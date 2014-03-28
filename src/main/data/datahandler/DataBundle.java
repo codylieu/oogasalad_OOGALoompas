@@ -1,4 +1,4 @@
-package datahandler;
+package main.data.datahandler;
 
 public class DataBundle {
 
