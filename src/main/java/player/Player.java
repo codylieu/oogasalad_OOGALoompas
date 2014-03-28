@@ -135,7 +135,7 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		gameCard.add(makeGamePanel());
+		gameCard.add(makeGamePanel(), constraints);
 		
 		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -158,11 +158,14 @@ public class Player {
 		cards.add(gameCard, "gameCard");
 	}
 	
-	private JPanel makeGamePanel() {
-		JPanel gamePanel = new JPanel();
+	private TDPlayerEngine makeGamePanel() {
+		/*JPanel gamePanel = new JPanel();
 		gamePanel.setPreferredSize(new Dimension(600, 400));
 		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		return gamePanel;
+		return gamePanel;*/
+		
+		TDPlayerEngine playerEngine = new TDPlayerEngine();
+		return playerEngine;
 	}
 	
 	private JPanel makeGameButtonPanel() {
@@ -174,14 +177,6 @@ public class Player {
 		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(cards, "welcomeCard");
-				frame.pack();
-			}
-		});
-		JButton addTowerButton = new JButton("Add Tower");
-		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		addTowerButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("add tower");
 				frame.pack();
 			}
 		});
@@ -217,12 +212,20 @@ public class Player {
 				frame.pack();
 			}
 		});
+		JButton addTowerButton = new JButton("Add Tower");
+		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		addTowerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("add tower");
+				frame.pack();
+			}
+		});
 		gameButtonPanel.add(mainMenuButton);
-		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(pauseButton);
 		gameButtonPanel.add(saveButton);
 		gameButtonPanel.add(quitButton);
+		gameButtonPanel.add(addTowerButton);
 		return gameButtonPanel;
 	}
 	
