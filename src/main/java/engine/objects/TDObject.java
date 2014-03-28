@@ -1,4 +1,4 @@
-package engine.objects;
+package main.java.engine.objects;
 
 import jgame.JGObject;
 
