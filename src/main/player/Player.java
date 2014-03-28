@@ -2,11 +2,17 @@ package main.player;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -17,6 +23,7 @@ public class Player {
 	private CardLayout cardLayout;
 	
 	public static String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
+	public static int BUTTON_PADDING = 10;
 	
 	public Player() {
 		makeFrame();
@@ -25,6 +32,10 @@ public class Player {
 		addGameCard();
 		addCreditsCard();
 		show();
+	}
+	
+	public void showCard(String cardName){
+		cardLayout.show(cards,  cardName);
 	}
 	
 	private void makeFrame() {
@@ -41,7 +52,25 @@ public class Player {
 	
 	private void addWelcomeCard() {
 		JPanel welcomeCard = new JPanel();
+		welcomeCard.setLayout(new BoxLayout(welcomeCard, BoxLayout.Y_AXIS));
+		welcomeCard.add(makeWelcomeLabel());
+		welcomeCard.add(makeWelcomeButtonPanel());
+		cards.add(welcomeCard, "welcomeCard");
+	}
+	
+	private JLabel makeWelcomeLabel() {
+		JLabel welcomeLabel = new JLabel("Ooga Loompas Tower Defense");
+		welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		welcomeLabel.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		return welcomeLabel;
+	}
+	
+	private JPanel makeWelcomeButtonPanel() {
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		
 		JButton startGameButton = new JButton("Start Game");
+		startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		startGameButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(cards, "gameCard");
@@ -49,6 +78,7 @@ public class Player {
 			}
 		});
 		JButton continueButton = new JButton("Continue");
+		continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		continueButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("continue");
@@ -56,6 +86,7 @@ public class Player {
 			}
 		});
 		JButton helpButton = new JButton("Help");
+		helpButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		helpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("help");
@@ -63,6 +94,7 @@ public class Player {
 			}
 		});
 		JButton optionsButton = new JButton("Options");
+		optionsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		optionsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("options");
@@ -70,22 +102,43 @@ public class Player {
 			}
 		});
 		JButton creditsButton = new JButton("Credits");
+		creditsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		creditsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(cards, "creditsCard");
 				frame.pack();
 			}
 		});
-		welcomeCard.add(startGameButton);
-		welcomeCard.add(continueButton);
-		welcomeCard.add(helpButton);
-		welcomeCard.add(optionsButton);
-		welcomeCard.add(creditsButton);
-		cards.add(welcomeCard, "welcomeCard");
+		buttonPanel.add(startGameButton);
+		buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
+		buttonPanel.add(continueButton);
+		buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
+		buttonPanel.add(helpButton);
+		buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
+		buttonPanel.add(optionsButton);
+		buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
+		buttonPanel.add(creditsButton);
+		
+		return buttonPanel;
 	}
 	
 	private void addGameCard() {
 		JPanel gameCard = new JPanel();
+		gameCard.add(makeGameButtonPanel());
+		gameCard.add(makeGameInfoPanel());
+		gameCard.add(makeUnitInfoPanel());
+		cards.add(gameCard, "gameCard");
+	}
+	
+	private JPanel makeGameButtonPanel() {
+		JPanel gameButtonPanel = new JPanel();
+		JButton mainMenuButton = new JButton("Main Menu");
+		mainMenuButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(cards, "welcomeCard");
+				frame.pack();
+			}
+		});
 		JButton addTowerButton = new JButton("Add Tower");
 		addTowerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -93,8 +146,59 @@ public class Player {
 				frame.pack();
 			}
 		});
-		gameCard.add(addTowerButton);
-		cards.add(gameCard, "gameCard");
+		JButton playResumeButton = new JButton("Play/Resume");
+		playResumeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("play resume");
+				frame.pack();
+			}
+		});
+		JButton pauseButton = new JButton("Pause");
+		pauseButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("pause");
+				frame.pack();
+			}
+		});
+		JButton saveButton = new JButton("Save");
+		saveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("save");
+				frame.pack();
+			}
+		});
+		JButton quitButton = new JButton("Quit");
+		quitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("quit");
+				frame.pack();
+			}
+		});
+		gameButtonPanel.add(mainMenuButton);
+		gameButtonPanel.add(addTowerButton);
+		gameButtonPanel.add(playResumeButton);
+		gameButtonPanel.add(pauseButton);
+		gameButtonPanel.add(saveButton);
+		gameButtonPanel.add(quitButton);
+		return gameButtonPanel;
+	}
+	
+	private JPanel makeGameInfoPanel() {
+		JPanel gamePanel = new JPanel();
+		JLabel pointsLabel = new JLabel("Points");
+		JLabel resourcesLabel = new JLabel("Resources");
+		JLabel levelLabel = new JLabel("Level/Wave");
+		gamePanel.add(pointsLabel);
+		gamePanel.add(resourcesLabel);
+		gamePanel.add(levelLabel);
+		return gamePanel;
+	}
+	
+	private JPanel makeUnitInfoPanel() {
+		JPanel unitInfoPanel = new JPanel();
+		JLabel unitInfoLabel = new JLabel("this is some unit info");
+		unitInfoPanel.add(unitInfoLabel);
+		return unitInfoPanel;
 	}
 	
 	private void addCreditsCard() {
