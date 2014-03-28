@@ -9,3 +9,7 @@
 .classpath
 /bin
 /.project_settings
+
+# idea files
+.idea/
+*.iml
