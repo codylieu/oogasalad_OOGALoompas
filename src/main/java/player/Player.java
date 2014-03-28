@@ -1,4 +1,4 @@
-package main.player;
+package main.java.player;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
