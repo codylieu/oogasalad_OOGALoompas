@@ -20,7 +20,7 @@ public class Player {
 	
 	public Player() {
 		makeFrame();
-		makecards();
+		makeCards();
 		addWelcomeCard();
 		addGameCard();
 		addCreditsCard();
@@ -35,7 +35,7 @@ public class Player {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
-	private void makecards() {
+	private void makeCards() {
 		cards = new JPanel(cardLayout = new CardLayout());
 	}
 	
