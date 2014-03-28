@@ -1,4 +1,4 @@
-package engine.objects;
+package main.java.engine.objects;
 
 public class Monster extends TDObject {
 	
@@ -13,7 +13,5 @@ public class Monster extends TDObject {
 	 */
 	public Monster(String name, double x, double y, String gfxname, double health, double damage, double range) {
 	
-		
-		
 	}
 }
