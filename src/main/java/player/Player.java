@@ -2,12 +2,17 @@ package main.java.player;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -124,15 +129,48 @@ public class Player {
 	
 	private void addGameCard() {
 		JPanel gameCard = new JPanel();
-		gameCard.add(makeGameButtonPanel());
-		gameCard.add(makeGameInfoPanel());
-		gameCard.add(makeUnitInfoPanel());
+		gameCard.setLayout(new GridBagLayout());
+		
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		gameCard.add(makeGamePanel());
+		
+		constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 1;
+		constraints.gridy = 0;
+		gameCard.add(makeGameButtonPanel(), constraints);
+		
+		constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		gameCard.add(makeGameInfoPanel(), constraints);
+		
+		constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 1;
+		constraints.gridy = 1;
+		gameCard.add(makeUnitInfoPanel(), constraints);
+		
 		cards.add(gameCard, "gameCard");
+	}
+	
+	private JPanel makeGamePanel() {
+		JPanel gamePanel = new JPanel();
+		gamePanel.setPreferredSize(new Dimension(600, 400));
+		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
+		return gamePanel;
 	}
 	
 	private JPanel makeGameButtonPanel() {
 		JPanel gameButtonPanel = new JPanel();
+		gameButtonPanel.setLayout(new GridLayout(10, 1));
+		
 		JButton mainMenuButton = new JButton("Main Menu");
+		//mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cardLayout.show(cards, "welcomeCard");
@@ -140,6 +178,7 @@ public class Player {
 			}
 		});
 		JButton addTowerButton = new JButton("Add Tower");
+		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		addTowerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("add tower");
@@ -147,6 +186,7 @@ public class Player {
 			}
 		});
 		JButton playResumeButton = new JButton("Play/Resume");
+		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		playResumeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("play resume");
@@ -154,6 +194,7 @@ public class Player {
 			}
 		});
 		JButton pauseButton = new JButton("Pause");
+		//pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pauseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("pause");
@@ -161,6 +202,7 @@ public class Player {
 			}
 		});
 		JButton saveButton = new JButton("Save");
+		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("save");
@@ -168,6 +210,7 @@ public class Player {
 			}
 		});
 		JButton quitButton = new JButton("Quit");
+		//quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		quitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("quit");
@@ -185,6 +228,7 @@ public class Player {
 	
 	private JPanel makeGameInfoPanel() {
 		JPanel gamePanel = new JPanel();
+		gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
 		JLabel pointsLabel = new JLabel("Points");
 		JLabel resourcesLabel = new JLabel("Resources");
 		JLabel levelLabel = new JLabel("Level/Wave");
