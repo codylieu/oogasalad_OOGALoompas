@@ -87,6 +87,12 @@ public class Player {
 	private void addGameCard() {
 		JPanel gameCard = new JPanel();
 		JButton addTowerButton = new JButton("Add Tower");
+		addTowerButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("add tower");
+				frame.pack();
+			}
+		});
 		gameCard.add(addTowerButton);
 		cards.add(gameCard, "gameCard");
 	}
