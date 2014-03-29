@@ -7,11 +7,12 @@ import javax.swing.JPanel;
 import main.java.author.controller.MainController;
 import main.java.author.view.Canvas;
 
-public class EnemyEditorTab extends EditorTab{
+public abstract class EditorTab extends JPanel{
 	
-	public EnemyEditorTab(MainController controller){
-		super(controller);
-		add(new Canvas(), BorderLayout.CENTER);
+	private MainController myController;
+	
+	public EditorTab(MainController controller){
+		myController = controller;
 	}
 	
 }

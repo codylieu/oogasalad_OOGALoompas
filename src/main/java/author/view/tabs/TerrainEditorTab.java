@@ -4,12 +4,13 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
+import main.java.author.controller.MainController;
 import main.java.author.view.Canvas;
 
-public class TerrainEditorTab extends JPanel{
+public class TerrainEditorTab extends EditorTab{
 
-	public TerrainEditorTab(){
+	public TerrainEditorTab(MainController controller){
+		super(controller);
 		add(new Canvas(), BorderLayout.CENTER);
 	}
-	
 }
