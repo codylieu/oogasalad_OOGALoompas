@@ -17,17 +17,13 @@ public class Enemy {
 	public void setAttributes() {
 		
 	}
+
+	public int getId() {
+		return myId;
+	}
 	
 	public int getHealth() {
 		return myHealth;
-	}
-	
-	public int getFireRate() {
-		return myFireRate;
-	}
-	
-	public int getRange() {
-		return myRange;
 	}
 }
 

@@ -21,6 +21,10 @@ public class Tower {
 		
 	}
 	
+	public int getId() {
+		return myId;
+	}
+	
 	public int getHealth() {
 		return myHealth;
 	}

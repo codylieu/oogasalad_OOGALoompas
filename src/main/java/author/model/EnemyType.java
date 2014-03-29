@@ -1,5 +1,5 @@
 package main.java.author.model;
 
-public class EnemyType {
-
+public enum EnemyType {
+	SPIDER, WOLF, TROLL, DEMON, DRAGON
 }
