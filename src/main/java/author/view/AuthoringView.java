@@ -3,8 +3,8 @@ package main.java.author.view;
 import java.awt.BorderLayout;
 import java.awt.MenuBar;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import main.java.author.view.tabs.EnemyEditorTab;
@@ -40,10 +40,6 @@ public class AuthoringView extends JFrame {
 		tabbedPane.add("Enemy Editor", new EnemyEditorTab());
 		tabbedPane.add("Game Settings Editor", new GameSettingsEditorTab());
 		tabbedPane.add("Terrain Editor", new TerrainEditorTab());
-	}
-
-	public JComponent createAttributes() {
-		return null;
 	}
 
 	public static void main (String [] args) {
