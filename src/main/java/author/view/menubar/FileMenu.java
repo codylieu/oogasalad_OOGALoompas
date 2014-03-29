@@ -9,6 +9,7 @@ public class FileMenu extends JMenu {
 	 */
 	public FileMenu(){
 		super("File");
-		add(new NewLevelMenuItem());
+		add(new SaveMenuItem());
+		add(new LoadMenuItem());
 	}
 }

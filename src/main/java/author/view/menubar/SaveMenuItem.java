@@ -1,25 +1,27 @@
 package main.java.author.view.menubar;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JMenuItem;
 
+public class SaveMenuItem extends JMenuItem {
 
-public class LevelMenuItem extends JMenuItem {
-	/**
-	 * Creates a new tab with its own world when pressed
-	 */
-	LevelMenuItem(int index){
-		super("Level " + index);
-		addActionListener(new LaunchLevelActionListener());
+	SaveMenuItem(){
+		super("Save");
+		addActionListener(new LaunchSaveActionListener());
 	}
-	class LaunchLevelActionListener implements ActionListener{
+	class LaunchSaveActionListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
+			
 		}
 	}
+	
 }
