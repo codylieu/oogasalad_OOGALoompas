@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 
 import main.java.author.view.Canvas;
 
-public class WaveEditorTab extends JPanel{
+public class SchemaEditorTab extends JPanel{
 
-	public WaveEditorTab(){
+	public SchemaEditorTab(){
 		add(new Canvas(), BorderLayout.CENTER);
 	}
 	

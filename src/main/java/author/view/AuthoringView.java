@@ -6,18 +6,15 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import main.java.author.view.tabs.EnemyEditorTab;
-import main.java.author.view.tabs.TerrainEditorTab;
-import main.java.author.view.tabs.TowerEditorTab;
-import main.java.author.view.tabs.WaveEditorTab;
+import main.java.author.view.tabs.*;
 
 public class AuthoringView extends JFrame {
 
-	private JTabbedPane tabbedPane = new JTabbedPane();;
+	private JTabbedPane myTabs = new JTabbedPane();;
 	
 	public AuthoringView(){
 		createEditorTabs();
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		getContentPane().add(myTabs, BorderLayout.CENTER);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		pack();
@@ -28,10 +25,14 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs(){
-		tabbedPane.add("Tower Editor", new TowerEditorTab());
-		tabbedPane.add("Enemy Editor", new EnemyEditorTab());
-		tabbedPane.add("Wave Editor", new WaveEditorTab());
-		tabbedPane.add("Terrain Editor", new TerrainEditorTab());
+		myTabs.add("Tower Editor", new TowerEditorTab());
+		myTabs.add("Enemy Editor", new EnemyEditorTab());
+		myTabs.add("Terrain Editor", new TerrainEditorTab());
+		myTabs.add("Schema Editor", new SchemaEditorTab());
+	}
+	
+	public JPanel createAttributesPanel() {
+		return null;
 	}
 	
 	public static void main (String [] args) {
