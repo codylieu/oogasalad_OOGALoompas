@@ -4,9 +4,9 @@ import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 
-public class TowerEditorTab extends JPanel{
+public class WaveEditorTab extends JPanel{
 
-	public TowerEditorTab(){
+	public WaveEditorTab(){
 		add(new Canvas(), BorderLayout.CENTER);
 	}
 	

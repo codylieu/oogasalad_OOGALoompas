@@ -8,7 +8,7 @@ import javax.swing.JTabbedPane;
 
 public class AuthoringView extends JFrame {
 
-	private JTabbedPane tabbedPane;
+	private JTabbedPane tabbedPane = new JTabbedPane();;
 	
 	public AuthoringView(){
 		createEditorTabs();
@@ -23,28 +23,10 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs(){
-		tabbedPane = new JTabbedPane();
-		
-		JPanel towerEditorTab = new JPanel();
-		towerEditorTab.add(new Canvas());
-		tabbedPane.add("Tower Editor", towerEditorTab);
-//		Need to create classes for each editor so that you can just do:
-//		tabbedPane.add("Tower Editor", new TowerEditorTab());
-		
-		JPanel enemyEditorTab = new JPanel();
-		enemyEditorTab.add(new Canvas());
-		tabbedPane.add("Enemy Editor", enemyEditorTab);
-//		tabbedPane.add("Enemy Editor", new EnemyEditorTab());
-		
-		JPanel waveEditorTab = new JPanel();
-		waveEditorTab.add(new Canvas());
-		tabbedPane.add("Wave Editor", waveEditorTab);
-//		tabbedPane.add("Wave Editor", new WaveEditorTab());
-		
-		JPanel terrainEditorTab = new JPanel();
-		terrainEditorTab.add(new Canvas());
-		tabbedPane.add("Terrain Editor", terrainEditorTab);
-//		tabbedPane.add("Terrain Editor", new TerrainEditorTab());
+		tabbedPane.add("Tower Editor", new TowerEditorTab());
+		tabbedPane.add("Enemy Editor", new EnemyEditorTab());
+		tabbedPane.add("Wave Editor", new WaveEditorTab());
+		tabbedPane.add("Terrain Editor", new TerrainEditorTab());
 	}
 	
 	public static void main (String [] args) {
