@@ -6,6 +6,11 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import main.java.author.view.tabs.EnemyEditorTab;
+import main.java.author.view.tabs.TerrainEditorTab;
+import main.java.author.view.tabs.TowerEditorTab;
+import main.java.author.view.tabs.WaveEditorTab;
+
 public class AuthoringView extends JFrame {
 
 	private JTabbedPane tabbedPane = new JTabbedPane();;
