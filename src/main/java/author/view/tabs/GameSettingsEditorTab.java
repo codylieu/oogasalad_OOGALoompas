@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 
 import main.java.author.view.Canvas;
 
-public class WaveEditorTab extends JPanel{
+public class GameSettingsEditorTab extends JPanel{
 
-	public WaveEditorTab(){
+	public GameSettingsEditorTab(){
 		add(new Canvas(), BorderLayout.CENTER);
 	}
 	
