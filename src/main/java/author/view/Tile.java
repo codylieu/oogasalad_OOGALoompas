@@ -65,7 +65,7 @@ public class Tile extends JPanel {
 	private void updateImg() {
 		try {
 			File file = new File(DEFAULT_IMAGE_PACKAGE + "tower.png");
-			myImg = ImageIO.read(file);
+			myImg = (myImg == null) ? ImageIO.read(file) : null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
