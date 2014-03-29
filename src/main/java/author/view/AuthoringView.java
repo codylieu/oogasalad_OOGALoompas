@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import main.java.author.view.menubar.MenuBar;
 import main.java.author.view.tabs.EnemyEditorTab;
 import main.java.author.view.tabs.TerrainEditorTab;
 import main.java.author.view.tabs.TowerEditorTab;
@@ -18,6 +19,7 @@ public class AuthoringView extends JFrame {
 	public AuthoringView(){
 		createEditorTabs();
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		setJMenuBar(new MenuBar());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		pack();
