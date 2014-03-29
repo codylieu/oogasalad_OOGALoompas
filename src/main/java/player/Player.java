@@ -2,7 +2,6 @@ package main.java.player;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -11,22 +10,33 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 
 public class Player {
+	
 	
 	private JFrame frame;
 	private JPanel cards;
 	private CardLayout cardLayout;
 	
+	public static String HELP = "Instructions for game, how to save, etc";
+	public static String DIFFICULTY = "Difficulty";
+	public static String EASY = "Easy Mode";
+	public static String MEDIUM = "Medium Mode";
+	public static String HARD = "Hard Mode";
+	public static String SOUND = "Sound";
+	public static String ON = "On";
+	public static String OFF = "Off";
 	public static String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
 	public static int BUTTON_PADDING = 10;
 	
@@ -35,6 +45,8 @@ public class Player {
 		makeCards();
 		addWelcomeCard();
 		addGameCard();
+		addHelpCard();
+		addOptionsCard();
 		addCreditsCard();
 		show();
 	}
@@ -94,7 +106,7 @@ public class Player {
 		helpButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		helpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("help");
+				cardLayout.show(cards,  "helpCard");
 				frame.pack();
 			}
 		});
@@ -102,7 +114,7 @@ public class Player {
 		optionsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		optionsButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("options");
+				cardLayout.show(cards,  "optionCard");
 				frame.pack();
 			}
 		});
@@ -172,14 +184,8 @@ public class Player {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
 		
-		JButton mainMenuButton = new JButton("Main Menu");
-		//mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		mainMenuButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cardLayout.show(cards, "welcomeCard");
-				frame.pack();
-			}
-		});
+		JButton mainMenuButton = makeMainMenuButton();
+		
 		JButton playResumeButton = new JButton("Play/Resume");
 		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		playResumeButton.addActionListener(new ActionListener() {
@@ -248,13 +254,197 @@ public class Player {
 		return unitInfoPanel;
 	}
 	
+	private void addOptionsCard() {
+		JPanel optionCard = new JPanel();
+		optionCard.setLayout(new GridBagLayout());
+
+		
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		optionCard.add(makeMainMenuButton(), constraints);
+		
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		optionCard.add(makeDifficultyInfoPanel(), constraints);
+		
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 2;
+		optionCard.add(makeDifficultyRadioButtonPanel(), constraints);
+		
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 3;
+		optionCard.add(makeSoundInfoPanel(), constraints);
+		
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 4;
+		optionCard.add(makeSoundRadioButtonPanel(), constraints);
+
+		cards.add(optionCard, "optionCard");
+	}
+	
+	private JPanel makeDifficultyInfoPanel(){
+		JPanel difficultyInfoPanel = new JPanel();
+		JLabel difficultyInfoLabel = new JLabel(DIFFICULTY);
+		difficultyInfoPanel.add(difficultyInfoLabel);
+		return difficultyInfoPanel;
+	}
+	
+	private JPanel makeDifficultyRadioButtonPanel(){
+		JPanel difficultyRadioButtonPanel = new JPanel();
+		
+		//need gameengine to agree that default is easy mode
+		JRadioButton easyButton = new JRadioButton(EASY);
+		easyButton.setActionCommand(EASY);
+		easyButton.setMnemonic(KeyEvent.VK_E);
+		easyButton.setSelected(true);
+		
+		JRadioButton mediumButton = new JRadioButton(MEDIUM);
+		mediumButton.setActionCommand(MEDIUM);
+		mediumButton.setMnemonic(KeyEvent.VK_M);
+		
+		JRadioButton hardButton = new JRadioButton(HARD);
+		hardButton.setActionCommand(HARD);
+		hardButton.setMnemonic(KeyEvent.VK_H);
+		
+		ButtonGroup difficultyRadioButtonGroup = new ButtonGroup();
+		difficultyRadioButtonGroup.add(easyButton);
+		difficultyRadioButtonGroup.add(mediumButton);
+		difficultyRadioButtonGroup.add(hardButton);
+		
+		easyButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("easy");
+				frame.pack();
+			}
+		});
+		
+		mediumButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("medium");
+				frame.pack();
+			}
+		});
+		
+		hardButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("hard");
+				frame.pack();
+			}
+		});
+		
+		difficultyRadioButtonPanel.add(easyButton);
+		difficultyRadioButtonPanel.add(mediumButton);
+		difficultyRadioButtonPanel.add(hardButton);
+		return difficultyRadioButtonPanel;
+	}
+	
+	private JPanel makeSoundInfoPanel(){
+		JPanel soundInfoPanel = new JPanel();
+		JLabel soundInfoLabel = new JLabel(SOUND);
+		soundInfoPanel.add(soundInfoLabel);
+		return soundInfoPanel;
+	}
+	
+	private JPanel makeSoundRadioButtonPanel(){
+		JPanel soundRadioButtonPanel = new JPanel();
+		
+		JRadioButton onButton = new JRadioButton(ON);
+		onButton.setActionCommand(ON);
+		onButton.setMnemonic(KeyEvent.VK_O);
+		onButton.setSelected(true);
+		
+		JRadioButton offButton = new JRadioButton(OFF);
+		offButton.setActionCommand(OFF);
+		offButton.setMnemonic(KeyEvent.VK_F);
+			
+		ButtonGroup soundRadioButtonGroup = new ButtonGroup();
+		soundRadioButtonGroup.add(onButton);
+		soundRadioButtonGroup.add(offButton);
+				
+		onButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(ON);
+				frame.pack();
+			}
+		});
+		
+		offButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(OFF);
+				frame.pack();
+			}
+		});
+					
+		soundRadioButtonPanel.add(onButton);
+		soundRadioButtonPanel.add(offButton);
+		return soundRadioButtonPanel;
+	}
+	
+	private void addHelpCard() {
+		JPanel helpCard = new JPanel();
+		helpCard.setLayout(new GridBagLayout());
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		helpCard.add(makeMainMenuButton(), constraints);
+
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		helpCard.add(makeHelpInfoPanel(), constraints);
+
+		cards.add(helpCard, "helpCard");
+	}
+
+	private JPanel makeHelpInfoPanel(){
+		JPanel helpInfoPanel = new JPanel();
+		JTextArea helpArea = new JTextArea(10,40);
+		helpArea.setEditable(false);
+		helpArea.append(HELP);
+		helpInfoPanel.add(helpArea, BorderLayout.CENTER);
+		return helpInfoPanel;
+	}
 	private void addCreditsCard() {
-		JPanel creditsCard = new JPanel();
 		JTextArea creditsArea = new JTextArea(10,40);
 		creditsArea.setEditable(false);
 		creditsArea.append(CREDITS);
-		creditsCard.add(creditsArea, BorderLayout.CENTER);
+		
+		JPanel creditsCard = new JPanel();
+		creditsCard.setLayout(new GridBagLayout());
+		
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		creditsCard.add(makeMainMenuButton(), constraints);
+
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		creditsCard.add(creditsArea, constraints);
+		
 		cards.add(creditsCard, "creditsCard");
+	}
+	
+	private JButton makeMainMenuButton() {
+		JButton mainMenuButton = new JButton("Main Menu");
+		//mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		mainMenuButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cardLayout.show(cards, "welcomeCard");
+				frame.pack();
+			}
+		});
+
+		return mainMenuButton;
 	}
 	
 	private void show() {

@@ -1,6 +1,5 @@
 package main.java.player;
 
-import jgame.JGColor;
 import jgame.platform.JGEngine;
 
 public class TDPlayerEngine extends JGEngine {
