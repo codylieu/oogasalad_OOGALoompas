@@ -7,9 +7,15 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.NumberFormat;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -23,17 +29,19 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.MainController;
+import main.java.author.model.Enemy;
+import main.java.author.util.UtilFunctions;
 
 //SplitPaneDemo itself is not a visible component.
 public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JLabel picture;
-	private JList list;
+	private DefaultListModel listModel;
+	private JList<String> list;
 	private JSplitPane splitPane;
-	private String[] imageNames = { "spider", "wolf", "troll", "demon",
-			"dragon" };
-
+	private JPanel designEnemyPane;
 	private JLabel healthLabel;
 	private JLabel speedLabel;
 	private JLabel damageLabel;
@@ -48,41 +56,62 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private NumberFormat numberFormat;
 
+	private JButton createEnemyButton;
+	private JTextField createEnemyField;
+
+	private HashMap<String, Enemy> enemyMap;
+
 	public EnemyEditorTab(MainController c) {
 		super(c);
 		this.setLayout(new BorderLayout());
-		initSplitPane();
+		this.add(makeDesignEnemyPane(), BorderLayout.NORTH);
+		this.add(makeOverallTabContent(), BorderLayout.SOUTH);
+		initDataFields();
+		addActionListeners();
+	}
+	
+	private void initDataFields() {
+		enemyMap = new HashMap<String, Enemy>();
 	}
 
-	public void initSplitPane() {
-		list = new JList(imageNames);
+	private Component makeDesignEnemyPane() {
+		JPanel result = new JPanel();
+		result.setLayout(new BorderLayout());
+		result.add(new JLabel("Design New Enemy"), BorderLayout.WEST);
+
+		createEnemyField = new JTextField();
+		createEnemyButton = new JButton("Begin");
+		result.add(createEnemyField, BorderLayout.CENTER);
+		result.add(createEnemyButton, BorderLayout.EAST);
+
+		return result;
+	}
+
+	public Component makeOverallTabContent() {
+		listModel = new DefaultListModel();
+		listModel.addElement("Default Enemy Name");
+		list = new JList<String>(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectedIndex(0);
 		list.addListSelectionListener(this);
 
 		JScrollPane listScrollPane = new JScrollPane(list);
-		picture = new JLabel();
-		picture.setFont(picture.getFont().deriveFont(Font.ITALIC));
-		picture.setHorizontalAlignment(JLabel.CENTER);
 
 		JComponent editorPane = makeEditorPane();
 
 		// Create a split pane with the two scroll panes in it.
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane,
 				editorPane);
-		splitPane.setOneTouchExpandable(true);
+
 		splitPane.setDividerLocation(150);
 
-		// Provide minimum sizes for the two components in the split pane.
 		Dimension minimumSize = new Dimension(100, 50);
 		listScrollPane.setMinimumSize(minimumSize);
 		editorPane.setMinimumSize(minimumSize);
 
-		// Provide a preferred size for the split pane.
-		splitPane.setPreferredSize(new Dimension(this.getWidth(), this
-				.getHeight()));
-		updateLabel(imageNames[list.getSelectedIndex()]);
-		this.add(splitPane);
+		splitPane.setPreferredSize(new Dimension(this.getWidth(), 550));
+		// updateLabel(enemyNames[list.getSelectedIndex()]);
+		return splitPane;
 	}
 
 	private JComponent makeEditorPane() {
@@ -135,30 +164,9 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		return result;
 	}
 
-	// Listens to the list
-	public void valueChanged(ListSelectionEvent e) {
-		JList list = (JList) e.getSource();
-		updateLabel(imageNames[list.getSelectedIndex()]);
-	}
+	// Renders the selected enemy's data
+	protected void updateDataDisplayed(String name) {
 
-	// Renders the selected image
-	protected void updateLabel(String name) {
-		ImageIcon icon = createImageIcon("images/" + name + ".gif");
-		picture.setIcon(icon);
-		if (icon != null) {
-			picture.setText(null);
-		} else {
-			picture.setText("Image not found");
-		}
-	}
-
-	// Used by SplitPaneDemo2
-	public JList getImageList() {
-		return list;
-	}
-
-	public JSplitPane getSplitPane() {
-		return splitPane;
 	}
 
 	/** Returns an ImageIcon, or null if the path was invalid. */
@@ -198,8 +206,51 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JComponent makeAttributesPane() {
 		JPanel myAttributes = new JPanel();
 		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		myAttributes.add(makeLabelPane(), BorderLayout.CENTER);
-		myAttributes.add(makeFieldPane(), BorderLayout.LINE_END);
+		myAttributes.add(makeLabelPane(), BorderLayout.WEST);
+		myAttributes.add(makeFieldPane(), BorderLayout.EAST);
 		return myAttributes;
+	}
+
+	private void addActionListeners() {
+		createEnemyButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String createEnemyText = createEnemyField.getText().trim();
+				if (newEnemyNameIsValid(createEnemyText)) {
+					createNewEnemy(createEnemyText);
+				}
+
+			}
+
+		});
+	}
+
+	private boolean newEnemyNameIsValid(String enemyName) {
+		if (!enemyName.equals("")) {
+			if (!enemyMap.containsKey(enemyName)) {
+				if (UtilFunctions.isAlphaNumeric(enemyName)) {
+					if (enemyName.length() <= 20) {
+						if (enemyName.length() >= 2) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
+	}
+
+	private void createNewEnemy(String enemyName) {
+		listModel.addElement(enemyName);
+		Enemy newEmeny = new Enemy(1);
+		enemyMap.put(enemyName, newEmeny);
+		updateDataDisplayed(enemyName);
+	}
+
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }
