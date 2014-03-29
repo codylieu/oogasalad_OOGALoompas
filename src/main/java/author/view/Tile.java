@@ -3,9 +3,15 @@ package main.java.author.view;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -16,6 +22,9 @@ public class Tile extends JPanel {
 	private int myColumn; // 0 - NUM_COLS
 	private Color myColor;
 	private boolean isSelected;
+	private BufferedImage myImg;
+	
+	private static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
 	public Tile(int row, int column, Color color) {
 	    myRow = row;
@@ -31,12 +40,8 @@ public class Tile extends JPanel {
 		myColor = color;
 	}
 	
-	public boolean isSelected() {
-		return isSelected;
-	}
-	
-	protected void toggleSelection() {
-		isSelected = !isSelected;
+	public Image getImage() {
+		return myImg;
 	}
 	
 	public int getRow() {
@@ -46,4 +51,24 @@ public class Tile extends JPanel {
 	public int getCol() {
 		return myColumn;
 	}
+	
+	public boolean isSelected() {
+		return isSelected;
+	}
+	
+	protected void toggleSelection() {
+		isSelected = !isSelected;
+		updateImg();
+		
+	}
+	
+	private void updateImg() {
+		try {
+			File file = new File(DEFAULT_IMAGE_PACKAGE + "tower.png");
+			myImg = ImageIO.read(file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 }

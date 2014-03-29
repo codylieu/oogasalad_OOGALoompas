@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
+import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 
@@ -54,9 +55,15 @@ public class Canvas extends JPanel {
 			int x = tile.getRow() * rectWidth;
 			int y = tile.getCol() * rectHeight;
 			Color tileColor = tile.getColor();
-			g.setColor(tileColor);
-			g.fillRect(x, y, rectWidth, rectHeight); // filling appropriate Tile background colors
+			BufferedImage tileImage = (BufferedImage) tile.getImage();
 			
+			if (tileImage == null) {
+				g.setColor(tileColor);
+				g.fillRect(x, y, rectWidth, rectHeight); // filling appropriate Tile background colors
+			} else {
+				g.drawImage(tileImage,x,y, rectWidth, rectHeight, tileColor, null);
+			}
+
 			Graphics2D g2 = (Graphics2D) g; // g2 permits setting width of border
 			g2.setColor(DEFAULT_BORDER_COLOR);
 			BasicStroke borderWidth = (tile.isSelected()) ? new BasicStroke(3) : new BasicStroke(1);
