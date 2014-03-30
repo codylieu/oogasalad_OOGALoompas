@@ -35,8 +35,9 @@ public class JSONParser {
 	 * @return
 	 * @throws IOException
 	 * @author in-youngjo
+	 * @throws ClassNotFoundException 
 	 */
-	public DataBundle readFile(String filename) throws IOException{
+	public DataBundle readFile(String filename) throws IOException, ClassNotFoundException{
 		String fileString = "";
 		Scanner s = new Scanner(new File("src/main/resources/" + filename + ".txt"));
 		while(s.hasNext())	{
@@ -54,15 +55,18 @@ public class JSONParser {
 	 * @param in
 	 * @return
 	 * @throws IOException
+	 * @throws ClassNotFoundException 
 	 */
-	public DataBundle readJsonStream(InputStream in) throws IOException {
+	public DataBundle readJsonStream(InputStream in) throws IOException, ClassNotFoundException {
 		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
 		DataBundle output = new DataBundle();
 		try {
+			reader.beginObject();
 			while (reader.hasNext()) {
 				String className = reader.nextString();
 				output.add(readObjectList(className, reader));
 			}
+			reader.endObject();
 			return output;
 		} finally {
 			reader.close();
@@ -76,8 +80,9 @@ public class JSONParser {
 	 * @param reader
 	 * @return
 	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	public List<Object> readObjectList(String className, JsonReader reader) throws IOException	{
+	public List<Object> readObjectList(String className, JsonReader reader) throws IOException, ClassNotFoundException	{
 		List<Object> list = new ArrayList<Object>();
 		reader.beginArray();
 		while (reader.hasNext()) {
@@ -94,18 +99,44 @@ public class JSONParser {
 	 * @param reader
 	 * @return
 	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	public Object readObject(String className, JsonReader reader) throws IOException	{
+	public Object readObject(String className, JsonReader reader) throws IOException, ClassNotFoundException	{
 		Object obj = new Object();
 		reader.beginObject();
+		Class<?> myClass = Class.forName(className);
+		if(myClass.equals((new TestGameObject(1,2)).getClass()))	{
+			obj = processTestGameObject(reader);
+		}
+		if(myClass.equals("SOME OTHER OBJECT TYPE".getClass()))	{
+			
+		}
 		
 		reader.endObject();
 		return obj;
+	}
+
+	public Object processTestGameObject(JsonReader reader) throws IOException	{
+		int id = 0;
+		int health = 0;
+		while (reader.hasNext()) {
+			String name = reader.nextName();
+			if (name.equals("myID")) {
+				id = reader.nextInt();
+			} else if (name.equals("myHealth")) {
+				health = reader.nextInt();
+			} else {
+				reader.skipValue();
+			}
+		}
+		return new TestGameObject(id,health);
 	}
 	
 	/**
 	 * Method to use reflect to create objects based on className and the 
 	 * parameterList passed to the method.
+	 * MAY NOT NEED THIS METHOD IF HARD CODING (i.e. using methods like
+	 * processTestGameObject)
 	 * @param className
 	 * @param parameterList
 	 * @return
@@ -122,6 +153,12 @@ public class JSONParser {
 		Constructor<?> constructor = myClass.getConstructor(parameterList.getClass());
 		Object output = constructor.newInstance(parameterList);
 		return output;
+	}
+	
+	public static void main(String[] args) throws ClassNotFoundException, IOException	{
+		JSONParser j = new JSONParser();
+		DataBundle d = j.readFile("blah");
+		System.out.println(d);
 	}
 
 }

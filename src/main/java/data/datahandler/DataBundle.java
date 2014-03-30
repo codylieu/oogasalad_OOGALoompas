@@ -99,8 +99,9 @@ public class DataBundle {
 	 * provided filename
 	 * @param filename
 	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	public void loadDataBundle(String filename) throws IOException	{
+	public void loadDataBundle(String filename) throws IOException, ClassNotFoundException	{
 		JSONParser p = new JSONParser();
 		//TODO: develop JSONParser and implement methods here
 		p.readFile(filename);
