@@ -1,4 +1,4 @@
-package java.data.datahandler;
+package main.java.data.datahandler;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import java.data.jsonhandler.JSONParser;
-import java.data.jsonhandler.JSONSerializer;
+import main.java.data.jsonhandler.JSONParser;
+import main.java.data.jsonhandler.JSONSerializer;
 
 /**
  * DataBundles are designed to store lists of objects mapped to the types of 

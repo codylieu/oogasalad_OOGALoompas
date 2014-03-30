@@ -1,4 +1,4 @@
-package java.data.jsonhandler;
+package main.java.data.jsonhandler;
 
 import java.util.HashMap;
 import java.util.Map;

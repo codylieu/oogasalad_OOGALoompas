@@ -1,4 +1,4 @@
-package java.author.controller;
+package main.java.author.controller;
 
 public class MainController {
 

@@ -1,6 +1,6 @@
-package java.data.jsonhandler;
+package main.java.data.jsonhandler;
 
-import java.data.datahandler.DataBundle;
+import main.java.data.datahandler.DataBundle;
 
 public class JSONParser {
 	

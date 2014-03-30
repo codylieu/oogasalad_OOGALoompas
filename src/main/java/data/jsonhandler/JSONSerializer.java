@@ -1,12 +1,13 @@
-package java.data.jsonhandler;
+package main.java.data.jsonhandler;
 
-import java.data.datahandler.DataBundle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import main.java.data.datahandler.DataBundle;
 
 import com.google.gson.Gson;
 
