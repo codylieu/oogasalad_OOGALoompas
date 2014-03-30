@@ -1,5 +1,7 @@
 package java.data.datahandler;
 
+import java.data.jsonhandler.JSONParser;
+import java.data.jsonhandler.JSONSerializer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,6 +78,25 @@ public class DataBundle {
 	 */
 	public Map<Class<?>, List<Object>> getDataMap()	{
 		return dataMap;
+	}
+	
+	/**
+	 * Saves the current DataBundle with the provided filename
+	 * @param filename
+	 */
+	public void saveDataBundle(String filename)	{
+		JSONSerializer s = new JSONSerializer();
+		//TODO: develop JSONSerializer and implement methods here
+	}
+	
+	/**
+	 * Fills the DataBundle with information retrieved from the file with the
+	 * provided filename
+	 * @param filename
+	 */
+	public void loadDataBundle(String filename)	{
+		JSONParser p = new JSONParser();
+		//TODO: develop JSONParser and implement methods here
 	}
 	
 	public static void main(String[] args)	{
