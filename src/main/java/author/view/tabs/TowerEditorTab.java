@@ -5,7 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 import main.java.author.controller.MainController;
-import main.java.author.view.Canvas;
+import main.java.author.view.tabs.terrain.Canvas;
 
 public class TowerEditorTab extends EditorTab{
 

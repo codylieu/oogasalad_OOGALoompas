@@ -1,9 +1,11 @@
-package main.java.author.view;
+package main.java.author.view.tabs.terrain;
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
@@ -19,6 +21,7 @@ public class Canvas extends JPanel {
 	public static final int TILE_SIZE = 40; // in pixels
 
 	private final Tile[][] myTiles;
+	private static TileObject selectedTileObj;
 
 	public Canvas(){
 		myTiles = new Tile[NUM_ROWS][NUM_COLS];
@@ -31,11 +34,16 @@ public class Canvas extends JPanel {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Tile tile = getTile(e.getX(), e.getY());
-				tile.toggleSelection();
-				repaint(); 
+				updateTileImage(e);
 			}
 		});
+		addMouseMotionListener(new MouseMotionAdapter()
+		{
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				updateTileImage(e);
+			}
+		});	
 	}
 
 	/**
@@ -46,32 +54,28 @@ public class Canvas extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g); // Call to super class is necessary
 		g.clearRect(0, 0, getWidth(), getHeight());
-		
+
 		int rectWidth = getWidth() / NUM_COLS;
 		int rectHeight = getHeight() / NUM_ROWS;
-		
+
 		for (Tile tile : getTiles()) {
 			// Upper left corner of the tile
 			int x = tile.getRow() * rectWidth;
 			int y = tile.getCol() * rectHeight;
 			Color tileColor = tile.getColor();
 			BufferedImage tileImage = (BufferedImage) tile.getImage();
-			
+
 			if (tileImage == null) {
 				g.setColor(tileColor);
 				g.fillRect(x, y, rectWidth, rectHeight); // filling appropriate Tile background colors
 			} else {
 				g.drawImage(tileImage,x,y, rectWidth, rectHeight, tileColor, null);
 			}
-
-			Graphics2D g2 = (Graphics2D) g; // g2 permits setting width of border
-			g2.setColor(DEFAULT_BORDER_COLOR);
-			BasicStroke borderWidth = (tile.isSelected()) ? new BasicStroke(3) : new BasicStroke(1);
-			g2.setStroke(borderWidth);
-			g2.drawRect(x, y, rectWidth, rectHeight); // drawing appropriate Tile borders
+			g.setColor(DEFAULT_BORDER_COLOR);
+			g.drawRect(x, y, rectWidth, rectHeight); // drawing appropriate Tile borders
 		}
 	}
-	
+
 	/**
 	 * Obtains the specified Tile within the JPanel
 	 * @param x the x-coordinate of the JPanel
@@ -81,7 +85,7 @@ public class Canvas extends JPanel {
 	private Tile getTile(int x, int y) {
 		return myTiles[x/TILE_SIZE][y/TILE_SIZE];
 	}
-	
+
 	/**
 	 * Obtains a list of tiles within the JPanel
 	 * @return all tiles within the JPanel
@@ -94,5 +98,16 @@ public class Canvas extends JPanel {
 			}
 		}
 		return tiles;
+	}
+
+	private void updateTileImage(MouseEvent e) {
+		Tile tile = getTile(e.getX(), e.getY());
+		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
+		tile.setColor(selectedTileObj.getBGColor());
+		repaint(); 
+	}
+
+	public static void setSelectedTileObj(TileObject tObj) {
+		selectedTileObj = tObj;
 	}
 }

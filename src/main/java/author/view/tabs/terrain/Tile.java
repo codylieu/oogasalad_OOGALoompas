@@ -1,4 +1,4 @@
-package main.java.author.view;
+package main.java.author.view.tabs.terrain;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -24,7 +24,7 @@ public class Tile extends JPanel {
 	private boolean isSelected;
 	private BufferedImage myImg;
 	
-	private static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
+	static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
 	public Tile(int row, int column, Color color) {
 	    myRow = row;
@@ -56,16 +56,13 @@ public class Tile extends JPanel {
 		return isSelected;
 	}
 	
-	protected void toggleSelection() {
-		isSelected = !isSelected;
-		updateImg();
-		
-	}
-	
-	private void updateImg() {
+	protected void setImage(String imgName) {
+		if (imgName == null) {
+			return;
+		}
 		try {
-			File file = new File(DEFAULT_IMAGE_PACKAGE + "tower.png");
-			myImg = (myImg == null) ? ImageIO.read(file) : null;
+			File file = new File(DEFAULT_IMAGE_PACKAGE + imgName);
+			myImg = ImageIO.read(file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
