@@ -1,6 +1,6 @@
 {
 	"tileMapName": "tiles_map",
-	"tileMapFile": "tiles_map.png",
+	"tileMapFile": "/main/resources/tiles_map.png",
 	"numXTiles": 19,
 	"numYTiles": 20,
 	"tileMap": [

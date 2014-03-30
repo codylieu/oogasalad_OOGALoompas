@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class Model {
+    public static final String RESOURCE_PATH = "/main/resources/";
+
     private JGEngineInterface engine;
 
     public void setEngine(JGEngineInterface engine) {
@@ -17,7 +19,7 @@ public class Model {
 
     public void loadMap(String fileName) {
         try {
-            InputStream is = getClass().getResourceAsStream("/main/resources/" + fileName);
+            InputStream is = getClass().getResourceAsStream(RESOURCE_PATH + fileName);
             InputStreamReader isr = new InputStreamReader(is);
             JsonReader reader = new JsonReader(isr);
             Gson gson = new Gson();
