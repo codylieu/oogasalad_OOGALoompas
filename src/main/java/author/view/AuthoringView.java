@@ -9,8 +9,8 @@ import javax.swing.JTabbedPane;
 import main.java.author.controller.MainController;
 import main.java.author.view.tabs.EnemyEditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
-import main.java.author.view.tabs.TerrainEditorTab;
 import main.java.author.view.tabs.TowerEditorTab;
+import main.java.author.view.tabs.terrain.TerrainEditorTab;
 
 
 /**
