@@ -25,7 +25,6 @@ public class AuthoringView extends JFrame {
 		myController = new MainController();
 		createEditorTabs(myController);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		setMenuBar(new MenuBar());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
@@ -37,14 +36,19 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs(MainController controller) {
+		tabbedPane.add("Game Settings Editor", new GameSettingsEditorTab(controller));
 		tabbedPane.add("Tower Editor", new TowerEditorTab(controller));
-		tabbedPane.add("Enemy Editor", new EnemyEditorTab(controller));
-		tabbedPane.add("Game Settings Editor", new GameSettingsEditorTab(
-				controller));
+//		tabbedPane.add("Enemy Editor", new EnemyEditorTab(controller));
 		tabbedPane.add("Terrain Editor", new TerrainEditorTab(controller));
 	}
 
 	public static void main (String [] args) {
 		new AuthoringView();
+	}
+	
+	// Passes the WorldManagerInstance to the Data Team.
+	// Will be linked to an action listener that is connected to the save button in the menu bar
+	public void saveGame(){
+		
 	}
 }
