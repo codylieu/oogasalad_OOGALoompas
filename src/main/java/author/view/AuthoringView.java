@@ -45,10 +45,5 @@ public class AuthoringView extends JFrame {
 	public static void main (String [] args) {
 		new AuthoringView();
 	}
-	
-	// Passes the WorldManagerInstance to the Data Team.
-	// Will be linked to an action listener that is connected to the save button in the menu bar
-	public void saveGame(){
-		
-	}
+
 }
