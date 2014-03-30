@@ -28,6 +28,8 @@ public class TerrainEditorTab extends EditorTab{
 		availableTiles = new ArrayList<TileObject>();
 		availableTiles.add(new Ground());
 		availableTiles.add(new Grass());
+		availableTiles.add(new Water());
+		availableTiles.add(new Tree());
 		add(new Canvas(), BorderLayout.CENTER);
 		add(getTileList(), BorderLayout.EAST);
 	}
@@ -40,6 +42,8 @@ public class TerrainEditorTab extends EditorTab{
 			try {
 				Image img = ImageIO.read(new File(Tile.DEFAULT_IMAGE_PACKAGE + tObj.getImage()));
 				tObj.setIcon(new ImageIcon(img));
+				tObj.setBackground(tObj.getBGColor());
+				tObj.setOpaque(true);
 				tObj.setPreferredSize(new Dimension(35,35));
 			} catch (IOException ex) {}
 			panel.add(tObj, c);

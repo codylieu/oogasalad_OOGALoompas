@@ -103,6 +103,7 @@ public class Canvas extends JPanel {
 	private void updateTileImage(MouseEvent e) {
 		Tile tile = getTile(e.getX(), e.getY());
 		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
+		tile.setColor(selectedTileObj.getBGColor());
 		repaint(); 
 	}
 

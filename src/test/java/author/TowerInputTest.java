@@ -21,17 +21,6 @@ public class TowerInputTest {
 		} catch (Exception e) { e.printStackTrace(); }
 	}
 	
-	private void testGUI() {
-		moveToTile(5, 5);
-		clickMouse();
-		moveToTile(0, 0);
-		clickMouse();
-		moveToTile(5, 14);
-		clickMouse();
-		moveToTile(14, 5);
-		clickMouse();
-	}
-	
 	private void clickMouse() {
 		robot.mousePress(InputEvent.BUTTON1_MASK);
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
