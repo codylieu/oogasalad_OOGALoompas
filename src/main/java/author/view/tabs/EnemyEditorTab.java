@@ -243,7 +243,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private void createNewEnemy(String enemyName) {
 		listModel.addElement(enemyName);
-		Enemy newEmeny = new Enemy(1);
+		Enemy newEmeny = new Enemy("1");
 		enemyMap.put(enemyName, newEmeny);
 		updateDataDisplayed(enemyName);
 	}
