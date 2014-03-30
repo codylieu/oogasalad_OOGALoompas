@@ -1,5 +1,10 @@
-package main.java.data.jsonhandler;
+package java.data.jsonhandler;
 
 public class JSONSerializer {
 
+	public JSONSerializer(){
+		
+	}
+	
+	
 }
