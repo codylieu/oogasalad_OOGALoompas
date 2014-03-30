@@ -3,6 +3,10 @@ package main.java.engine;
 import java.util.HashMap;
 import java.util.Map;
 
+import main.java.engine.objects.Tower;
+
+import jgame.JGObject;
+
 public class Player {
 	private double money;
 	private int health;
@@ -40,4 +44,4 @@ public class Player {
 	public double getHealth() {
 		return this.health;
 	}
-}
+} 
