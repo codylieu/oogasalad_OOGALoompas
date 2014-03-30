@@ -11,7 +11,8 @@ public class Monster extends TDObject {
 	 * @param damage
 	 * @param range
 	 */
-	public Monster(String name, double x, double y, String gfxname, double health, double damage, double range) {
-	
-	}
+
+    public Monster(String name, boolean unique_id, double x, double y, int collisionid, String gfxname) {
+        super(name, unique_id, x, y, collisionid, gfxname);
+    }
 }
