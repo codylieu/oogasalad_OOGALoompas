@@ -15,6 +15,9 @@ public class GUIAutomationPlayback {
 	
 	private File myFile;
 	private Robot robot;
+	private static final int CLICK = -1;
+	private static final int DRAG = -2;
+	private boolean wantsDrag;
 	
 	public GUIAutomationPlayback(String filePath) {
 		initRobot();
@@ -36,10 +39,12 @@ public class GUIAutomationPlayback {
 					y = y.trim();
 					int xPos = Integer.parseInt(x);
 					int yPos = Integer.parseInt(y);
-					if (xPos == -7777777) {
+					if (xPos == CLICK) {
 						click();
+					} else if (xPos == DRAG){
+						wantsDrag = true;
 					} else {
-						moveToLoc(xPos, yPos, 1);
+						moveToLoc(xPos, yPos, 3);
 					}
 				}
 				br.close();
@@ -68,14 +73,18 @@ public class GUIAutomationPlayback {
 		int start_x = MouseInfo.getPointerInfo().getLocation().x;
 		int start_y = MouseInfo.getPointerInfo().getLocation().y;
 		
-		int steps = 25;
+		int steps = wantsDrag ? 50 : 5;
 		
-		for (int i=0; i<steps; i++){  
+		for (int i=0; i<=steps; i++){  
 			int mov_x = ((end_x * i)/steps) + (start_x*(steps-i)/steps);
 			int mov_y = ((end_y * i)/steps) + (start_y*(steps-i)/steps);
 			robot.mouseMove(mov_x,mov_y);
+			if (wantsDrag) {
+				click();
+			}
 			robot.delay(mouseDelay);
 		}
+		wantsDrag = false;
 	}
 
 	public static void main (String [] args) {

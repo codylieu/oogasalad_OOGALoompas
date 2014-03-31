@@ -12,7 +12,6 @@ import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.TowerEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 
-
 /**
  * Frame that represents the GUI for the Authoring environment.
  * 
