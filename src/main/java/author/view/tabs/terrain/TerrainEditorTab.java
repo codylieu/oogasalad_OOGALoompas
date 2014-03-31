@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,11 +31,12 @@ public class TerrainEditorTab extends EditorTab{
 	private List<TileObject> availableTiles;
 	private static final String TERRAIN_TYPE_PCKG = "main.java.author.view.tabs.terrain.types.";
 	private String [] terrainTypes = { "Ground", "Grass", "Water", "Tree" };
+	private Canvas myCanvas;
 	
 	public TerrainEditorTab(MainController controller){
 		super(controller);
 		initTerrainTypes();
-		add(new Canvas(), BorderLayout.CENTER);
+		add(myCanvas = new Canvas(), BorderLayout.CENTER);
 		add(getTileList(), BorderLayout.EAST);
 	}
 	
@@ -41,7 +44,13 @@ public class TerrainEditorTab extends EditorTab{
 		availableTiles = new ArrayList<TileObject>();		
 		for (String terrainType : terrainTypes) {
 			try {
-				TileObject tileObj = (TileObject) Class.forName(TERRAIN_TYPE_PCKG + terrainType).newInstance();
+				final TileObject tileObj = (TileObject) Class.forName(TERRAIN_TYPE_PCKG + terrainType).newInstance();
+				tileObj.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						myCanvas.setSelectedTileObj(tileObj);
+					}
+				});
 				availableTiles.add(tileObj);
 			} catch (Exception e) { e.printStackTrace(); } 
 		}

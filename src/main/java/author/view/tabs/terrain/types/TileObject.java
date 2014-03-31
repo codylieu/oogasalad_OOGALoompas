@@ -11,12 +11,7 @@ import main.java.author.view.tabs.terrain.Canvas;
 public abstract class TileObject extends JButton{
 	
 	public TileObject() {
-		addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Canvas.setSelectedTileObj(TileObject.this);
-			}
-		});
+
 	}
 	
 	public abstract boolean canWalkOver();

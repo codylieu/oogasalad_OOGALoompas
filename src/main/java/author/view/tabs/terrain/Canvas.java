@@ -23,7 +23,7 @@ public class Canvas extends JPanel {
 	public static final int TILE_SIZE = 32; // in pixels
 
 	private final Tile[][] myTiles;
-	private static TileObject selectedTileObj;
+	private TileObject selectedTileObj;
 
 	public Canvas(){
 		myTiles = new Tile[NUM_COLS][NUM_ROWS];
@@ -110,7 +110,7 @@ public class Canvas extends JPanel {
 		repaint(); 
 	}
 
-	public static void setSelectedTileObj(TileObject tObj) {
+	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
 	}
 }
