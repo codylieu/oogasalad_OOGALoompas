@@ -21,6 +21,16 @@ public class TDMap {
     private int numYTiles;
     private String[][] tileMap;
 
+    /**
+     * Create a TDMap object which holds the information needed to initialize the tiles of the engine.
+     *
+     * @param tileMapName   Name of the tile map
+     * @param tileMapFile   Name of the file that contains the tile map
+     * @param numXTiles     Number of X tiles across the tile map
+     * @param numYTiles     Number of y tiles down the tile map
+     * @param tileMap       2D string array the size of the map with each element containing the id of the tile
+     *                      that is mapped there
+     */
     public TDMap(String tileMapName, String tileMapFile, int numXTiles, int numYTiles, String[][] tileMap) {
         this.tileMapName = tileMapName;
         this.tileMapFile = tileMapFile;
@@ -29,6 +39,11 @@ public class TDMap {
         this.tileMap = tileMap;
     }
 
+    /**
+     * Loads the map into the specified engine.
+     *
+     * @param engine The engine for the map to be loaded into
+     */
     public void loadIntoGame(JGEngineInterface engine) {
         engine.defineImageMap(tileMapName, tileMapFile, xOffset, yOffset, tileXSize, tileYSize, skipX, skipY);
 

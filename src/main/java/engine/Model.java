@@ -17,11 +17,14 @@ public class Model {
         this.engine = engine;
     }
 
+    /**
+     * Loads a map/terrain into the engine.
+     *
+     * @param fileName The name of the file which contains the map information
+     */
     public void loadMap(String fileName) {
         try {
-            InputStream is = getClass().getResourceAsStream(RESOURCE_PATH + fileName);
-            InputStreamReader isr = new InputStreamReader(is);
-            JsonReader reader = new JsonReader(isr);
+            JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
             Gson gson = new Gson();
 
             TDMap map = gson.fromJson(reader, TDMap.class);
