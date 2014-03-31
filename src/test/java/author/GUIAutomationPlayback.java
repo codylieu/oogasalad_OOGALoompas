@@ -15,9 +15,9 @@ public class GUIAutomationPlayback {
 	
 	private File myFile;
 	private Robot robot;
-	private static final int CLICK = -1;
-	private static final int DRAG = -2;
-	private boolean wantsDrag;
+	boolean mouseDown;
+	private static final int MOUSE_DOWN = -1;
+	private static final int MOUSE_UP = -2;
 	
 	public GUIAutomationPlayback(String filePath) {
 		initRobot();
@@ -39,12 +39,12 @@ public class GUIAutomationPlayback {
 					y = y.trim();
 					int xPos = Integer.parseInt(x);
 					int yPos = Integer.parseInt(y);
-					if (xPos == CLICK) {
-						click();
-					} else if (xPos == DRAG){
-						wantsDrag = true;
+					if (xPos == MOUSE_DOWN) {
+						pressMouseDown();
+					} else if (xPos == MOUSE_UP){
+						pressMouseUp();
 					} else {
-						moveToLoc(xPos, yPos, 3);
+						moveToLoc(xPos, yPos, 2);
 					}
 				}
 				br.close();
@@ -64,37 +64,28 @@ public class GUIAutomationPlayback {
 		
 	}
 	
-	private void click() {
-		robot.mousePress(InputEvent.BUTTON1_MASK);
-		robot.mouseRelease(InputEvent.BUTTON1_MASK);
-	}
-	
 	private void pressMouseDown() {
 		robot.mousePress(InputEvent.BUTTON1_MASK);
+		mouseDown = true;
 	}
 	
 	private void pressMouseUp() {
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
+		mouseDown = false;
 	}
 	
 	private void moveToLoc(int end_x, int end_y, int mouseDelay) {
 		int start_x = MouseInfo.getPointerInfo().getLocation().x;
 		int start_y = MouseInfo.getPointerInfo().getLocation().y;
 		
-		int steps = wantsDrag ? 150 : 5;
+		int steps = 10;
 		
 		for (int i=0; i<=steps; i++){  
 			int mov_x = ((end_x * i)/steps) + (start_x*(steps-i)/steps);
 			int mov_y = ((end_y * i)/steps) + (start_y*(steps-i)/steps);
 			robot.mouseMove(mov_x,mov_y);
-			if (wantsDrag) {
-				pressMouseDown();
-				wantsDrag = false;
-			}
 			robot.delay(mouseDelay);
 		}
-		wantsDrag = false;
-		pressMouseUp();
 	}
 
 	public static void main (String [] args) {
