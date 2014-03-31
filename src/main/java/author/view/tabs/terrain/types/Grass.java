@@ -1,21 +1,22 @@
-package main.java.author.view.tabs.terrain;
+package main.java.author.view.tabs.terrain.types;
 
 import java.awt.Color;
 
 public class Grass extends TileObject {
 
 	@Override
-	boolean canWalkOver() {
+	
+	public boolean canWalkOver() {
 		return true;
 	}
 
 	@Override
-	Color getBGColor() {
+	public Color getBGColor() {
 		return null;
 	}
 
 	@Override
-	String getImage() {
+	public String getImage() {
 		return "grass.png";
 	}
 

@@ -1,4 +1,4 @@
-package main.java.author.view.tabs.terrain;
+package main.java.author.view.tabs.terrain.types;
 
 import java.awt.Color;
 

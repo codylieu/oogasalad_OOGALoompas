@@ -18,20 +18,33 @@ import javax.swing.JPanel;
 
 import main.java.author.controller.MainController;
 import main.java.author.view.tabs.EditorTab;
+import main.java.author.view.tabs.terrain.types.Grass;
+import main.java.author.view.tabs.terrain.types.Ground;
+import main.java.author.view.tabs.terrain.types.TileObject;
+import main.java.author.view.tabs.terrain.types.Tree;
+import main.java.author.view.tabs.terrain.types.Water;
 
 public class TerrainEditorTab extends EditorTab{
 
 	private List<TileObject> availableTiles;
-
+	private static final String TERRAIN_TYPE_PCKG = "main.java.author.view.tabs.terrain.types.";
+	private String [] terrainTypes = { "Ground", "Grass", "Water", "Tree" };
+	
 	public TerrainEditorTab(MainController controller){
 		super(controller);
-		availableTiles = new ArrayList<TileObject>();
-		availableTiles.add(new Ground());
-		availableTiles.add(new Grass());
-		availableTiles.add(new Water());
-		availableTiles.add(new Tree());
+		initTerrainTypes();
 		add(new Canvas(), BorderLayout.CENTER);
 		add(getTileList(), BorderLayout.EAST);
+	}
+	
+	private void initTerrainTypes() {
+		availableTiles = new ArrayList<TileObject>();		
+		for (String terrainType : terrainTypes) {
+			try {
+				TileObject tileObj = (TileObject) Class.forName(TERRAIN_TYPE_PCKG + terrainType).newInstance();
+				availableTiles.add(tileObj);
+			} catch (Exception e) { e.printStackTrace(); } 
+		}
 	}
 
 	private JPanel getTileList() {
