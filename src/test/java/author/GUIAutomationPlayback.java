@@ -69,22 +69,32 @@ public class GUIAutomationPlayback {
 		robot.mouseRelease(InputEvent.BUTTON1_MASK);
 	}
 	
+	private void pressMouseDown() {
+		robot.mousePress(InputEvent.BUTTON1_MASK);
+	}
+	
+	private void pressMouseUp() {
+		robot.mouseRelease(InputEvent.BUTTON1_MASK);
+	}
+	
 	private void moveToLoc(int end_x, int end_y, int mouseDelay) {
 		int start_x = MouseInfo.getPointerInfo().getLocation().x;
 		int start_y = MouseInfo.getPointerInfo().getLocation().y;
 		
-		int steps = wantsDrag ? 50 : 5;
+		int steps = wantsDrag ? 150 : 5;
 		
 		for (int i=0; i<=steps; i++){  
 			int mov_x = ((end_x * i)/steps) + (start_x*(steps-i)/steps);
 			int mov_y = ((end_y * i)/steps) + (start_y*(steps-i)/steps);
 			robot.mouseMove(mov_x,mov_y);
 			if (wantsDrag) {
-				click();
+				pressMouseDown();
+				wantsDrag = false;
 			}
 			robot.delay(mouseDelay);
 		}
 		wantsDrag = false;
+		pressMouseUp();
 	}
 
 	public static void main (String [] args) {
