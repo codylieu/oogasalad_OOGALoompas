@@ -16,18 +16,18 @@ public class Canvas extends JPanel {
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
-	public static final int NUM_ROWS = 15;
+	public static final int NUM_ROWS = 10;
 	public static final int NUM_COLS = 15;
-	public static final int TILE_SIZE = 40; // in pixels
+	public static final int TILE_SIZE = 32; // in pixels
 
 	private final Tile[][] myTiles;
 	private static TileObject selectedTileObj;
 
 	public Canvas(){
-		myTiles = new Tile[NUM_ROWS][NUM_COLS];
-		for (int row = 0; row < NUM_ROWS; row++) {
-			for (int col = 0; col < NUM_COLS; col++) {
-				myTiles[row][col] = new Tile(row, col, DEFAULT_TILE_COLOR);
+		myTiles = new Tile[NUM_COLS][NUM_ROWS];
+		for (int col = 0; col < NUM_COLS; col++) {
+			for (int row = 0; row < NUM_ROWS; row++) {
+				myTiles[col][row] = new Tile(row, col, DEFAULT_TILE_COLOR);
 			}
 		}
 		setPreferredSize(new Dimension(NUM_COLS*TILE_SIZE, NUM_ROWS*TILE_SIZE)); // important for maintaining size of JPanel
@@ -58,10 +58,11 @@ public class Canvas extends JPanel {
 		int rectWidth = getWidth() / NUM_COLS;
 		int rectHeight = getHeight() / NUM_ROWS;
 
+		int index = 0;
 		for (Tile tile : getTiles()) {
 			// Upper left corner of the tile
-			int x = tile.getRow() * rectWidth;
-			int y = tile.getCol() * rectHeight;
+			int x = tile.getCol() * rectWidth;
+			int y = tile.getRow() * rectHeight;
 			Color tileColor = tile.getColor();
 			BufferedImage tileImage = (BufferedImage) tile.getImage();
 
@@ -92,8 +93,8 @@ public class Canvas extends JPanel {
 	 */
 	private List<Tile> getTiles() {
 		List<Tile> tiles = new ArrayList<Tile>();
-		for (int i = 0; i < NUM_ROWS; i++) {
-			for (int j = 0; j < NUM_COLS; j++) {
+		for (int i = 0; i < NUM_COLS; i++) {
+			for (int j = 0; j < NUM_ROWS; j++) {
 				tiles.add(myTiles[i][j]);
 			}
 		}
@@ -103,7 +104,7 @@ public class Canvas extends JPanel {
 	private void updateTileImage(MouseEvent e) {
 		Tile tile = getTile(e.getX(), e.getY());
 		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
-		tile.setColor(selectedTileObj.getBGColor());
+		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
 		repaint(); 
 	}
 
