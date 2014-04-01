@@ -11,24 +11,26 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
+import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 
 public class Player {
 	
-	
-	private JFrame frame;
-	private JPanel cards;
-	private CardLayout cardLayout;
-	
+	private static final String LOAD_GAME_DATA = "Load Game Data";
+	public static final String FILELABEL = "File";
 	public static String HELP = "Instructions for game, how to save, etc";
 	public static String DIFFICULTY = "Difficulty";
 	public static String EASY = "Easy Mode";
@@ -39,6 +41,12 @@ public class Player {
 	public static String OFF = "Off";
 	public static String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
 	public static int BUTTON_PADDING = 10;
+	public static String USER_DIR = "user.dir";	
+
+	private JFrame frame;
+	private JPanel cards;
+	private CardLayout cardLayout;
+	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	
 	public Player() {
 		makeFrame();
@@ -61,6 +69,28 @@ public class Player {
 		frame.setTitle("OOGA Loompas Tower Defense");
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setJMenuBar(makeMenuBar());
+	}
+	
+	@SuppressWarnings("serial")
+	private JMenu makeFileMenu(){
+		JMenu files = new JMenu(FILELABEL);
+		files.add(new AbstractAction(LOAD_GAME_DATA){
+			public void actionPerformed(ActionEvent e){
+				int response = fileChooser.showOpenDialog(null);
+				if(response == JFileChooser.APPROVE_OPTION){
+					File file = fileChooser.getSelectedFile();
+					System.out.println("FILE CHOSEN: " + file.getName());
+				}
+			}
+		});
+		return files;
+	}
+	
+	private JMenuBar makeMenuBar(){
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.add(makeFileMenu());
+		return menuBar;
 	}
 	
 	private void makeCards() {
