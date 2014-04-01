@@ -19,12 +19,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.*;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -33,37 +36,21 @@ import javax.swing.JPanel;
 import main.java.author.view.AuthoringView;
 
 public class GUIAutomation extends JPanel{
-	private static Robot robot;
 	
-	private static final String X_POS = "xPos";
-	private static final String Y_POS = "yPos";
 	public static final String MOUSE_PRESS = "MousePress";
 	public static final String MOUSE_RELEASE = "MouseRelease";
 	public static final String KEY_PRESS = "KeyPress";
 	public static final String KEY_RELEASE = "KeyRelease";
+	protected static final String MY_DATA_RECORD = "src/test/java/author/MyRecord.ser";
 	
-	private int xPosIndex = 0;
-	private int yPosIndex = 0;
-	private int mousePressIndex = 0;
-	private int mouseReleaseIndex = 0;
-	private int keyPressIndex = 0;
-	private int keyReleaseIndex = 0;
+	private List<UserInputCommand> myRecordedData = new ArrayList<UserInputCommand>();
 	
-	private Map<String, Integer> myRecordedData = new LinkedHashMap<String, Integer>();
-	
-	private static final int MOUSE_DOWN = -1; // 'special' value written to .txt file to recognize a mouse press
-	private static final int MOUSE_UP = -2; // 'special' value written to .txt file to recognize a mouse release
 	private static final int MAX_RECORD_TIME = 25; // (in seconds) can be changed, but kept small so we don't
-	                                               // write too much data to the .txt file
-	
-	private static final int CARRIAGE_RETURN = 13;
-	private static final int LINE_FEED = 10;
-	private List<Integer> mouseXPos; // list of mouse movements, presses, and releases
-	private List<Integer> mouseYPos; // list of mouse movements, presses, and releases
-	private boolean mousePressed;    // is the mouse currently pressed down
-	private boolean mouseReleased;   // has the mouse recently been released from a click/drag
+	                                               // exceed bounds of ArrayList
 
 	private boolean isRecording;     // is the program currently recording 
+	
+
 	
 	/**
 	 * Executes the recording (really obtaining data for the logging) of mouse movements, clicks, drags
@@ -72,8 +59,6 @@ public class GUIAutomation extends JPanel{
 		isRecording = true;
 		long initTime = System.currentTimeMillis() / 1000;
 		long currTime;
-		mouseXPos = new ArrayList<Integer>();
-		mouseYPos = new ArrayList<Integer>();
 		
 		int myLastX = MouseInfo.getPointerInfo().getLocation().x;
 		int myLastY = MouseInfo.getPointerInfo().getLocation().y;
@@ -94,19 +79,11 @@ public class GUIAutomation extends JPanel{
 				myLastY = yLoc;
 			}
 
-			if (mousePressed) {	
-				myRecordedData.put(MOUSE_PRESS + (mousePressIndex++), MOUSE_DOWN);
-				mousePressed = false;
-			}
-			if (mouseReleased) {
-				myRecordedData.put(MOUSE_RELEASE + (mouseReleaseIndex++), MOUSE_UP);
-				mouseReleased = false;
-			}
 			if (shouldMark) {
-				myRecordedData.put(X_POS + (xPosIndex++), myLastX);
-				myRecordedData.put(Y_POS + (yPosIndex++), myLastY);
+				myRecordedData.add(new MouseLocationCommand(myLastX, myLastY));
 			}
 		}
+		removeLastClick();
 		logToFile();
 	}
 
@@ -116,21 +93,14 @@ public class GUIAutomation extends JPanel{
 	 */
 	private void logToFile() {
 		try {
-			File file = new File("src/test/java/author/test.txt");
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-			FileWriter fw = new FileWriter(file);
-			BufferedWriter bw = new BufferedWriter(fw);
-			for (String command : myRecordedData.keySet()) {
-				bw.write(command + ": " + myRecordedData.get(command) + "\n");
-			}
-			bw.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	        FileOutputStream fos = new FileOutputStream(MY_DATA_RECORD);
+	        ObjectOutputStream oos = new ObjectOutputStream (fos);
+	        oos.writeObject(myRecordedData);
+	        fos.close();
+	        oos.close ();
+	    } catch ( Exception ex ) {
+	        ex.printStackTrace ();
+	    }
 	}
 
 	
@@ -158,17 +128,6 @@ public class GUIAutomation extends JPanel{
 		stopFrame.setVisible(true);
 	}
 
-	
-	/**
-	 * Initializes java's Robot as a way of maintaining
-	 * track of the state of your program
-	 */
-	private void initRobot() {
-		try {
-			robot = new Robot();
-		} catch (AWTException e) { e.printStackTrace(); }
-	}
-
 	/**
 	 * Creates a global mouse listener, works regardless of the component the mouse clicks on
 	 */
@@ -178,12 +137,10 @@ public class GUIAutomation extends JPanel{
 		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {  
 			public void eventDispatched(AWTEvent e) { 
 				if(e.toString().contains("MOUSE_PRESSED")) {
-					mousePressed = true;
-					mouseReleased = false;
+					myRecordedData.add(new MousePressCommand());
 				}
 				if(e.toString().contains("MOUSE_RELEASED")) {
-					mousePressed = false;
-					mouseReleased = true;
+					myRecordedData.add(new MouseReleaseCommand());
 				}
 			}  
 		}, eventMask);  
@@ -196,14 +153,25 @@ public class GUIAutomation extends JPanel{
 		      public boolean dispatchKeyEvent(KeyEvent e) {
 		    	String keyEventInfo = e.toString();
 		        if (keyEventInfo.contains("KEY_PRESSED")) {
-		        	myRecordedData.put(KEY_PRESS + (keyPressIndex++), e.getKeyCode());
+		        	myRecordedData.add(new KeyPressCommand(e.getKeyCode()));
 		        }
 		        if (keyEventInfo.contains("KEY_RELEASED")) {
-		        	myRecordedData.put(KEY_RELEASE + (keyReleaseIndex++), e.getKeyCode());
+		        	myRecordedData.add(new KeyReleaseCommand(e.getKeyCode()));
 		        }
 		        return false;
 		      }
 		});
+	}
+	
+	private void removeLastClick() {
+		if (!isRecording) {
+			for (int count = myRecordedData.size() - 1; count >= 0; count--) {
+				if (myRecordedData.get(count) instanceof MousePressCommand) {
+					myRecordedData.remove(count);
+					return;
+				}
+			}
+		}
 	}
 	
 	public static void main (String [] args) {
@@ -213,8 +181,6 @@ public class GUIAutomation extends JPanel{
 		automation.initMouse();
 		automation.initKeyboard();
 		automation.allowStop();
-		automation.initRobot();
 		automation.record();
-
 	}	
 }
