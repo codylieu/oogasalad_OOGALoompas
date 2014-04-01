@@ -7,8 +7,6 @@ import jgame.JGObject;
  */
 public abstract class TDObject extends JGObject {
 
-    protected double myHealth;
-    
     //TODO: abstract methods?
     
     public TDObject (String name,
@@ -31,12 +29,5 @@ public abstract class TDObject extends JGObject {
     }
     
 
-    /**
-     * Reduce the health of this object by a damage amount.
-     * @param damage afflicting object's damage
-     */
-    public void takeDamage (double damage) {
-        myHealth -= damage;
-    }
     
 }

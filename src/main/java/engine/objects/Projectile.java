@@ -1,5 +1,6 @@
 package main.java.engine.objects;
 
+import main.java.engine.objects.monster.Monster;
 import jgame.JGObject;
 
 
