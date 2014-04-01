@@ -6,12 +6,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.MouseInfo;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
@@ -35,6 +38,10 @@ public class GUIAutomation extends JPanel{
 	private static final int MOUSE_UP = -2; // 'special' value written to .txt file to recognize a mouse release
 	private static final int MAX_RECORD_TIME = 25; // (in seconds) can be changed, but kept small so we don't
 	                                               // write too much data to the .txt file
+	
+	
+	private static final int CARRIAGE_RETURN = 13;
+	private static final int LINE_FEED = 10;
 	private List<Integer> mouseXPos; // list of mouse movements, presses, and releases
 	private List<Integer> mouseYPos; // list of mouse movements, presses, and releases
 	private boolean mousePressed;    // is the mouse currently pressed down
@@ -164,6 +171,27 @@ public class GUIAutomation extends JPanel{
 		}, eventMask);  
 	}
 	
+	private void initKeyboard() {
+		KeyboardFocusManager.getCurrentKeyboardFocusManager()
+		  .addKeyEventDispatcher(new KeyEventDispatcher() {
+		      @Override
+		      public boolean dispatchKeyEvent(KeyEvent e) {
+		    	String keyEventInfo = e.toString();
+		    	String undefinedChar = "keyChar=Undefined";
+		        if (keyEventInfo.contains("KEY_PRESSED") && !keyEventInfo.contains(undefinedChar)) {
+		        	mouseXPos.add(-1*e.getKeyCode());
+		        	mouseYPos.add(-1*e.getKeyCode());
+		        }
+		        return false;
+		      }
+		});
+	}
+	
+	private int stripOfApos (String str) {
+		return -1*str.substring(1,2).charAt(0);
+	}
+	
+	// TODO: fix implementation
 	private void preventLastClick() {
 		for (int count = mouseXPos.size() - 1; count >= 0; count--) {
 			if (mouseXPos.get(count).equals(MOUSE_DOWN)) {
@@ -181,6 +209,7 @@ public class GUIAutomation extends JPanel{
 		System.out.println("Recording..");
 		AuthoringView view = new AuthoringView(); // MAKE INSTANCE OF YOUR OWN VIEW HERE
 		automation.initMouse();
+		automation.initKeyboard();
 		automation.allowStop();
 		automation.initRobot();
 		automation.record();

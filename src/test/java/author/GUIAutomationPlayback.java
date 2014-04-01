@@ -43,6 +43,8 @@ public class GUIAutomationPlayback {
 						pressMouseDown();
 					} else if (xPos == MOUSE_UP){
 						pressMouseUp();
+					} else if (xPos < 0){
+						type(-1*xPos);
 					} else {
 						moveToLoc(xPos, yPos, 2);
 					}
@@ -62,6 +64,11 @@ public class GUIAutomationPlayback {
 	
 	private void play() {
 		
+	}
+	
+	private void type(int keyCode) {
+		robot.keyPress(keyCode);
+		robot.keyRelease(keyCode);
 	}
 	
 	private void pressMouseDown() {
