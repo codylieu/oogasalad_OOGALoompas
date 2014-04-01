@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.MouseInfo;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,7 +16,8 @@ public class GUIAutomationPlayback {
 	
 	private File myFile;
 	private Robot robot;
-	boolean mouseDown;
+	private boolean mouseDown;
+	private boolean isShiftPressed;
 	private static final int MOUSE_DOWN = -1;
 	private static final int MOUSE_UP = -2;
 	
@@ -68,7 +70,15 @@ public class GUIAutomationPlayback {
 	
 	private void type(int keyCode) {
 		robot.keyPress(keyCode);
-		robot.keyRelease(keyCode);
+		if (isShiftPressed) {
+			robot.keyRelease(KeyEvent.VK_SHIFT);
+			isShiftPressed = false;
+		}
+		if (keyCode != KeyEvent.VK_SHIFT) {
+			robot.keyRelease(keyCode);
+		} else {
+			isShiftPressed = true;
+		}
 	}
 	
 	private void pressMouseDown() {

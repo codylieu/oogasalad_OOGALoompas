@@ -39,7 +39,6 @@ public class GUIAutomation extends JPanel{
 	private static final int MAX_RECORD_TIME = 25; // (in seconds) can be changed, but kept small so we don't
 	                                               // write too much data to the .txt file
 	
-	
 	private static final int CARRIAGE_RETURN = 13;
 	private static final int LINE_FEED = 10;
 	private List<Integer> mouseXPos; // list of mouse movements, presses, and releases
@@ -177,8 +176,7 @@ public class GUIAutomation extends JPanel{
 		      @Override
 		      public boolean dispatchKeyEvent(KeyEvent e) {
 		    	String keyEventInfo = e.toString();
-		    	String undefinedChar = "keyChar=Undefined";
-		        if (keyEventInfo.contains("KEY_PRESSED") && !keyEventInfo.contains(undefinedChar)) {
+		        if (keyEventInfo.contains("KEY_PRESSED")) {
 		        	mouseXPos.add(-1*e.getKeyCode());
 		        	mouseYPos.add(-1*e.getKeyCode());
 		        }
@@ -187,11 +185,7 @@ public class GUIAutomation extends JPanel{
 		});
 	}
 	
-	private int stripOfApos (String str) {
-		return -1*str.substring(1,2).charAt(0);
-	}
 	
-	// TODO: fix implementation
 	private void preventLastClick() {
 		for (int count = mouseXPos.size() - 1; count >= 0; count--) {
 			if (mouseXPos.get(count).equals(MOUSE_DOWN)) {
