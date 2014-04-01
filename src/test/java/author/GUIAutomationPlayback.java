@@ -35,19 +35,22 @@ public class GUIAutomationPlayback {
 				br = new BufferedReader(new FileReader(myFile));
 				String line;
 				while ((line = br.readLine()) != null) {
-					String x = line.substring(line.indexOf(":") + 1, line.indexOf("y"));
-					String y = line.substring(line.lastIndexOf(":") + 1);
-					x = x.trim();
-					y = y.trim();
-					int xPos = Integer.parseInt(x);
-					int yPos = Integer.parseInt(y);
-					if (xPos == MOUSE_DOWN) {
+					String command = line.substring(0, line.indexOf(":"));
+					String value = line.substring(line.indexOf(":") + 1).trim();
+					int dataVal = Integer.parseInt(value);
+
+					if (command.contains(GUIAutomation.MOUSE_PRESS)) {
 						pressMouseDown();
-					} else if (xPos == MOUSE_UP){
+					} else if (command.contains(GUIAutomation.MOUSE_RELEASE)){
 						pressMouseUp();
-					} else if (xPos < 0){
-						type(-1*xPos);
+					} else if (command.contains(GUIAutomation.KEY_PRESS)){
+						pressKey(dataVal);
+					} else if (command.contains(GUIAutomation.KEY_RELEASE)) {
+						releaseKey(dataVal);
 					} else {
+						int xPos = dataVal;
+						line = br.readLine();
+						int yPos = Integer.parseInt(line.substring(line.indexOf(":") + 1).trim());
 						moveToLoc(xPos, yPos, 2);
 					}
 				}
@@ -68,17 +71,12 @@ public class GUIAutomationPlayback {
 		
 	}
 	
-	private void type(int keyCode) {
+	private void pressKey(int keyCode) {
 		robot.keyPress(keyCode);
-		if (isShiftPressed) {
-			robot.keyRelease(KeyEvent.VK_SHIFT);
-			isShiftPressed = false;
-		}
-		if (keyCode != KeyEvent.VK_SHIFT) {
-			robot.keyRelease(keyCode);
-		} else {
-			isShiftPressed = true;
-		}
+	}
+	
+	private void releaseKey(int keyCode) {
+		robot.keyRelease(keyCode);
 	}
 	
 	private void pressMouseDown() {

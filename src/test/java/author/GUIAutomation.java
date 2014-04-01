@@ -34,6 +34,23 @@ import main.java.author.view.AuthoringView;
 
 public class GUIAutomation extends JPanel{
 	private static Robot robot;
+	
+	private static final String X_POS = "xPos";
+	private static final String Y_POS = "yPos";
+	public static final String MOUSE_PRESS = "MousePress";
+	public static final String MOUSE_RELEASE = "MouseRelease";
+	public static final String KEY_PRESS = "KeyPress";
+	public static final String KEY_RELEASE = "KeyRelease";
+	
+	private int xPosIndex = 0;
+	private int yPosIndex = 0;
+	private int mousePressIndex = 0;
+	private int mouseReleaseIndex = 0;
+	private int keyPressIndex = 0;
+	private int keyReleaseIndex = 0;
+	
+	private Map<String, Integer> myRecordedData = new LinkedHashMap<String, Integer>();
+	
 	private static final int MOUSE_DOWN = -1; // 'special' value written to .txt file to recognize a mouse press
 	private static final int MOUSE_UP = -2; // 'special' value written to .txt file to recognize a mouse release
 	private static final int MAX_RECORD_TIME = 25; // (in seconds) can be changed, but kept small so we don't
@@ -58,6 +75,9 @@ public class GUIAutomation extends JPanel{
 		mouseXPos = new ArrayList<Integer>();
 		mouseYPos = new ArrayList<Integer>();
 		
+		int myLastX = MouseInfo.getPointerInfo().getLocation().x;
+		int myLastY = MouseInfo.getPointerInfo().getLocation().y;
+		
 		while (isRecording && (currTime = System.currentTimeMillis() / 1000) < MAX_RECORD_TIME + initTime) {
 			 // obtaining mouse absolute location
 			int xLoc = MouseInfo.getPointerInfo().getLocation().x;
@@ -66,27 +86,26 @@ public class GUIAutomation extends JPanel{
 			// we typically prevent marking the position of identical, consecutive points as we are concerned
 			// with mouse movement, rather than a stationary mouse. In addition, failing to do so results in
 			// extremely slow playback time as we would be taking measurements of the mouse position at a very high frequency
-			boolean shouldMark = (mouseXPos.size() == 0) ? true : !(xLoc == mouseXPos.get(mouseXPos.size() - 1)
-					&& yLoc == mouseYPos.get(mouseYPos.size() - 1));                                                  
+			boolean shouldMark = (myRecordedData.size() == 0) ? true : !(xLoc == myLastX
+					&& yLoc == myLastY);                 
+			
+			if (shouldMark) {
+				myLastX = xLoc;
+				myLastY = yLoc;
+			}
 
-			if (mousePressed) {
-				mouseXPos.add(MOUSE_DOWN);
-				mouseYPos.add(MOUSE_DOWN);
+			if (mousePressed) {	
+				myRecordedData.put(MOUSE_PRESS + (mousePressIndex++), MOUSE_DOWN);
 				mousePressed = false;
 			}
 			if (mouseReleased) {
-				mouseXPos.add(MOUSE_UP);
-				mouseYPos.add(MOUSE_UP);
+				myRecordedData.put(MOUSE_RELEASE + (mouseReleaseIndex++), MOUSE_UP);
 				mouseReleased = false;
 			}
-			
 			if (shouldMark) {
-				mouseXPos.add(MouseInfo.getPointerInfo().getLocation().x);
-				mouseYPos.add(MouseInfo.getPointerInfo().getLocation().y);
+				myRecordedData.put(X_POS + (xPosIndex++), myLastX);
+				myRecordedData.put(Y_POS + (yPosIndex++), myLastY);
 			}
-		}
-		if (!isRecording) {
-			preventLastClick();
 		}
 		logToFile();
 	}
@@ -104,8 +123,8 @@ public class GUIAutomation extends JPanel{
 
 			FileWriter fw = new FileWriter(file);
 			BufferedWriter bw = new BufferedWriter(fw);
-			for (int count = 0; count < mouseXPos.size(); count++) {
-				bw.write("xPos: " + mouseXPos.get(count) + " yPos: " + mouseYPos.get(count) + "\n");
+			for (String command : myRecordedData.keySet()) {
+				bw.write(command + ": " + myRecordedData.get(command) + "\n");
 			}
 			bw.close();
 
@@ -177,27 +196,16 @@ public class GUIAutomation extends JPanel{
 		      public boolean dispatchKeyEvent(KeyEvent e) {
 		    	String keyEventInfo = e.toString();
 		        if (keyEventInfo.contains("KEY_PRESSED")) {
-		        	mouseXPos.add(-1*e.getKeyCode());
-		        	mouseYPos.add(-1*e.getKeyCode());
+		        	myRecordedData.put(KEY_PRESS + (keyPressIndex++), e.getKeyCode());
+		        }
+		        if (keyEventInfo.contains("KEY_RELEASED")) {
+		        	myRecordedData.put(KEY_RELEASE + (keyReleaseIndex++), e.getKeyCode());
 		        }
 		        return false;
 		      }
 		});
 	}
 	
-	
-	private void preventLastClick() {
-		for (int count = mouseXPos.size() - 1; count >= 0; count--) {
-			if (mouseXPos.get(count).equals(MOUSE_DOWN)) {
-				while (count < mouseXPos.size()) {
-					mouseXPos.remove(count);
-					mouseYPos.remove(count);
-					return;
-				}
-			}
-		}
-	}
-
 	public static void main (String [] args) {
 		GUIAutomation automation = new GUIAutomation();
 		System.out.println("Recording..");
