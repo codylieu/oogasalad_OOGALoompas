@@ -1,6 +1,5 @@
 package main.java.engine.objects;
 
-import jgame.JGObject;
 import main.java.engine.objects.TDObject;
 
 
