@@ -33,11 +33,4 @@ public class MonsterSpawnSchema {
         }
     }
 
-    /**
-     * Change the number of monsters to be created in a swarm
-     */
-    public void setSwarmSize (int swarmSize) {
-        this.mySwarmSize = swarmSize;
-    }
-
 }

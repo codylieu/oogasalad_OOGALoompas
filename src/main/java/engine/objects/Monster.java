@@ -1,5 +1,6 @@
 package main.java.engine.objects;
 
+import jgame.JGObject;
 import jgame.JGPoint;
 
 
@@ -8,7 +9,7 @@ public class Monster extends TDObject {
     public static final String MONSTER_GFX = "monster";
     public static final int MONSTER_CID = 1;
 
-    private double myHealth;
+    private double myDamage;
     private double myMoveSpeed;
     private double myMoneyValue;
     private JGPoint myTargetExit = new JGPoint(0, 0);
@@ -27,16 +28,19 @@ public class Monster extends TDObject {
                     double y,
                     double health,
                     double moveSpeed,
+                    double damage,
                     double moneyValue) {
         super(name, x, y, MONSTER_CID, MONSTER_GFX);
         myHealth = health;
+        myDamage = damage;
         myMoveSpeed = moveSpeed;
         myMoneyValue = moneyValue;
     }
 
     @Override
     public void move () {
-        //naively move toward exit in straight line path.
+        checkDeath();
+        // naively move toward exit in straight line path.
         if (x > myTargetExit.x) {
             x--;
         }
@@ -52,4 +56,16 @@ public class Monster extends TDObject {
         }
     }
 
+    private void checkDeath () {
+        if (myHealth <= 0) {
+            this.remove();
+        }
+    }
+    
+    @Override
+    public void hit (JGObject obj) {
+        if (and(obj.colid, Tower.TOWER_CID)) {
+            ((Tower) obj).takeDamage(myDamage);
+        }
+    }
 }

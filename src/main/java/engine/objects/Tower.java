@@ -1,5 +1,6 @@
 package main.java.engine.objects;
 
+import jgame.JGObject;
 import main.java.engine.objects.TDObject;
 
 
@@ -11,8 +12,7 @@ public class Tower extends TDObject {
     public static final double DEFAULT_HEALTH = 100;
     public static final double DEFAULT_DAMAGE = 50;
     public static final double DEFAULT_RANGE = 50;
-    
-    private double myHealth;
+
     private double myDamage;
     private double myRange;
 
