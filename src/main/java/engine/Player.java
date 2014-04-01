@@ -8,6 +8,7 @@ import main.java.engine.objects.Tower;
 import jgame.JGObject;
 
 public class Player {
+	private static final int DEFAULT_INITIAL_LIVES_NUM = 3;
 	private double money;
 	private int health;
 	private double score;
@@ -15,7 +16,7 @@ public class Player {
 	
 	public Player() {
 		this.money = 0;
-		this.health = 3;
+		this.health = DEFAULT_INITIAL_LIVES_NUM;
 		this.score = 0;
 		this.skills = new HashMap<String, Integer>();
 	}

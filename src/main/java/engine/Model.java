@@ -11,10 +11,12 @@ import main.java.engine.objects.Tower;
 public class Model {
 	private List<TDObject> TDObjects;
 	private int level;
+	private Player myPlayer;
 	
 	public Model() {
 		TDObjects = new ArrayList<TDObject>();
 		level = 1;
+		myPlayer = new Player();
 	}
 	
 	public JGObject createTower(String type, double x, double y, String gfxname) {
