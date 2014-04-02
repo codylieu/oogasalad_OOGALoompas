@@ -37,6 +37,7 @@ public class TestEngine extends JGEngine {
         model.addNewPlayer();
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
+        model.setTemporaryWaveSchema();
     }
 
     @Override
@@ -46,7 +47,8 @@ public class TestEngine extends JGEngine {
         if (getMouseButton(1)) {
             model.placeTower(getMouseX(), getMouseY());
         }
-        model.spawnMonster(100, 150);
+        model.spawnNextWave();
+//        model.spawnMonster(100, 150);
     }
 
     @Override

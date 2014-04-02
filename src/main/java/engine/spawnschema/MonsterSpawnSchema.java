@@ -1,4 +1,4 @@
-package main.java.engine.objects;
+package main.java.engine.spawnschema;
 
 import main.java.engine.factories.MonsterFactory;
 
@@ -32,6 +32,7 @@ public class MonsterSpawnSchema {
     public void spawn () {
         for (int i = 0; i < mySwarmSize; i++) {
             // myFactory.create(myMonsterName);
+        	myFactory.placeMoster();
         }
     }
 

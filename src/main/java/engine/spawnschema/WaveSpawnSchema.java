@@ -1,5 +1,6 @@
-package main.java.engine.objects;
+package main.java.engine.spawnschema;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -13,7 +14,7 @@ import java.util.Collections;
  */
 public class WaveSpawnSchema {
 
-    Collection<MonsterSpawnSchema> myMonsterSchema;
+    Collection<MonsterSpawnSchema> myMonsterSchemas = new ArrayList<MonsterSpawnSchema>();
 
     /**
      * Add a new MonsterSpawnSchema to this wave.
@@ -21,14 +22,14 @@ public class WaveSpawnSchema {
      * @param schema
      */
     public void addMonsterSchema (MonsterSpawnSchema schema) {
-        myMonsterSchema.add(schema);
+        myMonsterSchemas.add(schema);
     }
 
     /**
      * Clear collection of MonsterSpawnSchema
      */
     public void clearSchema () {
-        myMonsterSchema.clear();
+        myMonsterSchemas.clear();
     }
 
     /**
@@ -37,6 +38,18 @@ public class WaveSpawnSchema {
      * @return unmodifiable collection of MonsterSpawnSchema
      */
     public Collection<MonsterSpawnSchema> getMonsterSpawnSchema () {
-        return Collections.unmodifiableCollection(myMonsterSchema);
+        return Collections.unmodifiableCollection(myMonsterSchemas);
+    }
+    
+    
+
+    /**
+     * Create the wave of monsters specified by spawning all contained monster spawn schemas.
+     *
+     */
+    public void spawn () {
+    	for(MonsterSpawnSchema monsterSchema : myMonsterSchemas) {
+    		monsterSchema.spawn();
+    	}
     }
 }

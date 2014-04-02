@@ -3,8 +3,6 @@ package main.java.engine;
 import java.util.HashMap;
 import java.util.Map;
 
-import main.java.engine.objects.Tower;
-
 import jgame.JGObject;
 
 public class Player {

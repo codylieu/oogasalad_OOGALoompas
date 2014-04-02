@@ -5,8 +5,11 @@ import jgame.impl.JGEngineInterface;
 import main.java.engine.factories.MonsterFactory;
 import main.java.engine.factories.TowerFactory;
 import main.java.engine.map.TDMap;
-import main.java.engine.objects.Tower;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.tower.Tower;
+import main.java.engine.spawnschema.MonsterSpawnSchema;
+import main.java.engine.spawnschema.WaveSpawnSchema;
+import main.java.exceptions.engine.InvalidTowerCreationParameters;
 
 import java.awt.Point;
 import java.io.InputStream;
@@ -25,11 +28,15 @@ public class Model {
     private Point exit;
     private List<Tower> towers;
     private List<Monster> monsters;
+    private Gson gsonParser;
+    private WaveSpawnSchema currentWave;
 
     public Model() {
         this.towerFactory = new TowerFactory(engine);
         this.monsterFactory = new MonsterFactory(engine);
+        this.gsonParser = new Gson();
         this.gameClock = 0;
+        this.gsonParser = new Gson();
     }
     
     public void addNewPlayer() {
@@ -42,7 +49,12 @@ public class Model {
     }
 
     public void placeTower(double x, double y) {
-        towerFactory.placeTower(x, y);
+        try {
+			towerFactory.placeSimpleTower("PunyTower", x, y);
+		} catch (InvalidTowerCreationParameters e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
     /**
@@ -53,9 +65,8 @@ public class Model {
     public void loadMap(String fileName) {
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
-            Gson gson = new Gson();
 
-            TDMap map = gson.fromJson(reader, TDMap.class);
+            TDMap map = gsonParser.fromJson(reader, TDMap.class);
             map.loadIntoGame(engine);
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,10 +75,6 @@ public class Model {
     
     public void resetGameClock() {
     	this.gameClock = 0;
-    }
-    
-    public void spawnMonster(double x, double y) {
-    	monsterFactory.placeMoster(x, y);
     }
     
     public void setEntrance(double x, double y) {
@@ -105,5 +112,35 @@ public class Model {
     
     public int getMoney() {
     	return player.getMoney();
+    }
+    /**
+     * Loads a wave spawn schema into the model
+     *
+     * @param fileName The name of the JSON file containing wave spawn schema info
+     */
+    public void loadWaveSpawnSchema(String fileName) {
+        try {
+            JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
+            WaveSpawnSchema newWave = gsonParser.fromJson(reader, WaveSpawnSchema.class);
+            
+          //TODO: set up wave # -> wave schema map object
+            currentWave = newWave; 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     *  Spawns a new wave.
+     */
+    public void spawnNextWave() {
+    	currentWave.spawn();
+    	//TODO: keep track of wave# state .. 
+    }
+    
+    public void setTemporaryWaveSchema() {
+    	MonsterSpawnSchema schema = new MonsterSpawnSchema("SimpleMonster", 5);
+    	currentWave = new WaveSpawnSchema();
+    	currentWave.addMonsterSchema(schema);
     }
 }
