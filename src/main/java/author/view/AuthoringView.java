@@ -37,7 +37,7 @@ public class AuthoringView extends JFrame {
 	public void createEditorTabs(MainController controller) {
 		tabbedPane.add("Game Settings Editor", new GameSettingsEditorTab(controller));
 		tabbedPane.add("Tower Editor", new TowerEditorTab(controller));
-//		tabbedPane.add("Enemy Editor", new EnemyEditorTab(controller));
+		tabbedPane.add("Enemy Editor", new EnemyEditorTab(controller));
 		tabbedPane.add("Terrain Editor", new TerrainEditorTab(controller));
 	}
 
