@@ -1,7 +1,7 @@
 package main.java.engine.objects;
 
 import main.java.engine.objects.monster.Monster;
-import main.resources.jgame.JGObject;
+import jgame.JGObject;
 
 
 public class Projectile extends TDObject {
