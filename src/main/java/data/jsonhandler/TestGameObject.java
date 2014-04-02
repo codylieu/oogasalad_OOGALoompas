@@ -12,6 +12,7 @@ public class TestGameObject {
 		myID = id;
 		myHealth = health;
 	}
+	
 	public Map<String, Object> getInfo()	{
 		Map<String, Object> output = new HashMap<String, Object>();
 		output.put("myID", myID);
