@@ -35,6 +35,7 @@ public class TerrainEditorTab extends EditorTab{
 	private static final String TERRAIN_TYPE_PCKG = "main.java.author.view.tabs.terrain.types.";
 	private static final String CLEAR = "Clear Tiles";
 	private String [] terrainTypes = { "Ground", "Grass", "Water", "Tree" };
+	private TileObject mySelectedTile;
 	private Canvas myCanvas;
 	
 	public TerrainEditorTab(MainController controller){
@@ -49,13 +50,8 @@ public class TerrainEditorTab extends EditorTab{
 		availableTiles = new ArrayList<TileObject>();		
 		for (String terrainType : terrainTypes) {
 			try {
-				final TileObject tileObj = (TileObject) Class.forName(TERRAIN_TYPE_PCKG + terrainType).newInstance();
-				tileObj.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						myCanvas.setSelectedTileObj(tileObj);
-					}
-				});
+				TileObject tileObj = (TileObject) Class.forName(TERRAIN_TYPE_PCKG + terrainType).newInstance();
+				tileObj.addActionListener(actionListener(this, "updateCanvasSelection"));
 				availableTiles.add(tileObj);
 			} catch (Exception e) { e.printStackTrace(); } 
 		}
@@ -67,10 +63,6 @@ public class TerrainEditorTab extends EditorTab{
 		return clearButton;
 	}
 	
-	public void clearCanvasTiles(ActionEvent event) {
-		myCanvas.clearTiles();
-	}
-
 	private JPanel getTileList() {
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridy = 1;
@@ -88,6 +80,14 @@ public class TerrainEditorTab extends EditorTab{
 		}
 		panel.setPreferredSize(new Dimension(50,200)); // important for maintaining size of JPanel
 		return panel;
+	}
+
+	public void updateCanvasSelection(ActionEvent e) {
+		myCanvas.setSelectedTileObj((TileObject) e.getSource());
+	}
+	
+	public void clearCanvasTiles(ActionEvent e) {
+		myCanvas.clearTiles();
 	}
 
 }
