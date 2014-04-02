@@ -27,4 +27,7 @@ public abstract class TDObject extends JGObject {
                      int expireOffView) {
        super(name, true, x, y, cid, gfxname, xspeed, yspeed, expireOffView);
     }
+    
+
+    
 }
