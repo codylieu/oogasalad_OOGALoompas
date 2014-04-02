@@ -12,6 +12,10 @@ public class SimpleTower extends Tower{
 		super(x, y, DEFAULT_GRAPHICS, DEFAULT_DAMAGE, DEFAULT_RANGE);
 	}
 	
+	public SimpleTower(double x, double y, double damage, double range, String graphics) {
+		super(x, y, graphics, damage, range);
+	}
+	
 	@Override
 	public void fireProjectile(double targetX, double targetY) {
 		/* trigonometry from Guardian JGame example */
