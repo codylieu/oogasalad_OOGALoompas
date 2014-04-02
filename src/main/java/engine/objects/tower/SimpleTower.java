@@ -8,7 +8,7 @@ public class SimpleTower extends Tower{
 	
 	static final String DEFAULT_GRAPHICS = "SimpleTower";
 	static final double DEFAULT_DAMAGE = 2;
-	static final double DEFAULT_RANGE = 1000;
+	static final double DEFAULT_RANGE = 10;
 
 	public SimpleTower(double x, double y) {
 		super(x, y, DEFAULT_GRAPHICS, DEFAULT_DAMAGE, DEFAULT_RANGE);

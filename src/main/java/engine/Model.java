@@ -155,7 +155,8 @@ public class Model {
      */
     private void doSpawnActivity() {
     	
-        if (gameClock % 100 == 0)
+//        if (gameClock % 100 == 0)
+    	if (gameClock == 100)
         	spawnNextWave();
         
     }
@@ -167,6 +168,7 @@ public class Model {
 		updateGameClockByFrame();
 		doSpawnActivity();
         doTowerFiring();
+        System.out.println(towers.size());
 	}
     
 	private void doTowerFiring() {
@@ -174,6 +176,7 @@ public class Model {
 			for (Tower t : towers) {
 				Point2D monsterCoor = getNearestMonsterCoordinate(new Point2D.Double(
 						t.x, t.y));
+//				System.out.println(t.checkAndfireProjectile(monsterCoor));
 				t.checkAndfireProjectile(monsterCoor);
 			}
 		}
@@ -189,6 +192,7 @@ public class Model {
 				closestMonsterCoor = m.getCurrentCoor();
 			}
  		}
+//		System.out.println(minDistance);
 		return closestMonsterCoor;
 	}
 
@@ -206,7 +210,7 @@ public class Model {
      * Test method
      */
     public void setTemporaryWaveSchema() {
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 5);
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1);
     	WaveSpawnSchema wschema = new WaveSpawnSchema();
     	wschema.addMonsterSchema(mschema);
     	addWaveToGame(wschema);

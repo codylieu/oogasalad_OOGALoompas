@@ -20,7 +20,7 @@ public class TowerFactory {
         //Add code for reflection mapping of towers from JSON
         List<Object> parameterValuesForPunyTower = new ArrayList<Object>();
         parameterValuesForPunyTower.add(new Double(1));
-        parameterValuesForPunyTower.add(new Double(2));
+        parameterValuesForPunyTower.add(new Double(200));
         parameterValuesForPunyTower.add("SimpleTower");
         towerParameters.put("PunyTower", parameterValuesForPunyTower);
     }

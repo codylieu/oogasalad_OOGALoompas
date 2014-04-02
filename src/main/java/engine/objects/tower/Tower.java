@@ -30,12 +30,17 @@ public abstract class Tower extends TDObject {
      * @param Point2D coordinate of target
      * @return 
      */
-    public void checkAndfireProjectile(Point2D target) {
-    	if(target == null) return;
+    public boolean checkAndfireProjectile(Point2D target) {
+    	if(target == null) {
+    		return false;
+    	}
     	Point2D currCoor = new Point2D.Double(x, y);
+    	System.out.println(target.distance(currCoor) + " " + myRange);
     	if(target.distance(currCoor) < myRange ) {
     		fireProjectile(target);
+    		return true;
     	}
+    	return false;
     }
     
     abstract void fireProjectile(Point2D target);
