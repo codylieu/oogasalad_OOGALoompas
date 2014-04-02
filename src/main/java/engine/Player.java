@@ -7,7 +7,7 @@ import main.java.engine.objects.Tower;
 
 import jgame.JGObject;
 
-public class Player {
+public class Player implements IPlayer{
 	private static final int DEFAULT_INITIAL_LIVES_NUM = 3;
 	private double money;
 	private int health;
@@ -44,5 +44,28 @@ public class Player {
 	
 	public double getHealth() {
 		return this.health;
+	}
+
+	@Override
+	public double getScore() {
+		return this.score;
+	}
+
+	@Override
+	public void updateGameStats() {
+		// update all the game stats. e.g., health, money
+		
+	}
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isGameLost() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 } 

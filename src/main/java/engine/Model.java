@@ -5,18 +5,23 @@ import java.util.Map;
 
 import jgame.JGObject;
 
+import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.Tower;
 
-public class Model {
+public class Model implements IModel{
 	private List<TDObject> TDObjects;
 	private int level;
-	private Player myPlayer;
+	private IPlayer myPlayer;
+	private CollisionManager myCollisionManager;
 	
 	public Model() {
 		TDObjects = new ArrayList<TDObject>();
 		level = 1;
 		myPlayer = new Player();
+		addPlayer(myPlayer);
+//		addCollisionManager(new CollisionManager()); 
+		
 	}
 	
 	public JGObject createTower(String type, double x, double y, String gfxname) {
@@ -31,7 +36,23 @@ public class Model {
 		id.level++;
 	}
 	
-	public TDObject createTowerDefenseObject(String objectName, Map<String, String> attributes) {
-		return new TDObjecT();
+	public TDObject createTDObject(String objectName, Map<String, String> attributes) {
+//		return new TDObject();
+		return null;
+	}
+
+	@Override
+	public void setCollisionManager(CollisionManager collisionManager) {
+		this.myCollisionManager = collisionManager;
+	}
+
+	@Override
+	public void addPlayer(IPlayer player) {
+		this.myPlayer = player;
+	}
+
+	@Override
+	public List<TDObject> getListOfObjects() {
+		return TDObjects;
 	}
 }
