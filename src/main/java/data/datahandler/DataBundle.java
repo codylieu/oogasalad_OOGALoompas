@@ -1,11 +1,14 @@
-package java.data.datahandler;
+package main.java.data.datahandler;
 
-import java.data.jsonhandler.JSONParser;
-import java.data.jsonhandler.JSONSerializer;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import main.java.data.jsonhandler.JSONDeserializer;
+import main.java.data.jsonhandler.JSONSerializer;
 
 /**
  * DataBundles are designed to store lists of objects mapped to the types of 
@@ -80,34 +83,15 @@ public class DataBundle {
 		return dataMap;
 	}
 	
-	/**
-	 * Saves the current DataBundle with the provided filename
-	 * @param filename
-	 */
-	public void saveDataBundle(String filename)	{
-		JSONSerializer s = new JSONSerializer();
-		//TODO: develop JSONSerializer and implement methods here
-	}
-	
-	/**
-	 * Fills the DataBundle with information retrieved from the file with the
-	 * provided filename
-	 * @param filename
-	 */
-	public void loadDataBundle(String filename)	{
-		JSONParser p = new JSONParser();
-		//TODO: develop JSONParser and implement methods here
-	}
-	
-	public static void main(String[] args)	{
-		DataBundle d = new DataBundle();
-		d.add("a");
-		d.add(1);
-		List<String> l = new ArrayList<String>();
-		l.add("b");
-		l.add("c");
-		d.add(l);
-		System.out.println(d.getDataMap());
-		System.out.println(d.getList(new String()));
-	}
+//	public static void main(String[] args)	{
+//		DataBundle d = new DataBundle();
+//		d.add("a");
+//		d.add(1);
+//		List<String> l = new ArrayList<String>();
+//		l.add("b");
+//		l.add("c");
+//		d.add(l);
+//		System.out.println(d.getDataMap());
+//		System.out.println(d.getList(new String()));
+//	}
 }
