@@ -1,5 +1,6 @@
 package main.java.engine.spawnschema;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -13,7 +14,7 @@ import java.util.Collections;
  */
 public class WaveSpawnSchema {
 
-    Collection<MonsterSpawnSchema> myMonsterSchemas;
+    Collection<MonsterSpawnSchema> myMonsterSchemas = new ArrayList<MonsterSpawnSchema>();
 
     /**
      * Add a new MonsterSpawnSchema to this wave.

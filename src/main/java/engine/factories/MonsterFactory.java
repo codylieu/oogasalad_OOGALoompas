@@ -9,8 +9,13 @@ public class MonsterFactory {
    public MonsterFactory(JGEngineInterface engine) {
         this.engine = engine;
     }
+   
+   public MonsterFactory() {
+	   this(null);
+   }
 
-   public void placeMoster(double x, double y) {
+   public void placeMoster() {
        new SimpleMonster();
    }
+ 
 }

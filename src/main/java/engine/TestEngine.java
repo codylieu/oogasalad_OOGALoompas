@@ -34,21 +34,29 @@ public class TestEngine extends JGEngine {
         setFrameRate(45, 1);
         this.model = new Model();
         model.setEngine(this);
+        model.addNewPlayer();
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
+        model.setTemporaryWaveSchema();
     }
 
     @Override
     public void doFrame() {
         super.doFrame();
+        model.updateGameClockByFrame();
         if (getMouseButton(1)) {
             model.placeTower(getMouseX(), getMouseY());
         }
+        if (model.getGameClock() % 40 == 0)
+        	model.spawnNextWave();
+        moveObjects();
+//        model.spawnMonster(100, 150);
     }
 
     @Override
     public void paintFrame() {
         highlightMouseoverTile();
+        displayGameStats();
     }
 
     private void highlightMouseoverTile() {
@@ -57,5 +65,12 @@ public class TestEngine extends JGEngine {
         int curYTilePos = mousePos.y/tileHeight() * tileHeight();
 
         this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, JGColor.yellow);
+    }
+    
+    private void displayGameStats() {
+    	this.drawString("Score: "+model.getScore(), 50, 25, -1);
+    	this.drawString("Lives left: "+model.getPlayerLife(), 50, 50, -1);
+    	this.drawString("Money: "+model.getMoney(), 50, 75, -1);
+    	this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
     }
 }
