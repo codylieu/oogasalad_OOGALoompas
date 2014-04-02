@@ -4,12 +4,12 @@ import main.java.engine.objects.Projectile;
 
 public class SimpleTower extends Tower{
 	
-	static final String GRAPHICS = "SimpleTower";
-	static final double DAMAGE = 2;
-	static final double RANGE = 10;
+	static final String DEFAULT_GRAPHICS = "SimpleTower";
+	static final double DEFAULT_DAMAGE = 2;
+	static final double DEFAULT_RANGE = 10;
 
 	public SimpleTower(double x, double y) {
-		super(x, y, GRAPHICS, DAMAGE, RANGE);
+		super(x, y, DEFAULT_GRAPHICS, DEFAULT_DAMAGE, DEFAULT_RANGE);
 	}
 	
 	@Override
