@@ -1,58 +1,109 @@
 package main.java.engine;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import jgame.JGObject;
-
-import main.java.engine.objects.CollisionManager;
-import main.java.engine.objects.TDObject;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+import jgame.impl.JGEngineInterface;
+import main.java.engine.factories.MonsterFactory;
+import main.java.engine.factories.TowerFactory;
+import main.java.engine.map.TDMap;
 import main.java.engine.objects.Tower;
+import main.java.engine.objects.monster.Monster;
 
-public class Model implements IModel{
-	private List<TDObject> TDObjects;
-	private int level;
-	private IPlayer myPlayer;
-	private CollisionManager myCollisionManager;
-	
-	public Model() {
-		TDObjects = new ArrayList<TDObject>();
-		level = 1;
-		myPlayer = new Player();
-		addPlayer(myPlayer);
-//		addCollisionManager(new CollisionManager()); 
-		
-	}
-	
-	public JGObject createTower(String type, double x, double y, String gfxname) {
-		return new JGObject(type, true, x, y, 1, gfxname);
-	}
-	
-	public void loadState() {
-		// load in the JSON file created by authoring environment
-	}
-	
-	public void upgradeTowers(Tower id) {
-		id.level++;
-	}
-	
-	public TDObject createTDObject(String objectName, Map<String, String> attributes) {
-//		return new TDObject();
-		return null;
-	}
+import java.awt.Point;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.List;
 
-	@Override
-	public void setCollisionManager(CollisionManager collisionManager) {
-		this.myCollisionManager = collisionManager;
-	}
+public class Model {
+    public static final String RESOURCE_PATH = "/main/resources/";
 
-	@Override
-	public void addPlayer(IPlayer player) {
-		this.myPlayer = player;
-	}
+    private JGEngineInterface engine;
+    private TowerFactory towerFactory;
+    private MonsterFactory monsterFactory;
+    private Player player;
+    private double gameClock;
+    private Point entrance;
+    private Point exit;
+    private List<Tower> towers;
+    private List<Monster> monsters;
 
-	@Override
-	public List<TDObject> getListOfObjects() {
-		return TDObjects;
-	}
+    public Model() {
+        this.towerFactory = new TowerFactory(engine);
+        this.monsterFactory = new MonsterFactory(engine);
+        this.gameClock = 0;
+    }
+    
+    public void addNewPlayer() {
+    	this.player = new Player();
+    }
+
+    public void setEngine(JGEngineInterface engine) {
+        this.engine = engine;
+        this.towerFactory = new TowerFactory(engine);
+    }
+
+    public void placeTower(double x, double y) {
+        towerFactory.placeTower(x, y);
+    }
+
+    /**
+     * Loads a map/terrain into the engine.
+     *
+     * @param fileName The name of the file which contains the map information
+     */
+    public void loadMap(String fileName) {
+        try {
+            JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
+            Gson gson = new Gson();
+
+            TDMap map = gson.fromJson(reader, TDMap.class);
+            map.loadIntoGame(engine);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void resetGameClock() {
+    	this.gameClock = 0;
+    }
+    
+    public void spawnMonster(double x, double y) {
+    	monsterFactory.placeMoster(x, y);
+    }
+    
+    public void setEntrance(double x, double y) {
+    	this.entrance.setLocation(x, y);
+    }
+    
+    public void setExit(double x, double y) {
+    	this.exit.setLocation(x,  y);
+    }
+    
+    public void addScore(double score) {
+    	player.addScore(score);
+    }
+    
+    public double getScore() {
+    	return player.getScore();
+    }
+    
+    public boolean isGameLost() {
+    	if (player.getLife() <= 0) return true;
+    	return false;
+    }
+    
+    public void updateGameClockByFrame() {
+    	this.gameClock++;
+    }
+    
+    public double getGameClock() {
+    	return this.gameClock;
+    }
+    
+    public int getLife() {
+    	return player.getLife();
+    }
+    
+    public int getMoney() {
+    	return player.getMoney();
+    }
 }
