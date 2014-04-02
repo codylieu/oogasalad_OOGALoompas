@@ -21,7 +21,7 @@ public class Model {
 
     private JGEngineInterface engine;
     private TowerFactory towerFactory;
-    private MonsterFactory monsterFactory;
+//    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
     private Point entrance;
@@ -33,7 +33,7 @@ public class Model {
 
     public Model() {
         this.towerFactory = new TowerFactory(engine);
-        this.monsterFactory = new MonsterFactory(engine);
+//        this.monsterFactory = new MonsterFactory(engine);
         this.gsonParser = new Gson();
         this.gameClock = 0;
         this.gsonParser = new Gson();
@@ -139,7 +139,7 @@ public class Model {
     }
     
     public void setTemporaryWaveSchema() {
-    	MonsterSpawnSchema schema = new MonsterSpawnSchema("SimpleMonster", 5);
+    	MonsterSpawnSchema schema = new MonsterSpawnSchema("SimpleMonster", 5, engine);
     	currentWave = new WaveSpawnSchema();
     	currentWave.addMonsterSchema(schema);
     }
