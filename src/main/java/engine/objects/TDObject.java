@@ -1,6 +1,6 @@
 package main.java.engine.objects;
 
-import jgame.JGObject;
+import main.resources.jgame.JGObject;
 
 /**
  * Abstract extension of JGObject. Represents monsters, towers, etc.

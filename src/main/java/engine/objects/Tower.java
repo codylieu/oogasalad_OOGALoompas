@@ -5,14 +5,11 @@ import main.java.engine.objects.TDObject;
 
 public class Tower extends TDObject {
 
-    public static final String TOWER_GFX = "tower";
     public static final int TOWER_CID = 0;
-
-    public static final double DEFAULT_DAMAGE = 50;
-    public static final double DEFAULT_RANGE = 50;
 
     private double myDamage;
     private double myRange;
+    private String myProjectile;
 
     /**
      * Create a tower at the specified x,y coordinate.
@@ -20,10 +17,11 @@ public class Tower extends TDObject {
      * @param x
      * @param y
      */
-    public Tower (double x, double y) {
-        super("tower", x, y, TOWER_CID, TOWER_GFX);
-        myDamage = DEFAULT_DAMAGE;
-        myRange = DEFAULT_RANGE;
+    public Tower (double x, double y, String tower_gfx, double damage, double range, String projectile) {
+        super("tower", x, y, TOWER_CID, tower_gfx);
+        myDamage = damage;
+        myRange = range;
+        myProjectile = projectile;
     }
 
     /**

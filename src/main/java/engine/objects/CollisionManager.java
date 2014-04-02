@@ -1,7 +1,7 @@
 package main.java.engine.objects;
 
 import main.java.engine.objects.monster.Monster;
-import jgame.platform.JGEngine;
+import main.resources.jgame.platform.JGEngine;
 
 
 public class CollisionManager {
