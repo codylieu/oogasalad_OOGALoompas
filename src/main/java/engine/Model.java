@@ -99,7 +99,7 @@ public class Model {
     	return this.gameClock;
     }
     
-    public int getLife() {
+    public int getPlayerLife() {
     	return player.getLife();
     }
     

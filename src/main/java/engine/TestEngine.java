@@ -65,7 +65,7 @@ public class TestEngine extends JGEngine {
     
     private void displayGameStats() {
     	this.drawString("Score: "+model.getScore(), 50, 25, -1);
-    	this.drawString("Health: "+model.getLife(), 50, 50, -1);
+    	this.drawString("Lives left: "+model.getPlayerLife(), 50, 50, -1);
     	this.drawString("Money: "+model.getMoney(), 50, 75, -1);
     	this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
     }
