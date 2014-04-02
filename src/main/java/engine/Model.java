@@ -3,6 +3,7 @@ package main.java.engine;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import jgame.impl.JGEngineInterface;
+import main.java.engine.factories.TowerFactory;
 import main.java.engine.map.TDMap;
 
 import java.io.InputStream;
@@ -12,9 +13,19 @@ public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
 
     private JGEngineInterface engine;
+    private TowerFactory towerFactory;
+
+    public Model() {
+        this.towerFactory = new TowerFactory(engine);
+    }
 
     public void setEngine(JGEngineInterface engine) {
         this.engine = engine;
+        this.towerFactory = new TowerFactory(engine);
+    }
+
+    public void placeTower(double x, double y) {
+        towerFactory.placeTower(x, y);
     }
 
     /**

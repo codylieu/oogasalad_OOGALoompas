@@ -5,8 +5,11 @@ import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import jgame.platform.StdGame;
 
+import java.awt.event.MouseEvent;
+
 public class TestEngine extends JGEngine {
     private static TestEngine engine;
+    private Model model;
 
     public TestEngine() {
         initEngineApplet();
@@ -29,8 +32,30 @@ public class TestEngine extends JGEngine {
     @Override
     public void initGame() {
         setFrameRate(45, 1);
-        Model model = new Model();
+        this.model = new Model();
         model.setEngine(this);
         model.loadMap("testmap.json");
+        defineMedia("/main/resources/media.tbl");
+    }
+
+    @Override
+    public void doFrame() {
+        super.doFrame();
+        if (getMouseButton(1)) {
+            model.placeTower(getMouseX(), getMouseY());
+        }
+    }
+
+    @Override
+    public void paintFrame() {
+        highlightMouseoverTile();
+    }
+
+    private void highlightMouseoverTile() {
+        JGPoint mousePos = getMousePos();
+        int curXTilePos = mousePos.x/tileWidth() * tileWidth();
+        int curYTilePos = mousePos.y/tileHeight() * tileHeight();
+
+        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, JGColor.yellow);
     }
 }
