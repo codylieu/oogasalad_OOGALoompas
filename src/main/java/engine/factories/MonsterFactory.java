@@ -1,5 +1,6 @@
 package main.java.engine.factories;
 
+import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.objects.Monster;
 
@@ -11,6 +12,8 @@ public class MonsterFactory {
     }
 
    public void placeMoster(double x, double y) {
-       new Monster("monster", x, y, 100, 5, 10);
+
+	   new Monster("monster", x, y, 100, 5, 10);
    }
+ 
 }

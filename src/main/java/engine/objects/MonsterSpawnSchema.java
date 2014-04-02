@@ -1,5 +1,7 @@
 package main.java.engine.objects;
 
+import main.java.engine.factories.MonsterFactory;
+
 /**
  * A schema object to store information about which monster to create, and how many of it to be
  * created per swarm.
@@ -12,7 +14,7 @@ public class MonsterSpawnSchema {
     private String myMonsterName;
     private int mySwarmSize;
 
-    // private Factory myFactory;
+    private MonsterFactory myFactory;
 
     /**
      * 
