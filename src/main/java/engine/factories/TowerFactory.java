@@ -2,7 +2,8 @@ package main.java.engine.factories;
 
 import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
-import main.java.engine.objects.Tower;
+import main.java.engine.objects.tower.SimpleTower;
+import main.java.engine.objects.tower.Tower;
 
 public class TowerFactory {
     private JGEngineInterface engine;
@@ -13,7 +14,7 @@ public class TowerFactory {
 
     public void placeTower(double x, double y) {
         JGPoint tileOrigin = findTileOrigin(x, y);
-        new Tower(tileOrigin.x, tileOrigin.y);
+        new SimpleTower(tileOrigin.x, tileOrigin.y);
     }
 
     public JGPoint findTileOrigin(double x, double y) {
