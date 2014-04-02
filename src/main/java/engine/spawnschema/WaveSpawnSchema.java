@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+import main.java.engine.objects.monster.Monster;
+
 /**
  * 
  * A container for multiple MonsterSpawnSchema, representing all of the swarms of monsters to be spawned in a
@@ -42,14 +44,16 @@ public class WaveSpawnSchema {
     }
     
     
-
-    /**
-     * Create the wave of monsters specified by spawning all contained monster spawn schemas.
-     *
-     */
-    public void spawn () {
-    	for(MonsterSpawnSchema monsterSchema : myMonsterSchemas) {
-    		monsterSchema.spawn();
-    	}
-    }
+	/**
+	 * Create the wave of monsters specified by spawning all contained monster
+	 * spawn schemas.
+	 * 
+	 */
+	public Collection<Monster> spawn() {
+		Collection<Monster> allNewlyAdded = new ArrayList<Monster>();
+		for (MonsterSpawnSchema monsterSchema : myMonsterSchemas) {
+			allNewlyAdded.addAll(monsterSchema.spawn());
+		}
+		return allNewlyAdded;
+	}
 }

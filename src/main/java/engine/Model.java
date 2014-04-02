@@ -1,8 +1,8 @@
 package main.java.engine;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+
 import jgame.impl.JGEngineInterface;
-import main.java.engine.factories.MonsterFactory;
 import main.java.engine.factories.TowerFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.monster.Monster;
@@ -12,12 +12,10 @@ import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.exceptions.engine.InvalidTowerCreationParameters;
 
 import java.awt.Point;
-import java.io.InputStream;
+import java.awt.geom.Point2D;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -42,6 +40,8 @@ public class Model {
         this.gameClock = 0;
         this.currentWave = 0;
         this.allWaves = new ArrayList<WaveSpawnSchema>();
+        monsters = new ArrayList<Monster>();
+        towers = new ArrayList<Tower>();
     }
     
     public void addNewPlayer() {
@@ -55,7 +55,7 @@ public class Model {
 
     public void placeTower(double x, double y) {
         try {
-			towerFactory.placeSimpleTower("PunyTower", x, y);
+			towers.add(towerFactory.placeSimpleTower("PunyTower", x, y));
 		} catch (InvalidTowerCreationParameters e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -136,26 +136,67 @@ public class Model {
     }
     
     
-    private boolean gameWon () {
+    private boolean gameWon() {
     	if(currentWave >= allWaves.size()){
     		return true;
     	}
     	return false;
     }
     
-    /**
-     *  Spawns a new wave
-     */
-    public void spawnNextWave() {
-    	allWaves.get(currentWave).spawn();
+
+    private void spawnNextWave() {
+    	monsters.addAll(allWaves.get(currentWave).spawn());
     	//currentWave++;
     	//TODO: check if gameWon() ?
     }
     
     /**
-     * Add a wave to the game plan logic
-     * @param waveSchema
+     *  Spawns a new wave at determined intervals
      */
+    private void doSpawnActivity() {
+    	
+        if (gameClock % 100 == 0)
+        	spawnNextWave();
+        
+    }
+    
+    /**
+     *  The model's "doFrame()" method that updates all state, spawn monsters, etc.
+     */
+	public void updateGame() {
+		updateGameClockByFrame();
+		doSpawnActivity();
+        doTowerFiring();
+	}
+    
+	private void doTowerFiring() {
+		if (!monsters.isEmpty()) {
+			for (Tower t : towers) {
+				Point2D monsterCoor = getNearestMonsterCoordinate(new Point2D.Double(
+						t.x, t.y));
+				t.checkAndfireProjectile(monsterCoor);
+			}
+		}
+
+	}
+
+	private Point2D getNearestMonsterCoordinate(Point2D towerCoor) {
+		double minDistance = Double.MAX_VALUE;
+		Point2D closestMonsterCoor = null;
+		for(Monster m : monsters) {
+			if(m.getCurrentCoor().distance(towerCoor) < minDistance) {
+				minDistance = m.getCurrentCoor().distance(towerCoor);
+				closestMonsterCoor = m.getCurrentCoor();
+			}
+ 		}
+		return closestMonsterCoor;
+	}
+
+	/**
+	 * Add a wave to the game plan logic
+	 * 
+	 * @param waveSchema
+	 */
     public void addWaveToGame(WaveSpawnSchema waveSchema) {
     	allWaves.add(waveSchema);
     }

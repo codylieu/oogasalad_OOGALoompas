@@ -1,5 +1,7 @@
 package main.java.engine.objects.tower;
 
+import java.awt.geom.Point2D;
+
 import main.java.engine.objects.TDObject;
 
 
@@ -21,13 +23,21 @@ public abstract class Tower extends TDObject {
         myDamage = damage;
         myRange = range;
     }
-
+   
     /**
      * Shoot a projectile in the direction of the specified x,y target coordinates
      * 
-     * @param targetX
-     * @param targetY
+     * @param Point2D coordinate of target
      * @return 
      */
-    public abstract void fireProjectile(double targetX, double targetY);
+    public void checkAndfireProjectile(Point2D target) {
+    	if(target == null) return;
+    	Point2D currCoor = new Point2D.Double(x, y);
+    	if(target.distance(currCoor) < myRange ) {
+    		fireProjectile(target);
+    	}
+    }
+    
+    abstract void fireProjectile(Point2D target);
+
 }

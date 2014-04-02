@@ -1,5 +1,7 @@
 package main.java.engine.objects.monster;
 
+import java.awt.geom.Point2D;
+
 import main.java.engine.objects.TDObject;
 
 
@@ -55,5 +57,13 @@ public abstract class Monster extends TDObject {
      */
     public void takeDamage (double damage) {
         myHealth -= damage;
+    }
+    
+    /**
+     * Get current coordinate in a Point2D
+     * @return Current coordinate
+     */
+    public Point2D getCurrentCoor() {
+    	return new Point2D.Double(this.x, this.y);
     }
 }

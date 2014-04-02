@@ -8,6 +8,7 @@ import java.util.Map;
 import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.objects.tower.SimpleTower;
+import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.InvalidTowerCreationParameters;
 
 public class TowerFactory {
@@ -24,10 +25,10 @@ public class TowerFactory {
         towerParameters.put("PunyTower", parameterValuesForPunyTower);
     }
 
-    public void placeSimpleTower(String simpleTowerType, double x, double y) throws InvalidTowerCreationParameters {
+    public Tower placeSimpleTower(String simpleTowerType, double x, double y) throws InvalidTowerCreationParameters {
         JGPoint tileOrigin = findTileOrigin(x, y);
         List<Object> simpleTowerParameters = towerParameters.get(simpleTowerType);
-        new SimpleTower(tileOrigin.x, tileOrigin.y, (Double) simpleTowerParameters.get(0),
+        return new SimpleTower(tileOrigin.x, tileOrigin.y, (Double) simpleTowerParameters.get(0),
         		(Double) simpleTowerParameters.get(1), (String) simpleTowerParameters.get(2));
         
     /*

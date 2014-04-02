@@ -1,5 +1,6 @@
 package main.java.engine.factories;
 
+import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.monster.SimpleMonster;
 import jgame.impl.JGEngineInterface;
 
@@ -14,8 +15,8 @@ public class MonsterFactory {
 	   this(null);
    }
 
-   public void placeMoster() {
-       new SimpleMonster();
+   public Monster placeMoster() {
+       return new SimpleMonster();
    }
  
 }

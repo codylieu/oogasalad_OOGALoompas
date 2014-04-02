@@ -43,12 +43,10 @@ public class TestEngine extends JGEngine {
     @Override
     public void doFrame() {
         super.doFrame();
-        model.updateGameClockByFrame();
         if (getMouseButton(1)) {
             model.placeTower(getMouseX(), getMouseY());
         }
-        if (model.getGameClock() % 100 == 0)
-        	model.spawnNextWave();
+        model.updateGame();
         moveObjects();
 //        model.spawnMonster(100, 150);
     }
