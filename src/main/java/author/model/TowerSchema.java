@@ -2,7 +2,15 @@ package main.java.author.model;
 
 import java.util.ArrayList;
 
-public class Tower {
+/**
+ * 
+ * This is a settings object for a specific type of Tower like a Fire Tower, and at
+ * a high level is a wrapper for a bunch of key value pairs that the Engine will
+ * need to reference to create TDObjects. This class is not a specific instance
+ * of a Tower. Please refer to the Game Engine's TDObjects for the objects
+ * related to ones you will see onscreen.
+ */
+public class TowerSchema {
 	private int myId;
 	private int myHealth;
 	private int myFireRate;
@@ -12,7 +20,7 @@ public class Tower {
 	
 	private ArrayList<String> myAttributes;
 	
-	public Tower(int id) {
+	public TowerSchema(int id) {
 		myAttributes = new ArrayList<String>();
 		myId = id;
 	}

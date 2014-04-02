@@ -20,11 +20,11 @@ import main.java.data.datahandler.DataBundle;
  * @author In-Young Jo
  *
  */
-public class JSONParser {
+public class JSONDeserializer {
 
 	private DataBundle myData;
 
-	public JSONParser()	{
+	public JSONDeserializer()	{
 		myData = new DataBundle();
 	}
 
@@ -156,7 +156,7 @@ public class JSONParser {
 	}
 	
 	public static void main(String[] args) throws ClassNotFoundException, IOException	{
-		JSONParser j = new JSONParser();
+		JSONDeserializer j = new JSONDeserializer();
 		DataBundle d = j.readFile("blah");
 		System.out.println(d);
 	}
