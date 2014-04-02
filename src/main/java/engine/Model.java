@@ -14,9 +14,11 @@ public class Model {
 
     private JGEngineInterface engine;
     private TowerFactory towerFactory;
+    private Gson gsonParser;
 
     public Model() {
         this.towerFactory = new TowerFactory(engine);
+        this.gsonParser = new Gson();
     }
 
     public void setEngine(JGEngineInterface engine) {
@@ -36,10 +38,24 @@ public class Model {
     public void loadMap(String fileName) {
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
-            Gson gson = new Gson();
 
-            TDMap map = gson.fromJson(reader, TDMap.class);
+            TDMap map = gsonParser.fromJson(reader, TDMap.class);
             map.loadIntoGame(engine);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Loads a wave spawn schema into the model
+     *
+     * @param fileName The name of the JSON file containing wave spawn schema info
+     */
+    public void loadWaveSpawnSchema(String fileName) {
+        try {
+            JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
+            TDMap map = gsonParser.fromJson(reader, TDMap.class);
+            //TODO: load state 
         } catch (Exception e) {
             e.printStackTrace();
         }

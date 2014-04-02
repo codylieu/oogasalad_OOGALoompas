@@ -1,4 +1,4 @@
-package main.java.engine.objects;
+package main.java.engine.spawnschema;
 
 /**
  * A schema object to store information about which monster to create, and how many of it to be
