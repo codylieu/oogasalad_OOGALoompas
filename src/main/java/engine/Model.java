@@ -5,6 +5,7 @@ import com.google.gson.stream.JsonReader;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.factories.TowerFactory;
 import main.java.engine.map.TDMap;
+import main.java.engine.spawnschema.WaveSpawnSchema;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -15,6 +16,7 @@ public class Model {
     private JGEngineInterface engine;
     private TowerFactory towerFactory;
     private Gson gsonParser;
+    private WaveSpawnSchema currentWave;
 
     public Model() {
         this.towerFactory = new TowerFactory(engine);
@@ -54,10 +56,20 @@ public class Model {
     public void loadWaveSpawnSchema(String fileName) {
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
-            TDMap map = gsonParser.fromJson(reader, TDMap.class);
-            //TODO: load state 
+            WaveSpawnSchema newWave = gsonParser.fromJson(reader, WaveSpawnSchema.class);
+            
+          //TODO: set up wave # -> wave schema map object
+            currentWave = newWave; 
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     *  Spawns a new wave.
+     */
+    public void spawnNextWave() {
+    	currentWave.spawn();
+    	//TODO: keep track of wave# state .. 
     }
 }
