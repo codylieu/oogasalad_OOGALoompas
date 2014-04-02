@@ -11,6 +11,13 @@ import main.java.author.view.tabs.EnemyEditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.TowerEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
+import java.io.IOException;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  * Frame that represents the GUI for the Authoring environment.
@@ -24,7 +31,7 @@ public class AuthoringView extends JFrame {
 		myController = new MainController();
 		createEditorTabs(myController);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		setMenuBar(new MenuBar());
+		setMenuBar(new MenuBar()); // This doesn't work. Usually I use setJMenuBar, but it gives me a compile error now.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		pack();
@@ -37,7 +44,7 @@ public class AuthoringView extends JFrame {
 	public void createEditorTabs(MainController controller) {
 		tabbedPane.add("Game Settings Editor", new GameSettingsEditorTab(controller));
 		tabbedPane.add("Tower Editor", new TowerEditorTab(controller));
-//		tabbedPane.add("Enemy Editor", new EnemyEditorTab(controller));
+		tabbedPane.add("Enemy Editor", new EnemyEditorTab(controller));
 		tabbedPane.add("Terrain Editor", new TerrainEditorTab(controller));
 	}
 

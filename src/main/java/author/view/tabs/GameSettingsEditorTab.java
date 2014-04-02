@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
@@ -32,6 +33,8 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JTextField beginningMoneyField;
 	
 	private NumberFormat numberFormat;
+	
+	private JButton submitButton;
 
 	public GameSettingsEditorTab(MainController controller){
 		super(controller);
@@ -70,7 +73,24 @@ public class GameSettingsEditorTab extends EditorTab{
 		attributes.add(makeLabelPane(), BorderLayout.WEST);
 		attributes.add(makeFieldPane(), BorderLayout.EAST);
 		
+		attributes.add(makeSubmitButton(), BorderLayout.SOUTH);
+		
 		return attributes;
+	}
+	
+	private JComponent makeSubmitButton(){
+		submitButton = new JButton("Submit");
+		
+		submitButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+			
+		});
+		
+		return submitButton;
 	}
 	
 	private JComponent makeLabelPane(){

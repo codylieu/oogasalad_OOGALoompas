@@ -39,7 +39,7 @@ import main.java.author.util.UtilFunctions;
 public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JLabel picture;
 	private DefaultListModel listModel;
-	private JList<String> list;
+	private JList list;
 	private JSplitPane splitPane;
 	private JPanel designEnemyPane;
 	private JLabel healthLabel;
@@ -90,7 +90,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	public Component makeOverallTabContent() {
 		listModel = new DefaultListModel();
 		listModel.addElement("Default Enemy Name");
-		list = new JList<String>(listModel);
+		list = new JList(listModel);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectedIndex(0);
 		list.addListSelectionListener(this);
