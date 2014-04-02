@@ -18,14 +18,19 @@ public class TowerFactory {
         this.engine = engine;
         //Add code for reflection mapping of towers from JSON
         List<Object> parameterValuesForPunyTower = new ArrayList<Object>();
-        parameterValuesForPunyTower.add(1);
-        parameterValuesForPunyTower.add(2);
+        parameterValuesForPunyTower.add(new Double(1));
+        parameterValuesForPunyTower.add(new Double(2));
         parameterValuesForPunyTower.add("SimpleTower");
         towerParameters.put("PunyTower", parameterValuesForPunyTower);
     }
 
     public void placeSimpleTower(String simpleTowerType, double x, double y) throws InvalidTowerCreationParameters {
         JGPoint tileOrigin = findTileOrigin(x, y);
+        List<Object> simpleTowerParameters = towerParameters.get(simpleTowerType);
+        new SimpleTower(tileOrigin.x, tileOrigin.y, (Double) simpleTowerParameters.get(0),
+        		(Double) simpleTowerParameters.get(1), (String) simpleTowerParameters.get(2));
+        
+    /*
         try {
         List<Object> simpleTowerParameters = towerParameters.get(simpleTowerType);
         new SimpleTower(tileOrigin.x, tileOrigin.y, (Double) simpleTowerParameters.get(0),
@@ -34,6 +39,7 @@ public class TowerFactory {
         catch (Exception e) {
         	throw new InvalidTowerCreationParameters();
         }
+        */
     }
 
     public JGPoint findTileOrigin(double x, double y) {
