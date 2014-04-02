@@ -139,7 +139,7 @@ public class Model {
     }
     
     public void setTemporaryWaveSchema() {
-    	MonsterSpawnSchema schema = new MonsterSpawnSchema("SimpleMonster", 5, engine);
+    	MonsterSpawnSchema schema = new MonsterSpawnSchema("SimpleMonster", 5);
     	currentWave = new WaveSpawnSchema();
     	currentWave.addMonsterSchema(schema);
     }

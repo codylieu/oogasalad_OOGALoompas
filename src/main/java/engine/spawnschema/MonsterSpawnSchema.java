@@ -21,10 +21,11 @@ public class MonsterSpawnSchema {
      * @param monsterToCreate String representation for Factory creation
      * @param swarmSize how many of the specified monster to be created
      */
-    public MonsterSpawnSchema (String monsterToCreate, int swarmSize, JGEngineInterface engine) {
+    public MonsterSpawnSchema (String monsterToCreate, int swarmSize) {
         myMonsterName = monsterToCreate;
         mySwarmSize = swarmSize;
-        myFactory = new MonsterFactory(engine);
+//        myFactory = new MonsterFactory(engine);
+        myFactory = new MonsterFactory();
     }
 
     /**
