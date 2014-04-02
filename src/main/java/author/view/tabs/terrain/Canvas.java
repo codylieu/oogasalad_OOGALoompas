@@ -109,6 +109,14 @@ public class Canvas extends JPanel {
 		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
 		repaint(); 
 	}
+	
+	protected void clearTiles() {
+		for (Tile tile : getTiles()) {
+			tile.setImage(null);
+			tile.setColor(DEFAULT_TILE_COLOR);
+			repaint();
+		}
+	}
 
 	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;

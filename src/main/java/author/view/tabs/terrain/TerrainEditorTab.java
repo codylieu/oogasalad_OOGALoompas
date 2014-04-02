@@ -16,6 +16,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import main.java.author.controller.MainController;
@@ -26,10 +27,13 @@ import main.java.author.view.tabs.terrain.types.TileObject;
 import main.java.author.view.tabs.terrain.types.Tree;
 import main.java.author.view.tabs.terrain.types.Water;
 
+import static main.java.author.controller.ActionListenerUtil.actionListener;
+
 public class TerrainEditorTab extends EditorTab{
 
 	private List<TileObject> availableTiles;
 	private static final String TERRAIN_TYPE_PCKG = "main.java.author.view.tabs.terrain.types.";
+	private static final String CLEAR = "Clear Tiles";
 	private String [] terrainTypes = { "Ground", "Grass", "Water", "Tree" };
 	private Canvas myCanvas;
 	
@@ -38,6 +42,7 @@ public class TerrainEditorTab extends EditorTab{
 		initTerrainTypes();
 		add(myCanvas = new Canvas(), BorderLayout.CENTER);
 		add(getTileList(), BorderLayout.EAST);
+		add(initClearButton(), BorderLayout.SOUTH);
 	}
 	
 	private void initTerrainTypes() {
@@ -54,6 +59,16 @@ public class TerrainEditorTab extends EditorTab{
 				availableTiles.add(tileObj);
 			} catch (Exception e) { e.printStackTrace(); } 
 		}
+	}
+	
+	private JButton initClearButton() {
+		JButton clearButton = new JButton(CLEAR);
+		clearButton.addActionListener(actionListener(this, "clearCanvasTiles"));
+		return clearButton;
+	}
+	
+	public void clearCanvasTiles(ActionEvent event) {
+		myCanvas.clearTiles();
 	}
 
 	private JPanel getTileList() {
