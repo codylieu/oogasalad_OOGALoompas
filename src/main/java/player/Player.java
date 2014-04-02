@@ -135,7 +135,17 @@ public class Player {
 			buttonPanel.add(temp);
 			buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
 		}
-
+		
+		JButton exitButton = new JButton("Exit");
+		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		exitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+				frame.pack();
+			}
+		});
+		buttonPanel.add(exitButton);
+		buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
 		return buttonPanel;
 	}
 
