@@ -15,6 +15,8 @@ import java.awt.Point;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -29,14 +31,15 @@ public class Model {
     private List<Tower> towers;
     private List<Monster> monsters;
     private Gson gsonParser;
-    private WaveSpawnSchema currentWave;
+    private int currentWave;
+    private List<WaveSpawnSchema> allWaves;
 
     public Model() {
         this.towerFactory = new TowerFactory(engine);
 //        this.monsterFactory = new MonsterFactory(engine);
         this.gsonParser = new Gson();
         this.gameClock = 0;
-        this.gsonParser = new Gson();
+        this.currentWave = 0;
     }
     
     public void addNewPlayer() {
@@ -123,8 +126,8 @@ public class Model {
             JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
             WaveSpawnSchema newWave = gsonParser.fromJson(reader, WaveSpawnSchema.class);
             
-          //TODO: set up wave # -> wave schema map object
-            currentWave = newWave; 
+            addWaveToGame(newWave); 
+            
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -134,13 +137,26 @@ public class Model {
      *  Spawns a new wave.
      */
     public void spawnNextWave() {
-    	currentWave.spawn();
-    	//TODO: keep track of wave# state .. 
+    	allWaves.get(currentWave).spawn();
+    	currentWave++;
     }
     
+    /**
+     * Add a wave to the game plan logic
+     * @param waveSchema
+     */
+    public void addWaveToGame(WaveSpawnSchema waveSchema) {
+    	allWaves.add(waveSchema);
+    }
+    
+    
+    /**
+     * Test method
+     */
     public void setTemporaryWaveSchema() {
-    	MonsterSpawnSchema schema = new MonsterSpawnSchema("SimpleMonster", 5);
-    	currentWave = new WaveSpawnSchema();
-    	currentWave.addMonsterSchema(schema);
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 5);
+    	WaveSpawnSchema wschema = new WaveSpawnSchema();
+    	wschema.addMonsterSchema(mschema);
+    	addWaveToGame(wschema);
     }
 }
