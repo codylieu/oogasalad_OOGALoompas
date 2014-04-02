@@ -14,6 +14,7 @@ import main.java.exceptions.engine.InvalidTowerCreationParameters;
 import java.awt.Point;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -40,6 +41,7 @@ public class Model {
         this.gsonParser = new Gson();
         this.gameClock = 0;
         this.currentWave = 0;
+        this.allWaves = new ArrayList<WaveSpawnSchema>();
     }
     
     public void addNewPlayer() {
@@ -133,12 +135,21 @@ public class Model {
         }
     }
     
+    
+    private boolean gameWon () {
+    	if(currentWave >= allWaves.size()){
+    		return true;
+    	}
+    	return false;
+    }
+    
     /**
-     *  Spawns a new wave.
+     *  Spawns a new wave
      */
     public void spawnNextWave() {
     	allWaves.get(currentWave).spawn();
-    	currentWave++;
+    	//currentWave++;
+    	//TODO: check if gameWon() ?
     }
     
     /**
