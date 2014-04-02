@@ -29,7 +29,7 @@ public class Model {
     }
 
     public void placeTower(double x, double y) {
-        towerFactory.placeTower(x, y);
+        towerFactory.placeSimpleTower("SimpleTower",x, y);
     }
 
     /**
