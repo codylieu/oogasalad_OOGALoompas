@@ -52,12 +52,9 @@ public class Tile extends JPanel {
 		return myColumn;
 	}
 	
-	public boolean isSelected() {
-		return isSelected;
-	}
-	
 	protected void setImage(String imgName) {
 		if (imgName == null) {
+			myImg = null;
 			return;
 		}
 		try {

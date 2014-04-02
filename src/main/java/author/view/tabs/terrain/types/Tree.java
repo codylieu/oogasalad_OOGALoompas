@@ -1,21 +1,21 @@
-package main.java.author.view.tabs.terrain;
+package main.java.author.view.tabs.terrain.types;
 
 import java.awt.Color;
 
 public class Tree extends TileObject {
 
 	@Override
-	boolean canWalkOver() {
+	public boolean canWalkOver() {
 		return false;
 	}
 
 	@Override
-	Color getBGColor() {
+	public Color getBGColor() {
 		return new Color(0, 100, 0);
 	}
 
 	@Override
-	String getImage() {
+	public String getImage() {
 		return "tree.png";
 	}
 

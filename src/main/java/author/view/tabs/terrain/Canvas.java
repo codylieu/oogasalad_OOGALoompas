@@ -1,6 +1,8 @@
 package main.java.author.view.tabs.terrain;
 import javax.swing.*;
 
+import main.java.author.view.tabs.terrain.types.TileObject;
+
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
@@ -18,10 +20,10 @@ public class Canvas extends JPanel {
 
 	public static final int NUM_ROWS = 10;
 	public static final int NUM_COLS = 15;
-	public static final int TILE_SIZE = 32; // in pixels
+	public static final int TILE_SIZE = 50; // in pixels
 
 	private final Tile[][] myTiles;
-	private static TileObject selectedTileObj;
+	private TileObject selectedTileObj;
 
 	public Canvas(){
 		myTiles = new Tile[NUM_COLS][NUM_ROWS];
@@ -107,8 +109,16 @@ public class Canvas extends JPanel {
 		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
 		repaint(); 
 	}
+	
+	protected void clearTiles() {
+		for (Tile tile : getTiles()) {
+			tile.setImage(null);
+			tile.setColor(DEFAULT_TILE_COLOR);
+			repaint();
+		}
+	}
 
-	public static void setSelectedTileObj(TileObject tObj) {
+	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
 	}
 }

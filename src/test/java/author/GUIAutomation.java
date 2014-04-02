@@ -6,22 +6,28 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
 import java.awt.MouseInfo;
 import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.io.*;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,92 +36,84 @@ import javax.swing.JPanel;
 import main.java.author.view.AuthoringView;
 
 public class GUIAutomation extends JPanel{
-	private static Robot robot;
-	private List<Integer> mouseXPos;
-	private List<Integer> mouseYPos;
-	private static final int CLICK = -1;
-	private static final int DRAG = -2;
-	private boolean mousePressed;
-	private boolean mouseReleased;
-	private boolean shouldUpdatePos;
-	private boolean hasBeenClicked;
-	private int mousePressedX;
-	private int mousePressedY;
-	private int mouseReleasedX;
-	private int mouseReleasedY;
-	private boolean isRecording;
 	
+	public static final String MOUSE_PRESS = "MousePress";
+	public static final String MOUSE_RELEASE = "MouseRelease";
+	public static final String KEY_PRESS = "KeyPress";
+	public static final String KEY_RELEASE = "KeyRelease";
+	protected static final String MY_DATA_RECORD = "src/test/java/author/MyRecord.ser";
+	
+	private List<UserInputCommand> myRecordedData = new ArrayList<UserInputCommand>();
+	
+	private static final int MAX_RECORD_TIME = 25; // (in seconds) can be changed, but kept small so we don't
+	                                               // exceed bounds of ArrayList
+
+	private boolean isRecording;     // is the program currently recording 
+	
+
+	
+	/**
+	 * Executes the recording (really obtaining data for the logging) of mouse movements, clicks, drags
+	 */
 	private void record() {
-		System.out.println("Recording..");
 		isRecording = true;
 		long initTime = System.currentTimeMillis() / 1000;
 		long currTime;
-		mouseXPos = new ArrayList<Integer>();
-		mouseYPos = new ArrayList<Integer>();
-		while (isRecording && (currTime = System.currentTimeMillis() / 1000) < 25 + initTime) {
+		
+		int myLastX = MouseInfo.getPointerInfo().getLocation().x;
+		int myLastY = MouseInfo.getPointerInfo().getLocation().y;
+		
+		while (isRecording && (currTime = System.currentTimeMillis() / 1000) < MAX_RECORD_TIME + initTime) {
+			 // obtaining mouse absolute location
 			int xLoc = MouseInfo.getPointerInfo().getLocation().x;
 			int yLoc = MouseInfo.getPointerInfo().getLocation().y;
-			boolean shouldMark = (mouseXPos.size() == 0) ? true : !(xLoc == mouseXPos.get(mouseXPos.size() - 1)
-					&& yLoc == mouseYPos.get(mouseYPos.size() - 1));
+			
+			// we typically prevent marking the position of identical, consecutive points as we are concerned
+			// with mouse movement, rather than a stationary mouse. In addition, failing to do so results in
+			// extremely slow playback time as we would be taking measurements of the mouse position at a very high frequency
+			boolean shouldMark = (myRecordedData.size() == 0) ? true : !(xLoc == myLastX
+					&& yLoc == myLastY);                 
+			
+			if (shouldMark) {
+				myLastX = xLoc;
+				myLastY = yLoc;
+			}
 
-			if (shouldUpdatePos) {
-				mousePressedX = MouseInfo.getPointerInfo().getLocation().x;
-				mousePressedY = MouseInfo.getPointerInfo().getLocation().y;
-				shouldUpdatePos = false;
+			if (shouldMark) {
+				myRecordedData.add(new MouseLocationCommand(myLastX, myLastY));
 			}
-			if (mouseReleased) {
-				mouseReleasedX = MouseInfo.getPointerInfo().getLocation().x;
-				mouseReleasedY = MouseInfo.getPointerInfo().getLocation().y;
-			}
-			
-			if (hasBeenClicked) {
-				if (mousePressedX == mouseReleasedX && mousePressedY == mouseReleasedY) {
-					mouseXPos.add(CLICK);
-					mouseYPos.add(CLICK);
-				} else {
-					mouseXPos.add(DRAG);
-					mouseYPos.add(DRAG);
-				}
-				hasBeenClicked = false;
-			}
-			
-			if (shouldMark && !mousePressed) {
-				mouseXPos.add(MouseInfo.getPointerInfo().getLocation().x);
-				mouseYPos.add(MouseInfo.getPointerInfo().getLocation().y);
-			}
-			
 		}
+		removeLastClick();
 		logToFile();
 	}
 
+	/**
+	 * Logs information about the set of events that have occurred
+	 * during the recording
+	 */
 	private void logToFile() {
 		try {
-			File file = new File("src/test/java/author/test.txt");
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-			FileWriter fw = new FileWriter(file);
-			BufferedWriter bw = new BufferedWriter(fw);
-			for (int count = 0; count < mouseXPos.size(); count++) {
-				bw.write("xPos: " + mouseXPos.get(count) + " yPos: " + mouseYPos.get(count) + "\n");
-			}
-			bw.close();
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	        FileOutputStream fos = new FileOutputStream(MY_DATA_RECORD);
+	        ObjectOutputStream oos = new ObjectOutputStream (fos);
+	        oos.writeObject(myRecordedData);
+	        fos.close();
+	        oos.close ();
+	    } catch ( Exception ex ) {
+	        ex.printStackTrace ();
+	    }
 	}
 
-	private void allowStop(Component c) {
+	
+	/**
+	 * Constructs a way in which the user can stop the 'recording'
+	 */
+	private void allowStop() {
 		JFrame stopFrame = new JFrame();
 		JButton stopButton = new JButton("STOP RECORDING");
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				isRecording = false;
-				mouseXPos.remove(mouseXPos.size() - 1);
-				mouseYPos.remove(mouseYPos.size() - 1);
 				System.out.println("Recording stopped.");
 			}
 		});
@@ -125,67 +123,64 @@ public class GUIAutomation extends JPanel{
 		stopButton.setPreferredSize(new Dimension(200,100));
 		stopFrame.getContentPane().add(stopButton, BorderLayout.CENTER);
 		stopFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		stopFrame.setLocationRelativeTo(c);
+		stopFrame.setLocationRelativeTo(null); // offsets the JButton so it does not appear over user's view
 		stopFrame.pack();
 		stopFrame.setVisible(true);
 	}
 
-	private void initRobot() {
-		try {
-			robot = new Robot();
-		} catch (AWTException e) { e.printStackTrace(); }
-	}
-
+	/**
+	 * Creates a global mouse listener, works regardless of the component the mouse clicks on
+	 */
 	private void initMouse() {
 		long eventMask = AWTEvent.MOUSE_EVENT_MASK;  
 
-		Toolkit.getDefaultToolkit().addAWTEventListener( new AWTEventListener()  
-		{  
-			public void eventDispatched(AWTEvent e)  
-			{  
+		Toolkit.getDefaultToolkit().addAWTEventListener(new AWTEventListener() {  
+			public void eventDispatched(AWTEvent e) { 
 				if(e.toString().contains("MOUSE_PRESSED")) {
-					mousePressed = true;
-					mouseReleased = false;
-					shouldUpdatePos = true;
+					myRecordedData.add(new MousePressCommand());
 				}
-				
 				if(e.toString().contains("MOUSE_RELEASED")) {
-					mousePressed = false;
-					mouseReleased = true;
-					hasBeenClicked = true;
+					myRecordedData.add(new MouseReleaseCommand());
 				}
-				
 			}  
 		}, eventMask);  
-
 	}
 	
-/*	private int getXCor(AWTEvent e) {
-		int absolute = e.toString().indexOf("absolute");
-		int firstParenth = e.toString().indexOf("(", absolute);
-		int endComma = e.toString().indexOf(",", firstParenth);
-		String xCor = e.toString().substring(firstParenth + 1, endComma);
-		System.out.println(xCor);
-		return Integer.parseInt(xCor);
+	private void initKeyboard() {
+		KeyboardFocusManager.getCurrentKeyboardFocusManager()
+		  .addKeyEventDispatcher(new KeyEventDispatcher() {
+		      @Override
+		      public boolean dispatchKeyEvent(KeyEvent e) {
+		    	String keyEventInfo = e.toString();
+		        if (keyEventInfo.contains("KEY_PRESSED")) {
+		        	myRecordedData.add(new KeyPressCommand(e.getKeyCode()));
+		        }
+		        if (keyEventInfo.contains("KEY_RELEASED")) {
+		        	myRecordedData.add(new KeyReleaseCommand(e.getKeyCode()));
+		        }
+		        return false;
+		      }
+		});
 	}
 	
-	private int getYCor(AWTEvent e) {
-		int absolute = e.toString().indexOf("absolute");
-		int firstParenth = e.toString().indexOf("(", absolute);
-		int firstComma = e.toString().indexOf(",",firstParenth);
-		int endParenth = e.toString().indexOf(")", firstParenth);
-		String yCor = e.toString().substring(firstComma + 1, endParenth);
-		System.out.println(yCor);
-		return Integer.parseInt(yCor);
-	}*/
-
+	private void removeLastClick() {
+		if (!isRecording) {
+			for (int count = myRecordedData.size() - 1; count >= 0; count--) {
+				if (myRecordedData.get(count) instanceof MousePressCommand) {
+					myRecordedData.remove(count);
+					return;
+				}
+			}
+		}
+	}
+	
 	public static void main (String [] args) {
 		GUIAutomation automation = new GUIAutomation();
-		AuthoringView view = new AuthoringView();
+		System.out.println("Recording..");
+		AuthoringView view = new AuthoringView(); // MAKE INSTANCE OF YOUR OWN VIEW HERE
 		automation.initMouse();
-		automation.allowStop(null);
-		automation.initRobot();
+		automation.initKeyboard();
+		automation.allowStop();
 		automation.record();
-
 	}	
 }
