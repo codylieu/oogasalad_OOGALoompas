@@ -33,7 +33,6 @@ public class MonsterSpawnSchema {
      */
     public void spawn () {
         for (int i = 0; i < mySwarmSize; i++) {
-            // myFactory.create(myMonsterName);
         	myFactory.placeMoster();
         }
     }

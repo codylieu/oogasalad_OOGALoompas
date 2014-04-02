@@ -47,7 +47,7 @@ public class TestEngine extends JGEngine {
         if (getMouseButton(1)) {
             model.placeTower(getMouseX(), getMouseY());
         }
-        if (model.getGameClock() % 40 == 0)
+        if (model.getGameClock() % 100 == 0)
         	model.spawnNextWave();
         moveObjects();
 //        model.spawnMonster(100, 150);
