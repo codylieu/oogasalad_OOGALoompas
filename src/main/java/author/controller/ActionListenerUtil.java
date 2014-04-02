@@ -6,6 +6,14 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+/**
+ * IMPORTANT: This class is entirely taken from 
+ * 
+ * http://stackoverflow.com/questions/10271924/how-to-implement-and-mantain-multiple-actionlistener
+ *
+ * and is soon to be cleared for use with Professor Duvall. 
+ */
+
 public class ActionListenerUtil {    
 	  private static final Class<?>[] INTERFACES = { ActionListener.class };
 
