@@ -16,31 +16,31 @@ import java.util.List;
 
 import main.java.author.view.AuthoringView;
 
-public class GUIAutomationPlayback {
+public class EventPlayback {
 
 	private List<UserInputCommand> myRecordedCommands;
 	
-	public GUIAutomationPlayback() {
+	public EventPlayback() {
 		play();
 	}
 	
 	private void play() {
 
 		try{
-			FileInputStream fin = new FileInputStream(GUIAutomation.MY_DATA_RECORD);
-			ObjectInputStream ois = new ObjectInputStream(fin);
-			myRecordedCommands = (ArrayList<UserInputCommand>) ois.readObject();
-			ois.close();
-
-		}catch(Exception ex){
-			ex.printStackTrace();
+			FileInputStream fileIn = new FileInputStream(EventRecorder.MY_DATA_RECORD);
+			ObjectInputStream objIn = new ObjectInputStream(fileIn);
+			myRecordedCommands = (ArrayList<UserInputCommand>) objIn.readObject();
+			fileIn.close();
+			objIn.close();
+		} catch(Exception e) {
+			e.printStackTrace();
 		} 
 		
-		Robot myRobot;
+		Robot myRobot = null;
 		try {
 			myRobot = new Robot();
 		} catch (AWTException e) {
-			myRobot = null;
+			e.printStackTrace();
 		}
 
 		for (UserInputCommand command : myRecordedCommands) {
@@ -50,7 +50,7 @@ public class GUIAutomationPlayback {
 
 	public static void main (String [] args) {
 		new AuthoringView();
-		new GUIAutomationPlayback();
+		new EventPlayback();
 	}
 	
 }
