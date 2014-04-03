@@ -32,9 +32,10 @@ public class TestEngine extends JGEngine {
     @Override
     public void initGame() {
         setFrameRate(45, 1);
-        this.model = new Model();
-        model.setEngine(this);
+        this.model = new Model(this);
         model.addNewPlayer();
+        model.setEntrance(0, this.pfHeight()/2);
+        model.setExit(this.pfWidth()/2, this.pfHeight()/2);
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
         model.setTemporaryWaveSchema();
@@ -43,13 +44,13 @@ public class TestEngine extends JGEngine {
     @Override
     public void doFrame() {
         super.doFrame();
-        model.updateGameClockByFrame();
         if (getMouseButton(1)) {
             model.placeTower(getMouseX(), getMouseY());
+            clearMouseButton(1);
         }
-        if (model.getGameClock() % 100 == 0)
-        	model.spawnNextWave();
+        model.updateGame();
         moveObjects();
+        model.checkCollisions();
 //        model.spawnMonster(100, 150);
     }
 

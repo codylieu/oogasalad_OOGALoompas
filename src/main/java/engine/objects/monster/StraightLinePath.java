@@ -10,11 +10,12 @@ import java.awt.geom.Point2D;
  */
 public class StraightLinePath implements IMonsterPath {
 
-    private Point2D myTargetExit = new Point2D.Double(0, 0);
+    private Point2D myTargetExit;
     private Monster myMonster;
 
-    public StraightLinePath (Monster monsterToControl) {
+    public StraightLinePath (Monster monsterToControl, Point2D destination) {
         myMonster = monsterToControl;
+        myTargetExit  = destination;
     }
 
     // will need access to knowledge of exit(s), towers and terrain obstacles.

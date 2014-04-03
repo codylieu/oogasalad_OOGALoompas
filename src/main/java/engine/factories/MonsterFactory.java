@@ -1,5 +1,8 @@
 package main.java.engine.factories;
 
+import java.awt.geom.Point2D;
+
+import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.monster.SimpleMonster;
 import jgame.impl.JGEngineInterface;
 
@@ -14,8 +17,8 @@ public class MonsterFactory {
 	   this(null);
    }
 
-   public void placeMoster() {
-       new SimpleMonster();
+   public Monster placeMonster(Point2D entrance, Point2D exit) {
+       return new SimpleMonster(entrance, exit);
    }
  
 }
