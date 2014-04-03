@@ -38,6 +38,7 @@ public class TestEngine extends JGEngine {
         model.setExit(this.pfWidth()/2, this.pfHeight()/2);
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
+        model.loadSchemas("testtowers");
         model.setTemporaryWaveSchema();
     }
 

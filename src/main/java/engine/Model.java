@@ -5,8 +5,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import jgame.platform.JGEngine;
+import main.java.author.model.TowerSchema;
+import main.java.data.datahandler.DataBundle;
+import main.java.data.jsonhandler.JSONDeserializer;
 import main.java.engine.factories.TowerFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
@@ -64,7 +68,7 @@ public class Model {
      */
     public void placeTower(double x, double y) {
         try {
-			towerFactory.placeTower("PunyTower", x, y);
+			towerFactory.placeTower(x, y, "test tower 2");
 		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -82,6 +86,42 @@ public class Model {
 
             TDMap map = gsonParser.fromJson(reader, TDMap.class);
             map.loadIntoGame(engine);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads the game schemas from json and passes them to the appropriate factories.
+     *
+     * @param fileName Name of the json file containing the schemas
+     */
+    public void loadSchemas(String fileName) {
+        // JSONDeserializer deserializer = new JSONDeserializer();
+        // should deserialize but doesn't work right now for me
+
+        TowerSchema t1 = new TowerSchema();
+        t1.setMyName("test tower 1");
+        t1.setMyDamage(10);
+        t1.setMyRange(10);
+        t1.setMyImage("SimpleTower");
+
+        TowerSchema t2 = new TowerSchema();
+        t2.setMyName("test tower 2");
+        t2.setMyDamage(20);
+        t2.setMyRange(20);
+        t2.setMyImage("SimpleTower");
+
+        DataBundle d = new DataBundle();
+        d.add(t1);
+        d.add(t2);
+
+        try {
+            //DataBundle data = deserializer.readFile(fileName);
+            DataBundle data = d;
+            Map<Class<?>, List<Object>> dataMap = data.getDataMap();
+            List<TowerSchema> schemas = (List<TowerSchema>)(List<?>) dataMap.get(TowerSchema.class);
+            towerFactory.loadSchemas(schemas);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,7 +305,7 @@ public class Model {
 
 	/**
 	 * Returns the center of the object for targeting 
-	 * @param current object coordinate
+	 * @param m object coordinate
 	 * @return the center of the objects image according to the imageBBox
 	 */
 	private Point2D centerCoordinate(Monster m) {

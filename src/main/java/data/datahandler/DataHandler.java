@@ -33,7 +33,7 @@ public abstract class DataHandler {
 	 */
 	
 	public void serializeDataBundleToJSON(String filename) throws FileNotFoundException	{
-		mySerializer.write(filename, this);
+		mySerializer.write(filename, null);
 	}
 	
 	/**
