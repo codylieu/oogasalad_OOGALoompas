@@ -107,15 +107,15 @@ public class DataBundle {
 		p.readFile(filename);
 	}
 	
-//	public static void main(String[] args)	{
-//		DataBundle d = new DataBundle();
-//		d.add("a");
-//		d.add(1);
-//		List<String> l = new ArrayList<String>();
-//		l.add("b");
-//		l.add("c");
-//		d.add(l);
-//		System.out.println(d.getDataMap());
-//		System.out.println(d.getList(new String()));
-//	}
+	public static void main(String[] args)	{
+		DataBundle d = new DataBundle();
+		d.add("a");
+		d.add(1);
+		List<String> l = new ArrayList<String>();
+		l.add("b");
+		l.add("c");
+		d.add(l);
+		System.out.println(d.getDataMap());
+		System.out.println(d.getList(new String()));
+	}
 }

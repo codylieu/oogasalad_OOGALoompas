@@ -3,6 +3,7 @@ package main.java.data.jsonhandler;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +49,11 @@ public class JSONSerializer {
 		d.add(t2);
 		JSONSerializer j = new JSONSerializer();
 		j.write("blah",d);
+		List<TestGameObject> tlist = new ArrayList<TestGameObject>();
+		for(Object o : d.getList(t1))	{
+			tlist.add((TestGameObject) o);
+		}
+		System.out.println(tlist);
 	}
 	
 }
