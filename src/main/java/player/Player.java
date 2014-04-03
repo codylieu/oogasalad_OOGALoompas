@@ -91,15 +91,7 @@ public class Player {
 				}
 			}
 		});
-		files.add(new AbstractAction(LOAD_LIBRARY){
-			public void actionPerformed(ActionEvent e){
-				int response = fileChooser.showOpenDialog(null);
-				if(response == JFileChooser.APPROVE_OPTION){
-					File file = fileChooser.getSelectedFile();
-					System.out.println("FILE CHOSEN: " + file.getName());
-				}
-			}
-		});
+		files.add(new RepositoryViewer(LOAD_LIBRARY));
 		return files;
 	}
 
