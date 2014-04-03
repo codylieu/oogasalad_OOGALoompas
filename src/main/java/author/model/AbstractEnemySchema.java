@@ -2,15 +2,8 @@ package main.java.author.model;
 
 import java.awt.Dimension;
 
+public abstract class AbstractEnemySchema {
 
-/**
- * This is a settings object for a specific type of Enemy like a Spider, and at
- * a high level is a wrapper for a bunch of key value pairs that the Engine will
- * need to reference to create TDObjects. This class is not a specific instance
- * of an Enemy. Please refer to the Game Engine's TDObjects for the objects
- * related to ones you will see onscreen.
- */
-public class EnemySchema {
 	private String myName;
 	private String myImage;
 	private boolean isFlyingType;
@@ -65,4 +58,5 @@ public class EnemySchema {
 	public void setMyRewardAmount(double myRewardAmount) {
 		this.myRewardAmount = myRewardAmount;
 	}
+	
 }

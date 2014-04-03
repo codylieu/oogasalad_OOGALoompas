@@ -13,8 +13,8 @@ import java.util.List;
 public class GameBlueprint {
 
 	private GameScenario myGameScenario;
-	private List<TowerSchema> myTowerSchemas;
-	private List<EnemySchema> myEnemySchemas;
+	private List<SimpleTowerSchema> myTowerSchemas;
+	private List<SimpleEnemySchema> myEnemySchemas;
 	private List<LevelSchema> myLevelSchemas;
 	private List<GameMap> myGameMaps;
 
@@ -26,19 +26,19 @@ public class GameBlueprint {
 		this.myGameScenario = myGameScenario;
 	}
 
-	public List<TowerSchema> getMyTowerSchemas() {
+	public List<SimpleTowerSchema> getMyTowerSchemas() {
 		return myTowerSchemas;
 	}
 
-	public void setMyTowerSchemas(List<TowerSchema> myTowerSchemas) {
+	public void setMyTowerSchemas(List<SimpleTowerSchema> myTowerSchemas) {
 		this.myTowerSchemas = myTowerSchemas;
 	}
 
-	public List<EnemySchema> getMyEnemySchemas() {
+	public List<SimpleEnemySchema> getMyEnemySchemas() {
 		return myEnemySchemas;
 	}
 
-	public void setMyEnemySchemas(List<EnemySchema> myEnemySchemas) {
+	public void setMyEnemySchemas(List<SimpleEnemySchema> myEnemySchemas) {
 		this.myEnemySchemas = myEnemySchemas;
 	}
 
