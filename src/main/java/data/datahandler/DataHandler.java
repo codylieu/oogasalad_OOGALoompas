@@ -1,10 +1,13 @@
 package main.java.data.datahandler;
 
-import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.Map;
 
-import main.java.data.jsonhandler.JSONDeserializer;
-import main.java.data.jsonhandler.JSONSerializer;
+import com.google.gson.Gson;
 
 /**
  * An Abstract class for taking blueprints
@@ -16,26 +19,34 @@ import main.java.data.jsonhandler.JSONSerializer;
  */
 
 public abstract class DataHandler {
-	protected DataBundle myDataBundle;
-	private JSONSerializer mySerializer;
-	private JSONDeserializer myParser;
-	
+
+	private Gson myGson;
+
 	public DataHandler(){
-		myDataBundle = new DataBundle();
-		mySerializer = new JSONSerializer();
-		myParser = new JSONDeserializer();
+		myGson = new Gson();
 	}
-	
+
 	/**
 	 * Saves the current DataBundle with the provided filename
 	 * @param filename
-	 * @throws FileNotFoundException 
+	 * @throws IOException 
 	 */
-	
-	public void serializeDataBundleToJSON(String filename) throws FileNotFoundException	{
-		mySerializer.write(filename, this);
+	public void saveBundle(DataBundle dataBundle, String fileName) throws IOException	{
+
+		//JSON
+		/*PrintWriter output = new PrintWriter(new File("src/main/resources/" + fileName + ".txt"));
+		String objectAsJson = myGson.toJson(dataBundle);
+		output.println(objectAsJson);
+		output.close();*/
+
+		//Generic Java serialization
+		FileOutputStream fileOut = new FileOutputStream(fileName);
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		out.writeObject(dataBundle);
+		out.close();
+		fileOut.close();
 	}
-	
+
 	/**
 	 * Fills the DataBundle with information retrieved from the file with the
 	 * provided filename
@@ -43,8 +54,19 @@ public abstract class DataHandler {
 	 * @throws IOException 
 	 * @throws ClassNotFoundException 
 	 */
-	public DataBundle deserializeJSONToDataBundle(String filename) throws IOException, ClassNotFoundException	{
-		myParser.readFile(filename);
+	public DataBundle loadBundle(String fileName) throws IOException, ClassNotFoundException {
+		try {
+			FileInputStream fileIn = new FileInputStream(fileName);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			DataBundle toReturn = (DataBundle) in.readObject();
+			in.close();
+			fileIn.close();
+			return toReturn;
+		}
+		catch (IOException | ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return null;
 	}
 }
