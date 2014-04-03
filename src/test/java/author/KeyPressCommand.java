@@ -7,7 +7,6 @@ public class KeyPressCommand extends UserInputCommand {
 	private int myKeyCode;
 	
 	public KeyPressCommand(int keyCode) {
-		super(keyCode);
 		myKeyCode = keyCode;
 	}
 	
