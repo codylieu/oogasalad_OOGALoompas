@@ -34,6 +34,7 @@ import javax.swing.JTextArea;
 public class Player {
 
 	public static final String LOAD_GAME_DATA = "Load Game Data";
+	public static final String LOAD_LIBRARY = "Browse library";
 	public static final String FILELABEL = "File";
 	public static String HELP = "Instructions for game, how to save, etc";
 	public static String DIFFICULTY = "Difficulty";
@@ -64,10 +65,11 @@ public class Player {
 		show();
 	}
 
+	
 	public void showCard(String cardName){
 		cardLayout.show(cards,  cardName);
 	}
-
+	
 	private void makeFrame() {
 		frame = new JFrame();
 
@@ -81,6 +83,15 @@ public class Player {
 	private JMenu makeFileMenu(){
 		JMenu files = new JMenu(FILELABEL);
 		files.add(new AbstractAction(LOAD_GAME_DATA){
+			public void actionPerformed(ActionEvent e){
+				int response = fileChooser.showOpenDialog(null);
+				if(response == JFileChooser.APPROVE_OPTION){
+					File file = fileChooser.getSelectedFile();
+					System.out.println("FILE CHOSEN: " + file.getName());
+				}
+			}
+		});
+		files.add(new AbstractAction(LOAD_LIBRARY){
 			public void actionPerformed(ActionEvent e){
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
@@ -115,11 +126,6 @@ public class Player {
 		welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		welcomeLabel.setFont(new Font("SansSerif", Font.PLAIN, 32));
 		return welcomeLabel;
-	}
-
-	//TODO: check if card name exists
-	public void show(String cardName){
-		cardLayout.show(cards, cardName);
 	}
 
 	private JPanel makeWelcomeButtonPanel() {
