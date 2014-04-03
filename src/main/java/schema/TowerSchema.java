@@ -1,6 +1,7 @@
-package main.java.author.model;
+package main.java.schema;
 
 import java.awt.Dimension;
+
 
 /**
  * 
@@ -10,7 +11,7 @@ import java.awt.Dimension;
  * instance of a Tower. Please refer to the Game Engine's TDObjects for the
  * objects related to ones you will see onscreen.
  */
-public abstract class AbstractTowerSchema {
+public class TowerSchema{
 
 	private String myName;
 	private String myImage;

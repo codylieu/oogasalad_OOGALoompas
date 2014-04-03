@@ -3,9 +3,9 @@ package main.java.data.datahandler;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import main.java.author.model.GameBlueprint;
 import main.java.data.jsonhandler.JSONDeserializer;
 import main.java.data.jsonhandler.JSONSerializer;
+import main.java.schema.GameBlueprint;
 
 /**
  * Data handler specific to the Engine. Allows them

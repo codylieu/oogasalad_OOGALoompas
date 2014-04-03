@@ -1,6 +1,8 @@
-package main.java.author.model;
+package main.java.schema;
 
 import java.util.List;
+
+import main.java.author.model.GameMap;
 
 /**
  * 
@@ -12,33 +14,33 @@ import java.util.List;
  */
 public class GameBlueprint {
 
-	private GameScenario myGameScenario;
-	private List<SimpleTowerSchema> myTowerSchemas;
-	private List<SimpleEnemySchema> myEnemySchemas;
+	private GameSchema myGameScenario;
+	private List<TowerSchema> myTowerSchemas;
+	private List<EnemySchema> myEnemySchemas;
 	private List<LevelSchema> myLevelSchemas;
 	private List<GameMap> myGameMaps;
 
-	public GameScenario getMyGameScenario() {
+	public GameSchema getMyGameScenario() {
 		return myGameScenario;
 	}
 
-	public void setMyGameScenario(GameScenario myGameScenario) {
+	public void setMyGameScenario(GameSchema myGameScenario) {
 		this.myGameScenario = myGameScenario;
 	}
 
-	public List<SimpleTowerSchema> getMyTowerSchemas() {
+	public List<TowerSchema> getMyTowerSchemas() {
 		return myTowerSchemas;
 	}
 
-	public void setMyTowerSchemas(List<SimpleTowerSchema> myTowerSchemas) {
+	public void setMyTowerSchemas(List<TowerSchema> myTowerSchemas) {
 		this.myTowerSchemas = myTowerSchemas;
 	}
 
-	public List<SimpleEnemySchema> getMyEnemySchemas() {
+	public List<EnemySchema> getMyEnemySchemas() {
 		return myEnemySchemas;
 	}
 
-	public void setMyEnemySchemas(List<SimpleEnemySchema> myEnemySchemas) {
+	public void setMyEnemySchemas(List<EnemySchema> myEnemySchemas) {
 		this.myEnemySchemas = myEnemySchemas;
 	}
 
