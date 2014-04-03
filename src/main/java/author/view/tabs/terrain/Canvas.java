@@ -20,7 +20,7 @@ public class Canvas extends JPanel {
 
 	public static final int NUM_ROWS = 10;
 	public static final int NUM_COLS = 15;
-	public static final int TILE_SIZE = 32; // in pixels
+	public static final int TILE_SIZE = 50; // in pixels
 
 	private final Tile[][] myTiles;
 	private TileObject selectedTileObj;
@@ -108,6 +108,14 @@ public class Canvas extends JPanel {
 		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
 		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
 		repaint(); 
+	}
+	
+	protected void clearTiles() {
+		for (Tile tile : getTiles()) {
+			tile.setImage(null);
+			tile.setColor(DEFAULT_TILE_COLOR);
+			repaint();
+		}
 	}
 
 	public void setSelectedTileObj(TileObject tObj) {

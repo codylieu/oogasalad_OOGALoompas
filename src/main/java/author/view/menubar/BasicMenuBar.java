@@ -2,11 +2,11 @@ package main.java.author.view.menubar;
 
 import javax.swing.JMenuBar;
 
-public class MenuBar extends JMenuBar {
+public class BasicMenuBar extends JMenuBar {
 	/**
 	 * The MenuBar contains all the super menus
 	 */
-	public MenuBar(){
+	public BasicMenuBar(){
 		add(new FileMenu());
 		add(new HelpMenu());
 	}

@@ -8,12 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class UserInputCommand implements Serializable{
-
-	List<Integer> myCommandValues;
 	
-	public UserInputCommand(Integer ... commandValue) {
-		myCommandValues = Arrays.asList(commandValue);
-	}
+	public UserInputCommand(Integer ... commandValue) {};
 	
 	public String toString() {
 		return this.getClass().getName();
