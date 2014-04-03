@@ -6,9 +6,10 @@ import main.java.engine.objects.Projectile;
 
 public class SimpleTower extends Tower{
 	
-	static final String DEFAULT_GRAPHICS = "SimpleTower";
-	static final double DEFAULT_DAMAGE = 2;
-	static final double DEFAULT_RANGE = 10;
+	public static final String DEFAULT_GRAPHICS = "SimpleTower";
+	public static final double DEFAULT_DAMAGE = 10;
+	public static final double DEFAULT_RANGE = 200;
+	public static final double DEFAULT_FIRING_SPEED = 5;
 
 	public SimpleTower(double x, double y) {
 		super(x, y, DEFAULT_GRAPHICS, DEFAULT_DAMAGE, DEFAULT_RANGE);

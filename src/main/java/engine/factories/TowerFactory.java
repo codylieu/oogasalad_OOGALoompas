@@ -19,8 +19,8 @@ public class TowerFactory {
         this.engine = engine;
         //Add code for reflection mapping of towers from JSON
         List<Object> parameterValuesForPunyTower = new ArrayList<Object>();
-        parameterValuesForPunyTower.add(new Double(1));
-        parameterValuesForPunyTower.add(new Double(200));
+        parameterValuesForPunyTower.add(SimpleTower.DEFAULT_DAMAGE);
+        parameterValuesForPunyTower.add(SimpleTower.DEFAULT_RANGE);
         parameterValuesForPunyTower.add("SimpleTower");
         towerParameters.put("PunyTower", parameterValuesForPunyTower);
     }
