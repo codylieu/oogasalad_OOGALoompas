@@ -49,10 +49,18 @@ public class Model {
 
     }
     
+    /**
+     * Add a new player to the engine
+     */
     public void addNewPlayer() {
     	this.player = new Player();
     }
 
+    /**
+     * Add a tower at the specified location
+     * @param x	x coordinate of the tower
+     * @param y	y coordinate of the tower
+     */
     public void placeTower(double x, double y) {
         try {
 			towers.add(towerFactory.placeSimpleTower("PunyTower", x, y));
@@ -78,43 +86,76 @@ public class Model {
         }
     }
     
+    /**
+     * Reset the game clock
+     */
     public void resetGameClock() {
     	this.gameClock = 0;
     }
     
+    /**
+     * Set the monsters' entrance
+     * @param x
+     * @param y
+     */
     public void setEntrance(double x, double y) {
     	this.entrance.setLocation(x, y);
     }
     
+    /**
+     * Set the monsters' exit(destination)
+     * @param x
+     * @param y
+     */
     public void setExit(double x, double y) {
     	this.exit.setLocation(x,  y);
     }
     
-    public void addScore(double score) {
-    	player.addScore(score);
-    }
+//    public void addScore(double score) {
+//    	player.addScore(score);
+//    }
     
+    /**
+     * Get the score of the player
+     * @return current score
+     */
     public double getScore() {
     	return player.getScore();
     }
     
+    /**
+     * Check whether the game is lost
+     * @return true if game is lost
+     */
     public boolean isGameLost() {
     	if (player.getLife() <= 0) return true;
     	return false;
     }
     
-    public void updateGameClockByFrame() {
+    private void updateGameClockByFrame() {
     	this.gameClock++;
     }
     
+    /**
+     * Get the game clock
+     * @return current game clock
+     */
     public double getGameClock() {
     	return this.gameClock;
     }
     
+    /**
+     * Get the number of remaining lives of the player
+     * @return number of lives left
+     */
     public int getPlayerLife() {
     	return player.getLife();
     }
     
+    /**
+     * Get the amount of money obtained by the player
+     * @return current amount of money
+     */
     public int getMoney() {
     	return player.getMoney();
     }
