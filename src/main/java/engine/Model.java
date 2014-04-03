@@ -3,6 +3,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import jgame.platform.JGEngine;
@@ -213,11 +214,13 @@ public class Model {
 	}
 
 	private void removeDeadMonsters() {
-		for (Monster m : monsters) {
-			if (m.isDead()) {
-				monsters.remove(m);
-				addMoney(m.getMoneyValue());
-				m.remove();
+		Iterator<Monster> monsterIter = monsters.iterator();
+		while(monsterIter.hasNext()) {
+			Monster currentMonster = monsterIter.next();
+			if (currentMonster.isDead()) {
+				monsterIter.remove();
+				addMoney(currentMonster.getMoneyValue());
+				currentMonster.remove();
 			}
 		}
 	}
@@ -243,10 +246,20 @@ public class Model {
 		for(Monster m : monsters) {
 			if(m.getCurrentCoor().distance(towerCoor) < minDistance) {
 				minDistance = m.getCurrentCoor().distance(towerCoor);
-				closestMonsterCoor = m.getCurrentCoor();
+				closestMonsterCoor = centerCoordinate(m);
 			}
  		}
 		return closestMonsterCoor;
+	}
+
+	/**
+	 * Returns the center of the object for targeting 
+	 * @param current object coordinate
+	 * @return the center of the objects image according to the imageBBox
+	 */
+	private Point2D centerCoordinate(Monster m) {
+		return new Point2D.Double(m.getCurrentCoor().getX()+m.getImageBBoxConst().width/2,
+				m.getCurrentCoor().getY()+m.getImageBBoxConst().height/2);
 	}
 
 	/**
