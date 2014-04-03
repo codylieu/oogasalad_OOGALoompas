@@ -13,7 +13,9 @@ public abstract class Monster extends TDObject {
     protected double myDamage;
     protected double myMoveSpeed;
     protected double myMoneyValue;
-    protected IMonsterPath myPathFinder = new StraightLinePath(this);
+    protected IMonsterPath myPathFinder;
+    protected Point2D myEntrance;
+    protected Point2D myExit;
 
     /**
      * 
@@ -25,18 +27,21 @@ public abstract class Monster extends TDObject {
      * @param gfxname
      */
     public Monster (String name,
-                    double x,
-                    double y,
+//                    double x,
+//                    double y,
+    				Point2D entrance,
                     double health,
                     double moveSpeed,
                     double damage,
                     double moneyValue,
-                    String graphic) {
-        super(name, x, y, MONSTER_CID, graphic);
+                    String graphic,
+                    Point2D exit) {
+        super(name, entrance.getX(), entrance.getY(), MONSTER_CID, graphic);
         myHealth = health;
         myDamage = damage;
         myMoveSpeed = moveSpeed;
         myMoneyValue = moneyValue;
+        myPathFinder = new StraightLinePath(this, exit);
     }
 
     @Override
@@ -66,5 +71,9 @@ public abstract class Monster extends TDObject {
      */
     public Point2D getCurrentCoor() {
     	return new Point2D.Double(this.x, this.y);
+    }
+    
+    public double getMoneyValue() {
+    	return myMoneyValue;
     }
 }

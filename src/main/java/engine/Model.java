@@ -26,14 +26,14 @@ public class Model {
 //    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
-    private Point entrance;
-    private Point exit;
     private List<Tower> towers;
     private List<Monster> monsters;
     private Gson gsonParser;
     private int currentWave;
     private List<WaveSpawnSchema> allWaves;
     private CollisionManager collisionManager;
+    private Point2D entrance;
+    private Point2D exit;
 
     public Model(JGEngine engine) {
 //        this.monsterFactory = new MonsterFactory(engine);
@@ -99,7 +99,7 @@ public class Model {
      * @param y
      */
     public void setEntrance(double x, double y) {
-    	this.entrance.setLocation(x, y);
+    	this.entrance = new Point2D.Double(x, y);
     }
     
     /**
@@ -108,12 +108,12 @@ public class Model {
      * @param y
      */
     public void setExit(double x, double y) {
-    	this.exit.setLocation(x,  y);
+    	this.exit = new Point2D.Double(x, y);
     }
     
-//    public void addScore(double score) {
-//    	player.addScore(score);
-//    }
+    public void addScore(double score) {
+    	player.addScore(score);
+    }
     
     /**
      * Get the score of the player
@@ -196,8 +196,7 @@ public class Model {
      */
     private void doSpawnActivity() {
     	
-//        if (gameClock % 100 == 0)
-    	if (gameClock == 100)
+        if (gameClock % 100 == 0)
         	spawnNextWave();
         
     }
@@ -211,16 +210,20 @@ public class Model {
 		doSpawnActivity();
 		doTowerFiring();
 		removeDeadMonsters();
-		System.out.println(towers.size());
 	}
 
 	private void removeDeadMonsters() {
 		for (Monster m : monsters) {
 			if (m.isDead()) {
 				monsters.remove(m);
+				addMoney(m.getMoneyValue());
 				m.remove();
 			}
 		}
+	}
+
+	private void addMoney(double moneyValue) {
+		player.addMoney(moneyValue);
 	}
 
 	private void doTowerFiring() {
@@ -228,7 +231,6 @@ public class Model {
 			for (Tower t : towers) {
 				Point2D monsterCoor = getNearestMonsterCoordinate(new Point2D.Double(
 						t.x, t.y));
-//				System.out.println(t.checkAndfireProjectile(monsterCoor));
 				t.checkAndfireProjectile(monsterCoor);
 			}
 		}
@@ -244,7 +246,6 @@ public class Model {
 				closestMonsterCoor = m.getCurrentCoor();
 			}
  		}
-//		System.out.println(minDistance);
 		return closestMonsterCoor;
 	}
 
@@ -262,7 +263,7 @@ public class Model {
      * Test method
      */
     public void setTemporaryWaveSchema() {
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1);
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1, entrance, exit);
     	WaveSpawnSchema wschema = new WaveSpawnSchema();
     	wschema.addMonsterSchema(mschema);
     	addWaveToGame(wschema);

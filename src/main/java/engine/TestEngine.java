@@ -34,6 +34,8 @@ public class TestEngine extends JGEngine {
         setFrameRate(45, 1);
         this.model = new Model(this);
         model.addNewPlayer();
+        model.setEntrance(0, this.pfHeight()/2);
+        model.setExit(this.pfWidth()/2, this.pfHeight()/2);
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
         model.setTemporaryWaveSchema();

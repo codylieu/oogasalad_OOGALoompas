@@ -40,6 +40,10 @@ public class Player {
 		return this.money;
 	}
 	
+	public void addMoney(double value) {
+		this.money+=value;
+	}
+	
 	public int getLife() {
 		return this.life;
 	}
