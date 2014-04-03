@@ -28,8 +28,8 @@ public abstract class Tower extends TDObject {
      * @param x
      * @param y
      */
-    public Tower (double x, double y, String tower_gfx, double damage, double range) {
-        super("tower", x, y, TOWER_CID, tower_gfx);
+    public Tower (Point2D location, String tower_gfx, double damage, double range) {
+        super("tower", location.getX(), location.getY(), TOWER_CID, tower_gfx);
         myDamage = damage;
         myRange = range;
     }
