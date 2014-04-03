@@ -174,6 +174,9 @@ public class Model {
 		System.out.println(towers.size());
 	}
 
+	/**
+	 * Clean up dead monsters from monsters list and JGEngine display.
+	 */
 	private void removeDeadMonsters() {
 		Iterator<Monster> monsterIter = monsters.iterator();
 		while(monsterIter.hasNext()) {
@@ -185,6 +188,9 @@ public class Model {
 		}
 	}
 
+	/**
+	 * Call this to make each of the Towers execute firing logic
+	 */
 	private void doTowerFiring() {
 		if (!monsters.isEmpty()) {
 			for (Tower t : towers) {
@@ -197,6 +203,11 @@ public class Model {
 
 	}
 
+	/**
+	 * Returns the coordinate of the monster nearest to the coordinate passed in
+	 * @param towerCoor 
+	 * @return
+	 */
 	private Point2D getNearestMonsterCoordinate(Point2D towerCoor) {
 		double minDistance = Double.MAX_VALUE;
 		Point2D closestMonsterCoor = null;
