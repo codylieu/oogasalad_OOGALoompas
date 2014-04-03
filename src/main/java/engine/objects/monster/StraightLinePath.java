@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
  */
 public class StraightLinePath implements IMonsterPath {
 
-    private Point2D myTargetExit = new Point2D.Double(0, 0);
+    private Point2D myTargetExit = new Point2D.Double(Math.random()*500, Math.random()*500);
     private Monster myMonster;
 
     public StraightLinePath (Monster monsterToControl) {

@@ -3,6 +3,7 @@ import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import jgame.platform.JGEngine;
@@ -155,8 +156,8 @@ public class Model {
      */
     private void doSpawnActivity() {
     	
-//        if (gameClock % 100 == 0)
-    	if (gameClock == 100)
+        if (gameClock % 100 == 0)
+//    	if (gameClock == 100)
         	spawnNextWave();
         
     }
@@ -174,10 +175,12 @@ public class Model {
 	}
 
 	private void removeDeadMonsters() {
-		for (Monster m : monsters) {
-			if (m.isDead()) {
-				monsters.remove(m);
-				m.remove();
+		Iterator<Monster> monsterIter = monsters.iterator();
+		while(monsterIter.hasNext()) {
+			Monster currentMonster = monsterIter.next();
+			if (currentMonster.isDead()) {
+				monsterIter.remove();
+				currentMonster.remove();
 			}
 		}
 	}
