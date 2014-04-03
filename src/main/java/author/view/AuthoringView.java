@@ -7,13 +7,16 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import main.java.author.controller.MainController;
+import main.java.author.view.menubar.BasicMenuBar;
 import main.java.author.view.tabs.EnemyEditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.TowerEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
+
 import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
@@ -31,7 +34,7 @@ public class AuthoringView extends JFrame {
 		myController = new MainController();
 		createEditorTabs(myController);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		setMenuBar(new MenuBar()); // This doesn't work. Usually I use setJMenuBar, but it gives me a compile error now.
+		setJMenuBar(new BasicMenuBar()); // This doesn't work. Usually I use setJMenuBar, but it gives me a compile error now.
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		pack();
