@@ -1,6 +1,8 @@
-package main.java.author.model;
+package main.java.schema;
 
 import java.util.List;
+
+import main.java.author.model.GameMap;
 
 /**
  * 
@@ -12,17 +14,17 @@ import java.util.List;
  */
 public class GameBlueprint {
 
-	private GameScenario myGameScenario;
+	private GameSchema myGameScenario;
 	private List<TowerSchema> myTowerSchemas;
 	private List<EnemySchema> myEnemySchemas;
 	private List<LevelSchema> myLevelSchemas;
 	private List<GameMap> myGameMaps;
 
-	public GameScenario getMyGameScenario() {
+	public GameSchema getMyGameScenario() {
 		return myGameScenario;
 	}
 
-	public void setMyGameScenario(GameScenario myGameScenario) {
+	public void setMyGameScenario(GameSchema myGameScenario) {
 		this.myGameScenario = myGameScenario;
 	}
 

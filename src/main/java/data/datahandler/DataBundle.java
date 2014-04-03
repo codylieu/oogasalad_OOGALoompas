@@ -2,7 +2,8 @@ package main.java.data.datahandler;
 
 import java.io.Serializable;
 
-import main.java.author.model.GameBlueprint;
+import main.java.schema.GameBlueprint;
+
 
 
 /**

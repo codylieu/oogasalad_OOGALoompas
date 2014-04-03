@@ -54,6 +54,14 @@ public class TDPlayerEngine extends JGEngine {
     @Override
     public void doFrame() {
         super.doFrame();
+        
+        if (getMouseButton(1)) {
+            model.placeTower(getMouseX(), getMouseY());
+            clearMouseButton(1);
+        }
+        
         model.updateGame();
+        moveObjects();
+        model.checkCollisions();
     }
 }
