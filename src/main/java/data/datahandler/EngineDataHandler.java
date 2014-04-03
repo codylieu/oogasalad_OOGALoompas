@@ -30,8 +30,8 @@ public class EngineDataHandler extends DataHandler {
 	 * @throws IOException 
 	 */
 	
-	public void saveState(GameState currentGameState, String filePath) throws IOException {
-		saveBundle(new DataBundle(currentGameState), filePath);
+	public void saveBundle(DataBundle currentGameState, String filePath) throws IOException {
+		saveBundle(currentGameState, filePath);
 	}
 	
 	public DataBundle loadBundle(String filePath){
