@@ -136,14 +136,7 @@ public class Player {
 			buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
 		}
 		
-		JButton exitButton = new JButton("Exit");
-		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		exitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-				frame.pack();
-			}
-		});
+		JButton exitButton = makeQuitButton();
 		buttonPanel.add(exitButton);
 		buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
 		return buttonPanel;
@@ -220,14 +213,7 @@ public class Player {
 				frame.pack();
 			}
 		});
-		JButton quitButton = new JButton("Quit");
-		//quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		quitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("quit");
-				frame.pack();
-			}
-		});
+		JButton quitButton = makeQuitButton();
 		JButton addTowerButton = new JButton("Add Tower");
 		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		addTowerButton.addActionListener(new ActionListener() {
@@ -455,6 +441,18 @@ public class Player {
 		});
 
 		return mainMenuButton;
+	}
+	
+	private JButton makeQuitButton(){
+		JButton exitButton = new JButton("Quit");
+		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		exitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+				frame.pack();
+			}
+		});
+		return exitButton;
 	}
 
 	private void show() {
