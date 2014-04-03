@@ -34,8 +34,4 @@ public class EngineDataHandler extends DataHandler {
 		saveBundle(currentGameState, filePath);
 	}
 	
-	public DataBundle loadBundle(String filePath){
-		return loadBundle(filePath);
-	}
-	
 }
