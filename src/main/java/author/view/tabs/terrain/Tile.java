@@ -21,6 +21,7 @@ public class Tile extends JPanel {
 	private int myRow;    // 0 - NUM_ROWS
 	private int myColumn; // 0 - NUM_COLS
 	private Color myColor;
+	private int myPassIndex;
 	private boolean isSelected;
 	private BufferedImage myImg;
 	
@@ -50,6 +51,10 @@ public class Tile extends JPanel {
 	
 	public int getCol() {
 		return myColumn;
+	}
+	
+	public int getPassIndex() {
+		return myPassIndex;
 	}
 	
 	protected void setImage(String imgName) {

@@ -7,7 +7,6 @@ public class KeyReleaseCommand extends UserInputCommand {
 	private int myKeyCode;
 	
 	public KeyReleaseCommand(int keyCode) {
-		super(keyCode);
 		myKeyCode = keyCode;
 	}
 	
