@@ -20,4 +20,22 @@ public class EngineDataHandler extends DataHandler {
 	public EngineDataHandler(){
 		super();
 	}	
+	
+	/**
+	 * Method for authoring environment to
+	 * take a blueprint and file location and serialize
+	 * into a JSON file.
+	 * @param currentBlueprint
+	 * @param filePath
+	 * @throws IOException 
+	 */
+	
+	public void saveState(GameState currentGameState, String filePath) throws IOException {
+		saveBundle(new DataBundle(currentGameState), filePath);
+	}
+	
+	public DataBundle loadBundle(String filePath){
+		return loadBundle(filePath);
+	}
+	
 }

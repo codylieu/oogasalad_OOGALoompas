@@ -19,6 +19,7 @@ import main.java.schema.GameBlueprint;
 public class DataBundle implements Serializable {
 	
 	private GameBlueprint myGameBlueprint;
+//	private GameState myGameState;
 	
 	public DataBundle() {}
 	
@@ -30,7 +31,17 @@ public class DataBundle implements Serializable {
 		return myGameBlueprint;
 	}
 	
+	/*public GameState getGameState() {
+		return myGameState;
+	}*/
+	
 	public void setBlueprint(GameBlueprint gameBlueprint) {
 		myGameBlueprint = gameBlueprint;
 	}
+	
+	/*public void setGameState(GameState gameState) {
+		myGameState = gameState;
+	}*/
+	
+	
 }
