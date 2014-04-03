@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import main.java.data.jsonhandler.JSONParser;
+import main.java.data.jsonhandler.JSONDeserializer;
 import main.java.data.jsonhandler.JSONSerializer;
 
 /**
@@ -83,6 +83,7 @@ public class DataBundle {
 		return dataMap;
 	}
 	
+
 	/**
 	 * Saves the current DataBundle with the provided filename
 	 * @param filename
@@ -102,7 +103,7 @@ public class DataBundle {
 	 * @throws ClassNotFoundException 
 	 */
 	public void loadDataBundle(String filename) throws IOException, ClassNotFoundException	{
-		JSONParser p = new JSONParser();
+		JSONDeserializer p = new JSONDeserializer();
 		//TODO: develop JSONParser and implement methods here
 		p.readFile(filename);
 	}

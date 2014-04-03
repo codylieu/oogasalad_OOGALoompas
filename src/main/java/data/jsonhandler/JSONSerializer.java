@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 /**
  * 
  * @author In-Young Jo
+ * @author Jimmy Fang
  *
  */
 public class JSONSerializer {
@@ -24,6 +25,18 @@ public class JSONSerializer {
 		myGson = new Gson();
 	}
 	
+
+	
+	/**
+	 * Creates a JSON from a Data Bundle
+	 * Currently a shell
+	 * @param myDataBundle
+	 * @throws ClassNotFoundException
+	 */
+	public void serializeToJsonFromDataBundle(DataBundle myDataBundle){
+		
+	}
+	
 	/**
 	 * Method to write the information of a DataBundle into a text file
 	 * named after the filename String
@@ -31,6 +44,7 @@ public class JSONSerializer {
 	 * @param d
 	 * @throws FileNotFoundException
 	 */
+	
 	public void write(String filename, DataBundle d) throws FileNotFoundException	{
 		File outputFile = new File("src/main/resources/" + filename + ".txt");
 		PrintWriter output = new PrintWriter(outputFile);
