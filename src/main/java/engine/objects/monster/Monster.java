@@ -41,14 +41,15 @@ public abstract class Monster extends TDObject {
 
     @Override
     public void move () {
-        checkDeath();
+        isDead();
         myPathFinder.navigateMonster();
     }
 
-    private void checkDeath () {
-        if (myHealth <= 0) {
-            this.remove();
-        }
+    /**
+     *  Check if this object has died and should be removed
+     */
+    public boolean isDead () {
+        return myHealth <= 0;
     }
     
     /**

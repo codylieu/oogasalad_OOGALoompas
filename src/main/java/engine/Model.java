@@ -1,26 +1,27 @@
 package main.java.engine;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-
-import jgame.impl.JGEngineInterface;
-import main.java.engine.factories.TowerFactory;
-import main.java.engine.map.TDMap;
-import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.Tower;
-import main.java.engine.spawnschema.MonsterSpawnSchema;
-import main.java.engine.spawnschema.WaveSpawnSchema;
-import main.java.exceptions.engine.InvalidTowerCreationParameters;
-
 import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import jgame.platform.JGEngine;
+import main.java.engine.factories.TowerFactory;
+import main.java.engine.map.TDMap;
+import main.java.engine.objects.CollisionManager;
+import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.tower.Tower;
+import main.java.engine.spawnschema.MonsterSpawnSchema;
+import main.java.engine.spawnschema.WaveSpawnSchema;
+import main.java.exceptions.engine.InvalidTowerCreationParameters;
+
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
 
-    private JGEngineInterface engine;
+    private JGEngine engine;
     private TowerFactory towerFactory;
 //    private MonsterFactory monsterFactory;
     private Player player;
@@ -32,25 +33,24 @@ public class Model {
     private Gson gsonParser;
     private int currentWave;
     private List<WaveSpawnSchema> allWaves;
+    private CollisionManager collisionManager;
 
-    public Model() {
-        this.towerFactory = new TowerFactory(engine);
+    public Model(JGEngine engine) {
 //        this.monsterFactory = new MonsterFactory(engine);
+        this.engine = engine;
+        this.towerFactory = new TowerFactory(engine);
+        collisionManager = new CollisionManager(engine);
         this.gsonParser = new Gson();
         this.gameClock = 0;
         this.currentWave = 0;
         this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
         towers = new ArrayList<Tower>();
+
     }
     
     public void addNewPlayer() {
     	this.player = new Player();
-    }
-
-    public void setEngine(JGEngineInterface engine) {
-        this.engine = engine;
-        this.towerFactory = new TowerFactory(engine);
     }
 
     public void placeTower(double x, double y) {
@@ -161,16 +161,27 @@ public class Model {
         
     }
     
-    /**
-     *  The model's "doFrame()" method that updates all state, spawn monsters, etc.
-     */
+	/**
+	 * The model's "doFrame()" method that updates all state, spawn monsters,
+	 * etc.
+	 */
 	public void updateGame() {
 		updateGameClockByFrame();
 		doSpawnActivity();
-        doTowerFiring();
-        System.out.println(towers.size());
+		doTowerFiring();
+		removeDeadMonsters();
+		System.out.println(towers.size());
 	}
-    
+
+	private void removeDeadMonsters() {
+		for (Monster m : monsters) {
+			if (m.isDead()) {
+				monsters.remove(m);
+				m.remove();
+			}
+		}
+	}
+
 	private void doTowerFiring() {
 		if (!monsters.isEmpty()) {
 			for (Tower t : towers) {
@@ -215,4 +226,11 @@ public class Model {
     	wschema.addMonsterSchema(mschema);
     	addWaveToGame(wschema);
     }
+
+	/**
+	 * Check all collisions specified by the CollisionManager
+	 */
+	public void checkCollisions() {
+		collisionManager.checkAllCollisions();
+	}
 }

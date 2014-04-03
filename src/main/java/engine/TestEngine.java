@@ -32,8 +32,7 @@ public class TestEngine extends JGEngine {
     @Override
     public void initGame() {
         setFrameRate(45, 1);
-        this.model = new Model();
-        model.setEngine(this);
+        this.model = new Model(this);
         model.addNewPlayer();
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
@@ -49,6 +48,7 @@ public class TestEngine extends JGEngine {
         }
         model.updateGame();
         moveObjects();
+        model.checkCollisions();
 //        model.spawnMonster(100, 150);
     }
 
