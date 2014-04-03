@@ -203,11 +203,21 @@ public class Model {
 		for(Monster m : monsters) {
 			if(m.getCurrentCoor().distance(towerCoor) < minDistance) {
 				minDistance = m.getCurrentCoor().distance(towerCoor);
-				closestMonsterCoor = m.getCurrentCoor();
+				closestMonsterCoor = centerCoordinate(m);
 			}
  		}
 //		System.out.println(minDistance);
 		return closestMonsterCoor;
+	}
+
+	/**
+	 * Returns the center of the object for targeting 
+	 * @param current object coordinate
+	 * @return the center of the objects image according to the imageBBox
+	 */
+	private Point2D centerCoordinate(Monster m) {
+		return new Point2D.Double(m.getCurrentCoor().getX()+m.getImageBBoxConst().width/2,
+				m.getCurrentCoor().getY()+m.getImageBBoxConst().height/2);
 	}
 
 	/**
