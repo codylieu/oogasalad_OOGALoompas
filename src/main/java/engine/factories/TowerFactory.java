@@ -8,11 +8,12 @@ import java.util.Map;
 import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.objects.tower.SimpleTower;
-import main.java.exceptions.engine.InvalidTowerCreationParameters;
+import main.java.exceptions.engine.InvalidTowerCreationParametersException;
 
 public class TowerFactory {
     private JGEngineInterface engine;
-    private Map<String, List<Object>> towerParameters = new HashMap<String, List<Object>>();
+    private Map<String, List<Object>> userTowerParametersMap = new HashMap<String, List<Object>>();
+    private Map<String, String> userTowerConcreteTypeMap = new HashMap<String, String>();
 
     public TowerFactory(JGEngineInterface engine) {
         this.engine = engine;
@@ -21,31 +22,31 @@ public class TowerFactory {
         parameterValuesForPunyTower.add(new Double(1));
         parameterValuesForPunyTower.add(new Double(2));
         parameterValuesForPunyTower.add("SimpleTower");
-        towerParameters.put("PunyTower", parameterValuesForPunyTower);
+        userTowerParametersMap.put("PunyTower", parameterValuesForPunyTower);
+        userTowerConcreteTypeMap.put("PunyTower", "SimpleTower");
     }
 
-    public void placeSimpleTower(String simpleTowerType, double x, double y) throws InvalidTowerCreationParameters {
+    public void placeTower(String userTowerName, double x, double y) throws InvalidTowerCreationParametersException {
         JGPoint tileOrigin = findTileOrigin(x, y);
-        List<Object> simpleTowerParameters = towerParameters.get(simpleTowerType);
-        new SimpleTower(tileOrigin.x, tileOrigin.y, (Double) simpleTowerParameters.get(0),
-        		(Double) simpleTowerParameters.get(1), (String) simpleTowerParameters.get(2));
-        
-    /*
         try {
-        List<Object> simpleTowerParameters = towerParameters.get(simpleTowerType);
-        new SimpleTower(tileOrigin.x, tileOrigin.y, (Double) simpleTowerParameters.get(0),
-        		(Double) simpleTowerParameters.get(1), (String) simpleTowerParameters.get(2));
+            Object[] towerParameters = addLocationToTowerParameters(new ArrayList<Object>(userTowerParametersMap.get(userTowerName)), tileOrigin.x, tileOrigin.y);
+        	Reflection.createInstance("main.java.engine.objects.tower."+userTowerConcreteTypeMap.get(userTowerName), towerParameters);
+
         }
         catch (Exception e) {
-        	throw new InvalidTowerCreationParameters();
+        	throw new InvalidTowerCreationParametersException();
         }
-        */
+    }
+    
+    private Object[] addLocationToTowerParameters(List<Object> parameters, double x, double y) {
+    	parameters.add(0, y);
+    	parameters.add(0,x);
+    	return parameters.toArray();
     }
 
     public JGPoint findTileOrigin(double x, double y) {
         int curXTilePos = (int) x/engine.tileWidth() * engine.tileWidth();
         int curYTilePos = (int) y/engine.tileHeight() * engine.tileHeight();
-
         return new JGPoint(curXTilePos, curYTilePos);
     }
 }

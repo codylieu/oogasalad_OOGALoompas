@@ -9,7 +9,7 @@ import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
-import main.java.exceptions.engine.InvalidTowerCreationParameters;
+import main.java.exceptions.engine.InvalidTowerCreationParametersException;
 
 import java.awt.Point;
 import java.io.InputStream;
@@ -50,8 +50,8 @@ public class Model {
 
     public void placeTower(double x, double y) {
         try {
-			towerFactory.placeSimpleTower("PunyTower", x, y);
-		} catch (InvalidTowerCreationParameters e) {
+			towerFactory.placeTower("PunyTower", x, y);
+		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
