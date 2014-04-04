@@ -13,7 +13,6 @@ public class SimpleTower extends Tower {
 	public static final double DEFAULT_FIRING_SPEED = 5;
 	public static final double DEFAULT_COST = 100;
 
-
 	public SimpleTower(Point2D location) {
 		super(location, DEFAULT_GRAPHICS, DEFAULT_DAMAGE, DEFAULT_RANGE, DEFAULT_COST);
 	}
