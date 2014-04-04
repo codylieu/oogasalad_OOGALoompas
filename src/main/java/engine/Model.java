@@ -106,13 +106,13 @@ public class Model {
         TowerSchema t1 = new TowerSchema();
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
-        t1.setMyRange(10);
+        t1.setMyRange(200);
         t1.setMyImage("SimpleTower");
 
         TowerSchema t2 = new TowerSchema();
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
-        t2.setMyRange(20);
+        t2.setMyRange(200);
         t2.setMyImage("SimpleTower");
 
         GameBlueprint gb = new GameBlueprint();
