@@ -14,19 +14,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
@@ -46,14 +52,24 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JLabel speedLabel;
 	private JLabel damageLabel;
 
-	private JTextField healthField;
-	private JTextField speedField;
-	private JTextField damageField;
+	private JSpinner healthField;
+	private JSpinner speedField;
+	private JSpinner damageField;
+	
+	private static final int IMAGE_CANVAS_SIZE = 235;
+	private static final int DIVIDER_LOCATION = 300;
+	private static final float MEDIUM_FONT_SIZE = 25f;
+	private static final float X_LARGE_FONT_SIZE = 100f;
+	private static final float LARGE_FONT_SIZE = 50f;
+	
 
-	private static String healthString = "Health: ";
-	private static String speedString = "Speed: ";
-	private static String damageString = "Damage: ";
-
+	private static final String HEALTH_STRING = "Health";
+	private static final String SPEED_STRING = "Speed";
+	private static final String DAMAGE_STRING = "Damage";
+	private static final String REWARD_STRING = "Bounty";
+	private static final String TILE_SIZE_STRING = "Tile Size";
+	
+	
 	private NumberFormat numberFormat;
 
 	private JButton createEnemyButton;
@@ -94,6 +110,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.setSelectedIndex(0);
 		list.addListSelectionListener(this);
+		list.setFont(list.getFont().deriveFont(Font.PLAIN, MEDIUM_FONT_SIZE));
 
 		JScrollPane listScrollPane = new JScrollPane(list);
 
@@ -103,7 +120,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, listScrollPane,
 				editorPane);
 
-		splitPane.setDividerLocation(150);
+		splitPane.setDividerLocation(DIVIDER_LOCATION);
 
 		Dimension minimumSize = new Dimension(100, 50);
 		listScrollPane.setMinimumSize(minimumSize);
@@ -141,7 +158,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());
 		Canvas canvas = new Canvas();
-		canvas.setSize(200, 200);
+		canvas.setSize(IMAGE_CANVAS_SIZE, IMAGE_CANVAS_SIZE);
 		canvas.setBackground(Color.BLACK);
 		result.add(canvas, BorderLayout.NORTH);
 		result.add(makeChooseGraphicsButton(), BorderLayout.SOUTH);
@@ -152,7 +169,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());
 		Canvas canvas = new Canvas();
-		canvas.setSize(200, 200);
+		canvas.setSize(IMAGE_CANVAS_SIZE, IMAGE_CANVAS_SIZE);
 		canvas.setBackground(Color.BLACK);
 		result.add(canvas, BorderLayout.NORTH);
 		result.add(makeChooseGraphicsButton(), BorderLayout.SOUTH);
@@ -181,26 +198,20 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	}
 
 	private JComponent makeLabelPane() {
-		healthLabel = new JLabel(healthString);
-		healthLabel.setLabelFor(healthField);
-		speedLabel = new JLabel(speedString);
-		speedLabel.setLabelFor(speedField);
 
-		damageLabel = new JLabel(damageString);
-		damageLabel.setLabelFor(damageField);
 		JPanel labels = new JPanel(new GridLayout(0, 1));
-		labels.add(healthLabel);
-		labels.add(speedLabel);
-		labels.add(damageLabel);
+		labels.add(new JLabel(HEALTH_STRING));
+		labels.add(new JLabel(SPEED_STRING));
+		labels.add(new JLabel(DAMAGE_STRING));
 		return labels;
 	}
 
 	private JComponent makeFieldPane() {
-		healthField = new JFormattedTextField(numberFormat);
-		healthField.setColumns(5);
-		speedField = new JFormattedTextField(numberFormat);
-		damageField = new JFormattedTextField(numberFormat);
+		
 		JPanel result = new JPanel(new GridLayout(0, 1));
+		healthField = makeAttributeSpinner();
+		speedField = makeAttributeSpinner();
+		damageField = makeAttributeSpinner();
 		result.add(healthField);
 		result.add(speedField);
 		result.add(damageField);
@@ -212,7 +223,38 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		result.setLayout(new BorderLayout());
 		result.add(makeLabelPane(), BorderLayout.WEST);
 		result.add(makeFieldPane(), BorderLayout.CENTER);
+		result.add(makeDimensionPane(), BorderLayout.SOUTH);
 		return result;
+	}
+
+
+	private Component makeDimensionPane() {
+		JPanel penisSize = new JPanel();
+		penisSize.setLayout(new GridLayout(1, 0));
+		JRadioButton smallButton;
+		smallButton = new JRadioButton("Small");
+	    JRadioButton mediumButton;
+	    mediumButton = new JRadioButton("Medium");
+	    JRadioButton largeButton;
+	    largeButton = new JRadioButton("Large");
+	    ButtonGroup sizeGroup = new ButtonGroup();
+	    sizeGroup.add(smallButton);
+	    sizeGroup.add(mediumButton);
+	    sizeGroup.add(largeButton);
+		penisSize.add(smallButton);
+		penisSize.add(mediumButton);
+		penisSize.add(largeButton);	
+	    return penisSize;
+	}
+
+	private JSpinner makeAttributeSpinner() {
+		
+		SpinnerModel model = new SpinnerNumberModel(20, 1, 1000, 1);     
+		JSpinner spinner = new JSpinner(model);
+		spinner.setMaximumSize(new Dimension(200,spinner.getHeight()));
+		Font bigFont = spinner.getFont().deriveFont(Font.PLAIN, X_LARGE_FONT_SIZE);
+		spinner.setFont(bigFont);
+		return spinner;
 	}
 
 	private void addActionListeners() {
