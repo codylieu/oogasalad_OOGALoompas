@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.monster.SimpleMonster;
 import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
@@ -38,10 +37,6 @@ public class TDObjectFactory {
 		System.out.println(monsterSchemasMap.keySet().toString());
 	}
 
-    public Monster placeMonster(Point2D entrance, Point2D exit) {
-        return new SimpleMonster(entrance, exit);
-    }
-
     /**
      * Place tower at a given location's tile.
      *
@@ -55,7 +50,7 @@ public class TDObjectFactory {
 		try {
 			TowerSchema schema = towerSchemasMap.get(towerName);
 			Object[] towerParameters = {tileOrigin, schema};
-        	return (Tower) placeObject("main.java.engine.objects.tower.",schema.getMyConcreteType(), towerParameters);
+        	return (Tower) placeObject("main.java.engine.objects.tower.", schema.getMyConcreteType(), towerParameters);
 		} catch (Exception e) {
 			throw new TowerCreationFailureException();
 		}
@@ -65,7 +60,7 @@ public class TDObjectFactory {
 		System.out.println(monsterSchemasMap.keySet().toString());
 		MonsterSchema schema = monsterSchemasMap.get(userMonsterName);
 		Object[] monsterParameters = {entrance, exit, schema};
-    	return (Monster) placeObject("main.java.engine.objects.monster.",schema.getMyConcreteType(), monsterParameters);
+    	return (Monster) placeObject("main.java.engine.objects.monster.", schema.getMyConcreteType(), monsterParameters);
 		/*try {
 			MonsterSchema schema = monsterSchemas.get(userMonsterName);
 			Object[] monsterParameters = {entrance, exit, schema};
