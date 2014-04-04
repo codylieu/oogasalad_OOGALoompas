@@ -16,7 +16,7 @@ import main.java.engine.objects.monster.Monster;
  * 
  */
 public class MonsterSpawnSchema {
-	
+
 	private JGEngineInterface engine;
     private String myMonsterName;
     private int mySwarmSize;

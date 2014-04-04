@@ -33,6 +33,14 @@ public class TDObjectFactory {
         return new SimpleMonster(entrance, exit);
     }
 
+    /**
+     * Place tower at a given location's tile.
+     *
+     * @param location The coordinates to place the tower at
+     * @param towerName The name of the tower to place
+     * @return The new Tower object
+     * @throws TowerCreationFailureException
+     */
 	public Tower placeTower(Point2D location, String towerName) throws TowerCreationFailureException {
 		Point2D tileOrigin = findTileOrigin(location);
 		try {
