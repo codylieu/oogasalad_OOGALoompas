@@ -36,17 +36,17 @@ public class Player {
 	public static final String LOAD_GAME_DATA = "Load Game Data";
 	public static final String LOAD_LIBRARY = "Browse library";
 	public static final String FILELABEL = "File";
-	public static String HELP = "Instructions for game, how to save, etc";
-	public static String DIFFICULTY = "Difficulty";
-	public static String EASY = "Easy Mode";
-	public static String MEDIUM = "Medium Mode";
-	public static String HARD = "Hard Mode";
-	public static String SOUND = "Sound";
-	public static String ON = "On";
-	public static String OFF = "Off";
-	public static String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
-	public static int BUTTON_PADDING = 10;
-	public static String USER_DIR = "user.dir";	
+	public static final String HELP = "Instructions for game, how to save, etc";
+	public static final String DIFFICULTY = "Difficulty";
+	public static final String EASY = "Easy Mode";
+	public static final String MEDIUM = "Medium Mode";
+	public static final String HARD = "Hard Mode";
+	public static final String SOUND = "Sound";
+	public static final String ON = "On";
+	public static final String OFF = "Off";
+	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
+	public static final int BUTTON_PADDING = 10;
+	public static final String USER_DIR = "user.dir";	
 
 	private JFrame frame;
 	private JPanel cards;
