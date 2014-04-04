@@ -30,7 +30,7 @@ public class Model {
 //    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
-    private List<Tower> towers;
+    private Tower[][] towers;
     private List<Monster> monsters;
     private Gson gsonParser;
     private int currentWave;
@@ -50,7 +50,7 @@ public class Model {
         this.currentWave = 0;
         this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
-        towers = new ArrayList<Tower>();
+        towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
         setExit(engine.pfWidth()/2, engine.pfHeight()/2);
@@ -64,22 +64,31 @@ public class Model {
     }
 
     /**
-     * Add a tower at the specified location
+     * Add a tower at the specified location. If tower already exists in that cell, do nothing.
      * @param x	x coordinate of the tower
      * @param y	y coordinate of the tower
      */
     public void placeTower(double x, double y) {
-        try {
+        try {   
+              
     		Point2D location = new Point2D.Double(x, y);
+    		//FIXME: duplicate code in TestEngine???
+    	        int curXTilePos = (int) (x/engine.tileWidth());
+    	        int curYTilePos = (int) (y/engine.tileHeight());
+    	        
+    		// if tower already exists in the tile clicked, do nothing
+    		if(towers[curXTilePos][curYTilePos] != null) return;
+    		
         	Tower newTower = towerFactory.placeTower(location, "test tower 1");
+        	
         	if(player.getMoney() >= newTower.getCost() ) {
+        	        //FIXME: Decrease money?
         		player.addMoney(-SimpleTower.DEFAULT_COST);
-    
-    			towers.add(newTower);
+        		towers[curXTilePos][curYTilePos]  = newTower;
+    	
         	} else {
         		newTower.setImage(null);
         		newTower.remove();
-        		System.out.println(newTower.isAlive());
         	}
         	
 		} catch (InvalidTowerCreationParametersException e) {
@@ -88,6 +97,7 @@ public class Model {
 		}
     }
 
+    
     /**
      * Loads a map/terrain into the engine.
      *
@@ -300,12 +310,16 @@ public class Model {
 	/**
 	 * Call this to make each of the Towers execute firing logic
 	 */
-	private void doTowerFiring() {
-		if (!monsters.isEmpty()) {
-			for (Tower t : towers) {
-				Point2D monsterCoor = getNearestMonsterCoordinate(new Point2D.Double(
-						t.x, t.y));
-				t.checkAndfireProjectile(monsterCoor);
+    private void doTowerFiring () {
+        if (!monsters.isEmpty()) {
+            for (Tower[] towerRow : towers) {
+                for (Tower t : towerRow) {
+                    if (t != null) {
+                        Point2D monsterCoor =
+                                getNearestMonsterCoordinate(new Point2D.Double(t.x, t.y));
+                        t.checkAndfireProjectile(monsterCoor);
+                    }
+                }
 			}
 		}
 
