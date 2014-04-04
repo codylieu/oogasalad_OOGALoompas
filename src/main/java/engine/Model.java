@@ -72,19 +72,16 @@ public class Model {
         try {   
               
     		Point2D location = new Point2D.Double(x, y);
-    		//FIXME: duplicate code in TestEngine???
-    	        int curXTilePos = (int) (x/engine.tileWidth());
-    	        int curYTilePos = (int) (y/engine.tileHeight());
-    	        
+    	        int[] currentTile = getTileCoordinates(location);
     		// if tower already exists in the tile clicked, do nothing
-    		if(towers[curXTilePos][curYTilePos] != null) return;
+    		if(towers[currentTile[0]][currentTile[1]] != null) return;
     		
         	Tower newTower = towerFactory.placeTower(location, "test tower 1");
         	
         	if(player.getMoney() >= newTower.getCost() ) {
         	        //FIXME: Decrease money?
         		player.addMoney(-SimpleTower.DEFAULT_COST);
-        		towers[curXTilePos][curYTilePos]  = newTower;
+        		towers[currentTile[0]][currentTile[1]]  = newTower;
     	
         	} else {
         		newTower.setImage(null);
@@ -95,7 +92,20 @@ public class Model {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
     }
+
+    /**
+     * Return a two element int array with the tile coordinates that a given point is on, for use with Tower[][]
+     * @param location
+     * @return the row, col of the tile on which the location is situated
+     */
+    public int[] getTileCoordinates(Point2D location) {
+        int curXTilePos = (int) (location.getX()/engine.tileWidth());
+        int curYTilePos = (int) (location.getY()/engine.tileHeight());
+        return new int[]{curXTilePos, curYTilePos};
+    }
+    
 
     
     /**
