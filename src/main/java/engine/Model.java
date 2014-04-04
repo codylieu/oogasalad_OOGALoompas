@@ -40,6 +40,7 @@ public class Model {
     private CollisionManager collisionManager;
     private Point2D entrance;
     private Point2D exit;
+    private GameState gameState;
 
     public Model(JGEngine engine) {
 //        this.monsterFactory = new MonsterFactory(engine);
@@ -52,7 +53,9 @@ public class Model {
         this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
         towers = new ArrayList<Tower>();
-
+        gameState = new GameState();
+        setEntrance(0, engine.pfHeight()/2);
+        setExit(engine.pfWidth(), engine.pfHeight()/2);
     }
     
     /**
@@ -102,13 +105,13 @@ public class Model {
         TowerSchema t1 = new TowerSchema();
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
-        t1.setMyRange(100);
+        t1.setMyRange(200);
         t1.setMyImage("SimpleTower");
 
         TowerSchema t2 = new TowerSchema();
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
-        t2.setMyRange(20);
+        t2.setMyRange(200);
         t2.setMyImage("SimpleTower");
 
         GameBlueprint gb = new GameBlueprint();
@@ -253,6 +256,8 @@ public class Model {
 		doSpawnActivity();
 		doTowerFiring();
 		removeDeadMonsters();
+		gameState.updateGameStates(monsters, towers, entrance, exit, currentWave, allWaves, gameClock, 
+				player.getMoney(), player.getLife(), player.getScore());
 	}
 
 	/**
