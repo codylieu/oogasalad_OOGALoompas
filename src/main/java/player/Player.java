@@ -54,6 +54,8 @@ public class Player {
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
 	
+	private TDPlayerEngine engine;
+	
 	public Player() {
 		makeFrame();
 		makeCards();
@@ -177,8 +179,9 @@ public class Player {
 		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		return gamePanel;*/
 
-		TDPlayerEngine playerEngine = new TDPlayerEngine();
-		return playerEngine;
+		engine = new TDPlayerEngine();
+		engine.stop();
+		return engine;
 	}
 
 	private JPanel makeGameButtonPanel() {
@@ -187,22 +190,25 @@ public class Player {
 
 		JButton mainMenuButton = makeMainMenuButton();
 
-		JButton playResumeButton = new JButton("Play/Resume");
+		JButton playResumeButton = new JButton("Play/Pause");
 		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		playResumeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("play resume");
+				if (engine.isRunning())
+					engine.stop();
+				else
+					engine.start();
 				frame.pack();
 			}
 		});
-		JButton pauseButton = new JButton("Pause");
+		/*JButton pauseButton = new JButton("Pause");
 		//pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		pauseButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("pause");
+				engine.stop();
 				frame.pack();
 			}
-		});
+		});*/
 		JButton saveButton = new JButton("Save");
 		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		saveButton.addActionListener(new ActionListener() {
@@ -222,7 +228,7 @@ public class Player {
 		});
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
-		gameButtonPanel.add(pauseButton);
+		//gameButtonPanel.add(pauseButton);
 		gameButtonPanel.add(saveButton);
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(addTowerButton);
