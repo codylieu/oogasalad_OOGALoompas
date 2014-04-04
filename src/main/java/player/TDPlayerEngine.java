@@ -36,11 +36,14 @@ public class TDPlayerEngine extends JGEngine {
     }
 
     private void highlightMouseoverTile() {
-        JGPoint mousePos = getMousePos();
+    	JGPoint mousePos = getMousePos();
         int curXTilePos = mousePos.x/tileWidth() * tileWidth();
         int curYTilePos = mousePos.y/tileHeight() * tileHeight();
-
-        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, JGColor.yellow);
+        JGColor color = JGColor.yellow;
+        if (model.isTowerPresent(mousePos.x, mousePos.y)) {
+        	color = JGColor.green;
+        }
+        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
     }
     
     private void displayGameStats() {
