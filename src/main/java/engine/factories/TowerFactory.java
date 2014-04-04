@@ -1,15 +1,15 @@
 package main.java.engine.factories;
 
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
-import main.java.author.model.TowerSchema;
 import main.java.engine.objects.tower.SimpleTower;
 
 import main.java.exceptions.engine.InvalidTowerCreationParametersException;
+import main.java.schema.TowerSchema;
 
 public class TowerFactory {
     private JGEngineInterface engine;
@@ -31,19 +31,20 @@ public class TowerFactory {
         }
     }
 
-    public void placeTower(double x, double y, String towerName) throws InvalidTowerCreationParametersException {
-        JGPoint tileOrigin = findTileOrigin(x, y);
+    public void placeTower(Point2D location, String towerName) throws InvalidTowerCreationParametersException {
+        Point2D tileOrigin = findTileOrigin(location);
+
         try {
             TowerSchema schema = towerSchemas.get(towerName);
-            new SimpleTower(tileOrigin.x, tileOrigin.y, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage());
+            new SimpleTower(tileOrigin, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage());
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private JGPoint findTileOrigin(double x, double y) {
-        int curXTilePos = (int) x/engine.tileWidth() * engine.tileWidth();
-        int curYTilePos = (int) y/engine.tileHeight() * engine.tileHeight();
-        return new JGPoint(curXTilePos, curYTilePos);
+    public Point2D findTileOrigin(Point2D location) {
+        int curXTilePos = (int) location.getX()/engine.tileWidth() * engine.tileWidth();
+        int curYTilePos = (int) location.getY()/engine.tileHeight() * engine.tileHeight();
+        return new Point2D.Double(curXTilePos, curYTilePos);
     }
 }

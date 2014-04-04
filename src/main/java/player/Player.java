@@ -34,6 +34,7 @@ import javax.swing.JTextArea;
 public class Player {
 
 	public static final String LOAD_GAME_DATA = "Load Game Data";
+	public static final String LOAD_LIBRARY = "Browse library";
 	public static final String FILELABEL = "File";
 	public static String HELP = "Instructions for game, how to save, etc";
 	public static String DIFFICULTY = "Difficulty";
@@ -64,10 +65,11 @@ public class Player {
 		show();
 	}
 
+	
 	public void showCard(String cardName){
 		cardLayout.show(cards,  cardName);
 	}
-
+	
 	private void makeFrame() {
 		frame = new JFrame();
 
@@ -89,6 +91,7 @@ public class Player {
 				}
 			}
 		});
+		files.add(new RepositoryViewer(LOAD_LIBRARY));
 		return files;
 	}
 
@@ -117,11 +120,6 @@ public class Player {
 		return welcomeLabel;
 	}
 
-	//TODO: check if card name exists
-	public void show(String cardName){
-		cardLayout.show(cards, cardName);
-	}
-
 	private JPanel makeWelcomeButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));	
@@ -136,14 +134,7 @@ public class Player {
 			buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
 		}
 		
-		JButton exitButton = new JButton("Exit");
-		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		exitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-				frame.pack();
-			}
-		});
+		JButton exitButton = makeQuitButton();
 		buttonPanel.add(exitButton);
 		buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
 		return buttonPanel;
@@ -220,14 +211,7 @@ public class Player {
 				frame.pack();
 			}
 		});
-		JButton quitButton = new JButton("Quit");
-		//quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		quitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("quit");
-				frame.pack();
-			}
-		});
+		JButton quitButton = makeQuitButton();
 		JButton addTowerButton = new JButton("Add Tower");
 		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		addTowerButton.addActionListener(new ActionListener() {
@@ -455,6 +439,18 @@ public class Player {
 		});
 
 		return mainMenuButton;
+	}
+	
+	private JButton makeQuitButton(){
+		JButton exitButton = new JButton("Quit");
+		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		exitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+				frame.pack();
+			}
+		});
+		return exitButton;
 	}
 
 	private void show() {

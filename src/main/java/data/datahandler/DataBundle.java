@@ -1,14 +1,10 @@
 package main.java.data.datahandler;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.Serializable;
 
-import main.java.data.jsonhandler.JSONDeserializer;
-import main.java.data.jsonhandler.JSONSerializer;
+import main.java.schema.GameBlueprint;
+import main.java.schema.TowerSchema;
+
 
 /**
  * DataBundles are designed to store lists of objects mapped to the types of 
@@ -20,78 +16,23 @@ import main.java.data.jsonhandler.JSONSerializer;
  * @author In-Young Jo
  *
  */
-public class DataBundle {
-
-	//dataMap maps lists to the classes of the objects that the lists are storing
-	//NOTE: this assumes that lists hold uniform data
-	private Map<Class<?>, List<Object>> dataMap;
-
-	public DataBundle()	{
-		dataMap = new HashMap<Class<?>, List<Object>>();
-	}
-
-	/**
-	 * Method to add an object or object list to the dataBundle
-	 * @param obj
-	 */
-	public void add(Object obj)	{
-		
-		List<Object> tempList = new ArrayList<Object>();
-		
-		//If obj = list, add all objects to tempList
-		if(obj instanceof List<?>)	{
-			for(int i = 0; i < ((List<?>) obj).size(); i++)	{
-				tempList.add(((List<?>) obj).get(i));
-			}
-		}
-		
-		//If obj isn't a collection just add it to tempList
-		else	{
-			tempList.add(obj);
-		}
-		
-		//Map tempList to the class of the objects the List stores
-		//If there isn't a list containing the type of object in tempList:
-		if(!dataMap.keySet().contains(tempList.get(0).getClass()))	{
-			dataMap.put(obj.getClass(), tempList);
-		}
-		//If there is already a list containing the type of object in tempList:
-		else	{
-			tempList.addAll(dataMap.get(tempList.get(0).getClass()));
-			dataMap.put(tempList.get(0).getClass(), tempList);
-		}
+public class DataBundle implements Serializable {
+	
+	private GameBlueprint myGameBlueprint;
+	
+	public DataBundle() {}
+	
+	public DataBundle(GameBlueprint gameBlueprintInit) {
+		myGameBlueprint = gameBlueprintInit;
 	}
 	
-	/**
-	 * Get the list associated with the type of object passed as a parameter
-	 * @param obj
-	 * @return
-	 */
-	public List<Object> getList(Object obj)	{
-		List<Object> output = new ArrayList<Object>();
-		if(dataMap.containsKey(obj.getClass()))	{
-			output = dataMap.get(obj.getClass());
-		}
-		return output;
+	public GameBlueprint getBlueprint() {
+		return myGameBlueprint;
 	}
 	
-	/**
-	 * Returns the dataMap of the DataBundle
-	 * @return
-	 */
-	public Map<Class<?>, List<Object>> getDataMap()	{
-		return dataMap;
+	public void setBlueprint(GameBlueprint gameBlueprint) {
+		myGameBlueprint = gameBlueprint;
 	}
-	
-//	public static void main(String[] args)	{
-//		DataBundle d = new DataBundle();
-//		d.add("a");
-//		d.add(1);
-//		List<String> l = new ArrayList<String>();
-//		l.add("b");
-//		l.add("c");
-//		d.add(l);
-//		System.out.println(d.getDataMap());
-//		System.out.println(d.getList(new String()));
-//	}
+
+
 }

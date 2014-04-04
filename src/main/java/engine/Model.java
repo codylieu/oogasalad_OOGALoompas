@@ -1,5 +1,5 @@
 package main.java.engine;
-import java.awt.Point;
+
 import java.awt.geom.Point2D;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import jgame.platform.JGEngine;
-import main.java.author.model.TowerSchema;
 import main.java.data.datahandler.DataBundle;
-import main.java.data.jsonhandler.JSONDeserializer;
+import main.java.data.datahandler.DataHandler;
 import main.java.engine.factories.TowerFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
@@ -22,6 +21,8 @@ import main.java.exceptions.engine.InvalidTowerCreationParametersException;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import main.java.schema.GameBlueprint;
+import main.java.schema.TowerSchema;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -68,7 +69,8 @@ public class Model {
      */
     public void placeTower(double x, double y) {
         try {
-			towerFactory.placeTower(x, y, "test tower 2");
+        	Point2D location = new Point2D.Double(x, y);
+			towerFactory.placeTower(location, "test tower 1");
 		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,9 +99,6 @@ public class Model {
      * @param fileName Name of the json file containing the schemas
      */
     public void loadSchemas(String fileName) {
-        // JSONDeserializer deserializer = new JSONDeserializer();
-        // should deserialize but doesn't work right now for me
-
         TowerSchema t1 = new TowerSchema();
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
@@ -112,15 +111,18 @@ public class Model {
         t2.setMyRange(20);
         t2.setMyImage("SimpleTower");
 
-        DataBundle d = new DataBundle();
-        d.add(t1);
-        d.add(t2);
+        GameBlueprint gb = new GameBlueprint();
+        List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
+        towerSchemas.add(t1);
+        towerSchemas.add(t2);
+        gb.setMyTowerSchemas(towerSchemas);
+        DataBundle b = new DataBundle();
+        b.setBlueprint(gb);
 
         try {
-            //DataBundle data = deserializer.readFile(fileName);
-            DataBundle data = d;
-            Map<Class<?>, List<Object>> dataMap = data.getDataMap();
-            List<TowerSchema> schemas = (List<TowerSchema>)(List<?>) dataMap.get(TowerSchema.class);
+            DataBundle data = b;
+            GameBlueprint blueprint = b.getBlueprint();
+            List<TowerSchema> schemas = blueprint.getMyTowerSchemas();
             towerFactory.loadSchemas(schemas);
         } catch (Exception e) {
             e.printStackTrace();

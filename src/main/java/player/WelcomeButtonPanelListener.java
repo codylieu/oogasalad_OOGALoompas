@@ -15,7 +15,7 @@ public class WelcomeButtonPanelListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		player.show(resources.getString(e.getActionCommand()));
+		player.showCard(resources.getString(e.getActionCommand()));
 		
 	}
 

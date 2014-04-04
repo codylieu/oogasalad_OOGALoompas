@@ -11,12 +11,12 @@ public class SimpleTower extends Tower {
 	public static final double DEFAULT_RANGE = 200;
 	public static final double DEFAULT_FIRING_SPEED = 5;
 
-	public SimpleTower(double x, double y) {
-		super(x, y, DEFAULT_GRAPHICS, DEFAULT_DAMAGE, DEFAULT_RANGE);
+	public SimpleTower(Point2D location) {
+		super(location, DEFAULT_GRAPHICS, DEFAULT_DAMAGE, DEFAULT_RANGE);
 	}
 	
-	public SimpleTower(double x, double y, double damage, double range, String graphics) {
-		super(x, y, graphics, damage, range);
+	public SimpleTower(Point2D location, double damage, double range, String graphics) {
+		super(location, graphics, damage, range);
 	}
 	
 	@Override

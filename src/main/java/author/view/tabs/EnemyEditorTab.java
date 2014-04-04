@@ -5,17 +5,14 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -29,11 +26,10 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.MainController;
-import main.java.author.model.EnemySchema;
 import main.java.author.util.UtilFunctions;
+import main.java.schema.EnemySchema;
 
 //SplitPaneDemo itself is not a visible component.
 public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
@@ -243,7 +239,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private void createNewEnemy(String enemyName) {
 		listModel.addElement(enemyName);
-		EnemySchema newEmeny = new EnemySchema("1");
+		EnemySchema newEmeny = new EnemySchema();
 		enemyMap.put(enemyName, newEmeny);
 		updateDataDisplayed(enemyName);
 	}
