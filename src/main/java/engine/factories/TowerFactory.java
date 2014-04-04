@@ -27,6 +27,7 @@ public class TowerFactory {
      */
     public void loadSchemas(List<TowerSchema> schemas) {
         towerSchemas = new HashMap<String, TowerSchema>();
+
         for (TowerSchema s : schemas) {
             towerSchemas.put(s.getMyName(), s);
         }
@@ -37,7 +38,7 @@ public class TowerFactory {
 
         try {
             TowerSchema schema = towerSchemas.get(towerName);
-            return new SimpleTower(tileOrigin, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage());
+            return new SimpleTower(tileOrigin, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage(), schema.getMyCost());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -48,6 +49,7 @@ public class TowerFactory {
     public Point2D findTileOrigin(Point2D location) {
         int curXTilePos = (int) location.getX()/engine.tileWidth() * engine.tileWidth();
         int curYTilePos = (int) location.getY()/engine.tileHeight() * engine.tileHeight();
+
         return new Point2D.Double(curXTilePos, curYTilePos);
     }
 }

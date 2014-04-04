@@ -37,7 +37,6 @@ public class TestEngine extends JGEngine {
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
         model.loadSchemas("testtowers");
-        model.setTemporaryWaveSchema();
     }
 
     @Override
