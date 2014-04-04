@@ -152,7 +152,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		}
 	}
 
-	// Used by SplitPaneDemo2
+	// Used by Split	PaneDemo2
 	public JList getImageList() {
 		return list;
 	}

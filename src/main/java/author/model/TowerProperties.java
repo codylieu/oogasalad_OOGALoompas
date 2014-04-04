@@ -2,23 +2,19 @@ package main.java.author.model;
 
 import java.util.ArrayList;
 
-public class Enemy {
+public class TowerProperties {
 	private String myId;
 	private int myDamage;
 	private int myHealth;
-	private int mySpeed;
+	private int myFireRate;
 	
-	private EnemyType myType;
+	private TowerType myType;
 	
 	private ArrayList<String> myAttributes;
 	
-	public Enemy(String id) {
+	public TowerProperties(String id) {
 		myId = id;
 		myAttributes = new ArrayList<String>();
-	}
-	
-	public void setAttributes() {
-		
 	}
 
 	public String getId() {
@@ -29,20 +25,21 @@ public class Enemy {
 		return myHealth;
 	}
 	
-	public int getSpeed() {
-		return mySpeed;
+	public int getFireRate() {
+		return myFireRate;
 	}
 	
 	public void setHealth(int health){
 		myHealth = health;
 	}
 	
-	public void setSpeed(int speed) {
-		mySpeed = speed;
+	public void setFireRate(int speed) {
+		myFireRate = speed;
 	}
 	
 	public void setDamage(int damage) {
 		myDamage = damage;
 	}
+
 }
 
