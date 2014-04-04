@@ -1,5 +1,7 @@
 package main.java.engine.factories;
 
+import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +11,6 @@ import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
-
 import main.java.exceptions.engine.InvalidTowerCreationParametersException;
 
 public class TowerFactory {
@@ -28,10 +29,10 @@ public class TowerFactory {
         userTowerConcreteTypeMap.put("PunyTower", "SimpleTower");
     }
 
-    public void placeTower(String userTowerName, double x, double y) throws InvalidTowerCreationParametersException {
-        JGPoint tileOrigin = findTileOrigin(x, y);
+    public void placeTower(String userTowerName, Point2D location) throws InvalidTowerCreationParametersException {
+        Point2D tileOrigin = findTileOrigin(location);
         try {
-            Object[] towerParameters = addLocationToTowerParameters(new ArrayList<Object>(userTowerParametersMap.get(userTowerName)), tileOrigin.x, tileOrigin.y);
+            Object[] towerParameters = addLocationToParameters(new ArrayList<Object>(userTowerParametersMap.get(userTowerName)), tileOrigin);
         	Reflection.createInstance("main.java.engine.objects.tower."+userTowerConcreteTypeMap.get(userTowerName), towerParameters);
         }
         catch (Exception e) {
@@ -39,15 +40,14 @@ public class TowerFactory {
         }
     }
     
-    private Object[] addLocationToTowerParameters(List<Object> parameters, double x, double y) {
-    	parameters.add(0, y);
-    	parameters.add(0,x);
+    private Object[] addLocationToParameters(List<Object> parameters, Point2D location) {
+    	parameters.add(0,location);
     	return parameters.toArray();
     }
 
-    public JGPoint findTileOrigin(double x, double y) {
-        int curXTilePos = (int) x/engine.tileWidth() * engine.tileWidth();
-        int curYTilePos = (int) y/engine.tileHeight() * engine.tileHeight();
-        return new JGPoint(curXTilePos, curYTilePos);
+    public Point2D findTileOrigin(Point2D location) {
+        int curXTilePos = (int) location.getX()/engine.tileWidth() * engine.tileWidth();
+        int curYTilePos = (int) location.getY()/engine.tileHeight() * engine.tileHeight();
+        return new Point2D.Double(curXTilePos, curYTilePos);
     }
 }
