@@ -3,7 +3,7 @@ package main.java.data.datahandler;
 import java.io.Serializable;
 
 import main.java.schema.GameBlueprint;
-import main.java.schema.TowerSchema;
+import main.java.schema.SimpleTowerSchema;
 
 
 /**

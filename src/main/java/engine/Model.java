@@ -5,34 +5,36 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataBundle;
-import main.java.data.datahandler.DataHandler;
-import main.java.engine.factories.TowerFactory;
+import main.java.engine.factory.TDObjectFactory;
+import main.java.engine.factory.TowerFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
-import main.java.exceptions.engine.InvalidTowerCreationParametersException;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+
 import main.java.schema.GameBlueprint;
-import main.java.schema.TowerSchema;
+import main.java.schema.SimpleTowerSchema;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
 
+	private static final double Default_Money_Multiplier = 0.5;
+
     private JGEngine engine;
-    private TowerFactory towerFactory;
+    private TDObjectFactory factory;
 //    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
-    private List<Tower> towers;
+    private Tower[][] towers;
     private List<Monster> monsters;
     private Gson gsonParser;
     private int currentWave;
@@ -40,19 +42,22 @@ public class Model {
     private CollisionManager collisionManager;
     private Point2D entrance;
     private Point2D exit;
+    private GameState gameState;
 
     public Model(JGEngine engine) {
 //        this.monsterFactory = new MonsterFactory(engine);
         this.engine = engine;
-        this.towerFactory = new TowerFactory(engine);
+        this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
         this.gsonParser = new Gson();
         this.gameClock = 0;
         this.currentWave = 0;
         this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
-        towers = new ArrayList<Tower>();
-
+        towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
+        gameState = new GameState();
+        setEntrance(0, engine.pfHeight()/2);
+        setExit(engine.pfWidth(), engine.pfHeight()/2);
     }
     
     /**
@@ -63,21 +68,84 @@ public class Model {
     }
 
     /**
-     * Add a tower at the specified location
+     * Add a tower at the specified location. If tower already exists in that cell, do nothing.
      * @param x	x coordinate of the tower
      * @param y	y coordinate of the tower
      */
     public void placeTower(double x, double y) {
-        try {
-        	Point2D location = new Point2D.Double(x, y);
-			towers.add(towerFactory.placeTower(location, "test tower 1"));
-
-		} catch (InvalidTowerCreationParametersException e) {
+        try {   
+              
+    		Point2D location = new Point2D.Double(x, y);
+    	        int[] currentTile = getTileCoordinates(location);
+    		// if tower already exists in the tile clicked, do nothing
+    		if(isTowerPresent(currentTile)) return;
+    		
+        	Tower newTower = factory.placeTower(location, "test tower 1");
+        	
+        	if(player.getMoney() >= newTower.getCost() ) {
+        	        //FIXME: Decrease money?
+        		player.addMoney(-SimpleTower.DEFAULT_COST);
+        		towers[currentTile[0]][currentTile[1]]  = newTower;
+    	
+        	} else {
+        		newTower.setImage(null);
+        		newTower.remove();
+        	}
+        	
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
     }
 
+    /**
+     * Return a two element int array with the tile coordinates that a given point is on, for use with Tower[][]
+     * @param location
+     * @return the row, col of the tile on which the location is situated
+     */
+    private int[] getTileCoordinates(Point2D location) {
+        int curXTilePos = (int) (location.getX()/engine.tileWidth());
+        int curYTilePos = (int) (location.getY()/engine.tileHeight());
+        return new int[]{curXTilePos, curYTilePos};
+    }
+    
+    /**
+     * Check if there's a tower present at the specified coordinates
+     * @param coordinates
+     * @return true if there is a tower
+     */
+    private boolean isTowerPresent(int[] coordinates) {
+    	return towers[coordinates[0]][coordinates[1]]!=null;
+    }
+    
+    /**
+     * Check if there's a tower present at the specified coordinates
+     * This is mainly for the view to do a quick check
+     * @param x
+     * @param y
+     * @return true if there is a tower
+     */
+    public boolean isTowerPresent(double x, double y) {
+    	return isTowerPresent(getTileCoordinates(new Point2D.Double(x, y)));
+    }
+    
+    /**
+     * Check if the current location contains any tower. If yes, remove it. If no, do nothing 
+     * @param x
+     * @param y
+     */
+    public void checkAndRemoveTower(int x, int y) {
+    	int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
+    	if (isTowerPresent(coordinates)){
+    		int xtile = coordinates[0];
+    		int ytile = coordinates[1];
+    		player.addMoney(Default_Money_Multiplier * towers[xtile][ytile].getCost());
+    		towers[xtile][ytile].remove();
+    		towers[xtile][ytile] = null;
+    	}
+    }
+    
     /**
      * Loads a map/terrain into the engine.
      *
@@ -100,20 +168,32 @@ public class Model {
      * @param fileName Name of the json file containing the schemas
      */
     public void loadSchemas(String fileName) {
-        TowerSchema t1 = new TowerSchema();
+    	
+    	//load wavespawnschemas
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema(engine, "SimpleMonster", 1, entrance, exit);
+    	WaveSpawnSchema wschema = new WaveSpawnSchema();
+    	wschema.addMonsterSchema(mschema);
+    	addWaveToGame(wschema);
+    	//
+    	
+        SimpleTowerSchema t1 = new SimpleTowerSchema();
+        t1.setMyConcreteType("SimpleTower");
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
-        t1.setMyRange(10);
+        t1.setMyRange(200);
+        t1.setMyCost(SimpleTower.DEFAULT_COST);
         t1.setMyImage("SimpleTower");
 
-        TowerSchema t2 = new TowerSchema();
+        SimpleTowerSchema t2 = new SimpleTowerSchema();
+        t1.setMyConcreteType("SimpleTower");
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
-        t2.setMyRange(20);
+        t2.setMyRange(200);
+        t2.setMyCost(SimpleTower.DEFAULT_COST);
         t2.setMyImage("SimpleTower");
 
         GameBlueprint gb = new GameBlueprint();
-        List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
+        List<SimpleTowerSchema> towerSchemas = new ArrayList<SimpleTowerSchema>();
         towerSchemas.add(t1);
         towerSchemas.add(t2);
         gb.setMyTowerSchemas(towerSchemas);
@@ -123,8 +203,8 @@ public class Model {
         try {
             DataBundle data = b;
             GameBlueprint blueprint = b.getBlueprint();
-            List<TowerSchema> schemas = blueprint.getMyTowerSchemas();
-            towerFactory.loadSchemas(schemas);
+            List<SimpleTowerSchema> schemas = blueprint.getMyTowerSchemas();
+            factory.loadSchemas(schemas);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -172,7 +252,7 @@ public class Model {
      * @return true if game is lost
      */
     public boolean isGameLost() {
-    	if (player.getLife() <= 0) return true;
+    	if (getPlayerLife() <= 0) return true;
     	return false;
     }
     
@@ -221,7 +301,7 @@ public class Model {
     }
     
     
-    private boolean gameWon() {
+    private boolean isGameWon() {
     	if(currentWave >= allWaves.size()){
     		return true;
     	}
@@ -254,6 +334,8 @@ public class Model {
 		doSpawnActivity();
 		doTowerFiring();
 		removeDeadMonsters();
+		gameState.updateGameStates(monsters, towers, entrance, exit, currentWave, allWaves, gameClock, 
+				player.getMoney(), player.getLife(), player.getScore());
 	}
 
 	/**
@@ -278,12 +360,16 @@ public class Model {
 	/**
 	 * Call this to make each of the Towers execute firing logic
 	 */
-	private void doTowerFiring() {
-		if (!monsters.isEmpty()) {
-			for (Tower t : towers) {
-				Point2D monsterCoor = getNearestMonsterCoordinate(new Point2D.Double(
-						t.x, t.y));
-				t.checkAndfireProjectile(monsterCoor);
+    private void doTowerFiring () {
+        if (!monsters.isEmpty()) {
+            for (Tower[] towerRow : towers) {
+                for (Tower t : towerRow) {
+                    if (t != null) {
+                        Point2D monsterCoor =
+                                getNearestMonsterCoordinate(new Point2D.Double(t.x, t.y));
+                        t.checkAndfireProjectile(monsterCoor);
+                    }
+                }
 			}
 		}
 
@@ -292,7 +378,7 @@ public class Model {
 	/**
 	 * Returns the coordinate of the monster nearest to the coordinate passed in
 	 * @param towerCoor 
-	 * @return
+	 * @return coordinates of the nearest monster in the form of a Point2D object
 	 */
 	private Point2D getNearestMonsterCoordinate(Point2D towerCoor) {
 		double minDistance = Double.MAX_VALUE;
@@ -325,21 +411,20 @@ public class Model {
     	allWaves.add(waveSchema);
     }
     
+//    /**
+//     * Test method
+//     */
+//    public void setTemporaryWaveSchema() {
+//    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 2, entrance, exit);
+//    	WaveSpawnSchema wschema = new WaveSpawnSchema();
+//    	wschema.addMonsterSchema(mschema);
+//    	addWaveToGame(wschema);
+//    }
     
-    /**
-     * Test method
-     */
-    public void setTemporaryWaveSchema() {
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1, entrance, exit);
-    	WaveSpawnSchema wschema = new WaveSpawnSchema();
-    	wschema.addMonsterSchema(mschema);
-    	addWaveToGame(wschema);
-    }
-
 	/**
 	 * Check all collisions specified by the CollisionManager
 	 */
-	public void checkCollisions() {
-		collisionManager.checkAllCollisions();
-	}
+    public void checkCollisions() {
+    	collisionManager.checkAllCollisions();
+    }
 }

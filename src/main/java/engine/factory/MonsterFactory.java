@@ -1,4 +1,4 @@
-package main.java.engine.factories;
+package main.java.engine.factory;
 
 import java.awt.geom.Point2D;
 
