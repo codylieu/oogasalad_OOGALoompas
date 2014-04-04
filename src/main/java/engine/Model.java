@@ -70,11 +70,16 @@ public class Model {
      */
     public void placeTower(double x, double y) {
         try {
-
-        	if(player.getMoney() >= SimpleTower.DEFAULT_COST ) {
+    		Point2D location = new Point2D.Double(x, y);
+        	Tower newTower = towerFactory.placeTower(location, "test tower 1");
+        	if(player.getMoney() >= newTower.getCost() ) {
         		player.addMoney(-SimpleTower.DEFAULT_COST);
-        		Point2D location = new Point2D.Double(x, y);
-    			towers.add(towerFactory.placeTower(location, "test tower 1"));
+    
+    			towers.add(newTower);
+        	} else {
+        		newTower.setImage(null);
+        		newTower.remove();
+        		System.out.println(newTower.isAlive());
         	}
         	
 		} catch (InvalidTowerCreationParametersException e) {
