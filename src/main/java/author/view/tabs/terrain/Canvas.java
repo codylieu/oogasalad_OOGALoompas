@@ -36,14 +36,14 @@ public class Canvas extends JPanel {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				updateTileImage(e);
+				updateTile(e);
 			}
 		});
 		addMouseMotionListener(new MouseMotionAdapter()
 		{
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				updateTileImage(e);
+				updateTile(e);
 			}
 		});	
 	}
@@ -103,10 +103,11 @@ public class Canvas extends JPanel {
 		return tiles;
 	}
 
-	private void updateTileImage(MouseEvent e) {
+	private void updateTile(MouseEvent e) {
 		Tile tile = getTile(e.getX(), e.getY());
 		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
 		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
+		tile.setPassIndex((selectedTileObj == null) ? 0 : selectedTileObj.getPassabilityIndex());
 		repaint(); 
 	}
 	

@@ -14,7 +14,7 @@ public abstract class TileObject extends JButton{
 
 	}
 	
-	public abstract boolean canWalkOver();
+	public abstract int getPassabilityIndex();
 	public abstract Color getBGColor();
 	public abstract String getImage();
 

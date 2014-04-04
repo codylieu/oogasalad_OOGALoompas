@@ -7,8 +7,8 @@ import javax.swing.JButton;
 public class Ground extends TileObject {
 
 	@Override
-	public boolean canWalkOver() {
-		return true;
+	public int getPassabilityIndex() {
+		return 0;
 	}
 
 	@Override

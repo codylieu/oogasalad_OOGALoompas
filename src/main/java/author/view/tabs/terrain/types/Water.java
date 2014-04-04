@@ -5,8 +5,8 @@ import java.awt.Color;
 public class Water extends TileObject {
 
 	@Override
-	public boolean canWalkOver() {
-		return false;
+	public int getPassabilityIndex() {
+		return 1;
 	}
 
 	@Override

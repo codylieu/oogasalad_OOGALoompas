@@ -5,9 +5,8 @@ import java.awt.Color;
 public class Grass extends TileObject {
 
 	@Override
-	
-	public boolean canWalkOver() {
-		return true;
+	public int getPassabilityIndex() {
+		return 0;
 	}
 
 	@Override

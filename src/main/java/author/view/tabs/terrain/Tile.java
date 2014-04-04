@@ -57,6 +57,10 @@ public class Tile extends JPanel {
 		return myPassIndex;
 	}
 	
+	public void setPassIndex(int index) {
+		myPassIndex = index;
+	}
+	
 	protected void setImage(String imgName) {
 		if (imgName == null) {
 			myImg = null;
