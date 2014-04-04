@@ -10,15 +10,27 @@ import java.awt.Dimension;
  * instance of a Enemy. Please refer to the Game Engine's TDObjects for the
  * objects related to ones you will see onscreen.
  */
-public class EnemySchema{
+public class SimpleMonsterSchema extends MonsterSchema{
 
+	/*TODO: Move information related to all monsters to MonsterSchema
+	 */
 	private String myName;
 	private String myImage;
 	private boolean isFlyingType;
 	private double myMoveSpeed;
 	private Dimension myTileSize;
 	private double myRewardAmount;
+	private double myHealth;
 
+	
+	public void setHealth(double myHealth) {
+		this.myHealth = myHealth;
+	}
+	
+	public double getMyHealth() {
+		return myHealth;
+	}
+	
 	public String getMyName() {
 		return myName;
 	}
@@ -66,5 +78,4 @@ public class EnemySchema{
 	public void setMyRewardAmount(double myRewardAmount) {
 		this.myRewardAmount = myRewardAmount;
 	}
-	
 }

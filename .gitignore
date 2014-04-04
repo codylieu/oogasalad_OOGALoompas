@@ -9,6 +9,7 @@
 .classpath
 /bin
 /.project_settings
+/downloads
 
 # idea files
 .idea/

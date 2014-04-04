@@ -4,6 +4,7 @@ import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.engine.Model;
+import main.java.exceptions.engine.MonsterCreationFailureException;
 
 public class TDPlayerEngine extends JGEngine {
     private Model model;
@@ -14,20 +15,18 @@ public class TDPlayerEngine extends JGEngine {
 	}
 	
 	@Override
-	public void initCanvas() {
-		setCanvasSettings(15, 10, 32, 32, null, JGColor.black, null);
-	}
+    public void initCanvas() {
+        setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
+    }
 
 	@Override
 	public void initGame() {
-		setFrameRate(45, 1);
+        setFrameRate(45, 1);
         this.model = new Model(this);
         model.addNewPlayer();
-        model.setEntrance(0, this.pfHeight()/2);
-        model.setExit(this.pfWidth()/2, this.pfHeight()/2);
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
-        model.setTemporaryWaveSchema();
+        model.loadSchemas("testtowers");
 	}
 	
     @Override
@@ -54,14 +53,22 @@ public class TDPlayerEngine extends JGEngine {
     @Override
     public void doFrame() {
         super.doFrame();
-        
         if (getMouseButton(1)) {
             model.placeTower(getMouseX(), getMouseY());
             clearMouseButton(1);
         }
-        
-        model.updateGame();
+        if (getMouseButton(3)) { // right click
+        	model.checkAndRemoveTower(getMouseX(), getMouseY());
+        	clearMouseButton(3);
+        }
+        try {
+			model.updateGame();
+		} catch (MonsterCreationFailureException e) {
+			// TODO Implement exception
+			e.printStackTrace();
+		}
         moveObjects();
         model.checkCollisions();
+//        model.spawnMonster(100, 150);
     }
 }

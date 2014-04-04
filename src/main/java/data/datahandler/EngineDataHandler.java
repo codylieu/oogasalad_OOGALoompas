@@ -42,8 +42,8 @@ public class EngineDataHandler extends DataHandler {
 	 * @throws ClassNotFoundException 
 	 */
 	
-//	public GameState loadState(String filePath) throws ClassNotFoundException, IOException {
-//		return loadBundle(filePath).getGameState();
-//	}
+	public GameState loadState(String filePath) throws ClassNotFoundException, IOException {
+		return loadBundle(filePath).getGameState();
+	}
 	
 }
