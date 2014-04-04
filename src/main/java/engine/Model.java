@@ -86,8 +86,7 @@ public class Model {
         		towers[currentTile[0]][currentTile[1]]  = newTower;
     	
         	} else {
-        		newTower.setImage(null);
-        		newTower.remove();
+        		destroyTower(newTower);
         	}
         	
 		} catch (Exception e) {
@@ -96,6 +95,15 @@ public class Model {
 		}
         
     }
+
+	/**
+	 * Force destroy a tower
+	 * @param newTower
+	 */
+	private void destroyTower(Tower tower) {
+		tower.setImage(null);
+		tower.remove();
+	}
 
     /**
      * Return a two element int array with the tile coordinates that a given point is on, for use with Tower[][]
@@ -368,7 +376,7 @@ public class Model {
 	 * Call this to make each of the Towers execute firing logic
 	 */
     private void doTowerFiring () {
-        if (!monsters.isEmpty()) {
+        
             for (Tower[] towerRow : towers) {
                 for (Tower t : towerRow) {
                     if (t != null) {
@@ -378,7 +386,7 @@ public class Model {
                     }
                 }
 			}
-		}
+		
 
 	}
 
