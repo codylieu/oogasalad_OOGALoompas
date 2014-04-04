@@ -1,7 +1,7 @@
-package main.java.author.model;
+package main.java.schema;
 
 import java.awt.Dimension;
-import java.util.ArrayList;
+
 
 /**
  * 
@@ -11,7 +11,8 @@ import java.util.ArrayList;
  * instance of a Tower. Please refer to the Game Engine's TDObjects for the
  * objects related to ones you will see onscreen.
  */
-public class TowerSchema {
+public class TowerSchema{
+
 	private String myName;
 	private String myImage;
 	private double myAttackRate;
@@ -102,5 +103,5 @@ public class TowerSchema {
 	public void setMyImage(String myImage) {
 		this.myImage = myImage;
 	}
-
+	
 }
