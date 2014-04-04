@@ -46,7 +46,7 @@ public class TestEngine extends JGEngine {
             model.placeTower(getMouseX(), getMouseY());
             clearMouseButton(1);
         }
-        if (getMouseButton(3)) {
+        if (getMouseButton(3)) { // right click
         	model.checkAndRemoveTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
         }
@@ -66,8 +66,11 @@ public class TestEngine extends JGEngine {
         JGPoint mousePos = getMousePos();
         int curXTilePos = mousePos.x/tileWidth() * tileWidth();
         int curYTilePos = mousePos.y/tileHeight() * tileHeight();
-
-        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, JGColor.yellow);
+        JGColor color = JGColor.yellow;
+        if (model.isTowerPresent(mousePos.x, mousePos.y)) {
+        	color = JGColor.green;
+        }
+        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
     }
     
     private void displayGameStats() {

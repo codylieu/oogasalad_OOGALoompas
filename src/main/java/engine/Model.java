@@ -76,7 +76,7 @@ public class Model {
     		Point2D location = new Point2D.Double(x, y);
     	        int[] currentTile = getTileCoordinates(location);
     		// if tower already exists in the tile clicked, do nothing
-    		if(towers[currentTile[0]][currentTile[1]] != null) return;
+    		if(isTowerPresent(currentTile)) return;
     		
         	Tower newTower = towerFactory.placeTower(location, "test tower 1");
         	
@@ -109,16 +109,27 @@ public class Model {
     }
     
     /**
-     * Check if there's a tower present at the specified coordinatess
+     * Check if there's a tower present at the specified coordinates
      * @param coordinates
-     * @return
+     * @return true if there is a tower
      */
     private boolean isTowerPresent(int[] coordinates) {
     	return towers[coordinates[0]][coordinates[1]]!=null;
     }
     
     /**
-     * Check if the current location contains any tower. If yes, remove it. If no, do nothing. 
+     * Check if there's a tower present at the specified coordinates
+     * This is mainly for the view to do a quick check
+     * @param x
+     * @param y
+     * @return true if there is a tower
+     */
+    public boolean isTowerPresent(double x, double y) {
+    	return isTowerPresent(getTileCoordinates(new Point2D.Double(x, y)));
+    }
+    
+    /**
+     * Check if the current location contains any tower. If yes, remove it. If no, do nothing 
      * @param x
      * @param y
      */
@@ -237,7 +248,7 @@ public class Model {
      * @return true if game is lost
      */
     public boolean isGameLost() {
-    	if (player.getLife() <= 0) return true;
+    	if (getPlayerLife() <= 0) return true;
     	return false;
     }
     
@@ -286,7 +297,7 @@ public class Model {
     }
     
     
-    private boolean gameWon() {
+    private boolean isGameWon() {
     	if(currentWave >= allWaves.size()){
     		return true;
     	}
@@ -363,7 +374,7 @@ public class Model {
 	/**
 	 * Returns the coordinate of the monster nearest to the coordinate passed in
 	 * @param towerCoor 
-	 * @return
+	 * @return coordinates of the nearest monster in the form of a Point2D object
 	 */
 	private Point2D getNearestMonsterCoordinate(Point2D towerCoor) {
 		double minDistance = Double.MAX_VALUE;
