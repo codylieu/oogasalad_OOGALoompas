@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import jgame.impl.JGEngineInterface;
-import main.java.engine.factories.MonsterFactory;
+import main.java.engine.factory.MonsterFactory;
 import main.java.engine.objects.monster.Monster;
 
 /**
@@ -16,7 +16,8 @@ import main.java.engine.objects.monster.Monster;
  * 
  */
 public class MonsterSpawnSchema {
-
+	
+	private JGEngineInterface engine;
     private String myMonsterName;
     private int mySwarmSize;
     private MonsterFactory myFactory;
@@ -28,11 +29,11 @@ public class MonsterSpawnSchema {
      * @param monsterToCreate String representation for Factory creation
      * @param swarmSize how many of the specified monster to be created
      */
-    public MonsterSpawnSchema (String monsterToCreate, int swarmSize, Point2D entrance, Point2D exit) {
+    public MonsterSpawnSchema (JGEngineInterface engine, String monsterToCreate, int swarmSize, Point2D entrance, Point2D exit) {
+    	this.engine = engine;
         myMonsterName = monsterToCreate;
         mySwarmSize = swarmSize;
-//        myFactory = new MonsterFactory(engine);
-        myFactory = new MonsterFactory();
+        myFactory = new MonsterFactory(engine);
         myEntrance = entrance;
         myExit = exit;
     }

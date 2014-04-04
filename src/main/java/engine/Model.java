@@ -5,9 +5,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataBundle;
-import main.java.engine.factories.TowerFactory;
+import main.java.engine.factory.TDObjectFactory;
+import main.java.engine.factory.TowerFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.monster.Monster;
@@ -15,12 +17,12 @@ import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
-import main.java.exceptions.engine.InvalidTowerCreationParametersException;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+
 import main.java.schema.GameBlueprint;
-import main.java.schema.TowerSchema;
+import main.java.schema.SimpleTowerSchema;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -28,7 +30,7 @@ public class Model {
 	private static final double Default_Money_Multiplier = 0.5;
 
     private JGEngine engine;
-    private TowerFactory towerFactory;
+    private TDObjectFactory factory;
 //    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
@@ -45,7 +47,7 @@ public class Model {
     public Model(JGEngine engine) {
 //        this.monsterFactory = new MonsterFactory(engine);
         this.engine = engine;
-        this.towerFactory = new TowerFactory(engine);
+        this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
         this.gsonParser = new Gson();
         this.gameClock = 0;
@@ -78,7 +80,7 @@ public class Model {
     		// if tower already exists in the tile clicked, do nothing
     		if(isTowerPresent(currentTile)) return;
     		
-        	Tower newTower = towerFactory.placeTower(location, "test tower 1");
+        	Tower newTower = factory.placeTower(location, "test tower 1");
         	
         	if(player.getMoney() >= newTower.getCost() ) {
         	        //FIXME: Decrease money?
@@ -90,7 +92,7 @@ public class Model {
         		newTower.remove();
         	}
         	
-		} catch (InvalidTowerCreationParametersException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -168,20 +170,22 @@ public class Model {
     public void loadSchemas(String fileName) {
     	
     	//load wavespawnschemas
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1, entrance, exit);
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema(engine, "SimpleMonster", 1, entrance, exit);
     	WaveSpawnSchema wschema = new WaveSpawnSchema();
     	wschema.addMonsterSchema(mschema);
     	addWaveToGame(wschema);
     	//
     	
-        TowerSchema t1 = new TowerSchema();
+        SimpleTowerSchema t1 = new SimpleTowerSchema();
+        t1.setMyConcreteType("SimpleTower");
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
         t1.setMyRange(200);
         t1.setMyCost(SimpleTower.DEFAULT_COST);
         t1.setMyImage("SimpleTower");
 
-        TowerSchema t2 = new TowerSchema();
+        SimpleTowerSchema t2 = new SimpleTowerSchema();
+        t1.setMyConcreteType("SimpleTower");
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
         t2.setMyRange(200);
@@ -189,7 +193,7 @@ public class Model {
         t2.setMyImage("SimpleTower");
 
         GameBlueprint gb = new GameBlueprint();
-        List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
+        List<SimpleTowerSchema> towerSchemas = new ArrayList<SimpleTowerSchema>();
         towerSchemas.add(t1);
         towerSchemas.add(t2);
         gb.setMyTowerSchemas(towerSchemas);
@@ -199,8 +203,8 @@ public class Model {
         try {
             DataBundle data = b;
             GameBlueprint blueprint = b.getBlueprint();
-            List<TowerSchema> schemas = blueprint.getMyTowerSchemas();
-            towerFactory.loadSchemas(schemas);
+            List<SimpleTowerSchema> schemas = blueprint.getMyTowerSchemas();
+            factory.loadSchemas(schemas);
         } catch (Exception e) {
             e.printStackTrace();
         }
