@@ -16,6 +16,7 @@ public class EnemySchema{
 	private String myImage;
 	private boolean isFlyingType;
 	private double myMoveSpeed;
+	private String myExplosionImage;
 	private Dimension myTileSize;
 	private double myRewardAmount;
 
@@ -65,6 +66,14 @@ public class EnemySchema{
 
 	public void setMyRewardAmount(double myRewardAmount) {
 		this.myRewardAmount = myRewardAmount;
+	}
+
+	public String getMyExplosionImage() {
+		return myExplosionImage;
+	}
+
+	public void setMyExplosionImage(String myExplosionImage) {
+		this.myExplosionImage = myExplosionImage;
 	}
 	
 }

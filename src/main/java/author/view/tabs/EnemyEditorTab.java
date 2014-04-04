@@ -117,7 +117,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JComponent makeEditorPane() {
 		JPanel result = new JPanel();
 		result.setLayout(new BorderLayout());
-		result.add(makeAttributesPane(), BorderLayout.WEST);
+		result.add(makeAttributesPane(), BorderLayout.CENTER);
 		result.add(makeImagesPane(), BorderLayout.EAST);
 		result.add(makeDeleteEnemyButton(), BorderLayout.SOUTH);
 
@@ -182,8 +182,12 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private JComponent makeLabelPane() {
 		healthLabel = new JLabel(healthString);
+		healthLabel.setLabelFor(healthField);
 		speedLabel = new JLabel(speedString);
+		speedLabel.setLabelFor(speedField);
+
 		damageLabel = new JLabel(damageString);
+		damageLabel.setLabelFor(damageField);
 		JPanel labels = new JPanel(new GridLayout(0, 1));
 		labels.add(healthLabel);
 		labels.add(speedLabel);
@@ -193,22 +197,22 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private JComponent makeFieldPane() {
 		healthField = new JFormattedTextField(numberFormat);
-		healthField.setColumns(10);
+		healthField.setColumns(5);
 		speedField = new JFormattedTextField(numberFormat);
 		damageField = new JFormattedTextField(numberFormat);
-		JPanel fields = new JPanel(new GridLayout(0, 1));
-		fields.add(healthField);
-		fields.add(speedField);
-		fields.add(damageField);
-		return fields;
+		JPanel result = new JPanel(new GridLayout(0, 1));
+		result.add(healthField);
+		result.add(speedField);
+		result.add(damageField);
+		return result;
 	}
 
 	private JComponent makeAttributesPane() {
-		JPanel myAttributes = new JPanel();
-		setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-		myAttributes.add(makeLabelPane(), BorderLayout.WEST);
-		myAttributes.add(makeFieldPane(), BorderLayout.EAST);
-		return myAttributes;
+		JPanel result = new JPanel();
+		result.setLayout(new BorderLayout());
+		result.add(makeLabelPane(), BorderLayout.WEST);
+		result.add(makeFieldPane(), BorderLayout.CENTER);
+		return result;
 	}
 
 	private void addActionListeners() {
