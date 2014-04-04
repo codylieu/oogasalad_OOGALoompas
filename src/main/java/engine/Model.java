@@ -71,7 +71,6 @@ public class Model {
         try {
         	Point2D location = new Point2D.Double(x, y);
 			towers.add(towerFactory.placeTower(location, "test tower 1"));
-
 		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -103,7 +102,7 @@ public class Model {
         TowerSchema t1 = new TowerSchema();
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
-        t1.setMyRange(10);
+        t1.setMyRange(100);
         t1.setMyImage("SimpleTower");
 
         TowerSchema t2 = new TowerSchema();

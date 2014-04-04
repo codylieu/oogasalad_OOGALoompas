@@ -3,20 +3,18 @@ package main.java.engine.objects.tower;
 import java.awt.geom.Point2D;
 
 import main.java.engine.objects.Projectile;
+import main.java.schema.TowerSchema;
 
 public class SimpleTower extends Tower {
-	
 	public static final String DEFAULT_GRAPHICS = "SimpleTower";
 	public static final double DEFAULT_DAMAGE = 10;
 	public static final double DEFAULT_RANGE = 200;
 	public static final double DEFAULT_FIRING_SPEED = 5;
 
-	public SimpleTower(Point2D location) {
-		super(location, DEFAULT_GRAPHICS, DEFAULT_DAMAGE, DEFAULT_RANGE);
-	}
+    //TODO: DEFAULT SCHEMA
 	
-	public SimpleTower(Point2D location, double damage, double range, String graphics) {
-		super(location, graphics, damage, range);
+	public SimpleTower(Point2D location, TowerSchema schema) {
+		super(location, schema);
 	}
 	
 	@Override
