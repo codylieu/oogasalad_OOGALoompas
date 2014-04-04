@@ -1,5 +1,4 @@
 package main.java.engine;
-import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -47,7 +46,8 @@ public class Model {
         this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
         towers = new ArrayList<Tower>();
-
+        setEntrance(0, engine.pfHeight()/2);
+        setExit(engine.pfWidth(), engine.pfHeight()/2);
     }
     
     /**
