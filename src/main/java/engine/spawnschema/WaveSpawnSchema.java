@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import main.java.engine.objects.monster.Monster;
+import main.java.exceptions.engine.MonsterCreationFailureException;
 
 /**
  * 
@@ -47,9 +48,10 @@ public class WaveSpawnSchema {
 	/**
 	 * Create the wave of monsters specified by spawning all contained monster
 	 * spawn schemas.
+	 * @throws MonsterCreationFailureException 
 	 * 
 	 */
-	public Collection<Monster> spawn() {
+	public Collection<Monster> spawn() throws MonsterCreationFailureException {
 		Collection<Monster> allNewlyAdded = new ArrayList<Monster>();
 		for (MonsterSpawnSchema monsterSchema : myMonsterSchemas) {
 			allNewlyAdded.addAll(monsterSchema.spawn());
