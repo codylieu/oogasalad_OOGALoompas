@@ -36,7 +36,7 @@ public class Player {
 	public static final String LOAD_GAME_DATA = "Load Game Data";
 	public static final String LOAD_LIBRARY = "Browse library";
 	public static final String FILELABEL = "File";
-	public static final String HELP = "Instructions for game, how to save, etc";
+	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \nAdding towers uses up money. Right click on towers to sell. \nA proportion of the tower's original cost will be added to money";
 	public static final String DIFFICULTY = "Difficulty";
 	public static final String EASY = "Easy Mode";
 	public static final String MEDIUM = "Medium Mode";
