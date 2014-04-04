@@ -46,7 +46,6 @@ public abstract class Tower extends TDObject {
     		return false;
     	}
     	Point2D currCoor = new Point2D.Double(x, y);
-    	System.out.println(target.distance(currCoor) + " " + myRange);
     	if(inFiringInterval() && target.distance(currCoor) < myRange) {
     		fireProjectile(target);
     		return true;
