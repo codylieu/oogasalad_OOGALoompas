@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.monster.SimpleMonster;
 import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.SimpleTowerSchema;
@@ -26,6 +28,10 @@ public class TDObjectFactory {
 			towerSchemas.put(s.getMyName(), s);
 		}
 	}
+
+    public Monster placeMonster(Point2D entrance, Point2D exit) {
+        return new SimpleMonster(entrance, exit);
+    }
 
 	public Tower placeTower(Point2D location, String towerName) throws TowerCreationFailureException {
 		Point2D tileOrigin = findTileOrigin(location);

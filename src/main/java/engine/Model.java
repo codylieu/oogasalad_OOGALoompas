@@ -9,7 +9,6 @@ import java.util.List;
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataBundle;
 import main.java.engine.factory.TDObjectFactory;
-import main.java.engine.factory.TowerFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.monster.Monster;
@@ -31,7 +30,6 @@ public class Model {
 
     private JGEngine engine;
     private TDObjectFactory factory;
-//    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
     private Tower[][] towers;
@@ -45,7 +43,6 @@ public class Model {
     private GameState gameState;
 
     public Model(JGEngine engine) {
-//        this.monsterFactory = new MonsterFactory(engine);
         this.engine = engine;
         this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
@@ -146,6 +143,7 @@ public class Model {
     	}
     }
     
+    /**
     /**
      * Loads a map/terrain into the engine.
      *

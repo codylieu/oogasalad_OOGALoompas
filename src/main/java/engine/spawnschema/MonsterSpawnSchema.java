@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import jgame.impl.JGEngineInterface;
-import main.java.engine.factory.MonsterFactory;
+import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.objects.monster.Monster;
 
 /**
@@ -20,7 +20,7 @@ public class MonsterSpawnSchema {
 	private JGEngineInterface engine;
     private String myMonsterName;
     private int mySwarmSize;
-    private MonsterFactory myFactory;
+    private TDObjectFactory myFactory;
     private Point2D myEntrance;
     private Point2D myExit;
 
@@ -33,7 +33,7 @@ public class MonsterSpawnSchema {
     	this.engine = engine;
         myMonsterName = monsterToCreate;
         mySwarmSize = swarmSize;
-        myFactory = new MonsterFactory(engine);
+        myFactory = new TDObjectFactory(engine);
         myEntrance = entrance;
         myExit = exit;
     }
