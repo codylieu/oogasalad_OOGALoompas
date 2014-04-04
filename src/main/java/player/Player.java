@@ -201,20 +201,22 @@ public class Player {
 				frame.pack();
 			}
 		});
-		/*JButton pauseButton = new JButton("Pause");
-		//pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		pauseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				engine.stop();
-				frame.pack();
-			}
-		});*/
 		JButton saveButton = new JButton("Save");
 		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("save");
 				frame.pack();
+			}
+		});
+		JButton speedUpButton = new JButton("Speed Up");
+		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		speedUpButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//This should work but it doesn't
+				System.out.println(engine.getGameSpeed());
+				engine.setGameSpeed(20.0);
+				System.out.println(engine.getGameSpeed());
 			}
 		});
 		JButton quitButton = makeQuitButton();
@@ -228,8 +230,8 @@ public class Player {
 		});
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
-		//gameButtonPanel.add(pauseButton);
 		gameButtonPanel.add(saveButton);
+		//gameButtonPanel.add(speedUpButton);
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(addTowerButton);
 		return gameButtonPanel;
