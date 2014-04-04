@@ -26,10 +26,10 @@ public class Canvas extends JPanel {
 	private TileObject selectedTileObj;
 
 	public Canvas(){
-		myTiles = new Tile[NUM_COLS][NUM_ROWS];
-		for (int col = 0; col < NUM_COLS; col++) {
-			for (int row = 0; row < NUM_ROWS; row++) {
-				myTiles[col][row] = new Tile(row, col, DEFAULT_TILE_COLOR);
+		myTiles = new Tile[NUM_ROWS][NUM_COLS];
+		for (int row = 0; row < NUM_ROWS; row++) {
+			for (int col = 0; col < NUM_COLS; col++) {
+				myTiles[row][col] = new Tile(row, col, DEFAULT_TILE_COLOR);
 			}
 		}
 		setPreferredSize(new Dimension(NUM_COLS*TILE_SIZE, NUM_ROWS*TILE_SIZE)); // important for maintaining size of JPanel
@@ -91,7 +91,7 @@ public class Canvas extends JPanel {
 		boolean validRow = row >= 0 && row <= NUM_ROWS - 1;
 		boolean validCol = col >= 0 && col <= NUM_COLS - 1;
 		if (validRow && validCol) {
-			return myTiles[col][row];
+			return myTiles[row][col];
 		}
 		return null;
 	}
@@ -102,8 +102,8 @@ public class Canvas extends JPanel {
 	 */
 	private List<Tile> getTiles() {
 		List<Tile> tiles = new ArrayList<Tile>();
-		for (int i = 0; i < NUM_COLS; i++) {
-			for (int j = 0; j < NUM_ROWS; j++) {
+		for (int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
 				tiles.add(myTiles[i][j]);
 			}
 		}
