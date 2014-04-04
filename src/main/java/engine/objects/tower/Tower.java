@@ -15,6 +15,7 @@ public abstract class Tower extends TDObject {
 
     protected double myDamage;
     protected double myRange;
+    protected double myCost;
 
     /**
      * This should be a number from 1 (slowest) to 10 (fastest);
@@ -28,10 +29,11 @@ public abstract class Tower extends TDObject {
      * @param x
      * @param y
      */
-    public Tower (Point2D location, String tower_gfx, double damage, double range) {
+    public Tower (Point2D location, String tower_gfx, double damage, double range, double cost) {
         super("tower", location.getX(), location.getY(), TOWER_CID, tower_gfx);
         myDamage = damage;
         myRange = range;
+        myCost = cost;
     }
    
     /**
@@ -61,7 +63,15 @@ public abstract class Tower extends TDObject {
     private boolean inFiringInterval() {
 		 return myFiringCounter % Math.max(myFiringSpeed, 10)/10 == 0;
 	}
-
+    
+    /**
+     * Get this tower's cost
+     * @param target
+     */
+    public double getCost() {
+    	return myCost;
+    }
+    
 	abstract void fireProjectile(Point2D target);
 
 }

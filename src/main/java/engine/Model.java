@@ -5,15 +5,13 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataBundle;
-import main.java.data.datahandler.DataHandler;
 import main.java.engine.factories.TowerFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
@@ -53,7 +51,7 @@ public class Model {
         monsters = new ArrayList<Monster>();
         towers = new ArrayList<Tower>();
         setEntrance(0, engine.pfHeight()/2);
-        setExit(engine.pfWidth(), engine.pfHeight()/2);
+        setExit(engine.pfWidth()/2, engine.pfHeight()/2);
     }
     
     /**
@@ -70,9 +68,13 @@ public class Model {
      */
     public void placeTower(double x, double y) {
         try {
-        	Point2D location = new Point2D.Double(x, y);
-			towers.add(towerFactory.placeTower(location, "test tower 1"));
-
+        	
+        	if(player.getMoney() >= SimpleTower.DEFAULT_COST ) {
+        		player.addMoney(-SimpleTower.DEFAULT_COST);
+        		Point2D location = new Point2D.Double(x, y);
+    			towers.add(towerFactory.placeTower(location, "test tower 1"));
+        	}
+        	
 		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -101,16 +103,26 @@ public class Model {
      * @param fileName Name of the json file containing the schemas
      */
     public void loadSchemas(String fileName) {
+    	
+    	//load wavespawnschemas
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1, entrance, exit);
+    	WaveSpawnSchema wschema = new WaveSpawnSchema();
+    	wschema.addMonsterSchema(mschema);
+    	addWaveToGame(wschema);
+    	//
+    	
         TowerSchema t1 = new TowerSchema();
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
-        t1.setMyRange(10);
+        t1.setMyRange(200);
+        t1.setMyCost(SimpleTower.DEFAULT_COST);
         t1.setMyImage("SimpleTower");
 
         TowerSchema t2 = new TowerSchema();
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
-        t2.setMyRange(20);
+        t2.setMyRange(200);
+        t2.setMyCost(SimpleTower.DEFAULT_COST);
         t2.setMyImage("SimpleTower");
 
         GameBlueprint gb = new GameBlueprint();
@@ -326,17 +338,6 @@ public class Model {
     	allWaves.add(waveSchema);
     }
     
-    
-    /**
-     * Test method
-     */
-    public void setTemporaryWaveSchema() {
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1, entrance, exit);
-    	WaveSpawnSchema wschema = new WaveSpawnSchema();
-    	wschema.addMonsterSchema(mschema);
-    	addWaveToGame(wschema);
-    }
-
 	/**
 	 * Check all collisions specified by the CollisionManager
 	 */

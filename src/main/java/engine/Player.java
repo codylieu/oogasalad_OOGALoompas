@@ -13,7 +13,7 @@ public class Player {
 	private Map<String, Integer> skills;
 	
 	public Player() {
-		this.money = 0;
+		this.money = 300;
 		this.life = DEFAULT_INITIAL_LIVES_NUM;
 		this.score = 0;
 		this.skills = new HashMap<String, Integer>();

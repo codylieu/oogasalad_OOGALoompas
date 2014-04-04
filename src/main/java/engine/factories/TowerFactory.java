@@ -37,7 +37,7 @@ public class TowerFactory {
 
         try {
             TowerSchema schema = towerSchemas.get(towerName);
-            return new SimpleTower(tileOrigin, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage());
+            return new SimpleTower(tileOrigin, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage(), schema.getMyCost());
         } catch (Exception e) {
             e.printStackTrace();
         }

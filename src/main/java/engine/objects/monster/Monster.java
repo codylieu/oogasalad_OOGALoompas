@@ -73,6 +73,10 @@ public abstract class Monster extends TDObject {
     	return new Point2D.Double(this.x, this.y);
     }
     
+    /**
+     * Get money value received upon death of this monster
+     * @return
+     */
     public double getMoneyValue() {
     	return myMoneyValue;
     }
