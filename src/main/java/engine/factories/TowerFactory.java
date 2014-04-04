@@ -8,6 +8,7 @@ import java.util.Map;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.objects.tower.SimpleTower;
 
+import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.InvalidTowerCreationParametersException;
 import main.java.schema.TowerSchema;
 
@@ -31,15 +32,17 @@ public class TowerFactory {
         }
     }
 
-    public void placeTower(Point2D location, String towerName) throws InvalidTowerCreationParametersException {
+    public Tower placeTower(Point2D location, String towerName) throws InvalidTowerCreationParametersException {
         Point2D tileOrigin = findTileOrigin(location);
 
         try {
             TowerSchema schema = towerSchemas.get(towerName);
-            new SimpleTower(tileOrigin, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage());
+            return new SimpleTower(tileOrigin, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     public Point2D findTileOrigin(Point2D location) {
