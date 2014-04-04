@@ -14,7 +14,7 @@ import main.java.engine.spawnschema.WaveSpawnSchema;
 public class GameState {
 	// model specific
 	private List<Monster> monsters; 
-	private List<Tower> towers;
+	private Tower[][] towers;
 	private Point2D entrance;
 	private Point2D exit;
 	private int currentWave;
@@ -40,7 +40,7 @@ public class GameState {
 	 * @param playerLife
 	 * @param playerScore
 	 */
-	public void updateGameStates(List<Monster> currentMonsters, List<Tower> currentTowers, Point2D currentEntrance, 
+	public void updateGameStates(List<Monster> currentMonsters, Tower[][] currentTowers, Point2D currentEntrance, 
 			Point2D currentExit, int currentWaveNumber, List<WaveSpawnSchema> allCurrentWaves, double currentGameClock, 
 			int playerMoney, int playerLife, double playerScore) {
 		monsters = currentMonsters;

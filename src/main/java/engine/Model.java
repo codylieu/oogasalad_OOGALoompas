@@ -30,7 +30,7 @@ public class Model {
 //    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
-    private List<Tower> towers;
+    private Tower[][] towers;
     private List<Monster> monsters;
     private Gson gsonParser;
     private int currentWave;
@@ -50,7 +50,7 @@ public class Model {
         this.currentWave = 0;
         this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
-        towers = new ArrayList<Tower>();
+        towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
         setExit(engine.pfWidth()/2, engine.pfHeight()/2);
@@ -64,30 +64,50 @@ public class Model {
     }
 
     /**
-     * Add a tower at the specified location
+     * Add a tower at the specified location. If tower already exists in that cell, do nothing.
      * @param x	x coordinate of the tower
      * @param y	y coordinate of the tower
      */
     public void placeTower(double x, double y) {
-        try {
+        try {   
+              
     		Point2D location = new Point2D.Double(x, y);
+    	        int[] currentTile = getTileCoordinates(location);
+    		// if tower already exists in the tile clicked, do nothing
+    		if(towers[currentTile[0]][currentTile[1]] != null) return;
+    		
         	Tower newTower = towerFactory.placeTower(location, "test tower 1");
+        	
         	if(player.getMoney() >= newTower.getCost() ) {
+        	        //FIXME: Decrease money?
         		player.addMoney(-SimpleTower.DEFAULT_COST);
-    
-    			towers.add(newTower);
+        		towers[currentTile[0]][currentTile[1]]  = newTower;
+    	
         	} else {
         		newTower.setImage(null);
         		newTower.remove();
-        		System.out.println(newTower.isAlive());
         	}
         	
 		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+        
     }
 
+    /**
+     * Return a two element int array with the tile coordinates that a given point is on, for use with Tower[][]
+     * @param location
+     * @return the row, col of the tile on which the location is situated
+     */
+    public int[] getTileCoordinates(Point2D location) {
+        int curXTilePos = (int) (location.getX()/engine.tileWidth());
+        int curYTilePos = (int) (location.getY()/engine.tileHeight());
+        return new int[]{curXTilePos, curYTilePos};
+    }
+    
+
+    
     /**
      * Loads a map/terrain into the engine.
      *
@@ -300,12 +320,16 @@ public class Model {
 	/**
 	 * Call this to make each of the Towers execute firing logic
 	 */
-	private void doTowerFiring() {
-		if (!monsters.isEmpty()) {
-			for (Tower t : towers) {
-				Point2D monsterCoor = getNearestMonsterCoordinate(new Point2D.Double(
-						t.x, t.y));
-				t.checkAndfireProjectile(monsterCoor);
+    private void doTowerFiring () {
+        if (!monsters.isEmpty()) {
+            for (Tower[] towerRow : towers) {
+                for (Tower t : towerRow) {
+                    if (t != null) {
+                        Point2D monsterCoor =
+                                getNearestMonsterCoordinate(new Point2D.Double(t.x, t.y));
+                        t.checkAndfireProjectile(monsterCoor);
+                    }
+                }
 			}
 		}
 
