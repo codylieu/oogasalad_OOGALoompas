@@ -74,6 +74,7 @@ public class Model {
         try {
         	Point2D location = new Point2D.Double(x, y);
 			towers.add(towerFactory.placeTower(location, "test tower 1"));
+			
 
 		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
@@ -330,12 +331,16 @@ public class Model {
     	allWaves.add(waveSchema);
     }
     
+    public void destroyTower(double x, double y) {
+    	
+    }
+    
     
     /**
      * Test method
      */
     public void setTemporaryWaveSchema() {
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1, entrance, exit);
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 2, entrance, exit);
     	WaveSpawnSchema wschema = new WaveSpawnSchema();
     	wschema.addMonsterSchema(mschema);
     	addWaveToGame(wschema);
