@@ -4,6 +4,7 @@ import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.engine.Model;
+import main.java.exceptions.engine.MonsterCreationFailureException;
 
 public class TDPlayerEngine extends JGEngine {
     private Model model;
@@ -57,7 +58,12 @@ public class TDPlayerEngine extends JGEngine {
             clearMouseButton(1);
         }
         
-        model.updateGame();
+        try {
+			model.updateGame();
+		} catch (MonsterCreationFailureException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         moveObjects();
         model.checkCollisions();
     }
