@@ -160,8 +160,32 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		return result;
 	}
 
+<<<<<<< HEAD
 	// Renders the selected enemy's data
 	protected void updateDataDisplayed(String name) {
+=======
+	// Listens to the list
+	public void valueChanged(ListSelectionEvent e) {
+		JList list = (JList) e.getSource();
+		updateLabel(imageNames[list.getSelectedIndex()]);
+	}
+
+	// Renders the selected image
+	protected void updateLabel(String name) {
+		ImageIcon icon = createImageIcon("images/" + name + ".gif");
+		picture.setIcon(icon);
+		if (icon != null) {
+			picture.setText(null);
+		} else {
+			picture.setText("Image not found");
+		}
+	}
+
+	// Used by Split	PaneDemo2
+	public JList getImageList() {
+		return list;
+	}
+>>>>>>> author
 
 	}
 
