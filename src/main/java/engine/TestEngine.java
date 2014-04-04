@@ -46,6 +46,10 @@ public class TestEngine extends JGEngine {
             model.placeTower(getMouseX(), getMouseY());
             clearMouseButton(1);
         }
+        if (getMouseButton(3)) {
+        	model.checkAndRemoveTower(getMouseX(), getMouseY());
+        	clearMouseButton(3);
+        }
         model.updateGame();
         moveObjects();
         model.checkCollisions();
