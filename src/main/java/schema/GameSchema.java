@@ -1,10 +1,10 @@
-package main.java.author.model;
+package main.java.schema;
 
 /**
  * the higher level settings defining the type of game and some basic
  * overarching stats
  */
-public class GameScenario {
+public class GameSchema {
 
 	private int myStartingLives;
 	private int myStartingGold;
