@@ -65,7 +65,8 @@ public class Model {
     public void placeTower(double x, double y) {
         try {
         	Point2D location = new Point2D.Double(x, y);
-			towerFactory.placeTower("PunyTower", location);
+			towers.add(towerFactory.placeTower("PunyTower", location));
+			
 		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

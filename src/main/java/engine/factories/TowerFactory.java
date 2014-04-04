@@ -29,11 +29,11 @@ public class TowerFactory {
         userTowerConcreteTypeMap.put("PunyTower", "SimpleTower");
     }
 
-    public void placeTower(String userTowerName, Point2D location) throws InvalidTowerCreationParametersException {
+    public Tower placeTower(String userTowerName, Point2D location) throws InvalidTowerCreationParametersException {
         Point2D tileOrigin = findTileOrigin(location);
         try {
             Object[] towerParameters = addLocationToParameters(new ArrayList<Object>(userTowerParametersMap.get(userTowerName)), tileOrigin);
-        	Reflection.createInstance("main.java.engine.objects.tower."+userTowerConcreteTypeMap.get(userTowerName), towerParameters);
+        	return (Tower) Reflection.createInstance("main.java.engine.objects.tower."+userTowerConcreteTypeMap.get(userTowerName), towerParameters);
         }
         catch (Exception e) {
         	throw new InvalidTowerCreationParametersException();
