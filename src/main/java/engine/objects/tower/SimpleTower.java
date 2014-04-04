@@ -3,6 +3,7 @@ package main.java.engine.objects.tower;
 import java.awt.geom.Point2D;
 
 import main.java.engine.objects.Projectile;
+import main.java.schema.SimpleTowerSchema;
 import main.java.schema.TowerSchema;
 
 public class SimpleTower extends Tower {
@@ -19,6 +20,11 @@ public class SimpleTower extends Tower {
 	
 	public SimpleTower(Point2D location, double damage, double range, String graphics, double cost) {
 		super(location, graphics, damage, range, cost);
+	}
+	
+	public SimpleTower(Point2D location, TowerSchema schema) {
+		super(location,((SimpleTowerSchema) schema).getMyImage(), ((SimpleTowerSchema) schema).getMyDamage(),
+				((SimpleTowerSchema) schema).getMyRange(), ((SimpleTowerSchema) schema).getMyCost());
 	}
 	
 	@Override

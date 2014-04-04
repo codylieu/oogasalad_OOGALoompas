@@ -3,7 +3,7 @@ package main.java.engine.objects.tower;
 import java.awt.geom.Point2D;
 
 import main.java.engine.objects.TDObject;
-import main.java.schema.TowerSchema;
+import main.java.schema.SimpleTowerSchema;
 
 
 /**

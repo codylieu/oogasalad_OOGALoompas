@@ -16,7 +16,7 @@ public class GameBlueprint {
 
 	private GameSchema myGameScenario;
 	private List<TowerSchema> myTowerSchemas;
-	private List<EnemySchema> myEnemySchemas;
+	private List<MonsterSchema> myEnemySchemas;
 	private List<LevelSchema> myLevelSchemas;
 	private List<GameMap> myGameMaps;
 
@@ -36,11 +36,11 @@ public class GameBlueprint {
 		this.myTowerSchemas = myTowerSchemas;
 	}
 
-	public List<EnemySchema> getMyEnemySchemas() {
+	public List<MonsterSchema> getMyEnemySchemas() {
 		return myEnemySchemas;
 	}
 
-	public void setMyEnemySchemas(List<EnemySchema> myEnemySchemas) {
+	public void setMyEnemySchemas(List<MonsterSchema> myEnemySchemas) {
 		this.myEnemySchemas = myEnemySchemas;
 	}
 

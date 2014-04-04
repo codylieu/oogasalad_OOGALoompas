@@ -5,9 +5,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataBundle;
-import main.java.engine.factories.TowerFactory;
+import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.monster.Monster;
@@ -15,11 +16,15 @@ import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
-import main.java.exceptions.engine.InvalidTowerCreationParametersException;
+import main.java.exceptions.engine.MonsterCreationFailureException;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+
 import main.java.schema.GameBlueprint;
+import main.java.schema.MonsterSchema;
+import main.java.schema.SimpleMonsterSchema;
+import main.java.schema.SimpleTowerSchema;
 import main.java.schema.TowerSchema;
 
 public class Model {
@@ -28,7 +33,7 @@ public class Model {
 	private static final double Default_Money_Multiplier = 0.5;
 
     private JGEngine engine;
-    private TowerFactory towerFactory;
+    private TDObjectFactory factory;
 //    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
@@ -45,7 +50,7 @@ public class Model {
     public Model(JGEngine engine) {
 //        this.monsterFactory = new MonsterFactory(engine);
         this.engine = engine;
-        this.towerFactory = new TowerFactory(engine);
+        this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
         this.gsonParser = new Gson();
         this.gameClock = 0;
@@ -78,7 +83,7 @@ public class Model {
     		// if tower already exists in the tile clicked, do nothing
     		if(isTowerPresent(currentTile)) return;
     		
-        	Tower newTower = towerFactory.placeTower(location, "test tower 1");
+        	Tower newTower = factory.placeTower(location, "test tower 1");
         	
         	if(player.getMoney() >= newTower.getCost() ) {
         	        //FIXME: Decrease money?
@@ -90,7 +95,7 @@ public class Model {
         		newTower.remove();
         	}
         	
-		} catch (InvalidTowerCreationParametersException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -168,39 +173,53 @@ public class Model {
     public void loadSchemas(String fileName) {
     	
     	//load wavespawnschemas
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 1, entrance, exit);
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema(factory, "SimpleMonster", 1, entrance, exit);
     	WaveSpawnSchema wschema = new WaveSpawnSchema();
     	wschema.addMonsterSchema(mschema);
     	addWaveToGame(wschema);
     	//
     	
-        TowerSchema t1 = new TowerSchema();
+        SimpleTowerSchema t1 = new SimpleTowerSchema();
+        t1.setMyConcreteType("SimpleTower");
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
         t1.setMyRange(200);
         t1.setMyCost(SimpleTower.DEFAULT_COST);
         t1.setMyImage("SimpleTower");
 
-        TowerSchema t2 = new TowerSchema();
+        SimpleTowerSchema t2 = new SimpleTowerSchema();
+        t1.setMyConcreteType("SimpleTower");
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
         t2.setMyRange(200);
         t2.setMyCost(SimpleTower.DEFAULT_COST);
         t2.setMyImage("SimpleTower");
 
+        SimpleMonsterSchema m1 = new SimpleMonsterSchema();
+        m1.setMyConcreteType("SimpleMonster");
+        m1.setMyName("test monster 1");
+        m1.setHealth(100);
+        m1.setMyMoveSpeed(10);
+        m1.setMyRewardAmount(10);
+        m1.setMyImage("monster");
+        
         GameBlueprint gb = new GameBlueprint();
         List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
         towerSchemas.add(t1);
         towerSchemas.add(t2);
         gb.setMyTowerSchemas(towerSchemas);
+        List<MonsterSchema> monsterSchemas = new ArrayList<MonsterSchema>();
+        monsterSchemas.add(m1);
+        gb.setMyEnemySchemas(monsterSchemas);
         DataBundle b = new DataBundle();
         b.setBlueprint(gb);
 
         try {
             DataBundle data = b;
             GameBlueprint blueprint = b.getBlueprint();
-            List<TowerSchema> schemas = blueprint.getMyTowerSchemas();
-            towerFactory.loadSchemas(schemas);
+            List<TowerSchema> towerSchemasFromBluePrint = blueprint.getMyTowerSchemas();
+            List<MonsterSchema> monsterSchemasFromBluePrint = blueprint.getMyEnemySchemas();
+            factory.loadSchemas(towerSchemasFromBluePrint, monsterSchemasFromBluePrint);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -305,7 +324,7 @@ public class Model {
     }
     
 
-    private void spawnNextWave() {
+    private void spawnNextWave() throws MonsterCreationFailureException {
     	monsters.addAll(allWaves.get(currentWave).spawn());
     	//currentWave++;
     	//TODO: check if gameWon() ?
@@ -313,8 +332,9 @@ public class Model {
     
     /**
      *  Spawns a new wave at determined intervals
+     * @throws MonsterCreationFailureException 
      */
-    private void doSpawnActivity() {
+    private void doSpawnActivity() throws MonsterCreationFailureException {
     	
         if (gameClock % 100 == 0)
         	spawnNextWave();
@@ -324,8 +344,9 @@ public class Model {
 	/**
 	 * The model's "doFrame()" method that updates all state, spawn monsters,
 	 * etc.
+	 * @throws MonsterCreationFailureException 
 	 */
-	public void updateGame() {
+	public void updateGame() throws MonsterCreationFailureException {
 		updateGameClockByFrame();
 		doSpawnActivity();
 		doTowerFiring();
