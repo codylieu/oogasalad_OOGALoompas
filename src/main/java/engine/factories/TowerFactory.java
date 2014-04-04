@@ -1,48 +1,48 @@
 package main.java.engine.factories;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.objects.tower.SimpleTower;
+
 import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.InvalidTowerCreationParametersException;
+import main.java.schema.TowerSchema;
 
 public class TowerFactory {
     private JGEngineInterface engine;
-    private Map<String, List<Object>> userTowerParametersMap = new HashMap<String, List<Object>>();
-    private Map<String, String> userTowerConcreteTypeMap = new HashMap<String, String>();
+    private Map<String, TowerSchema> towerSchemas;
 
     public TowerFactory(JGEngineInterface engine) {
         this.engine = engine;
-        //Add code for reflection mapping of towers from JSON
-        List<Object> parameterValuesForPunyTower = new ArrayList<Object>();
-        parameterValuesForPunyTower.add(SimpleTower.DEFAULT_DAMAGE);
-        parameterValuesForPunyTower.add(SimpleTower.DEFAULT_RANGE);
-        parameterValuesForPunyTower.add("SimpleTower");
-        userTowerParametersMap.put("PunyTower", parameterValuesForPunyTower);
-        userTowerConcreteTypeMap.put("PunyTower", "SimpleTower");
     }
 
-    public Tower placeTower(String userTowerName, Point2D location) throws InvalidTowerCreationParametersException {
-        Point2D tileOrigin = findTileOrigin(location);
-        try {
-            Object[] towerParameters = addLocationToParameters(new ArrayList<Object>(userTowerParametersMap.get(userTowerName)), tileOrigin);
-        	return (Tower) Reflection.createInstance("main.java.engine.objects.tower."+userTowerConcreteTypeMap.get(userTowerName), towerParameters);
-        }
-        catch (Exception e) {
-        	throw new InvalidTowerCreationParametersException();
+    /**
+     * Loads a list of TowerSchemas into the factory
+     *
+     * @param schemas List of TowerSchemas to load
+     */
+    public void loadSchemas(List<TowerSchema> schemas) {
+        towerSchemas = new HashMap<String, TowerSchema>();
+        for (TowerSchema s : schemas) {
+            towerSchemas.put(s.getMyName(), s);
         }
     }
-    
-    private Object[] addLocationToParameters(List<Object> parameters, Point2D location) {
-    	parameters.add(0,location);
-    	return parameters.toArray();
+
+    public Tower placeTower(Point2D location, String towerName) throws InvalidTowerCreationParametersException {
+        Point2D tileOrigin = findTileOrigin(location);
+
+        try {
+            TowerSchema schema = towerSchemas.get(towerName);
+            return new SimpleTower(tileOrigin, schema.getMyDamage(), schema.getMyRange(), schema.getMyImage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public Point2D findTileOrigin(Point2D location) {

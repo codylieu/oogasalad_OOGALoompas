@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 
 import main.java.engine.objects.Projectile;
 
-public class SimpleTower extends Tower{
+public class SimpleTower extends Tower {
 	
 	public static final String DEFAULT_GRAPHICS = "SimpleTower";
 	public static final double DEFAULT_DAMAGE = 10;

@@ -3,7 +3,7 @@ package main.java.data.datahandler;
 import java.io.Serializable;
 
 import main.java.schema.GameBlueprint;
-
+import main.java.schema.TowerSchema;
 
 
 /**
@@ -33,4 +33,6 @@ public class DataBundle implements Serializable {
 	public void setBlueprint(GameBlueprint gameBlueprint) {
 		myGameBlueprint = gameBlueprint;
 	}
+
+
 }

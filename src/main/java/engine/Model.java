@@ -1,11 +1,15 @@
 package main.java.engine;
+
 import java.awt.geom.Point2D;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import jgame.platform.JGEngine;
+import main.java.data.datahandler.DataBundle;
+import main.java.data.datahandler.DataHandler;
 import main.java.engine.factories.TowerFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
@@ -17,6 +21,8 @@ import main.java.exceptions.engine.InvalidTowerCreationParametersException;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import main.java.schema.GameBlueprint;
+import main.java.schema.TowerSchema;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -65,8 +71,8 @@ public class Model {
     public void placeTower(double x, double y) {
         try {
         	Point2D location = new Point2D.Double(x, y);
-			towers.add(towerFactory.placeTower("PunyTower", location));
-			
+			towers.add(towerFactory.placeTower(location, "test tower 1"));
+
 		} catch (InvalidTowerCreationParametersException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -84,6 +90,42 @@ public class Model {
 
             TDMap map = gsonParser.fromJson(reader, TDMap.class);
             map.loadIntoGame(engine);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads the game schemas from json and passes them to the appropriate factories.
+     *
+     * @param fileName Name of the json file containing the schemas
+     */
+    public void loadSchemas(String fileName) {
+        TowerSchema t1 = new TowerSchema();
+        t1.setMyName("test tower 1");
+        t1.setMyDamage(10);
+        t1.setMyRange(10);
+        t1.setMyImage("SimpleTower");
+
+        TowerSchema t2 = new TowerSchema();
+        t2.setMyName("test tower 2");
+        t2.setMyDamage(20);
+        t2.setMyRange(20);
+        t2.setMyImage("SimpleTower");
+
+        GameBlueprint gb = new GameBlueprint();
+        List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
+        towerSchemas.add(t1);
+        towerSchemas.add(t2);
+        gb.setMyTowerSchemas(towerSchemas);
+        DataBundle b = new DataBundle();
+        b.setBlueprint(gb);
+
+        try {
+            DataBundle data = b;
+            GameBlueprint blueprint = b.getBlueprint();
+            List<TowerSchema> schemas = blueprint.getMyTowerSchemas();
+            towerFactory.loadSchemas(schemas);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -267,7 +309,7 @@ public class Model {
 
 	/**
 	 * Returns the center of the object for targeting 
-	 * @param current object coordinate
+	 * @param m object coordinate
 	 * @return the center of the objects image according to the imageBBox
 	 */
 	private Point2D centerCoordinate(Monster m) {
