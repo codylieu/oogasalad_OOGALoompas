@@ -16,8 +16,6 @@ import java.util.List;
  */
 public class SimpleTowerSchema extends TowerSchema{
 
-	private String myConcreteType;
-	private String myName;
 	private String myImage;
 	private double myAttackRate;
 	private double myAttackVelocity;
@@ -27,14 +25,6 @@ public class SimpleTowerSchema extends TowerSchema{
 	private Dimension myBoxSize;
 	private int myAttackType; // used to determine amplification of damage
 	private double myCost;
-	
-	public String getMyConcreteType() {
-		return myConcreteType;
-	}
-	
-	public void setMyConcreteType(String myConcreteType) {
-		this.myConcreteType = myConcreteType;
-	}
 	
 	public double getMyAttackRate() {
 		return myAttackRate;
@@ -98,14 +88,6 @@ public class SimpleTowerSchema extends TowerSchema{
 
 	public void setMyCost(double myCost) {
 		this.myCost = myCost;
-	}
-
-	public String getMyName() {
-		return myName;
-	}
-
-	public void setMyName(String myName) {
-		this.myName = myName;
 	}
 
 	public String getMyImage() {

@@ -1,6 +1,6 @@
 package main.java.schema;
 
-public abstract class TowerSchema {
+public abstract class MonsterSchema {
 	private String myName;
 	private String myConcreteType;
 

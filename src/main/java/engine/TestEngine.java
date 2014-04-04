@@ -7,6 +7,8 @@ import jgame.platform.StdGame;
 
 import java.awt.event.MouseEvent;
 
+import main.java.exceptions.engine.MonsterCreationFailureException;
+
 public class TestEngine extends JGEngine {
     private static TestEngine engine;
     private Model model;
@@ -50,7 +52,12 @@ public class TestEngine extends JGEngine {
         	model.checkAndRemoveTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
         }
-        model.updateGame();
+        try {
+			model.updateGame();
+		} catch (MonsterCreationFailureException e) {
+			// TODO Implement exception
+			e.printStackTrace();
+		}
         moveObjects();
         model.checkCollisions();
 //        model.spawnMonster(100, 150);

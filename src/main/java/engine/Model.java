@@ -16,12 +16,16 @@ import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
+import main.java.exceptions.engine.MonsterCreationFailureException;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
 import main.java.schema.GameBlueprint;
+import main.java.schema.MonsterSchema;
+import main.java.schema.SimpleMonsterSchema;
 import main.java.schema.SimpleTowerSchema;
+import main.java.schema.TowerSchema;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -168,7 +172,7 @@ public class Model {
     public void loadSchemas(String fileName) {
     	
     	//load wavespawnschemas
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema(engine, "SimpleMonster", 1, entrance, exit);
+    	MonsterSpawnSchema mschema = new MonsterSpawnSchema(factory, "SimpleMonster", 1, entrance, exit);
     	WaveSpawnSchema wschema = new WaveSpawnSchema();
     	wschema.addMonsterSchema(mschema);
     	addWaveToGame(wschema);
@@ -190,19 +194,31 @@ public class Model {
         t2.setMyCost(SimpleTower.DEFAULT_COST);
         t2.setMyImage("SimpleTower");
 
+        SimpleMonsterSchema m1 = new SimpleMonsterSchema();
+        m1.setMyConcreteType("SimpleMonster");
+        m1.setMyName("test monster 1");
+        m1.setHealth(100);
+        m1.setMyMoveSpeed(10);
+        m1.setMyRewardAmount(10);
+        m1.setMyImage("monster");
+        
         GameBlueprint gb = new GameBlueprint();
-        List<SimpleTowerSchema> towerSchemas = new ArrayList<SimpleTowerSchema>();
+        List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
         towerSchemas.add(t1);
         towerSchemas.add(t2);
         gb.setMyTowerSchemas(towerSchemas);
+        List<MonsterSchema> monsterSchemas = new ArrayList<MonsterSchema>();
+        monsterSchemas.add(m1);
+        gb.setMyEnemySchemas(monsterSchemas);
         DataBundle b = new DataBundle();
         b.setBlueprint(gb);
 
         try {
             DataBundle data = b;
             GameBlueprint blueprint = b.getBlueprint();
-            List<SimpleTowerSchema> schemas = blueprint.getMyTowerSchemas();
-            factory.loadSchemas(schemas);
+            List<TowerSchema> towerSchemasFromBluePrint = blueprint.getMyTowerSchemas();
+            List<MonsterSchema> monsterSchemasFromBluePrint = blueprint.getMyEnemySchemas();
+            factory.loadSchemas(towerSchemasFromBluePrint, monsterSchemasFromBluePrint);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -307,7 +323,7 @@ public class Model {
     }
     
 
-    private void spawnNextWave() {
+    private void spawnNextWave() throws MonsterCreationFailureException {
     	monsters.addAll(allWaves.get(currentWave).spawn());
     	//currentWave++;
     	//TODO: check if gameWon() ?
@@ -315,8 +331,9 @@ public class Model {
     
     /**
      *  Spawns a new wave at determined intervals
+     * @throws MonsterCreationFailureException 
      */
-    private void doSpawnActivity() {
+    private void doSpawnActivity() throws MonsterCreationFailureException {
     	
         if (gameClock % 100 == 0)
         	spawnNextWave();
@@ -326,8 +343,9 @@ public class Model {
 	/**
 	 * The model's "doFrame()" method that updates all state, spawn monsters,
 	 * etc.
+	 * @throws MonsterCreationFailureException 
 	 */
-	public void updateGame() {
+	public void updateGame() throws MonsterCreationFailureException {
 		updateGameClockByFrame();
 		doSpawnActivity();
 		doTowerFiring();
