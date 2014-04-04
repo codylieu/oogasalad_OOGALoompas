@@ -3,6 +3,7 @@ package main.java.engine.objects.tower;
 import java.awt.geom.Point2D;
 
 import main.java.engine.objects.TDObject;
+import main.java.schema.TowerSchema;
 
 
 /**
@@ -29,17 +30,18 @@ public abstract class Tower extends TDObject {
      * @param x
      * @param y
      */
+
     public Tower (Point2D location, String tower_gfx, double damage, double range, double cost) {
         super("tower", location.getX(), location.getY(), TOWER_CID, tower_gfx);
         myDamage = damage;
         myRange = range;
         myCost = cost;
     }
-   
+    
     /**
      * Shoot a projectile in the direction of the specified x,y target coordinates
      * 
-     * @param Point2D coordinate of target
+     * @param target coordinate of target
      * @return 
      */
     public boolean checkAndfireProjectile(Point2D target) {
@@ -48,7 +50,6 @@ public abstract class Tower extends TDObject {
     		return false;
     	}
     	Point2D currCoor = new Point2D.Double(x, y);
-    	System.out.println(target.distance(currCoor) + " " + myRange);
     	if(inFiringInterval() && target.distance(currCoor) < myRange) {
     		fireProjectile(target);
     		return true;

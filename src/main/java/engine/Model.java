@@ -38,6 +38,7 @@ public class Model {
     private CollisionManager collisionManager;
     private Point2D entrance;
     private Point2D exit;
+    private GameState gameState;
 
     public Model(JGEngine engine) {
 //        this.monsterFactory = new MonsterFactory(engine);
@@ -50,6 +51,7 @@ public class Model {
         this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
         towers = new ArrayList<Tower>();
+        gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
         setExit(engine.pfWidth()/2, engine.pfHeight()/2);
     }
@@ -68,7 +70,7 @@ public class Model {
      */
     public void placeTower(double x, double y) {
         try {
-        	
+
         	if(player.getMoney() >= SimpleTower.DEFAULT_COST ) {
         		player.addMoney(-SimpleTower.DEFAULT_COST);
         		Point2D location = new Point2D.Double(x, y);
@@ -267,6 +269,8 @@ public class Model {
 		doSpawnActivity();
 		doTowerFiring();
 		removeDeadMonsters();
+		gameState.updateGameStates(monsters, towers, entrance, exit, currentWave, allWaves, gameClock, 
+				player.getMoney(), player.getLife(), player.getScore());
 	}
 
 	/**
