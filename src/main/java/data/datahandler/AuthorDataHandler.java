@@ -26,7 +26,7 @@ public class AuthorDataHandler extends DataHandler {
 	/**
 	 * Method for authoring environment to
 	 * take a blueprint and file location and serialize
-	 * into a JSON file.
+	 * into output stream
 	 * @param currentBlueprint
 	 * @param filePath
 	 * @throws IOException 
@@ -39,7 +39,7 @@ public class AuthorDataHandler extends DataHandler {
 	/**
 	 * 
 	 * @param filePath
-	 * @return translate a JSON file into a GameBlueprint
+	 * @return translate output stream into a GameBlueprint
 	 * so that authoring environment can allow user to 
 	 * load half creating environments and modify
 	 * them
