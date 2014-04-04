@@ -29,7 +29,7 @@ import javax.swing.event.ListSelectionListener;
 
 import main.java.author.controller.MainController;
 import main.java.author.util.UtilFunctions;
-import main.java.schema.EnemySchema;
+import main.java.schema.SimpleMonsterSchema;
 
 //SplitPaneDemo itself is not a visible component.
 public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
@@ -55,7 +55,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JButton createEnemyButton;
 	private JTextField createEnemyField;
 
-	private HashMap<String, EnemySchema> enemyMap;
+	private HashMap<String, SimpleMonsterSchema> enemyMap;
 
 	public EnemyEditorTab(MainController c) {
 		super(c);
@@ -67,7 +67,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	}
 	
 	private void initDataFields() {
-		enemyMap = new HashMap<String, EnemySchema>();
+		enemyMap = new HashMap<String, SimpleMonsterSchema>();
 	}
 
 	private Component makeDesignEnemyPane() {
@@ -239,7 +239,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private void createNewEnemy(String enemyName) {
 		listModel.addElement(enemyName);
-		EnemySchema newEmeny = new EnemySchema();
+		SimpleMonsterSchema newEmeny = new SimpleMonsterSchema();
 		enemyMap.put(enemyName, newEmeny);
 		updateDataDisplayed(enemyName);
 	}
