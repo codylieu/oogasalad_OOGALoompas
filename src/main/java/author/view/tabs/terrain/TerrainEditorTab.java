@@ -128,7 +128,7 @@ public class TerrainEditorTab extends EditorTab{
 		JScrollPane scrollPane = new JScrollPane(tileOptions);
 		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    scrollPane.setPreferredSize(new Dimension(500, 500));
+	    scrollPane.setPreferredSize(new Dimension(350, 350));
 		tileOptionsFrame.add(scrollPane, BorderLayout.CENTER);
 		tileOptionsFrame.setResizable(false);
 		tileOptionsFrame.pack();

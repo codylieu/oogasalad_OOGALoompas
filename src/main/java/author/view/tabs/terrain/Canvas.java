@@ -86,7 +86,14 @@ public class Canvas extends JPanel {
 	 * @return the Tile for a specific location
 	 */
 	private Tile getTile(int x, int y) {
-		return myTiles[x/TILE_SIZE][y/TILE_SIZE];
+		int row = y/TILE_SIZE;
+		int col = x/TILE_SIZE;
+		boolean validRow = row >= 0 && row <= NUM_ROWS - 1;
+		boolean validCol = col >= 0 && col <= NUM_COLS - 1;
+		if (validRow && validCol) {
+			return myTiles[col][row];
+		}
+		return null;
 	}
 
 	/**
@@ -105,6 +112,9 @@ public class Canvas extends JPanel {
 
 	private void updateTile(MouseEvent e) {
 		Tile tile = getTile(e.getX(), e.getY());
+		if (tile == null) {
+			return;
+		}
 		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
 		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
 		tile.setPassIndex((selectedTileObj == null) ? 0 : selectedTileObj.getPassabilityIndex());
