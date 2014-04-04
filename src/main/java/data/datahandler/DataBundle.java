@@ -2,6 +2,7 @@ package main.java.data.datahandler;
 
 import java.io.Serializable;
 
+import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
 import main.java.schema.SimpleTowerSchema;
 
@@ -19,7 +20,7 @@ import main.java.schema.SimpleTowerSchema;
 public class DataBundle implements Serializable {
 	
 	private GameBlueprint myGameBlueprint;
-//	private GameState myGameState;
+	private GameState myGameState;
 	
 	public DataBundle() {}
 	
@@ -31,17 +32,16 @@ public class DataBundle implements Serializable {
 		return myGameBlueprint;
 	}
 	
-	/*public GameState getGameState() {
+	public GameState getGameState() {
 		return myGameState;
-	}*/
+	}
 	
 	public void setBlueprint(GameBlueprint gameBlueprint) {
 		myGameBlueprint = gameBlueprint;
 	}
 	
-	/*public void setGameState(GameState gameState) {
+	public void setGameState(GameState gameState) {
 		myGameState = gameState;
-	}*/
-	
+	}
 	
 }
