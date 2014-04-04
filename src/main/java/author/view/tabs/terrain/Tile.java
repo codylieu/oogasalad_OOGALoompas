@@ -23,7 +23,7 @@ public class Tile extends JPanel {
 	private Color myColor;
 	private int myPassIndex;
 	private boolean isSelected;
-	private BufferedImage myImg;
+	private Image myImg;
 	
 	static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
@@ -61,17 +61,8 @@ public class Tile extends JPanel {
 		myPassIndex = index;
 	}
 	
-	protected void setImage(String imgName) {
-		if (imgName == null) {
-			myImg = null;
-			return;
-		}
-		try {
-			File file = new File(DEFAULT_IMAGE_PACKAGE + imgName);
-			myImg = ImageIO.read(file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	protected void setImage(Image img) {
+		myImg = img;
 	}
 	
 }

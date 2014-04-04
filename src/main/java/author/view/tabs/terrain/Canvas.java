@@ -66,7 +66,7 @@ public class Canvas extends JPanel {
 			int x = tile.getCol() * rectWidth;
 			int y = tile.getRow() * rectHeight;
 			Color tileColor = tile.getColor();
-			BufferedImage tileImage = (BufferedImage) tile.getImage();
+			Image tileImage = tile.getImage();
 
 			if (tileImage == null) {
 				g.setColor(tileColor);
