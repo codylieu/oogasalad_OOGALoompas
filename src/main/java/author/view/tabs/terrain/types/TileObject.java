@@ -13,9 +13,11 @@ import main.java.author.view.tabs.terrain.Canvas;
 public class TileObject extends JButton{
 	
 	private Image myImage;
+	private Image myOriginalImage;
 	
 	public TileObject(Image img) {
 		myImage = img;
+		myOriginalImage = img;
 	}
 	
 	public int getPassabilityIndex() {
@@ -28,6 +30,14 @@ public class TileObject extends JButton{
 	
 	public Image getImage() {
 		return myImage;
+	}
+	
+	public Image getOriginalImage() {
+		return myOriginalImage;
+	}
+	
+	public void setImage(Image img) {
+		myImage = img;
 	}
 
 }

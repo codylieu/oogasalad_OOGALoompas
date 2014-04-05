@@ -20,7 +20,7 @@ public class Canvas extends JPanel {
 
 	public static final int NUM_ROWS = 10;
 	public static final int NUM_COLS = 15;
-	public static final int TILE_SIZE = 50; // in pixels
+	public static final int TILE_SIZE = 40; // in pixels
 
 	private final Tile[][] myTiles;
 	private TileObject selectedTileObj;
@@ -131,5 +131,9 @@ public class Canvas extends JPanel {
 
 	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
+	}
+	
+	public TileObject getSelectedTileObj() {
+		return selectedTileObj;
 	}
 }
