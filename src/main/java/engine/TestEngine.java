@@ -4,17 +4,19 @@ import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import jgame.platform.StdGame;
-
-import java.awt.event.MouseEvent;
-
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.player.CursorState;
+import main.java.player.TowerGhost;
 
 public class TestEngine extends JGEngine {
     private static TestEngine engine;
+    private CursorState cursorState;
     private Model model;
 
     public TestEngine() {
         initEngineApplet();
+        //cursorState = CursorState.None;
+        cursorState = CursorState.AddTower;
     }
 
     public TestEngine(JGPoint size) {
@@ -44,6 +46,7 @@ public class TestEngine extends JGEngine {
     @Override
     public void doFrame() {
         super.doFrame();
+        displayTowerGhostIfNecessary();
         if (getMouseButton(1)) {
             model.placeTower(getMouseX(), getMouseY());
             clearMouseButton(1);
@@ -67,6 +70,14 @@ public class TestEngine extends JGEngine {
     public void paintFrame() {
         highlightMouseoverTile();
         displayGameStats();
+    }
+    
+    private void displayTowerGhostIfNecessary() {
+    	System.out.println(cursorState);
+    	if (cursorState == CursorState.AddTower) {
+    		System.out.println("displaytower");
+    		new TowerGhost(getMouseX(), getMouseY());
+    	}
     }
 
     private void highlightMouseoverTile() {

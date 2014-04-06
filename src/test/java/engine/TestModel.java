@@ -1,15 +1,16 @@
 package test.java.engine;
 
-import org.junit.Test;
-
+import static org.junit.Assert.assertEquals;
 import main.java.engine.Model;
-import static org.junit.Assert.*;
+import main.java.engine.TestEngine;
+
+import org.junit.Test;
 
 public class TestModel {
 
 	@Test
 	public void checkTowerIsPlaced() {
-		Model model = new Model(new FakeJGEngine());
+		Model model = new Model(new TestEngine());
 		
 		final int testx = 2, testy = 2;
 		
@@ -21,14 +22,14 @@ public class TestModel {
 	
 	@Test
 	public void checkModelGetters() {
-		Model model = new Model(new FakeJGEngine());
+		Model model = new Model(new TestEngine());
 		
 		assertEquals(0, model.getGameClock(), .0001);
 	}
 	
 	@Test
 	public void checkPlayerGetters() {
-		Model model = new Model(new FakeJGEngine());
+		Model model = new Model(new TestEngine());
 		model.addNewPlayer();
 		
 		assert(model.getMoney() >= 0);

@@ -11,6 +11,7 @@ import main.java.data.datahandler.DataBundle;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
+import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
@@ -21,11 +22,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import main.java.schema.GameBlueprint;
-import main.java.schema.MonsterSchema;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.SimpleTowerSchema;
-import main.java.schema.TowerSchema;
+import main.java.schema.*;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -34,7 +31,6 @@ public class Model {
 
     private JGEngine engine;
     private TDObjectFactory factory;
-//    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
     private Tower[][] towers;
@@ -48,7 +44,6 @@ public class Model {
     private GameState gameState;
 
     public Model(JGEngine engine) {
-//        this.monsterFactory = new MonsterFactory(engine);
         this.engine = engine;
         this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
@@ -150,6 +145,7 @@ public class Model {
     }
     
     /**
+    /**
      * Loads a map/terrain into the engine.
      *
      * @param fileName The name of the file which contains the map information
@@ -180,7 +176,6 @@ public class Model {
     	//
     	
         SimpleTowerSchema t1 = new SimpleTowerSchema();
-        t1.setMyConcreteType("SimpleTower");
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
         t1.setMyRange(200);
@@ -188,7 +183,6 @@ public class Model {
         t1.setMyImage("SimpleTower");
 
         SimpleTowerSchema t2 = new SimpleTowerSchema();
-        t1.setMyConcreteType("SimpleTower");
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
         t2.setMyRange(200);
@@ -196,7 +190,6 @@ public class Model {
         t2.setMyImage("SimpleTower");
 
         SimpleMonsterSchema m1 = new SimpleMonsterSchema();
-        m1.setMyConcreteType("SimpleMonster");
         m1.setMyName("test monster 1");
         m1.setHealth(100);
         m1.setMyMoveSpeed(10);
@@ -204,22 +197,19 @@ public class Model {
         m1.setMyImage("monster");
         
         GameBlueprint gb = new GameBlueprint();
-        List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
-        towerSchemas.add(t1);
-        towerSchemas.add(t2);
-        gb.setMyTowerSchemas(towerSchemas);
-        List<MonsterSchema> monsterSchemas = new ArrayList<MonsterSchema>();
-        monsterSchemas.add(m1);
-        gb.setMyEnemySchemas(monsterSchemas);
+        List<TDObjectSchema> tdObjectSchemas = new ArrayList<TDObjectSchema>();
+        tdObjectSchemas.add(t1);
+        tdObjectSchemas.add(t2);
+        tdObjectSchemas.add(m1);
+        gb.setMyTDObjectSchemas(tdObjectSchemas);
         DataBundle b = new DataBundle();
         b.setBlueprint(gb);
 
         try {
             DataBundle data = b;
             GameBlueprint blueprint = b.getBlueprint();
-            List<TowerSchema> towerSchemasFromBluePrint = blueprint.getMyTowerSchemas();
-            List<MonsterSchema> monsterSchemasFromBluePrint = blueprint.getMyEnemySchemas();
-            factory.loadSchemas(towerSchemasFromBluePrint, monsterSchemasFromBluePrint);
+            List<TDObjectSchema> schemas = blueprint.getMyTDObjectSchemas();
+            factory.loadSchemas(schemas);
         } catch (Exception e) {
             e.printStackTrace();
         }

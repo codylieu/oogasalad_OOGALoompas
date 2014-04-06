@@ -20,30 +20,30 @@ public class Canvas extends JPanel {
 
 	public static final int NUM_ROWS = 10;
 	public static final int NUM_COLS = 15;
-	public static final int TILE_SIZE = 50; // in pixels
+	public static final int TILE_SIZE = 40; // in pixels
 
 	private final Tile[][] myTiles;
 	private TileObject selectedTileObj;
 
 	public Canvas(){
-		myTiles = new Tile[NUM_COLS][NUM_ROWS];
-		for (int col = 0; col < NUM_COLS; col++) {
-			for (int row = 0; row < NUM_ROWS; row++) {
-				myTiles[col][row] = new Tile(row, col, DEFAULT_TILE_COLOR);
+		myTiles = new Tile[NUM_ROWS][NUM_COLS];
+		for (int row = 0; row < NUM_ROWS; row++) {
+			for (int col = 0; col < NUM_COLS; col++) {
+				myTiles[row][col] = new Tile(row, col, DEFAULT_TILE_COLOR);
 			}
 		}
 		setPreferredSize(new Dimension(NUM_COLS*TILE_SIZE, NUM_ROWS*TILE_SIZE)); // important for maintaining size of JPanel
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				updateTileImage(e);
+				updateTile(e);
 			}
 		});
 		addMouseMotionListener(new MouseMotionAdapter()
 		{
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				updateTileImage(e);
+				updateTile(e);
 			}
 		});	
 	}
@@ -66,7 +66,7 @@ public class Canvas extends JPanel {
 			int x = tile.getCol() * rectWidth;
 			int y = tile.getRow() * rectHeight;
 			Color tileColor = tile.getColor();
-			BufferedImage tileImage = (BufferedImage) tile.getImage();
+			Image tileImage = tile.getImage();
 
 			if (tileImage == null) {
 				g.setColor(tileColor);
@@ -86,7 +86,14 @@ public class Canvas extends JPanel {
 	 * @return the Tile for a specific location
 	 */
 	private Tile getTile(int x, int y) {
-		return myTiles[x/TILE_SIZE][y/TILE_SIZE];
+		int row = y/TILE_SIZE;
+		int col = x/TILE_SIZE;
+		boolean validRow = row >= 0 && row <= NUM_ROWS - 1;
+		boolean validCol = col >= 0 && col <= NUM_COLS - 1;
+		if (validRow && validCol) {
+			return myTiles[row][col];
+		}
+		return null;
 	}
 
 	/**
@@ -95,18 +102,22 @@ public class Canvas extends JPanel {
 	 */
 	private List<Tile> getTiles() {
 		List<Tile> tiles = new ArrayList<Tile>();
-		for (int i = 0; i < NUM_COLS; i++) {
-			for (int j = 0; j < NUM_ROWS; j++) {
+		for (int i = 0; i < NUM_ROWS; i++) {
+			for (int j = 0; j < NUM_COLS; j++) {
 				tiles.add(myTiles[i][j]);
 			}
 		}
 		return tiles;
 	}
 
-	private void updateTileImage(MouseEvent e) {
+	private void updateTile(MouseEvent e) {
 		Tile tile = getTile(e.getX(), e.getY());
+		if (tile == null) {
+			return;
+		}
 		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
 		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
+		tile.setPassIndex((selectedTileObj == null) ? 0 : selectedTileObj.getPassabilityIndex());
 		repaint(); 
 	}
 	
@@ -120,5 +131,9 @@ public class Canvas extends JPanel {
 
 	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
+	}
+	
+	public TileObject getSelectedTileObj() {
+		return selectedTileObj;
 	}
 }

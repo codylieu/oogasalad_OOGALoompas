@@ -10,48 +10,52 @@ import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.MonsterSchema;
+import main.java.schema.TDObjectSchema;
 import main.java.schema.TowerSchema;
 import jgame.impl.JGEngineInterface;
+import main.java.util.Reflection;
 
 public class TDObjectFactory {
 	private JGEngineInterface engine;
-	private Map<String, TowerSchema> towerSchemasMap;
-	private Map<String, MonsterSchema> monsterSchemasMap;
+	private Map<String, TDObjectSchema> tdObjectSchemaMap;
 
 
 	public TDObjectFactory(JGEngineInterface engine) {
 		this.engine = engine;
-		towerSchemasMap = new HashMap<String, TowerSchema>();
-		monsterSchemasMap = new HashMap<String, MonsterSchema>();
+		tdObjectSchemaMap = new HashMap<>();;
 	}
 
-	public void loadSchemas(List<TowerSchema> towerSchemas, List<MonsterSchema> monsterSchemas) {
+	public void loadSchemas(List<TDObjectSchema> schemas) {
 		//TODO: Get rid of repetition in loading schemas
-		for (TowerSchema s : towerSchemas) {
-			towerSchemasMap.put(s.getMyName(), s);
-		}
-		for (MonsterSchema s : monsterSchemas) {
-			monsterSchemasMap.put(s.getMyName(), s);
-		}
-		System.out.println(monsterSchemasMap.keySet().toString());
+		for (TDObjectSchema s : schemas) {
+            tdObjectSchemaMap.put(s.getMyName(), s);
+        }
 	}
 
-	public Tower placeTower(Point2D location, String userTowerName) throws TowerCreationFailureException {
+    /**
+     * Place tower at a given location's tile.
+     *
+     * @param location The coordinates to place the tower at
+     * @param towerName The name of the tower to place
+     * @return The new Tower object
+     * @throws TowerCreationFailureException
+     */
+	public Tower placeTower(Point2D location, String towerName) throws TowerCreationFailureException {
 		Point2D tileOrigin = findTileOrigin(location);
 		try {
-			TowerSchema schema = towerSchemasMap.get(userTowerName);
+			TowerSchema schema = (TowerSchema) tdObjectSchemaMap.get(towerName);
 			Object[] towerParameters = {tileOrigin, schema};
-        	return (Tower) placeObject("main.java.engine.objects.tower.",schema.getMyConcreteType(), towerParameters);
+        	return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
 		} catch (Exception e) {
 			throw new TowerCreationFailureException();
 		}
 	}
 	
 	public Monster placeMonster(Point2D entrance, Point2D exit, String userMonsterName) throws MonsterCreationFailureException {
-		System.out.println(monsterSchemasMap.keySet().toString());
-		MonsterSchema schema = monsterSchemasMap.get(userMonsterName);
+		System.out.println(tdObjectSchemaMap.keySet().toString());
+		MonsterSchema schema = (MonsterSchema) tdObjectSchemaMap.get(userMonsterName);
 		Object[] monsterParameters = {entrance, exit, schema};
-    	return (Monster) placeObject("main.java.engine.objects.monster.",schema.getMyConcreteType(), monsterParameters);
+    	return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
 		/*try {
 			MonsterSchema schema = monsterSchemas.get(userMonsterName);
 			Object[] monsterParameters = {entrance, exit, schema};
@@ -61,15 +65,20 @@ public class TDObjectFactory {
 		}*/
 	}
 
-	private Object placeObject(String objectPackageLocation, String concreteName, Object[] parameters) {
-		return Reflection.createInstance(objectPackageLocation+concreteName, parameters);
+	private Object placeObject(Class objectType, Object[] parameters) {
+		return Reflection.createInstance(objectType.getName(), parameters);
 	}
-	
+
+    /**
+     * Find the top-left corner associated with the tile associated with the given location. Used to place
+     * new objects and images.
+     *
+     * @param location Coordinate of the map used to find the associated file
+     * @return The top left corner of the tile at the given coordinate
+     */
 	private Point2D findTileOrigin(Point2D location) {
 		int curXTilePos = (int) location.getX()/engine.tileWidth() * engine.tileWidth();
 		int curYTilePos = (int) location.getY()/engine.tileHeight() * engine.tileHeight();
 		return new Point2D.Double(curXTilePos, curYTilePos);
 	}
-
-
 }

@@ -1,5 +1,7 @@
 package main.java.schema;
 
+import main.java.engine.objects.monster.SimpleMonster;
+
 import java.awt.Dimension;
 
 /**
@@ -11,19 +13,24 @@ import java.awt.Dimension;
  * objects related to ones you will see onscreen.
  */
 public class SimpleMonsterSchema extends MonsterSchema{
+    public static final Class<SimpleMonster> MY_CONCRETE_TYPE = SimpleMonster.class;
 
-	/*TODO: Move information related to all monsters to MonsterSchema
-	 */
+    /*TODO: Move information related to all monsters to MonsterSchema
+             */
 	private String myName;
 	private String myImage;
 	private boolean isFlyingType;
 	private double myMoveSpeed;
+	private String myExplosionImage;
 	private Dimension myTileSize;
 	private double myRewardAmount;
 	private double myHealth;
 
-	
-	public void setHealth(double myHealth) {
+    public SimpleMonsterSchema() {
+        super(MY_CONCRETE_TYPE);
+    }
+
+    public void setHealth(double myHealth) {
 		this.myHealth = myHealth;
 	}
 	
@@ -77,5 +84,13 @@ public class SimpleMonsterSchema extends MonsterSchema{
 
 	public void setMyRewardAmount(double myRewardAmount) {
 		this.myRewardAmount = myRewardAmount;
+	}
+
+	public String getMyExplosionImage() {
+		return myExplosionImage;
+	}
+
+	public void setMyExplosionImage(String myExplosionImage) {
+		this.myExplosionImage = myExplosionImage;
 	}
 }

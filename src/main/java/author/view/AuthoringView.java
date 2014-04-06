@@ -30,11 +30,16 @@ public class AuthoringView extends JFrame {
 	private MainController myController;
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
+	private static final String GAME_SETTINGS_EDITOR_STRING = "Game Settings Editor";
+	private static final String TOWER_EDITOR_STRING = "Tower Editor";
+	private static final String ENEMY_EDITOR_STRING = "Enemy Editor";
+	private static final String TERRAIN_EDITOR_STRING = "Terrain Editor";
+	
 	public AuthoringView() {
 		myController = new MainController();
 		createEditorTabs(myController);
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
-		setJMenuBar(new BasicMenuBar()); // This doesn't work. Usually I use setJMenuBar, but it gives me a compile error now.
+		setJMenuBar(new BasicMenuBar());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		pack();
@@ -45,10 +50,10 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs(MainController controller) {
-		tabbedPane.add("Game Settings Editor", new GameSettingsEditorTab(controller));
-		tabbedPane.add("Tower Editor", new TowerEditorTab(controller));
-		tabbedPane.add("Enemy Editor", new EnemyEditorTab(controller));
-		tabbedPane.add("Terrain Editor", new TerrainEditorTab(controller));
+		tabbedPane.add(GAME_SETTINGS_EDITOR_STRING, new GameSettingsEditorTab(controller));
+		tabbedPane.add(TOWER_EDITOR_STRING, new TowerEditorTab(controller));
+		tabbedPane.add(ENEMY_EDITOR_STRING, new EnemyEditorTab(controller));
+		tabbedPane.add(TERRAIN_EDITOR_STRING, new TerrainEditorTab(controller));
 	}
 
 	public static void main (String [] args) {
