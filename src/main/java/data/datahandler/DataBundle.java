@@ -24,6 +24,11 @@ public class DataBundle implements Serializable {
 	
 	public DataBundle() {}
 	
+	public DataBundle(GameBlueprint gameBlueprintInit, GameState gameStateInit) {
+		myGameBlueprint = gameBlueprintInit;
+		myGameState = gameStateInit;
+	}
+	
 	public DataBundle(GameBlueprint gameBlueprintInit) {
 		myGameBlueprint = gameBlueprintInit;
 	}
