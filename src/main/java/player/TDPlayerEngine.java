@@ -1,8 +1,9 @@
 package main.java.player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Observer;
+import java.util.Map;
 
 import jgame.JGColor;
 import jgame.JGPoint;
@@ -40,7 +41,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	@Override
 	public void paintFrame() {
 		highlightMouseoverTile();
-		displayGameStats();
+		//displayGameStats();
 	}
 
 	private void highlightMouseoverTile() {
@@ -108,13 +109,13 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	}
 
 	@Override
-	public List<String> getUpdate(Observing o) {
+	public Map<String, String> getUpdate(Observing o) {
 		hasChanged = true;
-		List<String> gameStats = new ArrayList<String>();
-		gameStats.add("Score: " + model.getScore());
-		gameStats.add("Lives left: " + model.getPlayerLife());
-		gameStats.add("Money: " + model.getMoney());
-		gameStats.add("Game clock: " + model.getGameClock());
+		Map<String, String> gameStats = new HashMap<String, String>();
+		gameStats.put("Score", "Score: " + model.getScore());
+		gameStats.put("Lives", "Lives left: " + model.getPlayerLife());
+		gameStats.put("Money", "Money: " + model.getMoney());
+		gameStats.put("Time", "Game clock: " + model.getGameClock());
 		return gameStats;
 	}
 }

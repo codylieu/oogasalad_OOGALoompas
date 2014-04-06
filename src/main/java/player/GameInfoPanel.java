@@ -2,8 +2,7 @@ package main.java.player;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
+import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
@@ -12,7 +11,11 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class GameInfoPanel extends JPanel implements Observing {
 
-	private List<String> gameInfo;
+	public static final String SCORE = "Score";
+	public static final String LIFE = "Lives";
+	public static final String MONEY = "Money";
+	public static final String TIME = "Time";
+	
 	private Subject TDPlayerEngine;
 	private JLabel scoreLabel;
 	private JLabel lifeLabel;
@@ -35,11 +38,11 @@ public class GameInfoPanel extends JPanel implements Observing {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update() {		
-		List<String> currentGameInfo = (List<String>) TDPlayerEngine.getUpdate(this);
-		scoreLabel.setText(currentGameInfo.get(0));
-		lifeLabel.setText(currentGameInfo.get(1));
-		moneyLabel.setText(currentGameInfo.get(2));
-		timeLabel.setText(currentGameInfo.get(3));
+		Map<String, String> currentGameInfo = (Map<String, String>) TDPlayerEngine.getUpdate(this);
+		scoreLabel.setText(currentGameInfo.get(SCORE));
+		lifeLabel.setText(currentGameInfo.get(LIFE));
+		moneyLabel.setText(currentGameInfo.get(MONEY));
+		timeLabel.setText(currentGameInfo.get(TIME));
 	}
 
 	@Override
