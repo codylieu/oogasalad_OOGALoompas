@@ -22,6 +22,7 @@ public class UnitInfoPanel extends JPanel implements Observing {
 	@Override
 	public void update() {		
 		//unitInfoArea.setText(engine.getSelectedObject().toString());
+		unitInfoArea.setText(engine.getUpdate(this).get("Time"));
 	}
 
 	@Override
