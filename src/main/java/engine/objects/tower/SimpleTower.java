@@ -66,6 +66,7 @@ public class SimpleTower extends Tower {
      * DEPRECATED CONSTRUCTOR, DELETE ME after attribute map constructor utilized by factory
      */
     // TODO: DELETE THIS CONSTRUCTOR
+    @Deprecated
     public SimpleTower (Point2D location, TowerSchema schema) {
         super(location, ((SimpleTowerSchema) schema).getMyImage(), ((SimpleTowerSchema) schema)
                 .getMyDamage(),

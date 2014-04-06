@@ -67,6 +67,7 @@ public class SimpleMonster extends Monster {
     /**
      * DEPRECATED, DELETE ME after transition to attributes map complete.
      */
+    @Deprecated
     // TODO: deprecated, delete
     public SimpleMonster (Point2D entrance, Point2D exit, MonsterSchema schema) {
         super(entrance, exit, ((SimpleMonsterSchema) schema).getMyHealth(),
