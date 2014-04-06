@@ -3,6 +3,8 @@ package main.java.data.datahandler;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import main.java.engine.GameState;
+
 /**
  * Data handler specific to the Engine. Allows them
  * to translate their specific game state into a Data Bundle and
