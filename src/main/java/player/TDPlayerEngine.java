@@ -73,17 +73,17 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	public void doFrame() {
 		super.doFrame();
 		if (cursorState == CursorState.AddTower){
-			JGPoint mousePos = getMousePos();
-			new TowerGhost(mousePos.x/tileWidth() * tileWidth(), mousePos.y/tileHeight() * tileHeight());
+			if (getMouseButton(1)) {
+				model.placeTower(getMouseX(), getMouseY());
+				setCursorState(CursorState.None);
+				clearMouseButton(1);
+			}
+			else
+				drawTowerGhost();
 		}
 
 		notifyObservers();
 
-		if (getMouseButton(1)) {
-			model.placeTower(getMouseX(), getMouseY());
-			setCursorState(CursorState.None);
-			clearMouseButton(1);
-		}
 		if (getMouseButton(3)) { // right click
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
@@ -97,6 +97,11 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		moveObjects();
 		model.checkCollisions();
 		//        model.spawnMonster(100, 150);
+	}
+
+	private void drawTowerGhost() {
+		JGPoint mousePos = getMousePos();
+		new TowerGhost(mousePos.x/tileWidth() * tileWidth(), mousePos.y/tileHeight() * tileHeight());
 	}
 
 	@Override
