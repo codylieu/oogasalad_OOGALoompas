@@ -56,8 +56,11 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		int curYTilePos = mousePos.y/tileHeight() * tileHeight();
 		JGColor color = JGColor.yellow;
 		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0)
-			if (model.isTowerPresent(mousePos.x, mousePos.y))
-				color = JGColor.green;
+			if (cursorState == CursorState.AddTower)
+				if (model.isTowerPresent(mousePos.x, mousePos.y))
+					color = JGColor.red;
+				else
+					color = JGColor.green;
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
