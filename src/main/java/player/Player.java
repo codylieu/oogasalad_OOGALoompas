@@ -242,7 +242,8 @@ public class Player {
 	}
 
 	private JPanel makeUnitInfoPanel() {
-		UnitInfoPanel unitInfoPanel = new UnitInfoPanel(engine);
+		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
+		unitInfoPanel.setSubjectState(engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
