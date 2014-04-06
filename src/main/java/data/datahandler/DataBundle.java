@@ -17,6 +17,7 @@ import main.java.schema.SimpleTowerSchema;
  * @author In-Young Jo
  *
  */
+
 public class DataBundle implements Serializable {
 	
 	private GameBlueprint myGameBlueprint;

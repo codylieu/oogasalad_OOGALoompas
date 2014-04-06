@@ -33,7 +33,8 @@ public class AuthorDataHandler extends DataHandler {
 	 */
 	
 	public void saveBlueprint(GameBlueprint currentBlueprint, String filePath) throws IOException {
-		saveBundle(new DataBundle(currentBlueprint), filePath);
+		DefaultSettingsCreator myDefaultSettingsCreator = new DefaultSettingsCreator(currentBlueprint);
+		saveBundle(new DataBundle(currentBlueprint,myDefaultSettingsCreator.createDefaultGameState()), filePath);
 	}
 	
 	/**

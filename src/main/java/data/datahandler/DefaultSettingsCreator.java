@@ -4,9 +4,6 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 import main.java.engine.GameState;
-import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.Tower;
-import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.schema.GameBlueprint;
 
 /**
