@@ -38,9 +38,9 @@ import main.java.author.view.AuthoringView;
 
 /**
  * Allows a user to log a series of different events which can then be replayed through
- * EventPlayback.java, allowing for a variety of applications.
+ * EventPlayback.java, which is extremely useful for constructing visual tests of
+ * different GUI components
  * 
- * 	1) GUI TESTING : Simple to construct visual tests of different GUI components. 
  * 
  * @author Stephen Hughes, with assistance from StackOverflow forums for maintaining
  *         both mouse and key listeners
