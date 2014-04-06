@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -224,10 +222,7 @@ public class Player {
 		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		addTowerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (engine.getCursorState() == CursorState.AddTower)
-					engine.setCursorState(CursorState.None);
-				else
-					engine.setCursorState(CursorState.AddTower);
+				engine.toggleAddTower();
 			}
 		});
 		gameButtonPanel.add(mainMenuButton);

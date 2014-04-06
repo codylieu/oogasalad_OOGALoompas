@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import jgame.JGColor;
 import jgame.JGPoint;
@@ -16,6 +17,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	private List<Observing> observers;
 	private CursorState cursorState;
 	private boolean hasChanged;
+	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 
 	public TDPlayerEngine() {
 		super();
@@ -49,7 +51,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	public void setCursorState(CursorState newCursorState) {
 		cursorState = newCursorState;
 	}
-	
+
 	public CursorState getCursorState() {
 		return cursorState;
 	}
@@ -99,6 +101,8 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 
 		notifyObservers();
 
+		checkKeys();
+
 		if (getMouseButton(3)) { // right click
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
@@ -112,6 +116,22 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		moveObjects();
 		model.checkCollisions();
 		//        model.spawnMonster(100, 150);
+	}
+
+	public void toggleAddTower() {
+		if (getCursorState() == CursorState.AddTower){
+			setCursorState(CursorState.None);
+			removeObjects("TowerGhost", 0);
+		}
+		else
+			setCursorState(CursorState.AddTower);
+	}
+
+	private void checkKeys() {
+		if (getKey(Integer.parseInt(hotkeys.getString("AddTower")))){
+			toggleAddTower();
+			clearKey(Integer.parseInt(hotkeys.getString("AddTower")));
+		}
 	}
 
 	private void drawTowerGhost() {
