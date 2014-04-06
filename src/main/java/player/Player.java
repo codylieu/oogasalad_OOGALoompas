@@ -246,12 +246,9 @@ public class Player {
 		return gameInfoPanel;
 	}
 
-
-
 	private JPanel makeUnitInfoPanel() {
-		JPanel unitInfoPanel = new JPanel();
-		JLabel unitInfoLabel = new JLabel("this is some unit info");
-		unitInfoPanel.add(unitInfoLabel);
+		JPanel unitInfoPanel = new UnitInfoPanel(engine);
+		unitInfoPanel.add(unitInfoPanel);
 		return unitInfoPanel;
 	}
 

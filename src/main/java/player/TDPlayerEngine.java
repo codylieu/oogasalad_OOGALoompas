@@ -75,6 +75,14 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
 	}
 
+	/*public TDObject getSelectedObject() {
+		JGPoint mousePos = getMousePos();
+		int curXTilePos = mousePos.x/tileWidth() * tileWidth();
+		int curYTilePos = mousePos.y/tileHeight() * tileHeight();
+		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0)
+			if (model.isTowerPresent(mousePos.x, mousePos.y))
+				return ;
+	}*/
 
 	@Override
 	public void doFrame() {
