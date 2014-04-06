@@ -5,24 +5,23 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataBundle;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
-import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.exceptions.engine.MonsterCreationFailureException;
-
+import main.java.schema.GameBlueprint;
+import main.java.schema.SimpleMonsterSchema;
+import main.java.schema.SimpleTowerSchema;
+import main.java.schema.TDObjectSchema;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
-import main.java.schema.*;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -176,13 +175,6 @@ public class Model {
      */
     public void loadSchemas(String fileName) {
     	
-    	//load wavespawnschemas
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema(factory, "SimpleMonster", 1, entrance, exit);
-    	WaveSpawnSchema wschema = new WaveSpawnSchema();
-    	wschema.addMonsterSchema(mschema);
-    	addWaveToGame(wschema);
-    	//
-    	
         SimpleTowerSchema t1 = new SimpleTowerSchema();
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
@@ -203,6 +195,13 @@ public class Model {
         m1.setMyMoveSpeed(10);
         m1.setMyRewardAmount(10);
         m1.setMyImage("monster");
+        
+        //load wavespawnschemas
+        MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", m1, 1);
+        WaveSpawnSchema wschema = new WaveSpawnSchema();
+        wschema.addMonsterSchema(mschema);
+        addWaveToGame(wschema);
+        //
         
         GameBlueprint gb = new GameBlueprint();
         List<TDObjectSchema> tdObjectSchemas = new ArrayList<TDObjectSchema>();
@@ -321,13 +320,18 @@ public class Model {
     	return false;
     }
     
+    private void spawnNextWave () throws MonsterCreationFailureException {
+        for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
+            for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
+                Monster newlyAdded = factory.placeMonster(entrance, exit, spawnSchema.getMonsterSchema().getMyName());
+                monsters.add(newlyAdded);
+            }
+        }
 
-    private void spawnNextWave() throws MonsterCreationFailureException {
-    	monsters.addAll(allWaves.get(currentWave).spawn());
-    	//currentWave++;
-    	//TODO: check if gameWon() ?
+        // currentWave++;
+        // TODO: check if gameWon() ?
     }
-    
+
     /**
      *  Spawns a new wave at determined intervals
      * @throws MonsterCreationFailureException 
@@ -425,16 +429,6 @@ public class Model {
     public void addWaveToGame(WaveSpawnSchema waveSchema) {
     	allWaves.add(waveSchema);
     }
-    
-//    /**
-//     * Test method
-//     */
-//    public void setTemporaryWaveSchema() {
-//    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 2, entrance, exit);
-//    	WaveSpawnSchema wschema = new WaveSpawnSchema();
-//    	wschema.addMonsterSchema(mschema);
-//    	addWaveToGame(wschema);
-//    }
     
 	/**
 	 * Check all collisions specified by the CollisionManager
