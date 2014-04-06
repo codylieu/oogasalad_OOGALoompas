@@ -224,8 +224,7 @@ public class Player {
 		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		addTowerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("add tower");
-				frame.pack();
+				engine.setCursorState(CursorState.AddTower);
 			}
 		});
 		gameButtonPanel.add(mainMenuButton);

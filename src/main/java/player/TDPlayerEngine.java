@@ -14,6 +14,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 public class TDPlayerEngine extends JGEngine implements Subject {
 	private Model model;
 	private List<Observing> observers;
+	private CursorState cursorState;
 	private boolean hasChanged;
 
 	public TDPlayerEngine() {
@@ -21,7 +22,8 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		initEngineComponent(960, 640);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
-		}
+		cursorState = CursorState.None;
+	}
 
 	@Override
 	public void initCanvas() {
@@ -42,6 +44,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	public void paintFrame() {
 		highlightMouseoverTile();
 		//displayGameStats();
+	}
+
+	public void setCursorState(CursorState newCursorState) {
+		cursorState = newCursorState;
 	}
 
 	private void highlightMouseoverTile() {
@@ -66,10 +72,16 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	@Override
 	public void doFrame() {
 		super.doFrame();
+		if (cursorState == CursorState.AddTower){
+			JGPoint mousePos = getMousePos();
+			new TowerGhost(mousePos.x/tileWidth() * tileWidth(), mousePos.y/tileHeight() * tileHeight());
+		}
+
 		notifyObservers();
-		
+
 		if (getMouseButton(1)) {
 			model.placeTower(getMouseX(), getMouseY());
+			setCursorState(CursorState.None);
 			clearMouseButton(1);
 		}
 		if (getMouseButton(3)) { // right click
