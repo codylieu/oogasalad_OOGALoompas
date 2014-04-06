@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -53,9 +51,9 @@ public class Player {
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
-	
+
 	private TDPlayerEngine engine;
-	
+
 	public Player() {
 		makeFrame();
 		makeCards();
@@ -67,11 +65,11 @@ public class Player {
 		show();
 	}
 
-	
+
 	public void showCard(String cardName){
 		cardLayout.show(cards,  cardName);
 	}
-	
+
 	private void makeFrame() {
 		frame = new JFrame();
 
@@ -135,7 +133,7 @@ public class Player {
 			buttonPanel.add(temp);
 			buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
 		}
-		
+
 		JButton exitButton = makeQuitButton();
 		buttonPanel.add(exitButton);
 		buttonPanel.add(Box.createRigidArea(new Dimension(0, BUTTON_PADDING)));
@@ -224,8 +222,7 @@ public class Player {
 		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		addTowerButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("add tower");
-				frame.pack();
+				engine.toggleAddTower();
 			}
 		});
 		gameButtonPanel.add(mainMenuButton);
@@ -243,13 +240,10 @@ public class Player {
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
-	
 
-	
 	private JPanel makeUnitInfoPanel() {
-		JPanel unitInfoPanel = new JPanel();
-		JLabel unitInfoLabel = new JLabel("this is some unit info");
-		unitInfoPanel.add(unitInfoLabel);
+		UnitInfoPanel unitInfoPanel = new UnitInfoPanel(engine);
+		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
 
@@ -445,7 +439,7 @@ public class Player {
 
 		return mainMenuButton;
 	}
-	
+
 	private JButton makeQuitButton(){
 		JButton exitButton = new JButton("Quit");
 		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);

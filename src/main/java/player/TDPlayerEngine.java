@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import jgame.JGColor;
 import jgame.JGPoint;
@@ -14,14 +15,17 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 public class TDPlayerEngine extends JGEngine implements Subject {
 	private Model model;
 	private List<Observing> observers;
+	private CursorState cursorState;
 	private boolean hasChanged;
+	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 
 	public TDPlayerEngine() {
 		super();
 		initEngineComponent(960, 640);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
-		}
+		cursorState = CursorState.None;
+	}
 
 	@Override
 	public void initCanvas() {
@@ -44,14 +48,25 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		//displayGameStats();
 	}
 
+	public void setCursorState(CursorState newCursorState) {
+		cursorState = newCursorState;
+	}
+
+	public CursorState getCursorState() {
+		return cursorState;
+	}
+
 	private void highlightMouseoverTile() {
 		JGPoint mousePos = getMousePos();
 		int curXTilePos = mousePos.x/tileWidth() * tileWidth();
 		int curYTilePos = mousePos.y/tileHeight() * tileHeight();
 		JGColor color = JGColor.yellow;
-		if (model.isTowerPresent(mousePos.x, mousePos.y)) {
-			color = JGColor.green;
-		}
+		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0)
+			if (cursorState == CursorState.AddTower)
+				if (model.isTowerPresent(mousePos.x, mousePos.y))
+					color = JGColor.red;
+				else
+					color = JGColor.green;
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
@@ -62,16 +77,32 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
 	}
 
+	/*public TDObject getSelectedObject() {
+		JGPoint mousePos = getMousePos();
+		int curXTilePos = mousePos.x/tileWidth() * tileWidth();
+		int curYTilePos = mousePos.y/tileHeight() * tileHeight();
+		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0)
+			if (model.isTowerPresent(mousePos.x, mousePos.y))
+				return ;
+	}*/
 
 	@Override
 	public void doFrame() {
 		super.doFrame();
-		notifyObservers();
-		
-		if (getMouseButton(1)) {
-			model.placeTower(getMouseX(), getMouseY());
-			clearMouseButton(1);
+		if (cursorState == CursorState.AddTower){
+			if (getMouseButton(1)) {
+				model.placeTower(getMouseX(), getMouseY());
+				setCursorState(CursorState.None);
+				clearMouseButton(1);
+			}
+			else
+				drawTowerGhost();
 		}
+
+		notifyObservers();
+
+		checkKeys();
+
 		if (getMouseButton(3)) { // right click
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
@@ -85,6 +116,27 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		moveObjects();
 		model.checkCollisions();
 		//        model.spawnMonster(100, 150);
+	}
+
+	public void toggleAddTower() {
+		if (getCursorState() == CursorState.AddTower){
+			setCursorState(CursorState.None);
+			removeObjects("TowerGhost", 0);
+		}
+		else
+			setCursorState(CursorState.AddTower);
+	}
+
+	private void checkKeys() {
+		if (getKey(Integer.parseInt(hotkeys.getString("AddTower")))){
+			toggleAddTower();
+			clearKey(Integer.parseInt(hotkeys.getString("AddTower")));
+		}
+	}
+
+	private void drawTowerGhost() {
+		JGPoint mousePos = getMousePos();
+		new TowerGhost(mousePos.x/tileWidth() * tileWidth(), mousePos.y/tileHeight() * tileHeight());
 	}
 
 	@Override

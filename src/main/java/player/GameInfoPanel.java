@@ -16,7 +16,7 @@ public class GameInfoPanel extends JPanel implements Observing {
 	public static final String MONEY = "Money";
 	public static final String TIME = "Time";
 	
-	private Subject TDPlayerEngine;
+	private Subject TDPlayerEngine;//Strange variable name....
 	private JLabel scoreLabel;
 	private JLabel lifeLabel;
 	private JLabel moneyLabel;
