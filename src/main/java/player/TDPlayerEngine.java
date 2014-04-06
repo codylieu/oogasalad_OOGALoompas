@@ -49,6 +49,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	public void setCursorState(CursorState newCursorState) {
 		cursorState = newCursorState;
 	}
+	
+	public CursorState getCursorState() {
+		return cursorState;
+	}
 
 	private void highlightMouseoverTile() {
 		JGPoint mousePos = getMousePos();
