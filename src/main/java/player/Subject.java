@@ -5,5 +5,4 @@ public interface Subject {
 	public void unregister(Observing o);
 	
 	public void notifyObservers();
-	public Object getUpdate(Observing o);
-}
+	}

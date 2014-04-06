@@ -1,7 +1,5 @@
 package main.java.player;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
@@ -15,8 +13,8 @@ public class GameInfoPanel extends JPanel implements Observing {
 	public static final String LIFE = "Lives";
 	public static final String MONEY = "Money";
 	public static final String TIME = "Time";
-	
-	private Subject TDPlayerEngine;//Strange variable name....
+
+	private TDPlayerEngine engine;
 	private JLabel scoreLabel;
 	private JLabel lifeLabel;
 	private JLabel moneyLabel;
@@ -34,10 +32,8 @@ public class GameInfoPanel extends JPanel implements Observing {
 		add(timeLabel);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
 	public void update() {		
-		Map<String, String> currentGameInfo = (Map<String, String>) TDPlayerEngine.getUpdate(this);
+		Map<String, String> currentGameInfo = engine.getGameAttributes();
 		scoreLabel.setText(currentGameInfo.get(SCORE));
 		lifeLabel.setText(currentGameInfo.get(LIFE));
 		moneyLabel.setText(currentGameInfo.get(MONEY));
@@ -46,9 +42,8 @@ public class GameInfoPanel extends JPanel implements Observing {
 
 	@Override
 	public void setSubjectState(Subject s) {
-		TDPlayerEngine = s;
-		
+		engine = (TDPlayerEngine) s;
 	}
-		
+
 
 }

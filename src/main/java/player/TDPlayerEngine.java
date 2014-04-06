@@ -160,8 +160,8 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		}
 	}
 
-	@Override
-	public Map<String, String> getUpdate(Observing o) {
+	
+	public Map<String, String> getGameAttributes() {
 		hasChanged = true;
 		Map<String, String> gameStats = new HashMap<String, String>();
 		gameStats.put("Score", "Score: " + model.getScore());
