@@ -29,13 +29,29 @@ public abstract class Tower extends TDObject {
 	protected double myTimingCounter;
 
 	/**
-	 * Create a tower at the specified x,y coordinate. Currently sets default
-	 * instance vars.
-	 * 
-	 * @param x
-	 * @param y
+	 * Create a new tower 
+         * @param location point2d x,y coordinate
+         * @param tower_gfx image to be used
+         * @param damage damage of tower's projectiles
+         * @param range range of tower's aim
+         * @param cost money cost of creating tower
+         * @param buildup time for this tower's construction
+         */
+        public Tower(Point2D location, String tower_gfx, double damage,
+                     double range, double cost, double buildup) {
+             super("tower", location.getX(), location.getY(), TOWER_CID, tower_gfx);
+             myDamage = damage;
+             myRange = range;
+             myCost = cost;
+             myBuildUpTime = buildup;
+     }
+        
+        
+  
+	/**
+	 * DEPRECATED DELETE ME after transition to attributes map constructor above complete
 	 */
-
+        //TODO: DELETE ME
 	public Tower(Point2D location, String tower_gfx, double damage,
 			double range, double cost) {
 		super("tower", location.getX(), location.getY(), TOWER_CID, tower_gfx);

@@ -65,21 +65,6 @@ public class SimpleMonster extends Monster {
     }
 
     /**
-     * Within the attribute map, returns the value of the attributeName or returns the defaultValue
-     * otherwise
-     * 
-     * @param attributes map of attributes from a schema
-     * @param attributeName desired attribute
-     * @param defaultValue default value of attribute if not in attributes map
-     * @return
-     */
-    private static String getValueOrDefault (Map<String, String> attributes,
-                                             String attributeName,
-                                             String defaultValue) {
-        return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;
-    }
-
-    /**
      * DEPRECATED, DELETE ME after transition to attributes map complete.
      */
     // TODO: deprecated, delete
