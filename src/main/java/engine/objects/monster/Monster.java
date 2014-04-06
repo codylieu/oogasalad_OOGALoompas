@@ -35,7 +35,8 @@ public abstract class Monster extends TDObject {
 			double moveSpeed,
 			double rewardAmount,
 			String graphic) {
-		super("monster", entrance.getX(), entrance.getY(), MONSTER_CID, graphic);
+	    //TODO make factory add the spread between monsters in the same wave, and remove random from initial x,y
+		super("monster", entrance.getX()+Math.random()*100, entrance.getY()+Math.random()*100, MONSTER_CID, graphic);
 		myHealth = health;
 		myMoveSpeed = moveSpeed;
 		myMoneyValue = rewardAmount;
