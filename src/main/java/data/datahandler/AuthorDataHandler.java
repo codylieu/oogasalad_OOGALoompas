@@ -1,11 +1,10 @@
 package main.java.data.datahandler;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import main.java.data.jsonhandler.JSONDeserializer;
-import main.java.data.jsonhandler.JSONSerializer;
 import main.java.schema.GameBlueprint;
+
+
 
 /**
  * 
@@ -21,7 +20,7 @@ import main.java.schema.GameBlueprint;
  *
  */
 
-public  class AuthorDataHandler extends DataHandler {
+public class AuthorDataHandler extends DataHandler {
 
 	public AuthorDataHandler(){
 		super();
@@ -33,13 +32,12 @@ public  class AuthorDataHandler extends DataHandler {
 	 * into a JSON file.
 	 * @param currentBlueprint
 	 * @param filePath
-	 * @throws FileNotFoundException
+	 * @throws IOException 
 	 */
-
-	public void serializeAuthoringData(GameBlueprint currentBlueprint, String filePath) throws FileNotFoundException {
-		myDataBundle = translateBluePrintToDataBundle(currentBlueprint);
-		serializeDataBundleToJSON(filePath);
+	public void saveBlueprint(GameBlueprint currentBlueprint, String filePath) throws IOException {
+		saveBundle(new DataBundle(currentBlueprint), filePath);
 	}
+	
 	
 	/**
 	 * 
@@ -48,37 +46,10 @@ public  class AuthorDataHandler extends DataHandler {
 	 * so that authoring environment can allow user to 
 	 * load half creating environments and modify
 	 * them
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
-	
-	public GameBlueprint deserializeFromJSON(String filePath){
-		//deserialize from json into a data bundle
-		//translate from data bundle into game blueprint
-		// return blueprint
-		return null;
+	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException {
+		return loadBundle(filePath).getBlueprint();
 	}
-	
-	/**
-	 * Translates a blueprint passed in from the authoring environment
-	 * into a DataBundle
-	 * @param currentBlueprint
-	 * @return translated DataBundle representing entire game state 
-	 */
-	
-	private DataBundle translateBluePrintToDataBundle(GameBlueprint currentBlueprint){
-		return null;
-	}
-
-	/**
-	 * Translates a data bundle to a blueprint so that
-	 * authoring environment can load a previously
-	 * saved authoring state and make modifications
-	 * @return translated Data Bundle in the form of a GameBlueprint understandable by Authoring Environment
-	 */
-	
-	private GameBlueprint translateDataBundleToBlueprint(){
-		return null;
-	}
-
-
-
 }

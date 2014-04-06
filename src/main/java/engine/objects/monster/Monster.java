@@ -7,73 +7,75 @@ import main.java.engine.objects.TDObject;
 
 public abstract class Monster extends TDObject {
 
-    public static final int MONSTER_CID = 1;
-    
-    protected double myHealth;
-    protected double myDamage;
-    protected double myMoveSpeed;
-    protected double myMoneyValue;
-    protected IMonsterPath myPathFinder;
-    protected Point2D myEntrance;
-    protected Point2D myExit;
+	public static final int MONSTER_CID = 1;
 
-    /**
-     * 
-     * @param name
-     * @param unique_id
-     * @param x
-     * @param y
-     * @param collisionid
-     * @param gfxname
-     */
-    public Monster (String name,
-//                    double x,
-//                    double y,
-    				Point2D entrance,
-                    double health,
-                    double moveSpeed,
-                    double damage,
-                    double moneyValue,
-                    String graphic,
-                    Point2D exit) {
-        super(name, entrance.getX(), entrance.getY(), MONSTER_CID, graphic);
-        myHealth = health;
-        myDamage = damage;
-        myMoveSpeed = moveSpeed;
-        myMoneyValue = moneyValue;
-        myPathFinder = new StraightLinePath(this, exit);
-    }
+	protected double myHealth;
+	protected double myMoveSpeed;
+	protected double myMoneyValue;
+	protected IMonsterPath myPathFinder;
+	protected Point2D myEntrance;
+	protected Point2D myExit;
 
-    @Override
-    public void move () {
-        isDead();
-        myPathFinder.navigateMonster();
-    }
+	/* TODO: Clean up/move instance variables to appropriate concrete classes
+	 */
+	/**
+	 * 
+	 * @param name
+	 * @param unique_id
+	 * @param x
+	 * @param y
+	 * @param collisionid
+	 * @param gfxname
+	 */
+	public Monster (//double x,
+			//double y,
+			Point2D entrance,
+			Point2D exit,
+			double health,
+			double moveSpeed,
+			double rewardAmount,
+			String graphic) {
+		super("monster", entrance.getX(), entrance.getY(), MONSTER_CID, graphic);
+		myHealth = health;
+		myMoveSpeed = moveSpeed;
+		myMoneyValue = rewardAmount;
+		myPathFinder = new StraightLinePath(this, exit);
+	}
 
-    /**
-     *  Check if this object has died and should be removed
-     */
-    public boolean isDead () {
-        return myHealth <= 0;
-    }
-    
-    /**
-     * Reduce the health of this object by a damage amount.
-     * @param damage afflicting object's damage
-     */
-    public void takeDamage (double damage) {
-        myHealth -= damage;
-    }
-    
-    /**
-     * Get current coordinate in a Point2D
-     * @return Current coordinate
-     */
-    public Point2D getCurrentCoor() {
-    	return new Point2D.Double(this.x, this.y);
-    }
-    
-    public double getMoneyValue() {
-    	return myMoneyValue;
-    }
+	@Override
+	public void move () {
+		isDead();
+		myPathFinder.navigateMonster();
+	}
+
+	/**
+	 *  Check if this object has died and should be removed
+	 */
+	public boolean isDead () {
+		return myHealth <= 0;
+	}
+
+	/**
+	 * Reduce the health of this object by a damage amount.
+	 * @param damage afflicting object's damage
+	 */
+	public void takeDamage (double damage) {
+		myHealth -= damage;
+	}
+
+	/**
+	 * Get current coordinate in a Point2D
+	 * @return Current coordinate
+	 */
+	public Point2D getCurrentCoor() {
+		return new Point2D.Double(this.x, this.y);
+	}
+
+	/**
+	 * Get money value received upon death of this monster
+	 * @return
+	 */
+	public double getMoneyValue() {
+		return myMoneyValue;
+	}
 }

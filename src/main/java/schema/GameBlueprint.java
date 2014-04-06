@@ -15,8 +15,7 @@ import main.java.author.model.GameMap;
 public class GameBlueprint {
 
 	private GameSchema myGameScenario;
-	private List<TowerSchema> myTowerSchemas;
-	private List<EnemySchema> myEnemySchemas;
+	private List<TDObjectSchema> myTDObjectSchemas;
 	private List<LevelSchema> myLevelSchemas;
 	private List<GameMap> myGameMaps;
 
@@ -28,21 +27,13 @@ public class GameBlueprint {
 		this.myGameScenario = myGameScenario;
 	}
 
-	public List<TowerSchema> getMyTowerSchemas() {
-		return myTowerSchemas;
-	}
+    public List<TDObjectSchema> getMyTDObjectSchemas() {
+        return myTDObjectSchemas;
+    }
 
-	public void setMyTowerSchemas(List<TowerSchema> myTowerSchemas) {
-		this.myTowerSchemas = myTowerSchemas;
-	}
-
-	public List<EnemySchema> getMyEnemySchemas() {
-		return myEnemySchemas;
-	}
-
-	public void setMyEnemySchemas(List<EnemySchema> myEnemySchemas) {
-		this.myEnemySchemas = myEnemySchemas;
-	}
+    public void setMyTDObjectSchemas(List<TDObjectSchema> myTDObjectSchemas) {
+        this.myTDObjectSchemas = myTDObjectSchemas;
+    }
 
 	public List<LevelSchema> getMyLevelSchemas() {
 		return myLevelSchemas;

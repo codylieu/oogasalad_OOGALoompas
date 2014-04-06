@@ -1,5 +1,7 @@
 package main.java.schema;
 
+import main.java.engine.objects.monster.SimpleMonster;
+
 import java.awt.Dimension;
 
 /**
@@ -10,8 +12,11 @@ import java.awt.Dimension;
  * instance of a Enemy. Please refer to the Game Engine's TDObjects for the
  * objects related to ones you will see onscreen.
  */
-public class EnemySchema{
+public class SimpleMonsterSchema extends MonsterSchema{
+    public static final Class<SimpleMonster> MY_CONCRETE_TYPE = SimpleMonster.class;
 
+    /*TODO: Move information related to all monsters to MonsterSchema
+             */
 	private String myName;
 	private String myImage;
 	private boolean isFlyingType;
@@ -19,7 +24,20 @@ public class EnemySchema{
 	private String myExplosionImage;
 	private Dimension myTileSize;
 	private double myRewardAmount;
+	private double myHealth;
 
+    public SimpleMonsterSchema() {
+        super(MY_CONCRETE_TYPE);
+    }
+
+    public void setHealth(double myHealth) {
+		this.myHealth = myHealth;
+	}
+	
+	public double getMyHealth() {
+		return myHealth;
+	}
+	
 	public String getMyName() {
 		return myName;
 	}
@@ -75,5 +93,4 @@ public class EnemySchema{
 	public void setMyExplosionImage(String myExplosionImage) {
 		this.myExplosionImage = myExplosionImage;
 	}
-	
 }

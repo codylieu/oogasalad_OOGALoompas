@@ -12,12 +12,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -38,11 +36,10 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.MainController;
 import main.java.author.util.UtilFunctions;
-import main.java.schema.EnemySchema;
+import main.java.schema.SimpleMonsterSchema;
 
 //SplitPaneDemo itself is not a visible component.
 public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
@@ -75,7 +72,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JButton createEnemyButton;
 	private JTextField createEnemyField;
 
-	private HashMap<String, EnemySchema> enemyMap;
+	private HashMap<String, SimpleMonsterSchema> enemyMap;
 
 	public EnemyEditorTab(MainController c) {
 		super(c);
@@ -87,7 +84,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	}
 
 	private void initDataFields() {
-		enemyMap = new HashMap<String, EnemySchema>();
+		enemyMap = new HashMap<String, SimpleMonsterSchema>();
 	}
 
 	private Component makeDesignEnemyPane() {
@@ -326,8 +323,8 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private void createNewEnemy(String enemyName) {
 		listModel.addElement(enemyName);
-		EnemySchema newEmeny = new EnemySchema();
-		enemyMap.put(enemyName, newEmeny);
+		SimpleMonsterSchema newEnemy = new SimpleMonsterSchema();
+		enemyMap.put(enemyName, newEnemy);
 		updateDataDisplayed(enemyName);
 	}
 

@@ -7,6 +7,8 @@ import jgame.platform.StdGame;
 
 import java.awt.event.MouseEvent;
 
+import main.java.exceptions.engine.MonsterCreationFailureException;
+
 public class TestEngine extends JGEngine {
     private static TestEngine engine;
     private Model model;
@@ -34,11 +36,9 @@ public class TestEngine extends JGEngine {
         setFrameRate(45, 1);
         this.model = new Model(this);
         model.addNewPlayer();
-        model.setEntrance(0, this.pfHeight()/2);
-        model.setExit(this.pfWidth()/2, this.pfHeight()/2);
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
-        model.setTemporaryWaveSchema();
+        model.loadSchemas("testtowers");
     }
 
     @Override
@@ -48,7 +48,16 @@ public class TestEngine extends JGEngine {
             model.placeTower(getMouseX(), getMouseY());
             clearMouseButton(1);
         }
-        model.updateGame();
+        if (getMouseButton(3)) { // right click
+        	model.checkAndRemoveTower(getMouseX(), getMouseY());
+        	clearMouseButton(3);
+        }
+        try {
+			model.updateGame();
+		} catch (MonsterCreationFailureException e) {
+			// TODO Implement exception
+			e.printStackTrace();
+		}
         moveObjects();
         model.checkCollisions();
 //        model.spawnMonster(100, 150);
@@ -64,8 +73,11 @@ public class TestEngine extends JGEngine {
         JGPoint mousePos = getMousePos();
         int curXTilePos = mousePos.x/tileWidth() * tileWidth();
         int curYTilePos = mousePos.y/tileHeight() * tileHeight();
-
-        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, JGColor.yellow);
+        JGColor color = JGColor.yellow;
+        if (model.isTowerPresent(mousePos.x, mousePos.y)) {
+        	color = JGColor.green;
+        }
+        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
     }
     
     private void displayGameStats() {
