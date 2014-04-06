@@ -238,17 +238,14 @@ public class Player {
 	}
 
 	private JPanel makeGameInfoPanel() {
-		JPanel gamePanel = new JPanel();
-		gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
-		JLabel pointsLabel = new JLabel("Points");
-		JLabel resourcesLabel = new JLabel("Resources");
-		JLabel levelLabel = new JLabel("Level/Wave");
-		gamePanel.add(pointsLabel);
-		gamePanel.add(resourcesLabel);
-		gamePanel.add(levelLabel);
-		return gamePanel;
+		GameInfoPanel gameInfoPanel = new GameInfoPanel();
+		gameInfoPanel.setSubjectState(engine);
+		engine.register(gameInfoPanel);
+		return gameInfoPanel;
 	}
+	
 
+	
 	private JPanel makeUnitInfoPanel() {
 		JPanel unitInfoPanel = new JPanel();
 		JLabel unitInfoLabel = new JLabel("this is some unit info");
