@@ -22,10 +22,10 @@ public class GameInfoPanel extends JPanel implements Observing {
 	public GameInfoPanel(){
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		gameInfo = new ArrayList<String>();
-		scoreLabel = new JLabel("dasf");
-		lifeLabel = new JLabel("asdfsd");
-		moneyLabel = new JLabel("asdfsf");
-		timeLabel = new JLabel("asdfsdf");
+		scoreLabel = new JLabel("Score: ");
+		lifeLabel = new JLabel("Lives: ");
+		moneyLabel = new JLabel("Money: ");
+		timeLabel = new JLabel("Time: ");
 		add(scoreLabel);
 		add(lifeLabel);
 		add(moneyLabel);
