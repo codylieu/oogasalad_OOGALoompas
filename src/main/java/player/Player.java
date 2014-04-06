@@ -36,23 +36,25 @@ public class Player {
 	public static final String LOAD_GAME_DATA = "Load Game Data";
 	public static final String LOAD_LIBRARY = "Browse library";
 	public static final String FILELABEL = "File";
-	public static String HELP = "Instructions for game, how to save, etc";
-	public static String DIFFICULTY = "Difficulty";
-	public static String EASY = "Easy Mode";
-	public static String MEDIUM = "Medium Mode";
-	public static String HARD = "Hard Mode";
-	public static String SOUND = "Sound";
-	public static String ON = "On";
-	public static String OFF = "Off";
-	public static String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
-	public static int BUTTON_PADDING = 10;
-	public static String USER_DIR = "user.dir";	
+	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \nAdding towers uses up money. Right click on towers to sell. \nA proportion of the tower's original cost will be added to money";
+	public static final String DIFFICULTY = "Difficulty";
+	public static final String EASY = "Easy Mode";
+	public static final String MEDIUM = "Medium Mode";
+	public static final String HARD = "Hard Mode";
+	public static final String SOUND = "Sound";
+	public static final String ON = "On";
+	public static final String OFF = "Off";
+	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
+	public static final int BUTTON_PADDING = 10;
+	public static final String USER_DIR = "user.dir";	
 
 	private JFrame frame;
 	private JPanel cards;
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
+	
+	private TDPlayerEngine engine;
 	
 	public Player() {
 		makeFrame();
@@ -177,8 +179,9 @@ public class Player {
 		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		return gamePanel;*/
 
-		TDPlayerEngine playerEngine = new TDPlayerEngine();
-		return playerEngine;
+		engine = new TDPlayerEngine();
+		engine.stop();
+		return engine;
 	}
 
 	private JPanel makeGameButtonPanel() {
@@ -187,19 +190,14 @@ public class Player {
 
 		JButton mainMenuButton = makeMainMenuButton();
 
-		JButton playResumeButton = new JButton("Play/Resume");
+		JButton playResumeButton = new JButton("Play/Pause");
 		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		playResumeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("play resume");
-				frame.pack();
-			}
-		});
-		JButton pauseButton = new JButton("Pause");
-		//pauseButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		pauseButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("pause");
+				if (engine.isRunning())
+					engine.stop();
+				else
+					engine.start();
 				frame.pack();
 			}
 		});
@@ -209,6 +207,16 @@ public class Player {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("save");
 				frame.pack();
+			}
+		});
+		JButton speedUpButton = new JButton("Speed Up");
+		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		speedUpButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//This should work but it doesn't
+				System.out.println(engine.getGameSpeed());
+				engine.setGameSpeed(20.0);
+				System.out.println(engine.getGameSpeed());
 			}
 		});
 		JButton quitButton = makeQuitButton();
@@ -222,25 +230,22 @@ public class Player {
 		});
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
-		gameButtonPanel.add(pauseButton);
 		gameButtonPanel.add(saveButton);
+		//gameButtonPanel.add(speedUpButton);
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(addTowerButton);
 		return gameButtonPanel;
 	}
 
 	private JPanel makeGameInfoPanel() {
-		JPanel gamePanel = new JPanel();
-		gamePanel.setLayout(new BoxLayout(gamePanel, BoxLayout.Y_AXIS));
-		JLabel pointsLabel = new JLabel("Points");
-		JLabel resourcesLabel = new JLabel("Resources");
-		JLabel levelLabel = new JLabel("Level/Wave");
-		gamePanel.add(pointsLabel);
-		gamePanel.add(resourcesLabel);
-		gamePanel.add(levelLabel);
-		return gamePanel;
+		GameInfoPanel gameInfoPanel = new GameInfoPanel();
+		gameInfoPanel.setSubjectState(engine);
+		engine.register(gameInfoPanel);
+		return gameInfoPanel;
 	}
+	
 
+	
 	private JPanel makeUnitInfoPanel() {
 		JPanel unitInfoPanel = new JPanel();
 		JLabel unitInfoLabel = new JLabel("this is some unit info");
