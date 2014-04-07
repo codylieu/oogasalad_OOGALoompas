@@ -1,7 +1,7 @@
 package main.java.data.datahandler;
 
 import java.io.Serializable;
-import main.java.engine.GameState;
+
 import main.java.schema.GameBlueprint;
 
 
@@ -17,41 +17,24 @@ import main.java.schema.GameBlueprint;
  * 
  */
 
+@SuppressWarnings("serial")
 public class DataBundle implements Serializable {
 
     private GameBlueprint myGameBlueprint;
-    private GameState myGameState;
 
     public DataBundle () {
-    }
-
-    public DataBundle (GameBlueprint gameBlueprintInit, GameState gameStateInit) {
-        myGameBlueprint = gameBlueprintInit;
-        myGameState = gameStateInit;
     }
 
     public DataBundle (GameBlueprint gameBlueprintInit) {
         myGameBlueprint = gameBlueprintInit;
     }
 
-    public DataBundle (GameState gameStateInit) {
-        myGameState = gameStateInit;
-    }
-
     public GameBlueprint getBlueprint () {
         return myGameBlueprint;
     }
 
-    public GameState getGameState () {
-        return myGameState;
-    }
-
     public void setBlueprint (GameBlueprint gameBlueprint) {
         myGameBlueprint = gameBlueprint;
-    }
-
-    public void setGameState (GameState gameState) {
-        myGameState = gameState;
     }
 
 }

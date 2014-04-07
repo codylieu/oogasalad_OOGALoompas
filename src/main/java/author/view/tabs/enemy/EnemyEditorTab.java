@@ -26,6 +26,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -33,19 +34,25 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.LineBorder;
+import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import main.java.author.controller.MainController;
 import main.java.author.util.EnemyUtilFunctions;
@@ -55,7 +62,7 @@ import main.java.engine.objects.monster.Monster;
 import main.java.schema.SimpleMonsterSchema;
 
 //SplitPaneDemo itself is not a visible component.
-public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
+public class EnemyEditorTab extends EditorTab {
 
 	private JFileChooser fc;
 
@@ -66,8 +73,8 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private ImageCanvas enemyImageCanvas;
 
 	private JLabel picture;
-	private DefaultListModel<String> listModel;
-	private JList<String> list;
+	private DefaultTableModel listModel;
+	private JTable list;
 	private JSplitPane splitPane;
 
 	private JPanel designEnemyPane;
@@ -106,17 +113,19 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		addListeners();
 	}
 
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-
-		updateFieldDataUponNewSelection();
-		System.out.println("list value changed");
-
-	}
-
 	private void addListeners() {
 
-		list.addListSelectionListener(this);
+		list.getSelectionModel().addListSelectionListener(
+				new ListSelectionListener() {
+
+					@Override
+					public void valueChanged(ListSelectionEvent e) {
+						updateFieldDataUponNewSelection();
+						System.out.println("list value changed");
+					}
+				});
+
+		list.setDefaultEditor(Object.class, new EnemyCellEditor());
 		for (JSpinner field : spinnerFields) {
 			field.addChangeListener(new ChangeListener() {
 
@@ -131,7 +140,6 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		for (JRadioButton button : radioButtons) {
 			button.addItemListener(new ItemListener() {
 
-				@SuppressWarnings("deprecation")
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -205,8 +213,10 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	}
 
 	private void addEnemyNameToList(String enemyName) {
-		listModel.addElement(enemyName);
-		list.setSelectedValue(enemyName, true);
+		int indexToPlace = listModel.getRowCount();
+		System.out.println(indexToPlace);
+		listModel.addRow(new Object[] { enemyName });
+		list.setRowSelectionInterval(indexToPlace, indexToPlace);
 
 	}
 
@@ -228,7 +238,8 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	// puts the selected schema data into the fields
 	private void updateFieldDataUponNewSelection() {
-		String name = list.getSelectedValue();
+		String name = (String) listModel.getValueAt(list.getSelectedRow(), 0);
+		System.out.println(listModel.getValueAt(0, 0));
 		SimpleMonsterSchema myCurrentEnemy;
 		if (enemyMap.get(name) == null) {
 			myCurrentEnemy = new SimpleMonsterSchema(name);
@@ -243,6 +254,12 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		updateViewWithSchemaData(myCurrentEnemy.getAttributesMap());
 	}
 
+	private void replaceKeysInEnemyMap(String originalKey, String newKey) {
+		SimpleMonsterSchema monsterSchema = enemyMap.get(originalKey);
+		enemyMap.remove(originalKey);
+		enemyMap.put(newKey, monsterSchema);
+	}
+
 	/**
 	 * 
 	 * puts the schema data into the view field
@@ -254,7 +271,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private void updateViewWithSchemaData(Map<String, String> map) {
 		healthField.setValue(Integer.parseInt(map.get(Monster.HEALTH)));
 		speedField.setValue(Integer.parseInt(map.get(Monster.SPEED)));
-		damageField.setValue(Integer.parseInt(map.get(Monster.DAMAGE))); // damage isnt implemented
+		damageField.setValue(Integer.parseInt(map.get(Monster.DAMAGE)));
 		rewardField.setValue(Integer.parseInt(map.get(Monster.REWARD)));
 
 	}
@@ -264,7 +281,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	 */
 	private void updateSchemaDataFromView() {
 		// update schema with data
-		String name = list.getSelectedValue();
+		String name = (String) listModel.getValueAt(list.getSelectedRow(), 0);
 		SimpleMonsterSchema myCurrentEnemy = enemyMap.get(name);
 		Integer health = (Integer) healthField.getValue();
 		myCurrentEnemy.addAttribute(Monster.HEALTH, health.toString());
@@ -276,6 +293,56 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		myCurrentEnemy.addAttribute(Monster.REWARD, reward.toString());
 	}
 
+	private class EnemyCellEditor extends DefaultCellEditor {
+		private long lastTime = System.currentTimeMillis();
+
+		EnemyCellEditor() {
+			super(new JTextField());
+		}
+
+		public boolean stopCellEditing() {
+			JTable table = (JTable) getComponent().getParent();
+			String originalKey = (String) list.getValueAt(
+					list.getSelectedRow(), 0);
+
+			try {
+				String editingValue = (String) getCellEditorValue();
+				System.out.println(table.isEditing());
+				System.out.println(editingValue);
+
+				if (enemyMap.containsKey(editingValue)) {
+					JTextField textField = (JTextField) getComponent();
+					textField.setBorder(new LineBorder(Color.red));
+					textField.selectAll();
+					textField.requestFocusInWindow();
+
+					JOptionPane.showMessageDialog(null,
+							"Please enter a unique name.", "Alert!",
+							JOptionPane.ERROR_MESSAGE);
+					return false;
+
+				} else {
+					replaceKeysInEnemyMap(originalKey, editingValue);
+				}
+
+			} catch (ClassCastException exception) {
+				return false;
+			}
+
+			return super.stopCellEditing();
+		}
+
+		public Component getTableCellEditorComponent(JTable table,
+				Object value, boolean isSelected, int row, int column) {
+			Component c = super.getTableCellEditorComponent(table, value,
+					isSelected, row, column);
+			((JComponent) c).setBorder(new LineBorder(Color.black));
+
+			return c;
+		}
+
+	}
+
 	private class EnemyTabViewBuilder {
 		EnemyEditorTab myTab;
 
@@ -285,7 +352,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 		public JSpinner makeAttributeSpinner() {
 
-			SpinnerModel model = new SpinnerNumberModel(20, 1, 1000, 1);
+			SpinnerModel model = new SpinnerNumberModel(1, 1, 1000, 1);
 			JSpinner spinner = new JSpinner(model);
 			spinner.setMaximumSize(new Dimension(200, spinner.getHeight()));
 			Font bigFont = spinner.getFont().deriveFont(Font.PLAIN,
@@ -384,26 +451,25 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 			return labels;
 		}
 
-		public JList makeList() {
-			listModel = new DefaultListModel<String>();
-
-			JList list = new JList<String>(listModel);
-			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			list.setSelectedIndex(0);
-
-			list.setFont(list.getFont().deriveFont(Font.PLAIN,
-					EnemyViewConstants.MEDIUM_FONT_SIZE));
-			return list;
-		}
-
 		public Component makeOverallContent() {
-			list = myBuilder.makeList();
+			list = myBuilder.makeTable();
 
 			// Create a split pane with the two scroll panes in it.
 			splitPane = myBuilder.makeSplitPane(new JScrollPane(list),
 					makeEditorPane());
 			// updateLabel(enemyNames[list.getSelectedIndex()]);
 			return splitPane;
+		}
+
+		private JTable makeTable() {
+			listModel = new DefaultTableModel(new Object[] { "Enemy Name" }, 0);
+			JTable table = new JTable(listModel);
+			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			Font tableFont = table.getFont().deriveFont(
+					EnemyViewConstants.MEDIUM_FONT_SIZE);
+			table.setFont(tableFont);
+			table.setRowHeight((int) EnemyViewConstants.MEDIUM_FONT_SIZE + 12);
+			return table;
 		}
 
 		public JSplitPane makeSplitPane(JScrollPane listScrollPane,
