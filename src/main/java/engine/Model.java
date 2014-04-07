@@ -5,8 +5,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import jgame.platform.JGEngine;
-import main.java.data.datahandler.DataBundle;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
@@ -17,9 +17,8 @@ import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.schema.GameBlueprint;
+import main.java.schema.GameSchema;
 import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.SimpleTowerSchema;
-import main.java.schema.TDObjectSchema;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
@@ -169,56 +168,15 @@ public class Model {
     }
 
     /**
-     * Loads the game schemas from json and passes them to the appropriate factories.
+     * Loads the game schemas from GameBlueprint and sets the appropriate state
      *
-     * @param fileName Name of the json file containing the schemas
+     * @param GameBlueprint
      */
-    public void loadSchemas(String fileName) {
-//    	
-//        SimpleTowerSchema t1 = new SimpleTowerSchema();
-//        t1.setMyName("test tower 1");
-//        t1.setMyDamage(10);
-//        t1.setMyRange(200);
-//        t1.setMyCost(SimpleTower.DEFAULT_COST);
-//        t1.setMyImage("SimpleTower");
-//
-//        SimpleTowerSchema t2 = new SimpleTowerSchema();
-//        t2.setMyName("test tower 2");
-//        t2.setMyDamage(20);
-//        t2.setMyRange(200);
-//        t2.setMyCost(SimpleTower.DEFAULT_COST);
-//        t2.setMyImage("SimpleTower");
-//
-//        SimpleMonsterSchema m1 = new SimpleMonsterSchema();
-//        m1.setMyName("test monster 1");
-//        m1.setHealth(100);
-//        m1.setMyMoveSpeed(10);
-//        m1.setMyRewardAmount(10);
-//        m1.setMyImage("monster");
-//        
-//        //load wavespawnschemas for testing ...
-//        addWaveToGame(createTestWave(m1, 1));
-//        addWaveToGame(createTestWave(m1, 2));
-//        addWaveToGame(createTestWave(m1, 3));
-//        //
-//        
-//        GameBlueprint gb = new GameBlueprint();
-//        List<TDObjectSchema> tdObjectSchemas = new ArrayList<TDObjectSchema>();
-//        tdObjectSchemas.add(t1);
-//        tdObjectSchemas.add(t2);
-//        tdObjectSchemas.add(m1);
-//        gb.setMyTDObjectSchemas(tdObjectSchemas);
-//        DataBundle b = new DataBundle();
-//        b.setBlueprint(gb);
-//
-//        try {
-//            DataBundle data = b;
-//            GameBlueprint blueprint = b.getBlueprint();
-//            List<TDObjectSchema> schemas = blueprint.getMyTDObjectSchemas();
-//            factory.loadSchemas(schemas);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+    public void loadGameBlueprint(GameBlueprint bp) {
+    	
+    	Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
+    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
+   
     }
 
     
