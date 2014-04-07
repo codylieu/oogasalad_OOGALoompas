@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.schema.MonsterSchema;
 import main.java.schema.TDObjectSchema;
-import main.java.schema.TowerSchema;
 import jgame.impl.JGEngineInterface;
 import main.java.util.Reflection;
 
@@ -28,7 +27,7 @@ public class TDObjectFactory {
 	public void loadSchemas(List<TDObjectSchema> schemas) {
 		//TODO: Get rid of repetition in loading schemas
 		for (TDObjectSchema s : schemas) {
-            tdObjectSchemaMap.put(s.getMyName(), s);
+            tdObjectSchemaMap.put(s.getAttributesMap().get(TDObject.NAME), s);
         }
 	}
 
@@ -43,26 +42,34 @@ public class TDObjectFactory {
 	public Tower placeTower(Point2D location, String towerName) throws TowerCreationFailureException {
 		Point2D tileOrigin = findTileOrigin(location);
 		try {
-			TowerSchema schema = (TowerSchema) tdObjectSchemaMap.get(towerName);
-			Object[] towerParameters = {tileOrigin, schema};
+			TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
+
+            Map<String, String> attributes = schema.getAttributesMap();
+            attributes.put(Tower.X, tileOrigin.getX() + "");
+            attributes.put(Tower.Y, tileOrigin.getY() + "");
+
+			Object[] towerParameters = {attributes};
         	return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
 		} catch (Exception e) {
 			throw new TowerCreationFailureException();
 		}
 	}
 	
-	public Monster placeMonster(Point2D entrance, Point2D exit, String userMonsterName) throws MonsterCreationFailureException {
-		System.out.println(tdObjectSchemaMap.keySet().toString());
-		MonsterSchema schema = (MonsterSchema) tdObjectSchemaMap.get(userMonsterName);
-		Object[] monsterParameters = {entrance, exit, schema};
-    	return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
-		/*try {
-			MonsterSchema schema = monsterSchemas.get(userMonsterName);
-			Object[] monsterParameters = {entrance, exit, schema};
-        	return (Monster) placeObject("main.java.engine.objects.monster.",schema.getMyConcreteType(), monsterParameters);
+	public Monster placeMonster(Point2D entrance, Point2D exit, String monsterName) throws MonsterCreationFailureException {
+		try {
+            TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
+
+            Map<String, String> attributes = schema.getAttributesMap();
+            attributes.put(Monster.ENTRANCE_X, entrance.getX() + "");
+            attributes.put(Monster.ENTRANCE_Y, entrance.getY() + "");
+            attributes.put(Monster.EXIT_X, exit.getX() + "");
+            attributes.put(Monster.EXIT_Y, exit.getY() + "");
+
+            Object[] monsterParameters = {attributes};
+            return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
 		} catch (Exception e) {
 			throw new MonsterCreationFailureException();
-		}*/
+		}
 	}
 
 	private Object placeObject(Class objectType, Object[] parameters) {

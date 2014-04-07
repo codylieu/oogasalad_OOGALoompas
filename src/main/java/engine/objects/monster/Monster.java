@@ -8,7 +8,15 @@ import main.java.engine.objects.TDObject;
 public abstract class Monster extends TDObject {
 
 	public static final int MONSTER_CID = 1;
-
+	
+	public static final String HEALTH = "health";
+	public static final String SPEED = "speed";
+	public static final String MONEY_VALUE = "moneyValue";
+	public static final String ENTRANCE_X = "entranceX";
+	public static final String ENTRANCE_Y = "entranceY";
+	public static final String EXIT_X = "exitX";
+	public static final String EXIT_Y = "exitY";
+	
 	protected double myHealth;
 	protected double myMoveSpeed;
 	protected double myMoneyValue;
@@ -36,7 +44,7 @@ public abstract class Monster extends TDObject {
 			double rewardAmount,
 			String graphic) {
 	    //TODO make factory add the spread between monsters in the same wave, and remove random from initial x,y
-		super("monster", entrance.getX()+Math.random()*100, entrance.getY()+Math.random()*100, MONSTER_CID, graphic);
+		super("monster", entrance.getX() + Math.random() * 100, entrance.getY() + Math.random() * 100, MONSTER_CID, graphic);
 		myHealth = health;
 		myMoveSpeed = moveSpeed;
 		myMoneyValue = rewardAmount;

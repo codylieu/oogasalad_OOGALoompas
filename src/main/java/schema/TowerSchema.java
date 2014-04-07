@@ -12,8 +12,8 @@ public abstract class TowerSchema extends TDObjectSchema {
 		myAttributeSet.add(Tower.IMAGE);
 		myAttributeSet.add(Tower.HEALTH);
 		myAttributeSet.add(Tower.RANGE);
-		myAttributeSet.add(Tower.X);
-		myAttributeSet.add(Tower.Y);
+//		myAttributeSet.add(Tower.X);
+//		myAttributeSet.add(Tower.Y);
 		myAttributeSet.add(Tower.NAME);
     }
 }
