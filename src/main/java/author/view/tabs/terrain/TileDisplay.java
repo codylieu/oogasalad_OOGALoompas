@@ -1,6 +1,6 @@
 package main.java.author.view.tabs.terrain;
 
-import static main.java.author.controller.ActionListenerUtil.actionListener;
+import static main.java.author.util.ActionListenerUtil.actionListener;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -23,7 +23,7 @@ import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
 	
-	private static final String DEFAULT_BG_BITMAP_SOURCE = "blocks1.bmp";
+	private static final String DEFAULT_BG_BITMAP_SOURCE = "pokemon2.bmp";
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
 	private TileSelectionManager myTileManager;
 	private ResourceBundle myBitmapBundle;
@@ -80,23 +80,26 @@ public class TileDisplay extends JPanel {
 				c.gridy = i;
 				c.gridx = j;
 				Image im = myImages[i][j];
-				im = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT);
+				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT);
 
-				TileObject imgDisplayObj = new TileObject(myImages[i][j]);
-				imgDisplayObj.addActionListener(actionListener(myTileManager, "updateSelection"));
-				imgDisplayObj.setIcon(new ImageIcon(im));
-				tileOptions.add(imgDisplayObj, c);
+				TileObject imgDisplayObj = new TileObject(im);
+				imgDisplayObj.addActionListener(actionListener(this, "updateSelection"));
+				imgDisplayObj.setIcon(new ImageIcon(scaledIm)); // place scaled image as jbutton icon
+				tileOptions.add(imgDisplayObj, c); // grid layout of jbutton/images
 			}
 		}
 		add(tileOptions);
 	}
 	
-	public TileSelectionManager getTileSelectionManager() {
-		return ((TileSelectionManager) this.getParent());
-	}
-	
-	public Canvas getCanvas() {
-		return getTileSelectionManager().getCanvas();
+	/**
+	 * Action Listener, called when a 
+	 * @param e
+	 */
+	public void updateSelection(ActionEvent e) {
+		TileObject selectedTile = (TileObject) e.getSource();
+		myTileManager.getCanvas().setSelectedTileObj(selectedTile);
+		myTileManager.getTileEditPanel().setImageAngle(0);
+		myTileManager.getTileEditPanel().repaint();
 	}
 	
 	public int getPixelSize() {
@@ -110,7 +113,5 @@ public class TileDisplay extends JPanel {
 		myScrollPane.setPreferredSize(new Dimension(275, 350));
 		return myScrollPane;
 	}
-	
-	
 	
 }

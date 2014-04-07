@@ -1,6 +1,5 @@
-package main.java.engine.spawnschema;
+package main.java.schema;
 
-import main.java.schema.MonsterSchema;
 
 /**
  * A schema object/container to store information about which monsterschema to create, and how many of it to be
