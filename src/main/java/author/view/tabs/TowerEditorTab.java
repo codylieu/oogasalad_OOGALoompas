@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.util.HashMap;
+import java.awt.Canvas;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -32,7 +33,6 @@ import javax.swing.event.ListSelectionEvent;
 
 import main.java.author.controller.MainController;
 import main.java.author.util.UtilFunctions;
-import main.java.author.view.tabs.terrain.Canvas;
 import main.java.schema.SimpleMonsterSchema;
 
 public class TowerEditorTab extends EditorTab{
