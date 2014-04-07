@@ -11,6 +11,7 @@ import jgame.platform.JGEngine;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
+import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
@@ -104,7 +105,7 @@ public class Model {
 
 	/**
 	 * Force destroy a tower
-	 * @param newTower
+	 * @param tower
 	 */
 	private void destroyTower(Tower tower) {
 		tower.setImage(null);
@@ -178,16 +179,14 @@ public class Model {
     /**
      * Loads the game schemas from GameBlueprint and sets the appropriate state
      *
-     * @param GameBlueprint
+     * @param bp
      */
-    public void loadGameBlueprint(GameBlueprint bp) {
-    	
-    	Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
-    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
-   
-
-    }
-
+//    public void loadGameBlueprint(GameBlueprint bp) {
+//    	Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
+//    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
+//
+//
+//    }
     
     /**
      * Creates a wave of simple monsters for sans-factory testing ...
@@ -292,7 +291,6 @@ public class Model {
         }
     }
     
-    
     private boolean isGameWon() {
     	if(currentWave >= allWaves.size()){
     		return true;
@@ -300,16 +298,16 @@ public class Model {
     	return false;
     }
     
-    
     /**
      * Spawns the next wave in the list of all waves.
      * Currently rotates through all waves indefinitely.
      * @throws MonsterCreationFailureException
      */
-    private void spawnNextWave () throws MonsterCreationFailureException {
+    private void spawnNextWave() throws MonsterCreationFailureException {
         for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
             for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Monster newlyAdded = factory.placeMonster(entrance, exit, spawnSchema.getMonsterSchema().getName());
+                Monster newlyAdded = factory.placeMonster(entrance, exit,
+                        spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
                 monsters.add(newlyAdded);
             }
             if(++currentWave >= allWaves.size()) {
