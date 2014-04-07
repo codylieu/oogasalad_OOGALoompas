@@ -46,16 +46,6 @@ import main.java.schema.SimpleMonsterSchema;
 
 //SplitPaneDemo itself is not a visible component.
 public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
-	/** Returns an ImageIcon, or null if the path was invalid. */
-	protected static ImageIcon createImageIcon(String path) {
-		java.net.URL imgURL = EnemyEditorTab.class.getResource(path);
-		if (imgURL != null) {
-			return new ImageIcon(imgURL);
-		} else {
-			System.err.println("Couldn't find file: " + path);
-			return null;
-		}
-	}
 
 	private SimpleMonsterSchema myCurrentEnemy;
 	private JFileChooser fc;
@@ -75,7 +65,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JSpinner rewardField;
 
 	private NumberFormat numberFormat;
-	private JButton createEnemyButton = new JButton();
+	private JButton createEnemyButton;
 
 	private JRadioButton smallButton;
 	private JRadioButton mediumButton;
@@ -103,6 +93,18 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private void addActionListeners() {
 
 		list.addListSelectionListener(this);
+		
+		createEnemyButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String enemyName = createEnemyField.getText();
+				if (EnemyUtilFunctions.newEnemyNameIsValid(enemyName, enemyMap)) {
+					createNewEnemy(enemyName);
+				}
+			}
+		});
+		
 		collisionImageButton.addActionListener(new ActionListener() {
 
 			@Override
