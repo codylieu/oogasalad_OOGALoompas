@@ -85,6 +85,21 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 			if (model.isTowerPresent(mousePos.x, mousePos.y))
 				return ;
 	}*/
+	
+	public String getCurrentDescription() {
+		/*JGPoint mousePos = getMousePos();
+		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0) {
+			if (model.isTowerPresent(mousePos.x, mousePos.y)){
+				System.out.println(getObjects("tower", 0, true, null).size());
+				return getObjects("tower", 0, true, null).get(1).toString();//remove null to bounding box
+			}
+			else
+				return "";
+		}
+		else*/
+			return "";
+			
+	}
 
 	@Override
 	public void doFrame() {
