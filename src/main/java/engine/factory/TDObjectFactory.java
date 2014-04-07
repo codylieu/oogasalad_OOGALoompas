@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.MonsterCreationFailureException;
@@ -28,7 +29,7 @@ public class TDObjectFactory {
 	public void loadSchemas(List<TDObjectSchema> schemas) {
 		//TODO: Get rid of repetition in loading schemas
 		for (TDObjectSchema s : schemas) {
-            tdObjectSchemaMap.put(s.getAttributesMap().get("name"), s);
+            tdObjectSchemaMap.put(s.getAttributesMap().get(TDObject.NAME), s);
         }
 	}
 
