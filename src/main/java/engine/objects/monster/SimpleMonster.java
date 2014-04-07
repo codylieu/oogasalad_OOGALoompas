@@ -31,7 +31,7 @@ public class SimpleMonster extends Monster {
              Double.parseDouble(getValueOrDefault(attributes, EXIT_Y, "100")),
              Double.parseDouble(getValueOrDefault(attributes, HEALTH, DEFAULT_HEALTH + "")),
              Double.parseDouble(getValueOrDefault(attributes, SPEED, DEFAULT_MOVE_SPEED + "")),
-             Double.parseDouble(getValueOrDefault(attributes, MONEY_VALUE, DEFAULT_REWARD_AMOUNT +
+             Double.parseDouble(getValueOrDefault(attributes, REWARD, DEFAULT_REWARD_AMOUNT +
                                                                             "")),
              getValueOrDefault(attributes, "image", DEFAULT_MONSTER_GFX));
     }

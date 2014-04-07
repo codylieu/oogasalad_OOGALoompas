@@ -11,7 +11,7 @@ public abstract class MonsterSchema extends TDObjectSchema {
 		myAttributeSet.add(Monster.EXIT_X);
 		myAttributeSet.add(Monster.EXIT_Y);
 		myAttributeSet.add(Monster.HEALTH);
-		myAttributeSet.add(Monster.MONEY_VALUE);
+		myAttributeSet.add(Monster.REWARD);
 		myAttributeSet.add(Monster.SPEED);
 		myAttributeSet.add(Monster.NAME);
     }

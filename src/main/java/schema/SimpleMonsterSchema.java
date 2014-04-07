@@ -1,5 +1,7 @@
 package main.java.schema;
 
+import main.java.author.view.tabs.enemy.EnemyViewConstants;
+import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.monster.SimpleMonster;
 
 import java.awt.Dimension;
@@ -19,6 +21,26 @@ public class SimpleMonsterSchema extends MonsterSchema {
 
 	public SimpleMonsterSchema() {
 		super(MY_CONCRETE_TYPE);
+	}
+
+
+	/**
+	 * @param name name of monster
+	 */
+	public SimpleMonsterSchema(String name) {
+		this();
+		
+		populateDefaultAttributes(name);
+	
+	}
+
+	private void populateDefaultAttributes(String name) {
+		addAttribute(Monster.NAME, name);
+		addAttribute(Monster.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
+		addAttribute(Monster.SPEED, EnemyViewConstants.SPEED_DEFAULT);
+		addAttribute(Monster.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
+		addAttribute(Monster.REWARD, EnemyViewConstants.REWARD_DEFAULT);           
+		
 	}
 
 	@Override
