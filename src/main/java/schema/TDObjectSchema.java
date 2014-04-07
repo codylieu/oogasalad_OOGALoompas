@@ -1,6 +1,7 @@
 package main.java.schema;
 
 import main.java.engine.objects.TDObject;
+import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
 public abstract class TDObjectSchema extends AbstractSchema	{
 	
@@ -21,10 +22,21 @@ public abstract class TDObjectSchema extends AbstractSchema	{
 	 * 
 	 * @param attributeName
 	 * @param attributeValue
+	 * @throws InvalidParameterForConcreteTypeException 
 	 */
 	@Override
-	public void addAttribute(String attributeName, Object attributeValue) {
-		myAttributesMap.put(attributeName, attributeValue.toString());
+	public void addAttribute(String attributeName, Object attributeValue){
+		if(myAttributeSet.contains(attributeName)) {
+			myAttributesMap.put(attributeName, attributeValue.toString());
+		} 
+		else {
+			try {
+				throw new InvalidParameterForConcreteTypeException();
+			} catch (InvalidParameterForConcreteTypeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 //		myAttributesMap.put(TDObject.NAME, defineName()); i don't think i need this -- jordan
 	}
 	

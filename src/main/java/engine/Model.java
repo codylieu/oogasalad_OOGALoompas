@@ -19,6 +19,7 @@ import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
+import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 
@@ -60,7 +61,9 @@ public class Model {
         gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
         setExit(engine.pfWidth(), engine.pfHeight()/2);
-        loadGameBlueprint(null); // TODO: REPLACE
+        
+			loadGameBlueprint(null);
+		// TODO: REPLACE
         engineDataHandler = new EngineDataHandler();
     }
     
@@ -181,6 +184,7 @@ public class Model {
      * Loads the game schemas from GameBlueprint and sets the appropriate state
      *
      * @param bp
+     * @throws InvalidParameterForConcreteTypeException 
      */
     public void loadGameBlueprint(GameBlueprint bp) {
 //    	Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
@@ -197,6 +201,8 @@ public class Model {
         testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
         testTowerSchema.addAttribute(Tower.COST, "10");
         testTowerSchema.addAttribute(Tower.IMAGE, "SimpleTower");
+        testTowerSchema.addAttribute("dan", "SimpleTower");
+
         tdObjectSchemas.add(testTowerSchema);
 
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
@@ -478,7 +484,7 @@ public class Model {
     		int ytile = coordinates[1];
     		towers[xtile][ytile].remove();
     		Tower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
-    		System.out.println(newTower.x);
+    		//System.out.println(newTower.x);
     		towers[xtile][ytile] = newTower;
     		return true;
     	}

@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
+
 public abstract class AbstractSchema {
 	
 	protected Map<String, String> myAttributesMap;
@@ -29,8 +31,9 @@ public abstract class AbstractSchema {
 	 * 
 	 * @param attributeName
 	 * @param attributeValue
+	 * @throws InvalidParameterForConcreteTypeException 
 	 */
-	public abstract void addAttribute(String attributeName, Object attributeValue);
+	public abstract void addAttribute(String attributeName, Object attributeValue) throws InvalidParameterForConcreteTypeException;
 	
 
 	/**
