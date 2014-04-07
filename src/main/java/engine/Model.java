@@ -1,6 +1,7 @@
 package main.java.engine;
 
 import java.awt.geom.Point2D;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import jgame.platform.JGEngine;
+import main.java.data.datahandler.EngineDataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
@@ -24,8 +26,6 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
 import main.java.schema.*;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -45,6 +45,7 @@ public class Model {
     private Point2D entrance;
     private Point2D exit;
     private GameState gameState;
+    private EngineDataHandler engineDataHandler;
 
     public Model(JGEngine engine) {
         this.engine = engine;
@@ -60,6 +61,7 @@ public class Model {
         setEntrance(0, engine.pfHeight()/2);
         setExit(engine.pfWidth(), engine.pfHeight()/2);
         loadGameBlueprint(null); // TODO: REPLACE
+        engineDataHandler = new EngineDataHandler();
     }
     
     /**
@@ -213,6 +215,18 @@ public class Model {
         testWaveSchema.addMonsterSchema(testMonsterSpawnSchema3);
 
         allWaves.add(testWaveSchema);
+    }
+    
+    /**
+     * Loads game schemas from the GameBlueprint obtained from the filePath
+     * @param fileName
+     * @throws IOException 
+     * @throws ClassNotFoundException 
+     */
+    public void loadGameSchemas(String fileName) throws ClassNotFoundException, IOException	{
+    	GameBlueprint bp = engineDataHandler.loadBlueprint(RESOURCE_PATH + fileName);
+    	Map<String, String> gameAttributes = bp.getMyGameScenario().getAttributesMap();
+    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
     }
     
     /**

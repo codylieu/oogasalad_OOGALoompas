@@ -1,6 +1,5 @@
 package main.java.schema;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -15,7 +14,7 @@ public class GameSchema extends AbstractSchema{
 //	private boolean isSurvivalMode;
 	
 	public static final String LIVES = "lives";
-	public static final String GOLD = "gold";
+	public static final String MONEY = "money";
 	public static final String LEVELDIFFICULTY = "difficulty";
 	public static final String ISSURVIVALMODE = "issurvivalmode";
 
@@ -31,7 +30,6 @@ public class GameSchema extends AbstractSchema{
 	
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
