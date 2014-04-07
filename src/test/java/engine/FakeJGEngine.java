@@ -1,12 +1,14 @@
 package test.java.engine;
 
+import jgame.JGColor;
 import jgame.platform.JGEngine;
 
 public class FakeJGEngine extends JGEngine {
 
 	@Override
 	public void initCanvas() {
-		// TODO Auto-generated method stub
+//		 setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
+		 this.setTile(25, 20, "ha");
 		
 	}
 

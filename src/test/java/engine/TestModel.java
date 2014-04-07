@@ -11,9 +11,12 @@ public class TestModel {
 	public void checkTowerIsPlaced() {
 		Model model = new Model(new FakeJGEngine());
 		
-		final int testx = 2, testy = 2;
-		
-		model.placeTower(testx, testy);
+		final int testx = 200, testy = 200;
+//		System.out.println("ha");
+		System.out.println(model.placeTower(testx, testy));
+		System.out.println("ha");
+		model.isTowerPresent(testx, testy);
+		System.out.println("ha");
 		
 		assert(model.isTowerPresent(testx, testy));
 	}

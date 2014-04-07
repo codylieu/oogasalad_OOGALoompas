@@ -50,6 +50,7 @@ public class TestEngine extends JGEngine {
         }
         if (getMouseButton(3)) { // right click
         	model.checkAndRemoveTower(getMouseX(), getMouseY());
+//        	model.upgradeTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
         }
         try {

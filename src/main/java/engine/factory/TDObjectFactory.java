@@ -33,7 +33,7 @@ public class TDObjectFactory {
 		for (MonsterSchema s : monsterSchemas) {
 			monsterSchemasMap.put(s.getMyName(), s);
 		}
-		System.out.println(monsterSchemasMap.keySet().toString());
+//		System.out.println(monsterSchemasMap.keySet().toString());
 	}
 
 	public Tower placeTower(Point2D location, String userTowerName) throws TowerCreationFailureException {

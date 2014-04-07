@@ -17,6 +17,7 @@ import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.exceptions.engine.TowerCreationFailureException;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -75,13 +76,13 @@ public class Model {
      * @param x	x coordinate of the tower
      * @param y	y coordinate of the tower
      */
-    public void placeTower(double x, double y) {
+    public boolean placeTower(double x, double y) {
         try {   
               
     		Point2D location = new Point2D.Double(x, y);
     	        int[] currentTile = getTileCoordinates(location);
     		// if tower already exists in the tile clicked, do nothing
-    		if(isTowerPresent(currentTile)) return;
+    		if(isTowerPresent(currentTile)) return false;
     		
         	Tower newTower = factory.placeTower(location, "test tower 1");
         	
@@ -89,16 +90,18 @@ public class Model {
         	        //FIXME: Decrease money?
         		player.addMoney(-SimpleTower.DEFAULT_COST);
         		towers[currentTile[0]][currentTile[1]]  = newTower;
-    	
+        		return true;
         	} else {
         		newTower.setImage(null);
         		newTower.remove();
+        		return false;
         	}
         	
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return false;
         
     }
 
@@ -191,7 +194,7 @@ public class Model {
         t1.setMyConcreteType("SimpleTower");
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
-        t2.setMyRange(200);
+        t2.setMyRange(400);
         t2.setMyCost(SimpleTower.DEFAULT_COST);
         t2.setMyImage("SimpleTower");
 
@@ -443,5 +446,26 @@ public class Model {
 	 */
     public void checkCollisions() {
     	collisionManager.checkAllCollisions();
+    }
+    
+    /**
+     * Upgrade the tower at the specified coordinates
+     * @param x
+     * @param y
+     * @return
+     * @throws TowerCreationFailureException
+     */
+    public boolean upgradeTower(double x, double y) throws TowerCreationFailureException {
+    	int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
+    	if (isTowerPresent(coordinates)){
+    		int xtile = coordinates[0];
+    		int ytile = coordinates[1];
+    		towers[xtile][ytile].remove();
+    		Tower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
+    		System.out.println(newTower.x);
+    		towers[xtile][ytile] = newTower;
+    		return true;
+    	}
+    	return false;
     }
 }
