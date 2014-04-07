@@ -10,7 +10,9 @@ public abstract class TDObject extends JGObject {
 
     //TODO: abstract methods?
     
-    public TDObject (String name,
+    public static final String NAME = "name";
+
+	public TDObject (String name,
                      double x,
                      double y,
                      int cid,

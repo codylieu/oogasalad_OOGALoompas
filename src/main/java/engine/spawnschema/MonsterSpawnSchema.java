@@ -13,7 +13,7 @@ public class MonsterSpawnSchema {
 
     private MonsterSchema myMonsterSchema;
     private int mySwarmSize;
-
+    private String myName;
 
     /**
      * 
@@ -23,6 +23,7 @@ public class MonsterSpawnSchema {
     public MonsterSpawnSchema (String name, MonsterSchema monsterSchema, int swarmSize) {
     	myMonsterSchema = monsterSchema;
         mySwarmSize = swarmSize;
+        myName = name;
     }
     
 
@@ -39,5 +40,6 @@ public class MonsterSpawnSchema {
     public MonsterSchema getMonsterSchema(){
         return myMonsterSchema;
     }
+
     
 }
