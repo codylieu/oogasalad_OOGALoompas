@@ -1,5 +1,6 @@
 package main.java.engine.objects;
 
+import java.util.Map;
 import jgame.JGObject;
 
 /**
@@ -9,7 +10,9 @@ public abstract class TDObject extends JGObject {
 
     //TODO: abstract methods?
     
-    public TDObject (String name,
+    public static final String NAME = "name";
+
+	public TDObject (String name,
                      double x,
                      double y,
                      int cid,
@@ -28,6 +31,19 @@ public abstract class TDObject extends JGObject {
        super(name, true, x, y, cid, gfxname, xspeed, yspeed, expireOffView);
     }
     
-
+    /**
+     * Within an attribute map, returns the value of the attributeName or returns the defaultValue
+     * otherwise
+     * 
+     * @param attributes map of attributes from a schema
+     * @param attributeName desired attribute
+     * @param defaultValue default value of attribute if not in attributes map
+     * @return
+     */
+    protected static String getValueOrDefault (Map<String, String> attributes,
+                                             String attributeName,
+                                             String defaultValue) {
+        return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;
+    }
     
 }

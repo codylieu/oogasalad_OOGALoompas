@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import main.java.engine.GameState;
 
+import main.java.engine.GameState;
+import main.java.schema.GameBlueprint;
+
 /**
  * Data handler specific to the Engine. Allows them
  * to translate their specific game state into a Data Bundle and
@@ -30,8 +33,8 @@ public class EngineDataHandler extends DataHandler {
 	 * @throws IOException 
 	 */
 	
-	public void saveBundle(DataBundle currentGameState, String filePath) throws IOException {
-		saveBundle(currentGameState, filePath);
+	public void saveState(GameState currentGameState, String filePath) throws IOException {
+		saveBundle(new DataBundle(currentGameState), filePath);
 	}
 	
 	/**
@@ -45,6 +48,21 @@ public class EngineDataHandler extends DataHandler {
 	
 	public GameState loadState(String filePath) throws ClassNotFoundException, IOException {
 		return loadBundle(filePath).getGameState();
+	}
+	
+	/**
+	 * 
+	 * @param filePath
+	 * @return translate output stream into a GameBlueprint
+	 * so that authoring environment can allow user to 
+	 * load half creating environments and modify
+	 * them
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 */
+	
+	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException {
+		return loadBundle(filePath).getBlueprint();
 	}
 	
 }

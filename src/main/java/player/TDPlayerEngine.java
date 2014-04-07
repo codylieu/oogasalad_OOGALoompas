@@ -5,12 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.engine.Model;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+
 
 public class TDPlayerEngine extends JGEngine implements Subject {
 	private Model model;
@@ -39,7 +39,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		model.addNewPlayer();
 		model.loadMap("testmap.json");
 		defineMedia("/main/resources/media.tbl");
-		model.loadSchemas("testtowers");
+		//model.loadSchemas("testtowers");
 	}
 
 	@Override

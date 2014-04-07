@@ -1,22 +1,37 @@
 package main.java.schema;
 
-public abstract class TDObjectSchema {
-    private String myName;
-    private Class myConcreteType;
+import main.java.engine.objects.TDObject;
 
-    protected TDObjectSchema(Class myConcreteType) {
-        this.myConcreteType = myConcreteType;
-    }
+public abstract class TDObjectSchema extends AbstractSchema	{
+	
+	private Class<? extends TDObject> myConcreteType;
 
-    public Class getMyConcreteType() {
-        return myConcreteType;
-    }
+	protected TDObjectSchema(Class<? extends TDObject> concreteType) {
+		super();
+		myConcreteType = concreteType;
+	}
 
-    public void setMyName(String name) {
-        myName = name;
-    }
+	public Class<? extends TDObject> getMyConcreteType() {
+		return myConcreteType;
+	}
 
-    public String getMyName() {
-        return myName;
-    }
+	/**
+	 * Add a new attribute and its value to the internal attributes map. Ensure
+	 * attribute has toString method.
+	 * 
+	 * @param attributeName
+	 * @param attributeValue
+	 */
+	@Override
+	public void addAttribute(String attributeName, Object attributeValue) {
+		myAttributesMap.put(attributeName, attributeValue.toString());
+//		myAttributesMap.put(TDObject.NAME, defineName()); i don't think i need this -- jordan
+	}
+	
+	/**
+	 * Give me the name of the object to be created.
+	 * @return Name of the object
+	 */
+	public abstract String defineName();
+	
 }

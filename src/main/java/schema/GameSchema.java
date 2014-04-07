@@ -1,46 +1,36 @@
 package main.java.schema;
 
+import java.util.Set;
+
 /**
  * the higher level settings defining the type of game and some basic
  * overarching stats
  */
-public class GameSchema {
+public class GameSchema extends AbstractSchema{
 
-	private int myStartingLives;
-	private int myStartingGold;
-	private int myLevelDifficulty;
-	private boolean isSurvivalMode;
+//	private int myStartingLives;
+//	private int myStartingGold;
+//	private int myLevelDifficulty;
+//	private boolean isSurvivalMode;
+	
+	public static final String LIVES = "lives";
+	public static final String MONEY = "money";
+	public static final String LEVELDIFFICULTY = "difficulty";
+	public static final String ISSURVIVALMODE = "issurvivalmode";
 
-	public int getMyStartingLives() {
-		return myStartingLives;
+	public GameSchema()	{
+		super();
 	}
-
-	public void setMyStartingLives(int myStartingLives) {
-		this.myStartingLives = myStartingLives;
+	
+	@Override
+	public void addAttribute(String attributeName, Object attributeValue) {
+		myAttributesMap.put(attributeName, attributeValue.toString());
+		
 	}
-
-	public int getMyStartingGold() {
-		return myStartingGold;
+	
+	@Override
+	protected Set<String> populateAdditionalAttributes() {
+		return null;
 	}
-
-	public void setMyStartingGold(int myStartingGold) {
-		this.myStartingGold = myStartingGold;
-	}
-
-	public int getMyLevelDifficulty() {
-		return myLevelDifficulty;
-	}
-
-	public void setMyLevelDifficulty(int myLevelDifficulty) {
-		this.myLevelDifficulty = myLevelDifficulty;
-	}
-
-	public boolean isSurvivalMode() {
-		return isSurvivalMode;
-	}
-
-	public void setSurvivalMode(boolean isSurvivalMode) {
-		this.isSurvivalMode = isSurvivalMode;
-	}
-
+	
 }
