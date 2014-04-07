@@ -6,6 +6,8 @@ import javax.swing.JTextArea;
 @SuppressWarnings("serial")
 public class UnitInfoPanel extends JPanel implements Observing {
 	
+	public static final String TIME = "Time";
+	
 	private TDPlayerEngine engine;
 	private JTextArea unitInfoArea;
 
@@ -18,7 +20,7 @@ public class UnitInfoPanel extends JPanel implements Observing {
 	@Override
 	public void update() {		
 		//unitInfoArea.setText(engine.getSelectedObject().toString());
-		unitInfoArea.setText(engine.getGameAttributes().get("Time"));
+		unitInfoArea.setText(engine.getGameAttributes().get(TIME));
 	}
 
 	@Override
