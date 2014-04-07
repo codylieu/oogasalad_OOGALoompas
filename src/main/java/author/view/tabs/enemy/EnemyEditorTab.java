@@ -50,6 +50,7 @@ import main.java.author.controller.MainController;
 import main.java.author.util.EnemyUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.tabs.EditorTab;
+import main.java.engine.objects.monster.Monster;
 import main.java.schema.SimpleMonsterSchema;
 
 //SplitPaneDemo itself is not a visible component.
@@ -108,7 +109,8 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
-		updateDataDisplayed();
+		updateFieldsWithOtherMonsterData();
+		System.out.println("list value changed");
 
 	}
 
@@ -121,7 +123,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					System.out.println("change");
-					updateDataDisplayed();
+					updateDataForSameMonster();
 				}
 			});
 		}
@@ -205,7 +207,9 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		listModel.addElement(enemyName);
 		SimpleMonsterSchema newEnemy = new SimpleMonsterSchema();
 		enemyMap.put(enemyName, newEnemy);
-		updateDataDisplayed();
+		list.setSelectedIndex(listModel.getSize()-1);
+		updateDataForSameMonster();
+		updateFieldsWithOtherMonsterData();
 	}
 
 	private void initDataFields() {
@@ -225,11 +229,21 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	}
 
 	// Renders the selected enemy's data
-	protected void updateDataDisplayed() {
+	private void updateDataForSameMonster() {
 		String name = list.getSelectedValue();
 		SimpleMonsterSchema myCurrentEnemy = enemyMap.get(name);
-		int health = (int) healthField.getValue();
-		myCurrentEnemy.setHealth((double)health);
+		Integer health = (Integer) healthField.getValue();
+		myCurrentEnemy.addAttribute(Monster.HEALTH, health.toString());
+	}
+	
+	private void updateFieldsWithOtherMonsterData() {
+		String name = list.getSelectedValue();
+		SimpleMonsterSchema myCurrentEnemy = enemyMap.get(name);
+		String health = myCurrentEnemy.getAttributesMap().get(Monster.HEALTH);
+		System.out.println(health);
+		int enemyHealth = Integer.parseInt(health);
+		
+		healthField.setValue(enemyHealth);
 	}
 
 	private class EnemyTabViewBuilder {
@@ -342,7 +356,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 		public JList makeList() {
 			listModel = new DefaultListModel<String>();
-			listModel.addElement("Default Enemy Name");
+			
 			JList list = new JList<String>(listModel);
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			list.setSelectedIndex(0);
