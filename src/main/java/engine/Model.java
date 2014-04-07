@@ -5,7 +5,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataBundle;
 import main.java.engine.factory.TDObjectFactory;
@@ -23,19 +22,19 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
 import main.java.schema.GameBlueprint;
-import main.java.schema.MonsterSchema;
 import main.java.schema.SimpleMonsterSchema;
 import main.java.schema.SimpleTowerSchema;
-import main.java.schema.TowerSchema;
+import main.java.schema.TDObjectSchema;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
 
-	private static final double Default_Money_Multiplier = 0.5;
+    private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
 
     private JGEngine engine;
     private TDObjectFactory factory;
-//    private MonsterFactory monsterFactory;
     private Player player;
     private double gameClock;
     private Tower[][] towers;
@@ -49,7 +48,6 @@ public class Model {
     private GameState gameState;
 
     public Model(JGEngine engine) {
-//        this.monsterFactory = new MonsterFactory(engine);
         this.engine = engine;
         this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
@@ -92,8 +90,7 @@ public class Model {
         		towers[currentTile[0]][currentTile[1]]  = newTower;
         		return true;
         	} else {
-        		newTower.setImage(null);
-        		newTower.remove();
+        		destroyTower(newTower);
         		return false;
         	}
         	
@@ -104,6 +101,15 @@ public class Model {
 		return false;
         
     }
+
+	/**
+	 * Force destroy a tower
+	 * @param newTower
+	 */
+	private void destroyTower(Tower tower) {
+		tower.setImage(null);
+		tower.remove();
+	}
 
     /**
      * Return a two element int array with the tile coordinates that a given point is on, for use with Tower[][]
@@ -146,12 +152,13 @@ public class Model {
     	if (isTowerPresent(coordinates)){
     		int xtile = coordinates[0];
     		int ytile = coordinates[1];
-    		player.addMoney(Default_Money_Multiplier * towers[xtile][ytile].getCost());
+    		player.addMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
     		towers[xtile][ytile].remove();
     		towers[xtile][ytile] = null;
     	}
     }
     
+    /**
     /**
      * Loads a map/terrain into the engine.
      *
@@ -175,15 +182,7 @@ public class Model {
      */
     public void loadSchemas(String fileName) {
     	
-    	//load wavespawnschemas
-    	MonsterSpawnSchema mschema = new MonsterSpawnSchema(factory, "SimpleMonster", 1, entrance, exit);
-    	WaveSpawnSchema wschema = new WaveSpawnSchema();
-    	wschema.addMonsterSchema(mschema);
-    	addWaveToGame(wschema);
-    	//
-    	
         SimpleTowerSchema t1 = new SimpleTowerSchema();
-        t1.setMyConcreteType("SimpleTower");
         t1.setMyName("test tower 1");
         t1.setMyDamage(10);
         t1.setMyRange(200);
@@ -191,7 +190,6 @@ public class Model {
         t1.setMyImage("SimpleTower");
 
         SimpleTowerSchema t2 = new SimpleTowerSchema();
-        t1.setMyConcreteType("SimpleTower");
         t2.setMyName("test tower 2");
         t2.setMyDamage(20);
         t2.setMyRange(400);
@@ -199,33 +197,49 @@ public class Model {
         t2.setMyImage("SimpleTower");
 
         SimpleMonsterSchema m1 = new SimpleMonsterSchema();
-        m1.setMyConcreteType("SimpleMonster");
         m1.setMyName("test monster 1");
         m1.setHealth(100);
         m1.setMyMoveSpeed(10);
         m1.setMyRewardAmount(10);
         m1.setMyImage("monster");
         
+        //load wavespawnschemas for testing ...
+        addWaveToGame(createTestWave(m1, 1));
+        addWaveToGame(createTestWave(m1, 2));
+        addWaveToGame(createTestWave(m1, 3));
+        //
+        
         GameBlueprint gb = new GameBlueprint();
-        List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
-        towerSchemas.add(t1);
-        towerSchemas.add(t2);
-        gb.setMyTowerSchemas(towerSchemas);
-        List<MonsterSchema> monsterSchemas = new ArrayList<MonsterSchema>();
-        monsterSchemas.add(m1);
-        gb.setMyEnemySchemas(monsterSchemas);
+        List<TDObjectSchema> tdObjectSchemas = new ArrayList<TDObjectSchema>();
+        tdObjectSchemas.add(t1);
+        tdObjectSchemas.add(t2);
+        tdObjectSchemas.add(m1);
+        gb.setMyTDObjectSchemas(tdObjectSchemas);
         DataBundle b = new DataBundle();
         b.setBlueprint(gb);
 
         try {
             DataBundle data = b;
             GameBlueprint blueprint = b.getBlueprint();
-            List<TowerSchema> towerSchemasFromBluePrint = blueprint.getMyTowerSchemas();
-            List<MonsterSchema> monsterSchemasFromBluePrint = blueprint.getMyEnemySchemas();
-            factory.loadSchemas(towerSchemasFromBluePrint, monsterSchemasFromBluePrint);
+            List<TDObjectSchema> schemas = blueprint.getMyTDObjectSchemas();
+            factory.loadSchemas(schemas);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    
+    /**
+     * Creates a wave of simple monsters for sans-factory testing ...
+     * @param m1
+     * @param swarmSize
+     * @return
+     */
+    private WaveSpawnSchema createTestWave (SimpleMonsterSchema m1, int swarmSize) {
+        MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", m1, swarmSize);
+        WaveSpawnSchema wschema = new WaveSpawnSchema();
+        wschema.addMonsterSchema(mschema);
+        return wschema;
     }
     
     /**
@@ -326,21 +340,37 @@ public class Model {
     	return false;
     }
     
-
-    private void spawnNextWave() throws MonsterCreationFailureException {
-    	monsters.addAll(allWaves.get(currentWave).spawn());
-    	//currentWave++;
-    	//TODO: check if gameWon() ?
-    }
     
     /**
-     *  Spawns a new wave at determined intervals
+     * Spawns the next wave in the list of all waves.
+     * Currently rotates through all waves indefinitely.
+     * @throws MonsterCreationFailureException
+     */
+    private void spawnNextWave () throws MonsterCreationFailureException {
+        for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
+            for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
+                Monster newlyAdded = factory.placeMonster(entrance, exit, spawnSchema.getMonsterSchema().getMyName());
+                monsters.add(newlyAdded);
+            }
+            if(++currentWave >= allWaves.size()) {
+                currentWave = 0;
+            }
+        }
+        
+        // TODO: check if gameWon() ?
+    }
+
+    /**
+     *  Spawns a new wave 
      * @throws MonsterCreationFailureException 
      */
     private void doSpawnActivity() throws MonsterCreationFailureException {
     	
-        if (gameClock % 100 == 0)
-        	spawnNextWave();
+     //at determined intervals:
+     //   if (gameClock % 100 == 0)
+     //or if previous wave defeated:
+        if(monsters.isEmpty())
+            spawnNextWave();
         
     }
     
@@ -381,7 +411,7 @@ public class Model {
 	 * Call this to make each of the Towers execute firing logic
 	 */
     private void doTowerFiring () {
-        if (!monsters.isEmpty()) {
+        
             for (Tower[] towerRow : towers) {
                 for (Tower t : towerRow) {
                     if (t != null) {
@@ -391,7 +421,7 @@ public class Model {
                     }
                 }
 			}
-		}
+		
 
 	}
 
@@ -430,16 +460,6 @@ public class Model {
     public void addWaveToGame(WaveSpawnSchema waveSchema) {
     	allWaves.add(waveSchema);
     }
-    
-//    /**
-//     * Test method
-//     */
-//    public void setTemporaryWaveSchema() {
-//    	MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", 2, entrance, exit);
-//    	WaveSpawnSchema wschema = new WaveSpawnSchema();
-//    	wschema.addMonsterSchema(mschema);
-//    	addWaveToGame(wschema);
-//    }
     
 	/**
 	 * Check all collisions specified by the CollisionManager

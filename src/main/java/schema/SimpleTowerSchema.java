@@ -1,9 +1,8 @@
 package main.java.schema;
 
+import main.java.engine.objects.tower.SimpleTower;
+
 import java.awt.Dimension;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -14,9 +13,10 @@ import java.util.List;
  * instance of a Tower. Please refer to the Game Engine's TDObjects for the
  * objects related to ones you will see onscreen.
  */
-public class SimpleTowerSchema extends TowerSchema{
+public class SimpleTowerSchema extends TowerSchema {
+    private static final Class<SimpleTower> MY_CONCRETE_TYPE = SimpleTower.class;
 
-	private String myImage;
+    private String myImage;
 	private double myAttackRate;
 	private double myAttackVelocity;
 	private double myDamage;
@@ -25,8 +25,12 @@ public class SimpleTowerSchema extends TowerSchema{
 	private Dimension myBoxSize;
 	private int myAttackType; // used to determine amplification of damage
 	private double myCost;
-	
-	public double getMyAttackRate() {
+
+    public SimpleTowerSchema() {
+        super(MY_CONCRETE_TYPE);
+    }
+
+    public double getMyAttackRate() {
 		return myAttackRate;
 	}
 
