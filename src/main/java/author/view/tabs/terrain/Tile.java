@@ -16,7 +16,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class Tile extends JPanel {
+public class Tile {
 	
 	private int myRow;    // 0 - NUM_ROWS
 	private int myColumn; // 0 - NUM_COLS

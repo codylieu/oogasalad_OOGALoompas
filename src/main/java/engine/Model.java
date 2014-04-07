@@ -17,8 +17,6 @@ import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
-import main.java.engine.spawnschema.MonsterSpawnSchema;
-import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
@@ -204,7 +202,7 @@ public class Model {
 
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
         testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
-        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, "200");
+        testMonsterSchema.addAttribute(Monster.REWARD, "200");
         tdObjectSchemas.add(testMonsterSchema);
 
         factory.loadSchemas(tdObjectSchemas);
