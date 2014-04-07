@@ -40,22 +40,22 @@ public class WaveSpawnSchema {
      * 
      * @return unmodifiable collection of MonsterSpawnSchema
      */
-    public Collection<MonsterSpawnSchema> getMonsterSpawnSchema () {
+    public Collection<MonsterSpawnSchema> getMonsterSpawnSchemas () {
         return Collections.unmodifiableCollection(myMonsterSchemas);
     }
     
-    
-	/**
-	 * Create the wave of monsters specified by spawning all contained monster
-	 * spawn schemas.
-	 * @throws MonsterCreationFailureException 
-	 * 
-	 */
-	public Collection<Monster> spawn() throws MonsterCreationFailureException {
-		Collection<Monster> allNewlyAdded = new ArrayList<Monster>();
-		for (MonsterSpawnSchema monsterSchema : myMonsterSchemas) {
-			allNewlyAdded.addAll(monsterSchema.spawn());
-		}
-		return allNewlyAdded;
-	}
+ //TODO DELETE
+//	/**
+//	 * Create the wave of monsters specified by spawning all contained monster
+//	 * spawn schemas.
+//	 * @throws MonsterCreationFailureException 
+//	 * 
+//	 */
+//	public Collection<Monster> spawn() throws MonsterCreationFailureException {
+//		Collection<Monster> allNewlyAdded = new ArrayList<Monster>();
+//		for (MonsterSpawnSchema monsterSchema : myMonsterSchemas) {
+//			allNewlyAdded.addAll(monsterSchema.spawn());
+//		}
+//		return allNewlyAdded;
+//	}
 }

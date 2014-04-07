@@ -1,7 +1,19 @@
 package main.java.schema;
 
+import main.java.engine.objects.tower.Tower;
+
 public abstract class TowerSchema extends TDObjectSchema {
-    protected TowerSchema(Class myConcreteType) {
+	
+    protected TowerSchema(Class<? extends Tower> myConcreteType) {
         super(myConcreteType);
+		myAttributeSet.add(Tower.BUILDUP);
+		myAttributeSet.add(Tower.COST);
+		myAttributeSet.add(Tower.DAMAGE);
+		myAttributeSet.add(Tower.IMAGE);
+		myAttributeSet.add(Tower.HEALTH);
+		myAttributeSet.add(Tower.RANGE);
+//		myAttributeSet.add(Tower.X);
+//		myAttributeSet.add(Tower.Y);
+		myAttributeSet.add(Tower.NAME);
     }
 }

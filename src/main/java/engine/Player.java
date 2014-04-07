@@ -19,6 +19,18 @@ public class Player {
 		this.skills = new HashMap<String, Integer>();
 	}
 	
+	/**
+	 * Constructor to be used in the loadGameSchemas method in Model
+	 * @param money
+	 * @param life
+	 */
+	public Player(String m, String l)	{
+		this.money = Integer.parseInt(m);
+		this.life = Integer.parseInt(l);
+		this.score = 0;
+		this.skills = new HashMap<String, Integer>();
+	}
+	
 	public void updateMoney(double money) {
 		this.money += money;
 	}

@@ -3,6 +3,8 @@ package main.java.schema;
 import main.java.engine.objects.monster.SimpleMonster;
 
 import java.awt.Dimension;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 
@@ -13,84 +15,21 @@ import java.awt.Dimension;
  * objects related to ones you will see onscreen.
  */
 public class SimpleMonsterSchema extends MonsterSchema{
-    public static final Class<SimpleMonster> MY_CONCRETE_TYPE = SimpleMonster.class;
+	public static final Class<SimpleMonster> MY_CONCRETE_TYPE = SimpleMonster.class;
 
-    /*TODO: Move information related to all monsters to MonsterSchema
-             */
-	private String myName;
-	private String myImage;
-	private boolean isFlyingType;
-	private double myMoveSpeed;
-	private String myExplosionImage;
-	private Dimension myTileSize;
-	private double myRewardAmount;
-	private double myHealth;
-
-    public SimpleMonsterSchema() {
-        super(MY_CONCRETE_TYPE);
-    }
-
-    public void setHealth(double myHealth) {
-		this.myHealth = myHealth;
-	}
-	
-	public double getMyHealth() {
-		return myHealth;
-	}
-	
-	public String getMyName() {
-		return myName;
+	public SimpleMonsterSchema() {
+		super(MY_CONCRETE_TYPE);
 	}
 
-	public void setMyName(String myName) {
-		this.myName = myName;
+	@Override
+	protected Set<String> populateAdditionalAttributes() {
+		//empty set, no new attributes
+		return new HashSet<String>();
 	}
 
-	public String getMyImage() {
-		return myImage;
+	@Override
+	public String defineName() {
+		return "SimpleMonster";
 	}
 
-	public void setMyImage(String myImage) {
-		this.myImage = myImage;
-	}
-
-	public boolean isFlyingType() {
-		return isFlyingType;
-	}
-
-	public void setFlyingType(boolean isFlyingType) {
-		this.isFlyingType = isFlyingType;
-	}
-
-	public double getMyMoveSpeed() {
-		return myMoveSpeed;
-	}
-
-	public void setMyMoveSpeed(double myMoveSpeed) {
-		this.myMoveSpeed = myMoveSpeed;
-	}
-
-	public Dimension getMyTileSize() {
-		return myTileSize;
-	}
-
-	public void setMyTileSize(Dimension myTileSize) {
-		this.myTileSize = myTileSize;
-	}
-
-	public double getMyRewardAmount() {
-		return myRewardAmount;
-	}
-
-	public void setMyRewardAmount(double myRewardAmount) {
-		this.myRewardAmount = myRewardAmount;
-	}
-
-	public String getMyExplosionImage() {
-		return myExplosionImage;
-	}
-
-	public void setMyExplosionImage(String myExplosionImage) {
-		this.myExplosionImage = myExplosionImage;
-	}
 }
