@@ -1,6 +1,5 @@
 package main.java.author.controller;
 
-import java.util.List;
 import java.util.Map;
 
 public class MainController {
@@ -9,6 +8,10 @@ public class MainController {
 
 	public TabController getTabController(String tabName) {
 		return myTabControllers.get(tabName);
+	}
+	
+	public TabController putTabController(String key, TabController tabController) {
+		return myTabControllers.put(key, tabController);
 	}
 
 	public void addTowerToModel() {
