@@ -28,7 +28,7 @@ public class TDObjectFactory {
 	public void loadSchemas(List<TDObjectSchema> schemas) {
 		//TODO: Get rid of repetition in loading schemas
 		for (TDObjectSchema s : schemas) {
-            tdObjectSchemaMap.put(s.getMyName(), s);
+            tdObjectSchemaMap.put(s.getAttributesMap().get("name"), s);
         }
 	}
 
@@ -43,8 +43,13 @@ public class TDObjectFactory {
 	public Tower placeTower(Point2D location, String towerName) throws TowerCreationFailureException {
 		Point2D tileOrigin = findTileOrigin(location);
 		try {
-			TowerSchema schema = (TowerSchema) tdObjectSchemaMap.get(towerName);
-			Object[] towerParameters = {tileOrigin, schema};
+			TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
+
+            Map<String, String> attributes = schema.getAttributesMap();
+            attributes.put(Tower.X, tileOrigin.getX() + "");
+            attributes.put(Tower.Y, tileOrigin.getY() + "");
+
+			Object[] towerParameters = {attributes};
         	return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
 		} catch (Exception e) {
 			throw new TowerCreationFailureException();
@@ -52,17 +57,18 @@ public class TDObjectFactory {
 	}
 	
 	public Monster placeMonster(Point2D entrance, Point2D exit, String userMonsterName) throws MonsterCreationFailureException {
-		System.out.println(tdObjectSchemaMap.keySet().toString());
-		MonsterSchema schema = (MonsterSchema) tdObjectSchemaMap.get(userMonsterName);
-		Object[] monsterParameters = {entrance, exit, schema};
-    	return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
-		/*try {
-			MonsterSchema schema = monsterSchemas.get(userMonsterName);
-			Object[] monsterParameters = {entrance, exit, schema};
-        	return (Monster) placeObject("main.java.engine.objects.monster.",schema.getMyConcreteType(), monsterParameters);
+		try {
+            TDObjectSchema schema = tdObjectSchemaMap.get(userMonsterName);
+
+            Map<String, String> attributes = schema.getAttributesMap();
+            attributes.put(Tower.X, entrance.getX() + "");
+            attributes.put(Tower.Y, entrance.getY() + "");
+
+            Object[] monsterParameters = {entrance, exit, schema};
+            return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
 		} catch (Exception e) {
 			throw new MonsterCreationFailureException();
-		}*/
+		}
 	}
 
 	private Object placeObject(Class objectType, Object[] parameters) {
