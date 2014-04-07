@@ -9,6 +9,16 @@ import main.java.engine.objects.TDObject;
  * 
  */
 public abstract class Tower extends TDObject {
+	
+    public static final String X = "x";
+    public static final String Y = "y";
+    public static final String HEALTH = "health";
+    public static final String DAMAGE = "damage";
+    public static final String RANGE = "range";
+    public static final String COST = "cost";
+    public static final String BUILDUP = "buildup";
+    public static final String IMAGE ="image";
+    
 
 	public static final int TOWER_CID = 0;
 	

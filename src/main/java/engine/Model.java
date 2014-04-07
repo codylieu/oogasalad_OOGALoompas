@@ -174,51 +174,51 @@ public class Model {
      * @param fileName Name of the json file containing the schemas
      */
     public void loadSchemas(String fileName) {
-    	
-        SimpleTowerSchema t1 = new SimpleTowerSchema();
-        t1.setMyName("test tower 1");
-        t1.setMyDamage(10);
-        t1.setMyRange(200);
-        t1.setMyCost(SimpleTower.DEFAULT_COST);
-        t1.setMyImage("SimpleTower");
-
-        SimpleTowerSchema t2 = new SimpleTowerSchema();
-        t2.setMyName("test tower 2");
-        t2.setMyDamage(20);
-        t2.setMyRange(200);
-        t2.setMyCost(SimpleTower.DEFAULT_COST);
-        t2.setMyImage("SimpleTower");
-
-        SimpleMonsterSchema m1 = new SimpleMonsterSchema();
-        m1.setMyName("test monster 1");
-        m1.setHealth(100);
-        m1.setMyMoveSpeed(10);
-        m1.setMyRewardAmount(10);
-        m1.setMyImage("monster");
-        
-        //load wavespawnschemas for testing ...
-        addWaveToGame(createTestWave(m1, 1));
-        addWaveToGame(createTestWave(m1, 2));
-        addWaveToGame(createTestWave(m1, 3));
-        //
-        
-        GameBlueprint gb = new GameBlueprint();
-        List<TDObjectSchema> tdObjectSchemas = new ArrayList<TDObjectSchema>();
-        tdObjectSchemas.add(t1);
-        tdObjectSchemas.add(t2);
-        tdObjectSchemas.add(m1);
-        gb.setMyTDObjectSchemas(tdObjectSchemas);
-        DataBundle b = new DataBundle();
-        b.setBlueprint(gb);
-
-        try {
-            DataBundle data = b;
-            GameBlueprint blueprint = b.getBlueprint();
-            List<TDObjectSchema> schemas = blueprint.getMyTDObjectSchemas();
-            factory.loadSchemas(schemas);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//    	
+//        SimpleTowerSchema t1 = new SimpleTowerSchema();
+//        t1.setMyName("test tower 1");
+//        t1.setMyDamage(10);
+//        t1.setMyRange(200);
+//        t1.setMyCost(SimpleTower.DEFAULT_COST);
+//        t1.setMyImage("SimpleTower");
+//
+//        SimpleTowerSchema t2 = new SimpleTowerSchema();
+//        t2.setMyName("test tower 2");
+//        t2.setMyDamage(20);
+//        t2.setMyRange(200);
+//        t2.setMyCost(SimpleTower.DEFAULT_COST);
+//        t2.setMyImage("SimpleTower");
+//
+//        SimpleMonsterSchema m1 = new SimpleMonsterSchema();
+//        m1.setMyName("test monster 1");
+//        m1.setHealth(100);
+//        m1.setMyMoveSpeed(10);
+//        m1.setMyRewardAmount(10);
+//        m1.setMyImage("monster");
+//        
+//        //load wavespawnschemas for testing ...
+//        addWaveToGame(createTestWave(m1, 1));
+//        addWaveToGame(createTestWave(m1, 2));
+//        addWaveToGame(createTestWave(m1, 3));
+//        //
+//        
+//        GameBlueprint gb = new GameBlueprint();
+//        List<TDObjectSchema> tdObjectSchemas = new ArrayList<TDObjectSchema>();
+//        tdObjectSchemas.add(t1);
+//        tdObjectSchemas.add(t2);
+//        tdObjectSchemas.add(m1);
+//        gb.setMyTDObjectSchemas(tdObjectSchemas);
+//        DataBundle b = new DataBundle();
+//        b.setBlueprint(gb);
+//
+//        try {
+//            DataBundle data = b;
+//            GameBlueprint blueprint = b.getBlueprint();
+//            List<TDObjectSchema> schemas = blueprint.getMyTDObjectSchemas();
+//            factory.loadSchemas(schemas);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     
@@ -342,7 +342,7 @@ public class Model {
     private void spawnNextWave () throws MonsterCreationFailureException {
         for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
             for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Monster newlyAdded = factory.placeMonster(entrance, exit, spawnSchema.getMonsterSchema().getMyName());
+                Monster newlyAdded = factory.placeMonster(entrance, exit, spawnSchema.getMonsterSchema().getName());
                 monsters.add(newlyAdded);
             }
             if(++currentWave >= allWaves.size()) {
