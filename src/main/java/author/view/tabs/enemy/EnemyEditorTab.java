@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -108,7 +109,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
-		updateDataForNewSelection();
+		updateFieldDataUponNewSelection();
 		System.out.println("list value changed");
 
 	}
@@ -122,7 +123,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					System.out.println("change");
-					updateFieldDataForCurrentSchema();
+					updateSchemaDataFromView();
 				}
 			});
 		}
@@ -150,6 +151,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 				String enemyName = createEnemyField.getText();
 				if (EnemyUtilFunctions.newEnemyNameIsValid(enemyName, enemyMap)) {
 					addEnemyNameToList(enemyName);
+					createEnemyField.setText("");
 				}
 			}
 		});
@@ -204,8 +206,6 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private void addEnemyNameToList(String enemyName) {
 		listModel.addElement(enemyName);
-
-		// list.setSelectedIndex(listModel.getSize() - 1);
 		list.setSelectedValue(enemyName, true);
 
 	}
@@ -227,34 +227,53 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	}
 
 	// puts the selected schema data into the fields
-	private void updateDataForNewSelection() {
+	private void updateFieldDataUponNewSelection() {
 		String name = list.getSelectedValue();
 		SimpleMonsterSchema myCurrentEnemy;
 		if (enemyMap.get(name) == null) {
-			myCurrentEnemy = new SimpleMonsterSchema();
+			myCurrentEnemy = new SimpleMonsterSchema(name);
 			enemyMap.put(name, myCurrentEnemy);
-			// populate fields
-			healthField.setValue(20);
-			updateFieldDataForCurrentSchema();
+
 		} else {
 			myCurrentEnemy = enemyMap.get(name);
 			myCurrentEnemy.getAttributesMap().get(Monster.HEALTH);
-			String health = myCurrentEnemy.getAttributesMap().get(
-					Monster.HEALTH);
-			System.out.println(myCurrentEnemy.getAttributesMap().keySet());
-			int enemyHealth = Integer.parseInt(health);
-			healthField.setValue(enemyHealth);
+
 		}
+
+		updateViewWithSchemaData(myCurrentEnemy.getAttributesMap());
+	}
+
+	/**
+	 * 
+	 * puts the schema data into the view field
+	 * 
+	 * @param map
+	 *            the monster's schema attributes
+	 * 
+	 */
+	private void updateViewWithSchemaData(Map<String, String> map) {
+		healthField.setValue(Integer.parseInt(map.get(Monster.HEALTH)));
+		speedField.setValue(Integer.parseInt(map.get(Monster.SPEED)));
+		damageField.setValue(Integer.parseInt(map.get(Monster.DAMAGE))); // damage isnt implemented
+		rewardField.setValue(Integer.parseInt(map.get(Monster.REWARD)));
 
 	}
 
-	// puts the field data into the schema data
-	private void updateFieldDataForCurrentSchema() {
+	/**
+	 * puts the view fields' data into the schema data
+	 */
+	private void updateSchemaDataFromView() {
 		// update schema with data
 		String name = list.getSelectedValue();
 		SimpleMonsterSchema myCurrentEnemy = enemyMap.get(name);
 		Integer health = (Integer) healthField.getValue();
 		myCurrentEnemy.addAttribute(Monster.HEALTH, health.toString());
+		Integer speed = (Integer) speedField.getValue();
+		myCurrentEnemy.addAttribute(Monster.SPEED, speed.toString());
+		Integer damage = (Integer) damageField.getValue();
+		myCurrentEnemy.addAttribute(Monster.DAMAGE, damage.toString());
+		Integer reward = (Integer) rewardField.getValue();
+		myCurrentEnemy.addAttribute(Monster.REWARD, reward.toString());
 	}
 
 	private class EnemyTabViewBuilder {

@@ -199,7 +199,7 @@ public class Model {
 
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
         testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
-        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, "200");
+        testMonsterSchema.addAttribute(Monster.REWARD, "200");
         tdObjectSchemas.add(testMonsterSchema);
 
         factory.loadSchemas(tdObjectSchemas);

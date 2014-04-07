@@ -86,6 +86,8 @@ public class TerrainEditorTab extends EditorTab{
 		JFrame selectionFrame = new JFrame();
 		selectionFrame.add(myTileSelectionManager, BorderLayout.CENTER);
 		selectionFrame.setLocation(this.getWidth() + 25, 0);
+		selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		selectionFrame.setVisible(false);
 		selectionFrame.pack();
 		selectionFrame.setVisible(true);
 	}
