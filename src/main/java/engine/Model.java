@@ -205,29 +205,12 @@ public class Model {
         tdObjectSchemas.add(testMonsterSchema);
 
         factory.loadSchemas(tdObjectSchemas);
-        
-        WaveSpawnSchema testWaveSchema = new WaveSpawnSchema();
-        MonsterSpawnSchema testMonsterSpawnSchema1 = new MonsterSpawnSchema("", testMonsterSchema, 1);
-        MonsterSpawnSchema testMonsterSpawnSchema2 = new MonsterSpawnSchema("", testMonsterSchema, 2);
-        MonsterSpawnSchema testMonsterSpawnSchema3 = new MonsterSpawnSchema("", testMonsterSchema, 3);
-        testWaveSchema.addMonsterSchema(testMonsterSpawnSchema1);
-        testWaveSchema.addMonsterSchema(testMonsterSpawnSchema2);
-        testWaveSchema.addMonsterSchema(testMonsterSpawnSchema3);
 
-        allWaves.add(testWaveSchema);
+        allWaves.add(createTestWave(testMonsterSchema, 1));
+        allWaves.add(createTestWave(testMonsterSchema, 2));
+        allWaves.add(createTestWave(testMonsterSchema, 3));
     }
     
-    /**
-     * Loads game schemas from the GameBlueprint obtained from the filePath
-     * @param fileName
-     * @throws IOException 
-     * @throws ClassNotFoundException 
-     */
-    public void loadGameSchemas(String fileName) throws ClassNotFoundException, IOException	{
-    	GameBlueprint bp = engineDataHandler.loadBlueprint(RESOURCE_PATH + fileName);
-    	Map<String, String> gameAttributes = bp.getMyGameScenario().getAttributesMap();
-    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
-    }
     
     /**
      * Creates a wave of simple monsters for sans-factory testing ...
@@ -241,6 +224,20 @@ public class Model {
         wschema.addMonsterSchema(mschema);
         return wschema;
     }
+    
+    
+    /**
+     * Loads game schemas from the GameBlueprint obtained from the filePath
+     * @param fileName
+     * @throws IOException 
+     * @throws ClassNotFoundException 
+     */
+    public void loadGameSchemas(String fileName) throws ClassNotFoundException, IOException	{
+    	GameBlueprint bp = engineDataHandler.loadBlueprint(RESOURCE_PATH + fileName);
+    	Map<String, String> gameAttributes = bp.getMyGameScenario().getAttributesMap();
+    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
+    }
+
     
     /**
      * Reset the game clock
