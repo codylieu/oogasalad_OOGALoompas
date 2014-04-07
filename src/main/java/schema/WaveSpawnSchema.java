@@ -1,4 +1,4 @@
-package main.java.engine.spawnschema;
+package main.java.schema;
 
 import java.util.ArrayList;
 import java.util.Collection;
