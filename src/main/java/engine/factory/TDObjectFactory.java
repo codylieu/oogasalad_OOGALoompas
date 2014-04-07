@@ -45,8 +45,8 @@ public class TDObjectFactory {
 			TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
 
             Map<String, String> attributes = schema.getAttributesMap();
-            attributes.put(Tower.X, tileOrigin.getX() + "");
-            attributes.put(Tower.Y, tileOrigin.getY() + "");
+            attributes.put(Tower.X, String.valueOf(tileOrigin.getX()));
+            attributes.put(Tower.Y, String.valueOf(tileOrigin.getY()));
 
 			Object[] towerParameters = {attributes};
         	return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
@@ -60,10 +60,10 @@ public class TDObjectFactory {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
 
             Map<String, String> attributes = schema.getAttributesMap();
-            attributes.put(Monster.ENTRANCE_X, entrance.getX() + "");
-            attributes.put(Monster.ENTRANCE_Y, entrance.getY() + "");
-            attributes.put(Monster.EXIT_X, exit.getX() + "");
-            attributes.put(Monster.EXIT_Y, exit.getY() + "");
+            attributes.put(Monster.ENTRANCE_X, String.valueOf(entrance.getX()));
+            attributes.put(Monster.ENTRANCE_Y, String.valueOf(entrance.getY()));
+            attributes.put(Monster.EXIT_X, String.valueOf(exit.getX()));
+            attributes.put(Monster.EXIT_Y, String.valueOf(exit.getY()));
 
             Object[] monsterParameters = {attributes};
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);

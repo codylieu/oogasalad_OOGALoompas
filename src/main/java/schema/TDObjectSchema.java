@@ -24,7 +24,7 @@ public abstract class TDObjectSchema extends AbstractSchema{
 	@Override
 	public void addAttribute(String attributeName, Object attributeValue) {
 		myAttributesMap.put(attributeName, attributeValue.toString());
-		myAttributesMap.put(TDObject.NAME, defineName());
+//		myAttributesMap.put(TDObject.NAME, defineName()); i don't think i need this -- jordan
 	}
 	
 	/**

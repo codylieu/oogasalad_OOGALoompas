@@ -23,9 +23,7 @@ import main.java.exceptions.engine.TowerCreationFailureException;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import main.java.schema.GameBlueprint;
-import main.java.schema.GameSchema;
-import main.java.schema.SimpleMonsterSchema;
+import main.java.schema.*;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
@@ -61,6 +59,7 @@ public class Model {
         gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
         setExit(engine.pfWidth(), engine.pfHeight()/2);
+        loadGameBlueprint(null); // TODO: REPLACE
     }
     
     /**
@@ -83,7 +82,7 @@ public class Model {
     		// if tower already exists in the tile clicked, do nothing
     		if(isTowerPresent(currentTile)) return false;
     		
-        	Tower newTower = factory.placeTower(location, "test tower 1");
+        	Tower newTower = factory.placeTower(location, "test-tower-1");
         	
         	if(player.getMoney() >= newTower.getCost() ) {
         	        //FIXME: Decrease money?
@@ -181,12 +180,40 @@ public class Model {
      *
      * @param bp
      */
-//    public void loadGameBlueprint(GameBlueprint bp) {
+    public void loadGameBlueprint(GameBlueprint bp) {
 //    	Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
 //    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
-//
-//
-//    }
+
+//      GameSchema testGameSchema = new GameSchema();
+//      Map<String, String> gameSchemaMap = testGameSchema.getAttributesMap();
+//      player = new Player(gameSchemaMap.get(GameSchema.GOLD), gameSchemaMap.get(GameSchema.LIVES));
+        player = new Player();
+
+        List<TDObjectSchema> tdObjectSchemas = new ArrayList<>();
+
+        SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
+        testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
+        testTowerSchema.addAttribute(Tower.COST, "10");
+        testTowerSchema.addAttribute(Tower.IMAGE, "SimpleTower");
+        tdObjectSchemas.add(testTowerSchema);
+
+        SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
+        testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
+        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, "200");
+        tdObjectSchemas.add(testMonsterSchema);
+
+        factory.loadSchemas(tdObjectSchemas);
+        
+        WaveSpawnSchema testWaveSchema = new WaveSpawnSchema();
+        MonsterSpawnSchema testMonsterSpawnSchema1 = new MonsterSpawnSchema("", testMonsterSchema, 1);
+        MonsterSpawnSchema testMonsterSpawnSchema2 = new MonsterSpawnSchema("", testMonsterSchema, 2);
+        MonsterSpawnSchema testMonsterSpawnSchema3 = new MonsterSpawnSchema("", testMonsterSchema, 3);
+        testWaveSchema.addMonsterSchema(testMonsterSpawnSchema1);
+        testWaveSchema.addMonsterSchema(testMonsterSpawnSchema2);
+        testWaveSchema.addMonsterSchema(testMonsterSpawnSchema3);
+
+        allWaves.add(testWaveSchema);
+    }
     
     /**
      * Creates a wave of simple monsters for sans-factory testing ...

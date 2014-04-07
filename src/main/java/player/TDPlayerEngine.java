@@ -26,7 +26,7 @@ public class TDPlayerEngine extends JGEngine {
         model.addNewPlayer();
         model.loadMap("testmap.json");
         defineMedia("/main/resources/media.tbl");
-        model.loadSchemas("testtowers");
+//        model.loadSchemas("testtowers");
 	}
 	
     @Override

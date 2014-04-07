@@ -39,7 +39,8 @@ public abstract class AbstractSchema {
 	 * @return unmodifiable map
 	 */
 	public Map<String, String> getAttributesMap() {
-		return Collections.unmodifiableMap(myAttributesMap);
+//		return Collections.unmodifiableMap(myAttributesMap); TODO: need to add x and y when placing towers, how to fix?
+        return new HashMap<>(myAttributesMap);
 	}
 	
 	
