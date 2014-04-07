@@ -21,9 +21,11 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
+import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.SimpleMonsterSchema;
 import main.java.schema.SimpleTowerSchema;
 import main.java.schema.TDObjectSchema;
+import main.java.schema.WaveSpawnSchema;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;

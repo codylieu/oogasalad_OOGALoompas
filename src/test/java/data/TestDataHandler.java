@@ -6,14 +6,10 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 
 import main.java.data.datahandler.DataHandler;
 import main.java.engine.GameState;
-import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 
