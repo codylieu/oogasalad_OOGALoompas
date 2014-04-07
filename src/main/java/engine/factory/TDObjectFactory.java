@@ -10,9 +10,7 @@ import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.schema.MonsterSchema;
 import main.java.schema.TDObjectSchema;
-import main.java.schema.TowerSchema;
 import jgame.impl.JGEngineInterface;
 import main.java.util.Reflection;
 
@@ -57,15 +55,17 @@ public class TDObjectFactory {
 		}
 	}
 	
-	public Monster placeMonster(Point2D entrance, Point2D exit, String userMonsterName) throws MonsterCreationFailureException {
+	public Monster placeMonster(Point2D entrance, Point2D exit, String monsterName) throws MonsterCreationFailureException {
 		try {
-            TDObjectSchema schema = tdObjectSchemaMap.get(userMonsterName);
+            TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
 
             Map<String, String> attributes = schema.getAttributesMap();
-            attributes.put(Tower.X, entrance.getX() + "");
-            attributes.put(Tower.Y, entrance.getY() + "");
+            attributes.put(Monster.ENTRANCE_X, entrance.getX() + "");
+            attributes.put(Monster.ENTRANCE_Y, entrance.getY() + "");
+            attributes.put(Monster.EXIT_X, exit.getX() + "");
+            attributes.put(Monster.EXIT_Y, exit.getY() + "");
 
-            Object[] monsterParameters = {entrance, exit, schema};
+            Object[] monsterParameters = {attributes};
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
 		} catch (Exception e) {
 			throw new MonsterCreationFailureException();
