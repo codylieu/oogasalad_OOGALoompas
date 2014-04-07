@@ -108,6 +108,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 			if (getMouseButton(1)) {
 				model.placeTower(getMouseX(), getMouseY());
 				setCursorState(CursorState.None);
+				removeObjects("TowerGhost", 0);
 				clearMouseButton(1);
 			}
 			else
