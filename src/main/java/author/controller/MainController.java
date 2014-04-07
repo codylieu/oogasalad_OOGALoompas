@@ -1,21 +1,33 @@
 package main.java.author.controller;
 
+import java.util.Map;
+
 public class MainController {
 
-	public void addTower() {
-		
+	private Map<String, TabController> myTabControllers;
+
+	public TabController getTabController(String tabName) {
+		return myTabControllers.get(tabName);
 	}
 	
-	public void addEnemy() {
-		
+	public TabController putTabController(String key, TabController tabController) {
+		return myTabControllers.put(key, tabController);
 	}
-	
-	public void addGameSettings() {
-		
+
+	public void addTowerToModel() {
+
 	}
-	
-	public void addTerrainSettings() {
-		
+
+	public void addEnemyToModel() {
+
 	}
-	
+
+	public void addGameSettingsToModel() {
+
+	}
+
+	public void addTerrainSettingsToModel() {
+
+	}
+
 }
