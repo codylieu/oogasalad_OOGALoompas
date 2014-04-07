@@ -46,8 +46,8 @@ public class TileEditingPanel extends JPanel {
 	
 	@Override 
 	public void paintComponent(Graphics g) {
-		TileObject selectedTile = getCanvas().getSelectedTileObj();
-		int pixelSize = getPixelSize();
+		TileObject selectedTile = myTileManager.getCanvas().getSelectedTileObj();
+		int pixelSize = myTileManager.getTileDisplay().getPixelSize();
 		Image img = (selectedTile == null) ? null : selectedTile.getOriginalImage();
 		
 		if (img != null) {
@@ -78,18 +78,6 @@ public class TileEditingPanel extends JPanel {
 		myImgAngle += 90;
 		repaint();
 	} 
-	
-	public TileSelectionManager getTileSelectionManager() {
-		return ((TileSelectionManager) this.getParent());
-	}
-	
-	public Canvas getCanvas() {
-		return getTileSelectionManager().getCanvas();
-	}
-	
-	public int getPixelSize() {
-		return getTileSelectionManager().getPixelSize();
-	}
 	
 	protected void setImageAngle(int degrees) {
 		myImgAngle = degrees;

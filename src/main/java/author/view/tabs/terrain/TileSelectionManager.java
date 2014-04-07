@@ -54,6 +54,15 @@ public class TileSelectionManager extends JPanel {
 		setVisible(true);
 	}
 	
+	public TileDisplay getTileDisplay() {
+		return myTileDisplay;
+	}
+	
+	public TileEditingPanel getTileEditPanel() {
+		return myTileEditPanel;
+	}
+	
+	
 	private void initResources() {
 		myBitmapBundle = getResourceBundle("main.resources.author.images.", BITMAP_FILE);
 	}
@@ -68,17 +77,6 @@ public class TileSelectionManager extends JPanel {
 	
 	public Canvas getCanvas() {
 		return myCanvas;
-	}
-	
-	public int getPixelSize() {
-		return myTileDisplay.getPixelSize();
-	}
-	
-	public void updateSelection(ActionEvent e) {
-		TileObject selectedTile = (TileObject) e.getSource();
-		getCanvas().setSelectedTileObj(selectedTile);
-		myTileEditPanel.setImageAngle(0);
-		myTileEditPanel.repaint();
 	}
 
 }
