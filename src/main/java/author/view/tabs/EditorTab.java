@@ -7,12 +7,12 @@ import javax.swing.JPanel;
 import main.java.author.controller.MainController;
 import main.java.author.view.tabs.terrain.Canvas;
 
-public abstract class EditorTab extends JPanel{
-	
+public abstract class EditorTab extends JPanel {
+
 	private MainController myController;
-	
-	public EditorTab(MainController controller){
+
+	public EditorTab(MainController controller) {
 		myController = controller;
 	}
-	
+
 }
