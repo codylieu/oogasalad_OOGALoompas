@@ -12,7 +12,7 @@ public class UnitInfoPanel extends JPanel implements Observing {
 	private JTextArea unitInfoArea;
 
 	public UnitInfoPanel() {
-		unitInfoArea = new JTextArea(30, 30);
+		unitInfoArea = new JTextArea(5, 15);
 		unitInfoArea.setEditable(false);
 		add(unitInfoArea);
 	}
