@@ -32,6 +32,7 @@ import javax.swing.event.ListSelectionEvent;
 
 import main.java.author.controller.MainController;
 import main.java.author.util.UtilFunctions;
+import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.Canvas;
 import main.java.schema.SimpleMonsterSchema;
 
