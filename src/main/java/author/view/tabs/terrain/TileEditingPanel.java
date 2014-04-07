@@ -76,7 +76,7 @@ public class TileEditingPanel extends JPanel {
 
 	public void rotateImage(ActionEvent e) {
 		myImgAngle += 90;
-		repaint();
+		update(getGraphics());
 	} 
 	
 	protected void setImageAngle(int degrees) {

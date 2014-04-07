@@ -112,7 +112,7 @@ public class TileDisplay extends JPanel {
 		TileObject selectedTile = (TileObject) e.getSource();
 		myTileManager.getCanvas().setSelectedTileObj(selectedTile);
 		myTileManager.getTileEditPanel().setImageAngle(0);
-		myTileManager.getTileEditPanel().repaint();
+		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
 	}
 	
 	public int getPixelSize() {
