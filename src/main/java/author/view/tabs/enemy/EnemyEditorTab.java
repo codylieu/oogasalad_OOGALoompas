@@ -56,7 +56,6 @@ import main.java.schema.SimpleMonsterSchema;
 //SplitPaneDemo itself is not a visible component.
 public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
-	private SimpleMonsterSchema myCurrentEnemy;
 	private JFileChooser fc;
 
 	private BufferedImage collisionImage;
@@ -109,7 +108,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	@Override
 	public void valueChanged(ListSelectionEvent e) {
 
-		updateFieldsWithOtherMonsterData();
+		updateDataForNewSelection();
 		System.out.println("list value changed");
 
 	}
@@ -123,7 +122,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 				@Override
 				public void stateChanged(ChangeEvent e) {
 					System.out.println("change");
-					updateDataForSameMonster();
+					updateFieldDataForCurrentSchema();
 				}
 			});
 		}
@@ -150,7 +149,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 			public void actionPerformed(ActionEvent e) {
 				String enemyName = createEnemyField.getText();
 				if (EnemyUtilFunctions.newEnemyNameIsValid(enemyName, enemyMap)) {
-					createNewEnemy(enemyName);
+					addEnemyNameToList(enemyName);
 				}
 			}
 		});
@@ -203,13 +202,12 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	}
 
-	private void createNewEnemy(String enemyName) {
+	private void addEnemyNameToList(String enemyName) {
 		listModel.addElement(enemyName);
-		SimpleMonsterSchema newEnemy = new SimpleMonsterSchema();
-		enemyMap.put(enemyName, newEnemy);
-		list.setSelectedIndex(listModel.getSize()-1);
-		updateDataForSameMonster();
-		updateFieldsWithOtherMonsterData();
+
+		// list.setSelectedIndex(listModel.getSize() - 1);
+		list.setSelectedValue(enemyName, true);
+
 	}
 
 	private void initDataFields() {
@@ -228,22 +226,35 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	}
 
-	// Renders the selected enemy's data
-	private void updateDataForSameMonster() {
+	// puts the selected schema data into the fields
+	private void updateDataForNewSelection() {
+		String name = list.getSelectedValue();
+		SimpleMonsterSchema myCurrentEnemy;
+		if (enemyMap.get(name) == null) {
+			myCurrentEnemy = new SimpleMonsterSchema();
+			enemyMap.put(name, myCurrentEnemy);
+			// populate fields
+			healthField.setValue(20);
+			updateFieldDataForCurrentSchema();
+		} else {
+			myCurrentEnemy = enemyMap.get(name);
+			myCurrentEnemy.getAttributesMap().get(Monster.HEALTH);
+			String health = myCurrentEnemy.getAttributesMap().get(
+					Monster.HEALTH);
+			System.out.println(myCurrentEnemy.getAttributesMap().keySet());
+			int enemyHealth = Integer.parseInt(health);
+			healthField.setValue(enemyHealth);
+		}
+
+	}
+
+	// puts the field data into the schema data
+	private void updateFieldDataForCurrentSchema() {
+		// update schema with data
 		String name = list.getSelectedValue();
 		SimpleMonsterSchema myCurrentEnemy = enemyMap.get(name);
 		Integer health = (Integer) healthField.getValue();
 		myCurrentEnemy.addAttribute(Monster.HEALTH, health.toString());
-	}
-	
-	private void updateFieldsWithOtherMonsterData() {
-		String name = list.getSelectedValue();
-		SimpleMonsterSchema myCurrentEnemy = enemyMap.get(name);
-		String health = myCurrentEnemy.getAttributesMap().get(Monster.HEALTH);
-		System.out.println(health);
-		int enemyHealth = Integer.parseInt(health);
-		
-		healthField.setValue(enemyHealth);
 	}
 
 	private class EnemyTabViewBuilder {
@@ -356,7 +367,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 		public JList makeList() {
 			listModel = new DefaultListModel<String>();
-			
+
 			JList list = new JList<String>(listModel);
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			list.setSelectedIndex(0);
