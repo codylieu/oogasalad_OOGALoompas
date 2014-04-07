@@ -17,8 +17,6 @@ import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
-import main.java.engine.spawnschema.MonsterSpawnSchema;
-import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 

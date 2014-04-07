@@ -2,8 +2,6 @@ package main.java.schema;
 
 import java.util.List;
 
-import main.java.author.model.GameMap;
-
 /**
  * 
  * This is a settings object for a designed game, and at a high level is a
@@ -16,7 +14,7 @@ public class GameBlueprint {
 
 	private GameSchema myGameScenario;
 	private List<TDObjectSchema> myTDObjectSchemas;
-	private List<LevelSchema> myLevelSchemas;
+	private List<WaveSpawnSchema> myLevelSchemas;
 	private List<GameMap> myGameMaps;
 
 	public GameSchema getMyGameScenario() {
@@ -35,11 +33,11 @@ public class GameBlueprint {
         this.myTDObjectSchemas = myTDObjectSchemas;
     }
 
-	public List<LevelSchema> getMyLevelSchemas() {
+	public List<WaveSpawnSchema> getMyLevelSchemas() {
 		return myLevelSchemas;
 	}
 
-	public void setMyLevelSchemas(List<LevelSchema> myLevelSchemas) {
+	public void setMyLevelSchemas(List<WaveSpawnSchema> myLevelSchemas) {
 		this.myLevelSchemas = myLevelSchemas;
 	}
 
