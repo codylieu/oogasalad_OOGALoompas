@@ -2,25 +2,33 @@ package main.java.data.datahandler;
 
 import java.io.Serializable;
 
+import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
 import main.java.schema.SimpleTowerSchema;
 
 
 /**
- * DataBundles are designed to store lists of objects mapped to the types of 
- * objects contained in the list.
- * Therefore, it is important to store information within objects rather than
- * just adding random pieces of data (ints, doubles, Strings, etc.) to the 
- * DataBundle since there won't be any way to discern the purposes of primitive
- * data types when they are stored in the map.
+ * DataBundles store two objects. One object is a GameBlueprint,
+ * which contains data relevant to the authoring environment.
+ * The other object is a GameState, which contains data
+ * relevant to the engine. There are public getter and setter methods
+ * for both objects so that data can be properly saved and retrieved
+ * to/from the data bundle.
  * @author In-Young Jo
  *
  */
+
 public class DataBundle implements Serializable {
 	
 	private GameBlueprint myGameBlueprint;
+	private GameState myGameState;
 	
 	public DataBundle() {}
+	
+	public DataBundle(GameBlueprint gameBlueprintInit, GameState gameStateInit) {
+		myGameBlueprint = gameBlueprintInit;
+		myGameState = gameStateInit;
+	}
 	
 	public DataBundle(GameBlueprint gameBlueprintInit) {
 		myGameBlueprint = gameBlueprintInit;
@@ -30,9 +38,16 @@ public class DataBundle implements Serializable {
 		return myGameBlueprint;
 	}
 	
+	public GameState getGameState() {
+		return myGameState;
+	}
+	
 	public void setBlueprint(GameBlueprint gameBlueprint) {
 		myGameBlueprint = gameBlueprint;
 	}
-
-
+	
+	public void setGameState(GameState gameState) {
+		myGameState = gameState;
+	}
+	
 }
