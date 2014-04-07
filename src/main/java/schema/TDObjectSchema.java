@@ -1,30 +1,14 @@
 package main.java.schema;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import main.java.engine.objects.TDObject;
 
-public abstract class TDObjectSchema {
+public abstract class TDObjectSchema extends AbstractSchema{
 	private Class<? extends TDObject> myConcreteType;
-	private Map<String, String> myAttributesMap;
-	protected Set<String> myAttributeSet;
 
 	protected TDObjectSchema(Class<? extends TDObject> concreteType) {
+		super();
 		myConcreteType = concreteType;
-		myAttributesMap = new HashMap<String, String>();
-		myAttributeSet = new HashSet<String>();
-		myAttributeSet.addAll(populateAdditionalAttributes());
 	}
-
-	/**
-	 * Return a set of strings representing all attributes for this specific object
-	 * subclass.
-	 */
-	protected abstract Set<String> populateAdditionalAttributes();
 
 	public Class<? extends TDObject> getMyConcreteType() {
 		return myConcreteType;
@@ -37,18 +21,10 @@ public abstract class TDObjectSchema {
 	 * @param attributeName
 	 * @param attributeValue
 	 */
+	@Override
 	public void addAttribute(String attributeName, Object attributeValue) {
 		myAttributesMap.put(attributeName, attributeValue.toString());
 		myAttributesMap.put(TDObject.NAME, defineName());
-	}
-
-	/**
-	 * Get the internal map of attributes
-	 * 
-	 * @return unmodifiable map
-	 */
-	public Map<String, String> getAttributesMap() {
-		return Collections.unmodifiableMap(myAttributesMap);
 	}
 	
 	/**
