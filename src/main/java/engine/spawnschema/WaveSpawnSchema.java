@@ -1,11 +1,9 @@
 package main.java.engine.spawnschema;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-
-import main.java.engine.objects.monster.Monster;
-import main.java.exceptions.engine.MonsterCreationFailureException;
 
 /**
  * 
@@ -15,7 +13,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
  * @author Austin
  * 
  */
-public class WaveSpawnSchema {
+public class WaveSpawnSchema implements Serializable {
 
     Collection<MonsterSpawnSchema> myMonsterSchemas = new ArrayList<MonsterSpawnSchema>();
 

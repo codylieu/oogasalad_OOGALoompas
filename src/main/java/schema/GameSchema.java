@@ -1,12 +1,13 @@
 package main.java.schema;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * the higher level settings defining the type of game and some basic
  * overarching stats
  */
-public class GameSchema extends AbstractSchema{
+public class GameSchema extends AbstractSchema {
 
 //	private int myStartingLives;
 //	private int myStartingGold;
@@ -30,7 +31,6 @@ public class GameSchema extends AbstractSchema{
 	
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		return null;
+		return new HashSet<String>();
 	}
-	
 }

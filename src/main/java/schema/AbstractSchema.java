@@ -1,12 +1,12 @@
 package main.java.schema;
 
-import java.util.Collections;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class AbstractSchema {
+public abstract class AbstractSchema implements Serializable {
 	
 	protected Map<String, String> myAttributesMap;
 	protected Set<String> myAttributeSet;

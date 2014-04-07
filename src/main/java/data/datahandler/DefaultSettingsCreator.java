@@ -33,9 +33,6 @@ public class DefaultSettingsCreator {
 	 */
 	public DefaultSettingsCreator(GameBlueprint gameBlueprint){
 		myGameBlueprint = gameBlueprint;
-		//myWaveSpawnSchemas = myGameBlueprint.getMyLevelSchemas(); need to figure out this, currently in engine??
-		myStartingMoney = myGameBlueprint.getMyGameScenario().getMyStartingGold();
-		myStartingLives = myGameBlueprint.getMyGameScenario().getMyStartingLives();
 		
 	}
 	

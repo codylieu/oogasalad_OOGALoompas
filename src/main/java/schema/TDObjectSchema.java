@@ -1,8 +1,10 @@
 package main.java.schema;
 
+import java.io.Serializable;
+
 import main.java.engine.objects.TDObject;
 
-public abstract class TDObjectSchema extends AbstractSchema	{
+public abstract class TDObjectSchema extends AbstractSchema	implements Serializable {
 	
 	private Class<? extends TDObject> myConcreteType;
 
