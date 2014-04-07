@@ -132,6 +132,19 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 			toggleAddTower();
 			clearKey(Integer.parseInt(hotkeys.getString("AddTower")));
 		}
+
+		//THIS ONLY PAUSES FOR NOW
+		if (getKey(Integer.parseInt(hotkeys.getString("ToggleRunning")))){
+			toggleRunning();
+			clearKey(Integer.parseInt(hotkeys.getString("ToggleRunning")));
+		}
+	}
+
+	public void toggleRunning() {
+		if (isRunning())
+			stop();
+		else
+			start();
 	}
 
 	private void drawTowerGhost() {
@@ -160,7 +173,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		}
 	}
 
-	
+
 	public Map<String, String> getGameAttributes() {
 		hasChanged = true;
 		Map<String, String> gameStats = new HashMap<String, String>();

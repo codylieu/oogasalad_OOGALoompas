@@ -192,10 +192,7 @@ public class Player {
 		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		playResumeButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (engine.isRunning())
-					engine.stop();
-				else
-					engine.start();
+				engine.toggleRunning();
 				frame.pack();
 			}
 		});
