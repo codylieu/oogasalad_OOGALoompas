@@ -28,6 +28,10 @@ public class DataBundle implements Serializable {
 		myGameBlueprint = gameBlueprintInit;
 	}
 	
+	public DataBundle(GameState gameStateInit) {
+		myGameState = gameStateInit;
+	}
+	
 	public GameBlueprint getBlueprint() {
 		return myGameBlueprint;
 	}

@@ -14,7 +14,7 @@ public class GameSchema extends AbstractSchema{
 //	private boolean isSurvivalMode;
 	
 	public static final String LIVES = "lives";
-	public static final String GOLD = "gold";
+	public static final String MONEY = "money";
 	public static final String LEVELDIFFICULTY = "difficulty";
 	public static final String ISSURVIVALMODE = "issurvivalmode";
 
