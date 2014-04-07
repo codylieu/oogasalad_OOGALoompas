@@ -9,12 +9,18 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -35,6 +41,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -49,6 +57,10 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 	private SimpleMonsterSchema myCurrentEnemy;
 	private JFileChooser fc;
+
+	private BufferedImage collisionImage;
+	private BufferedImage enemyImage;
+
 	private ImageCanvas collisionImageCanvas;
 	private ImageCanvas enemyImageCanvas;
 
@@ -61,15 +73,18 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 	private JSpinner healthField;
 	private JSpinner speedField;
 	private JSpinner damageField;
-
 	private JSpinner rewardField;
+	private List<JSpinner> spinnerFields;
 
-	private NumberFormat numberFormat;
 	private JButton createEnemyButton;
 
 	private JRadioButton smallButton;
 	private JRadioButton mediumButton;
 	private JRadioButton largeButton;
+	private JRadioButton flyingButton;
+	private JRadioButton groundButton;
+
+	private List<JRadioButton> radioButtons;
 
 	private JTextField createEnemyField;
 	private JButton collisionImageButton;
@@ -87,13 +102,46 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
 		initDataFields();
 
-		addActionListeners();
+		addListeners();
 	}
 
-	private void addActionListeners() {
+	@Override
+	public void valueChanged(ListSelectionEvent e) {
+
+		updateDataDisplayed();
+
+	}
+
+	private void addListeners() {
 
 		list.addListSelectionListener(this);
-		
+		for (JSpinner field : spinnerFields) {
+			field.addChangeListener(new ChangeListener() {
+
+				@Override
+				public void stateChanged(ChangeEvent e) {
+					System.out.println("change");
+					updateDataDisplayed();
+				}
+			});
+		}
+
+		for (JRadioButton button : radioButtons) {
+			button.addItemListener(new ItemListener() {
+
+				@SuppressWarnings("deprecation")
+				@Override
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						System.out.println("radio change");
+						JRadioButton buton = (JRadioButton) e.getSource();
+						System.out.println(buton.getText());
+					}
+				}
+
+			});
+		}
+
 		createEnemyButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -104,7 +152,7 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 				}
 			}
 		});
-		
+
 		collisionImageButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -116,9 +164,9 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 					File file = fc.getSelectedFile();
 					try {
 						System.out.println("Opening: " + file.getName() + ".\n");
-						BufferedImage img = ImageIO.read(file);
+						collisionImage = ImageIO.read(file);
 
-						collisionImageCanvas.setImage(img);
+						collisionImageCanvas.setImage(collisionImage);
 						collisionImageCanvas.repaint();
 					} catch (IOException e1) {
 					}
@@ -139,8 +187,8 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 					File file = fc.getSelectedFile();
 					try {
 						System.out.println("Opening: " + file.getName() + ".\n");
-						BufferedImage img = ImageIO.read(file);
-						enemyImageCanvas.setImage(img);
+						enemyImage = ImageIO.read(file);
+						enemyImageCanvas.setImage(enemyImage);
 						enemyImageCanvas.repaint();
 					} catch (IOException e1) {
 					}
@@ -157,28 +205,31 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 		listModel.addElement(enemyName);
 		SimpleMonsterSchema newEnemy = new SimpleMonsterSchema();
 		enemyMap.put(enemyName, newEnemy);
-		updateDataDisplayed(enemyName);
+		updateDataDisplayed();
 	}
 
 	private void initDataFields() {
 		enemyMap = new HashMap<String, SimpleMonsterSchema>();
-	}
+		spinnerFields = new ArrayList<JSpinner>();
+		spinnerFields.add(healthField);
+		spinnerFields.add(speedField);
+		spinnerFields.add(damageField);
+		spinnerFields.add(rewardField);
+		radioButtons = new ArrayList<JRadioButton>();
+		radioButtons.add(smallButton);
+		radioButtons.add(mediumButton);
+		radioButtons.add(largeButton);
+		radioButtons.add(flyingButton);
+		radioButtons.add(groundButton);
 
-	
+	}
 
 	// Renders the selected enemy's data
-	protected void updateDataDisplayed(String name) {
+	protected void updateDataDisplayed() {
+		String name = list.getSelectedValue();
 		SimpleMonsterSchema myCurrentEnemy = enemyMap.get(name);
-		// fill out
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent e) {
-
-		String currentEnemyName = list.getSelectedValue();
-
-		updateDataDisplayed(currentEnemyName);
-
+		int health = (int) healthField.getValue();
+		myCurrentEnemy.setHealth((double)health);
 	}
 
 	private class EnemyTabViewBuilder {
@@ -186,95 +237,6 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 		public EnemyTabViewBuilder(EnemyEditorTab enemyEditorTab) {
 			myTab = enemyEditorTab;
-		}
-
-		public Component makeOverallContent() {
-			list = myBuilder.makeList();
-
-			// Create a split pane with the two scroll panes in it.
-			splitPane = myBuilder.makeSplitPane(new JScrollPane(list),
-					makeEditorPane());
-			// updateLabel(enemyNames[list.getSelectedIndex()]);
-			return splitPane;
-		}
-
-		private JComponent makeAttributesPane() {
-			JPanel result = new JPanel();
-
-			result.setLayout(new BorderLayout());
-
-			result.add(myBuilder.makeLabelPane(), BorderLayout.WEST);
-			result.add(myBuilder.makeFieldPane(), BorderLayout.CENTER);
-			return result;
-		}
-
-		private Component makeDeleteEnemyButton() {
-			JButton result = new JButton("Delete Enemy");
-			return result;
-		}
-
-		private JComponent makeEditorPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			result.add(makeAttributesPane(), BorderLayout.CENTER);
-			result.add(makeImagesPane(), BorderLayout.EAST);
-			result.add(makeDeleteEnemyButton(), BorderLayout.SOUTH);
-
-			return result;
-		}
-
-		private JComponent makeImagesPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			result.add(myBuilder.makeEnemyGraphicPane(), BorderLayout.NORTH);
-			result.add(myBuilder.makeCollisionGraphicPane(), BorderLayout.SOUTH);
-			return result;
-		}
-		
-		public Component makeDesignEnemyPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			result.add(new JLabel("Design New Enemy"), BorderLayout.WEST);
-
-			createEnemyField = new JTextField();
-			createEnemyButton = new JButton("Begin");
-			result.add(createEnemyField, BorderLayout.CENTER);
-			result.add(createEnemyButton, BorderLayout.EAST);
-
-			return result;
-		}
-
-		public JComponent makeTypePane() {
-			JPanel result = new JPanel();
-			result.setLayout(new GridLayout(1, 0));
-
-			result.setBorder(BorderFactory.createEmptyBorder(0, // top
-					20, // left
-					0, // bottom
-					0)); // right
-
-			JRadioButton groundButton;
-			groundButton = new JRadioButton("Ground");
-			JRadioButton flyingButton;
-			flyingButton = new JRadioButton("Flying");
-			ButtonGroup sizeButtonGroup = new ButtonGroup();
-			sizeButtonGroup.add(groundButton);
-			sizeButtonGroup.add(flyingButton);
-			result.add(groundButton);
-			result.add(flyingButton);
-			return result;
-		}
-
-		public JComponent makeLabelPane() {
-
-			JPanel labels = new JPanel(new GridLayout(0, 1));
-			labels.add(new JLabel(EnemyViewConstants.HEALTH_STRING));
-			labels.add(new JLabel(EnemyViewConstants.SPEED_STRING));
-			labels.add(new JLabel(EnemyViewConstants.DAMAGE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.REWARD_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TYPE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TILE_SIZE_STRING));
-			return labels;
 		}
 
 		public JSpinner makeAttributeSpinner() {
@@ -288,20 +250,29 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 			return spinner;
 		}
 
-		public JComponent makeFieldPane() {
+		public JComponent makeCollisionGraphicPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			collisionImageCanvas = new ImageCanvas();
+			collisionImageCanvas.setSize(EnemyViewConstants.IMAGE_CANVAS_SIZE,
+					EnemyViewConstants.IMAGE_CANVAS_SIZE);
+			collisionImageCanvas.setBackground(Color.BLACK);
+			result.add(collisionImageCanvas, BorderLayout.NORTH);
+			collisionImageButton = makeChooseGraphicsButton("Set Collision Image");
+			result.add(collisionImageButton, BorderLayout.SOUTH);
+			return result;
+		}
 
-			JPanel result = new JPanel(new GridLayout(0, 1));
+		public Component makeDesignEnemyPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			result.add(new JLabel("Design New Enemy"), BorderLayout.WEST);
 
-			healthField = makeAttributeSpinner();
-			speedField = makeAttributeSpinner();
-			damageField = makeAttributeSpinner();
-			rewardField = makeAttributeSpinner();
-			result.add(healthField);
-			result.add(speedField);
-			result.add(damageField);
-			result.add(rewardField);
-			result.add(makeTypePane());
-			result.add(makeDimensionPane());
+			createEnemyField = new JTextField();
+			createEnemyButton = new JButton("Begin");
+			result.add(createEnemyField, BorderLayout.CENTER);
+			result.add(createEnemyButton, BorderLayout.EAST);
+
 			return result;
 		}
 
@@ -327,19 +298,6 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 			return result;
 		}
 
-		public JComponent makeCollisionGraphicPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			collisionImageCanvas = new ImageCanvas();
-			collisionImageCanvas.setSize(EnemyViewConstants.IMAGE_CANVAS_SIZE,
-					EnemyViewConstants.IMAGE_CANVAS_SIZE);
-			collisionImageCanvas.setBackground(Color.BLACK);
-			result.add(collisionImageCanvas, BorderLayout.NORTH);
-			collisionImageButton = makeChooseGraphicsButton("Set Collision Image");
-			result.add(collisionImageButton, BorderLayout.SOUTH);
-			return result;
-		}
-
 		public JComponent makeEnemyGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
@@ -353,9 +311,33 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 			return result;
 		}
 
-		private JButton makeChooseGraphicsButton(String buttonString) {
-			JButton result = new JButton(buttonString);
+		public JComponent makeFieldPane() {
+
+			JPanel result = new JPanel(new GridLayout(0, 1));
+
+			healthField = makeAttributeSpinner();
+			speedField = makeAttributeSpinner();
+			damageField = makeAttributeSpinner();
+			rewardField = makeAttributeSpinner();
+			result.add(healthField);
+			result.add(speedField);
+			result.add(damageField);
+			result.add(rewardField);
+			result.add(makeTypePane());
+			result.add(makeDimensionPane());
 			return result;
+		}
+
+		public JComponent makeLabelPane() {
+
+			JPanel labels = new JPanel(new GridLayout(0, 1));
+			labels.add(new JLabel(EnemyViewConstants.HEALTH_STRING));
+			labels.add(new JLabel(EnemyViewConstants.SPEED_STRING));
+			labels.add(new JLabel(EnemyViewConstants.DAMAGE_STRING));
+			labels.add(new JLabel(EnemyViewConstants.REWARD_STRING));
+			labels.add(new JLabel(EnemyViewConstants.TYPE_STRING));
+			labels.add(new JLabel(EnemyViewConstants.TILE_SIZE_STRING));
+			return labels;
 		}
 
 		public JList makeList() {
@@ -368,6 +350,16 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 			list.setFont(list.getFont().deriveFont(Font.PLAIN,
 					EnemyViewConstants.MEDIUM_FONT_SIZE));
 			return list;
+		}
+
+		public Component makeOverallContent() {
+			list = myBuilder.makeList();
+
+			// Create a split pane with the two scroll panes in it.
+			splitPane = myBuilder.makeSplitPane(new JScrollPane(list),
+					makeEditorPane());
+			// updateLabel(enemyNames[list.getSelectedIndex()]);
+			return splitPane;
 		}
 
 		public JSplitPane makeSplitPane(JScrollPane listScrollPane,
@@ -384,6 +376,63 @@ public class EnemyEditorTab extends EditorTab implements ListSelectionListener {
 
 			splitPane.setPreferredSize(new Dimension(myTab.getWidth(), 550));
 			return splitPane;
+		}
+
+		public JComponent makeTypePane() {
+			JPanel result = new JPanel();
+			result.setLayout(new GridLayout(1, 0));
+
+			result.setBorder(BorderFactory.createEmptyBorder(0, // top
+					20, // left
+					0, // bottom
+					0)); // right
+
+			groundButton = new JRadioButton("Ground");
+			flyingButton = new JRadioButton("Flying");
+			ButtonGroup sizeButtonGroup = new ButtonGroup();
+			sizeButtonGroup.add(groundButton);
+			sizeButtonGroup.add(flyingButton);
+			result.add(groundButton);
+			result.add(flyingButton);
+			return result;
+		}
+
+		private JComponent makeAttributesPane() {
+			JPanel result = new JPanel();
+
+			result.setLayout(new BorderLayout());
+
+			result.add(myBuilder.makeLabelPane(), BorderLayout.WEST);
+			result.add(myBuilder.makeFieldPane(), BorderLayout.CENTER);
+			return result;
+		}
+
+		private JButton makeChooseGraphicsButton(String buttonString) {
+			JButton result = new JButton(buttonString);
+			return result;
+		}
+
+		private Component makeDeleteEnemyButton() {
+			JButton result = new JButton("Delete Enemy");
+			return result;
+		}
+
+		private JComponent makeEditorPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			result.add(makeAttributesPane(), BorderLayout.CENTER);
+			result.add(makeImagesPane(), BorderLayout.EAST);
+			result.add(makeDeleteEnemyButton(), BorderLayout.SOUTH);
+
+			return result;
+		}
+
+		private JComponent makeImagesPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			result.add(myBuilder.makeEnemyGraphicPane(), BorderLayout.NORTH);
+			result.add(myBuilder.makeCollisionGraphicPane(), BorderLayout.SOUTH);
+			return result;
 		}
 	}
 }
