@@ -2,7 +2,8 @@ package main.java.schema;
 
 import main.java.engine.objects.TDObject;
 
-public abstract class TDObjectSchema extends AbstractSchema{
+public abstract class TDObjectSchema extends AbstractSchema	{
+	
 	private Class<? extends TDObject> myConcreteType;
 
 	protected TDObjectSchema(Class<? extends TDObject> concreteType) {

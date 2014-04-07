@@ -1,6 +1,5 @@
 package main.java.schema;
 
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -31,7 +30,6 @@ public class GameSchema extends AbstractSchema{
 	
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
