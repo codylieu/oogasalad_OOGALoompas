@@ -313,11 +313,12 @@ public class EnemyEditorTab extends EditorTab {
 	 * 
 	 */
 	private void updateViewWithSchemaData(Map<String, String> map) {
+		// fields (spinners)
 		healthField.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)));
 		speedField.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)));
 		damageField.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)));
 		rewardField.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)));
-		// these are just default values right now
+		// buttons
 		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
 				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton
 				.getModel() : flyingButton.getModel();
@@ -333,6 +334,8 @@ public class EnemyEditorTab extends EditorTab {
 			selectedSizeButton = largeButton.getModel();
 		flyingButtonGroup.setSelected(selectedFlyButton, true);
 		sizeButtonGroup.setSelected(selectedSizeButton, true);
+		//images
+		
 
 	}
 
