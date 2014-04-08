@@ -1,6 +1,9 @@
 package main.java.data.datahandler;
 
+import java.io.File;
 import java.io.Serializable;
+
+import net.lingala.zip4j.core.ZipFile;
 
 import main.java.schema.GameBlueprint;
 
@@ -21,6 +24,7 @@ import main.java.schema.GameBlueprint;
 public class DataBundle implements Serializable {
 
     private GameBlueprint myGameBlueprint;
+    private ZipFile myZippedResources;
 
     public DataBundle () {
     }
@@ -31,6 +35,10 @@ public class DataBundle implements Serializable {
 
     public GameBlueprint getBlueprint () {
         return myGameBlueprint;
+    }
+    
+    public void setResourcesFolder(ZipFile resourceFolderToSave){
+    	myZippedResources = resourceFolderToSave;
     }
 
     public void setBlueprint (GameBlueprint gameBlueprint) {
