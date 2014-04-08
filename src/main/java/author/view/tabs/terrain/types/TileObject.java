@@ -14,6 +14,7 @@ public class TileObject extends JButton{
 	
 	private Image myImage;
 	private Image myOriginalImage;
+	private int myPassabilityIndex;
 	
 	public TileObject(Image img) {
 		myImage = img;
@@ -21,7 +22,11 @@ public class TileObject extends JButton{
 	}
 	
 	public int getPassabilityIndex() {
-		return 0;
+		return myPassabilityIndex;
+	}
+	
+	public void setPassabilityIndex(int index) {
+		myPassabilityIndex = index;
 	}
 	
 	public Color getBGColor() {

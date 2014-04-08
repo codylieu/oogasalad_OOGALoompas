@@ -71,31 +71,18 @@ public class TileDisplay extends JPanel {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param e
-	 */
 	public void constructTileOptions() {
 		JPanel tileOptions = new JPanel();
 		tileOptions.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-
-		
-		
 		c.gridx = 0;
 		c.gridy = 0;
-		
 		for (int i = 0; i < myImages.length; i ++) {
 			for (int j = 0; j < myImages[0].length; j++) {
-				
 				if (c.gridx > 8) {
 					c.gridy++;
 					c.gridx = 0;
 				} 
-				
-				
-				
-				
 				Image im = myImages[i][j];
 				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT);
 
@@ -108,9 +95,6 @@ public class TileDisplay extends JPanel {
 		}
 		add(tileOptions);
 	}
-	
-	
-
 	
 	private ResourceBundle getResourceBundle(String bundlePackage, String bundleName) {
 		return ResourceBundle.getBundle(bundlePackage + bundleName);
@@ -131,7 +115,7 @@ public class TileDisplay extends JPanel {
 		return pixelSize;
 	}
 	
-	public JScrollPane getMyScrollPane() {
+	public JScrollPane getTileScrollPane() {
 		JScrollPane myScrollPane = new JScrollPane(this);
 		myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

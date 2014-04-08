@@ -50,14 +50,14 @@ public class TerrainEditorTab extends EditorTab{
 		myCanvas = new Canvas();
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
 		add(myCanvas, BorderLayout.CENTER);
-		add(myTileSelectionManager.getTileDisplay().getMyScrollPane(), BorderLayout.EAST);
-		initButtonDisplay();
+		add(myTileSelectionManager.getTileDisplay().getTileScrollPane(), BorderLayout.EAST);
+		constructButtonDisplay();
 	}
 	
-	private void initButtonDisplay() {
+	private void constructButtonDisplay() {
 		buttonDisplayOptions = new HashMap<String, JButton>();
 		buttonDisplayOptions.put(CLEAR, initClearButton());
-		buttonDisplayOptions.put(EDIT_TILE, initDefaultBackground());
+		buttonDisplayOptions.put(EDIT_TILE, initEditorButton());
 		
 		JPanel buttonDisplayPanel = new JPanel();
 		buttonDisplayPanel.setLayout(new GridBagLayout());
@@ -73,17 +73,21 @@ public class TerrainEditorTab extends EditorTab{
 
 	private JButton initClearButton() {
 		JButton clearButton = new JButton(CLEAR);
-		clearButton.addActionListener(actionListener(myTileSelectionManager, "clearCanvasTiles"));
+		clearButton.addActionListener(actionListener(this, "clearCanvasTiles"));
 		return clearButton;
 	}
 	
-	private JButton initDefaultBackground() {
+	private JButton initEditorButton() {
 		JButton openBGTiles = new JButton(EDIT_TILE);
-		openBGTiles.addActionListener(actionListener(this, "displayTileSelectionManager"));
+		openBGTiles.addActionListener(actionListener(this, "openEditorWindow"));
 		return openBGTiles;
 	}
 	
-	public void displayTileSelectionManager(ActionEvent e) {
+	public void clearCanvasTiles(ActionEvent e) {
+		myCanvas.clearTiles();
+	}
+	
+	public void openEditorWindow(ActionEvent e) {
 		JFrame selectionFrame = new JFrame();
 		selectionFrame.add(myTileSelectionManager.getTileEditPanel(), BorderLayout.CENTER);
 		selectionFrame.setLocation(this.getWidth() + 25, 0);
