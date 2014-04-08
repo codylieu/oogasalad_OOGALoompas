@@ -74,9 +74,9 @@ public class TestEngine extends JGEngine {
     }
     
     private void displayTowerGhostIfNecessary() {
-    	System.out.println(cursorState);
+    	//System.out.println(cursorState);
     	if (cursorState == CursorState.AddTower) {
-    		System.out.println("displaytower");
+    	//	System.out.println("displaytower");
     		new TowerGhost(getMouseX(), getMouseY());
     	}
     }

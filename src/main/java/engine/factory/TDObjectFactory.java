@@ -8,11 +8,12 @@ import java.util.Map;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
+import main.java.engine.util.Reflection;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.TDObjectSchema;
 import jgame.impl.JGEngineInterface;
-import main.java.util.Reflection;
+
 
 public class TDObjectFactory {
 	private JGEngineInterface engine;
@@ -43,7 +44,7 @@ public class TDObjectFactory {
 		Point2D tileOrigin = findTileOrigin(location);
 		try {
 			TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
-
+			
             Map<String, String> attributes = schema.getAttributesMap();
             attributes.put(Tower.X, String.valueOf(tileOrigin.getX()));
             attributes.put(Tower.Y, String.valueOf(tileOrigin.getY()));
