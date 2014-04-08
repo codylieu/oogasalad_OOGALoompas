@@ -64,9 +64,9 @@ public class DataHandler {
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
 		DataBundle bundleToSave = new DataBundle();
 		bundleToSave.setBlueprint(blueprint);
-		ZipFile myZippedResources = compress(FILE_PATH,filePath + "zipped_resources");
+		ZipFile myZippedResources = compress(FILE_PATH,filePath + "ZippedResources.zip");
 		bundleToSave.setResourcesFolder(myZippedResources);
-		return saveObjectToFile(bundleToSave, filePath);
+		return saveObjectToFile(bundleToSave, filePath + "SavedBundle.ser");
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class DataHandler {
 	 * @param fileName Name of file containing serialized object
 	 * @return Unserialized object
 	 */
-	private Object loadObjectFromFile(String fileName) {
+	public Object loadObjectFromFile(String fileName) {
 		try {
 			FileInputStream fileIn = new FileInputStream(fileName);
 			ObjectInputStream in = new ObjectInputStream(fileIn);

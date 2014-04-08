@@ -19,6 +19,7 @@ public class TestDataHandler {
 	
 	public final static String FILE_PATH = "src/test/resources/";
 	public final static String BLUEPRINT_PATH = "TestBlueprint.ser";
+	public final static String SAVEBLUEPRINT_PATH = "SavedBlueprint";
 	public final static String ZIPPED_RESOURCES = "ZippedResources.zip";
 	public final static String STATE_PATH = "TestState.ser";
 	public final static String TEST_ATTRIBUTE_1 = "testAttribute1";
@@ -80,8 +81,8 @@ public class TestDataHandler {
 	@Test
 	public void testCompression() throws ClassNotFoundException, IOException {
 		DataHandler testDataHandler = new DataHandler();
-		GameBlueprint testBlueprint = testDataHandler.loadBlueprint(FILE_PATH + BLUEPRINT_PATH);
-		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH);
+		GameBlueprint testBlueprint = (GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH);
+		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 	}
 
 }
