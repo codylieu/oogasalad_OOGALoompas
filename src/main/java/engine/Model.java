@@ -91,7 +91,7 @@ public class Model {
         	
         	if(player.getMoney() >= newTower.getCost() ) {
         	        //FIXME: Decrease money?
-        		player.addMoney(-SimpleTower.DEFAULT_COST);
+        		player.addMoney(-newTower.getCost());
         		towers[currentTile[0]][currentTile[1]]  = newTower;
         		return true;
         	} else {
@@ -201,7 +201,7 @@ public class Model {
         testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
         testTowerSchema.addAttribute(Tower.COST, "10");
         testTowerSchema.addAttribute(Tower.IMAGE, "SimpleTower");
-        testTowerSchema.addAttribute("dan", "SimpleTower");
+      //  testTowerSchema.addAttribute("dan", "SimpleTower");
 
         tdObjectSchemas.add(testTowerSchema);
 
