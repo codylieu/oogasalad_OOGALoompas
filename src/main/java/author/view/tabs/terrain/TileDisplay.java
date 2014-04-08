@@ -75,10 +75,22 @@ public class TileDisplay extends JPanel {
 		tileOptions.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 
+		
+		
+		c.gridx = 0;
+		c.gridy = 0;
+		
 		for (int i = 0; i < myImages.length; i ++) {
 			for (int j = 0; j < myImages[0].length; j++) {
-				c.gridy = i;
-				c.gridx = j;
+				
+				if (c.gridx > 8) {
+					c.gridy++;
+					c.gridx = 0;
+				} 
+				
+				
+				
+				
 				Image im = myImages[i][j];
 				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT);
 
@@ -86,6 +98,7 @@ public class TileDisplay extends JPanel {
 				imgDisplayObj.addActionListener(actionListener(this, "updateSelection"));
 				imgDisplayObj.setIcon(new ImageIcon(scaledIm)); // place scaled image as jbutton icon
 				tileOptions.add(imgDisplayObj, c); // grid layout of jbutton/images
+				c.gridx++;
 			}
 		}
 		add(tileOptions);
@@ -99,7 +112,7 @@ public class TileDisplay extends JPanel {
 		TileObject selectedTile = (TileObject) e.getSource();
 		myTileManager.getCanvas().setSelectedTileObj(selectedTile);
 		myTileManager.getTileEditPanel().setImageAngle(0);
-		myTileManager.getTileEditPanel().repaint();
+		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
 	}
 	
 	public int getPixelSize() {
@@ -108,7 +121,7 @@ public class TileDisplay extends JPanel {
 	
 	public JScrollPane getMyScrollPane() {
 		JScrollPane myScrollPane = new JScrollPane(this);
-		myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		myScrollPane.setPreferredSize(new Dimension(275, 350));
 		return myScrollPane;

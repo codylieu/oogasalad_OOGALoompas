@@ -10,6 +10,7 @@ import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
+import main.java.schema.MonsterSchema;
 import main.java.schema.TDObjectSchema;
 import jgame.impl.JGEngineInterface;
 import main.java.util.Reflection;
@@ -60,10 +61,10 @@ public class TDObjectFactory {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
 
             Map<String, String> attributes = schema.getAttributesMap();
-            attributes.put(Monster.ENTRANCE_X, String.valueOf(entrance.getX()));
-            attributes.put(Monster.ENTRANCE_Y, String.valueOf(entrance.getY()));
-            attributes.put(Monster.EXIT_X, String.valueOf(exit.getX()));
-            attributes.put(Monster.EXIT_Y, String.valueOf(exit.getY()));
+            attributes.put(MonsterSchema.ENTRANCE_X, String.valueOf(entrance.getX()));
+            attributes.put(MonsterSchema.ENTRANCE_Y, String.valueOf(entrance.getY()));
+            attributes.put(MonsterSchema.EXIT_X, String.valueOf(exit.getX()));
+            attributes.put(MonsterSchema.EXIT_Y, String.valueOf(exit.getY()));
 
             Object[] monsterParameters = {attributes};
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);

@@ -26,6 +26,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -45,6 +46,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
@@ -56,9 +58,10 @@ import javax.swing.table.TableModel;
 
 import main.java.author.controller.MainController;
 import main.java.author.util.EnemyUtilFunctions;
+import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.tabs.EditorTab;
-import main.java.engine.objects.monster.Monster;
+import main.java.schema.MonsterSchema;
 import main.java.schema.SimpleMonsterSchema;
 
 //SplitPaneDemo itself is not a visible component.
@@ -72,12 +75,10 @@ public class EnemyEditorTab extends EditorTab {
 	private ImageCanvas collisionImageCanvas;
 	private ImageCanvas enemyImageCanvas;
 
-	private JLabel picture;
 	private DefaultTableModel listModel;
 	private JTable list;
 	private JSplitPane splitPane;
 
-	private JPanel designEnemyPane;
 	private JSpinner healthField;
 	private JSpinner speedField;
 	private JSpinner damageField;
@@ -92,12 +93,17 @@ public class EnemyEditorTab extends EditorTab {
 	private JRadioButton flyingButton;
 	private JRadioButton groundButton;
 
+	private ButtonGroup sizeButtonGroup;
+	private ButtonGroup flyingButtonGroup;
+
 	private List<JRadioButton> radioButtons;
 
 	private JTextField createEnemyField;
 	private JButton collisionImageButton;
+	private JButton deleteEnemyButton;
 	private JButton enemyImageButton;
 
+	private Border originalCreateEnemyFieldBorder;
 	private EnemyTabViewBuilder myBuilder;
 
 	private HashMap<String, SimpleMonsterSchema> enemyMap;
@@ -109,19 +115,45 @@ public class EnemyEditorTab extends EditorTab {
 		this.add(myBuilder.makeDesignEnemyPane(), BorderLayout.NORTH);
 		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
 		initDataFields();
-
+		addEnemyNameToList("Monster A");
+		updateFieldDataUponNewSelection();
 		addListeners();
 	}
 
 	private void addListeners() {
+
+		deleteEnemyButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (list.getRowCount() == 1) {
+					JOptionPane.showMessageDialog(null,
+							"Please design at least one enemy.", "Alert!",
+							JOptionPane.ERROR_MESSAGE);
+
+					return;
+				}
+				String enemyNameToDelete = getSelectedEnemyName();
+				enemyMap.remove(enemyNameToDelete);
+				int rowToDelete = list.getSelectedRow();
+				listModel.removeRow(rowToDelete);
+				int newNumOfRow = listModel.getRowCount();
+				if (newNumOfRow > 0) {
+					list.setRowSelectionInterval(0, 0);
+				}
+
+			}
+		});
 
 		list.getSelectionModel().addListSelectionListener(
 				new ListSelectionListener() {
 
 					@Override
 					public void valueChanged(ListSelectionEvent e) {
-						updateFieldDataUponNewSelection();
-						System.out.println("list value changed");
+						if (list.getSelectedRow() != -1) {
+							updateFieldDataUponNewSelection();
+						}
+
 					}
 				});
 
@@ -131,7 +163,7 @@ public class EnemyEditorTab extends EditorTab {
 
 				@Override
 				public void stateChanged(ChangeEvent e) {
-					System.out.println("change");
+
 					updateSchemaDataFromView();
 				}
 			});
@@ -143,9 +175,8 @@ public class EnemyEditorTab extends EditorTab {
 				@Override
 				public void itemStateChanged(ItemEvent e) {
 					if (e.getStateChange() == ItemEvent.SELECTED) {
-						System.out.println("radio change");
-						JRadioButton buton = (JRadioButton) e.getSource();
-						System.out.println(buton.getText());
+
+						updateSchemaDataFromView();
 					}
 				}
 
@@ -157,9 +188,19 @@ public class EnemyEditorTab extends EditorTab {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String enemyName = createEnemyField.getText();
+
+				enemyName = enemyName.trim().replaceAll(" +", " ");
+				System.out.println(enemyName);
 				if (EnemyUtilFunctions.newEnemyNameIsValid(enemyName, enemyMap)) {
+
 					addEnemyNameToList(enemyName);
 					createEnemyField.setText("");
+					createEnemyField.setBorder(originalCreateEnemyFieldBorder);
+				} else {
+					createEnemyField.setBorder(new LineBorder(Color.red));
+					createEnemyField.selectAll();
+					createEnemyField.requestFocusInWindow();
+					showInvalidEnemyNameDialog();
 				}
 			}
 		});
@@ -215,7 +256,7 @@ public class EnemyEditorTab extends EditorTab {
 	private void addEnemyNameToList(String enemyName) {
 		int indexToPlace = listModel.getRowCount();
 		System.out.println(indexToPlace);
-		listModel.addRow(new Object[] { enemyName });
+		listModel.addRow(new String[] { enemyName });
 		list.setRowSelectionInterval(indexToPlace, indexToPlace);
 
 	}
@@ -236,9 +277,12 @@ public class EnemyEditorTab extends EditorTab {
 
 	}
 
-	// puts the selected schema data into the fields
+	private String getSelectedEnemyName() {
+		return (String) listModel.getValueAt(list.getSelectedRow(), 0);
+	}
+
 	private void updateFieldDataUponNewSelection() {
-		String name = (String) listModel.getValueAt(list.getSelectedRow(), 0);
+		String name = getSelectedEnemyName();
 		System.out.println(listModel.getValueAt(0, 0));
 		SimpleMonsterSchema myCurrentEnemy;
 		if (enemyMap.get(name) == null) {
@@ -247,7 +291,7 @@ public class EnemyEditorTab extends EditorTab {
 
 		} else {
 			myCurrentEnemy = enemyMap.get(name);
-			myCurrentEnemy.getAttributesMap().get(Monster.HEALTH);
+			myCurrentEnemy.getAttributesMap().get(MonsterSchema.HEALTH);
 
 		}
 
@@ -269,10 +313,26 @@ public class EnemyEditorTab extends EditorTab {
 	 * 
 	 */
 	private void updateViewWithSchemaData(Map<String, String> map) {
-		healthField.setValue(Integer.parseInt(map.get(Monster.HEALTH)));
-		speedField.setValue(Integer.parseInt(map.get(Monster.SPEED)));
-		damageField.setValue(Integer.parseInt(map.get(Monster.DAMAGE)));
-		rewardField.setValue(Integer.parseInt(map.get(Monster.REWARD)));
+		healthField.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)));
+		speedField.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)));
+		damageField.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)));
+		rewardField.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)));
+		// these are just default values right now
+		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
+				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton
+				.getModel() : flyingButton.getModel();
+		ButtonModel selectedSizeButton;
+
+		if (map.get(MonsterSchema.TILE_SIZE).equals(
+				MonsterSchema.TILE_SIZE_SMALL))
+			selectedSizeButton = smallButton.getModel();
+		else if (map.get(MonsterSchema.TILE_SIZE).equals(
+				MonsterSchema.TILE_SIZE_MEDIUM))
+			selectedSizeButton = mediumButton.getModel();
+		else
+			selectedSizeButton = largeButton.getModel();
+		flyingButtonGroup.setSelected(selectedFlyButton, true);
+		sizeButtonGroup.setSelected(selectedSizeButton, true);
 
 	}
 
@@ -280,49 +340,58 @@ public class EnemyEditorTab extends EditorTab {
 	 * puts the view fields' data into the schema data
 	 */
 	private void updateSchemaDataFromView() {
-		// update schema with data
-		String name = (String) listModel.getValueAt(list.getSelectedRow(), 0);
+		// update schema with fields
+		String name = getSelectedEnemyName();
 		SimpleMonsterSchema myCurrentEnemy = enemyMap.get(name);
 		Integer health = (Integer) healthField.getValue();
-		myCurrentEnemy.addAttribute(Monster.HEALTH, health.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.HEALTH, health.toString());
 		Integer speed = (Integer) speedField.getValue();
-		myCurrentEnemy.addAttribute(Monster.SPEED, speed.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.SPEED, speed.toString());
 		Integer damage = (Integer) damageField.getValue();
-		myCurrentEnemy.addAttribute(Monster.DAMAGE, damage.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.DAMAGE, damage.toString());
 		Integer reward = (Integer) rewardField.getValue();
-		myCurrentEnemy.addAttribute(Monster.REWARD, reward.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.REWARD, reward.toString());
+		// update schema with buttons
+		myCurrentEnemy.addAttribute(MonsterSchema.FLYING_OR_GROUND,
+				GroupButtonUtil.getSelectedButtonText(flyingButtonGroup));
+		myCurrentEnemy.addAttribute(MonsterSchema.TILE_SIZE,
+				GroupButtonUtil.getSelectedButtonText(sizeButtonGroup));
+		// update schema with images
+	}
+
+	private void showInvalidEnemyNameDialog() {
+		JOptionPane
+				.showMessageDialog(
+						null,
+						"Please enter a unique alphanumeric name starting with letters and greater than two characters.",
+						"Alert!", JOptionPane.ERROR_MESSAGE);
 	}
 
 	private class EnemyCellEditor extends DefaultCellEditor {
-		private long lastTime = System.currentTimeMillis();
-
 		EnemyCellEditor() {
 			super(new JTextField());
 		}
 
 		public boolean stopCellEditing() {
 			JTable table = (JTable) getComponent().getParent();
-			String originalKey = (String) list.getValueAt(
-					list.getSelectedRow(), 0);
+			String originalKey = getSelectedEnemyName();
 
 			try {
-				String editingValue = (String) getCellEditorValue();
-				System.out.println(table.isEditing());
-				System.out.println(editingValue);
+				String editedKey = (String) getCellEditorValue();
 
-				if (enemyMap.containsKey(editingValue)) {
+				if (!originalKey.equals(editedKey)
+						&& !EnemyUtilFunctions.newEnemyNameIsValid(editedKey,
+								enemyMap)) {
 					JTextField textField = (JTextField) getComponent();
 					textField.setBorder(new LineBorder(Color.red));
 					textField.selectAll();
 					textField.requestFocusInWindow();
 
-					JOptionPane.showMessageDialog(null,
-							"Please enter a unique name.", "Alert!",
-							JOptionPane.ERROR_MESSAGE);
+					showInvalidEnemyNameDialog();
 					return false;
 
 				} else {
-					replaceKeysInEnemyMap(originalKey, editingValue);
+					replaceKeysInEnemyMap(originalKey, editedKey);
 				}
 
 			} catch (ClassCastException exception) {
@@ -380,6 +449,7 @@ public class EnemyEditorTab extends EditorTab {
 			result.add(new JLabel("Design New Enemy"), BorderLayout.WEST);
 
 			createEnemyField = new JTextField();
+			originalCreateEnemyFieldBorder = createEnemyField.getBorder();
 			createEnemyButton = new JButton("Begin");
 			result.add(createEnemyField, BorderLayout.CENTER);
 			result.add(createEnemyButton, BorderLayout.EAST);
@@ -396,10 +466,10 @@ public class EnemyEditorTab extends EditorTab {
 					0, // bottom
 					0)); // right
 
-			smallButton = new JRadioButton("Small");
-			mediumButton = new JRadioButton("Medium");
-			largeButton = new JRadioButton("Large");
-			ButtonGroup sizeButtonGroup = new ButtonGroup();
+			smallButton = new JRadioButton(MonsterSchema.TILE_SIZE_SMALL);
+			mediumButton = new JRadioButton(MonsterSchema.TILE_SIZE_MEDIUM);
+			largeButton = new JRadioButton(MonsterSchema.TILE_SIZE_LARGE);
+			sizeButtonGroup = new ButtonGroup();
 			sizeButtonGroup.add(smallButton);
 			sizeButtonGroup.add(mediumButton);
 			sizeButtonGroup.add(largeButton);
@@ -457,7 +527,6 @@ public class EnemyEditorTab extends EditorTab {
 			// Create a split pane with the two scroll panes in it.
 			splitPane = myBuilder.makeSplitPane(new JScrollPane(list),
 					makeEditorPane());
-			// updateLabel(enemyNames[list.getSelectedIndex()]);
 			return splitPane;
 		}
 
@@ -497,11 +566,13 @@ public class EnemyEditorTab extends EditorTab {
 					0, // bottom
 					0)); // right
 
-			groundButton = new JRadioButton("Ground");
-			flyingButton = new JRadioButton("Flying");
-			ButtonGroup sizeButtonGroup = new ButtonGroup();
-			sizeButtonGroup.add(groundButton);
-			sizeButtonGroup.add(flyingButton);
+			groundButton = new JRadioButton(
+					MonsterSchema.FLYING_OR_GROUND_GROUND);
+			flyingButton = new JRadioButton(
+					MonsterSchema.FLYING_OR_GROUND_FLYING);
+			flyingButtonGroup = new ButtonGroup();
+			flyingButtonGroup.add(groundButton);
+			flyingButtonGroup.add(flyingButton);
 			result.add(groundButton);
 			result.add(flyingButton);
 			return result;
@@ -523,8 +594,8 @@ public class EnemyEditorTab extends EditorTab {
 		}
 
 		private Component makeDeleteEnemyButton() {
-			JButton result = new JButton("Delete Enemy");
-			return result;
+			deleteEnemyButton = new JButton("Delete Enemy");
+			return deleteEnemyButton;
 		}
 
 		private JComponent makeEditorPane() {
