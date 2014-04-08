@@ -5,6 +5,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -124,18 +127,9 @@ public class DataHandler {
 		if (unserializedObject instanceof DataBundle) {
 			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
 			ZipFile myZippedResources = bundle.getZippedResourcesFolder();
-			File myCurrentResourcesFolder = new File (TEST_FILE_PATH);
-			if(!myCurrentResourcesFolder.exists()){
-		           System.out.println("Directory does not exist.");
-		           System.exit(0);
-		        }else{
-		           try{
-		               delete(myCurrentResourcesFolder);
-		           }catch(IOException e){
-		               e.printStackTrace();
-		               System.exit(0);
-		           }
-		        }
+			Path testFilePath = Paths.get(TEST_FILE_PATH);
+			
+//			decompress(myZippedResources,TEST_FILE_PATH);
 			//unzip and put resources in src/main/resources
 			return bundle.getBlueprint();
 		}
@@ -143,18 +137,39 @@ public class DataHandler {
 	}
 	
 	/**
+	 * Deletes a directory
+	 * @param dir
+	 * @return
+	 */
+	public static boolean deleteDir(File dir) 
+	{ 
+	  if (dir.isDirectory()) 
+	{ 
+	  String[] children = dir.list(); 
+	  for (int i=0; i<children.length; i++)
+	  { 
+	    boolean success = deleteDir(new File(dir, children[i])); 
+	    if (!success) 
+	    {  
+	      return false; 
+	    } 
+	  } 
+	  // The directory is now empty so delete it 
+	  return dir.delete(); 
+	} 
+		
+	/**
 	 * Unzips a ZIP file to a target location
 	 * @param compressedFile
 	 * @param destination
 	 */
 	
-	public static void decompress(String compressedFile,String destination) {
+	private static void decompress(ZipFile zippedResources,String destination) {
 		 try {
-		     ZipFile zipFile = new ZipFile(compressedFile);
-		     if (zipFile.isEncrypted()) {
+		     if (zippedResources.isEncrypted()) {
 		         //zipFile.setPassword(password);
 		     }
-		     zipFile.extractAll(destination);
+		     zippedResources.extractAll(destination);
 		 } catch (ZipException e) {
 		     e.printStackTrace();
 		 }
