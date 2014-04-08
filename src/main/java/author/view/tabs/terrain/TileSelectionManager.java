@@ -29,29 +29,18 @@ import javax.swing.SwingConstants;
 
 import main.java.author.view.tabs.terrain.types.TileObject;
 
-public class TileSelectionManager extends JPanel {
-
-	private static final String BITMAP_FILE = "BitmapImages";
+public class TileSelectionManager {
 
 	private ResourceBundle myBitmapBundle;
 	private Canvas myCanvas;
-	
 	private TileEditingPanel myTileEditPanel;
 	private TileDisplay myTileDisplay;
 	
 	public TileSelectionManager(Canvas canvas) {
 		myCanvas = canvas;
-		initResources();
-	
-		myTileDisplay = new TileDisplay(this, myBitmapBundle);
-		
-		
-		add(myTileDisplay.getMyScrollPane(), BorderLayout.WEST);
-		add(myTileEditPanel = new TileEditingPanel(this), BorderLayout.EAST);
-	}
-	
-	public void makeVisible(ActionEvent e) {
-		setVisible(true);
+		myTileDisplay = new TileDisplay(this);
+		myTileEditPanel = new TileEditingPanel(this);
+
 	}
 	
 	public TileDisplay getTileDisplay() {
@@ -62,15 +51,6 @@ public class TileSelectionManager extends JPanel {
 		return myTileEditPanel;
 	}
 	
-	
-	private void initResources() {
-		myBitmapBundle = getResourceBundle("main.resources.author.images.", BITMAP_FILE);
-	}
-	
-	private ResourceBundle getResourceBundle(String bundlePackage, String bundleName) {
-		return ResourceBundle.getBundle(bundlePackage + bundleName);
-	}
-
 	public void clearCanvasTiles(ActionEvent e) {
 		myCanvas.clearTiles();
 	}

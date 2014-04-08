@@ -38,7 +38,7 @@ import static main.java.author.util.ActionListenerUtil.actionListener;
 public class TerrainEditorTab extends EditorTab{
 
 	private static final String CLEAR = "Clear Tiles";
-	private static final String BACKGROUND_TILES = "Open Default Background Tiles";
+	private static final String EDIT_TILE = "Edit Tile";
 	
 	private TileSelectionManager myTileSelectionManager;
 	private Map<String, JButton> buttonDisplayOptions;
@@ -50,13 +50,14 @@ public class TerrainEditorTab extends EditorTab{
 		myCanvas = new Canvas();
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
 		add(myCanvas, BorderLayout.CENTER);
+		add(myTileSelectionManager.getTileDisplay().getMyScrollPane(), BorderLayout.EAST);
 		initButtonDisplay();
 	}
 	
 	private void initButtonDisplay() {
 		buttonDisplayOptions = new HashMap<String, JButton>();
 		buttonDisplayOptions.put(CLEAR, initClearButton());
-		buttonDisplayOptions.put(BACKGROUND_TILES, initDefaultBackground());
+		buttonDisplayOptions.put(EDIT_TILE, initDefaultBackground());
 		
 		JPanel buttonDisplayPanel = new JPanel();
 		buttonDisplayPanel.setLayout(new GridBagLayout());
@@ -67,7 +68,7 @@ public class TerrainEditorTab extends EditorTab{
 			buttonDisplayPanel.add(buttonDisplay, c);
 			c.gridy++;
 		}
-		add(buttonDisplayPanel, BorderLayout.WEST);
+		add(buttonDisplayPanel, BorderLayout.SOUTH);
 	}
 
 	private JButton initClearButton() {
@@ -77,14 +78,14 @@ public class TerrainEditorTab extends EditorTab{
 	}
 	
 	private JButton initDefaultBackground() {
-		JButton openBGTiles = new JButton(BACKGROUND_TILES);
+		JButton openBGTiles = new JButton(EDIT_TILE);
 		openBGTiles.addActionListener(actionListener(this, "displayTileSelectionManager"));
 		return openBGTiles;
 	}
 	
 	public void displayTileSelectionManager(ActionEvent e) {
 		JFrame selectionFrame = new JFrame();
-		selectionFrame.add(myTileSelectionManager, BorderLayout.CENTER);
+		selectionFrame.add(myTileSelectionManager.getTileEditPanel(), BorderLayout.CENTER);
 		selectionFrame.setLocation(this.getWidth() + 25, 0);
 		selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		selectionFrame.pack();

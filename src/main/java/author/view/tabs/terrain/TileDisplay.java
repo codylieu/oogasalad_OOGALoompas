@@ -22,7 +22,8 @@ import javax.swing.JScrollPane;
 import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
-	
+
+	private static final String BITMAP_FILE = "BitmapImages";
 	private static final String DEFAULT_BG_BITMAP_SOURCE = "pokemon2.bmp";
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
 	private TileSelectionManager myTileManager;
@@ -30,13 +31,17 @@ public class TileDisplay extends JPanel {
 	private Image[][] myImages; 
 	private int pixelSize;
 	
-	public TileDisplay(TileSelectionManager tileManager, ResourceBundle bitmapBundle) {
+	public TileDisplay(TileSelectionManager tileManager) {
 		myTileManager = tileManager;
-		myBitmapBundle = bitmapBundle;
-		myImages = parseBitmap(Tile.DEFAULT_IMAGE_PACKAGE, DEFAULT_BG_BITMAP_SOURCE);
+		initResources();
 
 		constructTileOptions();
 		setVisible(true);
+	}
+	
+	private void initResources() {
+		myBitmapBundle = getResourceBundle("main.resources.author.images.", BITMAP_FILE);
+		myImages = parseBitmap(Tile.DEFAULT_IMAGE_PACKAGE, DEFAULT_BG_BITMAP_SOURCE);
 	}
 	
 	/**
@@ -102,6 +107,13 @@ public class TileDisplay extends JPanel {
 			}
 		}
 		add(tileOptions);
+	}
+	
+	
+
+	
+	private ResourceBundle getResourceBundle(String bundlePackage, String bundleName) {
+		return ResourceBundle.getBundle(bundlePackage + bundleName);
 	}
 	
 	/**
