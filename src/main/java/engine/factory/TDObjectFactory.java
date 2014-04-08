@@ -46,7 +46,6 @@ public class TDObjectFactory {
             Map<String, Object> attributes = schema.getAttributesMap();
             attributes.put(Tower.X, tileOrigin.getX());
             attributes.put(Tower.Y, tileOrigin.getY());
-
 			Object[] towerParameters = {attributes};
         	return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
 		} catch (Exception e) {
@@ -55,33 +54,21 @@ public class TDObjectFactory {
 	}
 	
 	public Monster placeMonster(Point2D entrance, Point2D exit, String monsterName) throws MonsterCreationFailureException {
-		/*try {
+		try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
-
             Map<String, Object> attributes = schema.getAttributesMap();
             attributes.put(Monster.ENTRANCE_X, entrance.getX());
             attributes.put(Monster.ENTRANCE_Y, entrance.getY());
             attributes.put(Monster.EXIT_X, exit.getX());
             attributes.put(Monster.EXIT_Y, exit.getY());
-
             Object[] monsterParameters = {attributes};
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
 		} catch (Exception e) {
 			throw new MonsterCreationFailureException();
-		}*/
-        TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
-        Map<String, Object> attributes = schema.getAttributesMap();
-        attributes.put(Monster.ENTRANCE_X, entrance.getX());
-        attributes.put(Monster.ENTRANCE_Y, entrance.getY());
-        attributes.put(Monster.EXIT_X, exit.getX());
-        attributes.put(Monster.EXIT_Y, exit.getY());
-
-        Object[] monsterParameters = {attributes};
-        return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
+		}
 	}
 
 	private Object placeObject(Class objectType, Object[] parameters) {
-		System.out.println(parameters.toString());
 		return Reflection.createInstance(objectType.getName(), parameters);
 	}
 
