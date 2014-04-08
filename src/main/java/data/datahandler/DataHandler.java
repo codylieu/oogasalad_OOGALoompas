@@ -61,7 +61,8 @@ public class DataHandler {
 	}
 
 	/**
-	 * 
+	 * Saves a blueprint and current resources folder
+	 * to the file path
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
 	 */
@@ -117,7 +118,9 @@ public class DataHandler {
 	}
 
 	/**
-	 * 
+	 * Loads a serialized blueprint (in a databundle with blueprint + resources)
+	 * Deletes current resources folder and replaces it with the zipped resources
+	 * inside the databundle
 	 * @param filePath
 	 * @return unserialized gameblueprint
 	 * @throws IOException 
@@ -129,13 +132,13 @@ public class DataHandler {
 
 		if (unserializedObject instanceof DataBundle) {
 			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
-			//			ZipFile myZippedResources = bundle.getZippedResourcesFolder();
+			//ZipFile myZippedResources = bundle.getZippedResourcesFolder();
 			String myZippedResourcesLocation = bundle.getZippedResourcesFolderLocation();
 			File myDir = new File(TEST_FILE_PATH);
-//			System.out.println(deleteDirectory(myDir));
+			deleteDirectory(myDir);
 			ZipFile myZippedResourcesFolder = new ZipFile(myZippedResourcesLocation);
-			decompress(myZippedResourcesFolder,TEST_FILE_PATH);
 			//unzip and put resources in src/main/resources
+			decompress(myZippedResourcesFolder,TEST_FILE_PATH); 
 			return bundle.getBlueprint();
 		}
 		throw new ClassNotFoundException("Not a data bundle");
