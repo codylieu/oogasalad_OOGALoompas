@@ -201,7 +201,6 @@ public class Model {
         testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
         testTowerSchema.addAttribute(Tower.COST, (double) 10);
         testTowerSchema.addAttribute(Tower.IMAGE, "SimpleTower");
-      //  testTowerSchema.addAttribute("dan", "SimpleTower");
 
         tdObjectSchemas.add(testTowerSchema);
 

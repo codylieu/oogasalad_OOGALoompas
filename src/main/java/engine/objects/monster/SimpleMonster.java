@@ -2,9 +2,6 @@ package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
 import java.util.Map;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.MonsterSchema;
-
 
 public class SimpleMonster extends Monster {
 
@@ -26,10 +23,8 @@ public class SimpleMonster extends Monster {
 	 */
 	public SimpleMonster (Map<String, Object> attributes) {
 		this(
-				(double) getValueOrDefault(attributes, ENTRANCE_X, 0),
-				(double) getValueOrDefault(attributes, ENTRANCE_Y, 0),
-				(double) getValueOrDefault(attributes, EXIT_X, 100),
-				(double) getValueOrDefault(attributes, EXIT_Y, 100),
+				(Point2D) getValueOrDefault(attributes, ENTRANCE_LOCATION, new Point2D.Double(0,0)),
+				(Point2D) getValueOrDefault(attributes, EXIT_LOCATION, new Point2D.Double(0,0)),
 				(double) getValueOrDefault(attributes, HEALTH, DEFAULT_HEALTH),
 				(double) getValueOrDefault(attributes, SPEED, DEFAULT_MOVE_SPEED),
 				(double) getValueOrDefault(attributes, MONEY_VALUE, DEFAULT_REWARD_AMOUNT),
@@ -49,17 +44,15 @@ public class SimpleMonster extends Monster {
 	 * @param moneyValue
 	 * @param imageName
 	 */
-	public SimpleMonster (double entranceX,
-			double entranceY,
-			double exitX,
-			double exitY,
+	public SimpleMonster (Point2D entrance,
+			Point2D exit,
 			double health,
 			double speed,
 			double moneyValue,
 			String imageName) {
 
-		super(new Point2D.Double(entranceX, entranceY),
-				new Point2D.Double(exitX, exitY),
+		super(entrance,
+				exit,
 				health, moneyValue, speed, imageName);
 
 	}

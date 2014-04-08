@@ -23,8 +23,7 @@ public class SimpleTower extends Tower {
 	 */
 	public SimpleTower (Map<String, Object> attributes) {
 		this(
-				(double) getValueOrDefault(attributes, X, 0),
-				(double) getValueOrDefault(attributes, Y, 0),
+				(Point2D) getValueOrDefault(attributes, LOCATION, new Point2D.Double(0,0)),
 				(double) getValueOrDefault(attributes, HEALTH, DEFAULT_HEALTH),
 				(double) getValueOrDefault(attributes, DAMAGE, DEFAULT_DAMAGE),
 				(double) getValueOrDefault(attributes, RANGE, DEFAULT_RANGE),
@@ -45,8 +44,7 @@ public class SimpleTower extends Tower {
 	 * @param buildup buildup time for this tower's construction
 	 * @param imageName
 	 */
-	public SimpleTower (double x,
-			double y,
+	public SimpleTower (Point2D location,
 			double health,
 			double damage,
 			double range,
@@ -54,7 +52,7 @@ public class SimpleTower extends Tower {
 			double buildup,
 			String imageName) {
 
-		super(new Point2D.Double(x, y),
+		super(location,
 				imageName,
 				damage,
 				range,

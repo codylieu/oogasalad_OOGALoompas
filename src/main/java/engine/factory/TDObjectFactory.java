@@ -1,6 +1,7 @@
 package main.java.engine.factory;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,10 +44,8 @@ public class TDObjectFactory {
 		Point2D tileOrigin = findTileOrigin(location);
 		try {
 			TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
-            Map<String, Object> attributes = schema.getAttributesMap();
-            attributes.put(Tower.X, tileOrigin.getX());
-            attributes.put(Tower.Y, tileOrigin.getY());
-			Object[] towerParameters = {attributes};
+			schema.addAttribute(Tower.LOCATION, (Serializable) tileOrigin);
+			Object[] towerParameters = {schema.getAttributesMap()};
         	return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
 		} catch (Exception e) {
 			throw new TowerCreationFailureException();
@@ -56,12 +55,9 @@ public class TDObjectFactory {
 	public Monster placeMonster(Point2D entrance, Point2D exit, String monsterName) throws MonsterCreationFailureException {
 		try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
-            Map<String, Object> attributes = schema.getAttributesMap();
-            attributes.put(Monster.ENTRANCE_X, entrance.getX());
-            attributes.put(Monster.ENTRANCE_Y, entrance.getY());
-            attributes.put(Monster.EXIT_X, exit.getX());
-            attributes.put(Monster.EXIT_Y, exit.getY());
-            Object[] monsterParameters = {attributes};
+            schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
+            schema.addAttribute(Monster.EXIT_LOCATION, (Serializable) exit);
+            Object[] monsterParameters = {schema.getAttributesMap()};
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
 		} catch (Exception e) {
 			throw new MonsterCreationFailureException();
