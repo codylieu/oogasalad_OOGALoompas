@@ -308,7 +308,7 @@ public class Model {
      * @return number of lives left
      */
     public int getPlayerLife() {
-    	return player.getLife();
+    	return player.getLivesRemaining();
     }
     
     /**
@@ -387,7 +387,7 @@ public class Model {
 		doTowerFiring();
 		removeDeadMonsters();
 		gameState.updateGameStates(monsters, towers, entrance, exit, currentWave, allWaves, gameClock, 
-				player.getMoney(), player.getLife(), player.getScore());
+				player.getMoney(), player.getLivesRemaining(), player.getScore());
 	}
 
 	/**
@@ -489,5 +489,12 @@ public class Model {
     		return true;
     	}
     	return false;
+    }
+
+    /**
+     * Decrease player's lives by one.
+     */
+    public void decrementLives () {
+       player.decrementLives();
     }
 }
