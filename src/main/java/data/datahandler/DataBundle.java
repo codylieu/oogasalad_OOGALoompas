@@ -21,10 +21,15 @@ import main.java.schema.GameBlueprint;
  */
 
 @SuppressWarnings("serial")
+
+// Right now ZipFiles cannot be serialized, so I'm putting in the data bundle the location of the zipfile until we
+// can figure out how to serialize zipfiles w/ the gameblueprints.
+
 public class DataBundle implements Serializable {
 
     private GameBlueprint myGameBlueprint;
-    private ZipFile myZippedResources;
+//    private ZipFile myZippedResources;
+    private String myZippedResourcesLocation;
 
     public DataBundle () {
     }
@@ -37,12 +42,20 @@ public class DataBundle implements Serializable {
         return myGameBlueprint;
     }
     
-    public ZipFile getZippedResourcesFolder(){
-    	return myZippedResources;
+//    public ZipFile getZippedResourcesFolder(){
+//    	return myZippedResources;
+//    }
+    
+    public String getZippedResourcesFolderLocation(){
+    	return myZippedResourcesLocation;
     }
     
-    public void setResourcesFolder(ZipFile resourceFolderToSave){
-    	myZippedResources = resourceFolderToSave;
+//    public void setResourcesFolder(ZipFile resourceFolderToSave){
+//    	myZippedResources = resourceFolderToSave;
+//    }
+    
+    public void setResourceFolderLocation(String resourceFolderLocationToSave){
+    	myZippedResourcesLocation = resourceFolderLocationToSave;
     }
 
     public void setBlueprint (GameBlueprint gameBlueprint) {

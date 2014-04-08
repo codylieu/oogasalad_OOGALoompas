@@ -68,9 +68,11 @@ public class DataHandler {
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
 		DataBundle bundleToSave = new DataBundle();
 		bundleToSave.setBlueprint(blueprint);
-		ZipFile myZippedResources = compress(FILE_PATH,filePath + "ZippedResources.zip");
-		bundleToSave.setResourcesFolder(myZippedResources);
-		return saveObjectToFile(bundleToSave, filePath + "SavedBundle.ser");
+		String zipFileLocation = filePath + "ZippedResources.zip";
+		ZipFile myZippedResources = compress(FILE_PATH,zipFileLocation);
+		//		bundleToSave.setResourcesFolder(myZippedResources);
+		bundleToSave.setResourceFolderLocation(zipFileLocation);
+		return saveObjectToFile(bundleToSave, filePath + "Bundle.ser");
 	}
 
 	/**
@@ -79,17 +81,17 @@ public class DataHandler {
 	 * @param inputFile
 	 * @param compressedFile
 	 */
-	
+
 	private ZipFile compress(String inputFolder,String compressedFile) {
 		try {
 			ZipFile zipFile = new ZipFile(compressedFile);
 			File inputFolderH = new File(inputFolder);
 			ZipParameters parameters = new ZipParameters();
-			
+
 			// COMP_DEFLATE is for compression
 			// COMp_STORE no compression
 			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
-			
+
 			// DEFLATE_LEVEL_ULTRA = maximum compression
 			// DEFLATE_LEVEL_MAXIMUM
 			// DEFLATE_LEVEL_NORMAL = normal compression
@@ -101,12 +103,12 @@ public class DataHandler {
 			zipFile.addFolder(inputFolderH, parameters);
 			return zipFile;
 
-//			long uncompressedSize = inputFileH.length();
-//			File outputFileH = new File(compressedFile);
-//			long comrpessedSize = outputFileH.length();
+			//			long uncompressedSize = inputFileH.length();
+			//			File outputFileH = new File(compressedFile);
+			//			long comrpessedSize = outputFileH.length();
 
-//			double ratio = (double)comrpessedSize/(double)uncompressedSize;
-//			System.out.println("File compressed with compression ratio : "+ ratio);
+			//			double ratio = (double)comrpessedSize/(double)uncompressedSize;
+			//			System.out.println("File compressed with compression ratio : "+ ratio);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,62 +122,66 @@ public class DataHandler {
 	 * @return unserialized gameblueprint
 	 * @throws IOException 
 	 * @throws ClassNotFoundException 
+	 * @throws ZipException 
 	 */
-	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException {
+	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
 		Object unserializedObject = loadObjectFromFile(filePath);
 
 		if (unserializedObject instanceof DataBundle) {
 			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
-			ZipFile myZippedResources = bundle.getZippedResourcesFolder();
-			Path testFilePath = Paths.get(TEST_FILE_PATH);
-			
-//			decompress(myZippedResources,TEST_FILE_PATH);
+			//			ZipFile myZippedResources = bundle.getZippedResourcesFolder();
+			String myZippedResourcesLocation = bundle.getZippedResourcesFolderLocation();
+			File myDir = new File(TEST_FILE_PATH);
+			deleteDir(myDir);
+			ZipFile myZippedResourcesFolder = new ZipFile(myZippedResourcesLocation);
+//			decompress(myZippedResourcesFolder,TEST_FILE_PATH);
 			//unzip and put resources in src/main/resources
 			return bundle.getBlueprint();
 		}
 		throw new ClassNotFoundException("Not a data bundle");
 	}
-	
+
 	/**
 	 * Deletes a directory
 	 * @param dir
 	 * @return
 	 */
-	public static boolean deleteDir(File dir) 
+	private static boolean deleteDir(File dir) 
 	{ 
-	  if (dir.isDirectory()) 
-	{ 
-	  String[] children = dir.list(); 
-	  for (int i=0; i<children.length; i++)
-	  { 
-	    boolean success = deleteDir(new File(dir, children[i])); 
-	    if (!success) 
-	    {  
-	      return false; 
-	    } 
-	  } 
-	  // The directory is now empty so delete it 
-	  return dir.delete(); 
-	} 
-		
+		if (dir.isDirectory()) 
+			System.out.println("hi");
+		{ 
+			String[] children = dir.list(); 
+			for (int i=0; i<children.length; i++)
+			{ 
+				boolean success = deleteDir(new File(dir, children[i])); 
+				if (!success) 
+				{  
+					return false; 
+				} 
+			} 
+			return dir.delete(); 
+		}
+//		return true; 
+	}
 	/**
 	 * Unzips a ZIP file to a target location
 	 * @param compressedFile
 	 * @param destination
 	 */
-	
+
 	private static void decompress(ZipFile zippedResources,String destination) {
-		 try {
-		     if (zippedResources.isEncrypted()) {
-		         //zipFile.setPassword(password);
-		     }
-		     zippedResources.extractAll(destination);
-		 } catch (ZipException e) {
-		     e.printStackTrace();
-		 }
-		 
-		 System.out.println("File Decompressed");
+		try {
+			if (zippedResources.isEncrypted()) {
+				//zipFile.setPassword(password);
+			}
+			zippedResources.extractAll(destination);
+		} catch (ZipException e) {
+			e.printStackTrace();
 		}
+
+		System.out.println("File Decompressed");
+	}
 
 	/**
 	 * 

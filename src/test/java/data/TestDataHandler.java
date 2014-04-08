@@ -12,6 +12,7 @@ import main.java.data.datahandler.DataHandler;
 import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
+import net.lingala.zip4j.exception.ZipException;
 
 import org.junit.Test;
 
@@ -86,9 +87,9 @@ public class TestDataHandler {
 //	}
 	
 	@Test
-	public void testDecompression() throws ClassNotFoundException, IOException {
+	public void testDecompression() throws ClassNotFoundException, IOException, ZipException {
 		DataHandler testDataHandler = new DataHandler();
-		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintSavedBundle.ser"); // attempt to load serialized blueprint in data bundle
+		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintBundle.ser"); // attempt to load serialized blueprint in data bundle form
 	}
 
 }
