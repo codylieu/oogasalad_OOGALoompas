@@ -17,6 +17,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	private List<Observing> observers;
 	private CursorState cursorState;
 	private boolean hasChanged;
+	private boolean isFullScreen;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 
 	public TDPlayerEngine() {
@@ -24,6 +25,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		initEngineComponent(960, 640);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
+		isFullScreen = false;
 		cursorState = CursorState.None;
 	}
 
@@ -85,7 +87,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 			if (model.isTowerPresent(mousePos.x, mousePos.y))
 				return ;
 	}*/
-	
+
 	public String getCurrentDescription() {
 		/*JGPoint mousePos = getMousePos();
 		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0) {
@@ -97,8 +99,8 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 				return "";
 		}
 		else*/
-			return "";
-			
+		return "";
+
 	}
 
 	@Override
@@ -154,8 +156,24 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 			toggleRunning();
 			clearKey(Integer.parseInt(hotkeys.getString("ToggleRunning")));
 		}
+		
+		if(getKey(Integer.parseInt(hotkeys.getString("FullScreen")))){
+			toggleFullScreen();
+			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
+		}
 	}
 
+	public void toggleFullScreen(){
+		if(!isFullScreen){
+			initEngineComponent(0,0);
+			isFullScreen = true;
+			}
+		else{
+			initEngineComponent(960, 640);
+			isFullScreen = false;
+		}
+			
+	}
 	public void toggleRunning() {
 		if (isRunning())
 			stop();
