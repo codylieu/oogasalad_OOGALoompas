@@ -22,7 +22,7 @@ import com.google.gson.Gson;
  */
 
 public class DataHandler {
-	public final static String FILE_PATH = "src/main/resources";
+	public final static String FILE_PATH = "src/test/resources";
 
 	/*private Gson myGson;
 
@@ -65,12 +65,13 @@ public class DataHandler {
 		DataBundle bundleToSave = new DataBundle();
 		bundleToSave.setBlueprint(blueprint);
 		ZipFile myZippedResources = compress(FILE_PATH,filePath + "zipped_resources");
-		bundleToSave.setResourceFolder()
+		bundleToSave.setResourcesFolder(myZippedResources);
 		return saveObjectToFile(bundleToSave, filePath);
 	}
 
 	/**
 	 * Zips a file to a target location.
+	 * Can set compression level.
 	 * @param inputFile
 	 * @param compressedFile
 	 */
