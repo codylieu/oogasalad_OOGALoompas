@@ -25,13 +25,13 @@ public class SimpleMonster extends Monster {
      * @param attributes key value map of attributes as defined by MonsterSchema
      */
     public SimpleMonster (Map<String, String> attributes) {
-        this(Double.parseDouble(getValueOrDefault(attributes, ENTRANCE_X, "0")),
-             Double.parseDouble(getValueOrDefault(attributes, ENTRANCE_Y, "0")),
-             Double.parseDouble(getValueOrDefault(attributes, EXIT_X, "100")),
-             Double.parseDouble(getValueOrDefault(attributes, EXIT_Y, "100")),
-             Double.parseDouble(getValueOrDefault(attributes, HEALTH, DEFAULT_HEALTH + "")),
-             Double.parseDouble(getValueOrDefault(attributes, SPEED, DEFAULT_MOVE_SPEED + "")),
-             Double.parseDouble(getValueOrDefault(attributes, REWARD, DEFAULT_REWARD_AMOUNT +
+        this(Double.parseDouble(getValueOrDefault(attributes, MonsterSchema.ENTRANCE_X, "0")),
+             Double.parseDouble(getValueOrDefault(attributes, MonsterSchema.ENTRANCE_Y, "0")),
+             Double.parseDouble(getValueOrDefault(attributes, MonsterSchema.EXIT_X, "100")),
+             Double.parseDouble(getValueOrDefault(attributes, MonsterSchema.EXIT_Y, "100")),
+             Double.parseDouble(getValueOrDefault(attributes, MonsterSchema.HEALTH, DEFAULT_HEALTH + "")),
+             Double.parseDouble(getValueOrDefault(attributes, MonsterSchema.SPEED, DEFAULT_MOVE_SPEED + "")),
+             Double.parseDouble(getValueOrDefault(attributes, MonsterSchema.REWARD, DEFAULT_REWARD_AMOUNT +
                                                                             "")),
              getValueOrDefault(attributes, "image", DEFAULT_MONSTER_GFX));
     }
