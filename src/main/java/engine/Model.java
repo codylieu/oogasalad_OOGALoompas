@@ -240,8 +240,8 @@ public class Model {
      */
     public void loadGameSchemas(String fileName) throws ClassNotFoundException, IOException	{
     	GameBlueprint bp = engineDataHandler.loadBlueprint(RESOURCE_PATH + fileName);
-    	Map<String, String> gameAttributes = bp.getMyGameScenario().getAttributesMap();
-    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
+    	Map<String, Object> gameAttributes = bp.getMyGameScenario().getAttributesMap();
+    	player = new Player((Integer) gameAttributes.get(GameSchema.MONEY), (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
     
@@ -351,7 +351,7 @@ public class Model {
         for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
             for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
                 Monster newlyAdded = factory.placeMonster(entrance, exit,
-                        spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
+                        (String) spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
                 monsters.add(newlyAdded);
             }
             if(++currentWave >= allWaves.size()) {

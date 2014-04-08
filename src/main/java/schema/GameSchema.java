@@ -1,5 +1,6 @@
 package main.java.schema;
 
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -23,8 +24,8 @@ public class GameSchema extends AbstractSchema{
 	}
 	
 	@Override
-	public void addAttribute(String attributeName, Object attributeValue) {
-		myAttributesMap.put(attributeName, attributeValue.toString());
+	public void addAttribute(String attributeName, Serializable attributeValue) {
+		myAttributesMap.put(attributeName, attributeValue);
 		
 	}
 	
