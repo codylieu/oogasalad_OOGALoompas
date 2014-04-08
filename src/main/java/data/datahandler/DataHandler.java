@@ -132,9 +132,9 @@ public class DataHandler {
 			//			ZipFile myZippedResources = bundle.getZippedResourcesFolder();
 			String myZippedResourcesLocation = bundle.getZippedResourcesFolderLocation();
 			File myDir = new File(TEST_FILE_PATH);
-			deleteDir(myDir);
+//			System.out.println(deleteDirectory(myDir));
 			ZipFile myZippedResourcesFolder = new ZipFile(myZippedResourcesLocation);
-//			decompress(myZippedResourcesFolder,TEST_FILE_PATH);
+			decompress(myZippedResourcesFolder,TEST_FILE_PATH);
 			//unzip and put resources in src/main/resources
 			return bundle.getBlueprint();
 		}
@@ -146,24 +146,24 @@ public class DataHandler {
 	 * @param dir
 	 * @return
 	 */
-	private static boolean deleteDir(File dir) 
-	{ 
-		if (dir.isDirectory()) 
-			System.out.println("hi");
-		{ 
-			String[] children = dir.list(); 
-			for (int i=0; i<children.length; i++)
-			{ 
-				boolean success = deleteDir(new File(dir, children[i])); 
-				if (!success) 
-				{  
-					return false; 
-				} 
-			} 
-			return dir.delete(); 
-		}
-//		return true; 
+	public static boolean deleteDirectory(File dir) {
+	    if(! dir.exists() || !dir.isDirectory())    {
+	        return false;
+	    }
+
+	    String[] files = dir.list();
+	    for(int i = 0, len = files.length; i < len; i++)    {
+	        File f = new File(dir, files[i]);
+	        if(f.isDirectory()) {
+	            deleteDirectory(f);
+	        }else   {
+	            f.delete();
+	        }
+	    }
+	    return dir.delete();
 	}
+
+	
 	/**
 	 * Unzips a ZIP file to a target location
 	 * @param compressedFile
