@@ -1,10 +1,15 @@
 package main.java.data.datahandler;
-
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
 
 import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
@@ -17,13 +22,14 @@ import com.google.gson.Gson;
  */
 
 public class DataHandler {
+	public final static String FILE_PATH = "src/main/resources";
 
 	/*private Gson myGson;
 
 	public DataHandler(){
 		myGson = new Gson();
 	}*/
-	
+
 	/**
 	 * 
 	 * @param currentGameState
@@ -58,10 +64,70 @@ public class DataHandler {
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
 		DataBundle bundleToSave = new DataBundle();
 		bundleToSave.setBlueprint(blueprint);
-		//Zip resources folder
-		//Add zipped resoures folder to data bundle
+		ZipFile myZippedResources = compress(FILE_PATH,filePath + "zipped_resources");
+		bundleToSave.setResourceFolder()
 		return saveObjectToFile(bundleToSave, filePath);
 	}
+
+	/**
+	 * Zips a file to a target location.
+	 * @param inputFile
+	 * @param compressedFile
+	 */
+	
+	private ZipFile compress(String inputFolder,String compressedFile) {
+		try {
+			ZipFile zipFile = new ZipFile(compressedFile);
+			File inputFolderH = new File(inputFolder);
+			ZipParameters parameters = new ZipParameters();
+			
+			// COMP_DEFLATE is for compression
+			// COMp_STORE no compression
+			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+			
+			// DEFLATE_LEVEL_ULTRA = maximum compression
+			// DEFLATE_LEVEL_MAXIMUM
+			// DEFLATE_LEVEL_NORMAL = normal compression
+			// DEFLATE_LEVEL_FAST
+			// DEFLATE_LEVEL_FASTEST = fastest compression
+			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_ULTRA);
+
+			// folder compressed
+			zipFile.addFolder(inputFolderH, parameters);
+			return zipFile;
+
+//			long uncompressedSize = inputFileH.length();
+//			File outputFileH = new File(compressedFile);
+//			long comrpessedSize = outputFileH.length();
+
+//			double ratio = (double)comrpessedSize/(double)uncompressedSize;
+//			System.out.println("File compressed with compression ratio : "+ ratio);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	/**
+	 * Unzips a ZIP file to a target location
+	 * @param compressedFile
+	 * @param destination
+	 */
+	
+	public static void decompress(String compressedFile,String destination) {
+		 try {
+		     ZipFile zipFile = new ZipFile(compressedFile);
+		     if (zipFile.isEncrypted()) {
+		         //zipFile.setPassword(password);
+		     }
+		     zipFile.extractAll(destination);
+		 } catch (ZipException e) {
+		     e.printStackTrace();
+		 }
+		 
+		 System.out.println("File Decompressed");
+		}
 
 	/**
 	 * 

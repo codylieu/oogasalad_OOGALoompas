@@ -1,5 +1,6 @@
 package main.java.data.datahandler;
 
+import java.io.File;
 import java.io.Serializable;
 
 import main.java.schema.GameBlueprint;
@@ -21,6 +22,7 @@ import main.java.schema.GameBlueprint;
 public class DataBundle implements Serializable {
 
     private GameBlueprint myGameBlueprint;
+    private File myZippedResources;
 
     public DataBundle () {
     }
@@ -31,6 +33,10 @@ public class DataBundle implements Serializable {
 
     public GameBlueprint getBlueprint () {
         return myGameBlueprint;
+    }
+    
+    public void setResourcesFile(File resourceFolderToSave){
+    	myZippedResources = resourceFolderToSave;
     }
 
     public void setBlueprint (GameBlueprint gameBlueprint) {

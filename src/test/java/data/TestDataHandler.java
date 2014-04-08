@@ -2,7 +2,7 @@ package test.java.data;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
+//import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -73,7 +73,12 @@ public class TestDataHandler {
 		
 		//Check if the variable values are the same
 		assertEquals(CURRENT_WAVE_NUMBER, loadedState.getCurrentWaveNumber());
-		assertNotEquals(CURRENT_WAVE_NUMBER+1, loadedState.getCurrentWaveNumber());
+//		assertNotEquals(CURRENT_WAVE_NUMBER+1, loadedState.getCurrentWaveNumber());
+	}
+	
+	@Test
+	public void testCompressFile() {
+		DataHandler testDataHandler = new DataHandler();
 	}
 
 }
