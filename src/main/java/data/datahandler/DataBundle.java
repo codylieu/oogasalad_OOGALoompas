@@ -37,6 +37,10 @@ public class DataBundle implements Serializable {
         return myGameBlueprint;
     }
     
+    public ZipFile getZippedResourcesFolder(){
+    	return myZippedResources;
+    }
+    
     public void setResourcesFolder(ZipFile resourceFolderToSave){
     	myZippedResources = resourceFolderToSave;
     }

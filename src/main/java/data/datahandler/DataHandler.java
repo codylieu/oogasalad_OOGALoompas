@@ -22,7 +22,8 @@ import com.google.gson.Gson;
  */
 
 public class DataHandler {
-	public final static String FILE_PATH = "src/test/resources";
+	private final static String FILE_PATH = "src/test/resources"; // change back to src/main/resources after implementation is done!
+	private final static String TEST_FILE_PATH = "src/test/resources.replacement.tester";
 
 	/*private Gson myGson;
 
@@ -109,6 +110,37 @@ public class DataHandler {
 		}
 		return null;
 	}
+
+	/**
+	 * 
+	 * @param filePath
+	 * @return unserialized gameblueprint
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
+	 */
+	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException {
+		Object unserializedObject = loadObjectFromFile(filePath);
+
+		if (unserializedObject instanceof DataBundle) {
+			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
+			ZipFile myZippedResources = bundle.getZippedResourcesFolder();
+			File myCurrentResourcesFolder = new File (TEST_FILE_PATH);
+			if(!myCurrentResourcesFolder.exists()){
+		           System.out.println("Directory does not exist.");
+		           System.exit(0);
+		        }else{
+		           try{
+		               delete(myCurrentResourcesFolder);
+		           }catch(IOException e){
+		               e.printStackTrace();
+		               System.exit(0);
+		           }
+		        }
+			//unzip and put resources in src/main/resources
+			return bundle.getBlueprint();
+		}
+		throw new ClassNotFoundException("Not a data bundle");
+	}
 	
 	/**
 	 * Unzips a ZIP file to a target location
@@ -129,25 +161,6 @@ public class DataHandler {
 		 
 		 System.out.println("File Decompressed");
 		}
-
-	/**
-	 * 
-	 * @param filePath
-	 * @return unserialized gameblueprint
-	 * @throws IOException 
-	 * @throws ClassNotFoundException 
-	 */
-	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException {
-		Object unserializedObject = loadObjectFromFile(filePath);
-
-		if (unserializedObject instanceof DataBundle) {
-			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
-			//Get zipped resource folder from data bundle
-			//unzip and put resources in src/main/resources
-			return bundle.getBlueprint();
-		}
-		throw new ClassNotFoundException("Not a data bundle");
-	}
 
 	/**
 	 * 
