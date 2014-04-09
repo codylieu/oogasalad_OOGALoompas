@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
@@ -54,12 +55,12 @@ public class TDObjectFactory {
         }
     }
 
-    public Monster placeMonster (Point2D entrance, Point2D exit, String monsterName)
+    public Monster placeMonster (Point2D entrance, Exit exit, String monsterName)
                                                                                     throws MonsterCreationFailureException {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
             schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
-            schema.addAttribute(Monster.EXIT_LOCATION, (Serializable) exit);
+            schema.addAttribute(Monster.EXIT_LOCATION, exit);
             Object[] monsterParameters = { schema.getAttributesMap() };
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
         }

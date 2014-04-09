@@ -2,6 +2,7 @@ package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
 
+import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 
 
@@ -20,7 +21,7 @@ public abstract class Monster extends TDObject {
 	protected double myMoneyValue;
 	protected IMonsterPath myPathFinder;
 	protected Point2D myEntrance;
-	protected Point2D myExit;
+	protected Exit myExit;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
 	 */
@@ -36,7 +37,7 @@ public abstract class Monster extends TDObject {
 	public Monster (//double x,
 			//double y,
 			Point2D entrance,
-			Point2D exit,
+			Exit exit,
 			double health,
 			double moveSpeed,
 			double rewardAmount,
@@ -46,12 +47,11 @@ public abstract class Monster extends TDObject {
 		myHealth = health;
 		myMoveSpeed = moveSpeed;
 		myMoneyValue = rewardAmount;
-		myPathFinder = new StraightLinePath(this, exit);
+		myPathFinder = new StraightLinePath(this, exit.getLocation());
 	}
 
 	@Override
 	public void move () {
-		isDead();
 		myPathFinder.navigateMonster();
 	}
 

@@ -14,6 +14,7 @@ import main.java.data.datahandler.EngineDataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
+import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.SimpleTower;
@@ -61,7 +62,7 @@ public class Model {
         towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
-        setExit(engine.pfWidth(), engine.pfHeight()/2);
+        setExit(engine.pfWidth(), 0);
         
 			loadGameBlueprint(null);
 		// TODO: REPLACE
@@ -350,7 +351,8 @@ public class Model {
     private void spawnNextWave() throws MonsterCreationFailureException {
         for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
             for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Monster newlyAdded = factory.placeMonster(entrance, exit,
+                Exit monsterExit = new Exit(exit.getX(), exit.getY(), this);
+                Monster newlyAdded = factory.placeMonster(entrance, monsterExit,
                         (String) spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
                 monsters.add(newlyAdded);
             }

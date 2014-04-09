@@ -2,6 +2,7 @@ package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
 import java.util.Map;
+import main.java.engine.objects.Exit;
 
 public class SimpleMonster extends Monster {
 
@@ -10,7 +11,7 @@ public class SimpleMonster extends Monster {
 	public static final double DEFAULT_REWARD_AMOUNT = 10;
 	public static final String DEFAULT_MONSTER_GFX = "monster";
 
-	public SimpleMonster (Point2D entrance, Point2D exit) {
+	public SimpleMonster (Point2D entrance, Exit exit) {
 		super(entrance, exit, DEFAULT_HEALTH, DEFAULT_MOVE_SPEED, DEFAULT_REWARD_AMOUNT,
 				DEFAULT_MONSTER_GFX);
 		// myPathFinder = new StraightLinePath(this);
@@ -24,7 +25,7 @@ public class SimpleMonster extends Monster {
 	public SimpleMonster (Map<String, Object> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ENTRANCE_LOCATION, new Point2D.Double(0,0)),
-				(Point2D) getValueOrDefault(attributes, EXIT_LOCATION, new Point2D.Double(0,0)),
+				(Exit) getValueOrDefault(attributes, EXIT_LOCATION, null),
 				(double) getValueOrDefault(attributes, HEALTH, DEFAULT_HEALTH),
 				(double) getValueOrDefault(attributes, SPEED, DEFAULT_MOVE_SPEED),
 				(double) getValueOrDefault(attributes, MONEY_VALUE, DEFAULT_REWARD_AMOUNT),
@@ -45,7 +46,7 @@ public class SimpleMonster extends Monster {
 	 * @param imageName
 	 */
 	public SimpleMonster (Point2D entrance,
-			Point2D exit,
+			Exit exit,
 			double health,
 			double speed,
 			double moneyValue,
