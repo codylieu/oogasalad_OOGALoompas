@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.lingala.zip4j.exception.ZipException;
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
@@ -248,7 +249,13 @@ public class Model {
      * @throws ClassNotFoundException 
      */
     public void loadGameSchemas(String filePath) throws ClassNotFoundException, IOException	{
-		GameBlueprint bp = dataHandler.loadBlueprint(filePath);
+		GameBlueprint bp;
+		try {
+			bp = dataHandler.loadBlueprint(filePath);
+		} catch (ZipException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
     	player = new Player((Integer) gameAttributes.get(GameSchema.MONEY), (Integer) gameAttributes.get(GameSchema.LIVES));
     }
