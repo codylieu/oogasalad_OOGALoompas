@@ -8,13 +8,13 @@ import jgame.JGObject;
 public class Player {
 	private static final int DEFAULT_INITIAL_LIVES_NUM = 3;
 	private int money;
-	private int life;
+	private int lives;
 	private double score;
 	private Map<String, Integer> skills;
 	
 	public Player() {
 		this.money = 300;
-		this.life = DEFAULT_INITIAL_LIVES_NUM;
+		this.lives = DEFAULT_INITIAL_LIVES_NUM;
 		this.score = 0;
 		this.skills = new HashMap<String, Integer>();
 	}
@@ -22,11 +22,11 @@ public class Player {
 	/**
 	 * Constructor to be used in the loadGameSchemas method in Model
 	 * @param money
-	 * @param life
+	 * @param lives
 	 */
-	public Player(String m, String l)	{
-		this.money = Integer.parseInt(m);
-		this.life = Integer.parseInt(l);
+	public Player(Integer m, Integer l)	{
+		this.money = m;
+		this.lives = l;
 		this.score = 0;
 		this.skills = new HashMap<String, Integer>();
 	}
@@ -36,7 +36,7 @@ public class Player {
 	}
 	
 	public void lostLife() {
-		this.life -= 1;
+		this.lives -= 1;
 	}
 	
 	public void addScore(double score) {
@@ -56,8 +56,13 @@ public class Player {
 		this.money+=value;
 	}
 	
-	public int getLife() {
-		return this.life;
+	public int getLivesRemaining() {
+		return this.lives;
+	}
+	
+	
+	public void decrementLives(){
+	    lives--;
 	}
 
 	public double getScore() {

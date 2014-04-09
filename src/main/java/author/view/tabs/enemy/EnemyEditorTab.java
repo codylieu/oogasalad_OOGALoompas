@@ -16,6 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -268,11 +269,12 @@ public class EnemyEditorTab extends EditorTab {
 	 *            the monster's schema attributes
 	 * 
 	 */
-	private void updateViewWithSchemaData(Map<String, String> map) {
-		healthField.setValue(Integer.parseInt(map.get(Monster.HEALTH)));
-		speedField.setValue(Integer.parseInt(map.get(Monster.SPEED)));
-		damageField.setValue(Integer.parseInt(map.get(Monster.DAMAGE)));
-		rewardField.setValue(Integer.parseInt(map.get(Monster.REWARD)));
+	private void updateViewWithSchemaData(Map<String, Serializable> map) {
+		healthField.setValue(Integer.parseInt((String) map.get(Monster.HEALTH)));
+		speedField.setValue(Integer.parseInt((String) map.get(Monster.SPEED)));
+		//Hi, this is Kevin. Next line was causing errors. Not sure if I should delete. Somebody on authoring team should look at this.
+		//damageField.setValue(Integer.parseInt(map.get(Monster.DAMAGE)));
+		rewardField.setValue(Integer.parseInt((String) map.get(Monster.MONEY_VALUE)));
 
 	}
 
@@ -288,9 +290,10 @@ public class EnemyEditorTab extends EditorTab {
 		Integer speed = (Integer) speedField.getValue();
 		myCurrentEnemy.addAttribute(Monster.SPEED, speed.toString());
 		Integer damage = (Integer) damageField.getValue();
-		myCurrentEnemy.addAttribute(Monster.DAMAGE, damage.toString());
+		//Hi, this is Kevin. Next line was causing errors. Not sure if I should delete. Somebody on authoring team should look at this.
+		//myCurrentEnemy.addAttribute(Monster.DAMAGE, damage.toString());
 		Integer reward = (Integer) rewardField.getValue();
-		myCurrentEnemy.addAttribute(Monster.REWARD, reward.toString());
+		myCurrentEnemy.addAttribute(Monster.MONEY_VALUE, reward.toString());
 	}
 
 	private class EnemyCellEditor extends DefaultCellEditor {

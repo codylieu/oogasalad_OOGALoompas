@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
@@ -13,6 +14,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 
 
 public class TDPlayerEngine extends JGEngine implements Subject {
+
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
@@ -74,7 +76,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 
 	private void displayGameStats() {
 		this.drawString("Score: "+model.getScore(), 50, 25, -1);
-		this.drawString("Lives left: "+model.getPlayerLife(), 50, 50, -1);
+		this.drawString("Lives left: "+model.getPlayerLives(), 50, 50, -1);
 		this.drawString("Money: "+model.getMoney(), 50, 75, -1);
 		this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
 	}
@@ -212,7 +214,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		hasChanged = true;
 		Map<String, String> gameStats = new HashMap<String, String>();
 		gameStats.put("Score", "Score: " + model.getScore());
-		gameStats.put("Lives", "Lives left: " + model.getPlayerLife());
+		gameStats.put("Lives", "Lives left: " + model.getPlayerLives());
 		gameStats.put("Money", "Money: " + model.getMoney());
 		gameStats.put("Time", "Game clock: " + model.getGameClock());
 		return gameStats;
