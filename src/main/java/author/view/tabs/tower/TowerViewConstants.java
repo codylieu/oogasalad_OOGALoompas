@@ -1,10 +1,8 @@
-package main.java.author.view.tabs.enemy;
-
-import javax.swing.JSpinner;
+package main.java.author.view.tabs.tower;
 
 import main.java.schema.MonsterSchema;
 
-public class EnemyViewConstants {
+public class TowerViewConstants {
 	// string constants
 	public static final String HEALTH_STRING = "Health";
 	public static final String SPEED_STRING = "Speed";
@@ -18,5 +16,8 @@ public class EnemyViewConstants {
 	public static final int DAMAGE_DEFAULT = 20;
 	public static final int REWARD_DEFAULT = 20;
 
-	
+	public static final int IMAGE_CANVAS_SIZE = 235;
+
+	public static final int DIVIDER_LOCATION = 300;
+
 }

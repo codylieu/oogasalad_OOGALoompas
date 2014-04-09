@@ -34,7 +34,7 @@ public class SimpleMonsterSchema extends MonsterSchema {
 	
 	}
 
-	private void populateDefaultAttributes(String name) {
+	public void populateDefaultAttributes(String name) {
 		addAttribute(Monster.NAME, name);
 		addAttribute(MonsterSchema.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
 		addAttribute(MonsterSchema.SPEED, EnemyViewConstants.SPEED_DEFAULT);

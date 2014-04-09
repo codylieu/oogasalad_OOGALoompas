@@ -44,7 +44,8 @@ import javax.swing.table.DefaultTableModel;
 import main.java.author.controller.MainController;
 import main.java.author.util.EnemyUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
-import main.java.author.view.tabs.enemy.EnemyViewConstants;
+import main.java.author.view.global_constants.FontConstants;
+import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.schema.TDObjectSchema;
 
 public abstract class ObjectEditorTab extends EditorTab {
@@ -336,7 +337,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JSpinner spinner = new JSpinner(model);
 			spinner.setMaximumSize(new Dimension(200, spinner.getHeight()));
 			Font bigFont = spinner.getFont().deriveFont(Font.PLAIN,
-					EnemyViewConstants.X_LARGE_FONT_SIZE);
+					FontConstants.X_LARGE_FONT_SIZE);
 			spinner.setFont(bigFont);
 			return spinner;
 		}
@@ -373,8 +374,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 			collisionImageCanvas = new ImageCanvas();
-			collisionImageCanvas.setSize(EnemyViewConstants.IMAGE_CANVAS_SIZE,
-					EnemyViewConstants.IMAGE_CANVAS_SIZE);
+			collisionImageCanvas.setSize(ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE);
 			collisionImageCanvas.setBackground(Color.BLACK);
 			result.add(collisionImageCanvas, BorderLayout.NORTH);
 			collisionImageButton = makeChooseGraphicsButton("Set Collision Image");
@@ -401,8 +402,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 			objectImageCanvas = new ImageCanvas();
-			objectImageCanvas.setSize(EnemyViewConstants.IMAGE_CANVAS_SIZE,
-					EnemyViewConstants.IMAGE_CANVAS_SIZE);
+			objectImageCanvas.setSize(ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE);
 			objectImageCanvas.setBackground(Color.BLACK);
 			result.add(objectImageCanvas, BorderLayout.NORTH);
 			objectImageButton = makeChooseGraphicsButton("Set Enemy Image");
@@ -424,7 +425,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 					listScrollPane, editorPane);
 
-			splitPane.setDividerLocation(EnemyViewConstants.DIVIDER_LOCATION);
+			splitPane.setDividerLocation(ObjectEditorConstants.DIVIDER_LOCATION);
 
 			Dimension minimumSize = new Dimension(100, 50);
 			listScrollPane.setMinimumSize(minimumSize);
@@ -439,9 +440,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JTable table = new JTable(listModel);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			Font tableFont = table.getFont().deriveFont(
-					EnemyViewConstants.MEDIUM_FONT_SIZE);
+					FontConstants.MEDIUM_FONT_SIZE);
 			table.setFont(tableFont);
-			table.setRowHeight((int) EnemyViewConstants.MEDIUM_FONT_SIZE + 12);
+			table.setRowHeight((int) FontConstants.MEDIUM_FONT_SIZE + 12);
 			return table;
 		}
 
