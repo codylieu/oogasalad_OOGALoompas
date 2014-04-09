@@ -249,7 +249,7 @@ public class Model {
      * @throws ClassNotFoundException 
      */
     public void loadGameSchemas(String filePath) throws ClassNotFoundException, IOException	{
-		GameBlueprint bp;
+		GameBlueprint bp = null;
 		try {
 			bp = dataHandler.loadBlueprint(filePath);
 		} catch (ZipException e) {
