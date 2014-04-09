@@ -38,8 +38,9 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(Monster.NAME, name);
 		addAttribute(Monster.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
 		addAttribute(Monster.SPEED, EnemyViewConstants.SPEED_DEFAULT);
-		addAttribute(Monster.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
-		addAttribute(Monster.REWARD, EnemyViewConstants.REWARD_DEFAULT);           
+		//Hi, this is Kevin. Next line is causing errors, so I commented it out. I don't understand it so I didn't delete it
+		//addAttribute(Monster.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
+		addAttribute(Monster.MONEY_VALUE, EnemyViewConstants.REWARD_DEFAULT);           
 		
 	}
 

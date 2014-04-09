@@ -1,4 +1,4 @@
-package main.java.util;
+package main.java.engine.util;
 
 import java.lang.reflect.*;
 //Written by Professor Duvall, modified by Dianwen Li
@@ -41,7 +41,7 @@ public class Reflection
      * actual parameters, returns initialized instance of the corresponding 
      * class using matching constructor.  
      */
-    public static Object createInstance (String name, Object[] args)
+    public static Object createInstance (String name, Object ... args)
         throws ReflectionException
     {
         try

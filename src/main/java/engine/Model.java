@@ -3,6 +3,7 @@ package main.java.engine;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,10 +14,11 @@ import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
+import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
+import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
@@ -62,9 +64,9 @@ public class Model {
         towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
-        setExit(engine.pfWidth(), engine.pfHeight()/2);
-        loadGameBlueprint(null); // TODO: REPLACE
-        dataHandler = new DataHandler();
+        setExit(engine.pfWidth()/2, engine.pfHeight()/2);
+		loadGameBlueprint(null);// TODO: REPLACE
+		dataHandler = new DataHandler();
     }
     
     /**
@@ -74,6 +76,10 @@ public class Model {
     	this.player = new Player();
     }
 
+    public void removeMonster(Monster m){
+        monsters.remove(m);
+    }
+    
     /**
      * Add a tower at the specified location. If tower already exists in that cell, do nothing.
      * @param x	x coordinate of the tower
@@ -91,7 +97,7 @@ public class Model {
         	
         	if(player.getMoney() >= newTower.getCost() ) {
         	        //FIXME: Decrease money?
-        		player.addMoney(-SimpleTower.DEFAULT_COST);
+        		player.addMoney(-newTower.getCost());
         		towers[currentTile[0]][currentTile[1]]  = newTower;
         		return true;
         	} else {
@@ -184,6 +190,7 @@ public class Model {
      * Loads the game schemas from GameBlueprint and sets the appropriate state
      *
      * @param bp
+     * @throws InvalidParameterForConcreteTypeException 
      */
     public void loadGameBlueprint(GameBlueprint bp) {
 //    	Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
@@ -198,13 +205,14 @@ public class Model {
 
         SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
         testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
-        testTowerSchema.addAttribute(Tower.COST, "10");
+        testTowerSchema.addAttribute(Tower.COST, (double) 10);
         testTowerSchema.addAttribute(Tower.IMAGE, "SimpleTower");
+
         tdObjectSchemas.add(testTowerSchema);
 
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
         testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
-        testMonsterSchema.addAttribute(Monster.REWARD, "200");
+        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, (double) 200);
         tdObjectSchemas.add(testMonsterSchema);
 
         factory.loadSchemas(tdObjectSchemas);
@@ -236,9 +244,9 @@ public class Model {
      * @throws ClassNotFoundException 
      */
     public void loadGameSchemas(String filePath) throws ClassNotFoundException, IOException	{
-    	GameBlueprint bp = dataHandler.loadBlueprint(filePath);
-    	Map<String, String> gameAttributes = bp.getMyGameScenario().getAttributesMap();
-    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
+		GameBlueprint bp = dataHandler.loadBlueprint(filePath);
+    	Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
+    	player = new Player((Integer) gameAttributes.get(GameSchema.MONEY), (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
     /**
@@ -283,7 +291,7 @@ public class Model {
      * @return true if game is lost
      */
     public boolean isGameLost() {
-    	if (getPlayerLife() <= 0) return true;
+    	if (getPlayerLives() <= 0) return true;
     	return false;
     }
     
@@ -303,8 +311,8 @@ public class Model {
      * Get the number of remaining lives of the player
      * @return number of lives left
      */
-    public int getPlayerLife() {
-    	return player.getLife();
+    public int getPlayerLives() {
+    	return player.getLivesRemaining();
     }
     
     /**
@@ -346,8 +354,9 @@ public class Model {
     private void spawnNextWave() throws MonsterCreationFailureException {
         for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
             for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Monster newlyAdded = factory.placeMonster(entrance, exit,
-                        spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
+                Exit monsterExit = new Exit(exit.getX(), exit.getY(), this);
+                Monster newlyAdded = factory.placeMonster(entrance, monsterExit,
+                        (String) spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
                 monsters.add(newlyAdded);
             }
             if(++currentWave >= allWaves.size()) {
@@ -383,7 +392,7 @@ public class Model {
 		doTowerFiring();
 		removeDeadMonsters();
 		gameState.updateGameStates(monsters, towers, entrance, exit, currentWave, allWaves, gameClock, 
-				player.getMoney(), player.getLife(), player.getScore());
+				player.getMoney(), player.getLivesRemaining(), player.getScore());
 	}
 
 	/**
@@ -480,10 +489,17 @@ public class Model {
     		int ytile = coordinates[1];
     		towers[xtile][ytile].remove();
     		Tower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
-    		System.out.println(newTower.x);
+    		//System.out.println(newTower.x);
     		towers[xtile][ytile] = newTower;
     		return true;
     	}
     	return false;
+    }
+
+    /**
+     * Decrease player's lives by one.
+     */
+    public void decrementLives () {
+       player.decrementLives();
     }
 }

@@ -74,9 +74,9 @@ public class TestEngine extends JGEngine {
     }
     
     private void displayTowerGhostIfNecessary() {
-    	System.out.println(cursorState);
+    	//System.out.println(cursorState);
     	if (cursorState == CursorState.AddTower) {
-    		System.out.println("displaytower");
+    	//	System.out.println("displaytower");
     		new TowerGhost(getMouseX(), getMouseY());
     	}
     }
@@ -94,7 +94,7 @@ public class TestEngine extends JGEngine {
     
     private void displayGameStats() {
     	this.drawString("Score: "+model.getScore(), 50, 25, -1);
-    	this.drawString("Lives left: "+model.getPlayerLife(), 50, 50, -1);
+    	this.drawString("Lives left: "+model.getPlayerLives(), 50, 50, -1);
     	this.drawString("Money: "+model.getMoney(), 50, 75, -1);
     	this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
     }

@@ -5,12 +5,15 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GraphicsDevice;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -28,6 +31,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 public class Player {
 
@@ -51,7 +55,6 @@ public class Player {
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
-
 	private TDPlayerEngine engine;
 
 	public Player() {
@@ -65,7 +68,9 @@ public class Player {
 		show();
 	}
 
-
+	public void initGraphics(){
+		
+	}
 	public void showCard(String cardName){
 		cardLayout.show(cards,  cardName);
 	}
@@ -176,12 +181,13 @@ public class Player {
 		gamePanel.setPreferredSize(new Dimension(600, 400));
 		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		return gamePanel;*/
-
+		
 		engine = new TDPlayerEngine();
 		engine.stop();
 		return engine;
 	}
 
+	
 	private JPanel makeGameButtonPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
