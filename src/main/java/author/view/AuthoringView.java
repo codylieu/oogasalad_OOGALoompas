@@ -38,7 +38,6 @@ public class AuthoringView extends JFrame {
 
 	public AuthoringView() {
 		myController = new MainController();
-		
 	}
 
 	/**

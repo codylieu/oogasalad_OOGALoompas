@@ -33,6 +33,13 @@ public class Canvas extends JPanel {
 			}
 		}
 		setPreferredSize(new Dimension(NUM_COLS*TILE_SIZE, NUM_ROWS*TILE_SIZE)); // important for maintaining size of JPanel
+		initCanvasListeners();
+	}
+	
+	/**
+	 * Initializes listeners for both clicking and dragging on tiles
+	 */
+	private void initCanvasListeners() {
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -121,10 +128,14 @@ public class Canvas extends JPanel {
 		repaint(); // we want to keep this repaint, if we use update, it messes up on macs
 	}
 	
+	/**
+	 * Clears all tiles on the grid
+	 */
 	protected void clearTiles() {
 		for (Tile tile : getTiles()) {
 			tile.setImage(null);
 			tile.setColor(DEFAULT_TILE_COLOR);
+			tile.setPassIndex(0);
 			repaint();
 		}
 	}

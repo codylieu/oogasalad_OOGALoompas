@@ -34,7 +34,6 @@ public class TileDisplay extends JPanel {
 	public TileDisplay(TileSelectionManager tileManager) {
 		myTileManager = tileManager;
 		initResources();
-
 		constructTileOptions();
 		setVisible(true);
 	}
@@ -100,17 +99,6 @@ public class TileDisplay extends JPanel {
 		return ResourceBundle.getBundle(bundlePackage + bundleName);
 	}
 	
-	/**
-	 * Action Listener, called when a 
-	 * @param e
-	 */
-	public void updateSelection(ActionEvent e) {
-		TileObject selectedTile = (TileObject) e.getSource();
-		myTileManager.getCanvas().setSelectedTileObj(selectedTile);
-		myTileManager.getTileEditPanel().setImageAngle(0);
-		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
-	}
-	
 	public int getPixelSize() {
 		return pixelSize;
 	}
@@ -121,6 +109,17 @@ public class TileDisplay extends JPanel {
 		myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		myScrollPane.setPreferredSize(new Dimension(275, 350));
 		return myScrollPane;
+	}
+	
+	/**
+	 * Action Listener, called when a TileObject within this TileDisplay is clicked
+	 * @param e an ActionEvent called by a TileObject source
+	 */
+	public void updateSelection(ActionEvent e) {
+		TileObject selectedTile = (TileObject) e.getSource();
+		myTileManager.getCanvas().setSelectedTileObj(selectedTile);
+		myTileManager.getTileEditPanel().setImageAngle(0);
+		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
 	}
 	
 }
