@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import javax.swing.table.TableModel;
 
 import main.java.schema.SimpleMonsterSchema;
+import main.java.schema.TDObjectSchema;
 
 /**
  * @author garysheng
@@ -83,11 +84,11 @@ public class EnemyUtilFunctions {
 		return resizedImg;
 	}
 
-	public static boolean newEnemyNameIsValid(String enemyName,
-			HashMap<String, SimpleMonsterSchema> enemyMap) {
+	public static boolean newObjectNameIsValid(String enemyName,
+			HashMap<String, TDObjectSchema> objectMap) {
 
 		if (!enemyName.equals("")) {
-			if (!enemyMap.containsKey(enemyName)) {
+			if (!objectMap.containsKey(enemyName)) {
 				if (enemyName.length() <= 20) {
 					if (enemyName.length() >= 2) {
 						for (String part : enemyName.split(" ")) {

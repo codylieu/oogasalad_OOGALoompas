@@ -22,28 +22,35 @@ import javax.swing.JScrollPane;
 import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
-	
-	private static final String DEFAULT_BG_BITMAP_SOURCE = "pokemon2.bmp";
+
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
+	private String myBitmapFile;
 	private TileSelectionManager myTileManager;
-	private ResourceBundle myBitmapBundle;
 	private Image[][] myImages; 
 	private int pixelSize;
 	
-	public TileDisplay(TileSelectionManager tileManager, ResourceBundle bitmapBundle) {
+	public TileDisplay(TileSelectionManager tileManager, String bitmapFile, int pixels) {
 		myTileManager = tileManager;
-		myBitmapBundle = bitmapBundle;
-		myImages = parseBitmap(Tile.DEFAULT_IMAGE_PACKAGE, DEFAULT_BG_BITMAP_SOURCE);
-
-		constructTileOptions();
+		myBitmapFile = bitmapFile;
+		pixelSize = pixels;
+		initResources();
+		displayTiles();
 		setVisible(true);
 	}
 	
 	/**
-	 * 
-	 * @param bitmapPckg
-	 * @param bitmapName
-	 * @return
+	 * Initializes resources to be used 
+	 */
+	private void initResources() {
+		myImages = parseBitmap(Tile.DEFAULT_IMAGE_PACKAGE, myBitmapFile);
+	}
+	
+	/**
+	 * Reads through a bitmap (currently used for tile backgrounds) and outputs
+	 * a 2D array of image objects
+	 * @param bitmapPckg the package where the bitmap is located
+	 * @param bitmapName the name of the bitmap file
+	 * @return a 2D array of image objects within the bitmap
 	 */
 	private Image[][] parseBitmap(String bitmapPckg, String bitmapName) {
 		BufferedImage img = null;
@@ -51,9 +58,7 @@ public class TileDisplay extends JPanel {
 			img = ImageIO.read(new File(bitmapPckg + bitmapName));
 			int imageWidth = img.getWidth();
 			int imageHeight = img.getHeight();
-			pixelSize = Integer.parseInt(myBitmapBundle.getString(bitmapName));
 			Image [][] myImageArray = new Image[imageHeight/pixelSize][imageWidth/pixelSize];
-
 			for (int i = 0; i < imageHeight/pixelSize; i++) {
 				for (int j = 0; j < imageWidth/pixelSize; j++) {
 					myImageArray[i][j] = img.getSubimage(j*pixelSize, i*pixelSize, pixelSize, pixelSize);
@@ -67,64 +72,61 @@ public class TileDisplay extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @param e
+	 * Allows the user to see the tiles read in from the bitmap,
+	 * displayed through a GridBagLayout on a JPanel
 	 */
-	public void constructTileOptions() {
-		JPanel tileOptions = new JPanel();
-		tileOptions.setLayout(new GridBagLayout());
+	public void displayTiles() {
+		JPanel tileView = new JPanel();
+		tileView.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-
-		
-		
 		c.gridx = 0;
 		c.gridy = 0;
-		
 		for (int i = 0; i < myImages.length; i ++) {
 			for (int j = 0; j < myImages[0].length; j++) {
-				
 				if (c.gridx > 8) {
-					c.gridy++;
 					c.gridx = 0;
+					c.gridy++;
 				} 
-				
-				
-				
-				
 				Image im = myImages[i][j];
-				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT);
+				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT); // scale down image
 
 				TileObject imgDisplayObj = new TileObject(im);
 				imgDisplayObj.addActionListener(actionListener(this, "updateSelection"));
 				imgDisplayObj.setIcon(new ImageIcon(scaledIm)); // place scaled image as jbutton icon
-				tileOptions.add(imgDisplayObj, c); // grid layout of jbutton/images
+				tileView.add(imgDisplayObj, c); // grid layout of jbutton/images
 				c.gridx++;
 			}
 		}
-		add(tileOptions);
+		add(tileView);
 	}
 	
 	/**
-	 * Action Listener, called when a 
-	 * @param e
+	 * Obtains the side length of images in the bitmap, in pixels
+	 */
+	public int getPixelSize() {
+		return pixelSize;
+	}
+	
+	/**
+	 * Allows for a scrollable view of the tiles
+	 */
+	public JScrollPane getTileScrollPane() {
+		JScrollPane myScrollPane = new JScrollPane(this);
+		myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		myScrollPane.setPreferredSize(new Dimension(275, 350));
+		return myScrollPane;
+	}
+	
+	/**
+	 * Action Listener, called when a TileObject within this TileDisplay is clicked
+	 * @param e an ActionEvent called by a TileObject source
 	 */
 	public void updateSelection(ActionEvent e) {
 		TileObject selectedTile = (TileObject) e.getSource();
 		myTileManager.getCanvas().setSelectedTileObj(selectedTile);
 		myTileManager.getTileEditPanel().setImageAngle(0);
 		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
-	}
-	
-	public int getPixelSize() {
-		return pixelSize;
-	}
-	
-	public JScrollPane getMyScrollPane() {
-		JScrollPane myScrollPane = new JScrollPane(this);
-		myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		myScrollPane.setPreferredSize(new Dimension(275, 350));
-		return myScrollPane;
 	}
 	
 }
