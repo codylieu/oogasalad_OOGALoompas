@@ -161,7 +161,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 				String objectName = createObjectField.getText();
 
 				objectName = objectName.trim().replaceAll(" +", " ");
-				System.out.println(objectName);
 				if (EnemyUtilFunctions.newObjectNameIsValid(objectName,
 						objectMap)) {
 
@@ -242,7 +241,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	protected void addObjectNameToList(String objectName) {
 		int indexToPlace = listModel.getRowCount();
-		System.out.println(indexToPlace);
 		listModel.addRow(new String[] { objectName });
 		list.setRowSelectionInterval(indexToPlace, indexToPlace);
 
@@ -260,7 +258,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	protected void updateFieldDataUponNewSelection() {
 		String name = getSelectedObjectName();
-		System.out.println(listModel.getValueAt(0, 0));
 		TDObjectSchema myCurrentObject;
 		if (objectMap.get(name) == null) {
 			myCurrentObject = createSpecificNewObject(name);

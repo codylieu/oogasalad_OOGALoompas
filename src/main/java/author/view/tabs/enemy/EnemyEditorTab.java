@@ -109,21 +109,21 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		damageSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)));
 		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)));
 		// buttons
-		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
-				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton
-				.getModel() : flyingButton.getModel();
-		ButtonModel selectedSizeButton;
+		ButtonModel selectedFlyButtonModel = null;
+		ButtonModel selectedSizeButtonModel = null;
+		String flyOrGroundValue = map.get(MonsterSchema.FLYING_OR_GROUND);
+		String tileSizeValue = map.get(MonsterSchema.TILE_SIZE);
 
-		if (map.get(MonsterSchema.TILE_SIZE).equals(
-				MonsterSchema.TILE_SIZE_SMALL))
-			selectedSizeButton = smallButton.getModel();
-		else if (map.get(MonsterSchema.TILE_SIZE).equals(
-				MonsterSchema.TILE_SIZE_MEDIUM))
-			selectedSizeButton = mediumButton.getModel();
-		else
-			selectedSizeButton = largeButton.getModel();
-		flyingButtonGroup.setSelected(selectedFlyButton, true);
-		sizeButtonGroup.setSelected(selectedSizeButton, true);
+		for (JRadioButton radioButton : radioButtons) {
+			ButtonModel theModel = radioButton.getModel();
+			String theButtonText = radioButton.getText();
+			if (theButtonText.equals(flyOrGroundValue))
+				selectedFlyButtonModel = theModel;
+			if (theButtonText.equals(tileSizeValue))
+				selectedSizeButtonModel = theModel;
+		}
+		flyingButtonGroup.setSelected(selectedFlyButtonModel, true);
+		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
 		// images
 
 	}
