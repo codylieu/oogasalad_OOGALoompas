@@ -12,6 +12,10 @@ import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+<<<<<<< HEAD
+=======
+import java.io.Serializable;
+>>>>>>> master
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -227,7 +231,11 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	protected abstract void initDataFields();
 
+<<<<<<< HEAD
 	protected abstract void updateViewWithSchemaData(Map<String, String> map);
+=======
+	protected abstract void updateViewWithSchemaData(Map<String, Serializable> map);
+>>>>>>> master
 
 	protected abstract void updateSchemaDataFromView();
 
@@ -458,4 +466,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 		protected abstract JComponent makeLabelPane();
 	}
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> master

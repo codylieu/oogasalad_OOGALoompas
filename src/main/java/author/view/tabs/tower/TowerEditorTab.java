@@ -1,8 +1,13 @@
 package main.java.author.view.tabs.tower;
 
 import java.awt.Component;
+<<<<<<< HEAD
 
 import java.awt.GridLayout;
+=======
+import java.awt.GridLayout;
+import java.io.Serializable;
+>>>>>>> master
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -102,12 +107,21 @@ public class TowerEditorTab extends ObjectEditorTab{
 	 *            the monster's schema attributes
 	 * 
 	 */
+<<<<<<< HEAD
 	protected void updateViewWithSchemaData(Map<String, String> map) {
 		// fields (spinners)
 		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)));
 		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)));
 		damageSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)));
 		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)));
+=======
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+		// fields (spinners)
+		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
+		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
+		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
+		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
+>>>>>>> master
 		// buttons
 		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
 				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton

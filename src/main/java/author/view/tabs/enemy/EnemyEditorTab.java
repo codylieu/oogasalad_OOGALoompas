@@ -2,6 +2,10 @@ package main.java.author.view.tabs.enemy;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+<<<<<<< HEAD
+=======
+import java.io.Serializable;
+>>>>>>> master
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -92,6 +96,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		myCurrentEnemy.addAttribute(MonsterSchema.TILE_SIZE,
 				GroupButtonUtil.getSelectedButtonText(sizeButtonGroup));
 		// update schema with images
+<<<<<<< HEAD
 	}
 
 	/**
@@ -126,6 +131,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
 		// images
 
+=======
+>>>>>>> master
 	}
 
 	private class EnemyTabViewBuilder extends TabViewBuilder {
@@ -209,6 +216,36 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			return labels;
 		}
 
+<<<<<<< HEAD
+=======
+	}
+
+	@Override
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+		// fields (spinners)
+		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
+		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
+		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
+		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
+		// buttons
+		ButtonModel selectedFlyButtonModel = null;
+		ButtonModel selectedSizeButtonModel = null;
+		String flyOrGroundValue = (String) map.get(MonsterSchema.FLYING_OR_GROUND);
+		String tileSizeValue = (String) map.get(MonsterSchema.TILE_SIZE);
+
+		for (JRadioButton radioButton : radioButtons) {
+			ButtonModel theModel = radioButton.getModel();
+			String theButtonText = radioButton.getText();
+			if (theButtonText.equals(flyOrGroundValue))
+				selectedFlyButtonModel = theModel;
+			if (theButtonText.equals(tileSizeValue))
+				selectedSizeButtonModel = theModel;
+		}
+		flyingButtonGroup.setSelected(selectedFlyButtonModel, true);
+		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
+		// images
+
+>>>>>>> master
 	}
 
 }
