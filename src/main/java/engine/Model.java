@@ -17,7 +17,6 @@ import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.spawnschema.MonsterSpawnSchema;
 import main.java.engine.spawnschema.WaveSpawnSchema;
@@ -62,7 +61,7 @@ public class Model {
         towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
-        setExit(engine.pfWidth(), 0);
+        setExit(engine.pfWidth()/2, engine.pfHeight()/2);
         
 			loadGameBlueprint(null);
 		// TODO: REPLACE
@@ -76,6 +75,10 @@ public class Model {
     	this.player = new Player();
     }
 
+    public void removeMonster(Monster m){
+        monsters.remove(m);
+    }
+    
     /**
      * Add a tower at the specified location. If tower already exists in that cell, do nothing.
      * @param x	x coordinate of the tower
@@ -288,7 +291,7 @@ public class Model {
      * @return true if game is lost
      */
     public boolean isGameLost() {
-    	if (getPlayerLife() <= 0) return true;
+    	if (getPlayerLives() <= 0) return true;
     	return false;
     }
     
@@ -308,7 +311,7 @@ public class Model {
      * Get the number of remaining lives of the player
      * @return number of lives left
      */
-    public int getPlayerLife() {
+    public int getPlayerLives() {
     	return player.getLivesRemaining();
     }
     
