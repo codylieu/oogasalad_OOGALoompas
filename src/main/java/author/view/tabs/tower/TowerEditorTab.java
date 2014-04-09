@@ -68,7 +68,7 @@ public class TowerEditorTab extends ObjectEditorTab{
 	}
 
 	protected void setDefaultObjectName() {
-		defaultObjectName = "Monster A";
+		defaultObjectName = "Tower A";
 	}
 
 	/**
