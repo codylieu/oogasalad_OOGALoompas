@@ -258,7 +258,7 @@ public class Model {
      * @throws ClassNotFoundException 
      */
     public void loadGameSchemas(String filePath) throws ClassNotFoundException, IOException	{
-		GameBlueprint bp = null;
+		GameBlueprint bp;
 		try {
 			bp = dataHandler.loadBlueprint(filePath);
 		} catch (ZipException e) {
