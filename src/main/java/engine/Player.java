@@ -24,9 +24,9 @@ public class Player {
 	 * @param money
 	 * @param lives
 	 */
-	public Player(String m, String l)	{
-		this.money = Integer.parseInt(m);
-		this.lives = Integer.parseInt(l);
+	public Player(Integer m, Integer l)	{
+		this.money = m;
+		this.lives = l;
 		this.score = 0;
 		this.skills = new HashMap<String, Integer>();
 	}

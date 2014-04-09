@@ -1,5 +1,7 @@
 package main.java.schema;
 
+import java.io.Serializable;
+
 import main.java.engine.objects.TDObject;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
@@ -25,9 +27,9 @@ public abstract class TDObjectSchema extends AbstractSchema	{
 	 * @throws InvalidParameterForConcreteTypeException 
 	 */
 	@Override
-	public void addAttribute(String attributeName, Object attributeValue){
+	public void addAttribute(String attributeName, Serializable attributeValue){
 		if(myAttributeSet.contains(attributeName)) {
-			myAttributesMap.put(attributeName, attributeValue.toString());
+			myAttributesMap.put(attributeName, attributeValue);
 		} 
 		else {
 			try {

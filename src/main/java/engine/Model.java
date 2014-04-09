@@ -3,6 +3,7 @@ package main.java.engine;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -199,15 +200,14 @@ public class Model {
 
         SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
         testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
-        testTowerSchema.addAttribute(Tower.COST, "10");
+        testTowerSchema.addAttribute(Tower.COST, (double) 10);
         testTowerSchema.addAttribute(Tower.IMAGE, "SimpleTower");
-      //  testTowerSchema.addAttribute("dan", "SimpleTower");
 
         tdObjectSchemas.add(testTowerSchema);
 
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
         testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
-        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, "200");
+        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, (double) 200);
         tdObjectSchemas.add(testMonsterSchema);
 
         factory.loadSchemas(tdObjectSchemas);
@@ -240,8 +240,8 @@ public class Model {
      */
     public void loadGameSchemas(String fileName) throws ClassNotFoundException, IOException	{
     	GameBlueprint bp = engineDataHandler.loadBlueprint(RESOURCE_PATH + fileName);
-    	Map<String, String> gameAttributes = bp.getMyGameScenario().getAttributesMap();
-    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
+    	Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
+    	player = new Player((Integer) gameAttributes.get(GameSchema.MONEY), (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
     
@@ -351,7 +351,7 @@ public class Model {
         for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
             for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
                 Monster newlyAdded = factory.placeMonster(entrance, exit,
-                        spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
+                        (String) spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
                 monsters.add(newlyAdded);
             }
             if(++currentWave >= allWaves.size()) {
