@@ -41,7 +41,9 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(MonsterSchema.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
 		addAttribute(MonsterSchema.REWARD, EnemyViewConstants.REWARD_DEFAULT);    
 		addAttribute(MonsterSchema.FLYING_OR_GROUND, EnemyViewConstants.FLYING_OR_GROUND_DEFAULT);    
-		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);    
+		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);
+		addAttribute(MonsterSchema.ENEMY_IMAGE_PATH, "");
+		addAttribute(MonsterSchema.COLLISION_IMAGE_PATH, "");
 		
 	}
 
