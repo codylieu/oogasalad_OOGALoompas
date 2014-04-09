@@ -1,8 +1,7 @@
 package main.java.schema;
 
+import java.io.Serializable;
 import java.util.List;
-
-import main.java.author.model.GameMap;
 
 /**
  * 
@@ -12,11 +11,11 @@ import main.java.author.model.GameMap;
  * important key like isSurvivalMode, which will define a game as never ending.
  * This class does not relate to something that gets explicitly instantiated in the engine.
  */
-public class GameBlueprint {
+public class GameBlueprint implements Serializable {
 
 	private GameSchema myGameScenario;
 	private List<TDObjectSchema> myTDObjectSchemas;
-	private List<LevelSchema> myLevelSchemas;
+	private List<WaveSpawnSchema> myLevelSchemas;
 	private List<GameMap> myGameMaps;
 
 	public GameSchema getMyGameScenario() {
@@ -35,11 +34,11 @@ public class GameBlueprint {
         this.myTDObjectSchemas = myTDObjectSchemas;
     }
 
-	public List<LevelSchema> getMyLevelSchemas() {
+	public List<WaveSpawnSchema> getMyLevelSchemas() {
 		return myLevelSchemas;
 	}
 
-	public void setMyLevelSchemas(List<LevelSchema> myLevelSchemas) {
+	public void setMyLevelSchemas(List<WaveSpawnSchema> myLevelSchemas) {
 		this.myLevelSchemas = myLevelSchemas;
 	}
 

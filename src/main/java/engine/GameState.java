@@ -1,17 +1,18 @@
 package main.java.engine;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.List;
 
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
-import main.java.engine.spawnschema.WaveSpawnSchema;
+import main.java.schema.WaveSpawnSchema;
 
 /**
  * Store all the current game states so that Data can save
  *
  */
-public class GameState {
+public class GameState implements Serializable {
 	// model specific
 	private List<Monster> monsters; 
 	private Tower[][] towers;
@@ -55,4 +56,7 @@ public class GameState {
 		score = playerScore;
 	}
 
+	public int getCurrentWaveNumber() {
+		return currentWave;
+	}
 }

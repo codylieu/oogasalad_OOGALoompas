@@ -1,4 +1,4 @@
-package main.java.author.model;
+package main.java.schema;
 
 import main.java.author.view.tabs.terrain.Tile;
 

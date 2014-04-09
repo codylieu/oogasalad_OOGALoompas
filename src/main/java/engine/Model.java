@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 import jgame.platform.JGEngine;
-import main.java.data.datahandler.EngineDataHandler;
+import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
@@ -18,16 +18,19 @@ import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
-import main.java.engine.spawnschema.MonsterSpawnSchema;
-import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
+import main.java.schema.GameBlueprint;
+import main.java.schema.GameSchema;
+import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.SimpleMonsterSchema;
+import main.java.schema.SimpleTowerSchema;
+import main.java.schema.TDObjectSchema;
+import main.java.schema.WaveSpawnSchema;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
-import main.java.schema.*;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -47,7 +50,7 @@ public class Model {
     private Point2D entrance;
     private Point2D exit;
     private GameState gameState;
-    private EngineDataHandler engineDataHandler;
+    private DataHandler dataHandler;
 
     public Model(JGEngine engine) {
         this.engine = engine;
@@ -62,10 +65,8 @@ public class Model {
         gameState = new GameState();
         setEntrance(0, engine.pfHeight()/2);
         setExit(engine.pfWidth()/2, engine.pfHeight()/2);
-        
-			loadGameBlueprint(null);
-		// TODO: REPLACE
-        engineDataHandler = new EngineDataHandler();
+		loadGameBlueprint(null);// TODO: REPLACE
+		dataHandler = new DataHandler();
     }
     
     /**
@@ -242,13 +243,12 @@ public class Model {
      * @throws IOException 
      * @throws ClassNotFoundException 
      */
-    public void loadGameSchemas(String fileName) throws ClassNotFoundException, IOException	{
-    	GameBlueprint bp = engineDataHandler.loadBlueprint(RESOURCE_PATH + fileName);
+    public void loadGameSchemas(String filePath) throws ClassNotFoundException, IOException	{
+		GameBlueprint bp = dataHandler.loadBlueprint(filePath);
     	Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
     	player = new Player((Integer) gameAttributes.get(GameSchema.MONEY), (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
-    
     /**
      * Reset the game clock
      */

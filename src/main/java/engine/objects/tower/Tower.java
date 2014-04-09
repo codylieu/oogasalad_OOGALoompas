@@ -127,5 +127,11 @@ public abstract class Tower extends TDObject {
 	}
 
 	abstract void fireProjectile(Point2D target);
+	
+	public String toString() {
+		return "Damage: " + myDamage + "\n"
+				+ "Range: " + myRange + "\n"
+				+ "Cost: " + myCost + "\n";
+	}
 
 }
