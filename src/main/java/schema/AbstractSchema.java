@@ -11,13 +11,13 @@ import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
 public abstract class AbstractSchema {
 	
-	protected Map<String, Object> myAttributesMap;
+	protected Map<String, Serializable> myAttributesMap;
 	protected Set<String> myAttributeSet;
 	//TODO: Ensure that types of values of myAttributesMap match. Perhaps make myAttributesSet into a map that maps name of attribute with type?
 	
 	protected AbstractSchema()	{
 		//myAttributesMap = (Map<String, ? extends Serializable>) new HashMap<String, Object>();
-		myAttributesMap = new HashMap<String, Object>();
+		myAttributesMap = new HashMap<String, Serializable>();
 		myAttributeSet = new HashSet<String>();
 		myAttributeSet.addAll(populateAdditionalAttributes());
 	}
@@ -44,7 +44,7 @@ public abstract class AbstractSchema {
 	 * 
 	 * @return unmodifiable map
 	 */
-	public Map<String, Object> getAttributesMap() {
+	public Map<String, Serializable> getAttributesMap() {
 //		return Collections.unmodifiableMap(myAttributesMap); TODO: need to add x and y when placing towers, how to fix?
         return new HashMap<>(myAttributesMap);
 	}

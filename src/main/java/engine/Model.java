@@ -3,6 +3,7 @@ package main.java.engine;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -239,7 +240,7 @@ public class Model {
      */
     public void loadGameSchemas(String fileName) throws ClassNotFoundException, IOException	{
     	GameBlueprint bp = engineDataHandler.loadBlueprint(RESOURCE_PATH + fileName);
-    	Map<String, Object> gameAttributes = bp.getMyGameScenario().getAttributesMap();
+    	Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
     	player = new Player((Integer) gameAttributes.get(GameSchema.MONEY), (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
