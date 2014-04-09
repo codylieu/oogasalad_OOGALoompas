@@ -1,4 +1,4 @@
-package main.java.author.view.tabs.enemy;
+package main.java.author.view.tabs.tower;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -20,12 +20,11 @@ import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.MonsterSchema;
-import main.java.schema.SimpleMonsterSchema;
+import main.java.schema.SimpleTowerSchema;
 import main.java.schema.TDObjectSchema;
 
-//SplitPaneDemo itself is not a visible component.
-@SuppressWarnings("serial")
-public class EnemyEditorTab extends ObjectEditorTab {
+
+public class TowerEditorTab extends ObjectEditorTab{
 
 	private JSpinner healthSpinner;
 	private JSpinner speedSpinner;
@@ -41,16 +40,16 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	private ButtonGroup sizeButtonGroup;
 	private ButtonGroup flyingButtonGroup;
 
-	public EnemyEditorTab(MainController c) {
+	public TowerEditorTab(MainController c) {
 		super(c);
 	}
 
 	protected TDObjectSchema createSpecificNewObject(String objectName) {
-		return new SimpleMonsterSchema(objectName);
+		return new SimpleTowerSchema(objectName);
 	}
 
 	protected TabViewBuilder createSpecificTabViewBuilder() {
-		return new EnemyTabViewBuilder(this);
+		return new TowerTabViewBuilder(this);
 	}
 
 	protected void initDataFields() {
@@ -69,7 +68,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	}
 
 	protected void setDefaultObjectName() {
-		defaultObjectName = "Monster A";
+		defaultObjectName = "Tower A";
 	}
 
 	/**
@@ -78,26 +77,61 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	protected void updateSchemaDataFromView() {
 		// update schema with fields
 		String name = getSelectedObjectName();
-		TDObjectSchema myCurrentEnemy = objectMap.get(name);
+		TDObjectSchema myCurrentTower = objectMap.get(name);
 		Integer health = (Integer) healthSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.HEALTH, health.toString());
+		myCurrentTower.addAttribute(MonsterSchema.HEALTH, health.toString());
 		Integer speed = (Integer) speedSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.SPEED, speed.toString());
+		myCurrentTower.addAttribute(MonsterSchema.SPEED, speed.toString());
 		Integer damage = (Integer) damageSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.DAMAGE, damage.toString());
+		myCurrentTower.addAttribute(MonsterSchema.DAMAGE, damage.toString());
 		Integer reward = (Integer) rewardSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.REWARD, reward.toString());
+		myCurrentTower.addAttribute(MonsterSchema.REWARD, reward.toString());
 		// update schema with buttons
-		myCurrentEnemy.addAttribute(MonsterSchema.FLYING_OR_GROUND,
+		myCurrentTower.addAttribute(MonsterSchema.FLYING_OR_GROUND,
 				GroupButtonUtil.getSelectedButtonText(flyingButtonGroup));
-		myCurrentEnemy.addAttribute(MonsterSchema.TILE_SIZE,
+		myCurrentTower.addAttribute(MonsterSchema.TILE_SIZE,
 				GroupButtonUtil.getSelectedButtonText(sizeButtonGroup));
 		// update schema with images
 	}
 
-	private class EnemyTabViewBuilder extends TabViewBuilder {
+	/**
+	 * 
+	 * puts the schema data into the view field
+	 * 
+	 * @param map
+	 *            the monster's schema attributes
+	 * 
+	 */
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+		// fields (spinners)
+		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
+		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
+		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
+		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
+		// buttons
+		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
+				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton
+				.getModel() : flyingButton.getModel();
+		ButtonModel selectedSizeButton;
 
-		public EnemyTabViewBuilder(EditorTab editorTab) {
+		if (map.get(MonsterSchema.TILE_SIZE).equals(
+				MonsterSchema.TILE_SIZE_SMALL))
+			selectedSizeButton = smallButton.getModel();
+		else if (map.get(MonsterSchema.TILE_SIZE).equals(
+				MonsterSchema.TILE_SIZE_MEDIUM))
+			selectedSizeButton = mediumButton.getModel();
+		else
+			selectedSizeButton = largeButton.getModel();
+		flyingButtonGroup.setSelected(selectedFlyButton, true);
+		sizeButtonGroup.setSelected(selectedSizeButton, true);
+		// images
+
+	}
+
+
+	private class TowerTabViewBuilder extends TabViewBuilder {
+
+		public TowerTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
 			// TODO Auto-generated constructor stub
 		}
@@ -167,41 +201,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		protected JComponent makeLabelPane() {
 
 			JPanel labels = new JPanel(new GridLayout(0, 1));
-			labels.add(new JLabel(EnemyViewConstants.HEALTH_STRING));
-			labels.add(new JLabel(EnemyViewConstants.SPEED_STRING));
-			labels.add(new JLabel(EnemyViewConstants.DAMAGE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.REWARD_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TYPE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TILE_SIZE_STRING));
+			labels.add(new JLabel(TowerViewConstants.HEALTH_STRING));
+			labels.add(new JLabel(TowerViewConstants.SPEED_STRING));
+			labels.add(new JLabel(TowerViewConstants.DAMAGE_STRING));
+			labels.add(new JLabel(TowerViewConstants.REWARD_STRING));
+			labels.add(new JLabel(TowerViewConstants.TYPE_STRING));
+			labels.add(new JLabel(TowerViewConstants.TILE_SIZE_STRING));
 			return labels;
 		}
-
-	}
-
-	@Override
-	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
-		// fields (spinners)
-		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
-		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
-		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
-		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
-		// buttons
-		ButtonModel selectedFlyButtonModel = null;
-		ButtonModel selectedSizeButtonModel = null;
-		String flyOrGroundValue = (String) map.get(MonsterSchema.FLYING_OR_GROUND);
-		String tileSizeValue = (String) map.get(MonsterSchema.TILE_SIZE);
-
-		for (JRadioButton radioButton : radioButtons) {
-			ButtonModel theModel = radioButton.getModel();
-			String theButtonText = radioButton.getText();
-			if (theButtonText.equals(flyOrGroundValue))
-				selectedFlyButtonModel = theModel;
-			if (theButtonText.equals(tileSizeValue))
-				selectedSizeButtonModel = theModel;
-		}
-		flyingButtonGroup.setSelected(selectedFlyButtonModel, true);
-		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
-		// images
 
 	}
 

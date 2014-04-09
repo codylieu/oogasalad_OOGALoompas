@@ -1,78 +1,68 @@
 package main.java.author.view.tabs.terrain;
 
-
-
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import javax.swing.JTabbedPane;
 
-import main.java.author.view.tabs.terrain.types.TileObject;
+/**
+ * This class manages the interactions between the TileDisplay (where TileObjects are selected),
+ * the TileEditingPanel (where TileObjects are edited), and the Canvas (where TileObjects are displayed)
+ *
+ */
+public class TileSelectionManager {
 
-public class TileSelectionManager extends JPanel {
-
-	private static final String BITMAP_FILE = "BitmapImages";
-
-	private ResourceBundle myBitmapBundle;
 	private Canvas myCanvas;
-	
+	private ResourceBundle myBitmapBundle;
 	private TileEditingPanel myTileEditPanel;
-	private TileDisplay myTileDisplay;
+	private List<TileDisplay> myTileDisplays;
+	private JTabbedPane tileDisplayTab;
 	
 	public TileSelectionManager(Canvas canvas) {
 		myCanvas = canvas;
-		initResources();
-	
-		myTileDisplay = new TileDisplay(this, myBitmapBundle);
-		
-		
-		add(myTileDisplay.getMyScrollPane(), BorderLayout.WEST);
-		add(myTileEditPanel = new TileEditingPanel(this), BorderLayout.EAST);
+		initTileDisplays();
+		myTileEditPanel = new TileEditingPanel(this);
 	}
 	
-	public void makeVisible(ActionEvent e) {
-		setVisible(true);
+	private void initTileDisplays() {
+		myTileDisplays = new ArrayList<TileDisplay>();
+		tileDisplayTab = new JTabbedPane();
+		myBitmapBundle = ResourceBundle.getBundle("main.resources.author.images.BitmapImages");
+		Enumeration <String> bitmaps = myBitmapBundle.getKeys();
+		
+		while (bitmaps.hasMoreElements()) {
+			String bmp = bitmaps.nextElement();
+			String value = myBitmapBundle.getString(bmp);
+			try {
+				Integer i = Integer.parseInt(value);
+				TileDisplay currTileDisp = new TileDisplay(this, bmp, i);
+				myTileDisplays.add(currTileDisp);
+				tileDisplayTab.addTab(trimBitmapString(bmp), currTileDisp.getTileScrollPane());
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
+		}	
+	}
+	
+	private String trimBitmapString(String bitmapStr) {
+		int index = bitmapStr.indexOf(".bmp");
+		return (index != -1) ? bitmapStr.substring(0, index) : bitmapStr;
+		
+	}
+	
+	public JTabbedPane getTileDisplayTabs() {
+		return tileDisplayTab;
 	}
 	
 	public TileDisplay getTileDisplay() {
-		return myTileDisplay;
+		int index = tileDisplayTab.getSelectedIndex();
+		return myTileDisplays.get(index);
 	}
 	
 	public TileEditingPanel getTileEditPanel() {
 		return myTileEditPanel;
-	}
-	
-	
-	private void initResources() {
-		myBitmapBundle = getResourceBundle("main.resources.author.images.", BITMAP_FILE);
-	}
-	
-	private ResourceBundle getResourceBundle(String bundlePackage, String bundleName) {
-		return ResourceBundle.getBundle(bundlePackage + bundleName);
-	}
-
-	public void clearCanvasTiles(ActionEvent e) {
-		myCanvas.clearTiles();
 	}
 	
 	public Canvas getCanvas() {
