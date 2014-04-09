@@ -5,7 +5,7 @@ import java.io.Serializable;
 import main.java.engine.objects.TDObject;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
-public abstract class TDObjectSchema extends AbstractSchema	implements Serializable {
+public abstract class TDObjectSchema extends AbstractSchema	implements Serializable, HasDefaultValues {
 	
 	private Class<? extends TDObject> myConcreteType;
 
