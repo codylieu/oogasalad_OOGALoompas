@@ -6,67 +6,119 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import main.java.engine.GameState;
+import main.java.schema.GameBlueprint;
+
 import com.google.gson.Gson;
 
 /**
- * An Abstract class for taking blueprints
- * from Authoring or Engine and turning
- * them into 
- * 
  * @author Jimmy Fang
  *
  */
 
-public abstract class DataHandler {
+public class DataHandler {
 
-	private Gson myGson;
+	/*private Gson myGson;
 
 	public DataHandler(){
 		myGson = new Gson();
-	}
-
+	}*/
+	
 	/**
-	 * Saves the current DataBundle with the provided filename
-	 * @param filename
-	 * @throws IOException 
+	 * 
+	 * @param currentGameState
+	 * @param filePath
+	 * @throws IOException
 	 */
-	public void saveBundle(DataBundle dataBundle, String fileName) throws IOException	{
-
-		//JSON
-		/*PrintWriter output = new PrintWriter(new File("src/main/resources/" + fileName + ".txt"));
-		String objectAsJson = myGson.toJson(dataBundle);
-		output.println(objectAsJson);
-		output.close();*/
-
-		//Generic Java serialization
-		FileOutputStream fileOut = new FileOutputStream(fileName);
-		ObjectOutputStream out = new ObjectOutputStream(fileOut);
-		out.writeObject(dataBundle);
-		out.close();
-		fileOut.close();
+	public boolean saveState(GameState currentGameState, String filePath) throws IOException {
+		return saveObjectToFile(currentGameState, filePath);
 	}
 
 	/**
-	 * Fills the DataBundle with information retrieved from the file with the
-	 * provided filename
-	 * @param filename
+	 * 
+	 * @param filePath
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 */
+	public GameState loadState(String filePath) throws ClassNotFoundException, IOException {
+		Object unserializedObject = loadObjectFromFile(filePath);
+
+		if (unserializedObject instanceof GameState) {
+			return (GameState) loadObjectFromFile(filePath);
+		}
+		throw new ClassNotFoundException("Not a GameState");
+	}
+
+	/**
+	 * 
+	 * @param blueprint to save
+	 * @param filePath to save blueprint to
+	 */
+	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
+		DataBundle bundleToSave = new DataBundle();
+		bundleToSave.setBlueprint(blueprint);
+		//Zip resources folder
+		//Add zipped resoures folder to data bundle
+		return saveObjectToFile(bundleToSave, filePath);
+	}
+
+	/**
+	 * 
+	 * @param filePath
+	 * @return unserialized gameblueprint
 	 * @throws IOException 
 	 * @throws ClassNotFoundException 
 	 */
-	public DataBundle loadBundle(String fileName) throws IOException, ClassNotFoundException {
+	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException {
+		Object unserializedObject = loadObjectFromFile(filePath);
+
+		if (unserializedObject instanceof DataBundle) {
+			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
+			//Get zipped resource folder from data bundle
+			//unzip and put resources in src/main/resources
+			return bundle.getBlueprint();
+		}
+		throw new ClassNotFoundException("Not a data bundle");
+	}
+
+	/**
+	 * 
+	 * @param object Object to serialize
+	 * @param fileName File to save serialized object to
+	 * @return whether the object was successfully saved
+	 */
+	private boolean saveObjectToFile(Object object, String fileName) {
+		FileOutputStream fileOut;
+		try {
+			fileOut = new FileOutputStream(fileName);
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(object);
+			out.close();
+			fileOut.close();
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	/**
+	 * 
+	 * @param fileName Name of file containing serialized object
+	 * @return Unserialized object
+	 */
+	private Object loadObjectFromFile(String fileName) {
 		try {
 			FileInputStream fileIn = new FileInputStream(fileName);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
-			DataBundle toReturn = (DataBundle) in.readObject();
+			Object toReturn = in.readObject();
 			in.close();
 			fileIn.close();
 			return toReturn;
 		}
 		catch (IOException | ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
-		return null;
 	}
-	
 }

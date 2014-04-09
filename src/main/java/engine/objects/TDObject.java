@@ -1,12 +1,14 @@
 package main.java.engine.objects;
 
+import java.io.Serializable;
 import java.util.Map;
+
 import jgame.JGObject;
 
 /**
  * Abstract extension of JGObject. Represents monsters, towers, etc.
  */
-public abstract class TDObject extends JGObject {
+public abstract class TDObject extends JGObject implements Serializable {
 
     //TODO: abstract methods?
     

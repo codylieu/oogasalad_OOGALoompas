@@ -9,9 +9,9 @@ import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.spawnschema.MonsterSpawnSchema;
-import main.java.engine.spawnschema.WaveSpawnSchema;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.WaveSpawnSchema;
 
 
 public class LevelManager {
