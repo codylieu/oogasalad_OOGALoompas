@@ -1,8 +1,11 @@
 package main.java.engine.objects;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import main.java.schema.MonsterSchema;
 =======
+=======
+>>>>>>> FETCH_HEAD
 import java.io.Serializable;
 import java.util.Map;
 import main.java.engine.objects.monster.Monster;

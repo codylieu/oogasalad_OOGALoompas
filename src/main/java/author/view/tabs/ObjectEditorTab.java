@@ -12,6 +12,7 @@ import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -161,7 +162,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 				String objectName = createObjectField.getText();
 
 				objectName = objectName.trim().replaceAll(" +", " ");
-				System.out.println(objectName);
 				if (EnemyUtilFunctions.newObjectNameIsValid(objectName,
 						objectMap)) {
 
@@ -228,7 +228,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	protected abstract void initDataFields();
 
-	protected abstract void updateViewWithSchemaData(Map<String, String> map);
+	protected abstract void updateViewWithSchemaData(Map<String, Serializable> map);
 
 	protected abstract void updateSchemaDataFromView();
 
@@ -242,7 +242,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	protected void addObjectNameToList(String objectName) {
 		int indexToPlace = listModel.getRowCount();
-		System.out.println(indexToPlace);
 		listModel.addRow(new String[] { objectName });
 		list.setRowSelectionInterval(indexToPlace, indexToPlace);
 
@@ -260,7 +259,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	protected void updateFieldDataUponNewSelection() {
 		String name = getSelectedObjectName();
-		System.out.println(listModel.getValueAt(0, 0));
 		TDObjectSchema myCurrentObject;
 		if (objectMap.get(name) == null) {
 			myCurrentObject = createSpecificNewObject(name);

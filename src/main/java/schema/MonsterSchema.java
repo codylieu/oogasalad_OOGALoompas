@@ -29,7 +29,6 @@ public abstract class MonsterSchema extends TDObjectSchema {
 
 	protected MonsterSchema(Class<? extends Monster> myConcreteType) {
         super(myConcreteType);
-<<<<<<< HEAD
 		myAttributeSet.add(MonsterSchema.ENTRANCE_X);
 		myAttributeSet.add(MonsterSchema.ENTRANCE_Y);
 		myAttributeSet.add(MonsterSchema.EXIT_X);
@@ -37,13 +36,6 @@ public abstract class MonsterSchema extends TDObjectSchema {
 		myAttributeSet.add(MonsterSchema.HEALTH);
 		myAttributeSet.add(MonsterSchema.REWARD);
 		myAttributeSet.add(MonsterSchema.SPEED);
-=======
-		myAttributeSet.add(Monster.ENTRANCE_LOCATION);
-		myAttributeSet.add(Monster.EXIT_LOCATION);
-		myAttributeSet.add(Monster.HEALTH);
-		myAttributeSet.add(Monster.MONEY_VALUE);
-		myAttributeSet.add(Monster.SPEED);
->>>>>>> FETCH_HEAD
 		myAttributeSet.add(Monster.NAME);
     }
     

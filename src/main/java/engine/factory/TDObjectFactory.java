@@ -61,6 +61,7 @@ public class TDObjectFactory {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
 <<<<<<< HEAD
+<<<<<<< HEAD
 
             Map<String, String> attributes = schema.getAttributesMap();
             attributes.put(MonsterSchema.ENTRANCE_X, String.valueOf(entrance.getX()));
@@ -69,6 +70,11 @@ public class TDObjectFactory {
             attributes.put(MonsterSchema.EXIT_Y, String.valueOf(exit.getY()));
 
             Object[] monsterParameters = {attributes};
+=======
+            schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
+            schema.addAttribute(Monster.EXIT_LOCATION, exit);
+            Object[] monsterParameters = { schema.getAttributesMap() };
+>>>>>>> FETCH_HEAD
 =======
             schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
             schema.addAttribute(Monster.EXIT_LOCATION, exit);

@@ -1,8 +1,8 @@
 package main.java.author.view.tabs.tower;
 
 import java.awt.Component;
-
 import java.awt.GridLayout;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -102,12 +102,12 @@ public class TowerEditorTab extends ObjectEditorTab{
 	 *            the monster's schema attributes
 	 * 
 	 */
-	protected void updateViewWithSchemaData(Map<String, String> map) {
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
-		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)));
-		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)));
-		damageSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)));
-		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)));
+		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
+		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
+		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
+		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
 		// buttons
 		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
 				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton

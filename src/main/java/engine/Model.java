@@ -219,7 +219,11 @@ public class Model {
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
         testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
 <<<<<<< HEAD
+<<<<<<< HEAD
         testMonsterSchema.addAttribute(MonsterSchema.REWARD, "200");
+=======
+        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, (double) 200);
+>>>>>>> FETCH_HEAD
 =======
         testMonsterSchema.addAttribute(Monster.MONEY_VALUE, (double) 200);
 >>>>>>> FETCH_HEAD

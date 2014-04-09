@@ -2,6 +2,7 @@ package main.java.author.view.tabs.enemy;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -94,40 +95,6 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		// update schema with images
 	}
 
-	/**
-	 * 
-	 * puts the schema data into the view field
-	 * 
-	 * @param map
-	 *            the monster's schema attributes
-	 * 
-	 */
-	protected void updateViewWithSchemaData(Map<String, String> map) {
-		// fields (spinners)
-		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)));
-		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)));
-		damageSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)));
-		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)));
-		// buttons
-		ButtonModel selectedFlyButtonModel = null;
-		ButtonModel selectedSizeButtonModel = null;
-		String flyOrGroundValue = map.get(MonsterSchema.FLYING_OR_GROUND);
-		String tileSizeValue = map.get(MonsterSchema.TILE_SIZE);
-
-		for (JRadioButton radioButton : radioButtons) {
-			ButtonModel theModel = radioButton.getModel();
-			String theButtonText = radioButton.getText();
-			if (theButtonText.equals(flyOrGroundValue))
-				selectedFlyButtonModel = theModel;
-			if (theButtonText.equals(tileSizeValue))
-				selectedSizeButtonModel = theModel;
-		}
-		flyingButtonGroup.setSelected(selectedFlyButtonModel, true);
-		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
-		// images
-
-	}
-
 	private class EnemyTabViewBuilder extends TabViewBuilder {
 
 		public EnemyTabViewBuilder(EditorTab editorTab) {
@@ -208,6 +175,33 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			labels.add(new JLabel(EnemyViewConstants.TILE_SIZE_STRING));
 			return labels;
 		}
+
+	}
+
+	@Override
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+		// fields (spinners)
+		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
+		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
+		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
+		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
+		// buttons
+		ButtonModel selectedFlyButtonModel = null;
+		ButtonModel selectedSizeButtonModel = null;
+		String flyOrGroundValue = (String) map.get(MonsterSchema.FLYING_OR_GROUND);
+		String tileSizeValue = (String) map.get(MonsterSchema.TILE_SIZE);
+
+		for (JRadioButton radioButton : radioButtons) {
+			ButtonModel theModel = radioButton.getModel();
+			String theButtonText = radioButton.getText();
+			if (theButtonText.equals(flyOrGroundValue))
+				selectedFlyButtonModel = theModel;
+			if (theButtonText.equals(tileSizeValue))
+				selectedSizeButtonModel = theModel;
+		}
+		flyingButtonGroup.setSelected(selectedFlyButtonModel, true);
+		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
+		// images
 
 	}
 

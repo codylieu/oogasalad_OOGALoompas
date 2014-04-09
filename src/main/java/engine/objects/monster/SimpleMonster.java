@@ -7,6 +7,7 @@ import main.java.engine.objects.Exit;
 public class SimpleMonster extends Monster {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     public static final double DEFAULT_HEALTH = 100;
     public static final double DEFAULT_MOVE_SPEED = 10;
     public static final double DEFAULT_REWARD_AMOUNT = 10;
@@ -63,6 +64,8 @@ public class SimpleMonster extends Monster {
 
     }
 =======
+=======
+>>>>>>> FETCH_HEAD
 	public static final double DEFAULT_HEALTH = 100;
 	public static final double DEFAULT_MOVE_SPEED = 10;
 	public static final double DEFAULT_REWARD_AMOUNT = 10;
@@ -114,5 +117,8 @@ public class SimpleMonster extends Monster {
 				health, moneyValue, speed, imageName);
 
 	}
+<<<<<<< HEAD
+>>>>>>> FETCH_HEAD
+=======
 >>>>>>> FETCH_HEAD
 }
