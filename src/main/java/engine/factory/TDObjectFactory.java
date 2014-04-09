@@ -44,8 +44,7 @@ public class TDObjectFactory {
      * @return The new Tower object
      * @throws TowerCreationFailureException
      */
-    public Tower placeTower (Point2D location, String towerName)
-                                                                throws TowerCreationFailureException {
+    public Tower placeTower (Point2D location, String towerName) throws TowerCreationFailureException {
         Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
@@ -59,8 +58,7 @@ public class TDObjectFactory {
         }
     }
 
-    public Monster placeMonster (Point2D entrance, Exit exit, String monsterName)
-                                                                                    throws MonsterCreationFailureException {
+    public Monster placeMonster (Point2D entrance, Exit exit, String monsterName) throws MonsterCreationFailureException {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
             schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);

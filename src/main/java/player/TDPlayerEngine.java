@@ -42,7 +42,6 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		this.model = new Model(this);
 		model.addNewPlayer();
 		model.loadMap("testmap.json");
-		defineMedia("/main/resources/media.tbl");
 		//model.loadSchemas("testtowers");
 	}
 
