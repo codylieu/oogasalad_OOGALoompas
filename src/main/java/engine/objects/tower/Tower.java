@@ -10,8 +10,7 @@ import main.java.engine.objects.TDObject;
  */
 public abstract class Tower extends TDObject {
 	
-    public static final String X = "x";
-    public static final String Y = "y";
+    public static final String LOCATION = "location";
     public static final String HEALTH = "health";
     public static final String DAMAGE = "damage";
     public static final String RANGE = "range";

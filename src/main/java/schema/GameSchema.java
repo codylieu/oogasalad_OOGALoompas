@@ -1,7 +1,9 @@
 package main.java.schema;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+
 
 /**
  * the higher level settings defining the type of game and some basic
@@ -24,8 +26,8 @@ public class GameSchema extends AbstractSchema {
 	}
 	
 	@Override
-	public void addAttribute(String attributeName, Object attributeValue) {
-		myAttributesMap.put(attributeName, attributeValue.toString());
+	public void addAttribute(String attributeName, Serializable attributeValue) {
+		myAttributesMap.put(attributeName, attributeValue);
 		
 	}
 	

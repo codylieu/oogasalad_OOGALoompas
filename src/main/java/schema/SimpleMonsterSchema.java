@@ -34,12 +34,24 @@ public class SimpleMonsterSchema extends MonsterSchema {
 	
 	}
 
-	private void populateDefaultAttributes(String name) {
+	public void populateDefaultAttributes(String name) {
 		addAttribute(Monster.NAME, name);
+<<<<<<< HEAD
+		addAttribute(MonsterSchema.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
+		addAttribute(MonsterSchema.SPEED, EnemyViewConstants.SPEED_DEFAULT);
+		addAttribute(MonsterSchema.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
+		addAttribute(MonsterSchema.REWARD, EnemyViewConstants.REWARD_DEFAULT);    
+		addAttribute(MonsterSchema.FLYING_OR_GROUND, EnemyViewConstants.FLYING_OR_GROUND_DEFAULT);    
+		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);
+		addAttribute(MonsterSchema.ENEMY_IMAGE_PATH, "");
+		addAttribute(MonsterSchema.COLLISION_IMAGE_PATH, "");
+=======
 		addAttribute(Monster.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
 		addAttribute(Monster.SPEED, EnemyViewConstants.SPEED_DEFAULT);
-		addAttribute(Monster.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
-		addAttribute(Monster.REWARD, EnemyViewConstants.REWARD_DEFAULT);           
+		//Hi, this is Kevin. Next line is causing errors, so I commented it out. I don't understand it so I didn't delete it
+		//addAttribute(Monster.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
+		addAttribute(Monster.MONEY_VALUE, EnemyViewConstants.REWARD_DEFAULT);           
+>>>>>>> FETCH_HEAD
 		
 	}
 

@@ -36,7 +36,7 @@ public class TestModel {
 		model.addNewPlayer();
 		
 		assert(model.getMoney() >= 0);
-		assert(model.getPlayerLife() > 0);
+		assert(model.getPlayerLives() > 0);
 		assertEquals(0, model.getScore(), .0001);
 		
 	}
