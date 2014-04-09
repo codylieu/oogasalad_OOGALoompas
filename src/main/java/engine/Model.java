@@ -15,6 +15,7 @@ import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
+import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
@@ -22,6 +23,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
+import main.java.schema.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.SimpleMonsterSchema;
 import main.java.schema.SimpleTowerSchema;
@@ -32,6 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
 public class Model {
+
     public static final String RESOURCE_PATH = "/main/resources/";
 
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
@@ -51,6 +54,7 @@ public class Model {
 
     public Model(JGEngine engine) {
         this.engine = engine;
+        defineAllStaticImages();
         this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
 
@@ -73,6 +77,12 @@ public class Model {
 
     }
     
+    private void defineAllStaticImages () {
+        engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
+        //make bullet image dynamic
+        engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
+    }
+
     /**
      * Add a new player to the engine
      */
@@ -210,17 +220,18 @@ public class Model {
 
         SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
         testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
+        testTowerSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
         testTowerSchema.addAttribute(Tower.COST, (double) 10);
-        testTowerSchema.addAttribute(Tower.IMAGE, "SimpleTower");
 
         tdObjectSchemas.add(testTowerSchema);
 
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
         testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
+        testMonsterSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
         testMonsterSchema.addAttribute(Monster.MONEY_VALUE, (double) 200);
         tdObjectSchemas.add(testMonsterSchema);
 
-        factory.loadSchemas(tdObjectSchemas);
+        factory.loadTDObjectSchemas(tdObjectSchemas);
 
         levelManager.addNewWave(createTestWave(testMonsterSchema, 1));
         levelManager.addNewWave(createTestWave(testMonsterSchema, 2));

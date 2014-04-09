@@ -7,11 +7,14 @@ import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
 public abstract class TDObjectSchema extends AbstractSchema	implements Serializable {
 	
+        public static String IMAGE_NAME;
+        
 	private Class<? extends TDObject> myConcreteType;
 
 	protected TDObjectSchema(Class<? extends TDObject> concreteType) {
 		super();
 		myConcreteType = concreteType;
+		myAttributeSet.add(IMAGE_NAME);
 	}
 
 	public Class<? extends TDObject> getMyConcreteType() {
