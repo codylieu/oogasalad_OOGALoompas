@@ -3,11 +3,12 @@ package main.java.engine.objects.tower;
 import java.awt.geom.Point2D;
 import java.util.Map;
 import main.java.engine.objects.Projectile;
+import main.java.schema.SimpleMonsterSchema;
+import main.java.schema.SimpleTowerSchema;
 
 
 public class SimpleTower extends Tower {
 
-	public static final String DEFAULT_GRAPHICS = "SimpleTower";
 	public static final double DEFAULT_DAMAGE = 10;
 	public static final double DEFAULT_HEALTH = 100;
 	public static final double DEFAULT_RANGE = 200;
@@ -29,7 +30,7 @@ public class SimpleTower extends Tower {
 				(double) getValueOrDefault(attributes, RANGE, DEFAULT_RANGE),
 				(double) getValueOrDefault(attributes, COST, DEFAULT_COST),
 				(double) getValueOrDefault(attributes, BUILDUP, DEFAULT_BUILDUPTIME),
-				(String) getValueOrDefault(attributes, IMAGE, DEFAULT_GRAPHICS));
+				(String) attributes.get(NAME));
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import main.java.engine.Model;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
@@ -25,10 +26,13 @@ public class TDObjectFactory {
         tdObjectSchemaMap = new HashMap<>();
     }
 
-    public void loadSchemas (List<TDObjectSchema> schemas) {
+    public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
         // TODO: Get rid of repetition in loading schemas
         for (TDObjectSchema s : schemas) {
-            tdObjectSchemaMap.put((String) s.getAttributesMap().get(TDObject.NAME), s);
+            String objName = (String) s.getAttributesMap().get(TDObject.NAME);
+            String objImagePath = Model.RESOURCE_PATH + s.getAttributesMap().get(TDObjectSchema.IMAGE_NAME);
+            engine.defineImage(objName, "-", 1, objImagePath, "-");
+            tdObjectSchemaMap.put(objName, s);
         }
     }
 
