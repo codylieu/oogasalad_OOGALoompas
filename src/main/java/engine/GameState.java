@@ -40,13 +40,10 @@ public class GameState {
 	 * @param playerLife
 	 * @param playerScore
 	 */
-	public void updateGameStates(List<Monster> currentMonsters, Tower[][] currentTowers, Point2D currentEntrance, 
-			Point2D currentExit, int currentWaveNumber, List<WaveSpawnSchema> allCurrentWaves, double currentGameClock, 
+	public void updateGameStates(List<Monster> currentMonsters, Tower[][] currentTowers, int currentWaveNumber, List<WaveSpawnSchema> allCurrentWaves, double currentGameClock, 
 			int playerMoney, int playerLife, double playerScore) {
 		monsters = currentMonsters;
 		towers = currentTowers;
-		entrance = currentEntrance;
-		exit = currentExit;
 		currentWave = currentWaveNumber;
 		allWaves = allCurrentWaves;
 		gameClock = currentGameClock;

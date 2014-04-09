@@ -41,30 +41,30 @@ public class Model {
     private Tower[][] towers;
     private List<Monster> monsters;
     private Gson gsonParser;
-    private int currentWave;
-    private List<WaveSpawnSchema> allWaves;
     private CollisionManager collisionManager;
-    private Point2D entrance;
-    private Point2D exit;
     private GameState gameState;
     private EngineDataHandler engineDataHandler;
+    private LevelManager levelManager;
 
     public Model(JGEngine engine) {
         this.engine = engine;
         this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
+
+        levelManager = new LevelManager(factory);
+        //TODO: Code entrance/exit logic into wave or monster spawn schema
+        levelManager.setEntrance(0, engine.pfHeight()/2);
+        levelManager.setExit(engine.pfWidth()/2, engine.pfHeight()/2);
+        
+        
         this.gsonParser = new Gson();
         this.gameClock = 0;
-        this.currentWave = 0;
-        this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
         towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
-        setEntrance(0, engine.pfHeight()/2);
-        setExit(engine.pfWidth()/2, engine.pfHeight()/2);
         
-			loadGameBlueprint(null);
-		// TODO: REPLACE
+	loadGameBlueprint(null);
+	// TODO: REPLACE
         engineDataHandler = new EngineDataHandler();
     }
     
@@ -73,6 +73,7 @@ public class Model {
      */
     public void addNewPlayer() {
     	this.player = new Player();
+    	levelManager.registerPlayer(player);
     }
 
     public void removeMonster(Monster m){
@@ -216,9 +217,9 @@ public class Model {
 
         factory.loadSchemas(tdObjectSchemas);
 
-        allWaves.add(createTestWave(testMonsterSchema, 1));
-        allWaves.add(createTestWave(testMonsterSchema, 2));
-        allWaves.add(createTestWave(testMonsterSchema, 3));
+        levelManager.addNewWave(createTestWave(testMonsterSchema, 1));
+        levelManager.addNewWave(createTestWave(testMonsterSchema, 2));
+        levelManager.addNewWave(createTestWave(testMonsterSchema, 3));
     }
     
     
@@ -256,23 +257,7 @@ public class Model {
     	this.gameClock = 0;
     }
     
-    /**
-     * Set the monsters' entrance
-     * @param x
-     * @param y
-     */
-    public void setEntrance(double x, double y) {
-    	this.entrance = new Point2D.Double(x, y);
-    }
-    
-    /**
-     * Set the monsters' exit(destination)
-     * @param x
-     * @param y
-     */
-    public void setExit(double x, double y) {
-    	this.exit = new Point2D.Double(x, y);
-    }
+
     
     public void addScore(double score) {
     	player.addScore(score);
@@ -331,8 +316,7 @@ public class Model {
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
             WaveSpawnSchema newWave = gsonParser.fromJson(reader, WaveSpawnSchema.class);
-            
-            addWaveToGame(newWave); 
+            levelManager.addNewWave(newWave); 
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -340,44 +324,21 @@ public class Model {
     }
     
     private boolean isGameWon() {
-    	if(currentWave >= allWaves.size()){
-    		return true;
-    	}
-    	return false;
+    	return levelManager.checkAllWavesFinished();
     }
-    
-    /**
-     * Spawns the next wave in the list of all waves.
-     * Currently rotates through all waves indefinitely.
-     * @throws MonsterCreationFailureException
-     */
-    private void spawnNextWave() throws MonsterCreationFailureException {
-        for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
-            for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Exit monsterExit = new Exit(exit.getX(), exit.getY(), this);
-                Monster newlyAdded = factory.placeMonster(entrance, monsterExit,
-                        (String) spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
-                monsters.add(newlyAdded);
-            }
-            if(++currentWave >= allWaves.size()) {
-                currentWave = 0;
-            }
-        }
-        
-        // TODO: check if gameWon() ?
-    }
+
 
     /**
      *  Spawns a new wave 
      * @throws MonsterCreationFailureException 
      */
-    private void doSpawnActivity() throws MonsterCreationFailureException {
-    	
+    public void doSpawnActivity() throws MonsterCreationFailureException {
+        
      //at determined intervals:
      //   if (gameClock % 100 == 0)
      //or if previous wave defeated:
         if(monsters.isEmpty())
-            spawnNextWave();
+            monsters.addAll(levelManager.spawnNextWave());
         
     }
     
@@ -391,7 +352,7 @@ public class Model {
 		doSpawnActivity();
 		doTowerFiring();
 		removeDeadMonsters();
-		gameState.updateGameStates(monsters, towers, entrance, exit, currentWave, allWaves, gameClock, 
+		gameState.updateGameStates(monsters, towers, levelManager.getCurrentWave(), levelManager.getAllWaves(), gameClock, 
 				player.getMoney(), player.getLivesRemaining(), player.getScore());
 	}
 
@@ -459,15 +420,6 @@ public class Model {
 				m.getCurrentCoor().getY()+m.getImageBBoxConst().height/2);
 	}
 
-	/**
-	 * Add a wave to the game plan logic
-	 * 
-	 * @param waveSchema
-	 */
-    public void addWaveToGame(WaveSpawnSchema waveSchema) {
-    	allWaves.add(waveSchema);
-    }
-    
 	/**
 	 * Check all collisions specified by the CollisionManager
 	 */
