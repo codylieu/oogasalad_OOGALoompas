@@ -1,12 +1,14 @@
 package main.java.engine.objects;
 
+import java.io.Serializable;
 import java.util.Map;
+
 import jgame.JGObject;
 
 /**
  * Abstract extension of JGObject. Represents monsters, towers, etc.
  */
-public abstract class TDObject extends JGObject {
+public abstract class TDObject extends JGObject implements Serializable {
 
     //TODO: abstract methods?
     
@@ -40,9 +42,9 @@ public abstract class TDObject extends JGObject {
      * @param defaultValue default value of attribute if not in attributes map
      * @return
      */
-    protected static String getValueOrDefault (Map<String, String> attributes,
+    protected static Object getValueOrDefault (Map<String, Object> attributes,
                                              String attributeName,
-                                             String defaultValue) {
+                                             Object defaultValue) {
         return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;
     }
     

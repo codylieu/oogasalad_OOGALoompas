@@ -1,6 +1,7 @@
 package main.java.engine;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.List;
 
 import main.java.engine.objects.monster.Monster;
@@ -11,7 +12,7 @@ import main.java.schema.WaveSpawnSchema;
  * Store all the current game states so that Data can save
  *
  */
-public class GameState {
+public class GameState implements Serializable {
 	// model specific
 	private List<Monster> monsters; 
 	private Tower[][] towers;
@@ -40,13 +41,10 @@ public class GameState {
 	 * @param playerLife
 	 * @param playerScore
 	 */
-	public void updateGameStates(List<Monster> currentMonsters, Tower[][] currentTowers, Point2D currentEntrance, 
-			Point2D currentExit, int currentWaveNumber, List<WaveSpawnSchema> allCurrentWaves, double currentGameClock, 
+	public void updateGameStates(List<Monster> currentMonsters, Tower[][] currentTowers, int currentWaveNumber, List<WaveSpawnSchema> allCurrentWaves, double currentGameClock, 
 			int playerMoney, int playerLife, double playerScore) {
 		monsters = currentMonsters;
 		towers = currentTowers;
-		entrance = currentEntrance;
-		exit = currentExit;
 		currentWave = currentWaveNumber;
 		allWaves = allCurrentWaves;
 		gameClock = currentGameClock;
@@ -55,4 +53,7 @@ public class GameState {
 		score = playerScore;
 	}
 
+	public int getCurrentWaveNumber() {
+		return currentWave;
+	}
 }

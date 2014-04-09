@@ -3,27 +3,34 @@ package main.java.engine;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import net.lingala.zip4j.exception.ZipException;
 import jgame.platform.JGEngine;
-import main.java.data.datahandler.EngineDataHandler;
+import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
-import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.Tower;
+import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
+import main.java.schema.GameBlueprint;
+import main.java.schema.GameSchema;
+import main.java.schema.MonsterSchema;
+import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.SimpleMonsterSchema;
+import main.java.schema.SimpleTowerSchema;
+import main.java.schema.TDObjectSchema;
+import main.java.schema.WaveSpawnSchema;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
-import main.java.schema.*;
 
 public class Model {
     public static final String RESOURCE_PATH = "/main/resources/";
@@ -37,29 +44,34 @@ public class Model {
     private Tower[][] towers;
     private List<Monster> monsters;
     private Gson gsonParser;
-    private int currentWave;
-    private List<WaveSpawnSchema> allWaves;
     private CollisionManager collisionManager;
-    private Point2D entrance;
-    private Point2D exit;
     private GameState gameState;
-    private EngineDataHandler engineDataHandler;
+    private DataHandler dataHandler;
+    private LevelManager levelManager;
+
 
     public Model(JGEngine engine) {
         this.engine = engine;
         this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
+
+        levelManager = new LevelManager(factory);
+        //TODO: Code entrance/exit logic into wave or monster spawn schema
+        levelManager.setEntrance(0, engine.pfHeight()/2);
+        levelManager.setExit(engine.pfWidth()/2, engine.pfHeight()/2);
+        
+        
         this.gsonParser = new Gson();
         this.gameClock = 0;
-        this.currentWave = 0;
-        this.allWaves = new ArrayList<WaveSpawnSchema>();
         monsters = new ArrayList<Monster>();
         towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
-        setEntrance(0, engine.pfHeight()/2);
-        setExit(engine.pfWidth(), engine.pfHeight()/2);
-        loadGameBlueprint(null); // TODO: REPLACE
-        engineDataHandler = new EngineDataHandler();
+
+        levelManager.setEntrance(0, engine.pfHeight()/2);
+        levelManager.setExit(engine.pfWidth()/2, engine.pfHeight()/2);
+	loadGameBlueprint(null);// TODO: REPLACE
+	dataHandler = new DataHandler();
+
     }
     
     /**
@@ -67,8 +79,13 @@ public class Model {
      */
     public void addNewPlayer() {
     	this.player = new Player();
+    	levelManager.registerPlayer(player);
     }
 
+    public void removeMonster(Monster m){
+        monsters.remove(m);
+    }
+    
     /**
      * Add a tower at the specified location. If tower already exists in that cell, do nothing.
      * @param x	x coordinate of the tower
@@ -86,7 +103,7 @@ public class Model {
         	
         	if(player.getMoney() >= newTower.getCost() ) {
         	        //FIXME: Decrease money?
-        		player.addMoney(-SimpleTower.DEFAULT_COST);
+        		player.addMoney(-newTower.getCost());
         		towers[currentTile[0]][currentTile[1]]  = newTower;
         		return true;
         	} else {
@@ -179,6 +196,7 @@ public class Model {
      * Loads the game schemas from GameBlueprint and sets the appropriate state
      *
      * @param bp
+     * @throws InvalidParameterForConcreteTypeException 
      */
     public void loadGameBlueprint(GameBlueprint bp) {
 //    	Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
@@ -193,20 +211,29 @@ public class Model {
 
         SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
         testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
-        testTowerSchema.addAttribute(Tower.COST, "10");
+        testTowerSchema.addAttribute(Tower.COST, (double) 10);
         testTowerSchema.addAttribute(Tower.IMAGE, "SimpleTower");
+
         tdObjectSchemas.add(testTowerSchema);
 
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
         testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
-        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, "200");
+<<<<<<< HEAD
+<<<<<<< HEAD
+        testMonsterSchema.addAttribute(MonsterSchema.REWARD, "200");
+=======
+        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, (double) 200);
+>>>>>>> FETCH_HEAD
+=======
+        testMonsterSchema.addAttribute(Monster.MONEY_VALUE, (double) 200);
+>>>>>>> FETCH_HEAD
         tdObjectSchemas.add(testMonsterSchema);
 
         factory.loadSchemas(tdObjectSchemas);
 
-        allWaves.add(createTestWave(testMonsterSchema, 1));
-        allWaves.add(createTestWave(testMonsterSchema, 2));
-        allWaves.add(createTestWave(testMonsterSchema, 3));
+        levelManager.addNewWave(createTestWave(testMonsterSchema, 1));
+        levelManager.addNewWave(createTestWave(testMonsterSchema, 2));
+        levelManager.addNewWave(createTestWave(testMonsterSchema, 3));
     }
     
     
@@ -230,13 +257,18 @@ public class Model {
      * @throws IOException 
      * @throws ClassNotFoundException 
      */
-    public void loadGameSchemas(String fileName) throws ClassNotFoundException, IOException	{
-    	GameBlueprint bp = engineDataHandler.loadBlueprint(RESOURCE_PATH + fileName);
-    	Map<String, String> gameAttributes = bp.getMyGameScenario().getAttributesMap();
-    	player = new Player(gameAttributes.get(GameSchema.MONEY), gameAttributes.get(GameSchema.LIVES));
+    public void loadGameSchemas(String filePath) throws ClassNotFoundException, IOException	{
+		GameBlueprint bp = null;
+		try {
+			bp = dataHandler.loadBlueprint(filePath);
+		} catch (ZipException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
+    	player = new Player((Integer) gameAttributes.get(GameSchema.MONEY), (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
-    
     /**
      * Reset the game clock
      */
@@ -244,23 +276,7 @@ public class Model {
     	this.gameClock = 0;
     }
     
-    /**
-     * Set the monsters' entrance
-     * @param x
-     * @param y
-     */
-    public void setEntrance(double x, double y) {
-    	this.entrance = new Point2D.Double(x, y);
-    }
-    
-    /**
-     * Set the monsters' exit(destination)
-     * @param x
-     * @param y
-     */
-    public void setExit(double x, double y) {
-    	this.exit = new Point2D.Double(x, y);
-    }
+
     
     public void addScore(double score) {
     	player.addScore(score);
@@ -279,7 +295,7 @@ public class Model {
      * @return true if game is lost
      */
     public boolean isGameLost() {
-    	if (getPlayerLife() <= 0) return true;
+    	if (getPlayerLives() <= 0) return true;
     	return false;
     }
     
@@ -299,8 +315,8 @@ public class Model {
      * Get the number of remaining lives of the player
      * @return number of lives left
      */
-    public int getPlayerLife() {
-    	return player.getLife();
+    public int getPlayerLives() {
+    	return player.getLivesRemaining();
     }
     
     /**
@@ -319,8 +335,7 @@ public class Model {
         try {
             JsonReader reader = new JsonReader(new InputStreamReader(getClass().getResourceAsStream(RESOURCE_PATH + fileName)));
             WaveSpawnSchema newWave = gsonParser.fromJson(reader, WaveSpawnSchema.class);
-            
-            addWaveToGame(newWave); 
+            levelManager.addNewWave(newWave); 
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -328,43 +343,21 @@ public class Model {
     }
     
     private boolean isGameWon() {
-    	if(currentWave >= allWaves.size()){
-    		return true;
-    	}
-    	return false;
+    	return levelManager.checkAllWavesFinished();
     }
-    
-    /**
-     * Spawns the next wave in the list of all waves.
-     * Currently rotates through all waves indefinitely.
-     * @throws MonsterCreationFailureException
-     */
-    private void spawnNextWave() throws MonsterCreationFailureException {
-        for (MonsterSpawnSchema spawnSchema : allWaves.get(currentWave).getMonsterSpawnSchemas()) {
-            for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Monster newlyAdded = factory.placeMonster(entrance, exit,
-                        spawnSchema.getMonsterSchema().getAttributesMap().get(TDObject.NAME));
-                monsters.add(newlyAdded);
-            }
-            if(++currentWave >= allWaves.size()) {
-                currentWave = 0;
-            }
-        }
-        
-        // TODO: check if gameWon() ?
-    }
+
 
     /**
      *  Spawns a new wave 
      * @throws MonsterCreationFailureException 
      */
-    private void doSpawnActivity() throws MonsterCreationFailureException {
-    	
+    public void doSpawnActivity() throws MonsterCreationFailureException {
+        
      //at determined intervals:
      //   if (gameClock % 100 == 0)
      //or if previous wave defeated:
         if(monsters.isEmpty())
-            spawnNextWave();
+            monsters.addAll(levelManager.spawnNextWave());
         
     }
     
@@ -378,8 +371,8 @@ public class Model {
 		doSpawnActivity();
 		doTowerFiring();
 		removeDeadMonsters();
-		gameState.updateGameStates(monsters, towers, entrance, exit, currentWave, allWaves, gameClock, 
-				player.getMoney(), player.getLife(), player.getScore());
+		gameState.updateGameStates(monsters, towers, levelManager.getCurrentWave(), levelManager.getAllWaves(), gameClock, 
+				player.getMoney(), player.getLivesRemaining(), player.getScore());
 	}
 
 	/**
@@ -447,15 +440,6 @@ public class Model {
 	}
 
 	/**
-	 * Add a wave to the game plan logic
-	 * 
-	 * @param waveSchema
-	 */
-    public void addWaveToGame(WaveSpawnSchema waveSchema) {
-    	allWaves.add(waveSchema);
-    }
-    
-	/**
 	 * Check all collisions specified by the CollisionManager
 	 */
     public void checkCollisions() {
@@ -476,10 +460,17 @@ public class Model {
     		int ytile = coordinates[1];
     		towers[xtile][ytile].remove();
     		Tower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
-    		System.out.println(newTower.x);
+    		//System.out.println(newTower.x);
     		towers[xtile][ytile] = newTower;
     		return true;
     	}
     	return false;
+    }
+
+    /**
+     * Decrease player's lives by one.
+     */
+    public void decrementLives () {
+       player.decrementLives();
     }
 }
