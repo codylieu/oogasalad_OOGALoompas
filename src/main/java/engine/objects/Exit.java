@@ -3,6 +3,7 @@ package main.java.engine.objects;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import main.java.engine.Model;
+import main.java.engine.LevelManager;
 import main.java.engine.objects.monster.Monster;
 import jgame.JGObject;
 
@@ -16,9 +17,9 @@ public class Exit extends JGObject implements Serializable {
     /**
      * Wait time allowed before enemy at the exit can keep taking another life from player
      */
-    private static final double GRACE_TIME = 100;
+    private static final double GRACE_TIME = 200;
 
-    private Model myModel;
+    private LevelManager mySpawnManager;
     private Point2D myLocation;
     private double myGraceTime;
 
@@ -30,10 +31,10 @@ public class Exit extends JGObject implements Serializable {
      * @param y
      * @param model
      */
-    public Exit (double x, double y, Model model) {
+    public Exit (double x, double y, LevelManager spawnManager) {
         super("Exit", true, x, y, EXIT_CID, EXIT_GRAPHIC);
         myLocation = new Point2D.Double(x,y);
-        myModel = model;
+        mySpawnManager = spawnManager;
         //first contact is immediate loss of player life
         myGraceTime = 0;
     }
@@ -50,7 +51,7 @@ public class Exit extends JGObject implements Serializable {
      */
     private void decreasePlayerLives () {
         if(myGraceTime-- <= 0){
-            myModel.decrementLives();
+            mySpawnManager.monsterExitAction();
             //refill grace time
             myGraceTime = GRACE_TIME;
         }
