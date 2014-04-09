@@ -9,9 +9,9 @@ import javax.swing.JTabbedPane;
 import main.java.author.controller.MainController;
 import main.java.author.view.menubar.BasicMenuBar;
 import main.java.author.view.tabs.GameSettingsEditorTab;
+import main.java.author.view.tabs.TowerEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
-import main.java.author.view.tabs.tower.TowerEditorTab;
 
 import java.io.IOException;
 
@@ -38,6 +38,7 @@ public class AuthoringView extends JFrame {
 
 	public AuthoringView() {
 		myController = new MainController();
+		
 	}
 
 	/**

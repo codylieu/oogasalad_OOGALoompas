@@ -1,7 +1,6 @@
 package main.java.data.datahandler;
 
 import java.io.File;
-
 import java.io.Serializable;
 
 import net.lingala.zip4j.core.ZipFile;

@@ -35,7 +35,6 @@ public class TileEditingPanel extends JPanel {
 	private JComboBox constructTerrainTypes() {
 		JComboBox scrollableTerrainTypes = new JComboBox(terrainTypes);
 		 ((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);	
-		 scrollableTerrainTypes.addActionListener(actionListener(this, "updatePassabilityIndex"));
 		 return scrollableTerrainTypes;
 	}
 	
@@ -49,7 +48,7 @@ public class TileEditingPanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		TileObject selectedTile = myTileManager.getCanvas().getSelectedTileObj();
 		int pixelSize = myTileManager.getTileDisplay().getPixelSize();
-		Image img = (selectedTile == null) ? null : selectedTile.getUneditedImage();
+		Image img = (selectedTile == null) ? null : selectedTile.getOriginalImage();
 		
 		if (img != null) {
 			img = rotate((BufferedImage) img, myImgAngle);
@@ -75,19 +74,13 @@ public class TileEditingPanel extends JPanel {
         return dimg;  
     } 
 
+	public void rotateImage(ActionEvent e) {
+		myImgAngle += 90;
+		repaint();
+	} 
+	
 	protected void setImageAngle(int degrees) {
 		myImgAngle = degrees;
 	}
-	
-	public void updatePassabilityIndex(ActionEvent e) {
-		TileObject selectedTile = myTileManager.getCanvas().getSelectedTileObj();
-		int index = ((JComboBox) e.getSource()).getSelectedIndex();
-		selectedTile.setPassabilityIndex(index);
-	}
-	
-	public void rotateImage(ActionEvent e) {
-		myImgAngle += 90;
-		update(getGraphics());
-	} 
 	
 }

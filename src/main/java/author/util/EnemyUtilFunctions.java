@@ -1,17 +1,16 @@
 package main.java.author.util;
 
 import java.awt.Graphics2D;
+
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.table.TableModel;
 
 import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.TDObjectSchema;
 
 /**
  * @author garysheng
@@ -72,29 +71,23 @@ public class EnemyUtilFunctions {
 		}
 		return true;
 	}
-
-	public Image getScaledImage(Image srcImg, int w, int h) {
-		BufferedImage resizedImg = new BufferedImage(w, h,
-				BufferedImage.TYPE_INT_RGB);
-		Graphics2D g2 = resizedImg.createGraphics();
-		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2.drawImage(srcImg, 0, 0, w, h, null);
-		g2.dispose();
-		return resizedImg;
-	}
-
-	public static boolean newObjectNameIsValid(String enemyName,
-			HashMap<String, TDObjectSchema> objectMap) {
-
+	
+	public Image getScaledImage(Image srcImg, int w, int h){
+        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(srcImg, 0, 0, w, h, null);
+        g2.dispose();
+        return resizedImg;
+    }
+	
+	public static boolean newEnemyNameIsValid(String enemyName, HashMap<String, SimpleMonsterSchema> enemyMap) {
 		if (!enemyName.equals("")) {
-			if (!objectMap.containsKey(enemyName)) {
-				if (enemyName.length() <= 20) {
-					if (enemyName.length() >= 2) {
-						for (String part : enemyName.split(" ")) {
-							if (EnemyUtilFunctions.isAlphaNumeric(part)) {
-								return true;
-							}
+			if (!enemyMap.containsKey(enemyName)) {
+				if (EnemyUtilFunctions.isAlphaNumeric(enemyName)) {
+					if (enemyName.length() <= 20) {
+						if (enemyName.length() >= 2) {
+							return true;
 						}
 					}
 				}

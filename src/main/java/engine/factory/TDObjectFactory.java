@@ -12,7 +12,6 @@ import main.java.engine.objects.tower.Tower;
 import main.java.engine.util.Reflection;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.schema.MonsterSchema;
 import main.java.schema.TDObjectSchema;
 import jgame.impl.JGEngineInterface;
 
@@ -60,26 +59,9 @@ public class TDObjectFactory {
                                                                                     throws MonsterCreationFailureException {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-            Map<String, String> attributes = schema.getAttributesMap();
-            attributes.put(MonsterSchema.ENTRANCE_X, String.valueOf(entrance.getX()));
-            attributes.put(MonsterSchema.ENTRANCE_Y, String.valueOf(entrance.getY()));
-            attributes.put(MonsterSchema.EXIT_X, String.valueOf(exit.getX()));
-            attributes.put(MonsterSchema.EXIT_Y, String.valueOf(exit.getY()));
-
-            Object[] monsterParameters = {attributes};
-=======
             schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
             schema.addAttribute(Monster.EXIT_LOCATION, exit);
             Object[] monsterParameters = { schema.getAttributesMap() };
->>>>>>> FETCH_HEAD
-=======
-            schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
-            schema.addAttribute(Monster.EXIT_LOCATION, exit);
-            Object[] monsterParameters = { schema.getAttributesMap() };
->>>>>>> FETCH_HEAD
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
         }
         catch (Exception e) {

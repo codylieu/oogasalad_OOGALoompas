@@ -1,7 +1,5 @@
 package main.java.schema;
 
-import main.java.author.view.tabs.enemy.EnemyViewConstants;
-import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.SimpleTower;
 
 import java.awt.Dimension;
@@ -24,25 +22,6 @@ public class SimpleTowerSchema extends TowerSchema {
         super(MY_CONCRETE_TYPE);
     }
 
-    public SimpleTowerSchema(String name) {
-		this();
-		
-		populateDefaultAttributes(name);
-	
-	}
-
-	public void populateDefaultAttributes(String name) {
-		addAttribute(Monster.NAME, name);
-		addAttribute(MonsterSchema.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
-		addAttribute(MonsterSchema.SPEED, EnemyViewConstants.SPEED_DEFAULT);
-		addAttribute(MonsterSchema.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
-		addAttribute(MonsterSchema.REWARD, EnemyViewConstants.REWARD_DEFAULT);    
-		addAttribute(MonsterSchema.FLYING_OR_GROUND, EnemyViewConstants.FLYING_OR_GROUND_DEFAULT);    
-		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);
-		addAttribute(MonsterSchema.ENEMY_IMAGE_PATH, "");
-		addAttribute(MonsterSchema.COLLISION_IMAGE_PATH, "");
-		
-	}
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
 		//empty set, no new attributes

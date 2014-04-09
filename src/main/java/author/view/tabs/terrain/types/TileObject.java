@@ -10,30 +10,18 @@ import javax.swing.JButton;
 
 import main.java.author.view.tabs.terrain.Canvas;
 
-/**
- * Intermediate class which represents a Tile. Class has favorable aspects as
- * we can click on JButtons that look like Tiles and set their values accordingly.
- * These values are then transferred to the actual Tile object when the user clicks
- * on the Canvas
- *
- */
 public class TileObject extends JButton{
 	
 	private Image myImage;
-	private Image myUneditedImage; // original image associated with the TileObject
-	private int myPassabilityIndex; // an edited version of the TileObject's original image
+	private Image myOriginalImage;
 	
 	public TileObject(Image img) {
 		myImage = img;
-		myUneditedImage = img;
+		myOriginalImage = img;
 	}
 	
 	public int getPassabilityIndex() {
-		return myPassabilityIndex;
-	}
-	
-	public void setPassabilityIndex(int index) {
-		myPassabilityIndex = index;
+		return 0;
 	}
 	
 	public Color getBGColor() {
@@ -44,8 +32,8 @@ public class TileObject extends JButton{
 		return myImage;
 	}
 	
-	public Image getUneditedImage() {
-		return myUneditedImage;
+	public Image getOriginalImage() {
+		return myOriginalImage;
 	}
 	
 	public void setImage(Image img) {
