@@ -23,39 +23,32 @@ import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
 
-	private static final String BITMAP_FILE = "BitmapImages";
-	private static final String DEFAULT_BG_BITMAP_SOURCE = "pokemon2.bmp";
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
+	private String myBitmapFile;
 	private TileSelectionManager myTileManager;
-	private ResourceBundle myBitmapBundle;
 	private Image[][] myImages; 
 	private int pixelSize;
 	
-	public TileDisplay(TileSelectionManager tileManager) {
+	public TileDisplay(TileSelectionManager tileManager, String bitmapFile, int pixels) {
 		myTileManager = tileManager;
+		myBitmapFile = bitmapFile;
+		pixelSize = pixels;
 		initResources();
 		constructTileOptions();
 		setVisible(true);
 	}
 	
 	private void initResources() {
-		myBitmapBundle = getResourceBundle("main.resources.author.images.", BITMAP_FILE);
-		myImages = parseBitmap(Tile.DEFAULT_IMAGE_PACKAGE, DEFAULT_BG_BITMAP_SOURCE);
+		myImages = parseBitmap(Tile.DEFAULT_IMAGE_PACKAGE, myBitmapFile);
 	}
 	
-	/**
-	 * 
-	 * @param bitmapPckg
-	 * @param bitmapName
-	 * @return
-	 */
 	private Image[][] parseBitmap(String bitmapPckg, String bitmapName) {
 		BufferedImage img = null;
 		try {
 			img = ImageIO.read(new File(bitmapPckg + bitmapName));
 			int imageWidth = img.getWidth();
 			int imageHeight = img.getHeight();
-			pixelSize = Integer.parseInt(myBitmapBundle.getString(bitmapName));
+
 			Image [][] myImageArray = new Image[imageHeight/pixelSize][imageWidth/pixelSize];
 
 			for (int i = 0; i < imageHeight/pixelSize; i++) {
@@ -93,10 +86,6 @@ public class TileDisplay extends JPanel {
 			}
 		}
 		add(tileOptions);
-	}
-	
-	private ResourceBundle getResourceBundle(String bundlePackage, String bundleName) {
-		return ResourceBundle.getBundle(bundlePackage + bundleName);
 	}
 	
 	public int getPixelSize() {

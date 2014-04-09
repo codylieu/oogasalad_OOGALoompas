@@ -50,7 +50,7 @@ public class TerrainEditorTab extends EditorTab{
 		myCanvas = new Canvas();
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
 		add(myCanvas, BorderLayout.CENTER);
-		add(myTileSelectionManager.getTileDisplay().getTileScrollPane(), BorderLayout.EAST);
+		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.EAST);
 		constructButtonDisplay();
 	}
 	
@@ -91,7 +91,6 @@ public class TerrainEditorTab extends EditorTab{
 		JFrame selectionFrame = new JFrame();
 		selectionFrame.add(myTileSelectionManager.getTileEditPanel(), BorderLayout.CENTER);
 		selectionFrame.setLocation(this.getWidth() + 25, 0);
-		selectionFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		selectionFrame.pack();
 		selectionFrame.setVisible(true);
 	}
