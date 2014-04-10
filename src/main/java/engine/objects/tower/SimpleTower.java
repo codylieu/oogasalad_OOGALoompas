@@ -24,12 +24,12 @@ public class SimpleTower extends Tower {
 	 */
 	public SimpleTower (Map<String, Object> attributes) {
 		this(
-				(Point2D) getValueOrDefault(attributes, LOCATION, new Point2D.Double(0,0)),
-				(double) getValueOrDefault(attributes, HEALTH, DEFAULT_HEALTH),
-				(double) getValueOrDefault(attributes, DAMAGE, DEFAULT_DAMAGE),
-				(double) getValueOrDefault(attributes, RANGE, DEFAULT_RANGE),
-				(double) getValueOrDefault(attributes, COST, DEFAULT_COST),
-				(double) getValueOrDefault(attributes, BUILDUP, DEFAULT_BUILDUPTIME),
+				(Point2D) getValueOrDefault(attributes, TowerSchema.LOCATION, new Point2D.Double(0,0)),
+				(double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),
+				(double) getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
+				(double) getValueOrDefault(attributes, TowerSchema.RANGE, DEFAULT_RANGE),
+				(double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
+				(double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
 				(String) attributes.get(TowerSchema.NAME));
 	}
 

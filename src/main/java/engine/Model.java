@@ -222,7 +222,7 @@ public class Model {
         SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
         testTowerSchema.addAttribute(TowerSchema.NAME, "test-tower-1");
         testTowerSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
-        testTowerSchema.addAttribute(Tower.COST, (double) 10);
+        testTowerSchema.addAttribute(TowerSchema.COST, (double) 10);
 
         tdObjectSchemas.add(testTowerSchema);
 

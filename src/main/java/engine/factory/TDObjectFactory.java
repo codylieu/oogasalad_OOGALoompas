@@ -16,6 +16,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.MonsterSchema;
 import main.java.schema.TDObjectSchema;
+import main.java.schema.TowerSchema;
 
 
 public class TDObjectFactory {
@@ -49,7 +50,7 @@ public class TDObjectFactory {
         Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
-            schema.addAttribute(Tower.LOCATION, (Serializable) tileOrigin);
+            schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
             Object[] towerParameters = { schema.getAttributesMap() };
 
             return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
