@@ -11,6 +11,7 @@ public abstract class TowerSchema extends TDObjectSchema {
     public static final String COST = "cost";
     public static final String BUILDUP = "buildup";
     public static final String TOWER_IMAGE_NAME = "towerImageName";
+    public static final String BULLET_IMAGE_NAME = "bulletImageName";
 	
     protected TowerSchema(Class<? extends Tower> myConcreteType) {
         super(myConcreteType);
