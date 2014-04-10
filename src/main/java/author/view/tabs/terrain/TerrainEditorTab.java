@@ -32,14 +32,17 @@ import javax.swing.SwingConstants;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.terrain.types.TileObject;
+import main.java.schema.GameMap;
 import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab{
 
 	private static final String CLEAR = "Clear Tiles";
 	private static final String EDIT_TILE = "Edit Tile";
+	private static final String SAVE_MAP = "Save Map";
 	
 	private TileSelectionManager myTileSelectionManager;
 	private Map<String, JButton> buttonDisplayOptions;
@@ -59,6 +62,7 @@ public class TerrainEditorTab extends EditorTab{
 		buttonDisplayOptions = new HashMap<String, JButton>();
 		buttonDisplayOptions.put(CLEAR, initClearButton());
 		buttonDisplayOptions.put(EDIT_TILE, initEditorButton());
+		buttonDisplayOptions.put(SAVE_MAP, initSaveButton());
 		
 		JPanel buttonDisplayPanel = new JPanel();
 		buttonDisplayPanel.setLayout(new GridBagLayout());
@@ -72,6 +76,12 @@ public class TerrainEditorTab extends EditorTab{
 		add(buttonDisplayPanel, BorderLayout.SOUTH);
 	}
 
+	private JButton initSaveButton() {
+		JButton saveButton = new JButton(SAVE_MAP);
+		saveButton.addActionListener(actionListener(this, "saveMap"));
+		return saveButton;
+	}
+	
 	private JButton initClearButton() {
 		JButton clearButton = new JButton(CLEAR);
 		clearButton.addActionListener(actionListener(this, "clearCanvasTiles"));
@@ -82,6 +92,13 @@ public class TerrainEditorTab extends EditorTab{
 		JButton openBGTiles = new JButton(EDIT_TILE);
 		openBGTiles.addActionListener(actionListener(this, "openEditorWindow"));
 		return openBGTiles;
+	}
+	
+	public void saveMap(ActionEvent e) {
+		GameMap myCompletedMap = new GameMap(myCanvas.getTileArray());
+		TerrainController control = (TerrainController) myController;
+		control.addMap(myCompletedMap);
+		System.out.println("Map Saved");
 	}
 	
 	public void clearCanvasTiles(ActionEvent e) {
