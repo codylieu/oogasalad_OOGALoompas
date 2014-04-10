@@ -8,8 +8,8 @@ public abstract class MonsterSchema extends TDObjectSchema {
 	public static final String MONEY_VALUE = "moneyValue";
 	public static final String ENTRANCE_LOCATION = "entrance";
 	public static final String EXIT_LOCATION = "exit";
-	public static final String ENEMY_IMAGE_PATH = "enemyImagePath";
-	public static final String COLLISION_IMAGE_PATH = "collisonPath";
+	public static final String ENEMY_IMAGE_NAME = "enemyImageName";
+	public static final String COLLISION_IMAGE_NAME = "collisonImageName";
 	public static final String FLYING_OR_GROUND = "flyingOrGround";
 	public static final String TILE_SIZE = "tileSize";
 	

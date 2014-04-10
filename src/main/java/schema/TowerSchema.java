@@ -10,6 +10,7 @@ public abstract class TowerSchema extends TDObjectSchema {
     public static final String RANGE = "range";
     public static final String COST = "cost";
     public static final String BUILDUP = "buildup";
+    public static final String TOWER_IMAGE_NAME = "towerImageName";
 	
     protected TowerSchema(Class<? extends Tower> myConcreteType) {
         super(myConcreteType);
