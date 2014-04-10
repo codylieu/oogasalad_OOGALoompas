@@ -5,14 +5,15 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 
 import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
 import main.java.author.view.tabs.terrain.Canvas;
 
 public abstract class EditorTab extends JPanel {
 
-	private MainController myController;
+	protected TabController myController;
 
-	public EditorTab(MainController controller) {
-		myController = controller;
+	public EditorTab(TabController tabController) {
+		myController = tabController;
 	}
 
 }

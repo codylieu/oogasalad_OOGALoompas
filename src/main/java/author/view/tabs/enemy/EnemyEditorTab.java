@@ -16,6 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
@@ -41,7 +42,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	private ButtonGroup sizeButtonGroup;
 	private ButtonGroup flyingButtonGroup;
 
-	public EnemyEditorTab(MainController c) {
+	public EnemyEditorTab(TabController c) {
 		super(c);
 	}
 

@@ -476,4 +476,5 @@ public class Model {
     public void decrementLives () {
        player.decrementLives();
     }
+
 }
