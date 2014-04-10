@@ -5,15 +5,12 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsDevice;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -31,7 +28,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 public class Player {
 
@@ -215,12 +211,14 @@ public class Player {
 		speedUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//This should work but it doesn't
-				System.out.println(engine.getGameSpeed());
-				engine.setGameSpeed(20.0);
-				System.out.println(engine.getGameSpeed());
+				//System.out.println(engine.getGameSpeed());
+			//	engine.setGameSpeed(5.0);
+				System.out.println(engine.getFramePerSecond());
+				engine.setFramePerSecond(engine.getFramePerSecond()+5);
+				//System.out.println(engine.getGameSpeed());
 			}
 		});
-		JButton quitButton = makeQuitButton();
+				JButton quitButton = makeQuitButton();
 		JButton addTowerButton = new JButton("Add Tower");
 		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		addTowerButton.addActionListener(new ActionListener() {
@@ -231,7 +229,8 @@ public class Player {
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
-		//gameButtonPanel.add(speedUpButton);
+		gameButtonPanel.add(speedUpButton);
+		//gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(addTowerButton);
 		return gameButtonPanel;

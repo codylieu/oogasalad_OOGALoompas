@@ -15,6 +15,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 
 public class TDPlayerEngine extends JGEngine implements Subject {
 
+	private int FRAMEPERSECOND = 45;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
@@ -38,13 +39,21 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 
 	@Override
 	public void initGame() {
-		setFrameRate(45, 1);
+		setFrameRate(FRAMEPERSECOND, 1);
 		this.model = new Model(this);
 		model.addNewPlayer();
 		model.loadMap("testmap.json");
 		//model.loadSchemas("testtowers");
 	}
 
+	public int getFramePerSecond(){
+		return FRAMEPERSECOND;
+	}
+	
+	public void setFramePerSecond(int newFrame){
+		FRAMEPERSECOND = newFrame;
+		setFrameRate(FRAMEPERSECOND,1);
+	}
 	@Override
 	public void paintFrame() {
 		highlightMouseoverTile();
