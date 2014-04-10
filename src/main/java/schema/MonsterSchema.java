@@ -9,8 +9,8 @@ public abstract class MonsterSchema extends TDObjectSchema {
 	public static final String REWARD = "moneyValue";
 	public static final String ENTRANCE_LOCATION = "entrance";
 	public static final String EXIT_LOCATION = "exit";
-	public static final String ENEMY_IMAGE_PATH = "enemyImageName";
-	public static final String COLLISION_IMAGE_PATH = "collisonImageName";
+	public static final String ENEMY_IMAGE_NAME = "enemyImageName";
+	public static final String COLLISION_IMAGE_NAME = "collisonImageName";
 	public static final String FLYING_OR_GROUND = "flyingOrGround";
 	public static final String TILE_SIZE = "tileSize";
 	
@@ -35,8 +35,8 @@ public abstract class MonsterSchema extends TDObjectSchema {
 		myAttributeSet.add(MonsterSchema.NAME);
 		myAttributeSet.add(MonsterSchema.FLYING_OR_GROUND);
 		myAttributeSet.add(MonsterSchema.TILE_SIZE);
-		myAttributeSet.add(MonsterSchema.ENEMY_IMAGE_PATH);
-		myAttributeSet.add(MonsterSchema.COLLISION_IMAGE_PATH);
+		myAttributeSet.add(MonsterSchema.ENEMY_IMAGE_NAME);
+		myAttributeSet.add(MonsterSchema.COLLISION_IMAGE_NAME);
 		
     }
     
