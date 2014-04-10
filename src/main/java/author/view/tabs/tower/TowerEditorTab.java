@@ -23,8 +23,7 @@ import main.java.schema.MonsterSchema;
 import main.java.schema.SimpleTowerSchema;
 import main.java.schema.TDObjectSchema;
 
-
-public class TowerEditorTab extends ObjectEditorTab{
+public class TowerEditorTab extends ObjectEditorTab {
 
 	private JSpinner healthSpinner;
 	private JSpinner speedSpinner;
@@ -104,10 +103,14 @@ public class TowerEditorTab extends ObjectEditorTab{
 	 */
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
-		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
-		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
-		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
-		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
+		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)
+				.toString()));
+		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)
+				.toString()));
+		damageSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)
+				.toString()));
+		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)
+				.toString()));
 		// buttons
 		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
 				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton
@@ -127,7 +130,6 @@ public class TowerEditorTab extends ObjectEditorTab{
 		// images
 
 	}
-
 
 	private class TowerTabViewBuilder extends TabViewBuilder {
 

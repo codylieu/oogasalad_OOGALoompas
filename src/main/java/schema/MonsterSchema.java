@@ -1,5 +1,6 @@
 package main.java.schema;
 
+import main.java.author.view.tabs.enemy.EnemyViewConstants;
 import main.java.engine.objects.monster.Monster;
 
 public abstract class MonsterSchema extends TDObjectSchema {
@@ -31,7 +32,13 @@ public abstract class MonsterSchema extends TDObjectSchema {
 		myAttributeSet.add(MonsterSchema.HEALTH);
 		myAttributeSet.add(MonsterSchema.REWARD);
 		myAttributeSet.add(MonsterSchema.SPEED);
+		myAttributeSet.add(MonsterSchema.DAMAGE);
 		myAttributeSet.add(MonsterSchema.NAME);
+		myAttributeSet.add(MonsterSchema.FLYING_OR_GROUND);
+		myAttributeSet.add(MonsterSchema.TILE_SIZE);
+		myAttributeSet.add(MonsterSchema.ENEMY_IMAGE_PATH);
+		myAttributeSet.add(MonsterSchema.COLLISION_IMAGE_PATH);
+		
     }
     
 }
