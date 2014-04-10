@@ -14,6 +14,7 @@ public abstract class EditorTab extends JPanel {
 
 	public EditorTab(TabController tabController) {
 		myController = tabController;
+		myController.setControlledTab(this);
 	}
 
 }
