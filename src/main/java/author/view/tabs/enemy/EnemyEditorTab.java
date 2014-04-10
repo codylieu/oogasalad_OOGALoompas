@@ -80,13 +80,13 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		String name = getSelectedObjectName();
 		TDObjectSchema myCurrentEnemy = objectMap.get(name);
 		Integer health = (Integer) healthSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.HEALTH, health.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.HEALTH, health);
 		Integer speed = (Integer) speedSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.SPEED, speed.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.SPEED, speed);
 		Integer damage = (Integer) damageSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.DAMAGE, damage.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.DAMAGE, damage);
 		Integer reward = (Integer) rewardSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.REWARD, reward.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.REWARD, reward);
 		// update schema with buttons
 		myCurrentEnemy.addAttribute(MonsterSchema.FLYING_OR_GROUND,
 				GroupButtonUtil.getSelectedButtonText(flyingButtonGroup));
@@ -133,10 +133,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					0, // bottom
 					0)); // right
 
-			groundButton = new JRadioButton(
-					MonsterSchema.GROUND);
-			flyingButton = new JRadioButton(
-					MonsterSchema.FLYING);
+			groundButton = new JRadioButton(MonsterSchema.GROUND);
+			flyingButton = new JRadioButton(MonsterSchema.FLYING);
 			flyingButtonGroup = new ButtonGroup();
 			flyingButtonGroup.add(groundButton);
 			flyingButtonGroup.add(flyingButton);
@@ -182,20 +180,15 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
 
-		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)
-				.toString()));
-		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)
-				.toString()));
-		damageSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)
-				.toString()));
-		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)
-				.toString()));
+		healthSpinner.setValue(map.get(MonsterSchema.HEALTH));
+		speedSpinner.setValue(map.get(MonsterSchema.SPEED));
+		damageSpinner.setValue(map.get(MonsterSchema.DAMAGE));
+		rewardSpinner.setValue(map.get(MonsterSchema.REWARD));
 
 		// buttons
 		ButtonModel selectedFlyButtonModel = null;
 		ButtonModel selectedSizeButtonModel = null;
-		String flyOrGroundValue = (String) map
-				.get(MonsterSchema.FLYING_OR_GROUND);
+		String flyOrGroundValue = (String) map.get(MonsterSchema.FLYING_OR_GROUND);
 		String tileSizeValue = (String) map.get(MonsterSchema.TILE_SIZE);
 
 		for (JRadioButton radioButton : radioButtons) {

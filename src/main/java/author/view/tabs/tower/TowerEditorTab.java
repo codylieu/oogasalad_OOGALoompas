@@ -79,13 +79,13 @@ public class TowerEditorTab extends ObjectEditorTab {
 		String name = getSelectedObjectName();
 		TDObjectSchema myCurrentTower = objectMap.get(name);
 		Integer health = (Integer) healthSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.HEALTH, health.toString());
+		myCurrentTower.addAttribute(TowerSchema.HEALTH, health);
 		Integer cost = (Integer) costSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.COST, cost.toString());
+		myCurrentTower.addAttribute(TowerSchema.COST, cost);
 		Integer damage = (Integer) damageSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.DAMAGE, damage.toString());
+		myCurrentTower.addAttribute(TowerSchema.DAMAGE, damage);
 		Integer buildUp = (Integer) buildUpSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.BUILDUP, buildUp.toString());
+		myCurrentTower.addAttribute(TowerSchema.BUILDUP, buildUp);
 		// update schema with buttons
 		myCurrentTower.addAttribute(TowerSchema.TILE_SIZE,
 				GroupButtonUtil.getSelectedButtonText(sizeButtonGroup));
@@ -105,20 +105,15 @@ public class TowerEditorTab extends ObjectEditorTab {
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
 
-		healthSpinner.setValue(Integer.parseInt(map.get(TowerSchema.HEALTH)
-				.toString()));
-		costSpinner.setValue(Integer.parseInt(map.get(TowerSchema.COST)
-				.toString()));
-		damageSpinner.setValue(Integer.parseInt(map.get(TowerSchema.DAMAGE)
-				.toString()));
-		buildUpSpinner.setValue(Integer.parseInt(map.get(TowerSchema.BUILDUP)
-				.toString()));
+		healthSpinner.setValue(map.get(TowerSchema.HEALTH));
+		costSpinner.setValue(map.get(TowerSchema.COST));
+		damageSpinner.setValue(map.get(TowerSchema.DAMAGE));
+		buildUpSpinner.setValue(map.get(TowerSchema.BUILDUP));
 
 		// buttons
 		ButtonModel selectedRangeButtonModel = null;
 		ButtonModel selectedSizeButtonModel = null;
-		String rangeValue = (String) map
-				.get(TowerSchema.RANGE);
+		String rangeValue = (String) map.get(TowerSchema.RANGE);
 		String sizeValue = (String) map.get(TowerSchema.TILE_SIZE);
 
 		for (JRadioButton radioButton : radioButtons) {
