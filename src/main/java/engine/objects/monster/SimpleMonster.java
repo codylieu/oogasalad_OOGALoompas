@@ -24,7 +24,7 @@ public class SimpleMonster extends Monster {
 				(double) getValueOrDefault(attributes, MonsterSchema.HEALTH, DEFAULT_HEALTH),
 				(double) getValueOrDefault(attributes, MonsterSchema.SPEED, DEFAULT_MOVE_SPEED),
 				(double) getValueOrDefault(attributes, MonsterSchema.MONEY_VALUE, DEFAULT_REWARD_AMOUNT),
-				(String) attributes.get(NAME));
+				(String) attributes.get(MonsterSchema.NAME));
 	}
 
 	    /**

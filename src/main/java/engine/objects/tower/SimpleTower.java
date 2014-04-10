@@ -2,9 +2,9 @@ package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
 import java.util.Map;
+
 import main.java.engine.objects.Projectile;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.SimpleTowerSchema;
+import main.java.schema.TowerSchema;
 
 
 public class SimpleTower extends Tower {
@@ -30,7 +30,7 @@ public class SimpleTower extends Tower {
 				(double) getValueOrDefault(attributes, RANGE, DEFAULT_RANGE),
 				(double) getValueOrDefault(attributes, COST, DEFAULT_COST),
 				(double) getValueOrDefault(attributes, BUILDUP, DEFAULT_BUILDUPTIME),
-				(String) attributes.get(NAME));
+				(String) attributes.get(TowerSchema.NAME));
 	}
 
 	/**

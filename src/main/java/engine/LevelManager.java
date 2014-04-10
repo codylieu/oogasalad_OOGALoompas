@@ -5,12 +5,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.TDObjectSchema;
 import main.java.schema.WaveSpawnSchema;
 
 
@@ -56,7 +57,7 @@ public class LevelManager {
                 Monster newlyAdded =
                         myFactory.placeMonster(entrance, monsterExit,
                                                (String) spawnSchema.getMonsterSchema()
-                                                       .getAttributesMap().get(TDObject.NAME));
+                                                       .getAttributesMap().get(TDObjectSchema.NAME));
                 spawnedMonsters.add(newlyAdded);
             }
             if (++myCurrentWave >= myAllWaves.size()) {

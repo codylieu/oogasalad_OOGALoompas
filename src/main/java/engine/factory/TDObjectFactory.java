@@ -9,7 +9,6 @@ import java.util.Map;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.util.Reflection;
@@ -31,7 +30,7 @@ public class TDObjectFactory {
     public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
         // TODO: Get rid of repetition in loading schemas
         for (TDObjectSchema s : schemas) {
-            String objName = (String) s.getAttributesMap().get(TDObject.NAME);
+            String objName = (String) s.getAttributesMap().get(TDObjectSchema.NAME);
             String objImagePath = Model.RESOURCE_PATH + s.getAttributesMap().get(TDObjectSchema.IMAGE_NAME);
             engine.defineImage(objName, "-", 1, objImagePath, "-");
             tdObjectSchemaMap.put(objName, s);

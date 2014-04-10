@@ -9,7 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import net.lingala.zip4j.exception.ZipException;
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
@@ -28,7 +27,9 @@ import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.SimpleMonsterSchema;
 import main.java.schema.SimpleTowerSchema;
 import main.java.schema.TDObjectSchema;
+import main.java.schema.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
+import net.lingala.zip4j.exception.ZipException;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -219,14 +220,14 @@ public class Model {
         List<TDObjectSchema> tdObjectSchemas = new ArrayList<>();
 
         SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
-        testTowerSchema.addAttribute(Tower.NAME, "test-tower-1");
+        testTowerSchema.addAttribute(TowerSchema.NAME, "test-tower-1");
         testTowerSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
         testTowerSchema.addAttribute(Tower.COST, (double) 10);
 
         tdObjectSchemas.add(testTowerSchema);
 
         SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
-        testMonsterSchema.addAttribute(Monster.NAME, "test-monster-1");
+        testMonsterSchema.addAttribute(MonsterSchema.NAME, "test-monster-1");
         testMonsterSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
         testMonsterSchema.addAttribute(MonsterSchema.MONEY_VALUE, (double) 200);
         tdObjectSchemas.add(testMonsterSchema);
