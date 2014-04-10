@@ -27,9 +27,16 @@ public class MainController {
 		myTabControllers.add(tabController);
 	}
 
-	public boolean gameIsValid() {
+	/**
+	 * this method will be called when the Authoring View presses finalizeGame()
+	 * to check if the game should actually be finalized
+	 * 
+	 * @return
+	 */
+	public boolean isGameValid() {
 		for (TabController tabCtrl : myTabControllers) {
 			if (!tabCtrl.isTabValid()) {
+				tabCtrl.fireErrorPopUp();
 				return false;
 			}
 		}
@@ -57,9 +64,9 @@ public class MainController {
 	}
 
 	public void saveBlueprint() {
-		//tell model to save blueprint
+		// tell model to save blueprint
 	}
-	
+
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(new Runnable() {

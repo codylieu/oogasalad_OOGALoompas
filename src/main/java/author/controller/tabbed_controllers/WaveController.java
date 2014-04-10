@@ -23,4 +23,10 @@ public class WaveController extends TabController {
 	public void addWave(WaveSpawnSchema wave) {
 		mySuperController.addWaveToModel(wave);
 	}
+
+	@Override
+	public void fireErrorPopUp() {
+		// TODO Auto-generated method stub
+		
+	}
 }

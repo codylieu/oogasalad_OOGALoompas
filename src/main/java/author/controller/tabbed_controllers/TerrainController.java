@@ -22,4 +22,10 @@ public class TerrainController extends TabController {
 	public void addMap(GameMap gameMap) {
 		mySuperController.addGameMapToModel(gameMap);
 	}
+
+	@Override
+	public void fireErrorPopUp() {
+		// TODO Auto-generated method stub
+		
+	}
 }
