@@ -1,10 +1,17 @@
 package main.java.author.controller;
 
+import main.java.author.view.tabs.EditorTab;
+
 public abstract class TabController {
-	private MainController mySuperController;
+	protected MainController mySuperController;
+	protected EditorTab myEditorTab;
 
 	public TabController(MainController superController) {
 		mySuperController = superController;
+	}
+	
+	public void setControlledTab(EditorTab tab) {
+		myEditorTab = tab;
 	}
 
 	public abstract boolean isTabValid();
