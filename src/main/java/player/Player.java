@@ -218,6 +218,17 @@ public class Player {
 				//System.out.println(engine.getGameSpeed());
 			}
 		});
+		JButton slowDownButton = new JButton("Slow Down");
+		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		slowDownButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//This should work but it doesn't
+				//System.out.println(engine.getGameSpeed());
+				System.out.println(engine.getFramePerSecond());
+				engine.setFramePerSecond(engine.getFramePerSecond()-5);
+				//System.out.println(engine.getGameSpeed());
+			}
+		});
 				JButton quitButton = makeQuitButton();
 		JButton addTowerButton = new JButton("Add Tower");
 		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -230,7 +241,7 @@ public class Player {
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
 		gameButtonPanel.add(speedUpButton);
-		//gameButtonPanel.add(slowDownButton);
+		gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(addTowerButton);
 		return gameButtonPanel;
