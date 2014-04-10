@@ -1,5 +1,6 @@
 package main.java.author.view.tabs.terrain;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -46,10 +47,15 @@ public class TileSelectionManager {
 		}	
 	}
 	
+	protected void addTileDisplay(File bmpFile, int pixels) {
+		TileDisplay currTileDisp = new TileDisplay(this, bmpFile, pixels);
+		myTileDisplays.add(currTileDisp);
+		tileDisplayTab.addTab(trimBitmapString(bmpFile.getName()), currTileDisp.getTileScrollPane());
+	}
+	
 	private String trimBitmapString(String bitmapStr) {
 		int index = bitmapStr.indexOf(".bmp");
 		return (index != -1) ? bitmapStr.substring(0, index) : bitmapStr;
-		
 	}
 	
 	public JTabbedPane getTileDisplayTabs() {

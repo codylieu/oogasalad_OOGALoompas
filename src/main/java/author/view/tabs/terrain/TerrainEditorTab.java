@@ -23,8 +23,11 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -34,6 +37,7 @@ import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
+import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.author.view.tabs.terrain.types.TileObject;
 import main.java.schema.GameMap;
 import static main.java.author.util.ActionListenerUtil.actionListener;
@@ -43,7 +47,11 @@ public class TerrainEditorTab extends EditorTab{
 	private static final String CLEAR = "Clear Tiles";
 	private static final String EDIT_TILE = "Edit Tile";
 	private static final String SAVE_MAP = "Save Map";
+	private static final String ADD_BITMAP = "Add Bitmap File";
+	private static final String PIXEL_QUERY = "How many pixels are in the bitmap?";
+	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
 	
+	private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
 	private Map<String, JButton> buttonDisplayOptions;
 
@@ -63,6 +71,8 @@ public class TerrainEditorTab extends EditorTab{
 		buttonDisplayOptions.put(CLEAR, initClearButton());
 		buttonDisplayOptions.put(EDIT_TILE, initEditorButton());
 		buttonDisplayOptions.put(SAVE_MAP, initSaveButton());
+		buttonDisplayOptions.put(ADD_BITMAP, initNewBitmap());
+		
 		
 		JPanel buttonDisplayPanel = new JPanel();
 		buttonDisplayPanel.setLayout(new GridBagLayout());
@@ -76,6 +86,12 @@ public class TerrainEditorTab extends EditorTab{
 		add(buttonDisplayPanel, BorderLayout.SOUTH);
 	}
 
+	private JButton initNewBitmap() {
+		JButton createBitmap = new JButton(ADD_BITMAP);
+		createBitmap.addActionListener(actionListener(this, "importBitmap"));
+		return createBitmap;
+	}
+	
 	private JButton initSaveButton() {
 		JButton saveButton = new JButton(SAVE_MAP);
 		saveButton.addActionListener(actionListener(this, "saveMap"));
@@ -99,6 +115,35 @@ public class TerrainEditorTab extends EditorTab{
 		TerrainController control = (TerrainController) myController;
 		control.addMap(myCompletedMap);
 		System.out.println("Map Saved");
+	}
+	
+	public void importBitmap(ActionEvent e) {
+		fileChooser = new JFileChooser();
+		int fileReturn = fileChooser.showOpenDialog(this);
+		if (fileReturn == JFileChooser.APPROVE_OPTION) {
+			File file = fileChooser.getSelectedFile();
+			addTileDisplay(file);
+		}
+	}
+	
+	private void addTileDisplay(File f) {
+		if (f.getPath().endsWith(".bmp")) {
+			String pixels = queryUser(PIXEL_QUERY);
+			try {
+				int pixelCount = Integer.parseInt(pixels);
+				if (pixelCount < 40 && pixelCount > 10) {
+					myTileSelectionManager.addTileDisplay(f, pixelCount);
+				} else {
+					JOptionPane.showMessageDialog(this, PIXEL_RANGE);
+				}
+			} catch (NumberFormatException ex) {
+				
+			}
+		}
+	}
+	
+	private String queryUser(String query) {
+		return JOptionPane.showInputDialog(query);
 	}
 	
 	public void clearCanvasTiles(ActionEvent e) {

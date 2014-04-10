@@ -24,16 +24,18 @@ import main.java.author.view.tabs.terrain.types.TileObject;
 public class TileDisplay extends JPanel {
 
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
-	private String myBitmapFile;
 	private TileSelectionManager myTileManager;
 	private Image[][] myImages; 
 	private int pixelSize;
 	
 	public TileDisplay(TileSelectionManager tileManager, String bitmapFile, int pixels) {
+		this(tileManager, new File(Tile.DEFAULT_IMAGE_PACKAGE + bitmapFile), pixels);
+	}
+	
+	public TileDisplay(TileSelectionManager tileManager, File bitmapFile, int pixels) {
 		myTileManager = tileManager;
-		myBitmapFile = bitmapFile;
 		pixelSize = pixels;
-		initResources();
+		initResources(bitmapFile);
 		displayTiles();
 		setVisible(true);
 	}
@@ -41,8 +43,8 @@ public class TileDisplay extends JPanel {
 	/**
 	 * Initializes resources to be used 
 	 */
-	private void initResources() {
-		myImages = parseBitmap(Tile.DEFAULT_IMAGE_PACKAGE, myBitmapFile);
+	private void initResources(File bmpFile) {
+		myImages = parseBitmap(bmpFile);
 	}
 	
 	/**
@@ -52,10 +54,10 @@ public class TileDisplay extends JPanel {
 	 * @param bitmapName the name of the bitmap file
 	 * @return a 2D array of image objects within the bitmap
 	 */
-	private Image[][] parseBitmap(String bitmapPckg, String bitmapName) {
+	private Image[][] parseBitmap(File bitmapFile) {
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new File(bitmapPckg + bitmapName));
+			img = ImageIO.read(bitmapFile);
 			int imageWidth = img.getWidth();
 			int imageHeight = img.getHeight();
 			Image [][] myImageArray = new Image[imageHeight/pixelSize][imageWidth/pixelSize];
