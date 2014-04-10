@@ -404,7 +404,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 					ObjectEditorConstants.IMAGE_CANVAS_SIZE);
 			objectImageCanvas.setBackground(Color.BLACK);
 			result.add(objectImageCanvas, BorderLayout.NORTH);
-			objectImageButton = makeChooseGraphicsButton("Set Enemy Image");
+			objectImageButton = makeChooseGraphicsButton("Set Object Image");
 			result.add(objectImageButton, BorderLayout.SOUTH);
 			return result;
 		}
