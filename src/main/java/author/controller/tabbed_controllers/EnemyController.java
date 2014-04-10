@@ -19,4 +19,10 @@ public class EnemyController extends TabController {
 	public void addEnemy(SimpleMonsterSchema enemySchema) {
 		mySuperController.addEnemyToModel(enemySchema);
 	}
+
+	@Override
+	public void fireErrorPopUp() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -16,4 +16,6 @@ public abstract class TabController {
 
 	public abstract boolean isTabValid();
 
+	public abstract void fireErrorPopUp();
+
 }

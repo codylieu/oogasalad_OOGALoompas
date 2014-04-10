@@ -22,4 +22,10 @@ public class GameSettingsController extends TabController {
 	public void addGameSettings(GameSchema gameSchema) {
 		mySuperController.addGameSettingsToModel(gameSchema);
 	}
+
+	@Override
+	public void fireErrorPopUp() {
+		// TODO Auto-generated method stub
+		
+	}
 }

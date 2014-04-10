@@ -22,4 +22,10 @@ public class TowerController extends TabController {
 	public void addTower(SimpleTowerSchema towerSchema) {
 		mySuperController.addTowerToModel(towerSchema);
 	}
+
+	@Override
+	public void fireErrorPopUp() {
+		// TODO Auto-generated method stub
+		
+	}
 }

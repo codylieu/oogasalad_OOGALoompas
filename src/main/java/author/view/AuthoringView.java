@@ -1,7 +1,10 @@
 package main.java.author.view;
 
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
@@ -19,13 +22,13 @@ import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
 
-
 /**
  * Frame that represents the GUI for the Authoring environment.
  * 
  */
 public class AuthoringView extends JFrame {
 	private MainController myController;
+	private JButton finalizeGameButton;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -36,13 +39,14 @@ public class AuthoringView extends JFrame {
 
 	public AuthoringView(MainController mainController) {
 		myController = mainController;
+
 	}
 
 	/**
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs() {
-		
+
 		TabController enemyController = new EnemyController(myController);
 		TabController towerController = new TowerController(myController);
 		TabController waveController = new WaveController(myController);
@@ -63,12 +67,36 @@ public class AuthoringView extends JFrame {
 
 	public void createAndShowGUI() {
 		createEditorTabs();
-		getContentPane().add(tabbedPane, BorderLayout.CENTER);
+		add(tabbedPane, BorderLayout.CENTER);
+		add(createFinalizeGameButton(), BorderLayout.SOUTH);
 		setJMenuBar(new BasicMenuBar());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		pack();
 		setVisible(true);
+		addActionListeners();
+	}
+
+	private void addActionListeners() {
+		finalizeGameButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (myController.isGameValid()) {
+					saveBlueprint();
+				}
+			}
+		});
+	}
+	
+	private void saveBlueprint() {
+		//open a dialog box, cody
+		myController.saveBlueprint();
+	}
+
+	private JButton createFinalizeGameButton() {
+		finalizeGameButton = new JButton("Finalize Game");
+		return finalizeGameButton;
 	}
 
 }
