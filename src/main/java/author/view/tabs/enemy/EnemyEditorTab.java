@@ -134,9 +134,9 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					0)); // right
 
 			groundButton = new JRadioButton(
-					MonsterSchema.FLYING_OR_GROUND_GROUND);
+					MonsterSchema.GROUND);
 			flyingButton = new JRadioButton(
-					MonsterSchema.FLYING_OR_GROUND_FLYING);
+					MonsterSchema.FLYING);
 			flyingButtonGroup = new ButtonGroup();
 			flyingButtonGroup.add(groundButton);
 			flyingButtonGroup.add(flyingButton);

@@ -3,7 +3,6 @@ package main.java.schema;
 import main.java.engine.objects.monster.Monster;
 
 public abstract class MonsterSchema extends TDObjectSchema {
-	public static final String NAME = "name";
     public static final String HEALTH = "health";
 	public static final String SPEED = "speed";
 	public static final String MONEY_VALUE = "moneyValue";
@@ -14,8 +13,8 @@ public abstract class MonsterSchema extends TDObjectSchema {
 	public static final String FLYING_OR_GROUND = "flyingOrGround";
 	public static final String TILE_SIZE = "tileSize";
 	
-	public static final String FLYING_OR_GROUND_FLYING = "Flying";
-	public static final String FLYING_OR_GROUND_GROUND = "Ground";
+	public static final String FLYING = "Flying";
+	public static final String GROUND = "Ground";
 	
 	public static final String TILE_SIZE_SMALL = "Small";
 	public static final String TILE_SIZE_MEDIUM = "Medium";

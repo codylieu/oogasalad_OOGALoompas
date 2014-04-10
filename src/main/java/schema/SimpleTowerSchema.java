@@ -30,7 +30,7 @@ public class SimpleTowerSchema extends TowerSchema {
 	}
 
 	public void populateDefaultAttributes(String name) {
-		addAttribute(MonsterSchema.NAME, name);
+		/*addAttribute(MonsterSchema.NAME, name);
 		addAttribute(MonsterSchema.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
 		addAttribute(MonsterSchema.SPEED, EnemyViewConstants.SPEED_DEFAULT);
 		addAttribute(MonsterSchema.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
@@ -38,7 +38,7 @@ public class SimpleTowerSchema extends TowerSchema {
 		addAttribute(MonsterSchema.FLYING_OR_GROUND, EnemyViewConstants.FLYING_OR_GROUND_DEFAULT);    
 		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);
 		addAttribute(MonsterSchema.ENEMY_IMAGE_PATH, "");
-		addAttribute(MonsterSchema.COLLISION_IMAGE_PATH, "");
+		addAttribute(MonsterSchema.COLLISION_IMAGE_PATH, "");*/
 		
 	}
 	@Override
