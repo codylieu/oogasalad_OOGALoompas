@@ -10,11 +10,6 @@ import java.util.Set;
  * overarching stats
  */
 public class GameSchema extends AbstractSchema {
-
-//	private int myStartingLives;
-//	private int myStartingGold;
-//	private int myLevelDifficulty;
-//	private boolean isSurvivalMode;
 	
 	public static final String LIVES = "lives";
 	public static final String MONEY = "money";

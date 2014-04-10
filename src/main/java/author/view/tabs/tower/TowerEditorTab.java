@@ -85,7 +85,7 @@ public class TowerEditorTab extends ObjectEditorTab{
 		Integer damage = (Integer) damageSpinner.getValue();
 		myCurrentTower.addAttribute(MonsterSchema.DAMAGE, damage.toString());
 		Integer reward = (Integer) rewardSpinner.getValue();
-		myCurrentTower.addAttribute(MonsterSchema.REWARD, reward.toString());
+		myCurrentTower.addAttribute(MonsterSchema.MONEY_VALUE, reward.toString());
 		// update schema with buttons
 		myCurrentTower.addAttribute(MonsterSchema.FLYING_OR_GROUND,
 				GroupButtonUtil.getSelectedButtonText(flyingButtonGroup));
@@ -107,7 +107,7 @@ public class TowerEditorTab extends ObjectEditorTab{
 		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
 		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
 		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
-		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
+		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.MONEY_VALUE)));
 		// buttons
 		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
 				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton

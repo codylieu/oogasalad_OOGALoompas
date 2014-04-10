@@ -86,7 +86,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		Integer damage = (Integer) damageSpinner.getValue();
 		myCurrentEnemy.addAttribute(MonsterSchema.DAMAGE, damage.toString());
 		Integer reward = (Integer) rewardSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.REWARD, reward.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.MONEY_VALUE, reward.toString());
 		// update schema with buttons
 		myCurrentEnemy.addAttribute(MonsterSchema.FLYING_OR_GROUND,
 				GroupButtonUtil.getSelectedButtonText(flyingButtonGroup));
@@ -184,7 +184,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
 		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
 		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
-		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.REWARD)));
+		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.MONEY_VALUE)));
 		// buttons
 		ButtonModel selectedFlyButtonModel = null;
 		ButtonModel selectedSizeButtonModel = null;

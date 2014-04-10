@@ -36,7 +36,7 @@ public class SimpleTowerSchema extends TowerSchema {
 		addAttribute(MonsterSchema.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
 		addAttribute(MonsterSchema.SPEED, EnemyViewConstants.SPEED_DEFAULT);
 		addAttribute(MonsterSchema.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
-		addAttribute(MonsterSchema.REWARD, EnemyViewConstants.REWARD_DEFAULT);    
+		addAttribute(MonsterSchema.MONEY_VALUE, EnemyViewConstants.REWARD_DEFAULT);    
 		addAttribute(MonsterSchema.FLYING_OR_GROUND, EnemyViewConstants.FLYING_OR_GROUND_DEFAULT);    
 		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);
 		addAttribute(MonsterSchema.ENEMY_IMAGE_PATH, "");
