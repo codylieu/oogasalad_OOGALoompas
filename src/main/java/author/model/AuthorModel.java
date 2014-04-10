@@ -40,4 +40,13 @@ public class AuthorModel {
 
 	}
 
+	/**
+	 * @return true if the bluePrint has everything it needs and is validated
+	 */
+	public boolean isBlueprintReady() {
+		// TODO Cody think about what kind of validation you would need to run
+		// to make sure it's ready to be passed into the data team.
+		return false;
+	}
+
 }
