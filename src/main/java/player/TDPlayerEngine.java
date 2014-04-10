@@ -21,17 +21,31 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	private CursorState cursorState;
 	private boolean hasChanged;
 	private boolean isFullScreen;
+	private boolean soundOn;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 
 	public TDPlayerEngine() {
 		super();
+		defineAudioClip("song", "fox.wav");
 		initEngineComponent(960, 640);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
 		isFullScreen = false;
+		soundOn = false;
 		cursorState = CursorState.None;
 	}
 
+	public void playSound(){
+		soundOn = true;
+		if(soundOn)
+		playAudio("song");
+		}
+	
+
+	public void stopSound(){
+		soundOn = false;
+		stopAudio();
+	}
 	@Override
 	public void initCanvas() {
 		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
