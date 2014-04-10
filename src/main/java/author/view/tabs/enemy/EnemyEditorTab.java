@@ -86,7 +86,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		Integer damage = (Integer) damageSpinner.getValue();
 		myCurrentEnemy.addAttribute(MonsterSchema.DAMAGE, damage.toString());
 		Integer reward = (Integer) rewardSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.MONEY_VALUE, reward.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.REWARD, reward.toString());
 		// update schema with buttons
 		myCurrentEnemy.addAttribute(MonsterSchema.FLYING_OR_GROUND,
 				GroupButtonUtil.getSelectedButtonText(flyingButtonGroup));
@@ -181,14 +181,21 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
-		healthSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.HEALTH)));
-		speedSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.SPEED)));
-		damageSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.DAMAGE)));
-		rewardSpinner.setValue(Integer.parseInt((String) map.get(MonsterSchema.MONEY_VALUE)));
+
+		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)
+				.toString()));
+		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)
+				.toString()));
+		damageSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)
+				.toString()));
+		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)
+				.toString()));
+
 		// buttons
 		ButtonModel selectedFlyButtonModel = null;
 		ButtonModel selectedSizeButtonModel = null;
-		String flyOrGroundValue = (String) map.get(MonsterSchema.FLYING_OR_GROUND);
+		String flyOrGroundValue = (String) map
+				.get(MonsterSchema.FLYING_OR_GROUND);
 		String tileSizeValue = (String) map.get(MonsterSchema.TILE_SIZE);
 
 		for (JRadioButton radioButton : radioButtons) {

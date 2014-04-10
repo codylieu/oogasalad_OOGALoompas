@@ -6,7 +6,6 @@ import java.util.Set;
 import main.java.author.view.tabs.enemy.EnemyViewConstants;
 import main.java.engine.objects.tower.SimpleTower;
 
-
 /**
  * 
  * This is a settings object for a specific type of Tower like a Fire Tower, and
@@ -16,34 +15,39 @@ import main.java.engine.objects.tower.SimpleTower;
  * objects related to ones you will see onscreen.
  */
 public class SimpleTowerSchema extends TowerSchema {
-    private static final Class<SimpleTower> MY_CONCRETE_TYPE = SimpleTower.class;
+	private static final Class<SimpleTower> MY_CONCRETE_TYPE = SimpleTower.class;
 
-    public SimpleTowerSchema() {
-        super(MY_CONCRETE_TYPE);
-    }
+	public SimpleTowerSchema() {
+		super(MY_CONCRETE_TYPE);
+	}
 
-    public SimpleTowerSchema(String name) {
+	public SimpleTowerSchema(String name) {
 		this();
-		
+
 		populateDefaultAttributes(name);
-	
+
 	}
 
 	public void populateDefaultAttributes(String name) {
-		/*addAttribute(MonsterSchema.NAME, name);
+
+		// this is a hack
+		addAttribute(MonsterSchema.NAME, name);
 		addAttribute(MonsterSchema.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);
 		addAttribute(MonsterSchema.SPEED, EnemyViewConstants.SPEED_DEFAULT);
 		addAttribute(MonsterSchema.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
-		addAttribute(MonsterSchema.MONEY_VALUE, EnemyViewConstants.REWARD_DEFAULT);    
-		addAttribute(MonsterSchema.FLYING_OR_GROUND, EnemyViewConstants.FLYING_OR_GROUND_DEFAULT);    
-		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);
+		addAttribute(MonsterSchema.REWARD, EnemyViewConstants.REWARD_DEFAULT);
+		addAttribute(MonsterSchema.FLYING_OR_GROUND,
+				EnemyViewConstants.FLYING_OR_GROUND_DEFAULT);
+		addAttribute(MonsterSchema.TILE_SIZE,
+				EnemyViewConstants.TILE_SIZE_DEFAULT);
 		addAttribute(MonsterSchema.ENEMY_IMAGE_PATH, "");
-		addAttribute(MonsterSchema.COLLISION_IMAGE_PATH, "");*/
-		
+		addAttribute(MonsterSchema.COLLISION_IMAGE_PATH, "");
+
 	}
+
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		//empty set, no new attributes
+		// empty set, no new attributes
 		return new HashSet<String>();
 	}
 
@@ -51,5 +55,5 @@ public class SimpleTowerSchema extends TowerSchema {
 	public String defineName() {
 		return "SimpleTower";
 	}
-	
+
 }

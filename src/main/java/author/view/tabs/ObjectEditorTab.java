@@ -85,8 +85,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
 		initDataFields();
 		addObjectNameToList(defaultObjectName);
-		//updateFieldDataUponNewSelection();
-		//addListeners();
+		updateFieldDataUponNewSelection();
+		addListeners();
 	}
 
 	protected abstract void setDefaultObjectName();
