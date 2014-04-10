@@ -34,13 +34,7 @@ public class MainController {
 	 * @return
 	 */
 	public boolean isGameValid() {
-		for (TabController tabCtrl : myTabControllers) {
-			if (!tabCtrl.isTabValid()) {
-				tabCtrl.fireErrorPopUp();
-				return false;
-			}
-		}
-		return true;
+		return myModel.isBlueprintReady();
 	}
 
 	public void addTowerToModel(SimpleTowerSchema towerSchema) {
@@ -80,5 +74,7 @@ public class MainController {
 		});
 
 	}
+
+
 
 }
