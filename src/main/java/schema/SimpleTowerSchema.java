@@ -1,12 +1,10 @@
 package main.java.schema;
 
-import main.java.author.view.tabs.enemy.EnemyViewConstants;
-import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.SimpleTower;
-
-import java.awt.Dimension;
 import java.util.HashSet;
 import java.util.Set;
+
+import main.java.author.view.tabs.enemy.EnemyViewConstants;
+import main.java.engine.objects.tower.SimpleTower;
 
 /**
  * 
@@ -31,6 +29,7 @@ public class SimpleTowerSchema extends TowerSchema {
 	}
 
 	public void populateDefaultAttributes(String name) {
+
 		// this is a hack
 		addAttribute(MonsterSchema.NAME, name);
 		addAttribute(MonsterSchema.HEALTH, EnemyViewConstants.HEALTH_DEFAULT);

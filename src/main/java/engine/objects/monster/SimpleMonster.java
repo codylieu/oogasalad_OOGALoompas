@@ -2,9 +2,9 @@ package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
 import java.util.Map;
+
 import main.java.engine.objects.Exit;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.schema.MonsterSchema;
 
 public class SimpleMonster extends Monster {
 
@@ -19,12 +19,12 @@ public class SimpleMonster extends Monster {
 	 */
 	public SimpleMonster (Map<String, Object> attributes) {
 		this(
-				(Point2D) getValueOrDefault(attributes, ENTRANCE_LOCATION, new Point2D.Double(0,0)),
-				(Exit) getValueOrDefault(attributes, EXIT_LOCATION, null),
-				(double) getValueOrDefault(attributes, HEALTH, DEFAULT_HEALTH),
-				(double) getValueOrDefault(attributes, SPEED, DEFAULT_MOVE_SPEED),
-				(double) getValueOrDefault(attributes, MONEY_VALUE, DEFAULT_REWARD_AMOUNT),
-				(String) attributes.get(NAME));
+				(Point2D) getValueOrDefault(attributes, MonsterSchema.ENTRANCE_LOCATION, new Point2D.Double(0,0)),
+				(Exit) getValueOrDefault(attributes, MonsterSchema.EXIT_LOCATION, null),
+				(double) getValueOrDefault(attributes, MonsterSchema.HEALTH, DEFAULT_HEALTH),
+				(double) getValueOrDefault(attributes, MonsterSchema.SPEED, DEFAULT_MOVE_SPEED),
+				(double) getValueOrDefault(attributes, MonsterSchema.REWARD, DEFAULT_REWARD_AMOUNT),
+				(String) attributes.get(MonsterSchema.NAME));
 	}
 
 	    /**

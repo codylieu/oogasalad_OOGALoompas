@@ -17,7 +17,7 @@ public class EnemyViewConstants {
 	public static final int SPEED_DEFAULT = 20;
 	public static final int DAMAGE_DEFAULT = 20;
 	public static final int REWARD_DEFAULT = 20;
-	public static final String FLYING_OR_GROUND_DEFAULT = MonsterSchema.FLYING_OR_GROUND_GROUND;
+	public static final String FLYING_OR_GROUND_DEFAULT = MonsterSchema.GROUND;
 	public static final String TILE_SIZE_DEFAULT = MonsterSchema.TILE_SIZE_SMALL;
 
 	

@@ -134,9 +134,9 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					0)); // right
 
 			groundButton = new JRadioButton(
-					MonsterSchema.FLYING_OR_GROUND_GROUND);
+					MonsterSchema.GROUND);
 			flyingButton = new JRadioButton(
-					MonsterSchema.FLYING_OR_GROUND_FLYING);
+					MonsterSchema.FLYING);
 			flyingButtonGroup = new ButtonGroup();
 			flyingButtonGroup.add(groundButton);
 			flyingButtonGroup.add(flyingButton);
@@ -181,6 +181,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
+
 		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)
 				.toString()));
 		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)
@@ -189,6 +190,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 				.toString()));
 		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)
 				.toString()));
+
 		// buttons
 		ButtonModel selectedFlyButtonModel = null;
 		ButtonModel selectedSizeButtonModel = null;

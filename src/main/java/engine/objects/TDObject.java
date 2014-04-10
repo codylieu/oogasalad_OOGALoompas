@@ -11,8 +11,6 @@ import jgame.JGObject;
 public abstract class TDObject extends JGObject implements Serializable {
 
     //TODO: abstract methods?
-    
-    public static final String NAME = "name";
 
 	public TDObject (String name,
                      double x,

@@ -103,6 +103,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	 */
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
+
 		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)
 				.toString()));
 		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)
@@ -111,9 +112,10 @@ public class TowerEditorTab extends ObjectEditorTab {
 				.toString()));
 		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)
 				.toString()));
+
 		// buttons
 		ButtonModel selectedFlyButton = map.get(MonsterSchema.FLYING_OR_GROUND)
-				.equals(MonsterSchema.FLYING_OR_GROUND_GROUND) ? groundButton
+				.equals(MonsterSchema.GROUND) ? groundButton
 				.getModel() : flyingButton.getModel();
 		ButtonModel selectedSizeButton;
 
@@ -170,9 +172,9 @@ public class TowerEditorTab extends ObjectEditorTab {
 					0)); // right
 
 			groundButton = new JRadioButton(
-					MonsterSchema.FLYING_OR_GROUND_GROUND);
+					MonsterSchema.GROUND);
 			flyingButton = new JRadioButton(
-					MonsterSchema.FLYING_OR_GROUND_FLYING);
+					MonsterSchema.FLYING);
 			flyingButtonGroup = new ButtonGroup();
 			flyingButtonGroup.add(groundButton);
 			flyingButtonGroup.add(flyingButton);

@@ -4,19 +4,18 @@ import main.java.author.view.tabs.enemy.EnemyViewConstants;
 import main.java.engine.objects.monster.Monster;
 
 public abstract class MonsterSchema extends TDObjectSchema {
-	public static final String NAME = "name";
     public static final String HEALTH = "health";
 	public static final String SPEED = "speed";
 	public static final String REWARD = "moneyValue";
-	public static final String ENTRANCE_LOCATION = Monster.ENTRANCE_LOCATION;
-	public static final String EXIT_LOCATION = Monster.EXIT_LOCATION;
-	public static final String ENEMY_IMAGE_PATH = "enemyImagePath";
-	public static final String COLLISION_IMAGE_PATH = "collisonPath";
+	public static final String ENTRANCE_LOCATION = "entrance";
+	public static final String EXIT_LOCATION = "exit";
+	public static final String ENEMY_IMAGE_PATH = "enemyImageName";
+	public static final String COLLISION_IMAGE_PATH = "collisonImageName";
 	public static final String FLYING_OR_GROUND = "flyingOrGround";
 	public static final String TILE_SIZE = "tileSize";
 	
-	public static final String FLYING_OR_GROUND_FLYING = "Flying";
-	public static final String FLYING_OR_GROUND_GROUND = "Ground";
+	public static final String FLYING = "Flying";
+	public static final String GROUND = "Ground";
 	
 	public static final String TILE_SIZE_SMALL = "Small";
 	public static final String TILE_SIZE_MEDIUM = "Medium";

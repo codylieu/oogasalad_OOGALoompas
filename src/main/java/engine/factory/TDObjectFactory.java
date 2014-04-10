@@ -5,16 +5,18 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.util.Reflection;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
+import main.java.schema.MonsterSchema;
 import main.java.schema.TDObjectSchema;
-import jgame.impl.JGEngineInterface;
+import main.java.schema.TowerSchema;
 
 
 public class TDObjectFactory {
@@ -29,7 +31,7 @@ public class TDObjectFactory {
     public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
         // TODO: Get rid of repetition in loading schemas
         for (TDObjectSchema s : schemas) {
-            String objName = (String) s.getAttributesMap().get(TDObject.NAME);
+            String objName = (String) s.getAttributesMap().get(TDObjectSchema.NAME);
             String objImagePath = Model.RESOURCE_PATH + s.getAttributesMap().get(TDObjectSchema.IMAGE_NAME);
             engine.defineImage(objName, "-", 1, objImagePath, "-");
             tdObjectSchemaMap.put(objName, s);
@@ -48,7 +50,7 @@ public class TDObjectFactory {
         Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
-            schema.addAttribute(Tower.LOCATION, (Serializable) tileOrigin);
+            schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
             Object[] towerParameters = { schema.getAttributesMap() };
 
             return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
@@ -61,8 +63,8 @@ public class TDObjectFactory {
     public Monster placeMonster (Point2D entrance, Exit exit, String monsterName) throws MonsterCreationFailureException {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
-            schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
-            schema.addAttribute(Monster.EXIT_LOCATION, exit);
+            schema.addAttribute(MonsterSchema.ENTRANCE_LOCATION, (Serializable) entrance);
+            schema.addAttribute(MonsterSchema.EXIT_LOCATION, exit);
             Object[] monsterParameters = { schema.getAttributesMap() };
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
         }
