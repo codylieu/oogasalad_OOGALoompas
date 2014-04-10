@@ -43,6 +43,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
 import main.java.author.util.EnemyUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.global_constants.FontConstants;
@@ -71,8 +72,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected HashMap<String, TDObjectSchema> objectMap;
 	protected String defaultObjectName = "Default Object";
 
-	public ObjectEditorTab(MainController controller) {
-		super(controller);
+	public ObjectEditorTab(TabController towerController) {
+		super(towerController);
 		init();
 	}
 
