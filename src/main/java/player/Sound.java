@@ -20,10 +20,7 @@ public class Sound {
                 clip.open(sound);
             }     
     }
-    public void play(){
-        clip.setFramePosition(0);  
-        clip.start();
-    }
+
     public void loop(){
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
