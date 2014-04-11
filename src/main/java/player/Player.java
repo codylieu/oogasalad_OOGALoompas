@@ -5,19 +5,20 @@ import java.awt.CardLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GraphicsDevice;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -31,7 +32,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
-import javax.swing.SwingUtilities;
 
 public class Player {
 
@@ -69,7 +69,7 @@ public class Player {
 	}
 
 	public void initGraphics(){
-		
+
 	}
 	public void showCard(String cardName){
 		cardLayout.show(cards,  cardName);
@@ -92,6 +92,7 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
+                    engine.loadMapFile(file.getAbsolutePath());
 					System.out.println("FILE CHOSEN: " + file.getName());
 				}
 			}
@@ -181,13 +182,13 @@ public class Player {
 		gamePanel.setPreferredSize(new Dimension(600, 400));
 		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
 		return gamePanel;*/
-		
+
 		engine = new TDPlayerEngine();
 		engine.stop();
 		return engine;
 	}
 
-	
+
 	private JPanel makeGameButtonPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
@@ -215,9 +216,21 @@ public class Player {
 		speedUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//This should work but it doesn't
-				System.out.println(engine.getGameSpeed());
-				engine.setGameSpeed(20.0);
-				System.out.println(engine.getGameSpeed());
+				//System.out.println(engine.getGameSpeed());
+				//	engine.setGameSpeed(5.0);
+				System.out.println(engine.getFramePerSecond());
+				engine.setFramePerSecond(engine.getFramePerSecond()+5);
+				//System.out.println(engine.getGameSpeed());
+			}
+		});
+		JButton slowDownButton = new JButton("Slow Down");
+		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		slowDownButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//System.out.println(engine.getGameSpeed());
+				System.out.println(engine.getFramePerSecond());
+				engine.setFramePerSecond(engine.getFramePerSecond()-5);
+				//System.out.println(engine.getGameSpeed());
 			}
 		});
 		JButton quitButton = makeQuitButton();
@@ -231,7 +244,8 @@ public class Player {
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
-		//gameButtonPanel.add(speedUpButton);
+		gameButtonPanel.add(speedUpButton);
+		gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(addTowerButton);
 		return gameButtonPanel;
@@ -348,17 +362,24 @@ public class Player {
 		return soundInfoPanel;
 	}
 
+
+	private void playMusic() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
+		Sound song = new Sound("src/main/resources/fox.wav");
+		song.loop();
+	}
+
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
 
 		JRadioButton onButton = new JRadioButton(ON);
 		onButton.setActionCommand(ON);
 		onButton.setMnemonic(KeyEvent.VK_O);
-		onButton.setSelected(true);
+
 
 		JRadioButton offButton = new JRadioButton(OFF);
 		offButton.setActionCommand(OFF);
 		offButton.setMnemonic(KeyEvent.VK_F);
+		offButton.setSelected(true);
 
 		ButtonGroup soundRadioButtonGroup = new ButtonGroup();
 		soundRadioButtonGroup.add(onButton);
@@ -366,14 +387,24 @@ public class Player {
 
 		onButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(ON);
+				try {
+					playMusic();
+				} catch (LineUnavailableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (UnsupportedAudioFileException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				frame.pack();
-			}
-		});
+			}});
 
 		offButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(OFF);
+				engine.stopSound();
 				frame.pack();
 			}
 		});
@@ -381,89 +412,89 @@ public class Player {
 		soundRadioButtonPanel.add(onButton);
 		soundRadioButtonPanel.add(offButton);
 		return soundRadioButtonPanel;
+		}
+
+		private void addHelpCard() {
+			JPanel helpCard = new JPanel();
+			helpCard.setLayout(new GridBagLayout());
+
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.gridx = 0;
+			constraints.gridy = 1;
+			helpCard.add(makeMainMenuButton(), constraints);
+
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.gridx = 0;
+			constraints.gridy = 0;
+			helpCard.add(makeHelpInfoPanel(), constraints);
+
+			cards.add(helpCard, "helpCard");
+		}
+
+		private JPanel makeHelpInfoPanel(){
+			JPanel helpInfoPanel = new JPanel();
+			JTextArea helpArea = new JTextArea(10,40);
+			helpArea.setEditable(false);
+			helpArea.append(HELP);
+			helpInfoPanel.add(helpArea, BorderLayout.CENTER);
+			return helpInfoPanel;
+		}
+		private void addCreditsCard() {
+			JTextArea creditsArea = new JTextArea(10,40);
+			creditsArea.setEditable(false);
+			creditsArea.append(CREDITS);
+
+			JPanel creditsCard = new JPanel();
+			creditsCard.setLayout(new GridBagLayout());
+
+			GridBagConstraints constraints = new GridBagConstraints();
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.gridx = 0;
+			constraints.gridy = 1;
+			creditsCard.add(makeMainMenuButton(), constraints);
+
+			constraints.fill = GridBagConstraints.HORIZONTAL;
+			constraints.gridx = 0;
+			constraints.gridy = 0;
+			creditsCard.add(creditsArea, constraints);
+
+			cards.add(creditsCard, "creditsCard");
+		}
+
+		private JButton makeMainMenuButton() {
+			JButton mainMenuButton = new JButton("Main Menu");
+			//mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			mainMenuButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cardLayout.show(cards, "welcomeCard");
+					frame.pack();
+				}
+			});
+
+			return mainMenuButton;
+		}
+
+		private JButton makeQuitButton(){
+			JButton exitButton = new JButton("Quit");
+			exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+			exitButton.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+					frame.pack();
+				}
+			});
+			return exitButton;
+		}
+
+		private void show() {
+			cardLayout.show(cards, "welcomeCard");
+			frame.getContentPane().add(cards, BorderLayout.CENTER);
+			frame.pack();
+			frame.setVisible(true);
+		}
+
+		public static void main(String[] args) {
+			new Player();
+		}
 	}
-
-	private void addHelpCard() {
-		JPanel helpCard = new JPanel();
-		helpCard.setLayout(new GridBagLayout());
-
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		helpCard.add(makeMainMenuButton(), constraints);
-
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		helpCard.add(makeHelpInfoPanel(), constraints);
-
-		cards.add(helpCard, "helpCard");
-	}
-
-	private JPanel makeHelpInfoPanel(){
-		JPanel helpInfoPanel = new JPanel();
-		JTextArea helpArea = new JTextArea(10,40);
-		helpArea.setEditable(false);
-		helpArea.append(HELP);
-		helpInfoPanel.add(helpArea, BorderLayout.CENTER);
-		return helpInfoPanel;
-	}
-	private void addCreditsCard() {
-		JTextArea creditsArea = new JTextArea(10,40);
-		creditsArea.setEditable(false);
-		creditsArea.append(CREDITS);
-
-		JPanel creditsCard = new JPanel();
-		creditsCard.setLayout(new GridBagLayout());
-
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		creditsCard.add(makeMainMenuButton(), constraints);
-
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		creditsCard.add(creditsArea, constraints);
-
-		cards.add(creditsCard, "creditsCard");
-	}
-
-	private JButton makeMainMenuButton() {
-		JButton mainMenuButton = new JButton("Main Menu");
-		//mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		mainMenuButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				cardLayout.show(cards, "welcomeCard");
-				frame.pack();
-			}
-		});
-
-		return mainMenuButton;
-	}
-
-	private JButton makeQuitButton(){
-		JButton exitButton = new JButton("Quit");
-		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		exitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-				frame.pack();
-			}
-		});
-		return exitButton;
-	}
-
-	private void show() {
-		cardLayout.show(cards, "welcomeCard");
-		frame.getContentPane().add(cards, BorderLayout.CENTER);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	public static void main(String[] args) {
-		new Player();
-	}
-}

@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
 
 public class GameSettingsEditorTab extends EditorTab{
 
@@ -51,8 +52,8 @@ public class GameSettingsEditorTab extends EditorTab{
 	
 	private JButton submitButton;
 
-	public GameSettingsEditorTab(MainController controller){
-		super(controller);
+	public GameSettingsEditorTab(TabController gameSettingsController){
+		super(gameSettingsController);
 		createSettingsPanel();
 		add(settingsPanel, BorderLayout.CENTER);
 	}
