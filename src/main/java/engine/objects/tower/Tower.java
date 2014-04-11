@@ -1,14 +1,22 @@
 package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
+import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 
 
 /**
- * @author user
- * 
+ * Abstract Tower class
+ *
  */
 public abstract class Tower extends TDObject {
+
+    public static final double DEFAULT_DAMAGE = 10;
+    public static final double DEFAULT_HEALTH = 100;
+    public static final double DEFAULT_RANGE = 200;
+    public static final double DEFAULT_FIRING_SPEED = 5;
+    public static final double DEFAULT_COST = 100;
+    public static final double DEFAULT_BUILDUPTIME = 100;
 
     public static final int TOWER_CID = 0;
 
@@ -50,48 +58,41 @@ public abstract class Tower extends TDObject {
     }
 
     /**
-     * Shoot a projectile in the direction of the specified x,y target
-     * coordinates, if it is within firing interval. Call every frame
+     * Call every frame.
      * 
-     * @param target
+     * Does action specific to the type of tower.
+     * 
+     * Towers that shoot will fire a projectile in the direction of the specified x,y target
+     * coordinates, if it is within firing interval.
+     * 
+     * MoneyTowers will grant player money if a regeneration time has passed.
+     * 
+     * @param environ
      *        coordinate of target
      * @return
      */
-    public void checkAndfireProjectile (Point2D target) {
+    public void callTowerActions (EnvironmentKnowledge environ) {
         myTimingCounter++;
 
         if (myTimingCounter <= myBuildUpTime) {
             flash();
-            return;
+            return;   
+            // do no further behavior if still building up
         }
-        if (target == null) { return; }
-        Point2D currCoor = new Point2D.Double(x, y);
-        if (inFiringInterval() && target.distance(currCoor) < myRange) {
-            fireProjectile(target);
-        }
-        return;
+
+
     }
 
     /**
      * Flash by setting image to null based on FLASH_INTERVAL
      */
     private void flash () {
-        if (myTimingCounter % SimpleTower.FLASH_INTERVAL == 0) {
+        if (myTimingCounter % ShootingTower.FLASH_INTERVAL == 0) {
             this.setImage(myImage);
         }
         else {
             this.setImage(null);
         }
-    }
-
-    /**
-     * Returns whether or not it is time for the tower to fire, based on its
-     * firing speed
-     * 
-     * @return
-     */
-    private boolean inFiringInterval () {
-        return myTimingCounter % Math.max(myFiringSpeed, 10) / 10 == 0;
     }
 
     /**
@@ -102,8 +103,6 @@ public abstract class Tower extends TDObject {
     public double getCost () {
         return myCost;
     }
-
-    abstract void fireProjectile (Point2D target);
 
     public String toString () {
         return "Damage: " + myDamage + "\n"
