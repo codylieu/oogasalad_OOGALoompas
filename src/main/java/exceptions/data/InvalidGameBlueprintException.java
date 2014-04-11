@@ -1,6 +1,8 @@
 package main.java.exceptions.data;
 
-public class InvalidGameBlueprintException extends Exception {
+import java.io.IOException;
+
+public class InvalidGameBlueprintException extends IOException {
 	public InvalidGameBlueprintException(String s)	{
 		super("Invalid or missing " + s + " for GameBlueprint");
 	}
