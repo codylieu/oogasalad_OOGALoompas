@@ -1,13 +1,49 @@
 package main.java.engine.objects;
 
+import java.io.Serializable;
+import java.util.Map;
+
 import jgame.JGObject;
 
-public abstract class TDObject extends JGObject {
-    protected double health;
-    protected double damage;
-    protected double range;
+/**
+ * Abstract extension of JGObject. Represents monsters, towers, etc.
+ */
+public abstract class TDObject extends JGObject implements Serializable {
 
-    public TDObject(String name, boolean unique_id, double x, double y, int collisionid, String gfxname) {
-        super(name, unique_id, x, y, collisionid, gfxname);
+    //TODO: abstract methods?
+
+	public TDObject (String name,
+                     double x,
+                     double y,
+                     int cid,
+                     String gfxname) {
+        super(name, true, x, y, cid, gfxname);
     }
+
+    public TDObject (String name,
+                     double x,
+                     double y,
+                     int cid,
+                     String gfxname,
+                     double xspeed,
+                     double yspeed,
+                     int expireOffView) {
+       super(name, true, x, y, cid, gfxname, xspeed, yspeed, expireOffView);
+    }
+    
+    /**
+     * Within an attribute map, returns the value of the attributeName or returns the defaultValue
+     * otherwise
+     * 
+     * @param attributes map of attributes from a schema
+     * @param attributeName desired attribute
+     * @param defaultValue default value of attribute if not in attributes map
+     * @return
+     */
+    protected static Object getValueOrDefault (Map<String, Object> attributes,
+                                             String attributeName,
+                                             Object defaultValue) {
+        return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;
+    }
+    
 }

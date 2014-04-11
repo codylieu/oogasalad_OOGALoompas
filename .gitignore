@@ -10,6 +10,16 @@
 /bin
 /.project_settings
 
+#Downloads
+downloads/*.txt
+downloads/*.zip
+downloads/*.ser
+downloads/*.out
+
 # idea files
 .idea/
 *.iml
+
+# out files
+out/
+*.ser
