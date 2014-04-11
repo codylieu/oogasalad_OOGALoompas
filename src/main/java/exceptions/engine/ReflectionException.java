@@ -1,6 +1,5 @@
 package main.java.exceptions.engine;
 
-
 /**
  * A general exception that represents all possible Java Reflection exceptions. 
  * 

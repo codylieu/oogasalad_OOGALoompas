@@ -1,46 +1,35 @@
 package main.java.schema;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
+
 /**
  * the higher level settings defining the type of game and some basic
  * overarching stats
  */
-public class GameSchema {
+public class GameSchema extends AbstractSchema {
+	
+	public static final String LIVES = "lives";
+	public static final String MONEY = "money";
+	public static final String LEVELDIFFICULTY = "difficulty";
+	public static final String ISSURVIVALMODE = "issurvivalmode";
+	public static final String ROWS = "rows";
+	public static final String COLUMNS = "columns";
 
-	private int myStartingLives;
-	private int myStartingGold;
-	private int myLevelDifficulty;
-	private boolean isSurvivalMode;
-
-	public int getMyStartingLives() {
-		return myStartingLives;
+	public GameSchema()	{
+		super();
 	}
-
-	public void setMyStartingLives(int myStartingLives) {
-		this.myStartingLives = myStartingLives;
+	
+	@Override
+	public void addAttribute(String attributeName, Serializable attributeValue) {
+		myAttributesMap.put(attributeName, attributeValue);
+		
 	}
-
-	public int getMyStartingGold() {
-		return myStartingGold;
+	
+	@Override
+	protected Set<String> populateAdditionalAttributes() {
+		return new HashSet<String>();
 	}
-
-	public void setMyStartingGold(int myStartingGold) {
-		this.myStartingGold = myStartingGold;
-	}
-
-	public int getMyLevelDifficulty() {
-		return myLevelDifficulty;
-	}
-
-	public void setMyLevelDifficulty(int myLevelDifficulty) {
-		this.myLevelDifficulty = myLevelDifficulty;
-	}
-
-	public boolean isSurvivalMode() {
-		return isSurvivalMode;
-	}
-
-	public void setSurvivalMode(boolean isSurvivalMode) {
-		this.isSurvivalMode = isSurvivalMode;
-	}
-
 }

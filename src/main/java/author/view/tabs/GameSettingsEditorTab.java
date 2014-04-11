@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
 
 public class GameSettingsEditorTab extends EditorTab{
 
@@ -37,12 +38,22 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JTextField tilesPerRowField;
 	private JTextField tilesPerColumnField;
 	
+	private static final String LEVELS_STRING = "Levels Per Game: ";
+	private static final String WAVES_STRING = "Waves Per Level: ";
+	private static final String ENEMIES_STRING = "Enemies Per Wave: ";
+	private static final String MONEY_STRING = "Beginning Money: ";
+	private static final String ROW_TILES_STRING = "Number of Rows: ";
+	private static final String COLUMN_TILES_STRING = "Number of Columns: ";
+	
+	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
+	String[] GAME_DIFFICULTY_STRINGS = {"Easy", "Medium", "Hard"};
+	
 	private NumberFormat numberFormat;
 	
 	private JButton submitButton;
 
-	public GameSettingsEditorTab(MainController controller){
-		super(controller);
+	public GameSettingsEditorTab(TabController gameSettingsController){
+		super(gameSettingsController);
 		createSettingsPanel();
 		add(settingsPanel, BorderLayout.CENTER);
 	}
@@ -60,9 +71,8 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JComponent makeDropDownMenus(){
 		JPanel dropDownMenus = new JPanel();
 		dropDownMenus.setLayout(new BorderLayout());
-		
-		String[] gameModeStrings = {"Survival Mode", "Boss Mode"};
-		gameModeList = new JComboBox(gameModeStrings); 
+
+		gameModeList = new JComboBox(GAME_MODE_STRINGS); 
 		gameModeList.setSelectedIndex(1);
 		gameModeList.addActionListener(new ActionListener(){
 
@@ -75,8 +85,7 @@ public class GameSettingsEditorTab extends EditorTab{
 			
 		});
 		
-		String[] gameDifficultyStrings = {"Easy", "Medium", "Hard"};
-		gameDifficultyList = new JComboBox(gameDifficultyStrings);
+		gameDifficultyList = new JComboBox(GAME_DIFFICULTY_STRINGS);
 		gameDifficultyList.setSelectedIndex(1);
 		gameDifficultyList.addActionListener(new ActionListener(){
 
@@ -122,12 +131,12 @@ public class GameSettingsEditorTab extends EditorTab{
 	}
 	
 	private JComponent makeLabelPane(){
-		levelsPerGameLabel = new JLabel("Levels Per Game: ");
-		wavesPerLevelLabel = new JLabel("Waves Per Level: ");
-		enemiesPerWaveLabel = new JLabel("Enemies Per Wave: ");
-		beginningMoneyLabel = new JLabel("Beginning Money: ");
-		tilesPerRowLabel = new JLabel("Number of Rows: ");
-		tilesPerColumnLabel = new JLabel("Number of Columns: ");
+		levelsPerGameLabel = new JLabel(LEVELS_STRING);
+		wavesPerLevelLabel = new JLabel(WAVES_STRING);
+		enemiesPerWaveLabel = new JLabel(ENEMIES_STRING);
+		beginningMoneyLabel = new JLabel(MONEY_STRING);
+		tilesPerRowLabel = new JLabel(ROW_TILES_STRING);
+		tilesPerColumnLabel = new JLabel(COLUMN_TILES_STRING);
 		
 		JPanel labels = new JPanel( new GridLayout(0, 1));
 		
@@ -161,4 +170,6 @@ public class GameSettingsEditorTab extends EditorTab{
 		
 		return fields;
 	}
+
+	
 }

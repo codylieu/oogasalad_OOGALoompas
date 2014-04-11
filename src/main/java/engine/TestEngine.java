@@ -4,15 +4,19 @@ import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import jgame.platform.StdGame;
-
-import java.awt.event.MouseEvent;
+import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.player.CursorState;
+import main.java.player.TowerGhost;
 
 public class TestEngine extends JGEngine {
     private static TestEngine engine;
+    private CursorState cursorState;
     private Model model;
 
     public TestEngine() {
         initEngineApplet();
+        //cursorState = CursorState.None;
+        cursorState = CursorState.AddTower;
     }
 
     public TestEngine(JGPoint size) {
@@ -34,21 +38,29 @@ public class TestEngine extends JGEngine {
         setFrameRate(45, 1);
         this.model = new Model(this);
         model.addNewPlayer();
-        model.setEntrance(0, this.pfHeight()/2);
-        model.setExit(this.pfWidth()/2, this.pfHeight()/2);
         model.loadMap("testmap.json");
-        defineMedia("/main/resources/media.tbl");
-        model.setTemporaryWaveSchema();
+ 
     }
 
     @Override
     public void doFrame() {
         super.doFrame();
+        displayTowerGhostIfNecessary();
         if (getMouseButton(1)) {
             model.placeTower(getMouseX(), getMouseY());
             clearMouseButton(1);
         }
-        model.updateGame();
+        if (getMouseButton(3)) { // right click
+        	model.checkAndRemoveTower(getMouseX(), getMouseY());
+//        	model.upgradeTower(getMouseX(), getMouseY());
+        	clearMouseButton(3);
+        }
+        try {
+			model.updateGame();
+		} catch (MonsterCreationFailureException e) {
+			// TODO Implement exception
+			e.printStackTrace();
+		}
         moveObjects();
         model.checkCollisions();
 //        model.spawnMonster(100, 150);
@@ -59,18 +71,29 @@ public class TestEngine extends JGEngine {
         highlightMouseoverTile();
         displayGameStats();
     }
+    
+    private void displayTowerGhostIfNecessary() {
+    	//System.out.println(cursorState);
+    	if (cursorState == CursorState.AddTower) {
+    	//	System.out.println("displaytower");
+    		new TowerGhost(getMouseX(), getMouseY());
+    	}
+    }
 
     private void highlightMouseoverTile() {
         JGPoint mousePos = getMousePos();
         int curXTilePos = mousePos.x/tileWidth() * tileWidth();
         int curYTilePos = mousePos.y/tileHeight() * tileHeight();
-
-        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, JGColor.yellow);
+        JGColor color = JGColor.yellow;
+        if (model.isTowerPresent(mousePos.x, mousePos.y)) {
+        	color = JGColor.green;
+        }
+        this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
     }
     
     private void displayGameStats() {
     	this.drawString("Score: "+model.getScore(), 50, 25, -1);
-    	this.drawString("Lives left: "+model.getPlayerLife(), 50, 50, -1);
+    	this.drawString("Lives left: "+model.getPlayerLives(), 50, 50, -1);
     	this.drawString("Money: "+model.getMoney(), 50, 75, -1);
     	this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
     }
