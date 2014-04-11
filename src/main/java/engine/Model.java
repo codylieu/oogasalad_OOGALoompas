@@ -407,7 +407,7 @@ public class Model {
                     if (t != null) {
                         Point2D monsterCoor =
                                 getNearestMonsterCoordinate(new Point2D.Double(t.x, t.y));
-                        t.checkAndfireProjectile(monsterCoor);
+                        t.callTowerActions(monsterCoor);
                     }
                 }
 			}

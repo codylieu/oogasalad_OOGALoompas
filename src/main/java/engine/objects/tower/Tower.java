@@ -10,6 +10,13 @@ import main.java.engine.objects.TDObject;
  */
 public abstract class Tower extends TDObject {
 
+    public static final double DEFAULT_DAMAGE = 10;
+    public static final double DEFAULT_HEALTH = 100;
+    public static final double DEFAULT_RANGE = 200;
+    public static final double DEFAULT_FIRING_SPEED = 5;
+    public static final double DEFAULT_COST = 100;
+    public static final double DEFAULT_BUILDUPTIME = 100;
+    
     public static final int TOWER_CID = 0;
 
     public static final int FLASH_INTERVAL = 5;
@@ -50,27 +57,48 @@ public abstract class Tower extends TDObject {
     }
 
     /**
-     * Shoot a projectile in the direction of the specified x,y target
-     * coordinates, if it is within firing interval. Call every frame
+     * Call every frame.
+     * 
+     * Does action specific to the type of tower.
+     * 
+     * Towers that shoot will fire a projectile in the direction of the specified x,y target
+     * coordinates, if it is within firing interval. 
+     * 
+     * MoneyTowers will grant player money if a regeneration time has passed.
      * 
      * @param target
      *        coordinate of target
      * @return
      */
-    public void checkAndfireProjectile (Point2D target) {
+    public void callTowerActions (Point2D target) {
         myTimingCounter++;
 
         if (myTimingCounter <= myBuildUpTime) {
             flash();
             return;
         }
+        
+        doTowerFiring(target);
+
+        
+    }
+
+    
+    /**
+     * 
+     * Calls the tower's firing method, if any, when within the appropriate firing interval.
+     * 
+     * @param target
+     * 
+     */
+    private void doTowerFiring (Point2D target) {
         if (target == null) { return; }
         Point2D currCoor = new Point2D.Double(x, y);
         if (inFiringInterval() && target.distance(currCoor) < myRange) {
             fireProjectile(target);
         }
-        return;
     }
+    
 
     /**
      * Flash by setting image to null based on FLASH_INTERVAL

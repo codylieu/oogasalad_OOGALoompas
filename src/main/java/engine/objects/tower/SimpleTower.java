@@ -9,13 +9,6 @@ import main.java.schema.TowerSchema;
 
 public class SimpleTower extends Tower {
 
-	public static final double DEFAULT_DAMAGE = 10;
-	public static final double DEFAULT_HEALTH = 100;
-	public static final double DEFAULT_RANGE = 200;
-	public static final double DEFAULT_FIRING_SPEED = 5;
-	public static final double DEFAULT_COST = 100;
-	public static final double DEFAULT_BUILDUPTIME = 100;
-
 
 	/**
 	 * Create a new tower from a map of attributes. Should be called by factory.
