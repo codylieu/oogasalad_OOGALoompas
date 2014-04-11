@@ -127,7 +127,7 @@ public class TerrainEditorTab extends EditorTab {
     }
 	
 	public void importTileMap(ActionEvent e) {
-		fileChooser = new JFileChooser();
+		fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
         FileFilter imageFilter = new FileNameExtensionFilter(
                 IMAGE_FILTER_DIALOGUE, ImageIO.getReaderFileSuffixes());
         fileChooser.setFileFilter(imageFilter);

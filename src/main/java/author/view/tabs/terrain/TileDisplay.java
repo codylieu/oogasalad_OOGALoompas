@@ -57,10 +57,10 @@ public class TileDisplay extends JPanel {
 
             myNumXTiles = img.getWidth()/myPixelSize;
             myNumYTiles = img.getHeight()/myPixelSize;
-			Image [][] myImageArray = new Image[myNumXTiles][myNumYTiles];
-			for (int i = 0; i < myNumXTiles; i++) {
-				for (int j = 0; j < myNumYTiles; j++) {
-					myImageArray[i][j] = img.getSubimage(i * myPixelSize, j * myPixelSize,
+			Image [][] myImageArray = new Image[myNumYTiles][myNumXTiles];
+			for (int i = 0; i < myNumYTiles; i++) {
+				for (int j = 0; j < myNumXTiles; j++) {
+					myImageArray[i][j] = img.getSubimage(j * myPixelSize, i * myPixelSize,
                             myPixelSize, myPixelSize);
 				}
 			}
@@ -84,7 +84,7 @@ public class TileDisplay extends JPanel {
 		c.gridy = 0;
 		for (int i = 0; i < myImages.length; i ++) {
 			for (int j = 0; j < myImages[0].length; j++) {
-				if (c.gridx > 8) {
+				if (c.gridx > 4) {
 					c.gridx = 0;
 					c.gridy++;
 				} 
