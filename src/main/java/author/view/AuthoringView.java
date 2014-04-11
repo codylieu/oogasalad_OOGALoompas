@@ -16,7 +16,6 @@ import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.controller.tabbed_controllers.TowerController;
 import main.java.author.controller.tabbed_controllers.WaveController;
 import main.java.author.view.menubar.BasicMenuBar;
-import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
@@ -46,7 +45,6 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs() {
-
 		TabController enemyController = new EnemyController(myController);
 		TabController towerController = new TowerController(myController);
 		TabController waveController = new WaveController(myController);
@@ -62,7 +60,6 @@ public class AuthoringView extends JFrame {
 				.add(ENEMY_EDITOR_STRING, new EnemyEditorTab(enemyController));
 		tabbedPane.add(TERRAIN_EDITOR_STRING, new TerrainEditorTab(
 				terrainController));
-
 	}
 
 	public void createAndShowGUI() {
