@@ -183,17 +183,18 @@ public class Model {
      * @param x
      * @param y
      */
-    public void checkAndRemoveTower (int x, int y) {
-        int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
-        if (isTowerPresent(coordinates)) {
-            int xtile = coordinates[0];
-            int ytile = coordinates[1];
-            player.addMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
-            towers[xtile][ytile].remove();
-            towers[xtile][ytile] = null;
-        }
-    }
 
+    public void checkAndRemoveTower(double x, double y) {
+    	int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
+    	if (isTowerPresent(coordinates)){
+    		int xtile = coordinates[0];
+    		int ytile = coordinates[1];
+    		player.addMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
+    		towers[xtile][ytile].remove();
+    		towers[xtile][ytile] = null;
+    	}
+    }
+    
     /**
      * /**
      * Loads a map/terrain into the engine.
