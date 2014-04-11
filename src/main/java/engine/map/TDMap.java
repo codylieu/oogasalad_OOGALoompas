@@ -1,6 +1,15 @@
 package main.java.engine.map;
 
+import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
+import main.java.author.view.tabs.terrain.Tile;
+import main.java.author.view.tabs.terrain.TileMap;
+import main.java.schema.GameMap;
+
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
+import java.util.HashSet;
+import java.util.List;
 
 public class TDMap {
     private static final int xOffset = 0;
@@ -20,6 +29,10 @@ public class TDMap {
     private int numXTiles;
     private int numYTiles;
     private String[][] tileMap;
+
+    public TDMap() {
+        //TODO: create
+    }
 
     /**
      * Create a TDMap object which holds the information needed to initialize the tiles of the engine.
@@ -59,5 +72,64 @@ public class TDMap {
                 engine.setTile(i, j, tileMap[i][j]);
             }
         }
+    }
+
+    public void loadMapIntoGame(JGEngineInterface engine, String fileName) {
+        GameMap mapToLoad = null;
+        try {
+            FileInputStream fis = new FileInputStream(fileName);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            mapToLoad = (GameMap) is.readObject();
+            is.close();
+
+            Tile[][] tileMap = mapToLoad.getMyTiles();
+            List<TileMap> tileMapList = mapToLoad.getMyTileMaps();
+
+            // define image maps used in case multiple maps used
+            for (TileMap tm : tileMapList) {
+                String tileMapNameNew = tileMapName.replace("\\", "//"); //need to do this for jgengine
+                engine.defineImageMap(tm.getMyTileMapFile(), tileMapNameNew,
+                        0, 0, 32, 32, 0, 0); // TODO: refactor to constants
+            }
+
+            // now set the tiles
+            for (int i = 0; i < tileMap.length; i++) {
+                for (int j = 0; j < tileMap[0].length; j++) {
+                    Tile tile = tileMap[i][j];
+
+                    int tileMapWidth = getTileMapWidth(tileMapList, tile.getMyTileMapFileName());
+                    int index = tile.getMyMapXIndex() * tileMapWidth + tile.getMyMapYIndex();
+
+                    //TODO: why does jgame only take tilestr of size 4..., need to think of a better implementation
+                    engine.defineImage(tile.getMyTileMapFileName() + tile.getMyMapXIndex() + tile.getMyMapYIndex(),
+                            tile.getMyMapXIndex() + "" + tile.getMyMapYIndex(), 0, tile.getMyTileMapFileName(), index, "-");
+                    engine.setTile(new JGPoint(tile.getCol(), tile.getRow()),
+                            tile.getMyMapXIndex() + "" + tile.getMyMapYIndex());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //TODO: probably a better way to do this, refactor
+    private int getTileMapWidth(List<TileMap> tileMaps, String tileMapName) throws Exception {
+        for (TileMap tm : tileMaps) {
+            if (tm.getMyTileMapFile().equals(tileMapName)) {
+                return tm.getMyNumXTiles();
+            }
+        }
+
+        throw new Exception("Tilemap " + tileMapName + " not found"); // TODO: throw new exception
+    }
+
+    private int getTileMapHeight(List<TileMap> tileMaps, String tileMapName) throws Exception {
+        for (TileMap tm : tileMaps) {
+            if (tm.getMyTileMapFile().equals(tileMapName)) {
+                return tm.getMyNumYTiles();
+            }
+        }
+
+        throw new Exception("Tilemap " + tileMapName + " not found"); // TODO: throw new exception
     }
 }

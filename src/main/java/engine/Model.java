@@ -202,6 +202,16 @@ public class Model {
         }
     }
 
+    //TODO: use this instead of other one, will change
+    public void loadMapTest(String fileName) {
+        try {
+            TDMap tdMap = new TDMap();
+            tdMap.loadMapIntoGame(engine, fileName);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Loads the game schemas from GameBlueprint and sets the appropriate state
      *
