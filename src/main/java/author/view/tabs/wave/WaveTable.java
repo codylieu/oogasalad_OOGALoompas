@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.Serializable;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,12 +14,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-public class Table extends JPanel {
+public class WaveTable extends JPanel implements Serializable{
     private boolean DEBUG = false;
     private boolean ALLOW_COLUMN_SELECTION = false;
     private boolean ALLOW_ROW_SELECTION = true;
  
-    public Table() {
+    public WaveTable() {
         super(new GridLayout(1,0));
  
         final String[] columnNames = {"First Name",
@@ -40,7 +41,7 @@ public class Table extends JPanel {
          "Pool", new Integer(10), new Boolean(false)}
         };
  
-        final JTable table = new JTable(data, columnNames);
+        JTable table = new JTable(data, columnNames);
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
  
@@ -135,7 +136,7 @@ public class Table extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  
         //Create and set up the content pane.
-        Table table = new Table();
+        WaveTable table = new WaveTable();
         table.setOpaque(true); //content panes must be opaque
         frame.setContentPane(table);
  
