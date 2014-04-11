@@ -272,7 +272,7 @@ public class Model {
      * @return
      */
     private WaveSpawnSchema createTestWave (SimpleMonsterSchema m1, int swarmSize) {
-        MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", m1, swarmSize);
+        MonsterSpawnSchema mschema = new MonsterSpawnSchema(m1, swarmSize);
         WaveSpawnSchema wschema = new WaveSpawnSchema();
         wschema.addMonsterSchema(mschema);
         return wschema;
