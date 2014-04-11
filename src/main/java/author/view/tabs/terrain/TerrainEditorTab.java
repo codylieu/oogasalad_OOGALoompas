@@ -73,7 +73,6 @@ public class TerrainEditorTab extends EditorTab{
 		buttonDisplayOptions.put(SAVE_MAP, initSaveButton());
 		buttonDisplayOptions.put(ADD_BITMAP, initNewBitmap());
 		
-		
 		JPanel buttonDisplayPanel = new JPanel();
 		buttonDisplayPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -136,8 +135,8 @@ public class TerrainEditorTab extends EditorTab{
 				} else {
 					JOptionPane.showMessageDialog(this, PIXEL_RANGE);
 				}
-			} catch (NumberFormatException ex) {
-				
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 	}

@@ -28,10 +28,6 @@ public class TileDisplay extends JPanel {
 	private Image[][] myImages; 
 	private int pixelSize;
 	
-	public TileDisplay(TileSelectionManager tileManager, String bitmapFile, int pixels) {
-		this(tileManager, new File(Tile.DEFAULT_IMAGE_PACKAGE + bitmapFile), pixels);
-	}
-	
 	public TileDisplay(TileSelectionManager tileManager, File bitmapFile, int pixels) {
 		myTileManager = tileManager;
 		pixelSize = pixels;
@@ -50,8 +46,7 @@ public class TileDisplay extends JPanel {
 	/**
 	 * Reads through a bitmap (currently used for tile backgrounds) and outputs
 	 * a 2D array of image objects
-	 * @param bitmapPckg the package where the bitmap is located
-	 * @param bitmapName the name of the bitmap file
+	 * @param bitmapFile the bitmap file to load
 	 * @return a 2D array of image objects within the bitmap
 	 */
 	private Image[][] parseBitmap(File bitmapFile) {

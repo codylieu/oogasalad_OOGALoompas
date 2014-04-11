@@ -19,38 +19,19 @@ public class TileSelectionManager {
 	private ResourceBundle myBitmapBundle;
 	private TileEditingPanel myTileEditPanel;
 	private List<TileDisplay> myTileDisplays;
-	private JTabbedPane tileDisplayTab;
+	private JTabbedPane myTileDisplayTab;
 	
 	public TileSelectionManager(Canvas canvas) {
 		myCanvas = canvas;
-		initTileDisplays();
+        myTileDisplays = new ArrayList<TileDisplay>();
+        myTileDisplayTab = new JTabbedPane();
 		myTileEditPanel = new TileEditingPanel(this);
-	}
-	
-	private void initTileDisplays() {
-		myTileDisplays = new ArrayList<TileDisplay>();
-		tileDisplayTab = new JTabbedPane();
-		myBitmapBundle = ResourceBundle.getBundle("main.resources.author.images.BitmapImages");
-		Enumeration <String> bitmaps = myBitmapBundle.getKeys();
-		
-		while (bitmaps.hasMoreElements()) {
-			String bmp = bitmaps.nextElement();
-			String value = myBitmapBundle.getString(bmp);
-			try {
-				Integer i = Integer.parseInt(value);
-				TileDisplay currTileDisp = new TileDisplay(this, bmp, i);
-				myTileDisplays.add(currTileDisp);
-				tileDisplayTab.addTab(trimBitmapString(bmp), currTileDisp.getTileScrollPane());
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-		}	
 	}
 	
 	protected void addTileDisplay(File bmpFile, int pixels) {
 		TileDisplay currTileDisp = new TileDisplay(this, bmpFile, pixels);
 		myTileDisplays.add(currTileDisp);
-		tileDisplayTab.addTab(trimBitmapString(bmpFile.getName()), currTileDisp.getTileScrollPane());
+		myTileDisplayTab.addTab(trimBitmapString(bmpFile.getName()), currTileDisp.getTileScrollPane());
 	}
 	
 	private String trimBitmapString(String bitmapStr) {
@@ -59,11 +40,11 @@ public class TileSelectionManager {
 	}
 	
 	public JTabbedPane getTileDisplayTabs() {
-		return tileDisplayTab;
+		return myTileDisplayTab;
 	}
 	
 	public TileDisplay getTileDisplay() {
-		int index = tileDisplayTab.getSelectedIndex();
+		int index = myTileDisplayTab.getSelectedIndex();
 		return myTileDisplays.get(index);
 	}
 	

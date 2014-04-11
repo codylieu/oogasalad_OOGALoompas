@@ -17,15 +17,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class Tile {
-	
 	private int myRow;    // 0 - NUM_ROWS
 	private int myColumn; // 0 - NUM_COLS
 	private Color myColor;
 	private int myPassIndex;
-	private boolean isSelected;
 	private Image myImg;
-	
-	static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
 	public Tile(int row, int column, Color color) {
 	    myRow = row;
@@ -44,6 +40,10 @@ public class Tile {
 	public Image getImage() {
 		return myImg;
 	}
+
+    public void setImage(Image img) {
+        myImg = img;
+    }
 	
 	public int getRow() {
 		return myRow;
@@ -52,17 +52,12 @@ public class Tile {
 	public int getCol() {
 		return myColumn;
 	}
-	
+
 	public int getPassIndex() {
 		return myPassIndex;
 	}
-	
+
 	public void setPassIndex(int index) {
 		myPassIndex = index;
 	}
-	
-	protected void setImage(Image img) {
-		myImg = img;
-	}
-	
 }
