@@ -1,58 +1,36 @@
 package main.java.author.view.tabs.terrain;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
-import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.author.view.tabs.terrain.types.TileObject;
 import main.java.schema.GameMap;
 import static main.java.author.util.ActionListenerUtil.actionListener;
 
-public class TerrainEditorTab extends EditorTab{
-
+public class TerrainEditorTab extends EditorTab {
     private static final String CLEAR = "Clear Tiles";
 	private static final String EDIT_TILE = "Edit Tile";
 	private static final String SAVE_MAP = "Save Map";
-	private static final String ADD_BITMAP = "Add Bitmap File";
+	private static final String ADD_TILEMAP = "Add Bitmap File";
 	private static final String PIXEL_QUERY = "How many pixels are in the bitmap?";
 	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
-    public static final String IMAGE_FILTER_DIALOGUE = "Image files ((bmp, .jpg, .jpeg, .gif, .png)";
+    public static final String IMAGE_FILTER_DIALOGUE = "Image files (bmp, .jpg, .jpeg, .gif, .png)";
 
     private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
@@ -74,7 +52,7 @@ public class TerrainEditorTab extends EditorTab{
 		buttonDisplayOptions.put(CLEAR, initClearButton());
 		buttonDisplayOptions.put(EDIT_TILE, initEditorButton());
 		buttonDisplayOptions.put(SAVE_MAP, initSaveButton());
-		buttonDisplayOptions.put(ADD_BITMAP, initNewBitmap());
+		buttonDisplayOptions.put(ADD_TILEMAP, initNewTileMap());
 		
 		JPanel buttonDisplayPanel = new JPanel();
 		buttonDisplayPanel.setLayout(new GridBagLayout());
@@ -88,10 +66,10 @@ public class TerrainEditorTab extends EditorTab{
 		add(buttonDisplayPanel, BorderLayout.SOUTH);
 	}
 
-	private JButton initNewBitmap() {
-		JButton createBitmap = new JButton(ADD_BITMAP);
-		createBitmap.addActionListener(actionListener(this, "importBitmap"));
-		return createBitmap;
+	private JButton initNewTileMap() {
+		JButton createTileMap = new JButton(ADD_TILEMAP);
+		createTileMap.addActionListener(actionListener(this, "importTileMap"));
+		return createTileMap;
 	}
 	
 	private JButton initSaveButton() {
@@ -119,7 +97,7 @@ public class TerrainEditorTab extends EditorTab{
 		System.out.println("Map Saved");
 	}
 	
-	public void importBitmap(ActionEvent e) {
+	public void importTileMap(ActionEvent e) {
 		fileChooser = new JFileChooser();
         FileFilter imageFilter = new FileNameExtensionFilter(
                 IMAGE_FILTER_DIALOGUE, ImageIO.getReaderFileSuffixes());

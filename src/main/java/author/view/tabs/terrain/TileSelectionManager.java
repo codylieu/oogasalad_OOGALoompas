@@ -12,7 +12,6 @@ import javax.swing.JTabbedPane;
  *
  */
 public class TileSelectionManager {
-
 	private Canvas myCanvas;
 	private TileEditingPanel myTileEditPanel;
 	private List<TileDisplay> myTileDisplays;
@@ -35,10 +34,14 @@ public class TileSelectionManager {
 		return myTileDisplayTab;
 	}
 	
-	public TileDisplay getTileDisplay() {
+	public TileDisplay getCurrentTileDisplay() {
 		int index = myTileDisplayTab.getSelectedIndex();
 		return myTileDisplays.get(index);
 	}
+
+    public List<TileDisplay> getAllTileDisplays() {
+        return myTileDisplays; // TODO: make unmodifiable?
+    }
 	
 	public TileEditingPanel getTileEditPanel() {
 		return myTileEditPanel;

@@ -2,7 +2,6 @@ package main.java.author.view.tabs.terrain;
 
 import static main.java.author.util.ActionListenerUtil.actionListener;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,11 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -26,12 +23,12 @@ public class TileDisplay extends JPanel {
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
 	private TileSelectionManager myTileManager;
 	private Image[][] myImages; 
-	private int pixelSize;
+	private int myPixelSize;
 	
-	public TileDisplay(TileSelectionManager tileManager, File bitmapFile, int pixels) {
+	public TileDisplay(TileSelectionManager tileManager, File bitmapFile, int pixelSize) {
 		myTileManager = tileManager;
-		pixelSize = pixels;
-		initResources(bitmapFile);
+		myPixelSize = pixelSize;
+		initTileDisplay(bitmapFile);
 		displayTiles();
 		setVisible(true);
 	}
@@ -39,7 +36,7 @@ public class TileDisplay extends JPanel {
 	/**
 	 * Initializes resources to be used 
 	 */
-	private void initResources(File bmpFile) {
+	private void initTileDisplay(File bmpFile) {
 		myImages = parseBitmap(bmpFile);
 	}
 	
@@ -55,10 +52,10 @@ public class TileDisplay extends JPanel {
 			img = ImageIO.read(bitmapFile);
 			int imageWidth = img.getWidth();
 			int imageHeight = img.getHeight();
-			Image [][] myImageArray = new Image[imageHeight/pixelSize][imageWidth/pixelSize];
-			for (int i = 0; i < imageHeight/pixelSize; i++) {
-				for (int j = 0; j < imageWidth/pixelSize; j++) {
-					myImageArray[i][j] = img.getSubimage(j*pixelSize, i*pixelSize, pixelSize, pixelSize);
+			Image [][] myImageArray = new Image[imageHeight/ myPixelSize][imageWidth/ myPixelSize];
+			for (int i = 0; i < imageHeight/ myPixelSize; i++) {
+				for (int j = 0; j < imageWidth/ myPixelSize; j++) {
+					myImageArray[i][j] = img.getSubimage(j* myPixelSize, i* myPixelSize, myPixelSize, myPixelSize);
 				}
 			}
 			return myImageArray;
@@ -100,8 +97,8 @@ public class TileDisplay extends JPanel {
 	/**
 	 * Obtains the side length of images in the bitmap, in pixels
 	 */
-	public int getPixelSize() {
-		return pixelSize;
+	public int getMyPixelSize() {
+		return myPixelSize;
 	}
 	
 	/**
