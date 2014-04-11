@@ -363,8 +363,8 @@ public class Player {
 
 
 	private void playMusic() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		Sound song = new Sound("main/fox.wav");
-		song.play();
+		Sound song = new Sound("src/main/resources/fox.wav");
+		song.loop();
 	}
 
 	private JPanel makeSoundRadioButtonPanel(){
