@@ -3,6 +3,7 @@ package main.java.author.view.tabs.wave;
 import java.awt.BorderLayout;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
@@ -25,6 +26,14 @@ public class WaveEditorTab extends EditorTab{
 		
 	}
 	
+	private JPanel makeButtonPanel() {
+		JPanel result = new JPanel();
+		
+		return result;
+	}
+	
+	
+	//table
 	public void update() {
 		
 	}
