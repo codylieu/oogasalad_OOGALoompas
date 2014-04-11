@@ -33,7 +33,7 @@ public class TerrainEditorTab extends EditorTab {
 	private static final String ADD_TILEMAP = "Add Bitmap File";
 	private static final String PIXEL_QUERY = "How many pixels are in the bitmap?";
 	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
-    public static final String IMAGE_FILTER_DIALOGUE = "Image files (bmp, .jpg, .jpeg, .gif, .png)";
+    public static final String IMAGE_FILTER_DIALOGUE = ".GIF and .PNG Images";
 
     private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
@@ -128,8 +128,8 @@ public class TerrainEditorTab extends EditorTab {
 	
 	public void importTileMap(ActionEvent e) {
 		fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
-        FileFilter imageFilter = new FileNameExtensionFilter(
-                IMAGE_FILTER_DIALOGUE, ImageIO.getReaderFileSuffixes());
+        FileFilter imageFilter = new FileNameExtensionFilter(IMAGE_FILTER_DIALOGUE,
+                ".png", ".gif");
         fileChooser.setFileFilter(imageFilter);
 
 		int fileReturn = fileChooser.showOpenDialog(this);

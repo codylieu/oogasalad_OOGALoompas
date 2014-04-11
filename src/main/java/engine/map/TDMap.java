@@ -8,7 +8,6 @@ import main.java.schema.GameMap;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
-import java.util.HashSet;
 import java.util.List;
 
 public class TDMap {
