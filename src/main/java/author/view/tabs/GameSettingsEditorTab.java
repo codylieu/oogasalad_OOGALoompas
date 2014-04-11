@@ -25,20 +25,19 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JComboBox gameDifficultyList;
 	
 	private JLabel levelsPerGameLabel;
-	private JLabel wavesPerLevelLabel;
-	private JLabel enemiesPerWaveLabel;
+	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
 	private JLabel tilesPerRowLabel;
 	private JLabel tilesPerColumnLabel;
 	
 	private JTextField levelsPerGameField;
-	private JTextField wavesPerLevelField;
-	private JTextField enemiesPerWaveField;
+	private JTextField livesField;
 	private JTextField beginningMoneyField;
 	private JTextField tilesPerRowField;
 	private JTextField tilesPerColumnField;
 	
 	private static final String LEVELS_STRING = "Levels Per Game: ";
+	private static final String LIVES_STRING = "Lives: ";
 	private static final String WAVES_STRING = "Waves Per Level: ";
 	private static final String ENEMIES_STRING = "Enemies Per Wave: ";
 	private static final String MONEY_STRING = "Beginning Money: ";
@@ -132,8 +131,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	
 	private JComponent makeLabelPane(){
 		levelsPerGameLabel = new JLabel(LEVELS_STRING);
-		wavesPerLevelLabel = new JLabel(WAVES_STRING);
-		enemiesPerWaveLabel = new JLabel(ENEMIES_STRING);
+		livesLabel = new JLabel(LIVES_STRING);
 		beginningMoneyLabel = new JLabel(MONEY_STRING);
 		tilesPerRowLabel = new JLabel(ROW_TILES_STRING);
 		tilesPerColumnLabel = new JLabel(COLUMN_TILES_STRING);
@@ -141,8 +139,7 @@ public class GameSettingsEditorTab extends EditorTab{
 		JPanel labels = new JPanel( new GridLayout(0, 1));
 		
 		labels.add(levelsPerGameLabel);
-		labels.add(wavesPerLevelLabel);
-		labels.add(enemiesPerWaveLabel);
+		labels.add(livesLabel);
 		labels.add(beginningMoneyLabel);
 		labels.add(tilesPerRowLabel);
 		labels.add(tilesPerColumnLabel);
@@ -152,9 +149,8 @@ public class GameSettingsEditorTab extends EditorTab{
 	
 	private JComponent makeFieldPane(){
 		levelsPerGameField = new JFormattedTextField(numberFormat);
+		livesField = new JFormattedTextField(numberFormat);
 		levelsPerGameField.setColumns(10);
-		wavesPerLevelField = new JFormattedTextField(numberFormat);
-		enemiesPerWaveField = new JFormattedTextField(numberFormat);
 		beginningMoneyField = new JFormattedTextField(numberFormat);
 		tilesPerRowField = new JFormattedTextField(numberFormat);
 		tilesPerColumnField = new JFormattedTextField(numberFormat);
@@ -162,8 +158,7 @@ public class GameSettingsEditorTab extends EditorTab{
 		JPanel fields = new JPanel(new GridLayout(0, 1));
 		
 		fields.add(levelsPerGameField);
-		fields.add(wavesPerLevelField);
-		fields.add(enemiesPerWaveField);
+		fields.add(livesField);
 		fields.add(beginningMoneyField);
 		fields.add(tilesPerRowField);
 		fields.add(tilesPerColumnField);
