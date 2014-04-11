@@ -3,8 +3,10 @@ package main.java.engine.objects.monster;
 import java.awt.geom.Point2D;
 import java.util.List;
 
+import jgame.JGPoint;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
+import main.java.engine.objects.monster.jgpathfinder.*;
 
 
 public abstract class Monster extends TDObject {
@@ -20,9 +22,10 @@ public abstract class Monster extends TDObject {
 	protected double myHealth;
 	protected double myMoveSpeed;
 	protected double myMoneyValue;
-	protected IMonsterPath myPathFinder;
+	protected JGPathfinderInterface myPathFinder;
 	protected Point2D myEntrance;
 	protected Exit myExit;
+    protected JGPath myPath;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
 	 */
@@ -49,13 +52,39 @@ public abstract class Monster extends TDObject {
 		myHealth = health;
 		myMoveSpeed = moveSpeed;
 		myMoneyValue = rewardAmount;
-		myPathFinder = new StraightLinePath(this, exit.getLocation());
+        myEntrance = entrance;
+        myExit = exit;
+		myPathFinder = new JGPathfinder(new JGTileMap(eng), new JGPathfinderHeuristic(), eng); // TODO: clean up
+        JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
+        JGPoint pathExit = new JGPoint(myExit.getCenterTile());
+        myPath = myPathFinder.getPath(pathEntrance, pathExit);
 	}
 
 	@Override
 	public void move () {
-		myPathFinder.navigateMonster();
+        if (myPath.peek() != null) {
+            JGPoint waypoint = eng.getTileCoord(myPath.peek());
+
+            // TODO: refactor, quick implementation to test - jordan
+            if (((int) (x + 10) >= waypoint.x && (int) (x - 10) <= waypoint.x) &&
+                    ((int) (y + 10) >= waypoint.y && (int) (y - 10) <= waypoint.y)) {
+                waypoint = myPath.getNext();
+            }
+
+            xdir = Double.compare(waypoint.x, x);
+            ydir = Double.compare(waypoint.y, y);
+            setDirSpeed(xdir, ydir, 1);
+        } else {
+            setSpeed(0);
+        }
 	}
+
+    private JGPoint toCenterOfTile(JGPoint tileIndex) {
+        int x = tileIndex.x * eng.tileWidth() + eng.tileWidth()/2;
+        int y = tileIndex.y * eng.tileHeight() + eng.tileHeight()/2;
+
+        return new JGPoint(x, y);
+    }
 
 	/**
 	 *  Check if this object has died and should be removed
