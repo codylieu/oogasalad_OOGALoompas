@@ -73,8 +73,8 @@ public class Model {
         levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
         loadGameBlueprint(null);// TODO: REPLACE
         dataHandler = new DataHandler();
-        
-        environ = new EnvironmentKnowledge(monsters, player);
+
+        environ = new EnvironmentKnowledge(monsters, player, towers);
 
     }
 

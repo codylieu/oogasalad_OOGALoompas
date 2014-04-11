@@ -70,13 +70,6 @@ public abstract class Monster extends TDObject {
 		myHealth -= damage;
 	}
 
-	/**
-	 * Get current coordinate in a Point2D
-	 * @return Current coordinate
-	 */
-	public Point2D getCurrentCoor() {
-		return new Point2D.Double(this.x, this.y);
-	}
 
 	/**
 	 * Get money value received upon death of this monster

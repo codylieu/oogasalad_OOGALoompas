@@ -1,5 +1,6 @@
 package main.java.engine.objects;
 
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
 
@@ -46,4 +47,12 @@ public abstract class TDObject extends JGObject implements Serializable {
         return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;
     }
     
+
+	/**
+	 * Get current coordinate in a Point2D
+	 * @return Current coordinate
+	 */
+	public Point2D getCurrentCoor() {
+		return new Point2D.Double(this.x, this.y);
+	}
 }
