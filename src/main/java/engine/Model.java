@@ -163,7 +163,7 @@ public class Model {
      * @param x
      * @param y
      */
-    public void checkAndRemoveTower(int x, int y) {
+    public void checkAndRemoveTower(double x, double y) {
     	int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
     	if (isTowerPresent(coordinates)){
     		int xtile = coordinates[0];
