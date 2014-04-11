@@ -9,13 +9,9 @@ public abstract class TabController {
 	public TabController(MainController superController) {
 		mySuperController = superController;
 	}
-	
+
 	public void setControlledTab(EditorTab tab) {
 		myEditorTab = tab;
 	}
-
-	public abstract boolean isTabValid();
-
-	public abstract void fireErrorPopUp();
 
 }
