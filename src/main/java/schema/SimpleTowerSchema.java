@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import main.java.author.view.tabs.tower.TowerViewConstants;
-import main.java.engine.objects.tower.SimpleTower;
+import main.java.engine.objects.tower.ShootingTower;
 
 /**
  * 
@@ -15,7 +15,7 @@ import main.java.engine.objects.tower.SimpleTower;
  * objects related to ones you will see onscreen.
  */
 public class SimpleTowerSchema extends TowerSchema {
-	private static final Class<SimpleTower> MY_CONCRETE_TYPE = SimpleTower.class;
+	private static final Class<ShootingTower> MY_CONCRETE_TYPE = ShootingTower.class;
 
 	public SimpleTowerSchema() {
 		super(MY_CONCRETE_TYPE);

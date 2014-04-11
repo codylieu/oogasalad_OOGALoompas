@@ -14,7 +14,6 @@ import java.util.*;
 import java.util.List;
 
 public class Canvas extends JPanel {
-
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
@@ -125,6 +124,9 @@ public class Canvas extends JPanel {
 		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
 		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
 		tile.setPassIndex((selectedTileObj == null) ? 0 : selectedTileObj.getPassabilityIndex());
+        tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
+        tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
+        tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
 		repaint(); // we want to keep this repaint, if we use update, it messes up on macs
 	}
 	
@@ -138,6 +140,10 @@ public class Canvas extends JPanel {
 			tile.setPassIndex(0);
 			repaint();
 		}
+	}
+	
+	protected Tile[][] getTileArray() {
+		return myTiles;
 	}
 
 	public void setSelectedTileObj(TileObject tObj) {

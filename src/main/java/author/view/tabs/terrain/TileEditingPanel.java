@@ -48,7 +48,7 @@ public class TileEditingPanel extends JPanel {
 	@Override 
 	public void paintComponent(Graphics g) {
 		TileObject selectedTile = myTileManager.getCanvas().getSelectedTileObj();
-		int pixelSize = myTileManager.getTileDisplay().getPixelSize();
+		int pixelSize = myTileManager.getCurrentTileDisplay().getMyPixelSize();
 		Image img = (selectedTile == null) ? null : selectedTile.getUneditedImage();
 		
 		if (img != null) {
