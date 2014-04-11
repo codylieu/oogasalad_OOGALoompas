@@ -8,9 +8,12 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.io.ZipOutputStream;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 
@@ -62,18 +65,30 @@ public class DataHandler {
 
 	/**
 	 * Saves a blueprint and current resources folder
-	 * to the file path
+	 * to the file path. The ZIP file which is 
+	 * saved to the file-path is a representation of a saved
+	 * authoring environment, with blueprint + resources
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
 	 */
+
+	//	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
+	//		DataBundle bundleToSave = new DataBundle();
+	//		bundleToSave.setBlueprint(blueprint);
+	//		String zipFileLocation = filePath + "ZippedResources.zip";
+	//		ZipFile myZippedResources = compress(FILE_PATH,zipFileLocation);
+	//		//		bundleToSave.setResourcesFolder(myZippedResources);
+	//		bundleToSave.setResourceFolderLocation(zipFileLocation);
+	//		return saveObjectToFile(bundleToSave, filePath + "Bundle.ser");
+	//	}
+
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
-		DataBundle bundleToSave = new DataBundle();
-		bundleToSave.setBlueprint(blueprint);
-		String zipFileLocation = filePath + "ZippedResources.zip";
-		ZipFile myZippedResources = compress(FILE_PATH,zipFileLocation);
-		//		bundleToSave.setResourcesFolder(myZippedResources);
-		bundleToSave.setResourceFolderLocation(zipFileLocation);
-		return saveObjectToFile(bundleToSave, filePath + "Bundle.ser");
+		String zipFileLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+		saveObjectToFile(blueprint,filePath + "myBlueprint.ser");
+		List<File> myFilesToZip = new ArrayList<File>();
+		myFilesToZip.add(new File(filePath + "myBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
+		myFilesToZip.add(new File(FILE_PATH)); // resources folder
+		return compressAuthoringEnvironment(myFilesToZip,zipFileLocation);
 	}
 
 	/**
@@ -83,10 +98,9 @@ public class DataHandler {
 	 * @param compressedFile
 	 */
 
-	private ZipFile compress(String inputFolder,String compressedFile) {
+	private boolean compressAuthoringEnvironment(List<File> filesToAdd, String compressedFileLocation) {
 		try {
-			ZipFile zipFile = new ZipFile(compressedFile);
-			File inputFolderH = new File(inputFolder);
+			ZipOutputStream outputStream = new ZipOutputStream(new FileOutputStream(new File(compressedFileLocation)));
 			ZipParameters parameters = new ZipParameters();
 
 			// COMP_DEFLATE is for compression
@@ -101,24 +115,37 @@ public class DataHandler {
 			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_ULTRA);
 
 			// folder compressed
-			zipFile.addFolder(inputFolderH, parameters);
-			return zipFile;
+			for (File file : filesToAdd){
+				outputStream.putNextEntry(file, parameters);
 
-			//			long uncompressedSize = inputFileH.length();
-			//			File outputFileH = new File(compressedFile);
-			//			long comrpessedSize = outputFileH.length();
+				if (file.isDirectory()) {
+					outputStream.closeEntry();
+					continue;
+				}
 
-			//			double ratio = (double)comrpessedSize/(double)uncompressedSize;
-			//			System.out.println("File compressed with compression ratio : "+ ratio);
+				//Initialize inputstream
+				FileInputStream inputStream = new FileInputStream(file);
+				byte[] readBuff = new byte[4096];
+				int readLen = -1;
 
+				//Read the file content and write it to the OutputStream
+				while ((readLen = inputStream.read(readBuff)) != -1) {
+					outputStream.write(readBuff, 0, readLen);
+				}
+
+				outputStream.closeEntry();
+				inputStream.close();
+			}
+			outputStream.finish();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
-		return null;
+		return true;
 	}
 
 	/**
-	 * Loads a serialized blueprint (in a databundle with blueprint + resources)
+	 * Loads a serialized blueprint (a ZIP file with serialized gameBlueprint + resources))
 	 * Deletes current resources folder and replaces it with the zipped resources
 	 * inside the databundle
 	 * @param filePath
@@ -127,6 +154,23 @@ public class DataHandler {
 	 * @throws ClassNotFoundException 
 	 * @throws ZipException 
 	 */
+//	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
+//		Object unserializedObject = loadObjectFromFile(filePath);
+//
+//		if (unserializedObject instanceof DataBundle) {
+//			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
+//			//ZipFile myZippedResources = bundle.getZippedResourcesFolder();
+//			String myZippedResourcesLocation = bundle.getZippedResourcesFolderLocation();
+//			File myDir = new File(TEST_FILE_PATH);
+//			deleteDirectory(myDir);
+//			ZipFile myZippedResourcesFolder = new ZipFile(myZippedResourcesLocation);
+//			//unzip and put resources in src/main/resources
+//			decompress(myZippedResourcesFolder,TEST_FILE_PATH); 
+//			return bundle.getBlueprint();
+//		}
+//		throw new ClassNotFoundException("Not a data bundle");
+//	}
+	
 	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
 		Object unserializedObject = loadObjectFromFile(filePath);
 
@@ -150,23 +194,23 @@ public class DataHandler {
 	 * @return
 	 */
 	public static boolean deleteDirectory(File dir) {
-	    if(! dir.exists() || !dir.isDirectory())    {
-	        return false;
-	    }
+		if(! dir.exists() || !dir.isDirectory())    {
+			return false;
+		}
 
-	    String[] files = dir.list();
-	    for(int i = 0, len = files.length; i < len; i++)    {
-	        File f = new File(dir, files[i]);
-	        if(f.isDirectory()) {
-	            deleteDirectory(f);
-	        }else   {
-	            f.delete();
-	        }
-	    }
-	    return dir.delete();
+		String[] files = dir.list();
+		for(int i = 0, len = files.length; i < len; i++)    {
+			File f = new File(dir, files[i]);
+			if(f.isDirectory()) {
+				deleteDirectory(f);
+			}else   {
+				f.delete();
+			}
+		}
+		return dir.delete();
 	}
 
-	
+
 	/**
 	 * Unzips a ZIP file to a target location
 	 * @param compressedFile
