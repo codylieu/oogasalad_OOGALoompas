@@ -49,7 +49,7 @@ public class EventPlayback {
 	}
 
 	public static void main (String [] args) {
-		new AuthoringView();
+		//new AuthoringView();
 		new EventPlayback();
 	}
 	
