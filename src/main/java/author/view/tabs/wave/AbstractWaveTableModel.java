@@ -26,7 +26,7 @@ public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
 		setDataAndColumnNames(modelData, columnNames);
 	}
 
-	
+
 	protected AbstractWaveTableModel(List<T> modelData, List<String> columnNames, Class c) {
 		setDataAndColumnNames(modelData, columnNames);
 		setColumnClass(c);
@@ -44,10 +44,10 @@ public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
 		this.columnClass = c;
 	}
 
-//
-//  TableModel interface methods
-//
-	
+	//
+	//  TableModel interface methods
+	//
+
 	public Class getColumnClass(int column) {
 		Class columnClass = null;
 
@@ -70,7 +70,7 @@ public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
 	public int getRowCount() {
 		return modelData.size();
 	}
-	
+
 	public String getColumnName(int column) {
 		Object columnName = null;
 		if (column < columnNames.size()) {
@@ -79,6 +79,7 @@ public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
 		return (columnName == null) ? super.getColumnName( column ) : columnName.toString();
 	}
 
+	//returns true
 	public boolean isCellEditable(int row, int column) {
 		Boolean isEditable = null;
 		//  Check is column editability has been set
@@ -87,14 +88,15 @@ public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
 		}
 		return (isEditable == null) ? isModelEditable : isEditable.booleanValue();
 	}
-//
-//  Implement custom methods
-//
+
+	//
+	//  Implement custom methods
+	//
 
 	public void addRow(T data) {
 		insertRow(getRowCount(), data);
 	}
-	
+
 	public void addColumn(T data) {
 		insertColumn(getColumnCount(), data);
 	}
@@ -119,11 +121,10 @@ public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
 		return columnData;
 	}
 
-	public void insertRow(int row, T rowData) {
-		modelData.add(row, rowData);
-		fireTableStructureChanged();
+	public void insertRow(int row, T data) {
+		fireTableRowsInserted(row, row);
 	}
-	
+
 	public void insertColumn(int column, T data) {
 		modelData.add(column, data);
 		fireTableStructureChanged();
