@@ -17,8 +17,8 @@ public class Canvas extends JPanel {
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
-	public static final int NUM_ROWS = 10;
-	public static final int NUM_COLS = 15;
+	public static final int NUM_ROWS = 20;
+	public static final int NUM_COLS = 25;
 	public static final int TILE_SIZE = 40; // in pixels
 
 	private final Tile[][] myTiles;
