@@ -15,33 +15,24 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 public class WaveTable extends JPanel implements Serializable{
-    private boolean DEBUG = false;
+    private boolean FLAG_DEBUG = false;
     private boolean ALLOW_COLUMN_SELECTION = false;
     private boolean ALLOW_ROW_SELECTION = true;
  
+    private WaveTableModel myModel;
+    
+    public String[] columnNames = {"Wave"};
+    
+    public Object[][] data = {};
+    
+    public WaveTable(WaveTableModel model) {
+    	myModel = model;
+    }
+    
     public WaveTable() {
         super(new GridLayout(1,0));
  
-        final String[] columnNames = {"First Name",
-                                      "Last Name",
-                                      "Sport",
-                                      "# of Years",
-                                      "Vegetarian"};
- 
-        final Object[][] data = {
-        {"Kathy", "Smith",
-         "Snowboarding", new Integer(5), new Boolean(false)},
-        {"John", "Doe",
-         "Rowing", new Integer(3), new Boolean(true)},
-        {"Sue", "Black",
-         "Knitting", new Integer(2), new Boolean(false)},
-        {"Jane", "White",
-         "Speed reading", new Integer(20), new Boolean(true)},
-        {"Joe", "Brown",
-         "Pool", new Integer(10), new Boolean(false)}
-        };
- 
-        JTable table = new JTable(data, columnNames);
+        final JTable table = new JTable(data, columnNames);
         table.setPreferredScrollableViewportSize(new Dimension(500, 70));
         table.setFillsViewportHeight(true);
  
@@ -79,9 +70,6 @@ public class WaveTable extends JPanel implements Serializable{
                 table.getColumnModel().getSelectionModel();
             colSM.addListSelectionListener(new ListSelectionListener() {
                 public void valueChanged(ListSelectionEvent e) {
-                    //Ignore extra messages.
-                    if (e.getValueIsAdjusting()) return;
- 
                     ListSelectionModel lsm = (ListSelectionModel)e.getSource();
                     if (lsm.isSelectionEmpty()) {
                         System.out.println("No columns are selected.");
@@ -93,20 +81,15 @@ public class WaveTable extends JPanel implements Serializable{
                 }
             });
         }
- 
-        if (DEBUG) {
+        if (FLAG_DEBUG) {
             table.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent e) {
                     printDebugData(table);
                 }
             });
         }
- 
-        //Create the scroll pane and add the table to it.
         JScrollPane scrollPane = new JScrollPane(table);
- 
-        //Add the scroll pane to this panel.
-        add(scrollPane);
+        this.add(scrollPane);
     }
  
     private void printDebugData(JTable table) {
@@ -124,34 +107,9 @@ public class WaveTable extends JPanel implements Serializable{
         }
         System.out.println("--------------------------");
     }
- 
-    /**
-     * Create the GUI and show it.  For thread safety,
-     * this method should be invoked from the
-     * event-dispatching thread.
-     */
-    private static void createAndShowGUI() {
-        //Create and set up the window.
-        JFrame frame = new JFrame("SimpleTableSelectionDemo");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- 
-        //Create and set up the content pane.
-        WaveTable table = new WaveTable();
-        table.setOpaque(true); //content panes must be opaque
-        frame.setContentPane(table);
- 
-        //Display the window.
-        frame.pack();
-        frame.setVisible(true);
-    }
- 
-    public static void main(String[] args) {
-        //Schedule a job for the event-dispatching thread:
-        //creating and showing this application's GUI.
-        javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                createAndShowGUI();
-            }
-        });
-    }
+
+	public Object getSelectionModel() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

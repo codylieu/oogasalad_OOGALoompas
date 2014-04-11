@@ -6,7 +6,8 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
+//Reflection
+public abstract class WaveDataModel<T> extends AbstractTableModel {
 	protected List<T> modelData;
 	protected List<String> columnNames;
 	protected Class[] columnClasses;
@@ -14,20 +15,19 @@ public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
 	private Class columnClass = Object.class;
 	private boolean isModelEditable = true;
 
-	protected AbstractWaveTableModel(Class c) {
+	protected WaveDataModel(Class c) {
 		setColumnClass(c);
 	}
 
-	protected AbstractWaveTableModel(List<String> columnNames) {
+	protected WaveDataModel(List<String> columnNames) {
 		this(new ArrayList<T>(), columnNames);
 	}
 
-	protected AbstractWaveTableModel(List<T> modelData, List<String> columnNames) {
+	protected WaveDataModel(List<T> modelData, List<String> columnNames) {
 		setDataAndColumnNames(modelData, columnNames);
 	}
 
-
-	protected AbstractWaveTableModel(List<T> modelData, List<String> columnNames, Class c) {
+	protected WaveDataModel(List<T> modelData, List<String> columnNames, Class c) {
 		setDataAndColumnNames(modelData, columnNames);
 		setColumnClass(c);
 	}
@@ -141,20 +141,5 @@ public abstract class AbstractWaveTableModel<T> extends AbstractTableModel {
 
 	public void setModelEditable(boolean isModelEditable) {
 		this.isModelEditable = isModelEditable;
-	}
-
-	public static String formatColumnName(String columnName) {
-		if (columnName.length() < 3) return columnName;
-		StringBuffer buffer = new StringBuffer( columnName );
-		boolean isPreviousLowerCase = false;
-		for (int i = 1; i < buffer.length(); i++) {
-			boolean isCurrentUpperCase = Character.isUpperCase( buffer.charAt(i) );
-			if (isCurrentUpperCase && isPreviousLowerCase) {
-				buffer.insert(i, " ");
-				i++;
-			}
-			isPreviousLowerCase = ! isCurrentUpperCase;
-		}
-		return buffer.toString().replaceAll("_", " ");
 	}
 }
