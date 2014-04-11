@@ -1,6 +1,7 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
+import java.util.HashSet;
 import java.util.List;
 
 import jgame.JGPoint;
@@ -54,7 +55,7 @@ public abstract class Monster extends TDObject {
 		myMoneyValue = rewardAmount;
         myEntrance = entrance;
         myExit = exit;
-		myPathFinder = new JGPathfinder(new JGTileMap(eng), new JGPathfinderHeuristic(), eng); // TODO: clean up
+		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic(), eng); // TODO: clean up
         JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
         JGPoint pathExit = new JGPoint(myExit.getCenterTile());
         myPath = myPathFinder.getPath(pathEntrance, pathExit);
@@ -78,13 +79,6 @@ public abstract class Monster extends TDObject {
             setSpeed(0);
         }
 	}
-
-    private JGPoint toCenterOfTile(JGPoint tileIndex) {
-        int x = tileIndex.x * eng.tileWidth() + eng.tileWidth()/2;
-        int y = tileIndex.y * eng.tileHeight() + eng.tileHeight()/2;
-
-        return new JGPoint(x, y);
-    }
 
 	/**
 	 *  Check if this object has died and should be removed
