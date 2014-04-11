@@ -90,7 +90,7 @@ public class AuthoringView extends JFrame {
 	}
 	
 	private void saveBlueprint() {
-		//open a dialog box, cody
+		//open a dialog box, cody: myController.pickASaveLocation();
 		myController.saveBlueprint();
 	}
 
