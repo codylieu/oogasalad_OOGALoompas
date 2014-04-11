@@ -19,7 +19,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import main.java.author.view.tabs.Tile;
 import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {

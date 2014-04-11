@@ -1,4 +1,4 @@
-package main.java.author.view.tabs;
+package main.java.author.view.tabs.terrain;
 
 import java.awt.Color;
 import java.awt.Dimension;

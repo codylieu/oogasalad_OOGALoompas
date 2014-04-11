@@ -1,6 +1,6 @@
 package main.java.schema;
 
-import main.java.author.view.tabs.Tile;
+import main.java.author.view.tabs.terrain.Tile;
 
 /**
  * Wrapper for the tiles corresponding to a terrain map
