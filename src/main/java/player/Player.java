@@ -57,6 +57,7 @@ public class Player {
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
 	private TDPlayerEngine engine;
 	private Sound song;
+	private boolean soundOn;
 
 
 	public Player() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
@@ -73,6 +74,7 @@ public class Player {
 
 	private void initSong() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
 		song = new Sound("src/main/resources/fox.wav");
+		soundOn = false;
 	}
 
 	public void showCard(String cardName){
@@ -245,16 +247,35 @@ public class Player {
 				engine.toggleAddTower();
 			}
 		});
+		JButton soundButton = new JButton("Sound On/Off");
+		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		soundButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				toggleSound();
+			}
+		});
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
 		gameButtonPanel.add(speedUpButton);
 		gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
+		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		return gameButtonPanel;
 	}
 
+	private void toggleSound(){
+		if(!soundOn){
+			song.loop();
+			soundOn = true;
+		}
+		else{
+			song.stop();
+			soundOn = false;
+		}
+			
+	}
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
 		gameInfoPanel.setSubjectState(engine);
