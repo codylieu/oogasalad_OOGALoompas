@@ -406,12 +406,12 @@ public class Player {
 
 		onButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				song.loop();
+				toggleSound();
 				frame.pack();
 			}});
 		offButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				song.stop();
+				toggleSound();
 				frame.pack();
 			}
 		});
