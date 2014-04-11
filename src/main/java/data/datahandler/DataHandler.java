@@ -10,12 +10,15 @@ import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
 import main.java.engine.GameState;
+import main.java.exceptions.data.InvalidDataException;
+import main.java.exceptions.data.InvalidGameBlueprintException;
 import main.java.schema.GameBlueprint;
 
 import com.google.gson.Gson;
@@ -227,33 +230,56 @@ public class DataHandler {
 		}
 	}
 	
+	private boolean checkGameBlueprint(GameBlueprint b) throws InvalidGameBlueprintException	{
+		if(b.getMyGameScenario() == null)	{
+			throw new InvalidGameBlueprintException("hi");
+		}
+		else if(b.getMyTDObjectSchemas() == null){
+			
+		}
+		else if(b.getMyLevelSchemas() == null){
+		
+		}
+		else if(b.getMyGameMaps() == null){
+		
+		}
+		return true;
+	}
+	
 	/**
 	 * Method to check the validity of data stored in Game Blueprints
 	 * and Game States
+	 * Note: This method is only capable of checking public fields.
 	 * @param obj
 	 * @return
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 
+	 * @throws InvalidDataException 
 	 */
-	private boolean checkData(Object obj) throws IllegalArgumentException, IllegalAccessException	{
+	private boolean checkPublicData(Object obj) throws IllegalArgumentException, IllegalAccessException, InvalidDataException	{
 		int count = 0;
+		System.out.println(Arrays.toString(obj.getClass().getDeclaredFields()));
 		for(Field field : obj.getClass().getDeclaredFields())	{
-			if(!Modifier.isStatic(field.getModifiers()) && field.get(obj) != null)	{
+			if(!Modifier.isStatic(field.getModifiers()))	{
 				count++;
-			}
-			else	{
-
+				if(field.get(obj) != null)	{
+					count++;
+				}
+				else	{
+					throw new InvalidDataException(field.getName(),obj);
+				}
 			}
 		}
 		return count == obj.getClass().getDeclaredFields().length;
 	}
 	
-	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException	{
+	
+	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvalidDataException	{
 		DataHandler d = new DataHandler();
-		TestObject t1 = new TestObject();
 		TestObject t2 = new TestObject(1,2,"t2");
-		System.out.println(d.checkData(t1));
-		System.out.println(d.checkData(t2));
+		System.out.println(d.checkPublicData(t2));
+		GameBlueprint b = new GameBlueprint();
+		System.out.println(d.checkPublicData(b));
 
 	}
 }
