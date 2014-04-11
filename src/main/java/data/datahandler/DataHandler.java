@@ -45,7 +45,11 @@ public class DataHandler {
 	 * @throws IOException
 	 */
 	public boolean saveState(GameState currentGameState, String filePath) throws IOException {
-		return saveObjectToFile(currentGameState, filePath);
+		//First check if game state provided is valid
+		if(checkGameState(currentGameState))	{
+			return saveObjectToFile(currentGameState, filePath);
+		}
+		return false;
 	}
 
 	/**
@@ -69,15 +73,20 @@ public class DataHandler {
 	 * to the file path
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
+	 * @throws InvalidGameBlueprintException 
 	 */
-	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
-		DataBundle bundleToSave = new DataBundle();
-		bundleToSave.setBlueprint(blueprint);
-		String zipFileLocation = filePath + "ZippedResources.zip";
-		ZipFile myZippedResources = compress(FILE_PATH,zipFileLocation);
-		//		bundleToSave.setResourcesFolder(myZippedResources);
-		bundleToSave.setResourceFolderLocation(zipFileLocation);
-		return saveObjectToFile(bundleToSave, filePath + "Bundle.ser");
+	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
+		//First check if the blueprint provided is valid
+		if(checkGameBlueprint(blueprint))	{
+			DataBundle bundleToSave = new DataBundle();
+			bundleToSave.setBlueprint(blueprint);
+			String zipFileLocation = filePath + "ZippedResources.zip";
+			ZipFile myZippedResources = compress(FILE_PATH,zipFileLocation);
+			//		bundleToSave.setResourcesFolder(myZippedResources);
+			bundleToSave.setResourceFolderLocation(zipFileLocation);
+			return saveObjectToFile(bundleToSave, filePath + "Bundle.ser");
+		}
+		return false;
 	}
 
 	/**
@@ -230,19 +239,37 @@ public class DataHandler {
 		}
 	}
 	
+	/**
+	 * Method to check the validity of GameBlueprints
+	 * @param b
+	 * @return
+	 * @throws InvalidGameBlueprintException
+	 */
 	private boolean checkGameBlueprint(GameBlueprint b) throws InvalidGameBlueprintException	{
+		//TODO: Implement deeper validation of blueprint
 		if(b.getMyGameScenario() == null)	{
-			throw new InvalidGameBlueprintException("hi");
+			throw new InvalidGameBlueprintException("myGameScenario");
 		}
 		else if(b.getMyTDObjectSchemas() == null){
-			
+			throw new InvalidGameBlueprintException("myTDObjectSchemas");
 		}
 		else if(b.getMyLevelSchemas() == null){
-		
+			throw new InvalidGameBlueprintException("myLevelSchemas");
 		}
 		else if(b.getMyGameMaps() == null){
-		
+			throw new InvalidGameBlueprintException("myGameMaps");
 		}
+		return true;
+	}
+	
+	/**
+	 * Method to check the validity of GameStates
+	 * @param s
+	 * @return
+	 */
+	private boolean checkGameState(GameState s)	{
+		//TODO: Need to implement. Not sure how to proceed, since GameStates
+		//don't have getter methods for attributes.
 		return true;
 	}
 	
