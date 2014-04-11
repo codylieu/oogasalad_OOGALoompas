@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,7 +14,6 @@ import net.lingala.zip4j.core.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.util.Zip4jConstants;
-
 import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
 
@@ -224,5 +224,23 @@ public class DataHandler {
 		catch (IOException | ClassNotFoundException e) {
 			return null;
 		}
+	}
+	
+	/**
+	 * Method to check the validity of data stored in Game Blueprints
+	 * and Game States
+	 * @param obj
+	 * @return
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 */
+	private boolean checkData(Object obj) throws IllegalArgumentException, IllegalAccessException	{
+		int count = 0;
+		for(Field field : obj.getClass().getDeclaredFields())	{
+			if(field.get(obj) != null)	{
+				count++;
+			}
+		}
+		return count == obj.getClass().getDeclaredFields().length;
 	}
 }
