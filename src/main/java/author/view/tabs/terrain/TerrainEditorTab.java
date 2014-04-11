@@ -32,6 +32,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
@@ -44,14 +46,15 @@ import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab{
 
-	private static final String CLEAR = "Clear Tiles";
+    private static final String CLEAR = "Clear Tiles";
 	private static final String EDIT_TILE = "Edit Tile";
 	private static final String SAVE_MAP = "Save Map";
 	private static final String ADD_BITMAP = "Add Bitmap File";
 	private static final String PIXEL_QUERY = "How many pixels are in the bitmap?";
 	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
-	
-	private JFileChooser fileChooser;
+    public static final String IMAGE_FILTER_DIALOGUE = "Image files ((bmp, .jpg, .jpeg, .gif, .png)";
+
+    private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
 	private Map<String, JButton> buttonDisplayOptions;
 
@@ -118,27 +121,30 @@ public class TerrainEditorTab extends EditorTab{
 	
 	public void importBitmap(ActionEvent e) {
 		fileChooser = new JFileChooser();
+        FileFilter imageFilter = new FileNameExtensionFilter(
+                IMAGE_FILTER_DIALOGUE, ImageIO.getReaderFileSuffixes());
+        fileChooser.setFileFilter(imageFilter);
+
 		int fileReturn = fileChooser.showOpenDialog(this);
 		if (fileReturn == JFileChooser.APPROVE_OPTION) {
-			File file = fileChooser.getSelectedFile();
-			addTileDisplay(file);
-		}
+			addTileDisplay(fileChooser.getSelectedFile());
+		} else {
+            System.out.println("unacceptable file format"); //TODO: throw exception
+        }
 	}
 	
 	private void addTileDisplay(File f) {
-		if (f.getPath().endsWith(".bmp")) {
-			String pixels = queryUser(PIXEL_QUERY);
-			try {
-				int pixelCount = Integer.parseInt(pixels);
-				if (pixelCount < 40 && pixelCount > 10) {
-					myTileSelectionManager.addTileDisplay(f, pixelCount);
-				} else {
-					JOptionPane.showMessageDialog(this, PIXEL_RANGE);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+        String pixels = queryUser(PIXEL_QUERY);
+        try {
+            int pixelCount = Integer.parseInt(pixels);
+            if (pixelCount < 40 && pixelCount > 10) {
+                myTileSelectionManager.addTileDisplay(f, pixelCount);
+            } else {
+                JOptionPane.showMessageDialog(this, PIXEL_RANGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 	
 	private String queryUser(String query) {
