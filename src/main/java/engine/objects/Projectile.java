@@ -1,7 +1,6 @@
 package main.java.engine.objects;
 
 import main.java.engine.objects.monster.Monster;
-import main.java.schema.MonsterSchema;
 import jgame.JGObject;
 
 
@@ -43,7 +42,7 @@ public class Projectile extends TDObject {
     
     @Override
     public void hit (JGObject obj) {
-        if (and(obj.colid, MonsterSchema.MONSTER_CID)) {
+        if (and(obj.colid, Monster.MONSTER_CID)) {
             ((Monster) obj).takeDamage(myDamage);
             this.remove();
         }

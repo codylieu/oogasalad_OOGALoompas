@@ -5,8 +5,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import jgame.impl.JGEngineInterface;
+import main.java.engine.Model;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
 import main.java.engine.util.Reflection;
@@ -14,7 +16,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.MonsterSchema;
 import main.java.schema.TDObjectSchema;
-import jgame.impl.JGEngineInterface;
+import main.java.schema.TowerSchema;
 
 
 public class TDObjectFactory {
@@ -26,10 +28,13 @@ public class TDObjectFactory {
         tdObjectSchemaMap = new HashMap<>();
     }
 
-    public void loadSchemas (List<TDObjectSchema> schemas) {
+    public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
         // TODO: Get rid of repetition in loading schemas
         for (TDObjectSchema s : schemas) {
-            tdObjectSchemaMap.put((String) s.getAttributesMap().get(TDObject.NAME), s);
+            String objName = (String) s.getAttributesMap().get(TDObjectSchema.NAME);
+            String objImagePath = Model.RESOURCE_PATH + s.getAttributesMap().get(TDObjectSchema.IMAGE_NAME);
+            engine.defineImage(objName, "-", 1, objImagePath, "-");
+            tdObjectSchemaMap.put(objName, s);
         }
     }
 
@@ -41,12 +46,11 @@ public class TDObjectFactory {
      * @return The new Tower object
      * @throws TowerCreationFailureException
      */
-    public Tower placeTower (Point2D location, String towerName)
-                                                                throws TowerCreationFailureException {
+    public Tower placeTower (Point2D location, String towerName) throws TowerCreationFailureException {
         Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
-            schema.addAttribute(Tower.LOCATION, (Serializable) tileOrigin);
+            schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
             Object[] towerParameters = { schema.getAttributesMap() };
 
             return (Tower) placeObject(schema.getMyConcreteType(), towerParameters);
@@ -56,30 +60,12 @@ public class TDObjectFactory {
         }
     }
 
-    public Monster placeMonster (Point2D entrance, Exit exit, String monsterName)
-                                                                                    throws MonsterCreationFailureException {
+    public Monster placeMonster (Point2D entrance, Exit exit, String monsterName) throws MonsterCreationFailureException {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-            Map<String, String> attributes = schema.getAttributesMap();
-            attributes.put(MonsterSchema.ENTRANCE_X, String.valueOf(entrance.getX()));
-            attributes.put(MonsterSchema.ENTRANCE_Y, String.valueOf(entrance.getY()));
-            attributes.put(MonsterSchema.EXIT_X, String.valueOf(exit.getX()));
-            attributes.put(MonsterSchema.EXIT_Y, String.valueOf(exit.getY()));
-
-            Object[] monsterParameters = {attributes};
-=======
-            schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
-            schema.addAttribute(Monster.EXIT_LOCATION, exit);
+            schema.addAttribute(MonsterSchema.ENTRANCE_LOCATION, (Serializable) entrance);
+            schema.addAttribute(MonsterSchema.EXIT_LOCATION, exit);
             Object[] monsterParameters = { schema.getAttributesMap() };
->>>>>>> FETCH_HEAD
-=======
-            schema.addAttribute(Monster.ENTRANCE_LOCATION, (Serializable) entrance);
-            schema.addAttribute(Monster.EXIT_LOCATION, exit);
-            Object[] monsterParameters = { schema.getAttributesMap() };
->>>>>>> FETCH_HEAD
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
         }
         catch (Exception e) {

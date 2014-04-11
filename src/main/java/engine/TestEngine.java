@@ -39,8 +39,7 @@ public class TestEngine extends JGEngine {
         this.model = new Model(this);
         model.addNewPlayer();
         model.loadMap("testmap.json");
-        defineMedia("/main/resources/media.tbl");
-//        model.loadSchemas("testtowers");
+ 
     }
 
     @Override

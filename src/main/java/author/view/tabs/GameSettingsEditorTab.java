@@ -16,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
 
 public class GameSettingsEditorTab extends EditorTab{
 
@@ -50,9 +51,10 @@ public class GameSettingsEditorTab extends EditorTab{
 	private NumberFormat numberFormat;
 	
 	private JButton submitButton;
+	private JButton musicButton;
 
-	public GameSettingsEditorTab(MainController controller){
-		super(controller);
+	public GameSettingsEditorTab(TabController gameSettingsController){
+		super(gameSettingsController);
 		createSettingsPanel();
 		add(settingsPanel, BorderLayout.CENTER);
 	}
@@ -109,9 +111,42 @@ public class GameSettingsEditorTab extends EditorTab{
 		attributes.add(makeLabelPane(), BorderLayout.WEST);
 		attributes.add(makeFieldPane(), BorderLayout.EAST);
 		
-		attributes.add(makeSubmitButton(), BorderLayout.SOUTH);
+		attributes.add(makeButtons(), BorderLayout.SOUTH);
 		
 		return attributes;
+	}
+	
+	private JComponent makeButtons(){
+		
+		JPanel buttons = new JPanel();
+		
+		submitButton = new JButton("Submit");
+		submitButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		musicButton = new JButton("Choose Music");
+		musicButton.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		buttons.add(submitButton);
+		buttons.add(musicButton);
+		
+		return buttons;
+		
 	}
 	
 	private JComponent makeSubmitButton(){
