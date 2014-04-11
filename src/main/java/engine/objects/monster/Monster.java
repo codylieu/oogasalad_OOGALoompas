@@ -1,6 +1,7 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
+import java.util.List;
 
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
@@ -38,6 +39,7 @@ public abstract class Monster extends TDObject {
 			//double y,
 			Point2D entrance,
 			Exit exit,
+            List<Integer> blocked,
 			double health,
 			double moveSpeed,
 			double rewardAmount,
