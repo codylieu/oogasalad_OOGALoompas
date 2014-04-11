@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -20,8 +21,8 @@ import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
-	private TileSelectionManager myTileManager;
-	private Image[][] myImages;
+	private transient TileSelectionManager myTileManager;
+	private transient  Image[][] myImages;
     private int myNumXTiles;
     private int myNumYTiles;
 	private int myPixelSize;
@@ -59,7 +60,7 @@ public class TileDisplay extends JPanel {
 			Image [][] myImageArray = new Image[myNumXTiles][myNumYTiles];
 			for (int i = 0; i < myNumXTiles; i++) {
 				for (int j = 0; j < myNumYTiles; j++) {
-					myImageArray[i][j] = img.getSubimage(j * myPixelSize, i * myPixelSize,
+					myImageArray[i][j] = img.getSubimage(i * myPixelSize, j * myPixelSize,
                             myPixelSize, myPixelSize);
 				}
 			}
@@ -91,6 +92,9 @@ public class TileDisplay extends JPanel {
 				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT); // scale down image
 
 				TileObject imgDisplayObj = new TileObject(im);
+                imgDisplayObj.setMyXIndex(i); // Set row and column of where the thing is displayed
+                imgDisplayObj.setMyYIndex(j);
+                imgDisplayObj.setMyTileMapFileName(myTileMapFile);
 				imgDisplayObj.addActionListener(actionListener(this, "updateSelection"));
 				imgDisplayObj.setIcon(new ImageIcon(scaledIm)); // place scaled image as jbutton icon
 				tileView.add(imgDisplayObj, c); // grid layout of jbutton/images
@@ -128,5 +132,9 @@ public class TileDisplay extends JPanel {
 		myTileManager.getTileEditPanel().setImageAngle(0);
 		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
 	}
-	
+
+    // this method may be extraneous TODO: i'm pretty sure this can be designed better, sorry -jordan
+    public TileMap getTileMap() {
+        return new TileMap(myNumXTiles, myNumYTiles, myPixelSize, myTileMapFile);
+    }
 }

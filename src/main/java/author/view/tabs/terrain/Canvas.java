@@ -124,6 +124,9 @@ public class Canvas extends JPanel {
 		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
 		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
 		tile.setPassIndex((selectedTileObj == null) ? 0 : selectedTileObj.getPassabilityIndex());
+        tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
+        tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
+        tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
 		repaint(); // we want to keep this repaint, if we use update, it messes up on macs
 	}
 	

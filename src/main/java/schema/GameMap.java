@@ -1,8 +1,9 @@
 package main.java.schema;
 
 import main.java.author.view.tabs.terrain.Tile;
-import main.java.author.view.tabs.terrain.TileDisplay;
+import main.java.author.view.tabs.terrain.TileMap;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -11,9 +12,9 @@ import java.util.List;
  * TODO: change to standard schema format; i will do this later (hopefully) -jordan
  * 
  */
-public class GameMap {
+public class GameMap implements Serializable {
 	private Tile[][] myTiles;
-    private List<TileDisplay> myTileDisplays;
+    private List<TileMap> myTileMaps;
 
 	public Tile[][] getMyTiles() {
 		return myTiles;
@@ -23,11 +24,11 @@ public class GameMap {
 		this.myTiles = myTiles;
 	}
 
-    public List<TileDisplay> getMyTileDisplays() {
-        return myTileDisplays;
+    public List<TileMap> getMyTileMaps() {
+        return myTileMaps;
     }
 
-    public void setMyTileDisplays(List<TileDisplay> myTileDisplays) {
-        this.myTileDisplays = myTileDisplays;
+    public void setMyTileMaps(List<TileMap> myTileMaps) {
+        this.myTileMaps = myTileMaps;
     }
 }

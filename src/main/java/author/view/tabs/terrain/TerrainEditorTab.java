@@ -5,6 +5,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +22,6 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
-import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.schema.GameMap;
 import static main.java.author.util.ActionListenerUtil.actionListener;
@@ -43,7 +45,7 @@ public class TerrainEditorTab extends EditorTab {
 		super(controller);
 		myCanvas = new Canvas();
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
-		add(myCanvas, BorderLayout.CENTER);
+		add(myCanvas, BorderLayout.WEST);
 		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.EAST);
 		constructButtonDisplay();
 	}
@@ -90,11 +92,39 @@ public class TerrainEditorTab extends EditorTab {
 		openBGTiles.addActionListener(actionListener(this, "openEditorWindow"));
 		return openBGTiles;
 	}
-	
+
+    /**
+     * Temporary test file, saving will be in another component TODO: remove - jordan
+     * @param e
+     */
 	public void saveMap(ActionEvent e) {
 		GameMap myCompletedMap = new GameMap();
         Tile[][] tiles = myCanvas.getTileArray();
+        myCompletedMap.setMyTiles(tiles);
+
         List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
+        List<TileMap> tileMaps = new ArrayList<TileMap>();
+        for (TileDisplay d : tileDisplays) {
+            tileMaps.add(d.getTileMap());
+        }
+        myCompletedMap.setMyTileMaps(tileMaps);
+
+        JFileChooser saveFileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("SER Files", "ser");
+        saveFileChooser.setFileFilter(filter);
+        int returnVal = saveFileChooser.showSaveDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileOutputStream fout = new FileOutputStream(saveFileChooser.getSelectedFile().getAbsolutePath() + ".ser");
+                ObjectOutputStream oos = new ObjectOutputStream(fout);
+                oos.writeObject(myCompletedMap);
+                oos.close();
+                System.out.println("done");
+            }
+            catch(Exception ex){
+                ex.printStackTrace();
+            }
+        }
     }
 	
 	public void importTileMap(ActionEvent e) {
