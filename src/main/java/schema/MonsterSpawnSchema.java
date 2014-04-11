@@ -12,17 +12,15 @@ public class MonsterSpawnSchema {
 
     private MonsterSchema myMonsterSchema;
     private int mySwarmSize;
-    private String myName;
 
     /**
      * 
      * @param monsterToCreate String representation for Factory creation
      * @param swarmSize how many of the specified monster to be created
      */
-    public MonsterSpawnSchema (String name, MonsterSchema monsterSchema, int swarmSize) {
+    public MonsterSpawnSchema (MonsterSchema monsterSchema, int swarmSize) {
     	myMonsterSchema = monsterSchema;
         mySwarmSize = swarmSize;
-        myName = name;
     }
     
 
