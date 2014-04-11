@@ -139,6 +139,10 @@ public class Canvas extends JPanel {
 			repaint();
 		}
 	}
+	
+	protected Tile[][] getTileArray() {
+		return myTiles;
+	}
 
 	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
