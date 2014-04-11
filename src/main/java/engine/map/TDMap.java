@@ -15,8 +15,8 @@ public class TDMap {
     private static final int yOffset = 0;
     private static final int tileXSize = 32;
     private static final int tileYSize = 32;
-    private static final int skipX = 1;
-    private static final int skipY = 1;
+    private static final int skipX = 0;
+    private static final int skipY = 0;
 
     private static final String tileImageName = "tile";
     private static final String tileImagePrefix = "t";
@@ -101,7 +101,8 @@ public class TDMap {
 
                     //TODO: why does jgame only take tilestr of size 4..., need to think of a better implementation
                     engine.defineImage(tile.getMyTileMapFileName() + tile.getMyMapXIndex() + tile.getMyMapYIndex(),
-                            tile.getMyMapXIndex() + "" + tile.getMyMapYIndex(), 0, tile.getMyTileMapFileName(), index, "-");
+                            tile.getMyMapXIndex() + "" + tile.getMyMapYIndex(),
+                            tile.getPassIndex(), tile.getMyTileMapFileName(), index, "-");
                     engine.setTile(new JGPoint(tile.getCol(), tile.getRow()),
                             tile.getMyMapXIndex() + "" + tile.getMyMapYIndex());
                 }
