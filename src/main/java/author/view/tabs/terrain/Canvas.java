@@ -14,7 +14,6 @@ import java.util.*;
 import java.util.List;
 
 public class Canvas extends JPanel {
-
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 

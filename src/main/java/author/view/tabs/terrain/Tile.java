@@ -17,8 +17,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 public class Tile {
-	private int myRow;    // 0 - NUM_ROWS
-	private int myColumn; // 0 - NUM_COLS
+	private int myRow;          // 0 - NUM_ROWS
+	private int myColumn;       // 0 - NUM_COLS
+    private int myMapXIndex;    // image x index in tilemap
+    private int myMapYIndex;    // image y index in tilemap
+    private String myTileMapFile; // tilemap name
 	private Color myColor;
 	private int myPassIndex;
 	private Image myImg;
@@ -60,4 +63,28 @@ public class Tile {
 	public void setPassIndex(int index) {
 		myPassIndex = index;
 	}
+
+    public int getMyMapXIndex() {
+        return myMapXIndex;
+    }
+
+    public void setMyMapXIndex(int myMapXIndex) {
+        this.myMapXIndex = myMapXIndex;
+    }
+
+    public int getMyMapYIndex() {
+        return myMapYIndex;
+    }
+
+    public void setMyMapYIndex(int myMapYIndex) {
+        this.myMapYIndex = myMapYIndex;
+    }
+
+    public String getMyTileMapFile() {
+        return myTileMapFile;
+    }
+
+    public void setMyTileMapFile(String myTileMapFile) {
+        this.myTileMapFile = myTileMapFile;
+    }
 }

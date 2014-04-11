@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -91,11 +92,10 @@ public class TerrainEditorTab extends EditorTab {
 	}
 	
 	public void saveMap(ActionEvent e) {
-		GameMap myCompletedMap = new GameMap(myCanvas.getTileArray());
-		TerrainController control = (TerrainController) myController;
-		control.addMap(myCompletedMap);
-		System.out.println("Map Saved");
-	}
+		GameMap myCompletedMap = new GameMap();
+        Tile[][] tiles = myCanvas.getTileArray();
+        List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
+    }
 	
 	public void importTileMap(ActionEvent e) {
 		fileChooser = new JFileChooser();

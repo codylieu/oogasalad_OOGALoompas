@@ -19,45 +19,51 @@ import javax.swing.JScrollPane;
 import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
-
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
 	private TileSelectionManager myTileManager;
-	private Image[][] myImages; 
+	private Image[][] myImages;
+    private int myNumXTiles;
+    private int myNumYTiles;
 	private int myPixelSize;
+    private String myTileMapFile;
 	
-	public TileDisplay(TileSelectionManager tileManager, File bitmapFile, int pixelSize) {
+	public TileDisplay(TileSelectionManager tileManager, File tileMapFile, int pixelSize) {
 		myTileManager = tileManager;
+        myTileMapFile = tileMapFile.getAbsolutePath();
 		myPixelSize = pixelSize;
-		initTileDisplay(bitmapFile);
+		initTileDisplay(tileMapFile);
 		displayTiles();
 		setVisible(true);
 	}
 	
 	/**
-	 * Initializes resources to be used 
+	 * Initializes resources to be used
 	 */
-	private void initTileDisplay(File bmpFile) {
-		myImages = parseBitmap(bmpFile);
+	private void initTileDisplay(File tileMap) {
+		myImages = parseTileMap(tileMap);
 	}
 	
 	/**
 	 * Reads through a bitmap (currently used for tile backgrounds) and outputs
 	 * a 2D array of image objects
-	 * @param bitmapFile the bitmap file to load
+	 * @param tileMap the bitmap file to load
 	 * @return a 2D array of image objects within the bitmap
 	 */
-	private Image[][] parseBitmap(File bitmapFile) {
+	private Image[][] parseTileMap(File tileMap) {
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(bitmapFile);
-			int imageWidth = img.getWidth();
-			int imageHeight = img.getHeight();
-			Image [][] myImageArray = new Image[imageHeight/ myPixelSize][imageWidth/ myPixelSize];
-			for (int i = 0; i < imageHeight/ myPixelSize; i++) {
-				for (int j = 0; j < imageWidth/ myPixelSize; j++) {
-					myImageArray[i][j] = img.getSubimage(j* myPixelSize, i* myPixelSize, myPixelSize, myPixelSize);
+			img = ImageIO.read(tileMap);
+
+            myNumXTiles = img.getWidth()/myPixelSize;
+            myNumYTiles = img.getHeight()/myPixelSize;
+			Image [][] myImageArray = new Image[myNumXTiles][myNumYTiles];
+			for (int i = 0; i < myNumXTiles; i++) {
+				for (int j = 0; j < myNumYTiles; j++) {
+					myImageArray[i][j] = img.getSubimage(j * myPixelSize, i * myPixelSize,
+                            myPixelSize, myPixelSize);
 				}
 			}
+
 			return myImageArray;
 		} catch (IOException e) {
 			e.printStackTrace();

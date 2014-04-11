@@ -17,7 +17,7 @@ import main.java.author.view.tabs.terrain.Canvas;
  * on the Canvas
  *
  */
-public class TileObject extends JButton{
+public class TileObject extends JButton {
 	
 	private Image myImage;
 	private Image myUneditedImage; // original image associated with the TileObject
