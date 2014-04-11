@@ -1,4 +1,4 @@
-package main.java.author.view.tabs.terrain;
+package main.java.author.view.tabs;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -25,7 +25,7 @@ public class Tile {
 	private boolean isSelected;
 	private Image myImg;
 	
-	static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
+	public static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
 	public Tile(int row, int column, Color color) {
 	    myRow = row;
@@ -61,7 +61,7 @@ public class Tile {
 		myPassIndex = index;
 	}
 	
-	protected void setImage(Image img) {
+	public void setImage(Image img) {
 		myImg = img;
 	}
 	

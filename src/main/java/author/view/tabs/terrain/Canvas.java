@@ -1,6 +1,7 @@
 package main.java.author.view.tabs.terrain;
 import javax.swing.*;
 
+import main.java.author.view.tabs.Tile;
 import main.java.author.view.tabs.terrain.types.TileObject;
 
 import java.awt.*;

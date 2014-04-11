@@ -20,6 +20,7 @@ import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
+import main.java.author.view.tabs.wave.WaveEditorTab;
 
 /**
  * Frame that represents the GUI for the Authoring environment.
@@ -35,6 +36,7 @@ public class AuthoringView extends JFrame {
 	private static final String TOWER_EDITOR_STRING = "Tower Editor";
 	private static final String ENEMY_EDITOR_STRING = "Enemy Editor";
 	private static final String TERRAIN_EDITOR_STRING = "Terrain Editor";
+	private static final String WAVE_EDITOR_STRING = "Wave Editor";
 
 	public AuthoringView(MainController mainController) {
 		myController = mainController;
@@ -52,14 +54,21 @@ public class AuthoringView extends JFrame {
 				myController);
 		TabController terrainController = new TerrainController(myController);
 
-		tabbedPane.add(GAME_SETTINGS_EDITOR_STRING, new GameSettingsEditorTab(
-				gameSettingsController));
 		tabbedPane
-				.add(TOWER_EDITOR_STRING, new TowerEditorTab(towerController));
+				.add(GAME_SETTINGS_EDITOR_STRING,
+						new GameSettingsEditorTab(gameSettingsController));
 		tabbedPane
-				.add(ENEMY_EDITOR_STRING, new EnemyEditorTab(enemyController));
-		tabbedPane.add(TERRAIN_EDITOR_STRING, new TerrainEditorTab(
-				terrainController));
+				.add(TOWER_EDITOR_STRING,
+						new TowerEditorTab(towerController));
+		tabbedPane
+				.add(ENEMY_EDITOR_STRING,
+						new EnemyEditorTab(enemyController));
+		tabbedPane
+				.add(TERRAIN_EDITOR_STRING,
+						new TerrainEditorTab(terrainController));
+		tabbedPane
+				.add(WAVE_EDITOR_STRING,
+						new WaveEditorTab(waveController));
 	}
 
 	public void createAndShowGUI() {
