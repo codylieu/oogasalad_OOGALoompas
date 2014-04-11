@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -237,10 +238,22 @@ public class DataHandler {
 	private boolean checkData(Object obj) throws IllegalArgumentException, IllegalAccessException	{
 		int count = 0;
 		for(Field field : obj.getClass().getDeclaredFields())	{
-			if(field.get(obj) != null)	{
+			if(!Modifier.isStatic(field.getModifiers()) && field.get(obj) != null)	{
 				count++;
+			}
+			else	{
+
 			}
 		}
 		return count == obj.getClass().getDeclaredFields().length;
+	}
+	
+	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException	{
+		DataHandler d = new DataHandler();
+		TestObject t1 = new TestObject();
+		TestObject t2 = new TestObject(1,2,"t2");
+		System.out.println(d.checkData(t1));
+		System.out.println(d.checkData(t2));
+
 	}
 }
