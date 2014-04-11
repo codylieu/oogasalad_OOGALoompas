@@ -31,6 +31,7 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.terrain.types.TileObject;
 import static main.java.author.util.ActionListenerUtil.actionListener;
@@ -45,7 +46,7 @@ public class TerrainEditorTab extends EditorTab{
 
 	private Canvas myCanvas;
 	
-	public TerrainEditorTab(MainController controller){
+	public TerrainEditorTab(TabController controller){
 		super(controller);
 		myCanvas = new Canvas();
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
