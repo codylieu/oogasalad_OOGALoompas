@@ -20,7 +20,7 @@ import main.java.author.controller.TabController;
 
 public class GameSettingsEditorTab extends EditorTab{
 
-	private JPanel settingsPanel = new JPanel();
+	private JPanel settingsPanel = new JPanel(new GridLayout(0, 1));
 	private JComboBox gameModeList;
 	private JComboBox gameDifficultyList;
 	
@@ -69,7 +69,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	}
 	
 	private JComponent makeDropDownMenus(){
-		JPanel dropDownMenus = new JPanel();
+		JPanel dropDownMenus = new JPanel(new GridLayout(0, 1));
 		dropDownMenus.setLayout(new BorderLayout());
 
 		gameModeList = new JComboBox(GAME_MODE_STRINGS); 
@@ -104,7 +104,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	}
 	
 	private JComponent makeAttributesPane(){
-		JPanel attributes = new JPanel();
+		JPanel attributes = new JPanel(new GridLayout(0, 1));
 		
 		attributes.setLayout(new BorderLayout());
 		attributes.add(makeLabelPane(), BorderLayout.WEST);
@@ -117,7 +117,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	
 	private JComponent makeButtons(){
 		
-		JPanel buttons = new JPanel();
+		JPanel buttons = new JPanel(new GridLayout(0, 1));
 		
 		submitButton = new JButton("Submit");
 		submitButton.addActionListener(new ActionListener(){
@@ -155,7 +155,7 @@ public class GameSettingsEditorTab extends EditorTab{
 		tilesPerRowLabel = new JLabel(ROW_TILES_STRING);
 		tilesPerColumnLabel = new JLabel(COLUMN_TILES_STRING);
 		
-		JPanel labels = new JPanel( new GridLayout(0, 1));
+		JPanel labels = new JPanel(new GridLayout(0, 1));
 		
 		labels.add(levelsPerGameLabel);
 		labels.add(livesLabel);
