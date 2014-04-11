@@ -1,11 +1,10 @@
 package main.java.schema;
 
-import main.java.engine.objects.tower.SimpleTower;
-
-import java.awt.Dimension;
 import java.util.HashSet;
 import java.util.Set;
 
+import main.java.author.view.tabs.tower.TowerViewConstants;
+import main.java.engine.objects.tower.ShootingTower;
 
 /**
  * 
@@ -16,15 +15,39 @@ import java.util.Set;
  * objects related to ones you will see onscreen.
  */
 public class SimpleTowerSchema extends TowerSchema {
-    private static final Class<SimpleTower> MY_CONCRETE_TYPE = SimpleTower.class;
+	private static final Class<ShootingTower> MY_CONCRETE_TYPE = ShootingTower.class;
 
-    public SimpleTowerSchema() {
-        super(MY_CONCRETE_TYPE);
-    }
+	public SimpleTowerSchema() {
+		super(MY_CONCRETE_TYPE);
+	}
+
+	public SimpleTowerSchema(String name) {
+		this();
+
+		populateDefaultAttributes(name);
+
+	}
+
+	public void populateDefaultAttributes(String name) {
+
+		// this is a hack
+		addAttribute(TowerSchema.NAME, name);
+		addAttribute(TowerSchema.HEALTH, TowerViewConstants.HEALTH_DEFAULT);
+		addAttribute(TowerSchema.COST, TowerViewConstants.COST_DEFAULT);
+		addAttribute(TowerSchema.DAMAGE, TowerViewConstants.DAMAGE_DEFAULT);
+		addAttribute(TowerSchema.BUILDUP, TowerViewConstants.BUILDUP_DEFAULT);
+		addAttribute(TowerSchema.TILE_SIZE,
+				TowerViewConstants.TILE_SIZE_DEFAULT);
+		addAttribute(TowerSchema.RANGE,
+				TowerViewConstants.RANGE_DEFAULT);
+		addAttribute(TowerSchema.TOWER_IMAGE_NAME, "");
+		addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
+
+	}
 
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		//empty set, no new attributes
+		// empty set, no new attributes
 		return new HashSet<String>();
 	}
 
@@ -32,5 +55,5 @@ public class SimpleTowerSchema extends TowerSchema {
 	public String defineName() {
 		return "SimpleTower";
 	}
-	
+
 }

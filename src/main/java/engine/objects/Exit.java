@@ -10,8 +10,8 @@ import jgame.JGObject;
 
 public class Exit extends JGObject implements Serializable {
 
-    private static final String EXIT_GRAPHIC = "exit";
-
+    public static final String IMAGE_NAME = "exit.png";
+    public static final String NAME = "exit";
     public static final int EXIT_CID = 2;
     
     /**
@@ -32,7 +32,7 @@ public class Exit extends JGObject implements Serializable {
      * @param model
      */
     public Exit (double x, double y, LevelManager spawnManager) {
-        super("Exit", true, x, y, EXIT_CID, EXIT_GRAPHIC);
+        super("Exit", true, x, y, EXIT_CID, NAME);
         myLocation = new Point2D.Double(x,y);
         mySpawnManager = spawnManager;
         //first contact is immediate loss of player life

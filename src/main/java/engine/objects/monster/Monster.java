@@ -10,11 +10,11 @@ public abstract class Monster extends TDObject {
 
 	public static final int MONSTER_CID = 1;
 	
-	public static final String HEALTH = "health";
+	/*public static final String HEALTH = "health";
 	public static final String SPEED = "speed";
 	public static final String MONEY_VALUE = "moneyValue";
 	public static final String ENTRANCE_LOCATION = "entrance";
-	public static final String EXIT_LOCATION = "exit";
+	public static final String EXIT_LOCATION = "exit";*/
 	
 	protected double myHealth;
 	protected double myMoveSpeed;

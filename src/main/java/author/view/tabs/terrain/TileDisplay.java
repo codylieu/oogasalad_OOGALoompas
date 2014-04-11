@@ -2,7 +2,6 @@ package main.java.author.view.tabs.terrain;
 
 import static main.java.author.util.ActionListenerUtil.actionListener;
 
-import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,54 +10,61 @@ import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ResourceBundle;
+import java.io.Serializable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
-	
-	private static final String DEFAULT_BG_BITMAP_SOURCE = "pokemon2.bmp";
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
-	private TileSelectionManager myTileManager;
-	private ResourceBundle myBitmapBundle;
-	private Image[][] myImages; 
-	private int pixelSize;
+	private transient TileSelectionManager myTileManager;
+	private transient  Image[][] myImages;
+    private int myNumXTiles;
+    private int myNumYTiles;
+	private int myPixelSize;
+    private String myTileMapFile;
 	
-	public TileDisplay(TileSelectionManager tileManager, ResourceBundle bitmapBundle) {
+	public TileDisplay(TileSelectionManager tileManager, File tileMapFile, int pixelSize) {
 		myTileManager = tileManager;
-		myBitmapBundle = bitmapBundle;
-		myImages = parseBitmap(Tile.DEFAULT_IMAGE_PACKAGE, DEFAULT_BG_BITMAP_SOURCE);
-
-		constructTileOptions();
+        myTileMapFile = tileMapFile.getAbsolutePath();
+		myPixelSize = pixelSize;
+		initTileDisplay(tileMapFile);
+		displayTiles();
 		setVisible(true);
 	}
 	
 	/**
-	 * 
-	 * @param bitmapPckg
-	 * @param bitmapName
-	 * @return
+	 * Initializes resources to be used
 	 */
-	private Image[][] parseBitmap(String bitmapPckg, String bitmapName) {
+	private void initTileDisplay(File tileMap) {
+		myImages = parseTileMap(tileMap);
+	}
+	
+	/**
+	 * Reads through a bitmap (currently used for tile backgrounds) and outputs
+	 * a 2D array of image objects
+	 * @param tileMap the bitmap file to load
+	 * @return a 2D array of image objects within the bitmap
+	 */
+	private Image[][] parseTileMap(File tileMap) {
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new File(bitmapPckg + bitmapName));
-			int imageWidth = img.getWidth();
-			int imageHeight = img.getHeight();
-			pixelSize = Integer.parseInt(myBitmapBundle.getString(bitmapName));
-			Image [][] myImageArray = new Image[imageHeight/pixelSize][imageWidth/pixelSize];
+			img = ImageIO.read(tileMap);
 
-			for (int i = 0; i < imageHeight/pixelSize; i++) {
-				for (int j = 0; j < imageWidth/pixelSize; j++) {
-					myImageArray[i][j] = img.getSubimage(j*pixelSize, i*pixelSize, pixelSize, pixelSize);
+            myNumXTiles = img.getWidth()/myPixelSize;
+            myNumYTiles = img.getHeight()/myPixelSize;
+			Image [][] myImageArray = new Image[myNumYTiles][myNumXTiles];
+			for (int i = 0; i < myNumYTiles; i++) {
+				for (int j = 0; j < myNumXTiles; j++) {
+					myImageArray[i][j] = img.getSubimage(j * myPixelSize, i * myPixelSize,
+                            myPixelSize, myPixelSize);
 				}
 			}
+
 			return myImageArray;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -67,51 +73,68 @@ public class TileDisplay extends JPanel {
 	}
 	
 	/**
-	 * 
-	 * @param e
+	 * Allows the user to see the tiles read in from the bitmap,
+	 * displayed through a GridBagLayout on a JPanel
 	 */
-	public void constructTileOptions() {
-		JPanel tileOptions = new JPanel();
-		tileOptions.setLayout(new GridBagLayout());
+	public void displayTiles() {
+		JPanel tileView = new JPanel();
+		tileView.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-
+		c.gridx = 0;
+		c.gridy = 0;
 		for (int i = 0; i < myImages.length; i ++) {
 			for (int j = 0; j < myImages[0].length; j++) {
-				c.gridy = i;
-				c.gridx = j;
+				if (c.gridx > 4) {
+					c.gridx = 0;
+					c.gridy++;
+				} 
 				Image im = myImages[i][j];
-				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT);
+				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT); // scale down image
 
 				TileObject imgDisplayObj = new TileObject(im);
+                imgDisplayObj.setMyXIndex(i); // Set row and column of where the thing is displayed
+                imgDisplayObj.setMyYIndex(j);
+                imgDisplayObj.setMyTileMapFileName(myTileMapFile);
 				imgDisplayObj.addActionListener(actionListener(this, "updateSelection"));
 				imgDisplayObj.setIcon(new ImageIcon(scaledIm)); // place scaled image as jbutton icon
-				tileOptions.add(imgDisplayObj, c); // grid layout of jbutton/images
+				tileView.add(imgDisplayObj, c); // grid layout of jbutton/images
+				c.gridx++;
 			}
 		}
-		add(tileOptions);
+		add(tileView);
 	}
 	
 	/**
-	 * Action Listener, called when a 
-	 * @param e
+	 * Obtains the side length of images in the bitmap, in pixels
 	 */
-	public void updateSelection(ActionEvent e) {
-		TileObject selectedTile = (TileObject) e.getSource();
-		myTileManager.getCanvas().setSelectedTileObj(selectedTile);
-		myTileManager.getTileEditPanel().setImageAngle(0);
-		myTileManager.getTileEditPanel().repaint();
+	public int getMyPixelSize() {
+		return myPixelSize;
 	}
 	
-	public int getPixelSize() {
-		return pixelSize;
-	}
-	
-	public JScrollPane getMyScrollPane() {
+	/**
+	 * Allows for a scrollable view of the tiles
+	 */
+	public JScrollPane getTileScrollPane() {
 		JScrollPane myScrollPane = new JScrollPane(this);
-		myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		myScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		myScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		myScrollPane.setPreferredSize(new Dimension(275, 350));
 		return myScrollPane;
 	}
 	
+	/**
+	 * Action Listener, called when a TileObject within this TileDisplay is clicked
+	 * @param e an ActionEvent called by a TileObject source
+	 */
+	public void updateSelection(ActionEvent e) {
+		TileObject selectedTile = (TileObject) e.getSource();
+		myTileManager.getCanvas().setSelectedTileObj(selectedTile);
+		myTileManager.getTileEditPanel().setImageAngle(0);
+		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
+	}
+
+    // this method may be extraneous TODO: i'm pretty sure this can be designed better, sorry -jordan
+    public TileMap getTileMap() {
+        return new TileMap(myNumXTiles, myNumYTiles, myPixelSize, myTileMapFile);
+    }
 }

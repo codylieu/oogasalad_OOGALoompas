@@ -15,22 +15,37 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 
 public class TDPlayerEngine extends JGEngine implements Subject {
 
+	private int FRAMEPERSECOND = 45;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
 	private boolean hasChanged;
 	private boolean isFullScreen;
+	private boolean soundOn;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 
 	public TDPlayerEngine() {
 		super();
+		defineAudioClip("song", "fox.wav");
 		initEngineComponent(960, 640);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
 		isFullScreen = false;
+		soundOn = false;
 		cursorState = CursorState.None;
 	}
 
+	public void playSound(){
+		soundOn = true;
+		if(soundOn)
+		playAudio("song");
+		}
+	
+
+	public void stopSound(){
+		soundOn = false;
+		stopAudio();
+	}
 	@Override
 	public void initCanvas() {
 		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
@@ -38,14 +53,21 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 
 	@Override
 	public void initGame() {
-		setFrameRate(45, 1);
+		setFrameRate(FRAMEPERSECOND, 1);
 		this.model = new Model(this);
 		model.addNewPlayer();
 		model.loadMap("testmap.json");
-		defineMedia("/main/resources/media.tbl");
 		//model.loadSchemas("testtowers");
 	}
 
+	public int getFramePerSecond(){
+		return FRAMEPERSECOND;
+	}
+	
+	public void setFramePerSecond(int newFrame){
+		FRAMEPERSECOND = newFrame;
+		setFrameRate(FRAMEPERSECOND,1);
+	}
 	@Override
 	public void paintFrame() {
 		highlightMouseoverTile();
@@ -209,6 +231,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		}
 	}
 
+    //TODO: i added this kevin, will explain later - jordan
+    public void loadMapFile(String fileName) {
+        model.loadMapTest(fileName);
+    }
 
 	public Map<String, String> getGameAttributes() {
 		hasChanged = true;

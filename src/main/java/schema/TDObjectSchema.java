@@ -5,13 +5,17 @@ import java.io.Serializable;
 import main.java.engine.objects.TDObject;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
-public abstract class TDObjectSchema extends AbstractSchema	implements Serializable {
-	
+public abstract class TDObjectSchema extends AbstractSchema	implements Serializable, HasDefaultValues {
+
+	public static String IMAGE_NAME;
+	public static final String NAME = "name";
+
 	private Class<? extends TDObject> myConcreteType;
 
 	protected TDObjectSchema(Class<? extends TDObject> concreteType) {
 		super();
 		myConcreteType = concreteType;
+		myAttributeSet.add(IMAGE_NAME);
 	}
 
 	public Class<? extends TDObject> getMyConcreteType() {
@@ -39,13 +43,13 @@ public abstract class TDObjectSchema extends AbstractSchema	implements Serializa
 				e.printStackTrace();
 			}
 		}
-//		myAttributesMap.put(TDObject.NAME, defineName()); i don't think i need this -- jordan
+		//		myAttributesMap.put(TDObject.NAME, defineName()); i don't think i need this -- jordan
 	}
-	
+
 	/**
 	 * Give me the name of the object to be created.
 	 * @return Name of the object
 	 */
 	public abstract String defineName();
-	
+
 }
