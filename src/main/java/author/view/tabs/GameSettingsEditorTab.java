@@ -141,26 +141,11 @@ public class GameSettingsEditorTab extends EditorTab{
 			
 		});
 		
-		buttons.add(submitButton);
-		buttons.add(musicButton);
+		buttons.add(musicButton, BorderLayout.NORTH);
+		buttons.add(submitButton, BorderLayout.SOUTH);
 		
 		return buttons;
 		
-	}
-	
-	private JComponent makeSubmitButton(){
-		submitButton = new JButton("Submit");
-		
-		submitButton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-			}
-			
-		});
-		
-		return submitButton;
 	}
 	
 	private JComponent makeLabelPane(){
