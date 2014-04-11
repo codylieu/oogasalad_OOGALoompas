@@ -87,7 +87,7 @@ public class TDMap {
 
             // define image maps used in case multiple maps used
             for (TileMap tm : tileMapList) {
-                String tileMapNameNew = tileMapName.replace("\\", "//"); //need to do this for jgengine
+                String tileMapNameNew = tm.getMyTileMapFile().replace("\\", "//"); //need to do this for jgengine
                 engine.defineImageMap(tm.getMyTileMapFile(), tileMapNameNew,
                         0, 0, 32, 32, 0, 0); // TODO: refactor to constants
             }

@@ -208,6 +208,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		}
 	}
 
+    //TODO: i added this kevin, will explain later - jordan
+    public void loadMapFile(String fileName) {
+        model.loadMapTest(fileName);
+    }
 
 	public Map<String, String> getGameAttributes() {
 		hasChanged = true;

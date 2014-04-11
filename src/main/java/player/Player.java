@@ -92,6 +92,7 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
+                    engine.loadMapFile(file.getAbsolutePath());
 					System.out.println("FILE CHOSEN: " + file.getName());
 				}
 			}

@@ -119,7 +119,6 @@ public class TerrainEditorTab extends EditorTab {
                 ObjectOutputStream oos = new ObjectOutputStream(fout);
                 oos.writeObject(myCompletedMap);
                 oos.close();
-                System.out.println("done");
             }
             catch(Exception ex){
                 ex.printStackTrace();
