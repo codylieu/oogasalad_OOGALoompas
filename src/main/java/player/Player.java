@@ -12,7 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -304,7 +303,7 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		optionCard.add(makeDifficultyInfoPanel(), constraints);
+		optionCard.add(new InfoPanel(DIFFICULTY), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -314,7 +313,7 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		optionCard.add(makeSoundInfoPanel(), constraints);
+		optionCard.add(new InfoPanel(SOUND), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -323,23 +322,6 @@ public class Player {
 
 		cards.add(optionCard, "optionCard");
 	}
-
-	private JPanel makeDifficultyInfoPanel(){
-		JPanel difficultyInfoPanel = new JPanel();
-		JLabel difficultyInfoLabel = new JLabel(DIFFICULTY);
-		difficultyInfoPanel.add(difficultyInfoLabel);
-		return difficultyInfoPanel;
-	}
-
-	
-
-	private JPanel makeSoundInfoPanel(){
-		JPanel soundInfoPanel = new JPanel();
-		JLabel soundInfoLabel = new JLabel(SOUND);
-		soundInfoPanel.add(soundInfoLabel);
-		return soundInfoPanel;
-	}
-
 
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
@@ -388,19 +370,11 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		helpCard.add(new HelpInfoPanel(), constraints);
+		helpCard.add(new HelpTextPanel(), constraints);
 
 		cards.add(helpCard, "helpCard");
 	}
 
-	private JPanel makeHelpInfoPanel(){
-		JPanel helpInfoPanel = new JPanel();
-		JTextArea helpArea = new JTextArea(10,40);
-		helpArea.setEditable(false);
-		helpArea.append(HELP);
-		helpInfoPanel.add(helpArea, BorderLayout.CENTER);
-		return helpInfoPanel;
-	}
 	private void addCreditsCard() {
 		JTextArea creditsArea = new JTextArea(10,40);
 		creditsArea.setEditable(false);
