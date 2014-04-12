@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -23,7 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
-import main.java.schema.GameMap;
+import main.java.schema.map.GameMap;
 import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {

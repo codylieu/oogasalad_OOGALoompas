@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.engine.EnvironmentKnowledge;
-import main.java.schema.TowerSchema;
+import main.java.schema.tdobjects.TowerSchema;
 
 public class PowerUpTower extends Tower {
 	

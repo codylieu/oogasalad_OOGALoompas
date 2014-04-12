@@ -1,10 +1,11 @@
-package main.java.schema;
+package main.java.schema.tdobjects.towers;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import main.java.author.view.tabs.tower.TowerViewConstants;
 import main.java.engine.objects.tower.ShootingTower;
+import main.java.schema.tdobjects.TowerSchema;
 
 /**
  * 

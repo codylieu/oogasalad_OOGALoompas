@@ -15,14 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
-import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.schema.MonsterSchema;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 //SplitPaneDemo itself is not a visible component.
 @SuppressWarnings("serial")

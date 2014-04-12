@@ -6,11 +6,10 @@ import javax.swing.SwingUtilities;
 
 import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
-import main.java.schema.GameBlueprint;
-import main.java.schema.GameMap;
+import main.java.schema.map.GameMap;
 import main.java.schema.GameSchema;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.SimpleTowerSchema;
+import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.towers.SimpleTowerSchema;
 import main.java.schema.WaveSpawnSchema;
 
 public class MainController {

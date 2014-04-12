@@ -2,7 +2,7 @@ package main.java.author.controller.tabbed_controllers;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
-import main.java.schema.SimpleTowerSchema;
+import main.java.schema.tdobjects.towers.SimpleTowerSchema;
 
 public class TowerController extends TabController {
 

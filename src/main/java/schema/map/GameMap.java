@@ -1,4 +1,4 @@
-package main.java.schema;
+package main.java.schema.map;
 
 import main.java.author.view.tabs.terrain.Tile;
 import main.java.author.view.tabs.terrain.TileMap;
