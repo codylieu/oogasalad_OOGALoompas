@@ -23,7 +23,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
+import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.schema.GameMap;
+import main.java.schema.TileMapSchema;
+import main.java.schema.TileSchema;
 import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {
@@ -93,21 +96,58 @@ public class TerrainEditorTab extends EditorTab {
 		return openBGTiles;
 	}
 
+	
+	private void populateTileSchema(TileSchema tileSchema, Tile tile) {
+		try {
+			tileSchema.addAttribute(TileSchema.CANVAS_ROW, tile.getRow());
+			tileSchema.addAttribute(TileSchema.CANVAS_COL, tile.getCol());
+			tileSchema.addAttribute(TileSchema.TILEMAP_ROW, tile.getMyMapYIndex());
+			tileSchema.addAttribute(TileSchema.TILEMAP_COL, tile.getMyMapXIndex());
+			tileSchema.addAttribute(TileSchema.TILEMAP_FILE_NAME, tile.getMyTileMapFileName());
+			tileSchema.addAttribute(TileSchema.TILE_CID, tile.getPassIndex());
+		} catch (InvalidParameterForConcreteTypeException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void populateTileMapSchema(TileMapSchema tileMapSchema, TileDisplay tileDisp) {
+		try {
+        	tileMapSchema.addAttribute(TileMapSchema.NUM_ROWS, tileDisp.getNumRows());
+        	tileMapSchema.addAttribute(TileMapSchema.NUM_COLS, tileDisp.getNumCols());
+        	tileMapSchema.addAttribute(TileMapSchema.PIXEL_SIZE, tileDisp.getMyPixelSize());
+        	tileMapSchema.addAttribute(TileMapSchema.TILEMAP_FILE_NAME, tileDisp.getTileMapFile());
+		} catch (InvalidParameterForConcreteTypeException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
     /**
      * Temporary test file, saving will be in another component TODO: remove - jordan
      * @param e
      */
 	public void saveMap(ActionEvent e) {
 		GameMap myCompletedMap = new GameMap();
-        Tile[][] tiles = myCanvas.getTileArray();
-        myCompletedMap.setMyTiles(tiles);
-
-        List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
-        List<TileMap> tileMaps = new ArrayList<TileMap>();
-        for (TileDisplay d : tileDisplays) {
-            tileMaps.add(d.getTileMap());
+		
+        List<Tile> gameTiles = myCanvas.getTiles();
+        List<TileSchema> gameTileSchemas = new ArrayList<TileSchema>();        
+        for (Tile tile : gameTiles) {
+        	TileSchema tileSchema = new TileSchema();
+        	populateTileSchema(tileSchema, tile);
+        	gameTileSchemas.add(tileSchema);
         }
-        myCompletedMap.setMyTileMaps(tileMaps);
+        
+        List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
+        List<TileMapSchema> gameTileMapSchemas = new ArrayList<TileMapSchema>();
+    
+        for (TileDisplay tileDisp : tileDisplays) {
+        	TileMapSchema tileMapSchema = new TileMapSchema();
+        	populateTileMapSchema(tileMapSchema, tileDisp);
+        	gameTileMapSchemas.add(tileMapSchema);
+        }
+        
+        myCompletedMap.setTileSchemas(gameTileSchemas);
+        myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
 
         JFileChooser saveFileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("SER Files", "ser");

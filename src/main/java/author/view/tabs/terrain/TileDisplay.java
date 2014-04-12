@@ -111,6 +111,18 @@ public class TileDisplay extends JPanel {
 		return myPixelSize;
 	}
 	
+	public int getNumRows() {
+		return myNumYTiles;
+	}
+	
+	public int getNumCols() {
+		return myNumXTiles;
+	}
+	
+	public String getTileMapFile() {
+		return myTileMapFile;
+	}
+	
 	/**
 	 * Allows for a scrollable view of the tiles
 	 */
