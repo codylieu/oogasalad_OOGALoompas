@@ -161,23 +161,21 @@ public class Player {
 		constraints.gridy = 0;
 		gameCard.add(makeGamePanel(), constraints);
 
-		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		gameCard.add(makeGameButtonPanel(), constraints);
 
-		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		gameCard.add(makeGameInfoPanel(), constraints);
 
-		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		gameCard.add(makeUnitInfoPanel(), constraints);
+
 
 		cards.add(gameCard, "gameCard");
 	}
@@ -253,6 +251,8 @@ public class Player {
 				toggleSound();
 			}
 		});
+
+
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
@@ -261,6 +261,7 @@ public class Player {
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
+		gameButtonPanel.add(new TowerChooser(engine));
 		return gameButtonPanel;
 	}
 
