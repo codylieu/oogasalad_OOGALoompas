@@ -388,7 +388,7 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		helpCard.add(makeHelpInfoPanel(), constraints);
+		helpCard.add(new HelpInfoPanel(), constraints);
 
 		cards.add(helpCard, "helpCard");
 	}
