@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.lingala.zip4j.core.ZipFile;
@@ -20,11 +23,12 @@ import net.lingala.zip4j.model.FileHeader;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.unzip.UnzipUtil;
 import net.lingala.zip4j.util.Zip4jConstants;
-
 import main.java.engine.GameState;
+import main.java.exceptions.data.InvalidDataException;
+import main.java.exceptions.data.InvalidGameBlueprintException;
 import main.java.schema.GameBlueprint;
 
-import com.google.gson.Gson;
+//import com.google.gson.Gson;
 
 /**
  * @author Jimmy Fang
@@ -49,7 +53,11 @@ public class DataHandler {
 	 * @throws IOException
 	 */
 	public boolean saveState(GameState currentGameState, String filePath) throws IOException {
-		return saveObjectToFile(currentGameState, filePath);
+		//First check if game state provided is valid
+		if(checkGameState(currentGameState))	{
+			return saveObjectToFile(currentGameState, filePath);
+		}
+		return false;
 	}
 
 	/**
@@ -75,8 +83,8 @@ public class DataHandler {
 	 * authoring environment, with blueprint + resources
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
+	 * @throws InvalidGameBlueprintException 
 	 */
-
 	//	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
 	//		DataBundle bundleToSave = new DataBundle();
 	//		bundleToSave.setBlueprint(blueprint);
@@ -87,13 +95,16 @@ public class DataHandler {
 	//		return saveObjectToFile(bundleToSave, filePath + "Bundle.ser");
 	//	}
 
-	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
-		String zipFileLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
-		saveObjectToFile(blueprint,filePath + "myBlueprint.ser");
-		List<File> myFilesToZip = new ArrayList<File>();
-		myFilesToZip.add(new File(filePath + "myBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
-		myFilesToZip.add(new File(FILE_PATH)); // resources folder
-		return compressAuthoringEnvironment(myFilesToZip,zipFileLocation);
+	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
+		if (checkGameBlueprint(blueprint)){
+			String zipFileLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+			saveObjectToFile(blueprint,filePath + "myBlueprint.ser");
+			List<File> myFilesToZip = new ArrayList<File>();
+			myFilesToZip.add(new File(filePath + "myBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
+			myFilesToZip.add(new File(FILE_PATH)); // resources folder
+			return compressAuthoringEnvironment(myFilesToZip,zipFileLocation);
+		}
+		return false;
 	}
 
 	/**
@@ -176,10 +187,10 @@ public class DataHandler {
 	//		throw new ClassNotFoundException("Not a data bundle");
 	//	}
 
-	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
-		
-
-	}
+//	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
+//
+//
+//	}
 
 	/**
 	 * Deletes a directory
@@ -237,7 +248,7 @@ public class DataHandler {
 			for (int i = 0; i < fileHeaderList.size(); i++) {
 				FileHeader fileHeader = (FileHeader)fileHeaderList.get(i);
 				if (fileHeader != null) {
-					
+
 					String outFilePath = destinationPath + System.getProperty("file.separator") + fileHeader.getFileName();
 					File outFile = new File(outFilePath);
 
@@ -286,14 +297,14 @@ public class DataHandler {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private static void closeFileHandlers(ZipInputStream is, OutputStream os) throws IOException{
 		//Close output stream
 		if (os != null) {
 			os.close();
 			os = null;
 		}
-		
+
 		//Closing inputstream also checks for CRC of the the just extracted file.
 		//If CRC check has to be skipped (for ex: to cancel the unzip operation, etc)
 		//use method is.close(boolean skipCRCCheck) and set the flag,
@@ -344,5 +355,76 @@ public class DataHandler {
 		catch (IOException | ClassNotFoundException e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Method to check the validity of GameBlueprints
+	 * @param b
+	 * @return
+	 * @throws InvalidGameBlueprintException
+	 */
+	private boolean checkGameBlueprint(GameBlueprint b) throws InvalidGameBlueprintException	{
+		//TODO: Implement deeper validation of blueprint
+		if(b.getMyGameScenario() == null)	{
+			throw new InvalidGameBlueprintException("myGameScenario");
+		}
+		else if(b.getMyTDObjectSchemas() == null){
+			throw new InvalidGameBlueprintException("myTDObjectSchemas");
+		}
+		else if(b.getMyLevelSchemas() == null){
+			throw new InvalidGameBlueprintException("myLevelSchemas");
+		}
+		else if(b.getMyGameMaps() == null){
+			throw new InvalidGameBlueprintException("myGameMaps");
+		}
+		return true;
+	}
+
+	/**
+	 * Method to check the validity of GameStates
+	 * @param s
+	 * @return
+	 */
+	private boolean checkGameState(GameState s)	{
+		//TODO: Need to implement. Not sure how to proceed, since GameStates
+		//don't have getter methods for attributes.
+		return true;
+	}
+
+	/**
+	 * Method to check the validity of data stored in Game Blueprints
+	 * and Game States
+	 * Note: This method is only capable of checking public fields.
+	 * @param obj
+	 * @return
+	 * @throws IllegalAccessException 
+	 * @throws IllegalArgumentException 
+	 * @throws InvalidDataException 
+	 */
+	private boolean checkPublicData(Object obj) throws IllegalArgumentException, IllegalAccessException, InvalidDataException	{
+		int count = 0;
+		System.out.println(Arrays.toString(obj.getClass().getDeclaredFields()));
+		for(Field field : obj.getClass().getDeclaredFields())	{
+			if(!Modifier.isStatic(field.getModifiers()))	{
+				count++;
+				if(field.get(obj) != null)	{
+					count++;
+				}
+				else	{
+					throw new InvalidDataException(field.getName(),obj);
+				}
+			}
+		}
+		return count == obj.getClass().getDeclaredFields().length;
+	}
+
+
+	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvalidDataException	{
+		DataHandler d = new DataHandler();
+		TestObject t2 = new TestObject(1,2,"t2");
+		System.out.println(d.checkPublicData(t2));
+		GameBlueprint b = new GameBlueprint();
+		System.out.println(d.checkPublicData(b));
+
 	}
 }
