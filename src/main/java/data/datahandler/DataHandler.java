@@ -96,14 +96,22 @@ public class DataHandler {
 	//	}
 
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
-		if (checkGameBlueprint(blueprint)){
-			String zipFileLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
-			saveObjectToFile(blueprint,filePath + "myBlueprint.ser");
+//		if (checkGameBlueprint(blueprint)){
+			// zip the resources first
+			String zipResourcesLocation = filePath + "ZippedResources.zip";
+			File myResources = new File(FILE_PATH);
 			List<File> myFilesToZip = new ArrayList<File>();
-			myFilesToZip.add(new File(filePath + "myBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
-			myFilesToZip.add(new File(FILE_PATH)); // resources folder
-			return compressAuthoringEnvironment(myFilesToZip,zipFileLocation);
-		}
+			myFilesToZip.add(myResources);
+			// zip to ZipResourcesLocation
+			if (compressAuthoringEnvironment(myFilesToZip,zipResourcesLocation)){
+				String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+				// serialize the blueprint so we can zip it
+				saveObjectToFile(blueprint,filePath + "myBlueprint.ser"); 
+				myFilesToZip.add(new File(filePath + "myBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
+				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
+				return compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation);
+			}
+//		}
 		return false;
 	}
 

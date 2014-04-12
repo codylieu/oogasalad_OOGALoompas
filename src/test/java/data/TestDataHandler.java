@@ -53,7 +53,7 @@ public class TestDataHandler {
 //		assertTrue(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals(TEST_VALUE_1));
 //		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
 //	}
-//	
+	
 //	@Test
 //	public void testStateSavingAndLoading() {
 //		//Set up GameState
