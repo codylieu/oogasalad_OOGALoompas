@@ -51,6 +51,7 @@ public class ShootingTower extends Tower {
               range,
               cost,
               buildup);
+        myDamageOffset = 1;
     }
 
     @Override
@@ -94,7 +95,7 @@ public class ShootingTower extends Tower {
     public void fireProjectile (Point2D target) {
         /* trigonometry from Guardian JGame example */
         double angle = Math.atan2(target.getX() - this.x, target.getY() - this.y);
-        new Projectile(this.x, this.y, angle, myDamage);
+        new Projectile(this.x, this.y, angle, myDamage*myDamageOffset);
     }
 
 }
