@@ -23,37 +23,23 @@ public class SimpleTowerSchema extends TowerSchema {
 
 	public SimpleTowerSchema(String name) {
 		this();
-
 		populateDefaultAttributes(name);
-
 	}
 
 	public void populateDefaultAttributes(String name) {
-
-		// this is a hack
 		addAttribute(TowerSchema.NAME, name);
 		addAttribute(TowerSchema.HEALTH, TowerViewConstants.HEALTH_DEFAULT);
 		addAttribute(TowerSchema.COST, TowerViewConstants.COST_DEFAULT);
 		addAttribute(TowerSchema.DAMAGE, TowerViewConstants.DAMAGE_DEFAULT);
 		addAttribute(TowerSchema.BUILDUP, TowerViewConstants.BUILDUP_DEFAULT);
-		addAttribute(TowerSchema.TILE_SIZE,
-				TowerViewConstants.TILE_SIZE_DEFAULT);
-		addAttribute(TowerSchema.RANGE,
-				TowerViewConstants.RANGE_DEFAULT);
+		addAttribute(TowerSchema.TILE_SIZE, TowerViewConstants.TILE_SIZE_DEFAULT);
+		addAttribute(TowerSchema.RANGE, TowerViewConstants.RANGE_DEFAULT);
 		addAttribute(TowerSchema.TOWER_IMAGE_NAME, "");
 		addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
-
 	}
 
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		// empty set, no new attributes
-		return new HashSet<String>();
+		return new HashSet<>(); // No additional attributes
 	}
-
-	@Override
-	public String defineName() {
-		return "SimpleTower";
-	}
-
 }

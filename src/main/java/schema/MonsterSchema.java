@@ -23,10 +23,10 @@ public abstract class MonsterSchema extends TDObjectSchema {
 	public static final String TILE_SIZE_LARGE = "Large";
 	
 	public static final String DAMAGE = "attackDamage";
-	public static final int MONSTER_CID = 1;
 
 	protected MonsterSchema(Class<? extends Monster> myConcreteType) {
         super(myConcreteType);
+
 		myAttributeSet.add(MonsterSchema.ENTRANCE_LOCATION);
 		myAttributeSet.add(MonsterSchema.EXIT_LOCATION);
         myAttributeSet.add(MonsterSchema.BLOCKED_TILES);

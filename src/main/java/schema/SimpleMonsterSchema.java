@@ -1,10 +1,8 @@
 package main.java.schema;
 
 import main.java.author.view.tabs.enemy.EnemyViewConstants;
-import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.monster.SimpleMonster;
 
-import java.awt.Dimension;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -23,15 +21,12 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		super(MY_CONCRETE_TYPE);
 	}
 
-
 	/**
 	 * @param name name of monster
 	 */
 	public SimpleMonsterSchema(String name) {
 		this();
-		
 		populateDefaultAttributes(name);
-	
 	}
 
 	public void populateDefaultAttributes(String name) {
@@ -44,18 +39,10 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);
 		addAttribute(MonsterSchema.ENEMY_IMAGE_NAME, "");
 		addAttribute(MonsterSchema.COLLISION_IMAGE_NAME, "");
-		
 	}
 
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		// empty set, no new attributes
-		return new HashSet<String>();
+		return new HashSet<String>(); // empty set, no new attributes
 	}
-
-	@Override
-	public String defineName() {
-		return "SimpleMonster";
-	}
-
 }
