@@ -8,15 +8,15 @@ import java.util.Set;
 
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
-
 public abstract class AbstractSchema implements Serializable {
 	protected Map<String, Serializable> myAttributesMap;
 	protected Set<String> myAttributeSet;
-	//TODO: Ensure that types of values of myAttributesMap match. Perhaps make myAttributesSet into a map that maps name of attribute with type?
+	// TODO: Ensure that types of values of myAttributesMap match.
+	// Perhaps make myAttributesSet into a map that maps name of attribute with type?
 	
 	protected AbstractSchema()	{
-		myAttributesMap = new HashMap<String, Serializable>();
-		myAttributeSet = new HashSet<String>();
+		myAttributesMap = new HashMap<>();
+		myAttributeSet = new HashSet<>();
 		myAttributeSet.addAll(populateAdditionalAttributes());
 	}
 	
@@ -34,17 +34,24 @@ public abstract class AbstractSchema implements Serializable {
 	 * @param attributeValue
 	 * @throws InvalidParameterForConcreteTypeException 
 	 */
-	public abstract void addAttribute(String attributeName, Serializable attributeValue)
-            throws InvalidParameterForConcreteTypeException;
-	
+	public void addAttribute(String attributeName, Serializable attributeValue) {
+        if (myAttributeSet.contains(attributeName)) {
+            myAttributesMap.put(attributeName, attributeValue);
+        } else {
+            try {
+                throw new InvalidParameterForConcreteTypeException(); // TODO: actually throw instead of catching
+            } catch (InvalidParameterForConcreteTypeException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 	/**
-	 * Get the internal map of attributes
+	 * Get the internal map of attributes.
 	 * 
-	 * @return unmodifiable map
+	 * @return copy of the attributes map
 	 */
 	public Map<String, Serializable> getAttributesMap() {
-//		return Collections.unmodifiableMap(myAttributesMap); TODO: need to add x and y when placing towers, how to fix?
         return new HashMap<>(myAttributesMap);
 	}
 }

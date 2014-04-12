@@ -6,15 +6,12 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * 
  * A container for multiple MonsterSpawnSchema, representing all of the swarms of monsters to be spawned in a
  * particular wave
  * 
  * @author Austin
- * 
  */
 public class WaveSpawnSchema implements Serializable {
-
     Collection<MonsterSpawnSchema> myMonsterSchemas = new ArrayList<MonsterSpawnSchema>();
 
     /**
@@ -41,19 +38,4 @@ public class WaveSpawnSchema implements Serializable {
     public Collection<MonsterSpawnSchema> getMonsterSpawnSchemas () {
         return Collections.unmodifiableCollection(myMonsterSchemas);
     }
-    
- //TODO DELETE
-//	/**
-//	 * Create the wave of monsters specified by spawning all contained monster
-//	 * spawn schemas.
-//	 * @throws MonsterCreationFailureException 
-//	 * 
-//	 */
-//	public Collection<Monster> spawn() throws MonsterCreationFailureException {
-//		Collection<Monster> allNewlyAdded = new ArrayList<Monster>();
-//		for (MonsterSpawnSchema monsterSchema : myMonsterSchemas) {
-//			allNewlyAdded.addAll(monsterSchema.spawn());
-//		}
-//		return allNewlyAdded;
-//	}
 }

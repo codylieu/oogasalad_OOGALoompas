@@ -26,10 +26,4 @@ public class TileSchema extends AbstractSchema {
 
         return attributes;
     }
-
-    @Override
-    public void addAttribute(String attributeName, Serializable attributeValue)
-            throws InvalidParameterForConcreteTypeException {
-        myAttributesMap.put(attributeName, attributeValue);
-    }
 }

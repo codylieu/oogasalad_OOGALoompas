@@ -3,7 +3,6 @@ package main.java.schema;
 import main.java.engine.objects.tower.Tower;
 
 public abstract class TowerSchema extends TDObjectSchema {
-	
     public static final String LOCATION = "Location";
     public static final String HEALTH = "Health";
     public static final String DAMAGE = "Damage";
@@ -19,7 +18,6 @@ public abstract class TowerSchema extends TDObjectSchema {
     public static final String RANGE_SMALL = "Small";
     public static final String RANGE_MEDIUM = "Medium";
     public static final String RANGE_LARGE = "Large";
-    
 	
     protected TowerSchema(Class<? extends Tower> myConcreteType) {
         super(myConcreteType);
@@ -34,7 +32,5 @@ public abstract class TowerSchema extends TDObjectSchema {
 		myAttributeSet.add(TowerSchema.RANGE);
 		myAttributeSet.add(TowerSchema.LOCATION);
 		myAttributeSet.add(TowerSchema.NAME);
-	
-
     }
 }

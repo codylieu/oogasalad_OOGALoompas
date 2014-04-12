@@ -98,27 +98,19 @@ public class TerrainEditorTab extends EditorTab {
 
 	
 	private void populateTileSchema(TileSchema tileSchema, Tile tile) {
-		try {
-			tileSchema.addAttribute(TileSchema.CANVAS_ROW, tile.getRow());
-			tileSchema.addAttribute(TileSchema.CANVAS_COL, tile.getCol());
-			tileSchema.addAttribute(TileSchema.TILEMAP_ROW, tile.getMyMapYIndex());
-			tileSchema.addAttribute(TileSchema.TILEMAP_COL, tile.getMyMapXIndex());
-			tileSchema.addAttribute(TileSchema.TILEMAP_FILE_NAME, tile.getMyTileMapFileName());
-			tileSchema.addAttribute(TileSchema.TILE_CID, tile.getPassIndex());
-		} catch (InvalidParameterForConcreteTypeException e) {
-			e.printStackTrace();
-		}
+        tileSchema.addAttribute(TileSchema.CANVAS_ROW, tile.getRow());
+        tileSchema.addAttribute(TileSchema.CANVAS_COL, tile.getCol());
+        tileSchema.addAttribute(TileSchema.TILEMAP_ROW, tile.getMyMapYIndex());
+        tileSchema.addAttribute(TileSchema.TILEMAP_COL, tile.getMyMapXIndex());
+        tileSchema.addAttribute(TileSchema.TILEMAP_FILE_NAME, tile.getMyTileMapFileName());
+        tileSchema.addAttribute(TileSchema.TILE_CID, tile.getPassIndex());
 	}
 	
 	private void populateTileMapSchema(TileMapSchema tileMapSchema, TileDisplay tileDisp) {
-		try {
-        	tileMapSchema.addAttribute(TileMapSchema.NUM_ROWS, tileDisp.getNumRows());
-        	tileMapSchema.addAttribute(TileMapSchema.NUM_COLS, tileDisp.getNumCols());
-        	tileMapSchema.addAttribute(TileMapSchema.PIXEL_SIZE, tileDisp.getMyPixelSize());
-        	tileMapSchema.addAttribute(TileMapSchema.TILEMAP_FILE_NAME, tileDisp.getTileMapFile());
-		} catch (InvalidParameterForConcreteTypeException e) {
-			e.printStackTrace();
-		}
+        tileMapSchema.addAttribute(TileMapSchema.NUM_ROWS, tileDisp.getNumRows());
+        tileMapSchema.addAttribute(TileMapSchema.NUM_COLS, tileDisp.getNumCols());
+        tileMapSchema.addAttribute(TileMapSchema.PIXEL_SIZE, tileDisp.getMyPixelSize());
+        tileMapSchema.addAttribute(TileMapSchema.TILEMAP_FILE_NAME, tileDisp.getTileMapFile());
 	}
 	
 	
