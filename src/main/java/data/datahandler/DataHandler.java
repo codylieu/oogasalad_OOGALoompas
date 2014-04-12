@@ -177,19 +177,8 @@ public class DataHandler {
 	//	}
 
 	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
+		
 
-		if (unserializedObject instanceof DataBundle) {
-			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
-			//ZipFile myZippedResources = bundle.getZippedResourcesFolder();
-			String myZippedResourcesLocation = bundle.getZippedResourcesFolderLocation();
-			File myDir = new File(TEST_FILE_PATH);
-			deleteDirectory(myDir);
-			ZipFile myZippedResourcesFolder = new ZipFile(myZippedResourcesLocation);
-			//unzip and put resources in src/main/resources
-			decompress(myZippedResourcesFolder,TEST_FILE_PATH); 
-			return bundle.getBlueprint();
-		}
-		throw new ClassNotFoundException("Not a data bundle");
 	}
 
 	/**
