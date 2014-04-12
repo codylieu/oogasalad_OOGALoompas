@@ -309,7 +309,7 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		optionCard.add(makeDifficultyRadioButtonPanel(), constraints);
+		optionCard.add(new DifficultyPanel(engine), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -331,54 +331,7 @@ public class Player {
 		return difficultyInfoPanel;
 	}
 
-	private JPanel makeDifficultyRadioButtonPanel(){
-		JPanel difficultyRadioButtonPanel = new JPanel();
-
-		//need gameengine to agree that default is easy mode
-		JRadioButton easyButton = new JRadioButton(EASY);
-		easyButton.setActionCommand(EASY);
-		easyButton.setMnemonic(KeyEvent.VK_E);
-		easyButton.setSelected(true);
-
-		JRadioButton mediumButton = new JRadioButton(MEDIUM);
-		mediumButton.setActionCommand(MEDIUM);
-		mediumButton.setMnemonic(KeyEvent.VK_M);
-
-		JRadioButton hardButton = new JRadioButton(HARD);
-		hardButton.setActionCommand(HARD);
-		hardButton.setMnemonic(KeyEvent.VK_H);
-
-		ButtonGroup difficultyRadioButtonGroup = new ButtonGroup();
-		difficultyRadioButtonGroup.add(easyButton);
-		difficultyRadioButtonGroup.add(mediumButton);
-		difficultyRadioButtonGroup.add(hardButton);
-
-		easyButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("easy");
-				frame.pack();
-			}
-		});
-
-		mediumButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("medium");
-				frame.pack();
-			}
-		});
-
-		hardButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("hard");
-				frame.pack();
-			}
-		});
-
-		difficultyRadioButtonPanel.add(easyButton);
-		difficultyRadioButtonPanel.add(mediumButton);
-		difficultyRadioButtonPanel.add(hardButton);
-		return difficultyRadioButtonPanel;
-	}
+	
 
 	private JPanel makeSoundInfoPanel(){
 		JPanel soundInfoPanel = new JPanel();
