@@ -2,7 +2,6 @@ package main.java.engine;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,15 +28,10 @@ import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
 import net.lingala.zip4j.exception.ZipException;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
-
 
 public class Model {
-
-    public static final String RESOURCE_PATH = "/main/resources/";
-
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
+    public static final String RESOURCE_PATH = "/main/resources/";
 
     private JGEngine engine;
     private TDObjectFactory factory;
@@ -45,7 +39,6 @@ public class Model {
     private double gameClock;
     private Tower[][] towers;
     private List<Monster> monsters;
-    private Gson gsonParser;
     private CollisionManager collisionManager;
     private GameState gameState;
     private DataHandler dataHandler;
@@ -63,7 +56,6 @@ public class Model {
         levelManager.setEntrance(0, engine.pfHeight() / 2);
         levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
 
-        this.gsonParser = new Gson();
         this.gameClock = 0;
         monsters = new ArrayList<Monster>();
         towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
@@ -75,10 +67,10 @@ public class Model {
         dataHandler = new DataHandler();
 
         environ = new EnvironmentKnowledge(monsters, player, towers);
-
     }
 
     private void defineAllStaticImages () {
+        // TODO: remove this method, make this a part of schemas
         engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
         // make bullet image dynamic
         engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
@@ -92,10 +84,6 @@ public class Model {
         levelManager.registerPlayer(player);
     }
 
-    public void removeMonster (Monster m) {
-        monsters.remove(m);
-    }
-
     /**
      * Add a tower at the specified location. If tower already exists in that cell, do nothing.
      * 
@@ -104,13 +92,15 @@ public class Model {
      */
     public boolean placeTower (double x, double y) {
         try {
-
             Point2D location = new Point2D.Double(x, y);
             int[] currentTile = getTileCoordinates(location);
-            // if tower already exists in the tile clicked, do nothing
-            if (isTowerPresent(currentTile)) return false;
 
-            Tower newTower = factory.placeTower(location, "test-tower-1");
+            // if tower already exists in the tile clicked, do nothing
+            if (isTowerPresent(currentTile)) {
+                return false;
+            }
+
+            Tower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string name
 
             if (player.getMoney() >= newTower.getCost()) {
                 // FIXME: Decrease money?
@@ -122,14 +112,11 @@ public class Model {
                 destroyTower(newTower);
                 return false;
             }
-
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return false;
-
     }
 
     /**
@@ -152,6 +139,7 @@ public class Model {
     private int[] getTileCoordinates (Point2D location) {
         int curXTilePos = (int) (location.getX() / engine.tileWidth());
         int curYTilePos = (int) (location.getY() / engine.tileHeight());
+
         return new int[] { curXTilePos, curYTilePos };
     }
 
@@ -194,28 +182,8 @@ public class Model {
     		towers[xtile][ytile] = null;
     	}
     }
-    
-    /**
-     * /**
-     * Loads a map/terrain into the engine.
-     * 
-     * @param fileName The name of the file which contains the map information
-     */
-    public void loadMap (String fileName) {
-        try {
-            JsonReader reader =
-                    new JsonReader(new InputStreamReader(getClass()
-                            .getResourceAsStream(RESOURCE_PATH + fileName)));
 
-            TDMap map = gsonParser.fromJson(reader, TDMap.class);
-            map.loadIntoGame(engine);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //TODO: use this instead of other one, will change
+    //TODO: use this instead of other one, will change -jordan
     public void loadMapTest(String fileName) {
         try {
             TDMap tdMap = new TDMap();
@@ -281,7 +249,7 @@ public class Model {
     /**
      * Loads game schemas from the GameBlueprint obtained from the filePath
      * 
-     * @param fileName
+     * @param filePath
      * @throws IOException
      * @throws ClassNotFoundException
      */
@@ -314,7 +282,7 @@ public class Model {
     /**
      * Get the score of the player
      * 
-     * @return current score
+     * @return player's current score
      */
     public double getScore () {
         return player.getScore();
@@ -326,8 +294,7 @@ public class Model {
      * @return true if game is lost
      */
     public boolean isGameLost () {
-        if (getPlayerLives() <= 0) return true;
-        return false;
+        return getPlayerLives() <= 0;
     }
 
     private void updateGameClockByFrame () {
@@ -361,25 +328,6 @@ public class Model {
         return player.getMoney();
     }
 
-    /**
-     * Loads a wave spawn schema into the model
-     * 
-     * @param fileName The name of the JSON file containing wave spawn schema info
-     */
-    public void loadWaveSpawnSchema (String fileName) {
-        try {
-            JsonReader reader =
-                    new JsonReader(new InputStreamReader(getClass()
-                            .getResourceAsStream(RESOURCE_PATH + fileName)));
-            WaveSpawnSchema newWave = gsonParser.fromJson(reader, WaveSpawnSchema.class);
-            levelManager.addNewWave(newWave);
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private boolean isGameWon () {
         return levelManager.checkAllWavesFinished();
     }
@@ -390,7 +338,6 @@ public class Model {
      * @throws MonsterCreationFailureException
      */
     public void doSpawnActivity () throws MonsterCreationFailureException {
-
         // at determined intervals:
         // if (gameClock % 100 == 0)
         // or if previous wave defeated:
@@ -410,8 +357,7 @@ public class Model {
         doSpawnActivity();
         doTowerBehaviors();
         removeDeadMonsters();
-        gameState
-                .updateGameStates(monsters, towers, levelManager.getCurrentWave(),
+        gameState.updateGameStates(monsters, towers, levelManager.getCurrentWave(),
                                   levelManager.getAllWaves(), gameClock,
                                   player.getMoney(), player.getLivesRemaining(), player.getScore());
     }
@@ -447,7 +393,6 @@ public class Model {
                 }
             }
         }
-
     }
 
     /**
@@ -485,5 +430,4 @@ public class Model {
     public void decrementLives () {
         player.decrementLives();
     }
-
 }

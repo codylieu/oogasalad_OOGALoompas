@@ -38,8 +38,6 @@ public class TestEngine extends JGEngine {
         setFrameRate(45, 1);
         this.model = new Model(this);
         model.addNewPlayer();
-        model.loadMap("testmap.json");
- 
     }
 
     @Override
