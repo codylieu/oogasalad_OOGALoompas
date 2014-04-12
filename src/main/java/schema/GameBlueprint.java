@@ -1,5 +1,8 @@
 package main.java.schema;
 
+import main.java.schema.map.GameMap;
+import main.java.schema.tdobjects.TDObjectSchema;
+
 import java.io.Serializable;
 import java.util.List;
 

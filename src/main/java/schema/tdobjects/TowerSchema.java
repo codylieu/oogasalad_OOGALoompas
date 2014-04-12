@@ -1,4 +1,4 @@
-package main.java.schema;
+package main.java.schema.tdobjects;
 
 import main.java.engine.objects.tower.Tower;
 

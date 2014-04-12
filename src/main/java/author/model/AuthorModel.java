@@ -1,10 +1,10 @@
 package main.java.author.model;
 
 import main.java.schema.GameBlueprint;
-import main.java.schema.GameMap;
+import main.java.schema.map.GameMap;
 import main.java.schema.GameSchema;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.SimpleTowerSchema;
+import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.towers.SimpleTowerSchema;
 import main.java.schema.WaveSpawnSchema;
 
 public class AuthorModel {

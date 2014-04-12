@@ -15,9 +15,9 @@ import main.java.engine.objects.tower.Tower;
 import main.java.engine.util.Reflection;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.schema.MonsterSchema;
-import main.java.schema.TDObjectSchema;
-import main.java.schema.TowerSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 
 
 public class TDObjectFactory {

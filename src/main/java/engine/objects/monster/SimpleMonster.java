@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.engine.objects.Exit;
-import main.java.schema.MonsterSchema;
+import main.java.schema.tdobjects.MonsterSchema;
 
 public class SimpleMonster extends Monster {
 

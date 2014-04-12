@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.Projectile;
-import main.java.schema.TowerSchema;
+import main.java.schema.tdobjects.TowerSchema;
 
 
 public class ShootingTower extends Tower {
