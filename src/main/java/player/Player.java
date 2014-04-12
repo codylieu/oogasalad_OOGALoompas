@@ -59,7 +59,6 @@ public class Player {
 	private Sound song;
 	private boolean soundOn;
 
-
 	public Player() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		initSong();
 		makeFrame();
@@ -98,7 +97,7 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
-                    engine.loadMapFile(file.getAbsolutePath());
+					engine.loadMapFile(file.getAbsolutePath());
 					System.out.println("FILE CHOSEN: " + file.getName());
 				}
 			}
@@ -274,7 +273,7 @@ public class Player {
 			song.stop();
 			soundOn = false;
 		}
-			
+
 	}
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
@@ -421,7 +420,7 @@ public class Player {
 		return soundRadioButtonPanel;
 	}
 
-	
+
 	private void addHelpCard() {
 		JPanel helpCard = new JPanel();
 		helpCard.setLayout(new GridBagLayout());
@@ -475,6 +474,7 @@ public class Player {
 		//mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				engine.toggleRunning();
 				cardLayout.show(cards, "welcomeCard");
 				frame.pack();
 			}
