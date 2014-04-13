@@ -1,6 +1,8 @@
 package main.java.author.view.tabs.terrain;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -13,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -38,7 +41,7 @@ public class TerrainEditorTab extends EditorTab {
 	private static final String ROW_QUERY = "Enter Row Count";
 	private static final String COL_QUERY = "Enter Column Count";
 	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
-    private static final String IMAGE_FILTER_DIALOGUE = ".GIF and .PNG Images";
+    private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
     private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
 
     private JFileChooser fileChooser;
@@ -52,6 +55,7 @@ public class TerrainEditorTab extends EditorTab {
 		JButton initTerrainButton = new JButton(USER_INIT_MESSAGE);
 		initTerrainButton.addActionListener(actionListener(this, "initTerrainTab"));
 		add(initTerrainButton);
+		setPreferredSize(new Dimension(1200, 800));
 	}
 	
 	public void initTerrainTab(ActionEvent e) {
@@ -61,8 +65,8 @@ public class TerrainEditorTab extends EditorTab {
 		}
 		remove((JButton) e.getSource());
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
-		add(myCanvas, BorderLayout.WEST);
 		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.EAST);
+		add(myCanvas, BorderLayout.CENTER);
 		constructButtonDisplay();
 	}
 	
@@ -87,6 +91,8 @@ public class TerrainEditorTab extends EditorTab {
 		buttonDisplayOptions.put(ADD_TILEMAP, initNewTileMap());
 		
 		JPanel buttonDisplayPanel = new JPanel();
+		buttonDisplayPanel.setBackground(new Color(50, 50, 50));
+		
 		buttonDisplayPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
@@ -95,7 +101,10 @@ public class TerrainEditorTab extends EditorTab {
 			buttonDisplayPanel.add(buttonDisplay, c);
 			c.gridy++;
 		}
-		add(buttonDisplayPanel, BorderLayout.SOUTH);
+		
+		add(buttonDisplayPanel, BorderLayout.WEST);
+		revalidate();
+		repaint();
 	}
 
 	private JButton initNewTileMap() {
@@ -119,6 +128,7 @@ public class TerrainEditorTab extends EditorTab {
 	private JButton initEditorButton() {
 		JButton openBGTiles = new JButton(EDIT_TILE);
 		openBGTiles.addActionListener(actionListener(this, "openEditorWindow"));
+		openBGTiles.setEnabled(false);
 		return openBGTiles;
 	}
 	
@@ -138,9 +148,10 @@ public class TerrainEditorTab extends EditorTab {
 		int fileReturn = fileChooser.showOpenDialog(this);
 		if (fileReturn == JFileChooser.APPROVE_OPTION) {
 			addTileDisplay(fileChooser.getSelectedFile());
-		} else {
-            System.out.println("unacceptable file format"); //TODO: throw exception
-        }
+			buttonDisplayOptions.get(EDIT_TILE).setEnabled(true);
+			revalidate();
+			repaint();
+		} 
 	}
 
     /**

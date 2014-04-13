@@ -19,7 +19,7 @@ public class Canvas extends JPanel {
 
 	private int numRows;
 	private int numCols;
-	private static final int TILE_SIZE = 30; // in pixels
+	private static final int TILE_SIZE = 25; // in pixels
 
 	private final Tile[][] myTiles;
 	private TileObject selectedTileObj;
