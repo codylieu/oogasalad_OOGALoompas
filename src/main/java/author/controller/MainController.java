@@ -36,26 +36,51 @@ public class MainController {
 		return myModel.isBlueprintReady();
 	}
 
+	/**
+	 * Adds a schema representing a tower object to the game blueprint
+	 * @param towerSchema
+	 */
 	public void addTowerToModel(SimpleTowerSchema towerSchema) {
 		myModel.addTower(towerSchema);
 	}
 
+	/**
+	 * Adds a schema representing an enemy object to the game blueprint
+	 * @param enemySchema
+	 */
 	public void addEnemyToModel(SimpleMonsterSchema enemySchema) {
 		myModel.addEnemy(enemySchema);
 	}
 
+	/**
+	 * Adds a schema containing game settings to the game blueprint
+	 * @param gameSchema
+	 */
 	public void addGameSettingsToModel(GameSchema gameSchema) {
 		myModel.addGameSettings(gameSchema);
 	}
 
+	/**
+	 * Adds a schema representing characteristics of a game terrain map
+	 * to the game blueprint
+	 * @param gameMap
+	 */
 	public void addGameMapToModel(GameMap gameMap) {
 		myModel.addGameMap(gameMap);
 	}
 
+	/**
+	 * Adds a schema representing a TD wave to the game blueprint
+	 * @param wave
+	 */
 	public void addWaveToModel(WaveSpawnSchema wave) {
 		myModel.addWave(wave);
 	}
 
+	/**
+	 * Saves the game blueprint and lets the data team know that they
+	 * can begin serializing data
+	 */
 	public void saveBlueprint() {
 		// tell model to save blueprint
 	}

@@ -84,6 +84,10 @@ public class AuthoringView extends JFrame {
 		addActionListeners();
 	}
 
+	/**
+	 * Adds an action listener to the finalize game button which, when clicked,
+	 * saves the game blueprint so the data team can begin serializing information
+	 */
 	private void addActionListeners() {
 		finalizeGameButton.addActionListener(new ActionListener() {
 
@@ -96,11 +100,18 @@ public class AuthoringView extends JFrame {
 		});
 	}
 	
+	/**
+	 * Saves the current state of the game blueprint
+	 */
 	private void saveBlueprint() {
 		//open a dialog box, cody: myController.pickASaveLocation();
 		myController.saveBlueprint();
 	}
 
+	/**
+	 * Constructs a JButton which allows the user to finalize the game
+	 * that they made
+	 */
 	private JButton createFinalizeGameButton() {
 		finalizeGameButton = new JButton("Finalize Game");
 		return finalizeGameButton;

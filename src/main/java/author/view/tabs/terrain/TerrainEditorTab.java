@@ -58,6 +58,10 @@ public class TerrainEditorTab extends EditorTab {
 		setPreferredSize(new Dimension(1200, 800));
 	}
 	
+	/**
+	 * Initializes the terrain tab if the user has entered proper row/column 
+	 * information. If the user enters poor information, nothing happens.
+	 */
 	public void initTerrainTab(ActionEvent e) {
 		boolean isCanvasInitialized = initCanvas();
 		if (!isCanvasInitialized) {
@@ -70,6 +74,13 @@ public class TerrainEditorTab extends EditorTab {
 		constructButtonDisplay();
 	}
 	
+	/**
+	 * Obtains information from the user about the row and column size of the 
+	 * terrain map, and creates the Canvas representing the terrain map
+	 * 
+	 * @return true if the row and column entries contain valid information, 
+	 * otherwise false
+	 */
 	private boolean initCanvas() {
 		boolean isInitialized = false;
 		String numRows = queryUser(ROW_QUERY);
@@ -83,6 +94,12 @@ public class TerrainEditorTab extends EditorTab {
 		return isInitialized;
 	}
 	
+	/**
+	 * Initializes different buttons that give the user various options
+	 * when constructing the terrain map. These include clearing the canvas,
+	 * editing tiles, saving the current map, and adding new images for future
+	 * use.
+	 */
 	private void constructButtonDisplay() {
 		buttonDisplayOptions = new HashMap<String, JButton>();
 		buttonDisplayOptions.put(CLEAR, initClearButton());
@@ -107,24 +124,39 @@ public class TerrainEditorTab extends EditorTab {
 		repaint();
 	}
 
+	
+	/**
+	 * Constructs a JButton that allows the user to enter a image map,
+	 * which can then be parsed into smaller images
+	 */
 	private JButton initNewTileMap() {
 		JButton createTileMap = new JButton(ADD_TILEMAP);
 		createTileMap.addActionListener(actionListener(this, "importTileMap"));
 		return createTileMap;
 	}
 	
+	/**
+	 * Constructs a JButton that allows the user to save the current
+	 * state of the terrain map
+	 */
 	private JButton initSaveButton() {
 		JButton saveButton = new JButton(SAVE_MAP);
 		saveButton.addActionListener(actionListener(this, "saveMap"));
 		return saveButton;
 	}
 	
+	/**
+	 * Constructs a JButton that allows the user to clear the terrain map
+	 */
 	private JButton initClearButton() {
 		JButton clearButton = new JButton(CLEAR);
 		clearButton.addActionListener(actionListener(this, "clearCanvasTiles"));
 		return clearButton;
 	}
 	
+	/**
+	 * Constructs a JButton that allows the user to edit the features of an image
+	 */
 	private JButton initEditorButton() {
 		JButton openBGTiles = new JButton(EDIT_TILE);
 		openBGTiles.addActionListener(actionListener(this, "openEditorWindow"));
