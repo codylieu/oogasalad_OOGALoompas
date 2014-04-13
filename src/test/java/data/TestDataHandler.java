@@ -79,17 +79,17 @@ public class TestDataHandler {
 ////		assertNotEquals(CURRENT_WAVE_NUMBER+1, loadedState.getCurrentWaveNumber());
 //	}
 	
-	@Test
-	public void testCompression() throws ClassNotFoundException, IOException {
-		DataHandler testDataHandler = new DataHandler();
-		GameBlueprint testBlueprint = (GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH);
-		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
-	}
-	
 //	@Test
-//	public void testDecompression() throws ClassNotFoundException, IOException, ZipException {
+//	public void testCompression() throws ClassNotFoundException, IOException {
 //		DataHandler testDataHandler = new DataHandler();
-//		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip"); // attempt to load serialized blueprint in data bundle form
+//		GameBlueprint testBlueprint = (GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH);
+//		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 //	}
+	
+	@Test
+	public void testDecompression() throws ClassNotFoundException, IOException, ZipException {
+		DataHandler testDataHandler = new DataHandler();
+		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip"); // attempt to load serialized blueprint in data bundle form
+	}
 
 }

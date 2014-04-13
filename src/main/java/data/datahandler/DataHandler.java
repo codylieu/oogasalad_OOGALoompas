@@ -85,15 +85,6 @@ public class DataHandler {
 	 * @param filePath to save blueprint to
 	 * @throws InvalidGameBlueprintException 
 	 */
-	//	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) {
-	//		DataBundle bundleToSave = new DataBundle();
-	//		bundleToSave.setBlueprint(blueprint);
-	//		String zipFileLocation = filePath + "ZippedResources.zip";
-	//		ZipFile myZippedResources = compress(FILE_PATH,zipFileLocation);
-	//		//		bundleToSave.setResourcesFolder(myZippedResources);
-	//		bundleToSave.setResourceFolderLocation(zipFileLocation);
-	//		return saveObjectToFile(bundleToSave, filePath + "Bundle.ser");
-	//	}
 
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
 		//		if (checkGameBlueprint(blueprint)){
@@ -104,7 +95,7 @@ public class DataHandler {
 		//			myFilesToZip.add(myResources);
 		compressResources(myResources,zipResourcesLocation);
 		// zip to ZipResourcesLocation
-		myFilesToZip.add(myResources);
+		myFilesToZip.add(new File(zipResourcesLocation));
 
 		String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
 		//				// serialize the blueprint so we can zip it
