@@ -57,7 +57,7 @@ public class Canvas extends JPanel {
 	}
 
 	/**
-	 * Updates tiles within the JPanel when the 'repaint()' method is called. Sets the
+	 * Updates tiles within the JPanel when the 'update(getGraphics())' method is called. Sets the
 	 * appropriate background and border of each tile accordingly. 
 	 */
 	@Override
@@ -118,6 +118,11 @@ public class Canvas extends JPanel {
 		return tiles;
 	}
 
+	/**
+	 * Updates a tile that has been clicked in the terrain map
+	 * with data from the TileObject that was selected in the
+	 * TileDisplay
+	 */
 	private void updateTile(MouseEvent e) {
 		Tile tile = getTile(e.getX(), e.getY());
 		if (tile == null || selectedTileObj == null) {
