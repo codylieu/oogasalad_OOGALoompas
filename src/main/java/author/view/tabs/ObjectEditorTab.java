@@ -68,7 +68,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected JButton deleteObjectButton;
 	protected JButton objectImageButton;
 	protected Border originalCreateObjectFieldBorder;
-	protected TabViewBuilder myBuilder;
+	protected ObjectTabViewBuilder myBuilder;
 	protected HashMap<String, TDObjectSchema> objectMap;
 	protected String defaultObjectName = "Default Object";
 
@@ -233,7 +233,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	protected abstract void updateSchemaDataFromView();
 
-	protected abstract TabViewBuilder createSpecificTabViewBuilder();
+	protected abstract ObjectTabViewBuilder createSpecificTabViewBuilder();
 
 	private void replaceKeysInEnemyMap(String originalKey, String newKey) {
 		TDObjectSchema objectSchema = objectMap.get(originalKey);
@@ -323,10 +323,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
-	protected abstract class TabViewBuilder {
+	protected abstract class ObjectTabViewBuilder {
 		EditorTab myTab;
 
-		public TabViewBuilder(EditorTab editorTab) {
+		public ObjectTabViewBuilder(EditorTab editorTab) {
 			myTab = editorTab;
 		}
 

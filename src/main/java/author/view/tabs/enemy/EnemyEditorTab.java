@@ -50,7 +50,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new SimpleMonsterSchema(objectName);
 	}
 
-	protected TabViewBuilder createSpecificTabViewBuilder() {
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new EnemyTabViewBuilder(this);
 	}
 
@@ -96,7 +96,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		// update schema with images
 	}
 
-	private class EnemyTabViewBuilder extends TabViewBuilder {
+	private class EnemyTabViewBuilder extends ObjectTabViewBuilder {
 
 		public EnemyTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);

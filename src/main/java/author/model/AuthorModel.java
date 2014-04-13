@@ -19,7 +19,6 @@ public class AuthorModel {
 	}
 
 	public void addTower(SimpleTowerSchema towerSchema) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -29,7 +28,6 @@ public class AuthorModel {
 	}
 
 	public void addGameSettings(GameSchema gameSchema) {
-		// TODO Auto-generated method stub
 
 	}
 

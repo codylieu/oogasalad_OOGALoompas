@@ -49,7 +49,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 		return new SimpleTowerSchema(objectName);
 	}
 
-	protected TabViewBuilder createSpecificTabViewBuilder() {
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new TowerTabViewBuilder(this);
 	}
 
@@ -130,7 +130,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	}
 
-	private class TowerTabViewBuilder extends TabViewBuilder {
+	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
 
 		public TowerTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
