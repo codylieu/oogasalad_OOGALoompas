@@ -105,7 +105,7 @@ public class DataHandler {
 		return compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation);
 
 		//		}
-//		return false;
+		//		return false;
 	}
 
 	/**
@@ -184,22 +184,6 @@ public class DataHandler {
 	 * @throws ClassNotFoundException 
 	 * @throws ZipException 
 	 */
-	//	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
-	//		Object unserializedObject = loadObjectFromFile(filePath);
-	//
-	//		if (unserializedObject instanceof DataBundle) {
-	//			DataBundle bundle = ((DataBundle) loadObjectFromFile(filePath));
-	//			//ZipFile myZippedResources = bundle.getZippedResourcesFolder();
-	//			String myZippedResourcesLocation = bundle.getZippedResourcesFolderLocation();
-	//			File myDir = new File(TEST_FILE_PATH);
-	//			deleteDirectory(myDir);
-	//			ZipFile myZippedResourcesFolder = new ZipFile(myZippedResourcesLocation);
-	//			//unzip and put resources in src/main/resources
-	//			decompress(myZippedResourcesFolder,TEST_FILE_PATH); 
-	//			return bundle.getBlueprint();
-	//		}
-	//		throw new ClassNotFoundException("Not a data bundle");
-	//	}
 
 	/**
 	 * Takes in the filePath to a ZIP,
@@ -217,12 +201,12 @@ public class DataHandler {
 	 */
 	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
 		String zipDestinationPath = TEST_FILE_PATH + "MyAuthoringEnvironment/";
-		//		decompress(filePath, zipDestinationPath);
-		File myDir = new File(TEST_FILE_PATH);
+		decompress(filePath, zipDestinationPath);
+		File myDir = new File(TEST_FILE_PATH); // change to resources folder after it's completed
 		deleteDirectory(myDir);
 		decompress(zipDestinationPath + "SavedBlueprintZippedResources.zip", TEST_FILE_PATH);
 		return ((GameBlueprint) loadObjectFromFile(zipDestinationPath + "SavedBlueprintMyBlueprint.ser"));
-		//		return null;
+//		return null;
 	}
 
 	/**
@@ -356,7 +340,7 @@ public class DataHandler {
 	 * @param fileName File to save serialized object to
 	 * @return whether the object was successfully saved
 	 */
-	private boolean saveObjectToFile(Object object, String fileName) {
+	public boolean saveObjectToFile(Object object, String fileName) { // change back to private after testing
 		FileOutputStream fileOut;
 		try {
 			fileOut = new FileOutputStream(fileName);
@@ -376,7 +360,7 @@ public class DataHandler {
 	 * @param fileName Name of file containing serialized object
 	 * @return Unserialized object
 	 */
-	public Object loadObjectFromFile(String fileName) {
+	public Object loadObjectFromFile(String fileName) { // change back to private after testing
 		try {
 			FileInputStream fileIn = new FileInputStream(fileName);
 			ObjectInputStream in = new ObjectInputStream(fileIn);
