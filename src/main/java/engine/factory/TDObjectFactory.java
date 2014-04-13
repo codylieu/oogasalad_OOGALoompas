@@ -2,6 +2,7 @@ package main.java.engine.factory;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,9 +64,15 @@ public class TDObjectFactory {
     public Monster placeMonster (Point2D entrance, Exit exit, String monsterName) throws MonsterCreationFailureException {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
+
             schema.addAttribute(MonsterSchema.ENTRANCE_LOCATION, (Serializable) entrance);
             schema.addAttribute(MonsterSchema.EXIT_LOCATION, exit);
+
+            List<Integer> blocked = new ArrayList<Integer>();
+            blocked.add(2); // TODO, change -- provided by factory
+            schema.addAttribute(MonsterSchema.BLOCKED_TILES, (Serializable) blocked);
             Object[] monsterParameters = { schema.getAttributesMap() };
+
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
         }
         catch (Exception e) {

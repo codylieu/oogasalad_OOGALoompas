@@ -10,10 +10,9 @@ public class TerrainController extends TabController {
 		super(superController);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public void addMap(GameMap gameMap) {
 		mySuperController.addGameMapToModel(gameMap);
-
 	}
 
 }

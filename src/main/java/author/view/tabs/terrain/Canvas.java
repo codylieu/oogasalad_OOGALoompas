@@ -14,13 +14,12 @@ import java.util.*;
 import java.util.List;
 
 public class Canvas extends JPanel {
-
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
-	public static final int NUM_ROWS = 10;
-	public static final int NUM_COLS = 15;
-	public static final int TILE_SIZE = 40; // in pixels
+	public static final int NUM_ROWS = 20;
+	public static final int NUM_COLS = 25;
+	public static final int TILE_SIZE = 30; // in pixels
 
 	private final Tile[][] myTiles;
 	private TileObject selectedTileObj;
@@ -107,7 +106,7 @@ public class Canvas extends JPanel {
 	 * Obtains a list of tiles within the JPanel
 	 * @return all tiles within the JPanel
 	 */
-	private List<Tile> getTiles() {
+	protected List<Tile> getTiles() {
 		List<Tile> tiles = new ArrayList<Tile>();
 		for (int i = 0; i < NUM_ROWS; i++) {
 			for (int j = 0; j < NUM_COLS; j++) {
@@ -119,12 +118,15 @@ public class Canvas extends JPanel {
 
 	private void updateTile(MouseEvent e) {
 		Tile tile = getTile(e.getX(), e.getY());
-		if (tile == null) {
+		if (tile == null || selectedTileObj == null) {
 			return;
 		}
-		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
-		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
-		tile.setPassIndex((selectedTileObj == null) ? 0 : selectedTileObj.getPassabilityIndex());
+		tile.setImage(selectedTileObj.getImage());
+		tile.setColor(selectedTileObj.getBGColor());
+		tile.setPassIndex(selectedTileObj.getPassabilityIndex());
+        tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
+        tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
+        tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
 		repaint(); // we want to keep this repaint, if we use update, it messes up on macs
 	}
 	
