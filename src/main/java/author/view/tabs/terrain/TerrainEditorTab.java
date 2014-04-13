@@ -218,7 +218,7 @@ public class TerrainEditorTab extends EditorTab {
 		myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
 
 		TerrainController myControl = (TerrainController) myController;
-		myControl.addMap(myCompletedMap);
+		myControl.addMaps(myCompletedMap);
 		
 		//writeMapToFile(myCompletedMap);
 	}
@@ -309,5 +309,11 @@ public class TerrainEditorTab extends EditorTab {
 		selectionFrame.setLocation(this.getWidth() + 25, 0);
 		selectionFrame.pack();
 		selectionFrame.setVisible(true);
+	}
+
+	@Override
+	public void saveTabData() {
+		TerrainController controller = (TerrainController) myController;
+		
 	}
 }

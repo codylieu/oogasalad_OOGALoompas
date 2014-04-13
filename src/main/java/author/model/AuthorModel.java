@@ -18,12 +18,11 @@ public class AuthorModel {
 		myGameBlueprint = new GameBlueprint();
 	}
 
-	public void addTower(SimpleTowerSchema towerSchema) {
+	public void addTowers(List<SimpleTowerSchema> towerSchema) {
 
 	}
 
-	public void addEnemy(SimpleMonsterSchema enemySchema) {
-		// TODO Auto-generated method stub
+	public void addEnemies(List<SimpleMonsterSchema> enemySchema) {
 
 	}
 
@@ -31,13 +30,13 @@ public class AuthorModel {
 
 	}
 
-	public void addGameMap(GameMap gameMap) {
+	public void addGameMaps(GameMap gameMap) {
 		List<GameMap> gameMaps = new ArrayList<GameMap>();
 		gameMaps.add(gameMap);
 		myGameBlueprint.setMyGameMaps(gameMaps);
 	}
 
-	public void addWave(WaveSpawnSchema wave) {
+	public void addWaves(List<WaveSpawnSchema> waves) {
 		// TODO Auto-generated method stub
 
 	}

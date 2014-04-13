@@ -1,5 +1,7 @@
 package main.java.author.controller.tabbed_controllers;
 
+import java.util.List;
+
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.schema.SimpleMonsterSchema;
@@ -10,10 +12,11 @@ public class EnemyController extends TabController {
 		super(superController);
 	}
 
-	public void addEnemy(SimpleMonsterSchema enemySchema) {
+	public void addEnemies(List<SimpleMonsterSchema> enemySchema) {
 
-		mySuperController.addEnemyToModel(enemySchema);
+		mySuperController.addEnemiesToModel(enemySchema);
 
 	}
+
 	
 }

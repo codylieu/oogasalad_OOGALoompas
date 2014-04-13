@@ -17,6 +17,7 @@ import javax.swing.JSpinner;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.TowerController;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
@@ -209,6 +210,13 @@ public class TowerEditorTab extends ObjectEditorTab {
 			return labels;
 		}
 
+	}
+
+	@Override
+	public void saveTabData() {
+		TowerController controller = (TowerController) myController;
+		
+		
 	}
 
 }

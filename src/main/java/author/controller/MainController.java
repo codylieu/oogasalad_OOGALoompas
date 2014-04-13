@@ -40,16 +40,16 @@ public class MainController {
 	 * Adds a schema representing a tower object to the game blueprint
 	 * @param towerSchema
 	 */
-	public void addTowerToModel(SimpleTowerSchema towerSchema) {
-		myModel.addTower(towerSchema);
+	public void addTowersToModel(List<SimpleTowerSchema> towerSchema) {
+		myModel.addTowers(towerSchema);
 	}
 
 	/**
 	 * Adds a schema representing an enemy object to the game blueprint
 	 * @param enemySchema
 	 */
-	public void addEnemyToModel(SimpleMonsterSchema enemySchema) {
-		myModel.addEnemy(enemySchema);
+	public void addEnemiesToModel(List<SimpleMonsterSchema> enemySchema) {
+		myModel.addEnemies(enemySchema);
 	}
 
 	/**
@@ -65,16 +65,16 @@ public class MainController {
 	 * to the game blueprint
 	 * @param gameMap
 	 */
-	public void addGameMapToModel(GameMap gameMap) {
-		myModel.addGameMap(gameMap);
+	public void addGameMapsToModel(GameMap gameMap) {
+		myModel.addGameMaps(gameMap);
 	}
 
 	/**
 	 * Adds a schema representing a TD wave to the game blueprint
-	 * @param wave
+	 * @param waves
 	 */
-	public void addWaveToModel(WaveSpawnSchema wave) {
-		myModel.addWave(wave);
+	public void addWaveToModel(List<WaveSpawnSchema> waves) {
+		myModel.addWaves(waves);
 	}
 
 	/**

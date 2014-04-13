@@ -1,6 +1,7 @@
 package main.java.author.view.tabs.wave_editor;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.util.List;
 
 import main.java.author.controller.TabController;
@@ -18,9 +19,14 @@ public class WaveEditorTab extends EditorTab {
 		init();
 	}
 
+	private void addWaveData() {
+		
+	}
+	
 	private void init() {
 		setLayout(new BorderLayout());
 		myBuilder = new WaveTabViewBuilder(this);
+		add(myBuilder.createTable(), BorderLayout.CENTER);
 		updateTable();
 	}
 
@@ -43,6 +49,17 @@ public class WaveEditorTab extends EditorTab {
 		public WaveTabViewBuilder(WaveEditorTab tab) {
 			myTab = tab;
 		}
+
+		public Component createTable() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+	}
+
+	@Override
+	public void saveTabData() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

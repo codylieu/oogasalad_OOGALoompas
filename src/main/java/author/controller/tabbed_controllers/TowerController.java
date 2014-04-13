@@ -1,5 +1,7 @@
 package main.java.author.controller.tabbed_controllers;
 
+import java.util.List;
+
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.schema.SimpleTowerSchema;
@@ -11,9 +13,9 @@ public class TowerController extends TabController {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void addTower(SimpleTowerSchema towerSchema) {
+	public void addTowers(List<SimpleTowerSchema> towerSchemas) {
 
-		mySuperController.addTowerToModel(towerSchema);
+		mySuperController.addTowersToModel(towerSchemas);
 
 	}
 

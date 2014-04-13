@@ -1,6 +1,7 @@
 package main.java.author.controller.tabbed_controllers;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import main.java.author.controller.MainController;
@@ -15,8 +16,8 @@ public class WaveController extends TabController {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void addWave(WaveSpawnSchema wave) {
-		mySuperController.addWaveToModel(wave);
+	public void addWaves(List<WaveSpawnSchema> waves) {
+		mySuperController.addWaveToModel(waves);
 	}
 
 	public int getNumLevels() {

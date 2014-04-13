@@ -29,6 +29,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.GameSettingsController;
 import main.java.author.view.global_constants.FontConstants;
 
 public class GameSettingsEditorTab extends EditorTab{
@@ -222,6 +223,12 @@ public class GameSettingsEditorTab extends EditorTab{
 		labels.add(beginningMoneyLabel);
 
 		return labels;
+	}
+
+	@Override
+	public void saveTabData() {
+		GameSettingsController controller = (GameSettingsController) myController;
+		
 	}
 
 }
