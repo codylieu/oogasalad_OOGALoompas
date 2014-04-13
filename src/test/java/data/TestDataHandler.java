@@ -89,7 +89,7 @@ public class TestDataHandler {
 //	@Test
 //	public void testDecompression() throws ClassNotFoundException, IOException, ZipException {
 //		DataHandler testDataHandler = new DataHandler();
-//		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintBundle.ser"); // attempt to load serialized blueprint in data bundle form
+//		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip"); // attempt to load serialized blueprint in data bundle form
 //	}
 
 }

@@ -96,23 +96,25 @@ public class DataHandler {
 	//	}
 
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
-//		if (checkGameBlueprint(blueprint)){
-			// zip the resources first
-			String zipResourcesLocation = filePath + "ZippedResources.zip";
-			File myResources = new File(FILE_PATH);
-			List<File> myFilesToZip = new ArrayList<File>();
-			myFilesToZip.add(myResources);
-			// zip to ZipResourcesLocation
-			if (compressAuthoringEnvironment(myFilesToZip,zipResourcesLocation)){
-				String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
-				// serialize the blueprint so we can zip it
-				saveObjectToFile(blueprint,filePath + "myBlueprint.ser"); 
-				myFilesToZip.add(new File(filePath + "myBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
-				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
-				return compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation);
-			}
-//		}
-		return false;
+		//		if (checkGameBlueprint(blueprint)){
+		// zip the resources first
+		String zipResourcesLocation = filePath + "ZippedResources.zip";
+		File myResources = new File(FILE_PATH);
+		List<File> myFilesToZip = new ArrayList<File>();
+		//			myFilesToZip.add(myResources);
+		compressResources(myResources,zipResourcesLocation);
+		// zip to ZipResourcesLocation
+		myFilesToZip.add(myResources);
+
+		String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+		//				// serialize the blueprint so we can zip it
+		saveObjectToFile(blueprint,filePath + "MyBlueprint.ser"); 
+		myFilesToZip.add(new File(filePath + "MyBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
+		//				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
+		return compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation);
+
+		//		}
+//		return false;
 	}
 
 	/**
@@ -168,6 +170,19 @@ public class DataHandler {
 		return true;
 	}
 
+	private boolean compressResources(File folderToZIP, String filePathToStoreTo){
+		try{
+			ZipFile zipFile = new ZipFile(filePathToStoreTo);
+			ZipParameters parameters = new ZipParameters();
+			parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+			parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+			zipFile.addFolder(folderToZIP,parameters);
+		} catch (ZipException e){
+			e.printStackTrace();
+		}
+		return false;
+	}
+
 	/**
 	 * Loads a serialized blueprint (a ZIP file with serialized gameBlueprint + resources))
 	 * Deletes current resources folder and replaces it with the zipped resources
@@ -195,10 +210,29 @@ public class DataHandler {
 	//		throw new ClassNotFoundException("Not a data bundle");
 	//	}
 
-//	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
-//
-//
-//	}
+	/**
+	 * Takes in the filePath to a ZIP,
+	 * unzips this, which opens a
+	 * zipped resources and a serialized
+	 * gameBlueprint, return the unserialized
+	 * gameBlueprint while also replacing the
+	 * project's resources folder with the loaded
+	 * resources folder
+	 * @param filePath of a ZIP
+	 * @return a GameBlueprint
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 * @throws ZipException
+	 */
+	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
+		String zipDestinationPath = TEST_FILE_PATH + "MyAuthoringEnvironment/";
+		//		decompress(filePath, zipDestinationPath);
+		File myDir = new File(TEST_FILE_PATH);
+		deleteDirectory(myDir);
+		decompress(zipDestinationPath + "SavedBlueprintZippedResources.zip", TEST_FILE_PATH);
+		return ((GameBlueprint) loadObjectFromFile(zipDestinationPath + "SavedBlueprintMyBlueprint.ser"));
+		//		return null;
+	}
 
 	/**
 	 * Deletes a directory
