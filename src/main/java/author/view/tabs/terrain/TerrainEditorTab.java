@@ -174,7 +174,7 @@ public class TerrainEditorTab extends EditorTab {
 	public void importTileMap(ActionEvent e) {
 		fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
         FileFilter imageFilter = new FileNameExtensionFilter(IMAGE_FILTER_DIALOGUE,
-                ".png", ".gif", ".bmp");
+                "png", "gif", "bmp");
         fileChooser.setFileFilter(imageFilter);
 
 		int fileReturn = fileChooser.showOpenDialog(this);
@@ -195,6 +195,7 @@ public class TerrainEditorTab extends EditorTab {
      * @param e
      */
 	public void saveMap(ActionEvent e) {
+		((JButton) e.getSource()).setEnabled(false);
 		GameMap myCompletedMap = new GameMap();
 
 		List<Tile> gameTiles = myCanvas.getTiles();
