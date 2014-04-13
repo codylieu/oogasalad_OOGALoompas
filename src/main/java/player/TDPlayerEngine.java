@@ -56,6 +56,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		setFrameRate(FRAMEPERSECOND, 1);
 		this.model = new Model(this);
 		model.addNewPlayer();
+        model.loadGameBlueprint(null); // TODO: null for now
 	}
 
 	public int getFramePerSecond(){

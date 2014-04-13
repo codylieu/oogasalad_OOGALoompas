@@ -20,6 +20,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
+import main.java.schema.map.GameMap;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -196,54 +197,27 @@ public class Model {
     /**
      * Loads the game schemas from GameBlueprint and sets the appropriate state
      * 
-     * @param bp
+     * @param bp Game blueprint to load
      * @throws InvalidParameterForConcreteTypeException
      */
-    public void loadGameBlueprint (GameBlueprint bp) {
-        // Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
-        // player = new Player(gameAttributes.get(GameSchema.MONEY),
-        // gameAttributes.get(GameSchema.LIVES));
+    public void loadGameBlueprint(GameBlueprint bp) {
+        // TODO: use the actual game blueprint
+        GameBlueprint testBP = createTestBlueprint();
 
-        // GameSchema testGameSchema = new GameSchema();
-        // Map<String, String> gameSchemaMap = testGameSchema.getAttributesMap();
-        // player = new Player(gameSchemaMap.get(GameSchema.GOLD),
-        // gameSchemaMap.get(GameSchema.LIVES));
-        player = new Player();
+        // init player
+        GameSchema gameSchema = testBP.getMyGameScenario();
+        Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
+        this.player = new Player((int) gameSchemaAttributeMap.get(GameSchema.MONEY),
+                (int) gameSchemaAttributeMap.get(GameSchema.LIVES));
 
-        List<TDObjectSchema> tdObjectSchemas = new ArrayList<>();
-
-        SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
-        testTowerSchema.addAttribute(TowerSchema.NAME, "test-tower-1");
-        testTowerSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
-        testTowerSchema.addAttribute(TowerSchema.COST, (double) 10);
-
-        tdObjectSchemas.add(testTowerSchema);
-
-        SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
-        testMonsterSchema.addAttribute(MonsterSchema.NAME, "test-monster-1");
-        testMonsterSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
-        testMonsterSchema.addAttribute(MonsterSchema.REWARD, (double) 200);
-        tdObjectSchemas.add(testMonsterSchema);
-
+        // init factory objects
+        List<TDObjectSchema> tdObjectSchemas = testBP.getMyTDObjectSchemas();
         factory.loadTDObjectSchemas(tdObjectSchemas);
 
-        levelManager.addNewWave(createTestWave(testMonsterSchema, 1));
-        levelManager.addNewWave(createTestWave(testMonsterSchema, 2));
-        levelManager.addNewWave(createTestWave(testMonsterSchema, 3));
-    }
-
-    /**
-     * Creates a wave of simple monsters for sans-factory testing ...
-     * 
-     * @param m1
-     * @param swarmSize
-     * @return
-     */
-    private WaveSpawnSchema createTestWave (SimpleMonsterSchema m1, int swarmSize) {
-        MonsterSpawnSchema mschema = new MonsterSpawnSchema(m1, swarmSize);
-        WaveSpawnSchema wschema = new WaveSpawnSchema();
-        wschema.addMonsterSchema(mschema);
-        return wschema;
+        // init levels
+        for (WaveSpawnSchema wave : testBP.getMyLevelSchemas()) {
+            levelManager.addNewWave(wave);
+        }
     }
 
     /**
@@ -358,8 +332,8 @@ public class Model {
         doTowerBehaviors();
         removeDeadMonsters();
         gameState.updateGameStates(monsters, towers, levelManager.getCurrentWave(),
-                                  levelManager.getAllWaves(), gameClock,
-                                  player.getMoney(), player.getLivesRemaining(), player.getScore());
+                levelManager.getAllWaves(), gameClock,
+                player.getMoney(), player.getLivesRemaining(), player.getScore());
     }
 
     /**
@@ -429,5 +403,63 @@ public class Model {
      */
     public void decrementLives () {
         player.decrementLives();
+    }
+
+    /**
+     * TEST METHOD - Create a test blueprint for testing purposes
+     * TODO: remove when we no longer need this
+     * @return test blueprint
+     */
+    private GameBlueprint createTestBlueprint() {
+        GameBlueprint testBlueprint = new GameBlueprint();
+
+        // Populate TDObjects
+        List<TDObjectSchema> testTDObjectSchema = new ArrayList<>();
+
+        // Create test towers
+        SimpleTowerSchema testTowerOne = new SimpleTowerSchema();
+        testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
+        testTowerOne.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
+        testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerOne);
+
+        // Create test mosnters
+        SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
+        testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
+        testMonsterOne.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+        testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
+        testTDObjectSchema.add(testMonsterOne);
+
+        testBlueprint.setMyTDObjectSchemas(testTDObjectSchema);
+
+        // Create test game schemas
+        GameSchema testGameSchema = new GameSchema();
+        testGameSchema.addAttribute(GameSchema.ROWS, 25);
+        testGameSchema.addAttribute(GameSchema.COLUMNS, 20);
+        testGameSchema.addAttribute(GameSchema.LIVES, 3);
+        testGameSchema.addAttribute(GameSchema.MONEY, 500);
+
+        testBlueprint.setMyGameScenario(testGameSchema);
+
+        // Create wave schemas
+        List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
+        MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterOne, 1);
+        WaveSpawnSchema testWaveSpawnSchemaOne = new WaveSpawnSchema();
+        testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
+        testWaves.add(testWaveSpawnSchemaOne);
+
+        MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 2);
+        WaveSpawnSchema testWaveSpawnSchemaTwo = new WaveSpawnSchema();
+        testWaveSpawnSchemaTwo.addMonsterSchema(testMonsterSpawnSchemaTwo);
+        testWaves.add(testWaveSpawnSchemaTwo);
+
+        MonsterSpawnSchema testMonsterSpawnSchemaThree = new MonsterSpawnSchema(testMonsterOne, 10);
+        WaveSpawnSchema testWaveSpawnSchemaThree = new WaveSpawnSchema();
+        testWaveSpawnSchemaThree.addMonsterSchema(testMonsterSpawnSchemaThree);
+        testWaves.add(testWaveSpawnSchemaThree);
+
+        testBlueprint.setMyLevelSchemas(testWaves);
+
+        return testBlueprint;
     }
 }
