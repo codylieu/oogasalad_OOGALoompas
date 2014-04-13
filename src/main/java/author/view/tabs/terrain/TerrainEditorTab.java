@@ -25,6 +25,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.schema.GameMap;
@@ -47,7 +48,6 @@ public class TerrainEditorTab extends EditorTab {
     private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
 	private Map<String, JButton> buttonDisplayOptions;
-
 	private Canvas myCanvas;
 	
 	public TerrainEditorTab(TabController controller){
@@ -164,27 +164,31 @@ public class TerrainEditorTab extends EditorTab {
      */
 	public void saveMap(ActionEvent e) {
 		GameMap myCompletedMap = new GameMap();
+
+		List<Tile> gameTiles = myCanvas.getTiles();
+		List<TileSchema> gameTileSchemas = new ArrayList<TileSchema>();        
+		for (Tile tile : gameTiles) {
+			TileSchema tileSchema = new TileSchema();
+			populateTileSchema(tileSchema, tile);
+			gameTileSchemas.add(tileSchema);
+		}
+
+		List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
+		List<TileMapSchema> gameTileMapSchemas = new ArrayList<TileMapSchema>();
+		for (TileDisplay tileDisp : tileDisplays) {
+			TileMapSchema tileMapSchema = new TileMapSchema();
+			populateTileMapSchema(tileMapSchema, tileDisp);
+			gameTileMapSchemas.add(tileMapSchema);
+		}
+
+		myCompletedMap.setTileSchemas(gameTileSchemas);
+		myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
+
+		TerrainController myControl = (TerrainController) myController;
+		myControl.addMap(myCompletedMap);
 		
-        List<Tile> gameTiles = myCanvas.getTiles();
-        List<TileSchema> gameTileSchemas = new ArrayList<TileSchema>();        
-        for (Tile tile : gameTiles) {
-        	TileSchema tileSchema = new TileSchema();
-        	populateTileSchema(tileSchema, tile);
-        	gameTileSchemas.add(tileSchema);
-        }
-        
-        List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
-        List<TileMapSchema> gameTileMapSchemas = new ArrayList<TileMapSchema>();
-        for (TileDisplay tileDisp : tileDisplays) {
-        	TileMapSchema tileMapSchema = new TileMapSchema();
-        	populateTileMapSchema(tileMapSchema, tileDisp);
-        	gameTileMapSchemas.add(tileMapSchema);
-        }
-        
-        myCompletedMap.setTileSchemas(gameTileSchemas);
-        myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
-        writeMapToFile(myCompletedMap);
-    }
+		//writeMapToFile(myCompletedMap);
+	}
 	
 	/**
 	 * Transfers information about a Tile into a TileSchema object
