@@ -32,22 +32,16 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JLabel levelsPerGameLabel;
 	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
-	private JLabel tilesPerRowLabel;
-	private JLabel tilesPerColumnLabel;
 
 	private JTextField levelsPerGameField;
 	private JTextField livesField;
 	private JTextField beginningMoneyField;
-	private JTextField tilesPerRowField;
-	private JTextField tilesPerColumnField;
 
 	private static final String LEVELS_STRING = "Levels Per Game: ";
 	private static final String LIVES_STRING = "Lives: ";
 	private static final String WAVES_STRING = "Waves Per Level: ";
 	private static final String ENEMIES_STRING = "Enemies Per Wave: ";
 	private static final String MONEY_STRING = "Beginning Money: ";
-	private static final String ROW_TILES_STRING = "Number of Rows: ";
-	private static final String COLUMN_TILES_STRING = "Number of Columns: ";
 
 	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
 	String[] GAME_DIFFICULTY_STRINGS = {"Easy", "Medium", "Hard"};
@@ -175,16 +169,12 @@ public class GameSettingsEditorTab extends EditorTab{
 		levelsPerGameLabel = new JLabel(LEVELS_STRING);
 		livesLabel = new JLabel(LIVES_STRING);
 		beginningMoneyLabel = new JLabel(MONEY_STRING);
-		tilesPerRowLabel = new JLabel(ROW_TILES_STRING);
-		tilesPerColumnLabel = new JLabel(COLUMN_TILES_STRING);
 
 		JPanel labels = new JPanel(new GridLayout(0, 1));
 
 		labels.add(levelsPerGameLabel);
 		labels.add(livesLabel);
 		labels.add(beginningMoneyLabel);
-		labels.add(tilesPerRowLabel);
-		labels.add(tilesPerColumnLabel);
 
 		return labels;
 	}
@@ -194,16 +184,12 @@ public class GameSettingsEditorTab extends EditorTab{
 		livesField = new JFormattedTextField(numberFormat);
 		levelsPerGameField.setColumns(10);
 		beginningMoneyField = new JFormattedTextField(numberFormat);
-		tilesPerRowField = new JFormattedTextField(numberFormat);
-		tilesPerColumnField = new JFormattedTextField(numberFormat);
 
 		JPanel fields = new JPanel(new GridLayout(0, 1));
 
 		fields.add(levelsPerGameField);
 		fields.add(livesField);
 		fields.add(beginningMoneyField);
-		fields.add(tilesPerRowField);
-		fields.add(tilesPerColumnField);
 
 		return fields;
 	}
