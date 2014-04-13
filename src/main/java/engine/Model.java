@@ -207,8 +207,8 @@ public class Model {
         // init player
         GameSchema gameSchema = testBP.getMyGameScenario();
         Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
-        this.player = new Player((int) gameSchemaAttributeMap.get(GameSchema.MONEY),
-                (int) gameSchemaAttributeMap.get(GameSchema.LIVES));
+        this.player = new Player(Integer.valueOf((String) gameSchemaAttributeMap.get(GameSchema.MONEY)),
+                                 Integer.valueOf((String) gameSchemaAttributeMap.get(GameSchema.LIVES)));
 
         // init factory objects
         List<TDObjectSchema> tdObjectSchemas = testBP.getMyTDObjectSchemas();
