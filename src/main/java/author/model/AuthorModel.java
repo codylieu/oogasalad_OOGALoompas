@@ -1,5 +1,8 @@
 package main.java.author.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameMap;
 import main.java.schema.GameSchema;
@@ -31,8 +34,9 @@ public class AuthorModel {
 	}
 
 	public void addGameMap(GameMap gameMap) {
-		// TODO Auto-generated method stub
-
+		List<GameMap> gameMaps = new ArrayList<GameMap>();
+		gameMaps.add(gameMap);
+		myGameBlueprint.setMyGameMaps(gameMaps);
 	}
 
 	public void addWave(WaveSpawnSchema wave) {
