@@ -102,6 +102,10 @@ public class GameSettingsEditorTab extends EditorTab{
 		livesSpinner = makeAttributeSpinner();
 		beginningMoneySpinner = makeAttributeSpinner();
 		
+		levelsPerGameSpinner.setValue(10);
+		livesSpinner.setValue(5);
+		beginningMoneySpinner.setValue(500);
+		
 		fields.add(levelsPerGameSpinner);
 		fields.add(livesSpinner);
 		fields.add(beginningMoneySpinner);
