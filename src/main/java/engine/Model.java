@@ -209,11 +209,12 @@ public class Model {
      */
     public void loadGameBlueprint(String filePath) throws ClassNotFoundException, IOException {
         GameBlueprint bp = null;
-        try {
-            bp = dataHandler.loadBlueprint(filePath);
-        } catch (ZipException e) {
-            e.printStackTrace();
-        }
+        // TODO: load from datahandler
+//        try {
+//            bp = dataHandler.loadBlueprint(filePath);
+//        } catch (ZipException e) {
+//            e.printStackTrace();
+//        }
 
         // TODO: use the actual game blueprint (aka bp)
         GameBlueprint testBP = createTestBlueprint();
