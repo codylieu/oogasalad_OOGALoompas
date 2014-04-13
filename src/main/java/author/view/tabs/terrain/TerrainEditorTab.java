@@ -33,10 +33,13 @@ public class TerrainEditorTab extends EditorTab {
     private static final String CLEAR = "Clear Tiles";
 	private static final String EDIT_TILE = "Edit Tile";
 	private static final String SAVE_MAP = "Save Map";
-	private static final String ADD_TILEMAP = "Add Bitmap File";
+	private static final String ADD_TILEMAP = "Import Image File";
 	private static final String PIXEL_QUERY = "How many pixels are in the bitmap?";
+	private static final String ROW_QUERY = "Enter Row Count";
+	private static final String COL_QUERY = "Enter Column Count";
 	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
-    public static final String IMAGE_FILTER_DIALOGUE = ".GIF and .PNG Images";
+    private static final String IMAGE_FILTER_DIALOGUE = ".GIF and .PNG Images";
+    private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
 
     private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
@@ -46,11 +49,34 @@ public class TerrainEditorTab extends EditorTab {
 	
 	public TerrainEditorTab(TabController controller){
 		super(controller);
-		myCanvas = new Canvas();
+		JButton initTerrainButton = new JButton(USER_INIT_MESSAGE);
+		initTerrainButton.addActionListener(actionListener(this, "initTerrainTab"));
+		add(initTerrainButton);
+	}
+	
+	public void initTerrainTab(ActionEvent e) {
+		boolean isCanvasInitialized = initCanvas();
+		if (!isCanvasInitialized) {
+			return;
+		}
+		remove((JButton) e.getSource());
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
 		add(myCanvas, BorderLayout.WEST);
 		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.EAST);
 		constructButtonDisplay();
+	}
+	
+	private boolean initCanvas() {
+		boolean isInitialized = false;
+		String numRows = queryUser(ROW_QUERY);
+		String numCols = queryUser(COL_QUERY);
+		try {
+			int rowCount = Integer.parseInt(numRows);
+			int colCount = Integer.parseInt(numCols);
+			myCanvas = new Canvas(rowCount, colCount);
+			isInitialized = true;
+		} catch (NumberFormatException e) {}
+		return isInitialized;
 	}
 	
 	private void constructButtonDisplay() {
@@ -95,27 +121,34 @@ public class TerrainEditorTab extends EditorTab {
 		openBGTiles.addActionListener(actionListener(this, "openEditorWindow"));
 		return openBGTiles;
 	}
+	
+	/**
+	 * Allows the user to enter a grid of images that they would like to use,
+	 * which can then be parsed based on the pixel size of each image within
+	 * the grid.
+	 * 
+	 * @param e
+	 */
+	public void importTileMap(ActionEvent e) {
+		fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+        FileFilter imageFilter = new FileNameExtensionFilter(IMAGE_FILTER_DIALOGUE,
+                ".png", ".gif", ".bmp");
+        fileChooser.setFileFilter(imageFilter);
 
-	
-	private void populateTileSchema(TileSchema tileSchema, Tile tile) {
-        tileSchema.addAttribute(TileSchema.CANVAS_ROW, tile.getRow());
-        tileSchema.addAttribute(TileSchema.CANVAS_COL, tile.getCol());
-        tileSchema.addAttribute(TileSchema.TILEMAP_ROW, tile.getMyMapYIndex());
-        tileSchema.addAttribute(TileSchema.TILEMAP_COL, tile.getMyMapXIndex());
-        tileSchema.addAttribute(TileSchema.TILEMAP_FILE_NAME, tile.getMyTileMapFileName());
-        tileSchema.addAttribute(TileSchema.TILE_CID, tile.getPassIndex());
+		int fileReturn = fileChooser.showOpenDialog(this);
+		if (fileReturn == JFileChooser.APPROVE_OPTION) {
+			addTileDisplay(fileChooser.getSelectedFile());
+		} else {
+            System.out.println("unacceptable file format"); //TODO: throw exception
+        }
 	}
-	
-	private void populateTileMapSchema(TileMapSchema tileMapSchema, TileDisplay tileDisp) {
-        tileMapSchema.addAttribute(TileMapSchema.NUM_ROWS, tileDisp.getNumRows());
-        tileMapSchema.addAttribute(TileMapSchema.NUM_COLS, tileDisp.getNumCols());
-        tileMapSchema.addAttribute(TileMapSchema.PIXEL_SIZE, tileDisp.getMyPixelSize());
-        tileMapSchema.addAttribute(TileMapSchema.TILEMAP_FILE_NAME, tileDisp.getTileMapFile());
-	}
-	
-	
+
     /**
-     * Temporary test file, saving will be in another component TODO: remove - jordan
+     * Allows the current tiles on the canvas to be saved. TileSchemas represent
+     * the information behind Tile objects, while TileMapSchemas represent
+     * information about an image file imported by the user. Both are necessary
+     * in transferring information to the engine team. 
+     * 
      * @param e
      */
 	public void saveMap(ActionEvent e) {
@@ -131,7 +164,6 @@ public class TerrainEditorTab extends EditorTab {
         
         List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
         List<TileMapSchema> gameTileMapSchemas = new ArrayList<TileMapSchema>();
-    
         for (TileDisplay tileDisp : tileDisplays) {
         	TileMapSchema tileMapSchema = new TileMapSchema();
         	populateTileMapSchema(tileMapSchema, tileDisp);
@@ -140,8 +172,44 @@ public class TerrainEditorTab extends EditorTab {
         
         myCompletedMap.setTileSchemas(gameTileSchemas);
         myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
-
-        JFileChooser saveFileChooser = new JFileChooser();
+        writeMapToFile(myCompletedMap);
+    }
+	
+	/**
+	 * Transfers information about a Tile into a TileSchema object
+	 * 
+	 * @param tileSchema 
+	 * @param tile
+	 */
+	private void populateTileSchema(TileSchema tileSchema, Tile tile) {
+        tileSchema.addAttribute(TileSchema.CANVAS_ROW, tile.getRow());
+        tileSchema.addAttribute(TileSchema.CANVAS_COL, tile.getCol());
+        tileSchema.addAttribute(TileSchema.TILEMAP_ROW, tile.getMyMapYIndex());
+        tileSchema.addAttribute(TileSchema.TILEMAP_COL, tile.getMyMapXIndex());
+        tileSchema.addAttribute(TileSchema.TILEMAP_FILE_NAME, tile.getMyTileMapFileName());
+        tileSchema.addAttribute(TileSchema.TILE_CID, tile.getPassIndex());
+	}
+	
+	/**
+	 * Transfers information about a TileDisplay into a TileMapSchema object
+	 * @param tileMapSchema
+	 * @param tileDisp
+	 */
+	private void populateTileMapSchema(TileMapSchema tileMapSchema, TileDisplay tileDisp) {
+        tileMapSchema.addAttribute(TileMapSchema.NUM_ROWS, tileDisp.getNumRows());
+        tileMapSchema.addAttribute(TileMapSchema.NUM_COLS, tileDisp.getNumCols());
+        tileMapSchema.addAttribute(TileMapSchema.PIXEL_SIZE, tileDisp.getMyPixelSize());
+        tileMapSchema.addAttribute(TileMapSchema.TILEMAP_FILE_NAME, tileDisp.getTileMapFile());
+	}
+	
+	/**
+	 * Serializes a 'GameMap' which contains multiple TileSchemas and 
+	 * TileMapSchemas. 
+	 * 
+	 * @param map
+	 */
+	private void writeMapToFile(GameMap map) {
+		JFileChooser saveFileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("SER Files", "ser");
         saveFileChooser.setFileFilter(filter);
         int returnVal = saveFileChooser.showSaveDialog(this);
@@ -149,27 +217,20 @@ public class TerrainEditorTab extends EditorTab {
             try {
                 FileOutputStream fout = new FileOutputStream(saveFileChooser.getSelectedFile().getAbsolutePath() + ".ser");
                 ObjectOutputStream oos = new ObjectOutputStream(fout);
-                oos.writeObject(myCompletedMap);
+                oos.writeObject(map);
                 oos.close();
             }
             catch(Exception ex){
                 ex.printStackTrace();
             }
         }
-    }
+	}
 	
-	public void importTileMap(ActionEvent e) {
-		fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
-        FileFilter imageFilter = new FileNameExtensionFilter(IMAGE_FILTER_DIALOGUE,
-                ".png", ".gif");
-        fileChooser.setFileFilter(imageFilter);
-
-		int fileReturn = fileChooser.showOpenDialog(this);
-		if (fileReturn == JFileChooser.APPROVE_OPTION) {
-			addTileDisplay(fileChooser.getSelectedFile());
-		} else {
-            System.out.println("unacceptable file format"); //TODO: throw exception
-        }
+	/**
+	 * Clears the canvas of all user placed Tiles
+	 */
+	public void clearCanvasTiles(ActionEvent e) {
+		myCanvas.clearTiles();
 	}
 	
 	private void addTileDisplay(File f) {
@@ -181,7 +242,7 @@ public class TerrainEditorTab extends EditorTab {
             } else {
                 JOptionPane.showMessageDialog(this, PIXEL_RANGE);
             }
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
 	}
@@ -190,10 +251,10 @@ public class TerrainEditorTab extends EditorTab {
 		return JOptionPane.showInputDialog(query);
 	}
 	
-	public void clearCanvasTiles(ActionEvent e) {
-		myCanvas.clearTiles();
-	}
-	
+	/**
+	 * Opens a window that allows the user to edit information about
+	 * the selected Tile
+	 */
 	public void openEditorWindow(ActionEvent e) {
 		JFrame selectionFrame = new JFrame();
 		selectionFrame.add(myTileSelectionManager.getTileEditPanel(), BorderLayout.CENTER);

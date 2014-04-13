@@ -23,7 +23,6 @@ public class MainController {
 	}
 
 	public void addTabController(TabController tabController) {
-
 		myTabControllers.add(tabController);
 	}
 
