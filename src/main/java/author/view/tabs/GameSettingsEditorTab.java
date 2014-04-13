@@ -40,10 +40,6 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JLabel levelsPerGameLabel;
 	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
-
-	private JTextField levelsPerGameField;
-	private JTextField livesField;
-	private JTextField beginningMoneyField;
 	
 	private JSpinner levelsPerGameSpinner;
 	private JSpinner livesSpinner;
