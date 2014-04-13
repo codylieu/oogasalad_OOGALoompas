@@ -1,12 +1,16 @@
 package main.java.author.view.tabs;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -17,11 +21,15 @@ import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
+import main.java.author.view.global_constants.FontConstants;
 
 public class GameSettingsEditorTab extends EditorTab{
 
@@ -36,6 +44,12 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JTextField levelsPerGameField;
 	private JTextField livesField;
 	private JTextField beginningMoneyField;
+	
+	private JSpinner levelsPerGameSpinner;
+	private JSpinner livesSpinner;
+	private JSpinner beginningMoneySpinner;
+	
+	private List<JSpinner> spinnerFields;
 
 	private static final String LEVELS_STRING = "Levels Per Game: ";
 	private static final String LIVES_STRING = "Lives: ";
@@ -67,6 +81,37 @@ public class GameSettingsEditorTab extends EditorTab{
 		settingsPanel.add(makeAttributesPane(), BorderLayout.SOUTH);
 
 		settingsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+	}
+	
+	private JSpinner makeAttributeSpinner(){
+		
+		SpinnerModel model = new SpinnerNumberModel(1, 1, 1000, 1);
+		JSpinner spinner = new JSpinner(model);
+		
+		spinner.setMaximumSize(new Dimension(200, spinner.getHeight()));
+		
+		Font bigFont = spinner.getFont().deriveFont(Font.PLAIN,
+				FontConstants.X_LARGE_FONT_SIZE);
+		spinner.setFont(bigFont);
+		
+		return spinner;
+		
+	}
+	
+	private JComponent makeFieldPane(){
+		
+		JPanel fields = new JPanel(new GridLayout(0, 1));
+
+		levelsPerGameSpinner = makeAttributeSpinner();
+		livesSpinner = makeAttributeSpinner();
+		beginningMoneySpinner = makeAttributeSpinner();
+		
+		fields.add(levelsPerGameSpinner);
+		fields.add(livesSpinner);
+		fields.add(beginningMoneySpinner);
+		
+		return fields;
+		
 	}
 
 	private JComponent makeDropDownMenus(){
@@ -179,25 +224,25 @@ public class GameSettingsEditorTab extends EditorTab{
 		return labels;
 	}
 
-	private JComponent makeFieldPane(){
-		levelsPerGameField = new JFormattedTextField(numberFormat);
-		livesField = new JFormattedTextField(numberFormat);
-		beginningMoneyField = new JFormattedTextField(numberFormat);
-		
-		levelsPerGameField.setColumns(10);
-		
-		levelsPerGameField.setText("10");
-		livesField.setText("5");
-		beginningMoneyField.setText("5000");
-
-		JPanel fields = new JPanel(new GridLayout(0, 1));
-
-		fields.add(levelsPerGameField);
-		fields.add(livesField);
-		fields.add(beginningMoneyField);
-
-		return fields;
-	}
+//	private JComponent makeFieldPane(){
+//		levelsPerGameField = new JFormattedTextField(numberFormat);
+//		livesField = new JFormattedTextField(numberFormat);
+//		beginningMoneyField = new JFormattedTextField(numberFormat);
+//		
+//		levelsPerGameField.setColumns(10);
+//		
+//		levelsPerGameField.setText("10");
+//		livesField.setText("5");
+//		beginningMoneyField.setText("5000");
+//
+//		JPanel fields = new JPanel(new GridLayout(0, 1));
+//
+//		fields.add(levelsPerGameField);
+//		fields.add(livesField);
+//		fields.add(beginningMoneyField);
+//
+//		return fields;
+//	}
 
 
 }
