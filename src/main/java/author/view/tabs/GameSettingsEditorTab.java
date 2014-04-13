@@ -182,8 +182,13 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JComponent makeFieldPane(){
 		levelsPerGameField = new JFormattedTextField(numberFormat);
 		livesField = new JFormattedTextField(numberFormat);
-		levelsPerGameField.setColumns(10);
 		beginningMoneyField = new JFormattedTextField(numberFormat);
+		
+		levelsPerGameField.setColumns(10);
+		
+		levelsPerGameField.setText("10");
+		livesField.setText("5");
+		beginningMoneyField.setText("5000");
 
 		JPanel fields = new JPanel(new GridLayout(0, 1));
 
