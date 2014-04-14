@@ -66,18 +66,20 @@ public class EnvironmentKnowledge {
 
         return closestMonsterCoor;
     }
-    
+
     public List<ITower> getTowerCoordinatesInRange (double x, double y, double range) {
-    	Point2D towerCoordinate = new Point2D.Double(x, y);
-    	List<ITower> nearbyTowersList = new ArrayList<ITower>();
-    	for(ITower[] tArray : allTowers) {
-    		for(ITower t : tArray) {
-    			if(t != null && new Point2D.Double(t.getXCoordinate(), t.getYCoordinate()).distance(towerCoordinate) < range) {
-    				nearbyTowersList.add(t);
-    			}
-    		}
-    	}
-    	return nearbyTowersList;
+        Point2D towerCoordinate = new Point2D.Double(x, y);
+        List<ITower> nearbyTowersList = new ArrayList<ITower>();
+        for (ITower[] tArray : allTowers) {
+            for (ITower t : tArray) {
+                if (t != null &&
+                    new Point2D.Double(t.getXCoordinate(), t.getYCoordinate())
+                            .distance(towerCoordinate) < range) {
+                    nearbyTowersList.add(t);
+                }
+            }
+        }
+        return nearbyTowersList;
     }
 
     /**

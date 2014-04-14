@@ -3,18 +3,19 @@ package main.java.engine.factory;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.BaseTower;
+import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.MoneyTower;
 import main.java.engine.objects.tower.ShootingTower;
+import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.engine.util.Reflection;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
@@ -36,7 +37,8 @@ public class TDObjectFactory {
         // TODO: Get rid of repetition in loading schemas
         for (TDObjectSchema s : schemas) {
             String objName = (String) s.getAttributesMap().get(TDObjectSchema.NAME);
-            String objImagePath = Model.RESOURCE_PATH + s.getAttributesMap().get(TDObjectSchema.IMAGE_NAME);
+            String objImagePath =
+                    Model.RESOURCE_PATH + s.getAttributesMap().get(TDObjectSchema.IMAGE_NAME);
             engine.defineImage(objName, "-", 1, objImagePath, "-");
             tdObjectSchemaMap.put(objName, s);
         }
@@ -50,21 +52,43 @@ public class TDObjectFactory {
      * @return The new Tower object
      * @throws TowerCreationFailureException
      */
-    public ITower placeTower (Point2D location, String towerName) throws TowerCreationFailureException {
+    public ITower placeTower (Point2D location, String towerName)
+                                                                 throws TowerCreationFailureException {
         Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
             schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
             Object[] towerParameters = { schema.getAttributesMap() };
 
-            return new MoneyTower(new ShootingTower((BaseTower) placeObject(schema.getMyConcreteType(), towerParameters), 10, 3, 200));
+            // return new MoneyTower(new ShootingTower((BaseTower)
+            // placeObject(schema.getMyConcreteType(), towerParameters), 10, 3, 200));
+            return addTowerBehaviors((SimpleTower) placeObject(schema.getMyConcreteType(), towerParameters),
+                                schema);
         }
         catch (Exception e) {
             throw new TowerCreationFailureException(e);
         }
     }
 
-    public Monster placeMonster (Point2D entrance, Exit exit, String monsterName) throws MonsterCreationFailureException {
+    private ITower addTowerBehaviors (SimpleTower baseTower, TDObjectSchema schema) {
+        ITower finalTower = baseTower;
+        Map<String, Serializable> attributes = schema.getAttributesMap();
+        Collection<TowerBehaviors> towerBehaviors =
+                (Collection<TowerBehaviors>) attributes.get(TowerSchema.TOWER_BEHAVIORS);
+        for (TowerBehaviors towerBehavior : towerBehaviors) {
+            if (towerBehavior.equals(TowerBehaviors.MONEY_FARMING)) {
+                finalTower = new MoneyTower(finalTower);
+            }
+            if (towerBehavior.equals(TowerBehaviors.SHOOTING)) {
+                finalTower = new ShootingTower(finalTower, attributes);
+            }
+        }
+
+        return finalTower;
+    }
+
+    public Monster placeMonster (Point2D entrance, Exit exit, String monsterName)
+                                                                                 throws MonsterCreationFailureException {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
 
@@ -79,7 +103,7 @@ public class TDObjectFactory {
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
         }
         catch (Exception e) {
-            throw new MonsterCreationFailureException();
+            throw new MonsterCreationFailureException(e);
         }
     }
 

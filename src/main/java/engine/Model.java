@@ -4,6 +4,8 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -14,8 +16,9 @@ import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.BaseTower;
+import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.ITower;
+import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
@@ -25,7 +28,6 @@ import main.java.schema.map.GameMap;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.towers.SimpleTowerSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
@@ -412,9 +414,13 @@ public class Model {
         List<TDObjectSchema> testTDObjectSchema = new ArrayList<>();
 
         // Create test towers
-        SimpleTowerSchema testTowerOne = new SimpleTowerSchema();
+        TowerSchema testTowerOne = new TowerSchema();
         testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
-        testTowerOne.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
+        testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
+        towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
+        towerBehaviors.add(TowerBehaviors.SHOOTING);
+        testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
         testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerOne);
 

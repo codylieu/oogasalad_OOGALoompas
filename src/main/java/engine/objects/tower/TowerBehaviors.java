@@ -1,5 +1,7 @@
 package main.java.engine.objects.tower;
 
-public enum TowerBehaviors {
+import java.io.Serializable;
+
+public enum TowerBehaviors implements Serializable{
     SHOOTING, MONEY_FARMING
 }

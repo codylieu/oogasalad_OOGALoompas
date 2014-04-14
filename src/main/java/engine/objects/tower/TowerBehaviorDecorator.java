@@ -2,44 +2,45 @@ package main.java.engine.objects.tower;
 
 import main.java.engine.EnvironmentKnowledge;
 
+
 abstract class TowerBehaviorDecorator implements ITower {
     /**
      * The base tower will have behaviors added to it ("decorations")
      */
-    protected ITower baseTower;  
-    
+    protected ITower baseTower;
+
     public TowerBehaviorDecorator (ITower baseTower) {
         this.baseTower = baseTower;
     }
-    
+
     @Override
-    public boolean atInterval(int intervalFrequency) {
+    public boolean atInterval (int intervalFrequency) {
         return baseTower.atInterval(intervalFrequency);
     }
-    
+
     @Override
-    public double getXCoordinate(){
+    public double getXCoordinate () {
         return baseTower.getXCoordinate();
     }
-    
+
     @Override
-    public double getYCoordinate(){
+    public double getYCoordinate () {
         return baseTower.getYCoordinate();
     }
-    
+
     @Override
-    public double getCost(){
+    public double getCost () {
         return baseTower.getCost();
     }
-    
+
     @Override
-    public void remove(){
+    public void remove () {
         baseTower.remove();
     }
-    
+
     @Override
     public boolean callTowerActions (EnvironmentKnowledge environ) {
-        if(baseTower.callTowerActions(environ)){
+        if (baseTower.callTowerActions(environ)) {
             // in addition to base tower's behavior, also do additional behavior
             doDecoratedBehavior(environ);
         }
@@ -48,4 +49,3 @@ abstract class TowerBehaviorDecorator implements ITower {
 
     abstract void doDecoratedBehavior (EnvironmentKnowledge environ);
 }
-

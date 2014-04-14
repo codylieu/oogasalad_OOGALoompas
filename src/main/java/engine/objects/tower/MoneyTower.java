@@ -5,8 +5,9 @@ import main.java.engine.EnvironmentKnowledge;
 
 /**
  * Decorates a Tower with the ability to farm money for the current player.
+ * 
  * @author Austin
- *
+ * 
  */
 public class MoneyTower extends TowerBehaviorDecorator {
 
@@ -27,7 +28,7 @@ public class MoneyTower extends TowerBehaviorDecorator {
         // in addition to base tower's behaviors, also give player money at the appropriate interval
         grantPlayerMoney(environ);
     }
-    
+
     private void grantPlayerMoney (EnvironmentKnowledge environ) {
         if (baseTower.atInterval(DEFAULT_MONEY_GRANT_INTERVAL)) {
             environ.grantPlayerMoney(DEFAULT_MONEY_GRANTED);

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.BaseTower;
+import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.ITower;
 import main.java.schema.WaveSpawnSchema;
 

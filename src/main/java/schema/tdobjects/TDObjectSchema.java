@@ -1,9 +1,7 @@
 package main.java.schema.tdobjects;
 
 import java.io.Serializable;
-
 import main.java.engine.objects.TDObject;
-import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.schema.AbstractSchema;
 import main.java.schema.HasDefaultValues;
 

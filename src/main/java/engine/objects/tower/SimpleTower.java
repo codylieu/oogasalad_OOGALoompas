@@ -1,6 +1,7 @@
 package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
@@ -9,16 +10,14 @@ import main.java.schema.tdobjects.TowerSchema;
 
 /**
  *
- * Base Tower class 
- * It is wrapped around ("decorated") with tower behaviors such as shooting, money-farming ability, etc.
+ * A Simple Tower that just sits there and does nothing. 
+ * It is used to wrap around ("decorate") with tower behaviors such as shooting, money-farming ability, etc.
+ * The TDObject factory will use this tower as the base tower to decorate.
  *
  */
-public class BaseTower extends TDObject implements ITower {
+public class SimpleTower extends TDObject implements ITower {
 
-    public static final double DEFAULT_DAMAGE = 10;
     public static final double DEFAULT_HEALTH = 100;
-    public static final double DEFAULT_RANGE = 200;
-    public static final double DEFAULT_FIRING_SPEED = 5;
     public static final double DEFAULT_COST = 100;
     public static final double DEFAULT_BUILDUPTIME = 100;
 
@@ -26,8 +25,6 @@ public class BaseTower extends TDObject implements ITower {
 
     public static final int FLASH_INTERVAL = 5;
 
-    protected double myDamage;
-    protected double myDamageOffset;
     protected double myRange;
     protected double myCost;
     protected double myBuildUpTime;
@@ -37,11 +34,6 @@ public class BaseTower extends TDObject implements ITower {
     protected String myImage; 
     protected double myHealth;
     
-
-    /**
-     * This should be a number from 1 (slowest) to 10 (fastest);
-     */
-    protected double myFiringSpeed;
     /**
      * Internal timer shooting at intervals and timing build up phase.
      */
@@ -57,23 +49,18 @@ public class BaseTower extends TDObject implements ITower {
      * @param cost money cost of creating tower
      * @param buildup time for this tower's construction
      */
-    public BaseTower (Point2D location, double health, double damage,
-                  double range, double cost, double buildup, String name) {
+    public SimpleTower (Point2D location, double health, double cost, double buildup, String name) {
         super("tower", location.getX(), location.getY(), TOWER_CID, name);
         myHealth = health;
         myImage = name;
-        myDamage = damage;
-        myRange = range;
         myCost = cost;
         myBuildUpTime = buildup;
     }
     
-    public BaseTower (Map<String, Object> attributes) {
+    public SimpleTower (Map<String, Serializable> attributes) {
         this(
              (Point2D) getValueOrDefault(attributes, TowerSchema.LOCATION, new Point2D.Double(0, 0)),
              (double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),
-             (double) getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
-             (double) getValueOrDefault(attributes, TowerSchema.RANGE, DEFAULT_RANGE),
              (double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
              (double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
              (String) attributes.get(TowerSchema.NAME));     
@@ -116,9 +103,8 @@ public class BaseTower extends TDObject implements ITower {
     }
 
     public String toString () {
-        return "Damage: " + myDamage + "\n"
-               + "Range: " + myRange + "\n"
-               + "Cost: " + myCost + "\n";
+        return "Name: " + myImage
+                + "Cost: " + myCost + "\n";
     }
     
     /**
