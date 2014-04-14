@@ -5,6 +5,7 @@ import main.java.engine.EnvironmentKnowledge;
 public interface ITower {
 
     /**
+     * Call every frame.
      * Does action specific to the type of tower.
      * 
      * Towers that shoot will fire a projectile in the direction of the specified x,y target
@@ -15,12 +16,18 @@ public interface ITower {
      * @param environ environment knowledge
      * @return
      */
-    public void callTowerActions (EnvironmentKnowledge environ);
+    public boolean callTowerActions (EnvironmentKnowledge environ);
     
     public boolean atInterval(int interval);
     
     public double getXCoordinate();
     
     public double getYCoordinate();
+    
+    public void remove();
+    
+    public void doFrame(EnvironmentKnowledge environ);
+    
+    public double getCost();
     
 }

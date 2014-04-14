@@ -15,6 +15,7 @@ import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.BaseTower;
+import main.java.engine.objects.tower.ITower;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
@@ -38,7 +39,7 @@ public class Model {
     private TDObjectFactory factory;
     private Player player;
     private double gameClock;
-    private BaseTower[][] towers;
+    private ITower[][] towers;
     private List<Monster> monsters;
     private CollisionManager collisionManager;
     private GameState gameState;
@@ -59,7 +60,7 @@ public class Model {
 
         this.gameClock = 0;
         monsters = new ArrayList<Monster>();
-        towers = new BaseTower[engine.viewTilesX()][engine.viewTilesY()];
+        towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
 
         levelManager.setEntrance(0, engine.pfHeight() / 2);
@@ -101,7 +102,7 @@ public class Model {
                 return false;
             }
 
-            BaseTower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string name
+            ITower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string name
 
             if (player.getMoney() >= newTower.getCost()) {
                 // FIXME: Decrease money?
@@ -110,7 +111,7 @@ public class Model {
                 return true;
             }
             else {
-                destroyTower(newTower);
+                newTower.remove();
                 return false;
             }
         } catch (Exception e) {
@@ -120,15 +121,6 @@ public class Model {
         return false;
     }
 
-    /**
-     * Force destroy a tower
-     * 
-     * @param tower
-     */
-    private void destroyTower (BaseTower tower) {
-        tower.setImage(null);
-        tower.remove();
-    }
 
     /**
      * Return a two element int array with the tile coordinates that a given point is on, for use
@@ -360,8 +352,8 @@ public class Model {
      */
     private void doTowerBehaviors () {
       
-        for (BaseTower[] towerRow : towers) {
-            for (BaseTower t : towerRow) {
+        for (ITower[] towerRow : towers) {
+            for (ITower t : towerRow) {
                 if (t != null) {
                     t.callTowerActions(environ);
                 }
@@ -390,7 +382,7 @@ public class Model {
             int xtile = coordinates[0];
             int ytile = coordinates[1];
             towers[xtile][ytile].remove();
-            BaseTower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
+            ITower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
             // System.out.println(newTower.x);
             towers[xtile][ytile] = newTower;
             return true;
@@ -423,7 +415,7 @@ public class Model {
         testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerOne);
 
-        // Create test mosnters
+        // Create test monsters
         SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
         testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
         testMonsterOne.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");

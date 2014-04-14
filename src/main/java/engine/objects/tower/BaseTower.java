@@ -80,24 +80,28 @@ public class BaseTower extends TDObject implements ITower {
 }
 
     /**
-     * Call every frame.
+     * 
      * 
      * Will call action specific to the type of tower if and only if past the build up time.
      */
+    @Override
     public void doFrame(EnvironmentKnowledge environ){
-        myTimingCounter++;
-
-        if (myTimingCounter <= myBuildUpTime) {
-            flash();
-            return;   
-            // do no further behavior if still building up
-        }
-        
+    
         callTowerActions(environ);
     }
+    
+    @Override
+    public boolean callTowerActions (EnvironmentKnowledge environ) {
+        myTimingCounter++;
+        
+        if (myTimingCounter <= myBuildUpTime) {
+            flash();
+            return false;   
+            // do no further behavior if still building up
+        }
 
-    public void callTowerActions (EnvironmentKnowledge environ) {
-        // do nothing, base tower just sits there.
+        return true;
+
     }
 
     /**
@@ -144,6 +148,12 @@ public class BaseTower extends TDObject implements ITower {
     @Override
     public double getYCoordinate () {
         return y;
+    }
+    
+    @Override
+    public void remove() {
+        setImage(null);
+        super.remove();
     }
 
 }

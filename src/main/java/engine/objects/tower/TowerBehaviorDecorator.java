@@ -13,11 +13,6 @@ abstract class TowerBehaviorDecorator implements ITower {
     }
     
     @Override
-    public void callTowerActions (EnvironmentKnowledge environ) {
-        baseTower.callTowerActions(environ);
-    }
-    
-    @Override
     public boolean atInterval(int intervalFrequency) {
         return baseTower.atInterval(intervalFrequency);
     }
@@ -31,4 +26,31 @@ abstract class TowerBehaviorDecorator implements ITower {
     public double getYCoordinate(){
         return baseTower.getYCoordinate();
     }
+    
+    @Override
+    public void doFrame(EnvironmentKnowledge environ) {
+        baseTower.doFrame(environ);
+    }
+    
+    @Override
+    public double getCost(){
+        return baseTower.getCost();
+    }
+    
+    @Override
+    public void remove(){
+        baseTower.remove();
+    }
+    
+    @Override
+    public boolean callTowerActions (EnvironmentKnowledge environ) {
+        if(baseTower.callTowerActions(environ)){
+            // in addition to base tower's behavior, also do additional behavior
+            doDecoratedBehavior(environ);
+        }
+        return true;
+    }
+
+    abstract void doDecoratedBehavior (EnvironmentKnowledge environ);
 }
+

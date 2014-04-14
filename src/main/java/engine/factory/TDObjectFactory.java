@@ -12,6 +12,8 @@ import main.java.engine.Model;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.BaseTower;
+import main.java.engine.objects.tower.ITower;
+import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.util.Reflection;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
@@ -47,14 +49,14 @@ public class TDObjectFactory {
      * @return The new Tower object
      * @throws TowerCreationFailureException
      */
-    public BaseTower placeTower (Point2D location, String towerName) throws TowerCreationFailureException {
+    public ITower placeTower (Point2D location, String towerName) throws TowerCreationFailureException {
         Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
             schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
             Object[] towerParameters = { schema.getAttributesMap() };
 
-            return (BaseTower) placeObject(schema.getMyConcreteType(), towerParameters);
+            return new ShootingTower((BaseTower) placeObject(schema.getMyConcreteType(), towerParameters), 10, 3, 200);
         }
         catch (Exception e) {
             throw new TowerCreationFailureException(e);

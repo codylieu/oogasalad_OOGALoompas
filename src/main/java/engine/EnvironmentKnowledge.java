@@ -4,7 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.BaseTower;
+import main.java.engine.objects.tower.ITower;
 
 
 /**
@@ -27,14 +27,14 @@ public class EnvironmentKnowledge {
 
     List<Monster> allMonsters;
     Player currentPlayer;
-    BaseTower[][] allTowers;
+    ITower[][] allTowers;
 
     /**
      * Add necessary state info.
      * 
      * @param allMonsters
      */
-    public EnvironmentKnowledge (List<Monster> allMonsters, Player currentPlayer, BaseTower[][] towers) {
+    public EnvironmentKnowledge (List<Monster> allMonsters, Player currentPlayer, ITower[][] towers) {
 
         // add more parameters as necessary
 
@@ -67,12 +67,12 @@ public class EnvironmentKnowledge {
         return closestMonsterCoor;
     }
     
-    public List<BaseTower> getTowerCoordinatesInRange (double x, double y, double range) {
+    public List<ITower> getTowerCoordinatesInRange (double x, double y, double range) {
     	Point2D towerCoordinate = new Point2D.Double(x, y);
-    	List<BaseTower> nearbyTowersList = new ArrayList<BaseTower>();
-    	for(BaseTower[] tArray : allTowers) {
-    		for(BaseTower t : tArray) {
-    			if(t != null && t.getCurrentCoor().distance(towerCoordinate) < range) {
+    	List<ITower> nearbyTowersList = new ArrayList<ITower>();
+    	for(ITower[] tArray : allTowers) {
+    		for(ITower t : tArray) {
+    			if(t != null && new Point2D.Double(t.getXCoordinate(), t.getYCoordinate()).distance(towerCoordinate) < range) {
     				nearbyTowersList.add(t);
     			}
     		}

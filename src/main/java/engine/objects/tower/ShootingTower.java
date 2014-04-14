@@ -1,11 +1,8 @@
 package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.Projectile;
-import main.java.schema.tdobjects.TowerSchema;
 
 
 public class ShootingTower extends TowerBehaviorDecorator {
@@ -28,12 +25,10 @@ public class ShootingTower extends TowerBehaviorDecorator {
 
 
     @Override
-    public void callTowerActions (EnvironmentKnowledge environ) {
-        super.callTowerActions(environ);
-        // in addition to base tower's behavior, also fire at the nearest enemy!
+    void doDecoratedBehavior (EnvironmentKnowledge environ) {
+        //fire at the nearest enemy!
         doTowerFiring(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
     }
-
 
     /**
      * 
@@ -58,10 +53,9 @@ public class ShootingTower extends TowerBehaviorDecorator {
      * @return
      */
     private boolean inFiringInterval () {
-        return atInterval((int) Math.max(myFiringSpeed, 10) / 10);
+        return atInterval(21-2* (int) Math.min(myFiringSpeed, 10));
     }
 
-    
     /**
      * Fires projected at a target with the tower's damage factor
      */
@@ -70,4 +64,5 @@ public class ShootingTower extends TowerBehaviorDecorator {
         double angle = Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
         new Projectile(getXCoordinate(), getYCoordinate(), angle, myDamage);
     }
+
 }

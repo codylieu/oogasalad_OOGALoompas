@@ -17,8 +17,8 @@ public class PowerUpTower extends TowerBehaviorDecorator {
 
     public void callTowerActions (EnvironmentKnowledge environ) {
         super.callTowerActions(environ);
-        List<BaseTower> nearbyTowers = environ.getTowerCoordinatesInRange(getXCoordinate(), getYCoordinate(), myRange);
-        for (BaseTower t : nearbyTowers) {
+        List<ITower> nearbyTowers = environ.getTowerCoordinatesInRange(getXCoordinate(), getYCoordinate(), myRange);
+        for (ITower t : nearbyTowers) {
             // t.setTowerDamageOffset(DEFAULT_DAMAGE_POWER_UP_PROPORTION);
             // add another shooting tower wrapper instead
         }

@@ -6,6 +6,7 @@ import java.util.List;
 
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.BaseTower;
+import main.java.engine.objects.tower.ITower;
 import main.java.schema.WaveSpawnSchema;
 
 /**
@@ -15,7 +16,7 @@ import main.java.schema.WaveSpawnSchema;
 public class GameState implements Serializable {
 	// model specific
 	private List<Monster> monsters; 
-	private BaseTower[][] towers;
+	private ITower[][] towers;
 	private Point2D entrance;
 	private Point2D exit;
 	private int currentWave;
@@ -41,7 +42,7 @@ public class GameState implements Serializable {
 	 * @param playerLife
 	 * @param playerScore
 	 */
-	public void updateGameStates(List<Monster> currentMonsters, BaseTower[][] currentTowers, int currentWaveNumber, List<WaveSpawnSchema> allCurrentWaves, double currentGameClock, 
+	public void updateGameStates(List<Monster> currentMonsters, ITower[][] currentTowers, int currentWaveNumber, List<WaveSpawnSchema> allCurrentWaves, double currentGameClock, 
 			int playerMoney, int playerLife, double playerScore) {
 		monsters = currentMonsters;
 		towers = currentTowers;
