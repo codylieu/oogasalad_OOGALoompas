@@ -44,7 +44,7 @@ public class TestEngine extends JGEngine {
         super.doFrame();
         displayTowerGhostIfNecessary();
         if (getMouseButton(1)) {
-            model.placeTower(getMouseX(), getMouseY());
+            model.placeTower(getMouseX(), getMouseY(), "test-tower-1");
             clearMouseButton(1);
         }
         if (getMouseButton(3)) { // right click

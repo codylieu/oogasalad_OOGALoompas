@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +15,6 @@ import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
@@ -24,7 +22,6 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
-import main.java.schema.map.GameMap;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -32,6 +29,7 @@ import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
 import net.lingala.zip4j.exception.ZipException;
+
 
 public class Model {
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
@@ -69,9 +67,9 @@ public class Model {
         levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
         loadGameBlueprint(null);// TODO: REPLACE
         dataHandler = new DataHandler();
-        
+
         addNewPlayer();
-        
+
     }
 
     private void defineAllStaticImages () {
@@ -87,7 +85,7 @@ public class Model {
     public void addNewPlayer () {
         this.player = new Player();
         levelManager.registerPlayer(player);
-        
+
         environ = new EnvironmentKnowledge(monsters, player, towers);
     }
 
@@ -96,18 +94,18 @@ public class Model {
      * 
      * @param x x coordinate of the tower
      * @param y y coordinate of the tower
+     * @param towerName Type tower to be placed
      */
-    public boolean placeTower (double x, double y) {
+    public boolean placeTower (double x, double y, String towerName) {
         try {
             Point2D location = new Point2D.Double(x, y);
             int[] currentTile = getTileCoordinates(location);
 
             // if tower already exists in the tile clicked, do nothing
-            if (isTowerPresent(currentTile)) {
-                return false;
-            }
+            if (isTowerPresent(currentTile)) { return false; }
 
-            ITower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string name
+            ITower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string
+                                                                            // name
 
             if (player.getMoney() >= newTower.getCost()) {
                 // FIXME: Decrease money?
@@ -119,13 +117,13 @@ public class Model {
                 newTower.remove();
                 return false;
             }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return false;
     }
-
 
     /**
      * Return a two element int array with the tile coordinates that a given point is on, for use
@@ -170,23 +168,24 @@ public class Model {
      * @param y
      */
 
-    public void checkAndRemoveTower(double x, double y) {
-    	int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
-    	if (isTowerPresent(coordinates)){
-    		int xtile = coordinates[0];
-    		int ytile = coordinates[1];
-    		player.addMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
-    		towers[xtile][ytile].remove();
-    		towers[xtile][ytile] = null;
-    	}
+    public void checkAndRemoveTower (double x, double y) {
+        int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
+        if (isTowerPresent(coordinates)) {
+            int xtile = coordinates[0];
+            int ytile = coordinates[1];
+            player.addMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
+            towers[xtile][ytile].remove();
+            towers[xtile][ytile] = null;
+        }
     }
 
-    //TODO: use this instead of other one, will change -jordan
-    public void loadMapTest(String fileName) {
+    // TODO: use this instead of other one, will change -jordan
+    public void loadMapTest (String fileName) {
         try {
             TDMap tdMap = new TDMap();
             tdMap.loadMapIntoGame(engine, fileName);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -197,7 +196,7 @@ public class Model {
      * @param bp Game blueprint to load
      * @throws InvalidParameterForConcreteTypeException
      */
-    public void loadGameBlueprint(GameBlueprint bp) {
+    public void loadGameBlueprint (GameBlueprint bp) {
         // TODO: use the actual game blueprint
         GameBlueprint testBP = createTestBlueprint();
 
@@ -205,6 +204,7 @@ public class Model {
         GameSchema gameSchema = testBP.getMyGameScenario();
         Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
         this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
+
                                  (Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));
 
         // init factory objects
@@ -328,9 +328,10 @@ public class Model {
         doSpawnActivity();
         doTowerBehaviors();
         removeDeadMonsters();
-        gameState.updateGameStates(monsters, towers, levelManager.getCurrentWave(),
-                levelManager.getAllWaves(), gameClock,
-                player.getMoney(), player.getLivesRemaining(), player.getScore());
+        gameState
+                .updateGameStates(monsters, towers, levelManager.getCurrentWave(),
+                                  levelManager.getAllWaves(), gameClock,
+                                  player.getMoney(), player.getLivesRemaining(), player.getScore());
     }
 
     /**
@@ -356,7 +357,7 @@ public class Model {
      * Call this to do the individual behavior of each Tower
      */
     private void doTowerBehaviors () {
-      
+
         for (ITower[] towerRow : towers) {
             for (ITower t : towerRow) {
                 if (t != null) {
@@ -405,9 +406,10 @@ public class Model {
     /**
      * TEST METHOD - Create a test blueprint for testing purposes
      * TODO: remove when we no longer need this
+     * 
      * @return test blueprint
      */
-    private GameBlueprint createTestBlueprint() {
+    private GameBlueprint createTestBlueprint () {
         GameBlueprint testBlueprint = new GameBlueprint();
 
         // Populate TDObjects
@@ -423,6 +425,8 @@ public class Model {
         testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
         testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerOne);
+
+        // Create test money tower
 
         // Create test monsters
         SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();

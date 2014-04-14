@@ -62,8 +62,9 @@ public class TDObjectFactory {
 
             // return new MoneyTower(new ShootingTower((BaseTower)
             // placeObject(schema.getMyConcreteType(), towerParameters), 10, 3, 200));
-            return addTowerBehaviors((SimpleTower) placeObject(schema.getMyConcreteType(), towerParameters),
-                                schema);
+            return addTowerBehaviors((SimpleTower) placeObject(schema.getMyConcreteType(),
+                                                               towerParameters),
+                                     schema);
         }
         catch (Exception e) {
             throw new TowerCreationFailureException(e);
@@ -87,6 +88,16 @@ public class TDObjectFactory {
         return finalTower;
     }
 
+    /**
+     * Places a monster at set locations. Upon spawning, the monster will traverse from the entrance
+     * to the exit with a path finding algorithm.
+     * 
+     * @param entrance The spawn location of the monster
+     * @param exit The exit location of the monster
+     * @param monsterName The name of the monster to place
+     * @return The new Monster object
+     * @throws MonsterCreationFailureException
+     */
     public Monster placeMonster (Point2D entrance, Exit exit, String monsterName)
                                                                                  throws MonsterCreationFailureException {
         try {
@@ -106,6 +117,14 @@ public class TDObjectFactory {
             throw new MonsterCreationFailureException(e);
         }
     }
+
+    /**
+     * Uses the Reflection utility class to create the appropriate object with parameters
+     * 
+     * @param objectType
+     * @param parameters
+     * @return
+     */
 
     private Object placeObject (Class<?> objectType, Object[] parameters) {
         return Reflection.createInstance(objectType.getName(), parameters);

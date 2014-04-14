@@ -9,7 +9,7 @@ import main.java.author.view.AuthoringView;
 import main.java.schema.map.GameMap;
 import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.towers.SimpleTowerSchema;
+import main.java.schema.tdobjects.towers.ShootingTowerSchema;
 import main.java.schema.WaveSpawnSchema;
 
 public class MainController {
@@ -36,7 +36,7 @@ public class MainController {
 		return myModel.isBlueprintReady();
 	}
 
-	public void addTowerToModel(SimpleTowerSchema towerSchema) {
+	public void addTowerToModel(ShootingTowerSchema towerSchema) {
 		myModel.addTower(towerSchema);
 	}
 

@@ -14,7 +14,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public static final double DEFAULT_DAMAGE = 10;
     public static final double DEFAULT_RANGE = 200;
     public static final double DEFAULT_FIRING_SPEED = 5;
-    
+
     private static final int FIRING_INTERVAL_STEP = 2;
     private static final int MIN_FIRING_INTERVAL = 21;
     double myDamage;
@@ -25,7 +25,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
      * Create a new tower by adding shooting behavior to an existing tower
      * 
      * @param baseTower tower to be expanded with shooting behavior
-     * @param damage 
+     * @param damage
      * @param firingSpeed a value from 0.0 - 10.0, where 10 is the fastest firing speed.
      * @param range how far away tower can find targets to shoot at
      */
@@ -40,8 +40,9 @@ public class ShootingTower extends TowerBehaviorDecorator {
         this(
              baseTower,
              (double) TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED, DEFAULT_FIRING_SPEED),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.RANGE, DEFAULT_RANGE));     
+             (double) TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
+                                                 DEFAULT_FIRING_SPEED),
+             (double) TDObject.getValueOrDefault(attributes, TowerSchema.RANGE, DEFAULT_RANGE));
     }
 
     @Override
@@ -72,7 +73,8 @@ public class ShootingTower extends TowerBehaviorDecorator {
      * @return
      */
     private boolean inFiringInterval () {
-        return atInterval(MIN_FIRING_INTERVAL - FIRING_INTERVAL_STEP * (int) Math.min(myFiringSpeed, 10));
+        return atInterval(MIN_FIRING_INTERVAL - FIRING_INTERVAL_STEP *
+                          (int) Math.min(myFiringSpeed, 10));
     }
 
     /**
