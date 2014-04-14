@@ -28,7 +28,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 
 	public TDPlayerEngine() {
 		super();
-		defineAudioClip("song", "fox.wav");
+		//defineAudioClip("song", "fox.wav");
 		initEngineComponent(960, 640);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
@@ -37,7 +37,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		cursorState = CursorState.None;
 		myFrameRate = 45;
 	}
-
+/*
 	public void playSound(){
 		soundOn = true;
 		if(soundOn)
@@ -49,7 +49,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		soundOn = false;
 		stopAudio();
 	}
-
+*/
 	@Override
 	public void initCanvas() {
 		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
