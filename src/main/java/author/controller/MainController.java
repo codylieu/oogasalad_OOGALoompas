@@ -2,10 +2,14 @@ package main.java.author.controller;
 
 import java.util.List;
 
+import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
+import main.java.data.datahandler.DataHandler;
+import main.java.exceptions.data.InvalidGameBlueprintException;
 import main.java.schema.map.GameMap;
 import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.TowerSchema;
@@ -15,12 +19,17 @@ import main.java.schema.WaveSpawnSchema;
 public class MainController {
 
 	private AuthorModel myModel;
+	private AuthoringView myAuthoringView;
 	private List<TabController> myTabControllers;
 
 	public MainController() {
 		myModel = new AuthorModel();
 	}
 
+	public void setView(AuthoringView view) {
+		myAuthoringView = view;
+	}
+	
 	public void addTabController(TabController tabController) {
 		myTabControllers.add(tabController);
 	}
@@ -80,9 +89,18 @@ public class MainController {
 	/**
 	 * Saves the game blueprint and lets the data team know that they
 	 * can begin serializing data
+	 * @throws InvalidGameBlueprintException 
 	 */
-	public void saveBlueprint() {
-		// tell model to save blueprint
+	public void saveBlueprint() throws InvalidGameBlueprintException {
+		DataHandler handler = new DataHandler();
+		JFileChooser saveFileChooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("ZIP File", "zip");
+		saveFileChooser.setFileFilter(filter);
+		String filePath = "";
+		if (saveFileChooser.showSaveDialog(myAuthoringView) == JFileChooser.APPROVE_OPTION) {
+			filePath = saveFileChooser.getSelectedFile().getAbsolutePath() + ".zip";
+		}
+		handler.saveBlueprint(myModel.getBlueprint(), filePath);
 	}
 
 	public static void main(String[] args) {
