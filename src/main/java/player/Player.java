@@ -64,7 +64,7 @@ public class Player {
 		makeFrame();
 		makeCards();
 		addWelcomeCard();
-		addGameCard();
+		//addGameCard();
 		addHelpCard();
 		addOptionsCard();
 		addCreditsCard();
@@ -98,6 +98,7 @@ public class Player {
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
 					engine.loadMapFile(file.getAbsolutePath());
+					addGameCard();
 					System.out.println("FILE CHOSEN: " + file.getName());
 				}
 			}
