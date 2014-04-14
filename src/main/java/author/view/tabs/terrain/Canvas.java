@@ -23,10 +23,12 @@ public class Canvas extends JPanel {
 
 	private final Tile[][] myTiles;
 	private TileObject selectedTileObj;
+	private TerrainEditorTab myTerrainTab;
 
-	public Canvas(int rows, int cols){
+	public Canvas(int rows, int cols, TerrainEditorTab terrainTab){
 		numRows = rows;
 		numCols = cols;
+		myTerrainTab = terrainTab;
 		myTiles = new Tile[numRows][numCols];
 		for (int row = 0; row < numRows; row++) {
 			for (int col = 0; col < numCols; col++) {
@@ -130,7 +132,7 @@ public class Canvas extends JPanel {
 		}
 		tile.setImage(selectedTileObj.getImage());
 		tile.setColor(selectedTileObj.getBGColor());
-		tile.setPassIndex(selectedTileObj.getPassabilityIndex());
+		tile.setPassIndex(myTerrainTab.getPassabilityIndex());
         tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
         tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
         tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());

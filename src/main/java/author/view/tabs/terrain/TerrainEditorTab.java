@@ -55,6 +55,7 @@ public class TerrainEditorTab extends EditorTab {
     
     private String [] terrainTypes = {"Can Walk Over", "Can Walk and Fly Over", "Cannot Traverse"};
     private JComboBox terrainTypeChooser;
+    private int selectedPassabilityIndex;
 
     private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
@@ -99,7 +100,7 @@ public class TerrainEditorTab extends EditorTab {
 		try {
 			int rowCount = Integer.parseInt(numRows);
 			int colCount = Integer.parseInt(numCols);
-			myCanvas = new Canvas(rowCount, colCount);
+			myCanvas = new Canvas(rowCount, colCount, this);
 			isInitialized = true;
 		} catch (NumberFormatException e) {}
 		return isInitialized;
@@ -115,8 +116,11 @@ public class TerrainEditorTab extends EditorTab {
 	
 	public void updatePassabilityIndex(ActionEvent e) {
 		TileObject selectedTile = myCanvas.getSelectedTileObj();
-		int index = ((JComboBox) e.getSource()).getSelectedIndex();
-		selectedTile.setPassabilityIndex(index);
+		selectedPassabilityIndex = ((JComboBox) e.getSource()).getSelectedIndex();
+	}
+	
+	public int getPassabilityIndex() {
+		return selectedPassabilityIndex;
 	}
 	
 	/**
