@@ -42,7 +42,8 @@ public class PowerUpTower extends Tower {
 		super.callTowerActions(environ);
 		List<Tower> nearbyTowers = environ.getTowerCoordinatesInRange(this.x, this.y, myRange);
 		for(Tower t : nearbyTowers) {
-			t.setTowerDamageOffset(DEFAULT_DAMAGE_POWER_UP_PROPORTION);
+		    //t.setTowerDamageOffset(DEFAULT_DAMAGE_POWER_UP_PROPORTION);
+		    //add another shooting tower wrapper instead
 		}
 	}
 }

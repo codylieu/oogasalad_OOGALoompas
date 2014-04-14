@@ -6,10 +6,12 @@ import main.java.engine.objects.TDObject;
 
 
 /**
- * Abstract Tower class
+ *
+ * Base Tower class 
+ * It is wrapped around ("decorated") with tower behaviors such as shooting, money-farming ability, etc.
  *
  */
-public abstract class Tower extends TDObject {
+public class Tower extends TDObject implements ITower {
 
     public static final double DEFAULT_DAMAGE = 10;
     public static final double DEFAULT_HEALTH = 100;
@@ -88,7 +90,7 @@ public abstract class Tower extends TDObject {
      * Flash by setting image to null based on FLASH_INTERVAL
      */
     private void flash () {
-        if (myTimingCounter % ShootingTower.FLASH_INTERVAL == 0) {
+        if (myTimingCounter % FLASH_INTERVAL == 0) {
             this.setImage(myImage);
         }
         else {
@@ -104,21 +106,30 @@ public abstract class Tower extends TDObject {
     public double getCost () {
         return myCost;
     }
-    
-    /**
-     * Sets the the tower's damage offset as a proportion of original damage.
-     * @param offsetProportion
-     * @return offset proportion
-     */
-    public double setTowerDamageOffset (double offsetProportion) {
-    	myDamageOffset = myDamageOffset;
-    	return myDamageOffset;
-    }
 
     public String toString () {
         return "Damage: " + myDamage + "\n"
                + "Range: " + myRange + "\n"
                + "Cost: " + myCost + "\n";
+    }
+    
+    /**
+     * Checks if this tower's internal counter is at the interval passed in.
+     * @param intervalFrequency how frequently this method should return true (1 means every frame)
+     * @return
+     */
+    public boolean atInterval(int intervalFrequency) {
+        return myTimingCounter % intervalFrequency == 0;
+    }
+
+    @Override
+    public double getXCoordinate () {
+        return x;
+    }
+
+    @Override
+    public double getYCoordinate () {
+        return y;
     }
 
 }
