@@ -57,7 +57,7 @@ public class TDObjectFactory {
             return (BaseTower) placeObject(schema.getMyConcreteType(), towerParameters);
         }
         catch (Exception e) {
-            throw new TowerCreationFailureException();
+            throw new TowerCreationFailureException(e);
         }
     }
 

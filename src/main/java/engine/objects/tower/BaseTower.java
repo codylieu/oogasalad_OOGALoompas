@@ -1,8 +1,10 @@
 package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
+import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
+import main.java.schema.tdobjects.TowerSchema;
 
 
 /**
@@ -29,7 +31,12 @@ public class BaseTower extends TDObject implements ITower {
     protected double myRange;
     protected double myCost;
     protected double myBuildUpTime;
-    protected String myImage;
+    /**
+     * Its image name is defined to be exactly the same as its name.
+     */
+    protected String myImage; 
+    protected double myHealth;
+    
 
     /**
      * This should be a number from 1 (slowest) to 10 (fastest);
@@ -50,31 +57,34 @@ public class BaseTower extends TDObject implements ITower {
      * @param cost money cost of creating tower
      * @param buildup time for this tower's construction
      */
-    public BaseTower (Point2D location, String tower_gfx, double damage,
-                  double range, double cost, double buildup) {
-        super("tower", location.getX(), location.getY(), TOWER_CID, tower_gfx);
-        myImage = tower_gfx;
+    public BaseTower (Point2D location, double health, double damage,
+                  double range, double cost, double buildup, String name) {
+        super("tower", location.getX(), location.getY(), TOWER_CID, name);
+        myHealth = health;
+        myImage = name;
         myDamage = damage;
         myRange = range;
         myCost = cost;
         myBuildUpTime = buildup;
     }
+    
+    public BaseTower (Map<String, Object> attributes) {
+        this(
+             (Point2D) getValueOrDefault(attributes, TowerSchema.LOCATION, new Point2D.Double(0, 0)),
+             (double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),
+             (double) getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
+             (double) getValueOrDefault(attributes, TowerSchema.RANGE, DEFAULT_RANGE),
+             (double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
+             (double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
+             (String) attributes.get(TowerSchema.NAME));     
+}
 
     /**
      * Call every frame.
      * 
-     * Does action specific to the type of tower.
-     * 
-     * Towers that shoot will fire a projectile in the direction of the specified x,y target
-     * coordinates, if it is within firing interval.
-     * 
-     * MoneyTowers will grant player money if a regeneration time has passed.
-     * 
-     * @param environ
-     *        coordinate of target
-     * @return
+     * Will call action specific to the type of tower if and only if past the build up time.
      */
-    public void callTowerActions (EnvironmentKnowledge environ) {
+    public void doFrame(EnvironmentKnowledge environ){
         myTimingCounter++;
 
         if (myTimingCounter <= myBuildUpTime) {
@@ -82,8 +92,12 @@ public class BaseTower extends TDObject implements ITower {
             return;   
             // do no further behavior if still building up
         }
+        
+        callTowerActions(environ);
+    }
 
-
+    public void callTowerActions (EnvironmentKnowledge environ) {
+        // do nothing, base tower just sits there.
     }
 
     /**
