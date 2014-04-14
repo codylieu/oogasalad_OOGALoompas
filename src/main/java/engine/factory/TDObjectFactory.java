@@ -87,11 +87,11 @@ public class TDObjectFactory {
                 finalTower = new MoneyTower(finalTower, attributes);
             }
             if (towerBehavior.equals(TowerBehaviors.SHOOTING)) {
-                finalTower = new ShootingTower(finalTower, attributes);
+                finalTower = new ShootingTower(finalTower, attributes, "red_bullet");
             }
         }
-
         return finalTower;
+        //return new ShootingTower(finalTower, 20, 20, 200, "test-tower-1");
     }
 
     /**
