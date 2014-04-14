@@ -8,8 +8,8 @@ import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
 import main.java.schema.map.GameMap;
 import main.java.schema.GameSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.towers.ShootingTowerSchema;
 import main.java.schema.WaveSpawnSchema;
 
 public class MainController {
@@ -36,7 +36,7 @@ public class MainController {
 		return myModel.isBlueprintReady();
 	}
 
-	public void addTowerToModel(ShootingTowerSchema towerSchema) {
+	public void addTowerToModel(TowerSchema towerSchema) {
 		myModel.addTower(towerSchema);
 	}
 

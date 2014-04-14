@@ -42,6 +42,11 @@ public class TowerSchema extends TDObjectSchema {
         myAttributeSet.add(NAME);
         myAttributeSet.add(TOWER_BEHAVIORS);
     }
+    
+    public TowerSchema(String name) {
+    	this();
+    	populateDefaultAttributes(name);
+    }
 
     public void populateDefaultAttributes (String name) {
         addAttribute(TowerSchema.NAME, name);
