@@ -78,7 +78,7 @@ public class TDObjectFactory {
                 (Collection<TowerBehaviors>) attributes.get(TowerSchema.TOWER_BEHAVIORS);
         for (TowerBehaviors towerBehavior : towerBehaviors) {
             if (towerBehavior.equals(TowerBehaviors.MONEY_FARMING)) {
-                finalTower = new MoneyTower(finalTower);
+                finalTower = new MoneyTower(finalTower, attributes);
             }
             if (towerBehavior.equals(TowerBehaviors.SHOOTING)) {
                 finalTower = new ShootingTower(finalTower, attributes);
