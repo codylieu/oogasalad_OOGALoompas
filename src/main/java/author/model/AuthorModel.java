@@ -27,7 +27,7 @@ public class AuthorModel {
 	}
 
 	public void addGameSettings(GameSchema gameSchema) {
-
+		myGameBlueprint.setMyGameScenario(gameSchema);
 	}
 
 	public void addGameMaps(GameMap gameMap) {
