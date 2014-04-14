@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import com.sun.servicetag.SystemEnvironment;
-
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
@@ -61,7 +59,6 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	public void initGame() {
 		setFrameRate(myFrameRate, 1);
 		this.model = new Model(this);
-		model.addNewPlayer();
         model.loadGameBlueprint(null); // TODO: null for now
 	}
 

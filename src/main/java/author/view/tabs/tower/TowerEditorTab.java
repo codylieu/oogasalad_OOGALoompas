@@ -44,6 +44,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	protected TDObjectSchema createSpecificNewObject(String objectName) {
 		return new TowerSchema(objectName);
+
 	}
 
 	protected TabViewBuilder createSpecificTabViewBuilder() {
