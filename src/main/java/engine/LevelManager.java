@@ -11,7 +11,7 @@ import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.schema.MonsterSpawnSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.WaveSpawnSchema;
 
 

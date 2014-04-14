@@ -1,6 +1,7 @@
-package main.java.schema;
+package main.java.schema.map;
 
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
+import main.java.schema.AbstractSchema;
 
 import java.io.Serializable;
 import java.util.HashSet;
