@@ -3,8 +3,8 @@ package main.java.author.model;
 import main.java.schema.GameBlueprint;
 import main.java.schema.map.GameMap;
 import main.java.schema.GameSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.towers.ShootingTowerSchema;
 import main.java.schema.WaveSpawnSchema;
 
 public class AuthorModel {
@@ -15,7 +15,7 @@ public class AuthorModel {
 		myGameBlueprint = new GameBlueprint();
 	}
 
-	public void addTower(ShootingTowerSchema towerSchema) {
+	public void addTower(TowerSchema towerSchema) {
 		// TODO Auto-generated method stub
 
 	}

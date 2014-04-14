@@ -20,7 +20,6 @@ import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.tdobjects.towers.ShootingTowerSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
 public class TowerEditorTab extends ObjectEditorTab {
@@ -44,7 +43,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	}
 
 	protected TDObjectSchema createSpecificNewObject(String objectName) {
-		return new ShootingTowerSchema(objectName);
+		return new TowerSchema(objectName);
 	}
 
 	protected TabViewBuilder createSpecificTabViewBuilder() {
@@ -82,7 +81,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 		Integer cost = (Integer) costSpinner.getValue();
 		myCurrentTower.addAttribute(TowerSchema.COST, cost);
 		Integer damage = (Integer) damageSpinner.getValue();
-		myCurrentTower.addAttribute(ShootingTowerSchema.DAMAGE, damage);
+		myCurrentTower.addAttribute(TowerSchema.DAMAGE, damage);
 		Integer buildUp = (Integer) buildUpSpinner.getValue();
 		myCurrentTower.addAttribute(TowerSchema.BUILDUP, buildUp);
 		// update schema with buttons
@@ -106,7 +105,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 		healthSpinner.setValue(map.get(TowerSchema.HEALTH));
 		costSpinner.setValue(map.get(TowerSchema.COST));
-		damageSpinner.setValue(map.get(ShootingTowerSchema.DAMAGE));
+		damageSpinner.setValue(map.get(TowerSchema.DAMAGE));
 		buildUpSpinner.setValue(map.get(TowerSchema.BUILDUP));
 
 		// buttons
