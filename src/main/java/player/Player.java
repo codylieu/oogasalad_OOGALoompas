@@ -10,7 +10,6 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ResourceBundle;
@@ -21,16 +20,17 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+
+import main.java.reflection.MethodAction;
 
 public class Player {
 
@@ -198,59 +198,29 @@ public class Player {
 		JButton mainMenuButton = makeMainMenuButton();
 
 		JButton playResumeButton = new JButton("Play/Pause");
-		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		playResumeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				engine.toggleRunning();
-				frame.pack();
-			}
-		});
+		playResumeButton.addActionListener(new MethodAction (engine, "toggleRunning"));
+		
 		JButton saveButton = new JButton("Save");
-		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("save");
 				frame.pack();
 			}
 		});
+		
 		JButton speedUpButton = new JButton("Speed Up");
-		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		speedUpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//This should work but it doesn't
-				//System.out.println(engine.getGameSpeed());
-				//	engine.setGameSpeed(5.0);
-				System.out.println(engine.getFramePerSecond());
-				engine.setFramePerSecond(engine.getFramePerSecond()+5);
-				//System.out.println(engine.getGameSpeed());
-			}
-		});
+		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
+		
 		JButton slowDownButton = new JButton("Slow Down");
-		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		slowDownButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//System.out.println(engine.getGameSpeed());
-				System.out.println(engine.getFramePerSecond());
-				engine.setFramePerSecond(engine.getFramePerSecond()-5);
-				//System.out.println(engine.getGameSpeed());
-			}
-		});
+		slowDownButton.addActionListener(new MethodAction (engine, "slowDown"));
+		
 		JButton quitButton = makeQuitButton();
+		
 		JButton addTowerButton = new JButton("Add Tower");
-		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		addTowerButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				engine.toggleAddTower();
-			}
-		});
+		addTowerButton.addActionListener(new MethodAction (engine, "toggleAddTower"));
+		
 		JButton soundButton = new JButton("Sound On/Off");
-		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		soundButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toggleSound();
-			}
-		});
-
+		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
@@ -264,7 +234,7 @@ public class Player {
 		return gameButtonPanel;
 	}
 
-	private void toggleSound(){
+	public void toggleSound(){
 		if(!soundOn){
 			song.loop();
 			soundOn = true;
@@ -325,34 +295,12 @@ public class Player {
 
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
-
-		JRadioButton onButton = new JRadioButton(ON);
-		onButton.setActionCommand(ON);
-		onButton.setMnemonic(KeyEvent.VK_O);
-
-		JRadioButton offButton = new JRadioButton(OFF);
-		offButton.setActionCommand(OFF);
-		offButton.setMnemonic(KeyEvent.VK_F);
-		offButton.setSelected(true);
-
-		ButtonGroup soundRadioButtonGroup = new ButtonGroup();
-		soundRadioButtonGroup.add(onButton);
-		soundRadioButtonGroup.add(offButton);
-
-		onButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toggleSound();
-				frame.pack();
-			}});
-		offButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				toggleSound();
-				frame.pack();
-			}
-		});
-
-		soundRadioButtonPanel.add(onButton);
-		soundRadioButtonPanel.add(offButton);
+		
+		JCheckBox soundCheckBox = new JCheckBox("Music");
+		soundCheckBox.addActionListener(new MethodAction(this, "toggleSound"));
+		
+		soundRadioButtonPanel.add(soundCheckBox);
+		
 		return soundRadioButtonPanel;
 	}
 
