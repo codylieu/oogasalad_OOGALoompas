@@ -22,7 +22,6 @@ public class MainController {
 	}
 
 	public void addTabController(TabController tabController) {
-
 		myTabControllers.add(tabController);
 	}
 
@@ -36,26 +35,52 @@ public class MainController {
 		return myModel.isBlueprintReady();
 	}
 
+	/**
+	 * Adds a schema representing a tower object to the game blueprint
+	 * @param towerSchema
+	 */
+
 	public void addTowerToModel(TowerSchema towerSchema) {
 		myModel.addTower(towerSchema);
 	}
 
-	public void addEnemyToModel(SimpleMonsterSchema enemySchema) {
-		myModel.addEnemy(enemySchema);
+	/**
+	 * Adds a schema representing an enemy object to the game blueprint
+	 * @param enemySchema
+	 */
+	public void addEnemiesToModel(List<SimpleMonsterSchema> enemySchema) {
+		myModel.addEnemies(enemySchema);
 	}
 
+	/**
+	 * Adds a schema containing game settings to the game blueprint
+	 * @param gameSchema
+	 */
 	public void addGameSettingsToModel(GameSchema gameSchema) {
 		myModel.addGameSettings(gameSchema);
 	}
 
-	public void addGameMapToModel(GameMap gameMap) {
-		myModel.addGameMap(gameMap);
+	/**
+	 * Adds a schema representing characteristics of a game terrain map
+	 * to the game blueprint
+	 * @param gameMap
+	 */
+	public void addGameMapsToModel(GameMap gameMap) {
+		myModel.addGameMaps(gameMap);
 	}
 
-	public void addWaveToModel(WaveSpawnSchema wave) {
-		myModel.addWave(wave);
+	/**
+	 * Adds a schema representing a TD wave to the game blueprint
+	 * @param waves
+	 */
+	public void addWaveToModel(List<WaveSpawnSchema> waves) {
+		myModel.addWaves(waves);
 	}
 
+	/**
+	 * Saves the game blueprint and lets the data team know that they
+	 * can begin serializing data
+	 */
 	public void saveBlueprint() {
 		// tell model to save blueprint
 	}

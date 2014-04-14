@@ -21,6 +21,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.WaveController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.terrain.TileSelectionManager;
 
@@ -173,5 +174,13 @@ public class WaveEditorTab extends EditorTab{
 	//updating combobox
 	public void update() {
 		//controller.update();
+	}
+
+	@Override
+	public void saveTabData() {
+		WaveController controller = (WaveController) myController;
+		//dont add null
+		controller.addWaves(null);
+		
 	}
 }
