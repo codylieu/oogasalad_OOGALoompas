@@ -57,6 +57,7 @@ public class Player {
 	private TDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
+	private TowerChooser towerChooser;
 
 	public Player() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
 		initSong();
@@ -175,7 +176,7 @@ public class Player {
 		constraints.gridy = 1;
 		gameCard.add(makeUnitInfoPanel(), constraints);
 
-
+		
 		cards.add(gameCard, "gameCard");
 	}
 
@@ -186,6 +187,7 @@ public class Player {
 		return gamePanel;*/
 
 		engine = new TDPlayerEngine();
+		engine.setSubjectState(towerChooser);
 		engine.stop();
 		return engine;
 	}
@@ -222,6 +224,9 @@ public class Player {
 		JButton soundButton = new JButton("Sound On/Off");
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
+		towerChooser = new TowerChooser(engine);
+		towerChooser.register(engine);
+		
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
@@ -230,7 +235,7 @@ public class Player {
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
-		gameButtonPanel.add(new TowerChooser(engine));
+		gameButtonPanel.add(towerChooser);
 		return gameButtonPanel;
 	}
 

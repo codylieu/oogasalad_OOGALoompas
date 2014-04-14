@@ -13,7 +13,7 @@ import main.java.engine.Model;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 
 
-public class TDPlayerEngine extends JGEngine implements Subject {
+public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	public static int FRAME_RATE_DELTA = 5;
 	public static final String DEFAULT_TOWER_NAME = "test-tower-1";
@@ -34,7 +34,6 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		//defineAudioClip("song", "fox.wav");
 		initEngineComponent(960, 640);
 		towerName = DEFAULT_TOWER_NAME;
-		towerChooser = new TowerChooser(this);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
 		isFullScreen = false;
@@ -280,5 +279,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		gameStats.put("Money", "Money: " + model.getMoney());
 		gameStats.put("Time", "Game clock: " + model.getGameClock());
 		return gameStats;
+	}
+	
+	@Override
+	public void setSubjectState(Subject s) {
+		towerChooser = (TowerChooser) s;
 	}
 }
