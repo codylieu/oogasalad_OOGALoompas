@@ -391,7 +391,7 @@ public class DataHandler {
 		else if(b.getMyLevelSchemas() == null){
 			throw new InvalidGameBlueprintException("myLevelSchemas");
 		}
-		else if(b.getMyGameMaps() == null){
+		else if(b.getMyGameMapSchemas() == null){
 			throw new InvalidGameBlueprintException("myGameMaps");
 		}
 		return true;

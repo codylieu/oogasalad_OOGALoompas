@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,7 +23,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
-import main.java.schema.map.GameMap;
+import main.java.schema.map.GameMapSchema;
 import main.java.schema.map.TileMapSchema;
 import main.java.schema.map.TileSchema;
 
@@ -117,7 +118,7 @@ public class TerrainEditorTab extends EditorTab {
      * @param e
      */
 	public void saveMap(ActionEvent e) {
-		GameMap myCompletedMap = new GameMap();
+		GameMapSchema myCompletedMap = new GameMapSchema();
 		
         List<Tile> gameTiles = myCanvas.getTiles();
         List<TileSchema> gameTileSchemas = new ArrayList<TileSchema>();        
@@ -136,8 +137,8 @@ public class TerrainEditorTab extends EditorTab {
         	gameTileMapSchemas.add(tileMapSchema);
         }
         
-        myCompletedMap.setTileSchemas(gameTileSchemas);
-        myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
+        myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
+        myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable)gameTileMapSchemas);
 
         JFileChooser saveFileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("SER Files", "ser");
