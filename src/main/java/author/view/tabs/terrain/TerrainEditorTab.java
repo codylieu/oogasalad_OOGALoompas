@@ -223,31 +223,7 @@ public class TerrainEditorTab extends EditorTab {
      */
 	public void saveMap(ActionEvent e) {
 		((JButton) e.getSource()).setEnabled(false);
-		GameMap myCompletedMap = new GameMap();
-
-		List<Tile> gameTiles = myCanvas.getTiles();
-		List<TileSchema> gameTileSchemas = new ArrayList<TileSchema>();        
-		for (Tile tile : gameTiles) {
-			TileSchema tileSchema = new TileSchema();
-			populateTileSchema(tileSchema, tile);
-			gameTileSchemas.add(tileSchema);
-		}
-
-		List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
-		List<TileMapSchema> gameTileMapSchemas = new ArrayList<TileMapSchema>();
-		for (TileDisplay tileDisp : tileDisplays) {
-			TileMapSchema tileMapSchema = new TileMapSchema();
-			populateTileMapSchema(tileMapSchema, tileDisp);
-			gameTileMapSchemas.add(tileMapSchema);
-		}
-
-		myCompletedMap.setTileSchemas(gameTileSchemas);
-		myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
-
-		TerrainController myControl = (TerrainController) myController;
-		myControl.addMaps(myCompletedMap);
-		
-		//writeMapToFile(myCompletedMap);
+		saveTabData();
 	}
 	
 	/**
@@ -340,7 +316,30 @@ public class TerrainEditorTab extends EditorTab {
 
 	@Override
 	public void saveTabData() {
-		TerrainController controller = (TerrainController) myController;
+		GameMap myCompletedMap = new GameMap();
+
+		List<Tile> gameTiles = myCanvas.getTiles();
+		List<TileSchema> gameTileSchemas = new ArrayList<TileSchema>();        
+		for (Tile tile : gameTiles) {
+			TileSchema tileSchema = new TileSchema();
+			populateTileSchema(tileSchema, tile);
+			gameTileSchemas.add(tileSchema);
+		}
+
+		List<TileDisplay> tileDisplays = myTileSelectionManager.getAllTileDisplays();
+		List<TileMapSchema> gameTileMapSchemas = new ArrayList<TileMapSchema>();
+		for (TileDisplay tileDisp : tileDisplays) {
+			TileMapSchema tileMapSchema = new TileMapSchema();
+			populateTileMapSchema(tileMapSchema, tileDisp);
+			gameTileMapSchemas.add(tileMapSchema);
+		}
+
+		myCompletedMap.setTileSchemas(gameTileSchemas);
+		myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
+
+		TerrainController myControl = (TerrainController) myController;
+		myControl.addMaps(myCompletedMap);
 		
+		//writeMapToFile(myCompletedMap);
 	}
 }
