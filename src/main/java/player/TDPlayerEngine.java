@@ -15,7 +15,9 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 
 public class TDPlayerEngine extends JGEngine implements Subject {
 
-	private int FRAMEPERSECOND = 45;
+	public static int FRAME_RATE_DELTA = 5;
+
+	private int myFrameRate;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
@@ -33,19 +35,21 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		isFullScreen = false;
 		soundOn = false;
 		cursorState = CursorState.None;
+		myFrameRate = 45;
 	}
 
 	public void playSound(){
 		soundOn = true;
 		if(soundOn)
-		playAudio("song");
-		}
-	
+			playAudio("song");
+	}
+
 
 	public void stopSound(){
 		soundOn = false;
 		stopAudio();
 	}
+
 	@Override
 	public void initCanvas() {
 		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
@@ -53,19 +57,37 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 
 	@Override
 	public void initGame() {
-		setFrameRate(FRAMEPERSECOND, 1);
+		setFrameRate(myFrameRate, 1);
 		this.model = new Model(this);
-		model.addNewPlayer();
+        model.loadGameBlueprint(null); // TODO: null for now
 	}
 
-	public int getFramePerSecond(){
-		return FRAMEPERSECOND;
+	/*public int getFramePerSecond(){
+		return myFrameRate;
 	}
-	
+
 	public void setFramePerSecond(int newFrame){
-		FRAMEPERSECOND = newFrame;
-		setFrameRate(FRAMEPERSECOND,1);
+		myFrameRate = newFrame;
+		setFrameRate(myFrameRate,1);
+		System.out.println("hi");
+	}*/
+
+	public void speedUp() {
+		setFrameRate(getFrameRate() + FRAME_RATE_DELTA, 1);
+		System.out.println(getFrameRate());
 	}
+
+	/*
+	 * Returns whether the game was slowed down or not
+	 */
+	public boolean slowDown() {
+		if (getFrameRate() - FRAME_RATE_DELTA > 0) {
+			setFrameRate(getFrameRate() - FRAME_RATE_DELTA, 1);
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void paintFrame() {
 		highlightMouseoverTile();
@@ -91,6 +113,9 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 					color = JGColor.red;
 				else
 					color = JGColor.green;
+			else
+				if (model.isTowerPresent(mousePos.x, mousePos.y))
+					color = JGColor.orange;
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
@@ -130,7 +155,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		super.doFrame();
 		if (cursorState == CursorState.AddTower){
 			if (getMouseButton(1)) {
-				model.placeTower(getMouseX(), getMouseY());
+				model.placeTower(getMouseX(), getMouseY(), "test-tower-1");
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(1);
@@ -178,7 +203,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 			toggleRunning();
 			clearKey(Integer.parseInt(hotkeys.getString("ToggleRunning")));
 		}
-		
+
 		if(getKey(Integer.parseInt(hotkeys.getString("FullScreen")))){
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
@@ -189,12 +214,12 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		if(!isFullScreen){
 			initEngineComponent(0,0);
 			isFullScreen = true;
-			}
+		}
 		else{
 			initEngineComponent(960, 640);
 			isFullScreen = false;
 		}
-			
+
 	}
 	public void toggleRunning() {
 		if (isRunning())
@@ -229,10 +254,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		}
 	}
 
-    //TODO: i added this kevin, will explain later - jordan
-    public void loadMapFile(String fileName) {
-        model.loadMapTest(fileName);
-    }
+	//TODO: i added this kevin, will explain later - jordan
+	public void loadMapFile(String fileName) {
+		model.loadMapTest(fileName);
+	}
 
 	public Map<String, String> getGameAttributes() {
 		hasChanged = true;

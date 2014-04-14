@@ -15,7 +15,6 @@ import java.util.List;
  * This class does not relate to something that gets explicitly instantiated in the engine.
  */
 public class GameBlueprint implements Serializable {
-
 	private GameSchema myGameScenario;
 	private List<TDObjectSchema> myTDObjectSchemas;
 	private List<WaveSpawnSchema> myLevelSchemas;
@@ -52,5 +51,4 @@ public class GameBlueprint implements Serializable {
 	public void setMyGameMaps(List<GameMap> myGameMaps) {
 		this.myGameMaps = myGameMaps;
 	}
-	
 }
