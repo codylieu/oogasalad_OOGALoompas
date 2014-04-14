@@ -31,8 +31,8 @@ public class Projectile extends TDObject {
      * @param y src y-coor
      * @param angle Math.atan2(destX - srcX, destY - srcY)
      */
-    public Projectile (double x, double y, double angle, double damage) {
-        super("projectile", x, y, TOWER_PROJECTILE_CID, "red_bullet",
+    public Projectile (double x, double y, double angle, double damage, String img) {
+        super("projectile", x, y, TOWER_PROJECTILE_CID, img,
               DEFAULT_SPEED * Math.sin(angle),
               DEFAULT_SPEED * Math.cos(angle),
               JGObject.expire_off_view);

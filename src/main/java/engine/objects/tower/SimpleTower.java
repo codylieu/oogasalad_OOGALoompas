@@ -68,7 +68,7 @@ public class SimpleTower extends TDObject implements ITower {
 
     
     @Override
-    public boolean callTowerActions (EnvironmentKnowledge environ) {
+    public boolean callTowerActions (EnvironmentKnowledge environ, ProjectileLauncher launcher) {
         myTimingCounter++;
         
         if (myTimingCounter <= myBuildUpTime) {
@@ -122,6 +122,11 @@ public class SimpleTower extends TDObject implements ITower {
     public void remove() {
         setImage(null);
         super.remove();
+    }
+
+    @Override
+    public ProjectileLauncher getLauncher () {
+        return new ProjectileLauncher(this, 0, 0,0 ,null);
     }
 
 }

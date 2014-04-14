@@ -352,7 +352,7 @@ public class Model {
         for (ITower[] towerRow : towers) {
             for (ITower t : towerRow) {
                 if (t != null) {
-                    t.callTowerActions(environ);
+                    t.callTowerActions(environ, t.getLauncher());
                 }
             }
         }
@@ -438,12 +438,10 @@ public class Model {
 
         // Create test game schemas
         GameSchema testGameSchema = new GameSchema();
-        testGameSchema.addAttribute(GameSchema.ROWS, 25);
-        testGameSchema.addAttribute(GameSchema.COLUMNS, 20);
         testGameSchema.addAttribute(GameSchema.LIVES, 3);
         testGameSchema.addAttribute(GameSchema.MONEY, 500);
 
-        testBlueprint.setMyGameSchema(testGameSchema);
+        testBlueprint.setMyGameScenario(testGameSchema);
 
         // Create wave schemas
         List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
