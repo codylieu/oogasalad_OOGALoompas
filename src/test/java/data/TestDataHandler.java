@@ -99,7 +99,7 @@ public class TestDataHandler {
 		GameSchema testSchema = new GameSchema();
 		testSchema.addAttribute("Lives",10);
 		GameBlueprint testBlueprint = new GameBlueprint();
-		testBlueprint.setMyGameScenario(testSchema);
+		testBlueprint.setMyGameSchema(testSchema);
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
 		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip");

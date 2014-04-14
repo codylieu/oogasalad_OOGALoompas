@@ -24,7 +24,7 @@ public class GameBlueprint implements Serializable {
 		return myGameScenario;
 	}
 
-	public void setMyGameScenario(GameSchema myGameScenario) {
+	public void setMyGameSchema(GameSchema myGameScenario) {
 		this.myGameScenario = myGameScenario;
 	}
 
