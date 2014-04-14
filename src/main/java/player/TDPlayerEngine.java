@@ -62,8 +62,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		setFrameRate(myFrameRate, 1);
 		this.model = new Model(this);
 		model.addNewPlayer();
-		model.loadMap("testmap.json");
-		//model.loadSchemas("testtowers");
+        model.loadGameBlueprint(null); // TODO: null for now
 	}
 
 	/*public int getFramePerSecond(){
@@ -159,7 +158,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		super.doFrame();
 		if (cursorState == CursorState.AddTower){
 			if (getMouseButton(1)) {
-				model.placeTower(getMouseX(), getMouseY());
+				model.placeTower(getMouseX(), getMouseY(), "test-tower-1");
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(1);

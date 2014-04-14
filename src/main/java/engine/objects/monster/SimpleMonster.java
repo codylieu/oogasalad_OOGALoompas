@@ -1,11 +1,12 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import main.java.engine.objects.Exit;
-import main.java.schema.MonsterSchema;
+import main.java.schema.tdobjects.MonsterSchema;
 
 public class SimpleMonster extends Monster {
 
@@ -18,7 +19,7 @@ public class SimpleMonster extends Monster {
 	 * 
 	 * @param attributes key value map of attributes as defined by MonsterSchema
 	 */
-	public SimpleMonster (Map<String, Object> attributes) {
+	public SimpleMonster (Map<String, Serializable> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, MonsterSchema.ENTRANCE_LOCATION, new Point2D.Double(0,0)),
 				(Exit) getValueOrDefault(attributes, MonsterSchema.EXIT_LOCATION, null),

@@ -1,7 +1,8 @@
-package main.java.schema;
+package main.java.schema.tdobjects.monsters;
 
 import main.java.author.view.tabs.enemy.EnemyViewConstants;
 import main.java.engine.objects.monster.SimpleMonster;
+import main.java.schema.tdobjects.MonsterSchema;
 
 import java.util.HashSet;
 import java.util.Set;

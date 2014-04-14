@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -23,10 +22,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
-import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
-import main.java.schema.GameMap;
-import main.java.schema.TileMapSchema;
-import main.java.schema.TileSchema;
+import main.java.schema.map.GameMap;
+import main.java.schema.map.TileMapSchema;
+import main.java.schema.map.TileSchema;
+
 import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {
@@ -112,7 +111,6 @@ public class TerrainEditorTab extends EditorTab {
         tileMapSchema.addAttribute(TileMapSchema.PIXEL_SIZE, tileDisp.getMyPixelSize());
         tileMapSchema.addAttribute(TileMapSchema.TILEMAP_FILE_NAME, tileDisp.getTileMapFile());
 	}
-	
 	
     /**
      * Temporary test file, saving will be in another component TODO: remove - jordan
