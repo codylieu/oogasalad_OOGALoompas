@@ -31,6 +31,7 @@ import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.GameSettingsController;
 import main.java.author.view.global_constants.FontConstants;
+import main.java.schema.GameSchema;
 
 public class GameSettingsEditorTab extends EditorTab{
 
@@ -63,6 +64,8 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JButton musicButton;
 
 	private JFileChooser fileChooser;
+	
+	private GameSchema gameSchema;
 
 	public GameSettingsEditorTab(TabController gameSettingsController){
 		super(gameSettingsController);
@@ -227,7 +230,19 @@ public class GameSettingsEditorTab extends EditorTab{
 
 	@Override
 	public void saveTabData() {
+		
 		GameSettingsController controller = (GameSettingsController) myController;
+		
+		gameSchema = new GameSchema();
+		
+		gameSchema.addAttribute(GameSchema.LEVELS, (Integer) levelsPerGameSpinner.getValue());
+		gameSchema.addAttribute(GameSchema.LIVES, (Integer) livesSpinner.getValue());
+		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
+		
+//		gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, );
+//		gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, );
+		
+		controller.addGameSettings(gameSchema);
 		
 	}
 
