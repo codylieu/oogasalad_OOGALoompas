@@ -93,6 +93,9 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 					color = JGColor.red;
 				else
 					color = JGColor.green;
+			else
+				if (model.isTowerPresent(mousePos.x, mousePos.y))
+					color = JGColor.orange;
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
