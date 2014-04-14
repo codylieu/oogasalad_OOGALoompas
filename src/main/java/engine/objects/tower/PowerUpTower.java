@@ -7,7 +7,7 @@ import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.schema.tdobjects.TowerSchema;
 
-public class PowerUpTower extends Tower {
+public class PowerUpTower extends BaseTower {
 	
     public static final double DEFAULT_DAMAGE_POWER_UP_PROPORTION = 1.5;
 
@@ -40,8 +40,8 @@ public class PowerUpTower extends Tower {
 	
 	public void callTowerActions (EnvironmentKnowledge environ) {
 		super.callTowerActions(environ);
-		List<Tower> nearbyTowers = environ.getTowerCoordinatesInRange(this.x, this.y, myRange);
-		for(Tower t : nearbyTowers) {
+		List<BaseTower> nearbyTowers = environ.getTowerCoordinatesInRange(this.x, this.y, myRange);
+		for(BaseTower t : nearbyTowers) {
 		    //t.setTowerDamageOffset(DEFAULT_DAMAGE_POWER_UP_PROPORTION);
 		    //add another shooting tower wrapper instead
 		}

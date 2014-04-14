@@ -11,7 +11,7 @@ import main.java.engine.objects.TDObject;
  * It is wrapped around ("decorated") with tower behaviors such as shooting, money-farming ability, etc.
  *
  */
-public class Tower extends TDObject implements ITower {
+public class BaseTower extends TDObject implements ITower {
 
     public static final double DEFAULT_DAMAGE = 10;
     public static final double DEFAULT_HEALTH = 100;
@@ -50,7 +50,7 @@ public class Tower extends TDObject implements ITower {
      * @param cost money cost of creating tower
      * @param buildup time for this tower's construction
      */
-    public Tower (Point2D location, String tower_gfx, double damage,
+    public BaseTower (Point2D location, String tower_gfx, double damage,
                   double range, double cost, double buildup) {
         super("tower", location.getX(), location.getY(), TOWER_CID, tower_gfx);
         myImage = tower_gfx;

@@ -1,6 +1,6 @@
 package main.java.schema.tdobjects;
 
-import main.java.engine.objects.tower.Tower;
+import main.java.engine.objects.tower.BaseTower;
 
 public abstract class TowerSchema extends TDObjectSchema {
     public static final String LOCATION = "Location";
@@ -19,7 +19,7 @@ public abstract class TowerSchema extends TDObjectSchema {
     public static final String RANGE_MEDIUM = "Medium";
     public static final String RANGE_LARGE = "Large";
 	
-    protected TowerSchema(Class<? extends Tower> myConcreteType) {
+    protected TowerSchema(Class<? extends BaseTower> myConcreteType) {
         super(myConcreteType);
 
 		myAttributeSet.add(TowerSchema.BUILDUP);

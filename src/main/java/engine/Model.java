@@ -14,7 +14,7 @@ import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.Tower;
+import main.java.engine.objects.tower.BaseTower;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
@@ -38,7 +38,7 @@ public class Model {
     private TDObjectFactory factory;
     private Player player;
     private double gameClock;
-    private Tower[][] towers;
+    private BaseTower[][] towers;
     private List<Monster> monsters;
     private CollisionManager collisionManager;
     private GameState gameState;
@@ -59,7 +59,7 @@ public class Model {
 
         this.gameClock = 0;
         monsters = new ArrayList<Monster>();
-        towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
+        towers = new BaseTower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
 
         levelManager.setEntrance(0, engine.pfHeight() / 2);
@@ -101,7 +101,7 @@ public class Model {
                 return false;
             }
 
-            Tower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string name
+            BaseTower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string name
 
             if (player.getMoney() >= newTower.getCost()) {
                 // FIXME: Decrease money?
@@ -125,7 +125,7 @@ public class Model {
      * 
      * @param tower
      */
-    private void destroyTower (Tower tower) {
+    private void destroyTower (BaseTower tower) {
         tower.setImage(null);
         tower.remove();
     }
@@ -360,8 +360,8 @@ public class Model {
      */
     private void doTowerBehaviors () {
       
-        for (Tower[] towerRow : towers) {
-            for (Tower t : towerRow) {
+        for (BaseTower[] towerRow : towers) {
+            for (BaseTower t : towerRow) {
                 if (t != null) {
                     t.callTowerActions(environ);
                 }
@@ -390,7 +390,7 @@ public class Model {
             int xtile = coordinates[0];
             int ytile = coordinates[1];
             towers[xtile][ytile].remove();
-            Tower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
+            BaseTower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
             // System.out.println(newTower.x);
             towers[xtile][ytile] = newTower;
             return true;
