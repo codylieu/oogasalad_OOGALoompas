@@ -15,15 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
-import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.schema.MonsterSchema;
-import main.java.schema.TowerSchema;
-import main.java.schema.SimpleTowerSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 public class TowerEditorTab extends ObjectEditorTab {
 
@@ -46,7 +43,8 @@ public class TowerEditorTab extends ObjectEditorTab {
 	}
 
 	protected TDObjectSchema createSpecificNewObject(String objectName) {
-		return new SimpleTowerSchema(objectName);
+		return new TowerSchema(objectName);
+
 	}
 
 	protected TabViewBuilder createSpecificTabViewBuilder() {

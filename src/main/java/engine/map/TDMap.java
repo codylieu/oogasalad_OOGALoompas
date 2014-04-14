@@ -4,7 +4,7 @@ import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
 import main.java.author.view.tabs.terrain.Tile;
 import main.java.author.view.tabs.terrain.TileMap;
-import main.java.schema.GameMap;
+import main.java.schema.map.GameMap;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;

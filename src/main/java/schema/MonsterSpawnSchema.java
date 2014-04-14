@@ -1,5 +1,7 @@
 package main.java.schema;
 
+import main.java.schema.tdobjects.MonsterSchema;
+
 /**
  * A schema object/container to store information about which monsterschema to create, and how many of it to be
  * created per swarm.

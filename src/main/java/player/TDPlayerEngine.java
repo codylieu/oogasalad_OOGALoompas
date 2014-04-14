@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import com.sun.servicetag.SystemEnvironment;
-
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
@@ -61,9 +59,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	public void initGame() {
 		setFrameRate(myFrameRate, 1);
 		this.model = new Model(this);
-		model.addNewPlayer();
-		model.loadMap("testmap.json");
-		//model.loadSchemas("testtowers");
+        model.loadGameBlueprint(null); // TODO: null for now
 	}
 
 	/*public int getFramePerSecond(){
@@ -159,7 +155,7 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		super.doFrame();
 		if (cursorState == CursorState.AddTower){
 			if (getMouseButton(1)) {
-				model.placeTower(getMouseX(), getMouseY());
+				model.placeTower(getMouseX(), getMouseY(), "test-tower-1");
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(1);
