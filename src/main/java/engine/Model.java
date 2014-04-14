@@ -24,7 +24,7 @@ import main.java.schema.map.GameMap;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.towers.SimpleTowerSchema;
+import main.java.schema.tdobjects.towers.ShootingTowerSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
@@ -90,8 +90,9 @@ public class Model {
      * 
      * @param x x coordinate of the tower
      * @param y y coordinate of the tower
+     * @param towerName Type tower to be placed
      */
-    public boolean placeTower (double x, double y) {
+    public boolean placeTower (double x, double y, String towerName) {
         try {
             Point2D location = new Point2D.Double(x, y);
             int[] currentTile = getTileCoordinates(location);
@@ -101,7 +102,7 @@ public class Model {
                 return false;
             }
 
-            Tower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string name
+            Tower newTower = factory.placeTower(location, towerName); // TODO: take string name
 
             if (player.getMoney() >= newTower.getCost()) {
                 // FIXME: Decrease money?
@@ -416,14 +417,17 @@ public class Model {
         // Populate TDObjects
         List<TDObjectSchema> testTDObjectSchema = new ArrayList<>();
 
-        // Create test towers
-        SimpleTowerSchema testTowerOne = new SimpleTowerSchema();
+        // Create test shooting tower
+        ShootingTowerSchema testTowerOne = new ShootingTowerSchema();
         testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
         testTowerOne.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
         testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerOne);
+        
+        // Create test money tower
+        
 
-        // Create test mosnters
+        // Create test monsters
         SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
         testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
         testMonsterOne.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");

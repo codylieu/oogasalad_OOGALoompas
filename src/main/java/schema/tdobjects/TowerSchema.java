@@ -5,7 +5,6 @@ import main.java.engine.objects.tower.Tower;
 public abstract class TowerSchema extends TDObjectSchema {
     public static final String LOCATION = "Location";
     public static final String HEALTH = "Health";
-    public static final String DAMAGE = "Damage";
     public static final String RANGE = "Range";
     public static final String COST = "Cost";
     public static final String TILE_SIZE = "Size";
@@ -27,7 +26,6 @@ public abstract class TowerSchema extends TDObjectSchema {
 		myAttributeSet.add(TowerSchema.TOWER_IMAGE_NAME);
 		myAttributeSet.add(TowerSchema.BULLET_IMAGE_NAME);
 		myAttributeSet.add(TowerSchema.COST);
-		myAttributeSet.add(TowerSchema.DAMAGE);
 		myAttributeSet.add(TowerSchema.HEALTH);
 		myAttributeSet.add(TowerSchema.RANGE);
 		myAttributeSet.add(TowerSchema.LOCATION);

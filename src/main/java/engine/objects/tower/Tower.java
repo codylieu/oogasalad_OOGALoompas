@@ -11,7 +11,6 @@ import main.java.engine.objects.TDObject;
  */
 public abstract class Tower extends TDObject {
 
-    public static final double DEFAULT_DAMAGE = 10;
     public static final double DEFAULT_HEALTH = 100;
     public static final double DEFAULT_RANGE = 200;
     public static final double DEFAULT_FIRING_SPEED = 5;
@@ -22,8 +21,7 @@ public abstract class Tower extends TDObject {
 
     public static final int FLASH_INTERVAL = 5;
 
-    protected double myDamage;
-    protected double myDamageOffset;
+
     protected double myRange;
     protected double myCost;
     protected double myBuildUpTime;
@@ -43,16 +41,14 @@ public abstract class Tower extends TDObject {
      * 
      * @param location point2d x,y coordinate
      * @param tower_gfx image to be used
-     * @param damage damage of tower's projectiles
      * @param range range of tower's aim
      * @param cost money cost of creating tower
      * @param buildup time for this tower's construction
      */
-    public Tower (Point2D location, String tower_gfx, double damage,
+    public Tower (Point2D location, String tower_gfx,
                   double range, double cost, double buildup) {
         super("tower", location.getX(), location.getY(), TOWER_CID, tower_gfx);
         myImage = tower_gfx;
-        myDamage = damage;
         myRange = range;
         myCost = cost;
         myBuildUpTime = buildup;
@@ -104,20 +100,9 @@ public abstract class Tower extends TDObject {
     public double getCost () {
         return myCost;
     }
-    
-    /**
-     * Sets the the tower's damage offset as a proportion of original damage.
-     * @param offsetProportion
-     * @return offset proportion
-     */
-    public double setTowerDamageOffset (double offsetProportion) {
-    	myDamageOffset = myDamageOffset;
-    	return myDamageOffset;
-    }
 
     public String toString () {
-        return "Damage: " + myDamage + "\n"
-               + "Range: " + myRange + "\n"
+        return "Range: " + myRange + "\n"
                + "Cost: " + myCost + "\n";
     }
 

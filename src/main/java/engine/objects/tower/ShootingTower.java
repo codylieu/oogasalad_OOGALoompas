@@ -2,13 +2,17 @@ package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
 import java.util.Map;
+
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.Projectile;
 import main.java.schema.tdobjects.TowerSchema;
+import main.java.schema.tdobjects.towers.ShootingTowerSchema;
 
 
 public class ShootingTower extends Tower {
-
+    public static final double DEFAULT_DAMAGE = 10;
+    protected double myDamage;
+    protected double myDamageOffset;
     /**
      * Create a new tower from a map of attributes. Should be called by factory.
      * 
@@ -18,7 +22,7 @@ public class ShootingTower extends Tower {
         this(
              (Point2D) getValueOrDefault(attributes, TowerSchema.LOCATION, new Point2D.Double(0, 0)),
              (double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),
-             (double) getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
+             (double) getValueOrDefault(attributes, ShootingTowerSchema.DAMAGE, DEFAULT_DAMAGE),
              (double) getValueOrDefault(attributes, TowerSchema.RANGE, DEFAULT_RANGE),
              (double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
              (double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
@@ -47,11 +51,11 @@ public class ShootingTower extends Tower {
 
         super(location,
               imageName,
-              damage,
               range,
               cost,
               buildup);
         myDamageOffset = 1;
+        myDamage = damage;
     }
 
     @Override
@@ -97,5 +101,14 @@ public class ShootingTower extends Tower {
         double angle = Math.atan2(target.getX() - this.x, target.getY() - this.y);
         new Projectile(this.x, this.y, angle, myDamage*myDamageOffset);
     }
-
+    
+    /**
+     * Sets the the tower's damage offset as a proportion of original damage.
+     * @param offsetProportion
+     * @return offset proportion
+     */
+    public double setTowerDamageOffset (double offsetProportion) {
+    	myDamageOffset = offsetProportion;
+    	return myDamageOffset;
+    }
 }

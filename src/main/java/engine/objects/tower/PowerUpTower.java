@@ -13,7 +13,6 @@ public class PowerUpTower extends Tower {
 
 	public PowerUpTower(Point2D location,
 			double health,
-			double damage,
 			double range,
 			double cost,
 			double buildup,
@@ -21,7 +20,6 @@ public class PowerUpTower extends Tower {
 
 		super(location,
 				imageName,
-				damage,
 				range,
 				cost,
 				buildup);
@@ -31,7 +29,6 @@ public class PowerUpTower extends Tower {
 		this(
 				(Point2D) getValueOrDefault(attributes, TowerSchema.LOCATION, new Point2D.Double(0, 0)),
 				(double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),
-				(double) getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
 				(double) getValueOrDefault(attributes, TowerSchema.RANGE, DEFAULT_RANGE),
 				(double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
 				(double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
@@ -42,7 +39,9 @@ public class PowerUpTower extends Tower {
 		super.callTowerActions(environ);
 		List<Tower> nearbyTowers = environ.getTowerCoordinatesInRange(this.x, this.y, myRange);
 		for(Tower t : nearbyTowers) {
-			t.setTowerDamageOffset(DEFAULT_DAMAGE_POWER_UP_PROPORTION);
+			if(t instanceof ShootingTower){
+			((ShootingTower) t).setTowerDamageOffset(DEFAULT_DAMAGE_POWER_UP_PROPORTION);
+			}
 		}
 	}
 }

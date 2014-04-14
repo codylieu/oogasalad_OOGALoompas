@@ -15,14 +15,15 @@ import main.java.schema.tdobjects.TowerSchema;
  * instance of a Tower. Please refer to the Game Engine's TDObjects for the
  * objects related to ones you will see onscreen.
  */
-public class SimpleTowerSchema extends TowerSchema {
+public class ShootingTowerSchema extends TowerSchema {
 	private static final Class<ShootingTower> MY_CONCRETE_TYPE = ShootingTower.class;
+    public static final String DAMAGE = "Damage";
 
-	public SimpleTowerSchema() {
+	public ShootingTowerSchema() {
 		super(MY_CONCRETE_TYPE);
 	}
 
-	public SimpleTowerSchema(String name) {
+	public ShootingTowerSchema(String name) {
 		this();
 		populateDefaultAttributes(name);
 	}
@@ -31,7 +32,7 @@ public class SimpleTowerSchema extends TowerSchema {
 		addAttribute(TowerSchema.NAME, name);
 		addAttribute(TowerSchema.HEALTH, TowerViewConstants.HEALTH_DEFAULT);
 		addAttribute(TowerSchema.COST, TowerViewConstants.COST_DEFAULT);
-		addAttribute(TowerSchema.DAMAGE, TowerViewConstants.DAMAGE_DEFAULT);
+		addAttribute(ShootingTowerSchema.DAMAGE, TowerViewConstants.DAMAGE_DEFAULT);
 		addAttribute(TowerSchema.BUILDUP, TowerViewConstants.BUILDUP_DEFAULT);
 		addAttribute(TowerSchema.TILE_SIZE, TowerViewConstants.TILE_SIZE_DEFAULT);
 		addAttribute(TowerSchema.RANGE, TowerViewConstants.RANGE_DEFAULT);
@@ -41,6 +42,7 @@ public class SimpleTowerSchema extends TowerSchema {
 
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		return new HashSet<>(); // No additional attributes
+		myAttributeSet.add(ShootingTowerSchema.DAMAGE);
+		return myAttributeSet;
 	}
 }
