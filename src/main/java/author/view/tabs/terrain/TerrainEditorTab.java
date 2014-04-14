@@ -11,22 +11,29 @@ import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
+import main.java.author.view.tabs.terrain.types.TileObject;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.schema.GameMap;
 import main.java.schema.TileMapSchema;
@@ -38,16 +45,20 @@ public class TerrainEditorTab extends EditorTab {
 	private static final String EDIT_TILE = "Edit Tile";
 	private static final String SAVE_MAP = "Save Map";
 	private static final String ADD_TILEMAP = "Import Image File";
+	private static final String TERRAIN_CHOOSER = "Choose Terrain Type";
 	private static final String PIXEL_QUERY = "How many pixels are in the bitmap?";
 	private static final String ROW_QUERY = "Enter Row Count";
 	private static final String COL_QUERY = "Enter Column Count";
 	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
     private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
     private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
+    
+    private String [] terrainTypes = {"Can Walk Over", "Can Walk and Fly Over", "Cannot Traverse"};
+    private JComboBox terrainTypeChooser;
 
     private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
-	private Map<String, JButton> buttonDisplayOptions;
+	private Map<String, JComponent> displayOptions;
 	private Canvas myCanvas;
 	
 	public TerrainEditorTab(TabController controller){
@@ -94,6 +105,20 @@ public class TerrainEditorTab extends EditorTab {
 		return isInitialized;
 	}
 	
+	private JComboBox constructTerrainTypes() {
+		 JComboBox scrollableTerrainTypes = new JComboBox(terrainTypes);
+		 ((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);	
+		 scrollableTerrainTypes.addActionListener(actionListener(this, "updatePassabilityIndex"));
+		 scrollableTerrainTypes.setEnabled(false);
+		 return scrollableTerrainTypes;
+	}
+	
+	public void updatePassabilityIndex(ActionEvent e) {
+		TileObject selectedTile = myCanvas.getSelectedTileObj();
+		int index = ((JComboBox) e.getSource()).getSelectedIndex();
+		selectedTile.setPassabilityIndex(index);
+	}
+	
 	/**
 	 * Initializes different buttons that give the user various options
 	 * when constructing the terrain map. These include clearing the canvas,
@@ -101,25 +126,26 @@ public class TerrainEditorTab extends EditorTab {
 	 * use.
 	 */
 	private void constructButtonDisplay() {
-		buttonDisplayOptions = new HashMap<String, JButton>();
-		buttonDisplayOptions.put(CLEAR, initClearButton());
-		buttonDisplayOptions.put(EDIT_TILE, initEditorButton());
-		buttonDisplayOptions.put(SAVE_MAP, initSaveButton());
-		buttonDisplayOptions.put(ADD_TILEMAP, initNewTileMap());
+		displayOptions = new LinkedHashMap<String, JComponent>();
+		displayOptions.put(TERRAIN_CHOOSER, constructTerrainTypes());
+		displayOptions.put(EDIT_TILE, initEditorButton());
+		displayOptions.put(ADD_TILEMAP, initNewTileMap());
+		displayOptions.put(CLEAR, initClearButton());
+		displayOptions.put(SAVE_MAP, initSaveButton());
 		
-		JPanel buttonDisplayPanel = new JPanel();
-		buttonDisplayPanel.setBackground(new Color(50, 50, 50));
+		JPanel optionDisplayPanel = new JPanel();
+		optionDisplayPanel.setBackground(new Color(50, 50, 50));
 		
-		buttonDisplayPanel.setLayout(new GridBagLayout());
+		optionDisplayPanel.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		
 		c.gridy = 0;
-		for (JButton buttonDisplay : buttonDisplayOptions.values()) {
-			buttonDisplayPanel.add(buttonDisplay, c);
+		for (JComponent displayOption : displayOptions.values()) {
+			optionDisplayPanel.add(displayOption, c);
 			c.gridy++;
 		}
 		
-		add(buttonDisplayPanel, BorderLayout.WEST);
+		add(optionDisplayPanel, BorderLayout.WEST);
 		revalidate();
 		repaint();
 	}
@@ -180,7 +206,8 @@ public class TerrainEditorTab extends EditorTab {
 		int fileReturn = fileChooser.showOpenDialog(this);
 		if (fileReturn == JFileChooser.APPROVE_OPTION) {
 			addTileDisplay(fileChooser.getSelectedFile());
-			buttonDisplayOptions.get(EDIT_TILE).setEnabled(true);
+			displayOptions.get(EDIT_TILE).setEnabled(true);
+			displayOptions.get(TERRAIN_CHOOSER).setEnabled(true);
 			revalidate();
 			repaint();
 		} 
