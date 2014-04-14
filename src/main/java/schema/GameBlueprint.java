@@ -1,6 +1,6 @@
 package main.java.schema;
 
-import main.java.schema.map.GameMap;
+import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
 import java.io.Serializable;
@@ -15,11 +15,10 @@ import java.util.List;
  * This class does not relate to something that gets explicitly instantiated in the engine.
  */
 public class GameBlueprint implements Serializable {
-
 	private GameSchema myGameScenario;
 	private List<TDObjectSchema> myTDObjectSchemas;
 	private List<WaveSpawnSchema> myLevelSchemas;
-	private List<GameMap> myGameMaps;
+	private List<GameMapSchema> myGameMapSchemas;
 
 	public GameSchema getMyGameScenario() {
 		return myGameScenario;
@@ -45,12 +44,11 @@ public class GameBlueprint implements Serializable {
 		this.myLevelSchemas = myLevelSchemas;
 	}
 
-	public List<GameMap> getMyGameMaps() {
-		return myGameMaps;
+	public List<GameMapSchema> getMyGameMapSchemas() {
+		return myGameMapSchemas;
 	}
 
-	public void setMyGameMaps(List<GameMap> myGameMaps) {
-		this.myGameMaps = myGameMaps;
+	public void setMyGameMapSchemas(List<GameMapSchema> myGameMapSchemas) {
+		this.myGameMapSchemas = myGameMapSchemas;
 	}
-	
 }
