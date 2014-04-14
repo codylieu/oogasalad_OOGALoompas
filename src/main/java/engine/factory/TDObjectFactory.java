@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,10 @@ import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.MoneyTower;
 import main.java.engine.objects.tower.ShootingTower;
+import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.engine.util.Reflection;
 import main.java.exceptions.engine.MonsterCreationFailureException;
@@ -27,10 +28,12 @@ import main.java.schema.tdobjects.TowerSchema;
 public class TDObjectFactory {
     private JGEngineInterface engine;
     private Map<String, TDObjectSchema> tdObjectSchemaMap;
+    private List<String> possibleTowersNames;
 
     public TDObjectFactory (JGEngineInterface engine) {
         this.engine = engine;
         tdObjectSchemaMap = new HashMap<>();
+        possibleTowersNames = new ArrayList<String>();
     }
 
     public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
@@ -41,6 +44,9 @@ public class TDObjectFactory {
                     Model.RESOURCE_PATH + s.getAttributesMap().get(TDObjectSchema.IMAGE_NAME);
             engine.defineImage(objName, "-", 1, objImagePath, "-");
             tdObjectSchemaMap.put(objName, s);
+            if(s instanceof TowerSchema) {
+                possibleTowersNames.add(objName);
+            }
         }
     }
 
@@ -142,5 +148,13 @@ public class TDObjectFactory {
         int curXTilePos = (int) location.getX() / engine.tileWidth() * engine.tileWidth();
         int curYTilePos = (int) location.getY() / engine.tileHeight() * engine.tileHeight();
         return new Point2D.Double(curXTilePos, curYTilePos);
+    }
+    
+    /**
+     * Returns names of towers that have loaded schemas, and can possibly be created.
+     * @return an unmodifiable list
+     */
+    public List<String> getPossibleTowersNames(){
+        return Collections.unmodifiableList(possibleTowersNames);
     }
 }

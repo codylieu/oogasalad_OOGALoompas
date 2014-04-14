@@ -1,5 +1,7 @@
 package main.java.engine;
 
+import java.awt.event.KeyEvent;
+import java.util.List;
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
@@ -12,6 +14,8 @@ public class TestEngine extends JGEngine {
     private static TestEngine engine;
     private CursorState cursorState;
     private Model model;
+    private List<String> towers;
+    private int currTower = 0;
 
     public TestEngine() {
         initEngineApplet();
@@ -37,14 +41,19 @@ public class TestEngine extends JGEngine {
     public void initGame() {
         setFrameRate(45, 1);
         this.model = new Model(this);
+        towers = model.getPossibleTowers();
     }
-
+    
     @Override
     public void doFrame() {
         super.doFrame();
         displayTowerGhostIfNecessary();
+        if(getKey(KeyEvent.VK_1)) {
+            currTower++;
+            clearKey(KeyEvent.VK_1);
+        }
         if (getMouseButton(1)) {
-            model.placeTower(getMouseX(), getMouseY(), "test-tower-1");
+            model.placeTower(getMouseX(), getMouseY(), towers.get(currTower%towers.size()));
             clearMouseButton(1);
         }
         if (getMouseButton(3)) { // right click
@@ -67,6 +76,7 @@ public class TestEngine extends JGEngine {
     public void paintFrame() {
         highlightMouseoverTile();
         displayGameStats();
+        drawString(towers.get(currTower%towers.size()), pfWidth()/2, 0, 0);
     }
     
     private void displayTowerGhostIfNecessary() {

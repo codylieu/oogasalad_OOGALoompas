@@ -104,8 +104,7 @@ public class Model {
             // if tower already exists in the tile clicked, do nothing
             if (isTowerPresent(currentTile)) { return false; }
 
-            ITower newTower = factory.placeTower(location, "test-tower-1"); // TODO: take string
-                                                                            // name
+            ITower newTower = factory.placeTower(location, towerName);
 
             if (player.getMoney() >= newTower.getCost()) {
                 // FIXME: Decrease money?
@@ -421,10 +420,18 @@ public class Model {
         testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
         Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
         towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
-        towerBehaviors.add(TowerBehaviors.SHOOTING);
         testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
         testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerOne);
+        
+        TowerSchema testTowerTwo = new TowerSchema();
+        testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
+        testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
+        towerBehaviors2.add(TowerBehaviors.SHOOTING);
+        testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
+        testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerTwo);
 
         // Create test money tower
 
@@ -466,5 +473,9 @@ public class Model {
         testBlueprint.setMyLevelSchemas(testWaves);
 
         return testBlueprint;
+    }
+
+    public List<String> getPossibleTowers () {
+        return factory.getPossibleTowersNames();
     }
 }
