@@ -443,7 +443,7 @@ public class Model {
         testGameSchema.addAttribute(GameSchema.LIVES, 3);
         testGameSchema.addAttribute(GameSchema.MONEY, 500);
 
-        testBlueprint.setMyGameScenario(testGameSchema);
+        testBlueprint.setMyGameSchema(testGameSchema);
 
         // Create wave schemas
         List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
