@@ -73,8 +73,8 @@ public class Model {
         levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
         loadGameBlueprint(null);// TODO: REPLACE
         dataHandler = new DataHandler();
-        
-        environ = new EnvironmentKnowledge(monsters, player);
+
+        environ = new EnvironmentKnowledge(monsters, player, towers);
 
     }
 
@@ -183,17 +183,18 @@ public class Model {
      * @param x
      * @param y
      */
-    public void checkAndRemoveTower (int x, int y) {
-        int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
-        if (isTowerPresent(coordinates)) {
-            int xtile = coordinates[0];
-            int ytile = coordinates[1];
-            player.addMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
-            towers[xtile][ytile].remove();
-            towers[xtile][ytile] = null;
-        }
-    }
 
+    public void checkAndRemoveTower(double x, double y) {
+    	int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
+    	if (isTowerPresent(coordinates)){
+    		int xtile = coordinates[0];
+    		int ytile = coordinates[1];
+    		player.addMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
+    		towers[xtile][ytile].remove();
+    		towers[xtile][ytile] = null;
+    	}
+    }
+    
     /**
      * /**
      * Loads a map/terrain into the engine.
@@ -271,7 +272,7 @@ public class Model {
      * @return
      */
     private WaveSpawnSchema createTestWave (SimpleMonsterSchema m1, int swarmSize) {
-        MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", m1, swarmSize);
+        MonsterSpawnSchema mschema = new MonsterSpawnSchema(m1, swarmSize);
         WaveSpawnSchema wschema = new WaveSpawnSchema();
         wschema.addMonsterSchema(mschema);
         return wschema;

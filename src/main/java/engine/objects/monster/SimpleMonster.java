@@ -1,6 +1,7 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
+import java.util.List;
 import java.util.Map;
 
 import main.java.engine.objects.Exit;
@@ -21,6 +22,7 @@ public class SimpleMonster extends Monster {
 		this(
 				(Point2D) getValueOrDefault(attributes, MonsterSchema.ENTRANCE_LOCATION, new Point2D.Double(0,0)),
 				(Exit) getValueOrDefault(attributes, MonsterSchema.EXIT_LOCATION, null),
+                (List<Integer>) getValueOrDefault(attributes, MonsterSchema.BLOCKED_TILES, null),
 				(double) getValueOrDefault(attributes, MonsterSchema.HEALTH, DEFAULT_HEALTH),
 				(double) getValueOrDefault(attributes, MonsterSchema.SPEED, DEFAULT_MOVE_SPEED),
 				(double) getValueOrDefault(attributes, MonsterSchema.REWARD, DEFAULT_REWARD_AMOUNT),
@@ -42,12 +44,13 @@ public class SimpleMonster extends Monster {
      */
     public SimpleMonster (Point2D entrance,
                           Exit exit,
+                          List<Integer> blocked,
                           double health,
                           double speed,
                           double moneyValue,
                           String imageName) {
 
-        super(entrance, exit,
+        super(entrance, exit, blocked,
               health, moneyValue, speed, imageName);
 
     }

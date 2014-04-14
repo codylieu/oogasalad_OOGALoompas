@@ -18,10 +18,10 @@ import main.java.author.view.tabs.terrain.Canvas;
  * on the Canvas
  *
  */
-public class TileObject extends JButton implements Serializable {
-	private Image myImage;
+public class TileObject extends JButton {
+	private Image myImage; // an edited version of the TileObject's original image
 	private Image myUneditedImage; // original image associated with the TileObject
-	private int myPassabilityIndex; // an edited version of the TileObject's original image
+	private int myPassabilityIndex;
     private int myXIndex;
     private int myYIndex;
     private String myTileMapFileName;

@@ -23,6 +23,7 @@ public abstract class Tower extends TDObject {
     public static final int FLASH_INTERVAL = 5;
 
     protected double myDamage;
+    protected double myDamageOffset;
     protected double myRange;
     protected double myCost;
     protected double myBuildUpTime;
@@ -102,6 +103,16 @@ public abstract class Tower extends TDObject {
      */
     public double getCost () {
         return myCost;
+    }
+    
+    /**
+     * Sets the the tower's damage offset as a proportion of original damage.
+     * @param offsetProportion
+     * @return offset proportion
+     */
+    public double setTowerDamageOffset (double offsetProportion) {
+    	myDamageOffset = myDamageOffset;
+    	return myDamageOffset;
     }
 
     public String toString () {
