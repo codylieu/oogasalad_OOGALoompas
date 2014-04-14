@@ -273,8 +273,8 @@ public class Player {
 			song.stop();
 			soundOn = false;
 		}
-
 	}
+
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
 		gameInfoPanel.setSubjectState(engine);
