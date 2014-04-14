@@ -43,8 +43,9 @@ abstract class TowerBehaviorDecorator implements ITower {
         if (baseTower.callTowerActions(environ)) {
             // in addition to base tower's behavior, also do additional behavior
             doDecoratedBehavior(environ);
+            return true;
         }
-        return true;
+        return false;
     }
 
     abstract void doDecoratedBehavior (EnvironmentKnowledge environ);
