@@ -60,6 +60,7 @@ public class ShootingTower extends Tower {
 
     @Override
     public void callTowerActions (EnvironmentKnowledge environ) {
+    	//TODO: limit tower firing to after build is complete
         super.callTowerActions(environ);
         // in addition to build up time logic, also fire at the nearest enemy!
         doTowerFiring(environ.getNearestMonsterCoordinate(this.x, this.y));
