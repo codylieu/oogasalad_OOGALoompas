@@ -446,8 +446,6 @@ public class Model {
 
         // Create test game schemas
         GameSchema testGameSchema = new GameSchema();
-        testGameSchema.addAttribute(GameSchema.ROWS, 25);
-        testGameSchema.addAttribute(GameSchema.COLUMNS, 20);
         testGameSchema.addAttribute(GameSchema.LIVES, 3);
         testGameSchema.addAttribute(GameSchema.MONEY, 500);
 
