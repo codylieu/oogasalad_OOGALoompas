@@ -23,12 +23,11 @@ public class MoneyTower extends TowerBehaviorDecorator {
     }
 
     @Override
-    public void callTowerActions (EnvironmentKnowledge environ) {
-        super.callTowerActions(environ);
+    void doDecoratedBehavior (EnvironmentKnowledge environ) {
         // in addition to base tower's behaviors, also give player money at the appropriate interval
         grantPlayerMoney(environ);
     }
-
+    
     private void grantPlayerMoney (EnvironmentKnowledge environ) {
         if (baseTower.atInterval(DEFAULT_MONEY_GRANT_INTERVAL)) {
             environ.grantPlayerMoney(DEFAULT_MONEY_GRANTED);

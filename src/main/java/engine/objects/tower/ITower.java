@@ -26,8 +26,6 @@ public interface ITower {
     
     public void remove();
     
-    public void doFrame(EnvironmentKnowledge environ);
-    
     public double getCost();
     
 }

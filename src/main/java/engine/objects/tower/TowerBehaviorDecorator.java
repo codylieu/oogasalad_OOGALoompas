@@ -28,11 +28,6 @@ abstract class TowerBehaviorDecorator implements ITower {
     }
     
     @Override
-    public void doFrame(EnvironmentKnowledge environ) {
-        baseTower.doFrame(environ);
-    }
-    
-    @Override
     public double getCost(){
         return baseTower.getCost();
     }

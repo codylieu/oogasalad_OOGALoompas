@@ -67,8 +67,9 @@ public class Model {
         levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
         loadGameBlueprint(null);// TODO: REPLACE
         dataHandler = new DataHandler();
-
-        environ = new EnvironmentKnowledge(monsters, player, towers);
+        
+        addNewPlayer();
+        
     }
 
     private void defineAllStaticImages () {
@@ -84,6 +85,8 @@ public class Model {
     public void addNewPlayer () {
         this.player = new Player();
         levelManager.registerPlayer(player);
+        
+        environ = new EnvironmentKnowledge(monsters, player, towers);
     }
 
     /**

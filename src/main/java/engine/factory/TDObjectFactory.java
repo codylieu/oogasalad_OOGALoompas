@@ -13,6 +13,7 @@ import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.BaseTower;
 import main.java.engine.objects.tower.ITower;
+import main.java.engine.objects.tower.MoneyTower;
 import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.util.Reflection;
 import main.java.exceptions.engine.MonsterCreationFailureException;
@@ -56,7 +57,7 @@ public class TDObjectFactory {
             schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
             Object[] towerParameters = { schema.getAttributesMap() };
 
-            return new ShootingTower((BaseTower) placeObject(schema.getMyConcreteType(), towerParameters), 10, 3, 200);
+            return new MoneyTower(new ShootingTower((BaseTower) placeObject(schema.getMyConcreteType(), towerParameters), 10, 3, 200));
         }
         catch (Exception e) {
             throw new TowerCreationFailureException(e);

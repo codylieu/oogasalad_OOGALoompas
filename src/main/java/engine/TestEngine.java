@@ -37,7 +37,6 @@ public class TestEngine extends JGEngine {
     public void initGame() {
         setFrameRate(45, 1);
         this.model = new Model(this);
-        model.addNewPlayer();
     }
 
     @Override

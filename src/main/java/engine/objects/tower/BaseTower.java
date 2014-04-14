@@ -79,16 +79,6 @@ public class BaseTower extends TDObject implements ITower {
              (String) attributes.get(TowerSchema.NAME));     
 }
 
-    /**
-     * 
-     * 
-     * Will call action specific to the type of tower if and only if past the build up time.
-     */
-    @Override
-    public void doFrame(EnvironmentKnowledge environ){
-    
-        callTowerActions(environ);
-    }
     
     @Override
     public boolean callTowerActions (EnvironmentKnowledge environ) {
