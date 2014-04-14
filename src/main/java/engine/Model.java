@@ -17,7 +17,6 @@ import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.TowerBehaviors;
-import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
@@ -28,7 +27,6 @@ import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
-import net.lingala.zip4j.exception.ZipException;
 
 
 public class Model {
@@ -65,7 +63,13 @@ public class Model {
 
         levelManager.setEntrance(0, engine.pfHeight() / 2);
         levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
-        loadGameBlueprint(null);// TODO: REPLACE
+
+        try {
+            loadGameBlueprint(null);// TODO: REPLACE
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         dataHandler = new DataHandler();
 
         addNewPlayer();
@@ -190,13 +194,23 @@ public class Model {
     }
 
     /**
-     * Loads the game schemas from GameBlueprint and sets the appropriate state
+     * Deserialize and load into the engine the GameBlueprint obtained from the file path
      * 
-     * @param bp Game blueprint to load
-     * @throws InvalidParameterForConcreteTypeException
+     * @param filePath File path of the blueprint to be loaded
+     * @throws IOException
+     * @throws ClassNotFoundException
      */
-    public void loadGameBlueprint (GameBlueprint bp) {
-        // TODO: use the actual game blueprint
+
+    public void loadGameBlueprint(String filePath) throws ClassNotFoundException, IOException {
+        GameBlueprint bp = null;
+        // TODO: load from datahandler
+//        try {
+//            bp = dataHandler.loadBlueprint(filePath);
+//        } catch (ZipException e) {
+//            e.printStackTrace();
+//        }
+
+        // TODO: use the actual game blueprint (aka bp)
         GameBlueprint testBP = createTestBlueprint();
 
         // init player
@@ -214,28 +228,6 @@ public class Model {
         for (WaveSpawnSchema wave : testBP.getMyLevelSchemas()) {
             levelManager.addNewWave(wave);
         }
-    }
-
-    /**
-     * Loads game schemas from the GameBlueprint obtained from the filePath
-     * 
-     * @param filePath
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public void loadGameSchemas (String filePath) throws ClassNotFoundException, IOException {
-        GameBlueprint bp = null;
-        try {
-            bp = dataHandler.loadBlueprint(filePath);
-        }
-        catch (ZipException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
-        player =
-                new Player((Integer) gameAttributes.get(GameSchema.MONEY),
-                           (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
     /**
@@ -451,7 +443,7 @@ public class Model {
         testGameSchema.addAttribute(GameSchema.LIVES, 3);
         testGameSchema.addAttribute(GameSchema.MONEY, 500);
 
-        testBlueprint.setMyGameScenario(testGameSchema);
+        testBlueprint.setMyGameSchema(testGameSchema);
 
         // Create wave schemas
         List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();

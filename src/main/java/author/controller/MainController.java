@@ -6,7 +6,7 @@ import javax.swing.SwingUtilities;
 
 import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
-import main.java.schema.map.GameMap;
+import main.java.schema.map.GameMapSchema;
 import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -59,13 +59,12 @@ public class MainController {
 	public void addGameSettingsToModel(GameSchema gameSchema) {
 		myModel.addGameSettings(gameSchema);
 	}
-
 	/**
 	 * Adds a schema representing characteristics of a game terrain map
 	 * to the game blueprint
 	 * @param gameMap
 	 */
-	public void addGameMapsToModel(GameMap gameMap) {
+	public void addGameMapsToModel(GameMapSchema gameMap) {
 		myModel.addGameMaps(gameMap);
 	}
 

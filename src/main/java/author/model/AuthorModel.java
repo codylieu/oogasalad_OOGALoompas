@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.schema.GameBlueprint;
-import main.java.schema.map.GameMap;
+import main.java.schema.map.GameMapSchema;
 import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -30,10 +30,10 @@ public class AuthorModel {
 
 	}
 
-	public void addGameMaps(GameMap gameMap) {
-		List<GameMap> gameMaps = new ArrayList<GameMap>();
+	public void addGameMaps(GameMapSchema gameMap) {
+		List<GameMapSchema> gameMaps = new ArrayList<GameMapSchema>();
 		gameMaps.add(gameMap);
-		myGameBlueprint.setMyGameMaps(gameMaps);
+		myGameBlueprint.setMyGameMapSchemas(gameMaps);
 	}
 
 	public void addWaves(List<WaveSpawnSchema> waves) {
