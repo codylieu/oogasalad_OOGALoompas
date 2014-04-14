@@ -16,7 +16,9 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 public class TDPlayerEngine extends JGEngine implements Subject {
 
 	public static int FRAME_RATE_DELTA = 5;
+	public static final String DEFAULT_TOWER_NAME = "test-tower-1";
 
+	private TowerChooser towerChooser;
 	private int myFrameRate;
 	private Model model;
 	private List<Observing> observers;
@@ -24,12 +26,15 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	private boolean hasChanged;
 	private boolean isFullScreen;
 	private boolean soundOn;
+	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 
 	public TDPlayerEngine() {
 		super();
 		//defineAudioClip("song", "fox.wav");
 		initEngineComponent(960, 640);
+		towerName = DEFAULT_TOWER_NAME;
+		towerChooser = new TowerChooser(this);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
 		isFullScreen = false;
@@ -149,13 +154,14 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		return "";
 
 	}
-
+	
+	
 	@Override
 	public void doFrame() {
 		super.doFrame();
 		if (cursorState == CursorState.AddTower){
 			if (getMouseButton(1)) {
-				model.placeTower(getMouseX(), getMouseY(), "test-tower-1");
+				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(1);
@@ -183,6 +189,9 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		//        model.spawnMonster(100, 150);
 	}
 
+	public void update(){
+		towerName = towerChooser.getTowerName();
+	}
 	public void toggleAddTower() {
 		if (getCursorState() == CursorState.AddTower){
 			setCursorState(CursorState.None);
@@ -254,6 +263,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		}
 	}
 
+	public List<String> getListofTowers(){
+		return model.getPossibleTowers();
+	}
+	
 	//TODO: i added this kevin, will explain later - jordan
 	public void loadMapFile(String fileName) {
 		model.loadMapTest(fileName);
