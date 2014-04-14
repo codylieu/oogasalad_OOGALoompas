@@ -21,7 +21,7 @@ public class LevelManager {
     private List<WaveSpawnSchema> myAllWaves;
     private TDObjectFactory myFactory;
     private Point2D entrance;
-    private Point2D exit;
+    private Exit exit;
     private Player myPlayer;
     private boolean currentWaveOver;
 
@@ -54,9 +54,9 @@ public class LevelManager {
         for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave)
                 .getMonsterSpawnSchemas()) {
             for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Exit monsterExit = new Exit(exit.getX(), exit.getY(), this);
+//                Exit monsterExit = new Exit(exit.getX(), exit.getY(), this);
                 Monster newlyAdded =
-                        myFactory.placeMonster(entrance, monsterExit,
+                        myFactory.placeMonster(entrance, exit,
                                                (String) spawnSchema.getMonsterSchema()
                                                        .getAttributesMap().get(TDObjectSchema.NAME));
                 spawnedMonsters.add(newlyAdded);
@@ -94,7 +94,8 @@ public class LevelManager {
      * @param y
      */
     public void setExit (double x, double y) {
-        this.exit = new Point2D.Double(x, y);
+//        this.exit = new Point2D.Double(x, y);
+    	this.exit = new Exit(x, y, this);
     }
 
     /**

@@ -61,9 +61,6 @@ public class Model {
         towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
 
-        levelManager.setEntrance(0, engine.pfHeight() / 2);
-        levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
-
         try {
             loadGameBlueprint(null);// TODO: REPLACE
         } catch (Exception e) {
@@ -170,7 +167,6 @@ public class Model {
      * @param x
      * @param y
      */
-
     public void checkAndRemoveTower (double x, double y) {
         int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
         if (isTowerPresent(coordinates)) {

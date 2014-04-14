@@ -22,6 +22,7 @@ public class Exit extends JGObject implements Serializable {
     private LevelManager mySpawnManager;
     private Point2D myLocation;
     private double myGraceTime;
+    private boolean graceCountDown;
 
     /**
      * Create an exit at the x,y coordinate. Will use JGame collision detection with monster
@@ -36,27 +37,46 @@ public class Exit extends JGObject implements Serializable {
         myLocation = new Point2D.Double(x,y);
         mySpawnManager = spawnManager;
         //first contact is immediate loss of player life
+//        myGraceTime = 0;
         myGraceTime = 0;
     }
 
     @Override
     public void hit (JGObject obj) {
         if (and(obj.colid, Monster.MONSTER_CID)) {
-            decreasePlayerLives();
+            decreasePlayerLives();  
             ((Monster) obj).setDead();
             obj.remove();
         }
     }
     
+    @Override
+    public void move() {
+    	if (myGraceTime>=0) myGraceTime--;
+    			
+    	System.out.println(myGraceTime);
+    }
+    
+    
     /**
      * Decreases player lives if grace time has passed. 
      */
     private void decreasePlayerLives () {
-        if(myGraceTime-- <= 0){
-            mySpawnManager.monsterExitAction();
-            //refill grace time
-            myGraceTime = GRACE_TIME;
-        }
+//        if(myGraceTime-- <= 0){
+//            mySpawnManager.monsterExitAction();
+//            //refill grace time
+//            myGraceTime = GRACE_TIME;
+//        }
+    	if (!withinGracePeriod()) {
+          mySpawnManager.monsterExitAction();
+
+          //refill grace time
+          myGraceTime = GRACE_TIME;
+    	}
+    }
+    
+    private boolean withinGracePeriod() {
+    	return myGraceTime>0;
     }
 
     /**
