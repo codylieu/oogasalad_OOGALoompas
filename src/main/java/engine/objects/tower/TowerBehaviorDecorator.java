@@ -3,9 +3,15 @@ package main.java.engine.objects.tower;
 import main.java.engine.EnvironmentKnowledge;
 
 
+/**
+ * Abstract decorator class to "wrap" layers of behaviors/functionality around towers.
+ * Allows mix and match of tower behaviors, e.g. shooting and money farming.
+ * @author Austin
+ *
+ */
 abstract class TowerBehaviorDecorator implements ITower {
     /**
-     * The base tower will have behaviors added to it ("decorations")
+     * The base tower that will have behaviors added to it ("decorations")
      */
     protected ITower baseTower;
 
@@ -48,5 +54,9 @@ abstract class TowerBehaviorDecorator implements ITower {
         return false;
     }
 
+    /**
+     * Do the additional behavior granted by this behavior decoration.
+     * @param environ
+     */
     abstract void doDecoratedBehavior (EnvironmentKnowledge environ);
 }

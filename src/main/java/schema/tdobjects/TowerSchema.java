@@ -13,6 +13,8 @@ public class TowerSchema extends TDObjectSchema {
     public static final String FIRING_SPEED = "Firing Speed";
     public static final String RANGE = "Range";
     public static final String COST = "Cost";
+    public static final String MONEY_GRANTED = "Money granted";
+    public static final String MONEY_GRANT_INTERVAL = "Money grant interval";
     public static final String TILE_SIZE = "Size";
     public static final String BUILDUP = "BuildUp";
     public static final String TOWER_IMAGE_NAME = "Tower Image Name";

@@ -93,11 +93,7 @@ public class SimpleTower extends TDObject implements ITower {
         }
     }
 
-    /**
-     * Get this tower's cost
-     * 
-     * @param target
-     */
+    @Override
     public double getCost () {
         return myCost;
     }
@@ -107,11 +103,7 @@ public class SimpleTower extends TDObject implements ITower {
                 + "Cost: " + myCost + "\n";
     }
     
-    /**
-     * Checks if this tower's internal counter is at the interval passed in.
-     * @param intervalFrequency how frequently this method should return true (1 means every frame)
-     * @return
-     */
+    @Override
     public boolean atInterval(int intervalFrequency) {
         return myTimingCounter % intervalFrequency == 0;
     }

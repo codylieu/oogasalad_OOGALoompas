@@ -9,6 +9,12 @@ import main.java.engine.objects.TDObject;
 import main.java.schema.tdobjects.TowerSchema;
 
 
+/**
+ * Towers decoration make the base tower fire a projectile at nearest enemies
+ * 
+ * @author Austin
+ *
+ */
 public class ShootingTower extends TowerBehaviorDecorator {
 
     public static final double DEFAULT_DAMAGE = 10;
@@ -36,6 +42,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
         myRange = range;
     }
 
+    /**
+     * Constructor used by the factory in decorating a final tower.
+     * @param baseTower
+     * @param attributes
+     */
     public ShootingTower (ITower baseTower, Map<String, Serializable> attributes) {
         this(
              baseTower,
