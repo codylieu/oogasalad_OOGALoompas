@@ -13,22 +13,24 @@ import java.util.List;
  * 
  */
 public class GameMap implements Serializable {
-	private Tile[][] myTiles;
-    private List<TileMap> myTileMaps;
+    
+    private List<TileSchema> myTileSchemas;
+    private List<TileMapSchema> myTileMapSchemas;
+    
 
-	public Tile[][] getMyTiles() {
-		return myTiles;
+	public List<TileMapSchema> getTileMapSchemas() {
+		return myTileMapSchemas;
 	}
 
-	public void setMyTiles(Tile[][] myTiles) {
-		this.myTiles = myTiles;
+	public void setTileMapSchemas(List<TileMapSchema> tileMapSchemas) {
+		this.myTileMapSchemas = tileMapSchemas;
 	}
 
-    public List<TileMap> getMyTileMaps() {
-        return myTileMaps;
+    public List<TileSchema> getTileSchemas() {
+        return myTileSchemas;
     }
 
-    public void setMyTileMaps(List<TileMap> myTileMaps) {
-        this.myTileMaps = myTileMaps;
+    public void setTileSchemas(List<TileSchema> tileSchemas) {
+        this.myTileSchemas = tileSchemas;
     }
 }

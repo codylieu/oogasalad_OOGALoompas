@@ -21,8 +21,8 @@ import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
-	private transient TileSelectionManager myTileManager;
-	private transient  Image[][] myImages;
+	private TileSelectionManager myTileManager;
+	private Image[][] myImages;
     private int myNumXTiles;
     private int myNumYTiles;
 	private int myPixelSize;
@@ -109,6 +109,18 @@ public class TileDisplay extends JPanel {
 	 */
 	public int getMyPixelSize() {
 		return myPixelSize;
+	}
+	
+	public int getNumRows() {
+		return myNumYTiles;
+	}
+	
+	public int getNumCols() {
+		return myNumXTiles;
+	}
+	
+	public String getTileMapFile() {
+		return myTileMapFile;
 	}
 	
 	/**

@@ -15,8 +15,8 @@ public class TDMap {
     private static final int yOffset = 0;
     private static final int tileXSize = 32;
     private static final int tileYSize = 32;
-    private static final int skipX = 1;
-    private static final int skipY = 1;
+    private static final int skipX = 0;
+    private static final int skipY = 0;
 
     private static final String tileImageName = "tile";
     private static final String tileImagePrefix = "t";
@@ -74,41 +74,42 @@ public class TDMap {
     }
 
     public void loadMapIntoGame(JGEngineInterface engine, String fileName) {
-        GameMap mapToLoad = null;
-        try {
-            FileInputStream fis = new FileInputStream(fileName);
-            ObjectInputStream is = new ObjectInputStream(fis);
-            mapToLoad = (GameMap) is.readObject();
-            is.close();
-
-            Tile[][] tileMap = mapToLoad.getMyTiles();
-            List<TileMap> tileMapList = mapToLoad.getMyTileMaps();
-
-            // define image maps used in case multiple maps used
-            for (TileMap tm : tileMapList) {
-                String tileMapNameNew = tm.getMyTileMapFile().replace("\\", "//"); //need to do this for jgengine
-                engine.defineImageMap(tm.getMyTileMapFile(), tileMapNameNew,
-                        0, 0, 32, 32, 0, 0); // TODO: refactor to constants
-            }
-
-            // now set the tiles
-            for (int i = 0; i < tileMap.length; i++) {
-                for (int j = 0; j < tileMap[0].length; j++) {
-                    Tile tile = tileMap[i][j];
-
-                    int tileMapWidth = getTileMapWidth(tileMapList, tile.getMyTileMapFileName());
-                    int index = tile.getMyMapXIndex() * tileMapWidth + tile.getMyMapYIndex();
-
-                    //TODO: why does jgame only take tilestr of size 4..., need to think of a better implementation
-                    engine.defineImage(tile.getMyTileMapFileName() + tile.getMyMapXIndex() + tile.getMyMapYIndex(),
-                            tile.getMyMapXIndex() + "" + tile.getMyMapYIndex(), 0, tile.getMyTileMapFileName(), index, "-");
-                    engine.setTile(new JGPoint(tile.getCol(), tile.getRow()),
-                            tile.getMyMapXIndex() + "" + tile.getMyMapYIndex());
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        GameMap mapToLoad = null;
+//        try {
+//            FileInputStream fis = new FileInputStream(fileName);
+//            ObjectInputStream is = new ObjectInputStream(fis);
+//            mapToLoad = (GameMap) is.readObject();
+//            is.close();
+//
+//            Tile[][] tileMap = mapToLoad.getMyTiles();
+//            List<TileMap> tileMapList = mapToLoad.getMyTileMaps();
+//
+//            // define image maps used in case multiple maps used
+//            for (TileMap tm : tileMapList) {
+//                String tileMapNameNew = tm.getMyTileMapFile().replace("\\", "//"); //need to do this for jgengine
+//                engine.defineImageMap(tm.getMyTileMapFile(), tileMapNameNew,
+//                        0, 0, 32, 32, 0, 0); // TODO: refactor to constants
+//            }
+//
+//            // now set the tiles
+//            for (int i = 0; i < tileMap.length; i++) {
+//                for (int j = 0; j < tileMap[0].length; j++) {
+//                    Tile tile = tileMap[i][j];
+//
+//                    int tileMapWidth = getTileMapWidth(tileMapList, tile.getMyTileMapFileName());
+//                    int index = tile.getMyMapXIndex() * tileMapWidth + tile.getMyMapYIndex();
+//
+//                    //TODO: why does jgame only take tilestr of size 4..., need to think of a better implementation
+//                    engine.defineImage(tile.getMyTileMapFileName() + tile.getMyMapXIndex() + tile.getMyMapYIndex(),
+//                            tile.getMyMapXIndex() + "" + tile.getMyMapYIndex(),
+//                            tile.getPassIndex(), tile.getMyTileMapFileName(), index, "-");
+//                    engine.setTile(new JGPoint(tile.getCol(), tile.getRow()),
+//                            tile.getMyMapXIndex() + "" + tile.getMyMapYIndex());
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
     }
 
     //TODO: probably a better way to do this, refactor
