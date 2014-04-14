@@ -10,24 +10,20 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 
 public class Sound {
-    private Clip clip;
-    public Sound(String fileName) throws LineUnavailableException, IOException, UnsupportedAudioFileException {        
-            File file = new File(fileName);
-            if (file.exists()) {
-            	System.out.println("file exists");
-                AudioInputStream sound = AudioSystem.getAudioInputStream(file);
-                clip = AudioSystem.getClip();
-                clip.open(sound);
-            }     
-    }
-    public void play(){
-        clip.setFramePosition(0);  
-        clip.start();
-    }
-    public void loop(){
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
-    }
-    public void stop(){
-            clip.stop();
-        }
-    }
+	private Clip clip;
+	public Sound(String fileName) throws LineUnavailableException, IOException, UnsupportedAudioFileException {        
+		File file = new File(fileName);
+		if (file.exists()) {
+			AudioInputStream sound = AudioSystem.getAudioInputStream(file);
+			clip = AudioSystem.getClip();
+			clip.open(sound);
+		}     
+	}
+
+	public void loop(){
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+	}
+	public void stop(){
+		clip.stop();
+	}
+}

@@ -1,6 +1,5 @@
-package main.java.schema;
+package main.java.schema.tdobjects;
 
-import main.java.author.view.tabs.enemy.EnemyViewConstants;
 import main.java.engine.objects.monster.Monster;
 
 public abstract class MonsterSchema extends TDObjectSchema {

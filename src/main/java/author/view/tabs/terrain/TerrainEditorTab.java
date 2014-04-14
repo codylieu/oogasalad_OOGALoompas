@@ -35,9 +35,9 @@ import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.terrain.types.TileObject;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
-import main.java.schema.GameMap;
-import main.java.schema.TileMapSchema;
-import main.java.schema.TileSchema;
+import main.java.schema.map.GameMap;
+import main.java.schema.map.TileMapSchema;
+import main.java.schema.map.TileSchema;
 import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {

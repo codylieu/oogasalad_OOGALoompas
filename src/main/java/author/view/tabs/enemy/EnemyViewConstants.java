@@ -1,8 +1,6 @@
 package main.java.author.view.tabs.enemy;
 
-import javax.swing.JSpinner;
-
-import main.java.schema.MonsterSchema;
+import main.java.schema.tdobjects.MonsterSchema;
 
 public class EnemyViewConstants {
 	// string constants

@@ -1,6 +1,6 @@
 package main.java.author.view.tabs.tower;
 
-import main.java.schema.TowerSchema;
+import main.java.schema.tdobjects.TowerSchema;
 
 public class TowerViewConstants {
 	// string constants
