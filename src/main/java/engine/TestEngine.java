@@ -24,7 +24,7 @@ public class TestEngine extends JGEngine {
     }
 
     public TestEngine(JGPoint size) {
-        initEngine(size.x,size.y);
+        initEngine(800, 600);
     }
 
 
