@@ -13,32 +13,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import main.java.engine.GameState;
+import main.java.schema.GameBlueprint;
+
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
 public class JSONHandler {
 
 	private Gson myGson;
-	private DataBundle myData;
 	
 	/**
-	 * Method to write the information of a DataBundle into a text file
+	 * Method to write the information of an object into a text file
 	 * named after the filename String
 	 * @param filename
 	 * @param d
 	 * @throws FileNotFoundException
 	 */
-	public void write(String filename, DataBundle d) throws FileNotFoundException	{
+	public void serializetoJSON(String filename, Object obj) throws FileNotFoundException	{
 		File outputFile = new File("src/main/resources/" + filename + ".txt");
 		PrintWriter output = new PrintWriter(outputFile);
-		String j = myGson.toJson(d);
-		System.out.println(j);
-		output.println(j);
+		String json = myGson.toJson(obj);
+		System.out.println(json);
+		output.println(json);
 		output.close();
 	}
-
+	
+	public GameBlueprint deserializeBlueprintFromJSON(String json){
+		return new Gson().fromJson(json, (new GameBlueprint()).getClass());
+	}
+	
+	public GameState deserializeStateFromJSON(String json)	{
+		return new Gson().fromJson(json, (new GameState()).getClass());
+	}
+	
 	/*
-	 * EVERYTHING BELOW THIS HAS TO DO WITH PARSING. THIS NEEDS WORK 
+	 * IF DESERIALIZING IS REALLY AS EASY AS RUNNING THE TWO METHODS ABOVE, 
+	 * THEN NONE OF THIS IS NEEDED
 	 */
 	
 	/**
@@ -49,7 +60,8 @@ public class JSONHandler {
 	 * @throws IOException
 	 * @author in-youngjo
 	 */
-	public DataBundle readFile(String filename) throws IOException{
+	public GameBlueprint readFile(String filename) throws IOException{
+		GameBlueprint output = new GameBlueprint();
 		String fileString = "";
 		Scanner s = new Scanner(new File("src/main/resources/" + filename + ".txt"));
 		while(s.hasNext())	{
@@ -57,8 +69,8 @@ public class JSONHandler {
 		}
 		s.close();
 		InputStream stream = new ByteArrayInputStream(fileString.getBytes("UTF-8"));
-		myData = readJsonStream(stream);
-		return myData;
+		output = readJsonStream(stream);
+		return output;
 	}
 
 	/**
@@ -68,9 +80,9 @@ public class JSONHandler {
 	 * @return
 	 * @throws IOException
 	 */
-	public DataBundle readJsonStream(InputStream in) throws IOException {
+	public GameBlueprint readJsonStream(InputStream in) throws IOException {
 		JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));
-		DataBundle output = new DataBundle();
+		GameBlueprint output = new GameBlueprint();
 		try {
 			while (reader.hasNext()) {
 				//TODO: Need to gather info about blueprint and state and 
@@ -137,6 +149,9 @@ public class JSONHandler {
 		return output;
 	}
 
+	public static void main(String[] args)	{
+		
+	}
 
 
 }
