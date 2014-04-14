@@ -4,6 +4,6 @@ public class ServerMain {
 
 	   public static void main (String[] args) {
 		   TDServer server = new TDServer(12345);
-		   server.readFromClient();
+		   server.runServer();
 	   }
 }
