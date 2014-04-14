@@ -23,6 +23,7 @@ public class LevelManager {
     private Point2D entrance;
     private Point2D exit;
     private Player myPlayer;
+    private boolean currentWaveOver;
 
     /**
      * Tasked with managing state for levels/waves/lives and spawning waves of monsters.
