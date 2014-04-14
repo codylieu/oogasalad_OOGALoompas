@@ -1,7 +1,7 @@
 package main.java.author.model;
 
 import main.java.schema.GameBlueprint;
-import main.java.schema.map.GameMap;
+import main.java.schema.map.GameMapSchema;
 import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.towers.SimpleTowerSchema;
@@ -30,7 +30,7 @@ public class AuthorModel {
 
 	}
 
-	public void addGameMap(GameMap gameMap) {
+	public void addGameMap(GameMapSchema gameMapSchema) {
 		// TODO Auto-generated method stub
 
 	}

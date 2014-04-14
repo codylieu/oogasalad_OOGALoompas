@@ -15,12 +15,10 @@ import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.Tower;
-import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
-import main.java.schema.map.GameMap;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -28,7 +26,6 @@ import main.java.schema.tdobjects.towers.SimpleTowerSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
-import net.lingala.zip4j.exception.ZipException;
 
 public class Model {
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
