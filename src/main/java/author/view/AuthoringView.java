@@ -22,6 +22,7 @@ import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
 import main.java.author.view.tabs.wave.WaveEditorTab;
+import main.java.exceptions.data.InvalidGameBlueprintException;
 
 /**
  * Frame that represents the GUI for the Authoring environment.
@@ -41,6 +42,7 @@ public class AuthoringView extends JFrame {
 
 	public AuthoringView(MainController mainController) {
 		myController = mainController;
+		myController.setView(this);
 
 	}
 
@@ -94,19 +96,18 @@ public class AuthoringView extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (myController.isGameValid()) {
-					saveBlueprint();
+					try {
+						myController.saveBlueprint();
+					} catch (InvalidGameBlueprintException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
 	}
 	
-	/**
-	 * Saves the current state of the game blueprint
-	 */
-	private void saveBlueprint() {
-		//open a dialog box, cody: myController.pickASaveLocation();
-		myController.saveBlueprint();
-	}
+	
 
 	/**
 	 * Constructs a JButton which allows the user to finalize the game

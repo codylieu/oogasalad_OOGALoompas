@@ -27,7 +27,7 @@ public class AuthorModel {
 	}
 
 	public void addGameSettings(GameSchema gameSchema) {
-
+		myGameBlueprint.setMyGameScenario(gameSchema);
 	}
 
 	public void addGameMaps(GameMap gameMap) {
@@ -45,9 +45,12 @@ public class AuthorModel {
 	 * @return true if the bluePrint has everything it needs and is validated
 	 */
 	public boolean isBlueprintReady() {
-		// TODO Cody think about what kind of validation you would need to run
-		// to make sure it's ready to be passed into the data team.
-		return false;
+		//not implemented
+		return true;
+	}
+	
+	public GameBlueprint getBlueprint() {
+		return myGameBlueprint;
 	}
 
 }
