@@ -95,17 +95,17 @@ public class GameSettingsEditorTab extends EditorTab{
 		gameSchema.addAttribute(GameSchema.LIVES, (Integer) livesSpinner.getValue());
 		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
 
-		if(gameDifficultyList.getSelectedItem() == "Easy"){
+		if(gameDifficultyList.getSelectedItem().equals("Easy")){
 			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 1);
 		}
-		else if(gameDifficultyList.getSelectedItem() == "Medium"){
+		else if(gameDifficultyList.getSelectedItem().equals("Medium")){
 			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 2);
 		}
 		else{
 			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 3);
 		}
 		
-		if(gameModeList.getSelectedItem() == "Survival Mode"){
+		if(gameModeList.getSelectedItem().equals("Survival Mode")){
 			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, 1);
 		}
 		else{

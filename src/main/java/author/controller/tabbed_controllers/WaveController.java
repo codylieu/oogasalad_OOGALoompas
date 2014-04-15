@@ -1,12 +1,12 @@
 package main.java.author.controller.tabbed_controllers;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
+import main.java.author.view.tabs.wave_editor.WaveEditorTab;
 import main.java.schema.WaveSpawnSchema;
 
 public class WaveController extends TabController {
@@ -33,4 +33,10 @@ public class WaveController extends TabController {
 		enemies.add("Cat");
 		return enemies;*/
 	}
+	
+	public void updateTable(){
+		WaveEditorTab waveEditorTab = (WaveEditorTab) myEditorTab;
+		waveEditorTab.updateTable();
+	}
+	
 }

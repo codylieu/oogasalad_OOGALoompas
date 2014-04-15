@@ -211,7 +211,7 @@ public class MainController {
 			}
 		}
 		
-		return null;
+		return new ArrayList<String>();
 		
 	}
 	
