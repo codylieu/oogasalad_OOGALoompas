@@ -66,7 +66,7 @@ public class Player {
 		makeFrame();
 		makeCards();
 		addWelcomeCard();
-		//addGameCard();
+		addGameCard();
 		addHelpCard();
 		addOptionsCard();
 		addCreditsCard();
@@ -99,7 +99,7 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
-					addGameCard(); //THIS NEEDS TO BE MOVED
+					//addGameCard(); //THIS NEEDS TO BE MOVED
                     try {
 						engine.loadBlueprintFile(file.getAbsolutePath());
 					} catch (ClassNotFoundException | IOException | ZipException e1) {
