@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import main.java.engine.EnvironmentKnowledge;
-import main.java.engine.objects.Projectile;
+import main.java.engine.objects.projectile.DamageProjectile;
 
 public class BombTower extends ShootingTower {
 
@@ -18,9 +18,9 @@ public class BombTower extends ShootingTower {
         /* trigonometry from Guardian JGame example */
         double angle =
                 Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
-        new Projectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
-        new Projectile(getXCoordinate(), getYCoordinate(), angle*1.5, myDamage, myBulletImage);
-        new Projectile(getXCoordinate(), getYCoordinate(), angle*.8, myDamage, myBulletImage);
+        new DamageProjectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
+        new DamageProjectile(getXCoordinate(), getYCoordinate(), angle*1.5, myDamage, myBulletImage);
+        new DamageProjectile(getXCoordinate(), getYCoordinate(), angle*.8, myDamage, myBulletImage);
     }
 
 }

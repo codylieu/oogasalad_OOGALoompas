@@ -4,8 +4,8 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
-import main.java.engine.objects.Projectile;
 import main.java.engine.objects.TDObject;
+import main.java.engine.objects.projectile.DamageProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 
 
@@ -92,6 +92,6 @@ public class ShootingTower extends TowerBehaviorDecorator {
         /* trigonometry from Guardian JGame example */
         double angle =
                 Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
-        new Projectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
+        new DamageProjectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
     }
 }
