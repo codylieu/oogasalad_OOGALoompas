@@ -195,7 +195,7 @@ public class EventRecorder extends JPanel{
 	public static void main (String [] args) {
 		EventRecorder automation = new EventRecorder();
 		System.out.println("Recording..");
-		new AuthoringView(); // MAKE INSTANCE OF YOUR OWN VIEW HERE
+		//new AuthoringView(); // MAKE INSTANCE OF YOUR OWN VIEW HERE
 		automation.initListeners();
 		automation.allowStop();
 		automation.record();

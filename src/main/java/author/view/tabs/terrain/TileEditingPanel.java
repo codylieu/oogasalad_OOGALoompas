@@ -21,22 +21,13 @@ import main.java.author.view.tabs.terrain.types.TileObject;
 public class TileEditingPanel extends JPanel {
 
 	private TileSelectionManager myTileManager;
-	private String [] terrainTypes = {"Can Walk Over", "Can Walk and Fly Over", "Cannot Traverse"};
 	private static final String ROTATE = "Rotate";
 	private int myImgAngle; // in degrees
 	
 	public TileEditingPanel(TileSelectionManager tileManager) {
 		myTileManager = tileManager;
 		setPreferredSize(new Dimension(275, 350));
-		add(constructTerrainTypes(), BorderLayout.NORTH);
 		add(constructRotateButton(), BorderLayout.NORTH);
-	}
-	
-	private JComboBox constructTerrainTypes() {
-		JComboBox scrollableTerrainTypes = new JComboBox(terrainTypes);
-		 ((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);	
-		 scrollableTerrainTypes.addActionListener(actionListener(this, "updatePassabilityIndex"));
-		 return scrollableTerrainTypes;
 	}
 	
 	private JButton constructRotateButton() {
@@ -48,7 +39,7 @@ public class TileEditingPanel extends JPanel {
 	@Override 
 	public void paintComponent(Graphics g) {
 		TileObject selectedTile = myTileManager.getCanvas().getSelectedTileObj();
-		int pixelSize = myTileManager.getTileDisplay().getPixelSize();
+		int pixelSize = myTileManager.getCurrentTileDisplay().getMyPixelSize();
 		Image img = (selectedTile == null) ? null : selectedTile.getUneditedImage();
 		
 		if (img != null) {
@@ -77,12 +68,6 @@ public class TileEditingPanel extends JPanel {
 
 	protected void setImageAngle(int degrees) {
 		myImgAngle = degrees;
-	}
-	
-	public void updatePassabilityIndex(ActionEvent e) {
-		TileObject selectedTile = myTileManager.getCanvas().getSelectedTileObj();
-		int index = ((JComboBox) e.getSource()).getSelectedIndex();
-		selectedTile.setPassabilityIndex(index);
 	}
 	
 	public void rotateImage(ActionEvent e) {

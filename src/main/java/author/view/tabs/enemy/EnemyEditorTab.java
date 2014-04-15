@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -15,13 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
-import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.schema.MonsterSchema;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 //SplitPaneDemo itself is not a visible component.
 @SuppressWarnings("serial")
@@ -41,7 +43,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	private ButtonGroup sizeButtonGroup;
 	private ButtonGroup flyingButtonGroup;
 
-	public EnemyEditorTab(MainController c) {
+	public EnemyEditorTab(TabController c) {
 		super(c);
 	}
 
@@ -49,7 +51,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new SimpleMonsterSchema(objectName);
 	}
 
-	protected TabViewBuilder createSpecificTabViewBuilder() {
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new EnemyTabViewBuilder(this);
 	}
 
@@ -80,13 +82,13 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		String name = getSelectedObjectName();
 		TDObjectSchema myCurrentEnemy = objectMap.get(name);
 		Integer health = (Integer) healthSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.HEALTH, health.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.HEALTH, health);
 		Integer speed = (Integer) speedSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.SPEED, speed.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.SPEED, speed);
 		Integer damage = (Integer) damageSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.DAMAGE, damage.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.DAMAGE, damage);
 		Integer reward = (Integer) rewardSpinner.getValue();
-		myCurrentEnemy.addAttribute(MonsterSchema.REWARD, reward.toString());
+		myCurrentEnemy.addAttribute(MonsterSchema.REWARD, reward);
 		// update schema with buttons
 		myCurrentEnemy.addAttribute(MonsterSchema.FLYING_OR_GROUND,
 				GroupButtonUtil.getSelectedButtonText(flyingButtonGroup));
@@ -95,7 +97,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		// update schema with images
 	}
 
-	private class EnemyTabViewBuilder extends TabViewBuilder {
+	private class EnemyTabViewBuilder extends ObjectTabViewBuilder {
 
 		public EnemyTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
@@ -133,10 +135,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					0, // bottom
 					0)); // right
 
-			groundButton = new JRadioButton(
-					MonsterSchema.GROUND);
-			flyingButton = new JRadioButton(
-					MonsterSchema.FLYING);
+			groundButton = new JRadioButton(MonsterSchema.GROUND);
+			flyingButton = new JRadioButton(MonsterSchema.FLYING);
 			flyingButtonGroup = new ButtonGroup();
 			flyingButtonGroup.add(groundButton);
 			flyingButtonGroup.add(flyingButton);
@@ -182,14 +182,10 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
 
-		healthSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.HEALTH)
-				.toString()));
-		speedSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.SPEED)
-				.toString()));
-		damageSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.DAMAGE)
-				.toString()));
-		rewardSpinner.setValue(Integer.parseInt(map.get(MonsterSchema.REWARD)
-				.toString()));
+		healthSpinner.setValue(map.get(MonsterSchema.HEALTH));
+		speedSpinner.setValue(map.get(MonsterSchema.SPEED));
+		damageSpinner.setValue(map.get(MonsterSchema.DAMAGE));
+		rewardSpinner.setValue(map.get(MonsterSchema.REWARD));
 
 		// buttons
 		ButtonModel selectedFlyButtonModel = null;
@@ -210,6 +206,17 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
 		// images
 
+	}
+
+	@Override
+	public void saveTabData() {
+		EnemyController controller = (EnemyController) myController;
+
+	}
+
+	public List<String> getEnemyList() {
+
+		return (List<String>) objectMap.keySet();
 	}
 
 }

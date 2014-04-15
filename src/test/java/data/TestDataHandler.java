@@ -6,10 +6,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.File;
 import java.io.IOException;
 
 import main.java.data.datahandler.DataHandler;
-import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import net.lingala.zip4j.exception.ZipException;
@@ -53,7 +53,7 @@ public class TestDataHandler {
 //		assertTrue(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals(TEST_VALUE_1));
 //		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
 //	}
-//	
+	
 //	@Test
 //	public void testStateSavingAndLoading() {
 //		//Set up GameState
@@ -78,18 +78,42 @@ public class TestDataHandler {
 //		assertEquals(CURRENT_WAVE_NUMBER, loadedState.getCurrentWaveNumber());
 ////		assertNotEquals(CURRENT_WAVE_NUMBER+1, loadedState.getCurrentWaveNumber());
 //	}
-	
+
+	/**
+	 * Want to test Zippings and unzipping,
+	 * do so by saving a testBlueprint to file
+	 * then saving/unsaving it
+	 * to file again, and finally comparing them
+	 * both to make sure it's the same size
+	 * the blueprint doesn't actually get compressed,
+	 * but still want to make sure it doesn't get changed
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 * @throws ZipException 
+	 */
 	@Test
-	public void testCompression() throws ClassNotFoundException, IOException {
+	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
 		DataHandler testDataHandler = new DataHandler();
-		GameBlueprint testBlueprint = (GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH);
-		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
+		//set up gameblueprint, testing by just adding a gameschema
+		GameSchema testSchema = new GameSchema();
+		testSchema.addAttribute("Lives",10);
+		GameBlueprint testBlueprint = new GameBlueprint();
+		testBlueprint.setMyGameScenario(testSchema);
+		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
+		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip");
+		File testBlueprintAfterTestingFile = new File("src/test/resources.replacement.tester/resources/SavedBluePrintMyBlueprint.ser");
+		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
+		assertEquals(testBlueprintFile.length(),testBlueprintAfterTestingFile.length());
+		// load a blueprint, simulates 
+		
+//		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 	}
 	
 //	@Test
 //	public void testDecompression() throws ClassNotFoundException, IOException, ZipException {
 //		DataHandler testDataHandler = new DataHandler();
-//		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintBundle.ser"); // attempt to load serialized blueprint in data bundle form
+//		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip"); // attempt to load serialized blueprint in data bundle form
 //	}
 
 }

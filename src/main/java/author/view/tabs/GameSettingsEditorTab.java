@@ -1,174 +1,305 @@
 package main.java.author.view.tabs;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.MainController;
+import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.GameSettingsController;
+import main.java.author.view.global_constants.FontConstants;
+import main.java.schema.GameSchema;
 
+/**
+ * The tab that deals with the Game Settings attributes
+ */
 public class GameSettingsEditorTab extends EditorTab{
 
-	private JPanel settingsPanel = new JPanel();
+	private JPanel settingsPanel = new JPanel(new GridLayout(0, 1));
+	
 	private JComboBox gameModeList;
 	private JComboBox gameDifficultyList;
-	
+
 	private JLabel levelsPerGameLabel;
-	private JLabel wavesPerLevelLabel;
-	private JLabel enemiesPerWaveLabel;
+	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
-	private JLabel tilesPerRowLabel;
-	private JLabel tilesPerColumnLabel;
-	
-	private JTextField levelsPerGameField;
-	private JTextField wavesPerLevelField;
-	private JTextField enemiesPerWaveField;
-	private JTextField beginningMoneyField;
-	private JTextField tilesPerRowField;
-	private JTextField tilesPerColumnField;
-	
+
+	private JSpinner levelsPerGameSpinner;
+	private JSpinner livesSpinner;
+	private JSpinner beginningMoneySpinner;
+
+	private List<JSpinner> spinnerFields;
+
 	private static final String LEVELS_STRING = "Levels Per Game: ";
+	private static final String LIVES_STRING = "Lives: ";
 	private static final String WAVES_STRING = "Waves Per Level: ";
 	private static final String ENEMIES_STRING = "Enemies Per Wave: ";
 	private static final String MONEY_STRING = "Beginning Money: ";
-	private static final String ROW_TILES_STRING = "Number of Rows: ";
-	private static final String COLUMN_TILES_STRING = "Number of Columns: ";
-	
+
 	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
 	String[] GAME_DIFFICULTY_STRINGS = {"Easy", "Medium", "Hard"};
-	
+
 	private NumberFormat numberFormat;
-	
+
 	private JButton submitButton;
+	private JButton musicButton;
 
-	public GameSettingsEditorTab(MainController controller){
-		super(controller);
-		createSettingsPanel();
-		add(settingsPanel, BorderLayout.CENTER);
+	private JFileChooser fileChooser;
+
+	private GameSchema gameSchema;
+
+	private GameSettingsTabContentCreator contentCreator;
+
+	/**
+	 * @param gameSettingsController
+	 * The constructor for the Game Settings Editor Tab
+	 */
+	public GameSettingsEditorTab(TabController gameSettingsController){
+		super(gameSettingsController);
+		contentCreator = new GameSettingsTabContentCreator();
+		add(contentCreator.createSettingsPanel(), BorderLayout.CENTER);
 	}
 
-	private void createSettingsPanel() {
+	@Override
+	public void saveTabData() {
+
+		GameSettingsController controller = (GameSettingsController) myController;
+
+		gameSchema = new GameSchema();
+
+		gameSchema.addAttribute(GameSchema.LEVELS, (Integer) levelsPerGameSpinner.getValue());
+		gameSchema.addAttribute(GameSchema.LIVES, (Integer) livesSpinner.getValue());
+		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
+
+		if(gameDifficultyList.getSelectedItem().equals("Easy")){
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 1);
+		}
+		else if(gameDifficultyList.getSelectedItem().equals("Medium")){
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 2);
+		}
+		else{
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 3);
+		}
 		
-		settingsPanel.setLayout(new BorderLayout());
-		
-		settingsPanel.add(makeDropDownMenus(), BorderLayout.NORTH);
-		settingsPanel.add(makeAttributesPane(), BorderLayout.SOUTH);
-		
-		settingsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		if(gameModeList.getSelectedItem().equals("Survival Mode")){
+			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, 1);
+		}
+		else{
+			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, 0);
+		}
+
+		controller.addGameSettings(gameSchema);
+
 	}
-	
-	private JComponent makeDropDownMenus(){
-		JPanel dropDownMenus = new JPanel();
-		dropDownMenus.setLayout(new BorderLayout());
 
-		gameModeList = new JComboBox(GAME_MODE_STRINGS); 
-		gameModeList.setSelectedIndex(1);
-		gameModeList.addActionListener(new ActionListener(){
+	/**
+	 * Creates the contents of the Pane
+	 */
+	private class GameSettingsTabContentCreator{
+		
+		/**
+		 * Creates the main panel where all of the JComponents that deal with Game Settings attributes go
+		 * @return 
+		 */
+		private Component createSettingsPanel() {
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				// Would probably switch between the specific attributes to display or just make unique panels for each as classes.
-				// and then do some more logic outside of this action listener to decide what to display.
-			}
+			settingsPanel.setLayout(new BorderLayout());
+
+			settingsPanel.add(makeDropDownMenus(), BorderLayout.NORTH);
+			settingsPanel.add(makeAttributesPane(), BorderLayout.SOUTH);
+
+			settingsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 			
-		});
-		
-		gameDifficultyList = new JComboBox(GAME_DIFFICULTY_STRINGS);
-		gameDifficultyList.setSelectedIndex(1);
-		gameDifficultyList.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
-			}
+			return settingsPanel;
 			
-		});
-		
-		dropDownMenus.add(gameModeList, BorderLayout.NORTH);
-		dropDownMenus.add(gameDifficultyList, BorderLayout.SOUTH);
-		
-		return dropDownMenus;
-	}
-	
-	private JComponent makeAttributesPane(){
-		JPanel attributes = new JPanel();
-		
-		attributes.setLayout(new BorderLayout());
-		attributes.add(makeLabelPane(), BorderLayout.WEST);
-		attributes.add(makeFieldPane(), BorderLayout.EAST);
-		
-		attributes.add(makeSubmitButton(), BorderLayout.SOUTH);
-		
-		return attributes;
-	}
-	
-	private JComponent makeSubmitButton(){
-		submitButton = new JButton("Submit");
-		
-		submitButton.addActionListener(new ActionListener(){
+		}
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				
-			}
-			
-		});
-		
-		return submitButton;
-	}
-	
-	private JComponent makeLabelPane(){
-		levelsPerGameLabel = new JLabel(LEVELS_STRING);
-		wavesPerLevelLabel = new JLabel(WAVES_STRING);
-		enemiesPerWaveLabel = new JLabel(ENEMIES_STRING);
-		beginningMoneyLabel = new JLabel(MONEY_STRING);
-		tilesPerRowLabel = new JLabel(ROW_TILES_STRING);
-		tilesPerColumnLabel = new JLabel(COLUMN_TILES_STRING);
-		
-		JPanel labels = new JPanel( new GridLayout(0, 1));
-		
-		labels.add(levelsPerGameLabel);
-		labels.add(wavesPerLevelLabel);
-		labels.add(enemiesPerWaveLabel);
-		labels.add(beginningMoneyLabel);
-		labels.add(tilesPerRowLabel);
-		labels.add(tilesPerColumnLabel);
-		
-		return labels;
-	}
-	
-	private JComponent makeFieldPane(){
-		levelsPerGameField = new JFormattedTextField(numberFormat);
-		levelsPerGameField.setColumns(10);
-		wavesPerLevelField = new JFormattedTextField(numberFormat);
-		enemiesPerWaveField = new JFormattedTextField(numberFormat);
-		beginningMoneyField = new JFormattedTextField(numberFormat);
-		tilesPerRowField = new JFormattedTextField(numberFormat);
-		tilesPerColumnField = new JFormattedTextField(numberFormat);
-		
-		JPanel fields = new JPanel(new GridLayout(0, 1));
-		
-		fields.add(levelsPerGameField);
-		fields.add(wavesPerLevelField);
-		fields.add(enemiesPerWaveField);
-		fields.add(beginningMoneyField);
-		fields.add(tilesPerRowField);
-		fields.add(tilesPerColumnField);
-		
-		return fields;
+		/**
+		 * @return
+		 * Specifies the size and font of each JSpinner
+		 */
+		private JSpinner makeAttributeSpinner(){
+
+			SpinnerModel model = new SpinnerNumberModel(1, 1, 1000, 1);
+			JSpinner spinner = new JSpinner(model);
+
+			spinner.setMaximumSize(new Dimension(200, spinner.getHeight()));
+
+			Font bigFont = spinner.getFont().deriveFont(Font.PLAIN,
+					FontConstants.X_LARGE_FONT_SIZE);
+			spinner.setFont(bigFont);
+
+			return spinner;
+
+		}
+
+		/**
+		 * @return
+		 * Makes the labels for the attributes that have corresponding JSpinners
+		 */
+		private JComponent makeLabelPane(){
+			levelsPerGameLabel = new JLabel(LEVELS_STRING);
+			livesLabel = new JLabel(LIVES_STRING);
+			beginningMoneyLabel = new JLabel(MONEY_STRING);
+
+			JPanel labels = new JPanel(new GridLayout(0, 1));
+
+			labels.add(levelsPerGameLabel);
+			labels.add(livesLabel);
+			labels.add(beginningMoneyLabel);
+
+			return labels;
+		}
+
+		/**
+		 * @return
+		 * Makes the area where the user can edit attribute fields
+		 */
+		private JComponent makeFieldPane(){
+
+			JPanel fields = new JPanel(new GridLayout(0, 1));
+
+			levelsPerGameSpinner = makeAttributeSpinner();
+			livesSpinner = makeAttributeSpinner();
+			beginningMoneySpinner = makeAttributeSpinner();
+
+			levelsPerGameSpinner.setValue(10);
+			livesSpinner.setValue(5);
+			beginningMoneySpinner.setValue(500);
+
+			fields.add(levelsPerGameSpinner);
+			fields.add(livesSpinner);
+			fields.add(beginningMoneySpinner);
+
+			return fields;
+
+		}
+
+		/**
+		 * @return
+		 * Makes the drop down menus for game mode and game difficulty
+		 */
+		private JComponent makeDropDownMenus(){
+			JPanel dropDownMenus = new JPanel(new GridLayout(0, 1));
+			dropDownMenus.setLayout(new BorderLayout());
+
+			gameModeList = new JComboBox(GAME_MODE_STRINGS); 
+			gameModeList.setSelectedIndex(1);
+			gameModeList.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					// TODO Auto-generated method stub
+					// Would probably switch between the specific attributes to display or just make unique panels for each as classes.
+					// and then do some more logic outside of this action listener to decide what to display.
+				}
+
+			});
+
+			gameDifficultyList = new JComboBox(GAME_DIFFICULTY_STRINGS);
+			gameDifficultyList.setSelectedIndex(1);
+			gameDifficultyList.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+
+				}
+
+			});
+
+			dropDownMenus.add(gameModeList, BorderLayout.NORTH);
+			dropDownMenus.add(gameDifficultyList, BorderLayout.SOUTH);
+
+			return dropDownMenus;
+		}
+
+		/**
+		 * @return
+		 * Makes the attributes pane, which holds the labels and fields panes
+		 */
+		private JComponent makeAttributesPane(){
+			JPanel attributes = new JPanel(new GridLayout(0, 1));
+
+			attributes.setLayout(new BorderLayout());
+			attributes.add(makeLabelPane(), BorderLayout.WEST);
+			attributes.add(makeFieldPane(), BorderLayout.EAST);
+
+			attributes.add(makeButtons(), BorderLayout.SOUTH);
+
+			return attributes;
+		}
+
+		/**
+		 * @return
+		 * Makes various JButtons
+		 */
+		private JComponent makeButtons(){
+
+			JPanel buttons = new JPanel(new GridLayout(0, 1));
+
+			musicButton = new JButton("Choose Music");
+			musicButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// TODO Auto-generated method stub
+
+					// Get it to open up on the right file menu
+					fileChooser = new JFileChooser("main/resources");
+					FileNameExtensionFilter filter = new FileNameExtensionFilter("WAV files", "wav");
+					fileChooser.setFileFilter(filter);
+					int returnVal = fileChooser.showOpenDialog(GameSettingsEditorTab.this);
+
+					if(returnVal == JFileChooser.APPROVE_OPTION) {
+						File chosenFile = fileChooser.getSelectedFile();
+						String absolutePath = chosenFile.getAbsolutePath();
+						try {
+
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					}
+
+				}
+
+			});
+
+			buttons.add(musicButton, BorderLayout.CENTER);
+
+			return buttons;
+
+		}
+
 	}
 
-	
+	public int getNumLevels() {
+		// TODO Auto-generated method stub
+		return (int) levelsPerGameSpinner.getValue();
+	}
+
 }
