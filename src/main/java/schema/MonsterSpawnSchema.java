@@ -1,5 +1,6 @@
 package main.java.schema;
 
+import java.io.Serializable;
 
 /**
  * A schema object/container to store information about which monsterschema to create, and how many of it to be
@@ -8,8 +9,7 @@ package main.java.schema;
  * @author Austin
  * 
  */
-public class MonsterSpawnSchema {
-
+public class MonsterSpawnSchema implements Serializable {
     private MonsterSchema myMonsterSchema;
     private int mySwarmSize;
     private String myName;
@@ -39,6 +39,4 @@ public class MonsterSpawnSchema {
     public MonsterSchema getMonsterSchema(){
         return myMonsterSchema;
     }
-
-    
 }
