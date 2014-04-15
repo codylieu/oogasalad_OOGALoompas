@@ -40,6 +40,7 @@ import main.java.schema.GameSchema;
 public class GameSettingsEditorTab extends EditorTab{
 
 	private JPanel settingsPanel = new JPanel(new GridLayout(0, 1));
+	
 	private JComboBox gameModeList;
 	private JComboBox gameDifficultyList;
 
@@ -94,8 +95,22 @@ public class GameSettingsEditorTab extends EditorTab{
 		gameSchema.addAttribute(GameSchema.LIVES, (Integer) livesSpinner.getValue());
 		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
 
-		//		gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, );
-		//		gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, );
+		if(gameDifficultyList.getSelectedItem() == "Easy"){
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 1);
+		}
+		else if(gameDifficultyList.getSelectedItem() == "Medium"){
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 2);
+		}
+		else{
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 3);
+		}
+		
+		if(gameModeList.getSelectedItem() == "Survival Mode"){
+			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, 1);
+		}
+		else{
+			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, 0);
+		}
 
 		controller.addGameSettings(gameSchema);
 
