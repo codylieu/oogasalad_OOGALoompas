@@ -54,7 +54,6 @@ public class LevelManager {
         for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave)
                 .getMonsterSpawnSchemas()) {
             for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-//                Exit monsterExit = new Exit(exit.getX(), exit.getY(), this);
                 Monster newlyAdded =
                         myFactory.placeMonster(entrance, exit,
                                                (String) spawnSchema.getMonsterSchema()

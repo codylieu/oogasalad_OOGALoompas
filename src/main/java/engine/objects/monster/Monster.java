@@ -101,6 +101,7 @@ public abstract class Monster extends TDObject {
 	 */
 	public void setDead() {
 		myHealth = 0;
+		myMoneyValue = 0;
 	}
 
 
