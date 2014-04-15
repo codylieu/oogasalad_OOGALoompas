@@ -2,7 +2,7 @@ package main.java.author.controller.tabbed_controllers;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
-import main.java.schema.map.GameMap;
+import main.java.schema.map.GameMapSchema;
 
 public class TerrainController extends TabController {
 
@@ -10,9 +10,9 @@ public class TerrainController extends TabController {
 		super(superController);
 		// TODO Auto-generated constructor stub
 	}
-	
-	public void addMap(GameMap gameMap) {
-		mySuperController.addGameMapToModel(gameMap);
+
+	public void addMaps(GameMapSchema gameMap) {
+		mySuperController.addGameMapsToModel(gameMap);
 	}
 
 }

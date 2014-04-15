@@ -53,7 +53,7 @@ abstract class TowerBehaviorDecorator implements ITower {
         }
         return false;
     }
-
+    
     /**
      * Do the additional behavior granted by this behavior decoration.
      * @param environ

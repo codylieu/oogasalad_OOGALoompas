@@ -17,4 +17,10 @@ public abstract class EditorTab extends JPanel {
 		myController.setControlledTab(this);
 	}
 
+	/**
+	 * Calls the specific "add_____" schema method. For example, EnemyEditorTab's
+	 * saveTabData would call addEnemy
+	 */
+	public abstract void saveTabData();
+
 }

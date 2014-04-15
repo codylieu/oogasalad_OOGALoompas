@@ -1,6 +1,7 @@
 package main.java.author.view;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,6 +22,7 @@ import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
 import main.java.author.view.tabs.wave.WaveEditorTab;
+import main.java.exceptions.data.InvalidGameBlueprintException;
 
 /**
  * Frame that represents the GUI for the Authoring environment.
@@ -40,6 +42,7 @@ public class AuthoringView extends JFrame {
 
 	public AuthoringView(MainController mainController) {
 		myController = mainController;
+		myController.setView(this);
 
 	}
 
@@ -83,23 +86,33 @@ public class AuthoringView extends JFrame {
 		addActionListeners();
 	}
 
+	/**
+	 * Adds an action listener to the finalize game button which, when clicked,
+	 * saves the game blueprint so the data team can begin serializing information
+	 */
 	private void addActionListeners() {
 		finalizeGameButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (myController.isGameValid()) {
-					saveBlueprint();
+					try {
+						myController.saveBlueprint();
+					} catch (InvalidGameBlueprintException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
 	}
 	
-	private void saveBlueprint() {
-		//open a dialog box, cody: myController.pickASaveLocation();
-		myController.saveBlueprint();
-	}
+	
 
+	/**
+	 * Constructs a JButton which allows the user to finalize the game
+	 * that they made
+	 */
 	private JButton createFinalizeGameButton() {
 		finalizeGameButton = new JButton("Finalize Game");
 		return finalizeGameButton;

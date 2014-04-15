@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
@@ -17,7 +19,6 @@ import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.TowerBehaviors;
-import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
@@ -28,10 +29,10 @@ import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
-import net.lingala.zip4j.exception.ZipException;
 
 
 public class Model {
+
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
     public static final String RESOURCE_PATH = "/main/resources/";
 
@@ -63,9 +64,12 @@ public class Model {
         towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
 
-        levelManager.setEntrance(0, engine.pfHeight() / 2);
-        levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
-        loadGameBlueprint(null);// TODO: REPLACE
+        try {
+            loadGameBlueprint(null);// TODO: REPLACE
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         dataHandler = new DataHandler();
 
         addNewPlayer();
@@ -77,6 +81,7 @@ public class Model {
         engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
         // make bullet image dynamic
         engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
+        engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
     }
 
     /**
@@ -166,7 +171,6 @@ public class Model {
      * @param x
      * @param y
      */
-
     public void checkAndRemoveTower (double x, double y) {
         int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
         if (isTowerPresent(coordinates)) {
@@ -190,13 +194,23 @@ public class Model {
     }
 
     /**
-     * Loads the game schemas from GameBlueprint and sets the appropriate state
+     * Deserialize and load into the engine the GameBlueprint obtained from the file path
      * 
-     * @param bp Game blueprint to load
-     * @throws InvalidParameterForConcreteTypeException
+     * @param filePath File path of the blueprint to be loaded
+     * @throws IOException
+     * @throws ClassNotFoundException
      */
-    public void loadGameBlueprint (GameBlueprint bp) {
-        // TODO: use the actual game blueprint
+
+    public void loadGameBlueprint(String filePath) throws ClassNotFoundException, IOException {
+        GameBlueprint bp = null;
+        // TODO: load from datahandler
+//        try {
+//            bp = dataHandler.loadBlueprint(filePath);
+//        } catch (ZipException e) {
+//            e.printStackTrace();
+//        }
+
+        // TODO: use the actual game blueprint (aka bp)
         GameBlueprint testBP = createTestBlueprint();
 
         // init player
@@ -214,28 +228,6 @@ public class Model {
         for (WaveSpawnSchema wave : testBP.getMyLevelSchemas()) {
             levelManager.addNewWave(wave);
         }
-    }
-
-    /**
-     * Loads game schemas from the GameBlueprint obtained from the filePath
-     * 
-     * @param filePath
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public void loadGameSchemas (String filePath) throws ClassNotFoundException, IOException {
-        GameBlueprint bp = null;
-        try {
-            bp = dataHandler.loadBlueprint(filePath);
-        }
-        catch (ZipException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
-        player =
-                new Player((Integer) gameAttributes.get(GameSchema.MONEY),
-                           (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
     /**
@@ -418,6 +410,7 @@ public class Model {
         TowerSchema testTowerOne = new TowerSchema();
         testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
         testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
         towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
         testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
@@ -427,18 +420,40 @@ public class Model {
         TowerSchema testTowerTwo = new TowerSchema();
         testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
         testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
         towerBehaviors2.add(TowerBehaviors.SHOOTING);
         testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
         testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerTwo);
-
-        // Create test money tower
-
+        
+        TowerSchema testTowerThree = new TowerSchema();
+        testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
+        testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet");
+        testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
+        Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
+        towerBehaviors3.add(TowerBehaviors.BOMBING);
+        testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
+        testTowerThree.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerThree);
+        
+        TowerSchema testTowerFour = new TowerSchema();
+        testTowerFour.addAttribute(TowerSchema.NAME, "test-tower-4");
+        testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
+        Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
+        towerBehaviors4.add(TowerBehaviors.FREEZING);
+        testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors4);
+        testTowerFour.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerFour);
+        
         // Create test monsters
         SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
         testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
         testMonsterOne.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+        testMonsterOne.addAttribute(MonsterSchema.SPEED, (double) 1);
         testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
         testTDObjectSchema.add(testMonsterOne);
 
@@ -446,8 +461,6 @@ public class Model {
 
         // Create test game schemas
         GameSchema testGameSchema = new GameSchema();
-        testGameSchema.addAttribute(GameSchema.ROWS, 25);
-        testGameSchema.addAttribute(GameSchema.COLUMNS, 20);
         testGameSchema.addAttribute(GameSchema.LIVES, 3);
         testGameSchema.addAttribute(GameSchema.MONEY, 500);
 
@@ -478,4 +491,5 @@ public class Model {
     public List<String> getPossibleTowers () {
         return factory.getPossibleTowersNames();
     }
+
 }
