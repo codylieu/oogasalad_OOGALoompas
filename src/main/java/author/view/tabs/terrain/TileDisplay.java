@@ -144,9 +144,5 @@ public class TileDisplay extends JPanel {
 		myTileManager.getTileEditPanel().setImageAngle(0);
 		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
 	}
-
-    // this method may be extraneous TODO: i'm pretty sure this can be designed better, sorry -jordan
-    public TileMap getTileMap() {
-        return new TileMap(myNumXTiles, myNumYTiles, myPixelSize, myTileMapFile);
-    }
+	
 }

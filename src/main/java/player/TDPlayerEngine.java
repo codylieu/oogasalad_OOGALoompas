@@ -1,10 +1,13 @@
 package main.java.player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import net.lingala.zip4j.exception.ZipException;
 
 import jgame.JGColor;
 import jgame.JGPoint;
@@ -63,7 +66,12 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public void initGame() {
 		setFrameRate(myFrameRate, 1);
 		this.model = new Model(this);
-        model.loadGameBlueprint(null); // TODO: null for now
+		model.addNewPlayer();
+        try {
+            model.loadGameBlueprint(null); // TODO: null for now
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 
 	/*public int getFramePerSecond(){
@@ -267,8 +275,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	}
 	
 	//TODO: i added this kevin, will explain later - jordan
-	public void loadMapFile(String fileName) {
-		model.loadMapTest(fileName);
+	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {
+		model.loadGameBlueprint(fileName);
+		//model.loadMapTest(fileName);
 	}
 
 	public Map<String, String> getGameAttributes() {

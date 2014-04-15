@@ -17,7 +17,7 @@ public class PowerUpTower extends TowerBehaviorDecorator {
 
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
-        super.callTowerActions(environ);
+      //  super.callTowerActions(environ);
         List<ITower> nearbyTowers =
                 environ.getTowerCoordinatesInRange(getXCoordinate(), getYCoordinate(), myRange);
         for (ITower t : nearbyTowers) {

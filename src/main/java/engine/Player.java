@@ -20,7 +20,7 @@ public class Player {
 	}
 	
 	/**
-	 * Constructor to be used in the loadGameSchemas method in Model
+	 * Constructor to be used in the loadGameBlueprint method in Model
 	 * @param money
 	 * @param lives
 	 */

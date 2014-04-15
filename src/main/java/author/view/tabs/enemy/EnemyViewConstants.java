@@ -12,7 +12,7 @@ public class EnemyViewConstants {
 	public static final String TILE_SIZE_STRING = "Tile Size";
 
 	public static final int HEALTH_DEFAULT = 30;
-	public static final int SPEED_DEFAULT = 20;
+	public static final int SPEED_DEFAULT = 1;
 	public static final int DAMAGE_DEFAULT = 10;
 	public static final int REWARD_DEFAULT = 50;
 	public static final String FLYING_OR_GROUND_DEFAULT = MonsterSchema.GROUND;

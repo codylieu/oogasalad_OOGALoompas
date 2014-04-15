@@ -13,20 +13,20 @@ import main.java.engine.objects.monster.jgpathfinder.*;
 public abstract class Monster extends TDObject {
 
 	public static final int MONSTER_CID = 1;
-	
+
 	/*public static final String HEALTH = "health";
 	public static final String SPEED = "speed";
 	public static final String MONEY_VALUE = "moneyValue";
 	public static final String ENTRANCE_LOCATION = "entrance";
 	public static final String EXIT_LOCATION = "exit";*/
-	
+
 	protected double myHealth;
 	protected double myMoveSpeed;
 	protected double myMoneyValue;
 	protected JGPathfinderInterface myPathFinder;
 	protected Point2D myEntrance;
 	protected Exit myExit;
-    protected JGPath myPath;
+	protected JGPath myPath;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
 	 */
@@ -43,41 +43,41 @@ public abstract class Monster extends TDObject {
 			//double y,
 			Point2D entrance,
 			Exit exit,
-            List<Integer> blocked,
+			List<Integer> blocked,
 			double health,
 			double moveSpeed,
 			double rewardAmount,
 			String graphic) {
-	    //TODO make factory add the spread between monsters in the same wave, and remove random from initial x,y
+		//TODO make factory add the spread between monsters in the same wave, and remove random from initial x,y
 		super("monster", entrance.getX() + Math.random() * 100, entrance.getY() + Math.random() * 100, MONSTER_CID, graphic);
 		myHealth = health;
 		myMoveSpeed = moveSpeed;
 		myMoneyValue = rewardAmount;
-        myEntrance = entrance;
-        myExit = exit;
+		myEntrance = entrance;
+		myExit = exit;
 		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic(), eng); // TODO: clean up
-        JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
-        JGPoint pathExit = new JGPoint(myExit.getCenterTile());
-        myPath = myPathFinder.getPath(pathEntrance, pathExit);
+		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
+		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
+		myPath = myPathFinder.getPath(pathEntrance, pathExit);
 	}
 
 	@Override
 	public void move () {
-        if (myPath.peek() != null) {
-            JGPoint waypoint = eng.getTileCoord(myPath.peek());
+		if (myPath.peek() != null) {
+			JGPoint waypoint = eng.getTileCoord(myPath.peek());
 
-            // TODO: refactor, quick implementation to test - jordan
-            if (((int) (x + 10) >= waypoint.x && (int) (x - 10) <= waypoint.x) &&
-                    ((int) (y + 10) >= waypoint.y && (int) (y - 10) <= waypoint.y)) {
-                waypoint = myPath.getNext();
-            }
+			// TODO: refactor, quick implementation to test - jordan
+			if (((int) (x + 10) >= waypoint.x && (int) (x - 10) <= waypoint.x) &&
+					((int) (y + 10) >= waypoint.y && (int) (y - 10) <= waypoint.y)) {
+				waypoint = myPath.getNext();
+			}
 
-            xdir = Double.compare(waypoint.x, x);
-            ydir = Double.compare(waypoint.y, y);
-            setDirSpeed(xdir, ydir, 1);
-        } else {
-            setSpeed(0);
-        }
+			xdir = Double.compare(waypoint.x, x);
+			ydir = Double.compare(waypoint.y, y);
+			setDirSpeed(xdir, ydir, myMoveSpeed);
+		} else {
+			setSpeed(0);
+		}
 	}
 
 	/**
@@ -93,6 +93,19 @@ public abstract class Monster extends TDObject {
 	 */
 	public void takeDamage (double damage) {
 		myHealth -= damage;
+	}
+
+	public void reduceSpeed (double speed) {
+		myMoveSpeed *= speed;
+	}
+
+	/**
+	 * Set the monster to be dead immediately, 
+	 * effectively removing it from the game
+	 */
+	public void setDead() {
+		myHealth = 0;
+		myMoneyValue = 0;
 	}
 
 

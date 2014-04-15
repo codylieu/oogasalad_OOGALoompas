@@ -1,7 +1,10 @@
 package main.java.author.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import main.java.schema.GameBlueprint;
-import main.java.schema.map.GameMap;
+import main.java.schema.map.GameMapSchema;
 import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -16,26 +19,24 @@ public class AuthorModel {
 	}
 
 	public void addTower(TowerSchema towerSchema) {
-		// TODO Auto-generated method stub
 
 	}
 
-	public void addEnemy(SimpleMonsterSchema enemySchema) {
-		// TODO Auto-generated method stub
+	public void addEnemies(List<SimpleMonsterSchema> enemySchema) {
 
 	}
 
 	public void addGameSettings(GameSchema gameSchema) {
-		// TODO Auto-generated method stub
-
+		myGameBlueprint.setMyGameScenario(gameSchema);
 	}
 
-	public void addGameMap(GameMap gameMap) {
-		// TODO Auto-generated method stub
-
+	public void addGameMaps(GameMapSchema gameMap) {
+		List<GameMapSchema> gameMaps = new ArrayList<GameMapSchema>();
+		gameMaps.add(gameMap);
+		myGameBlueprint.setMyGameMapSchemas(gameMaps);
 	}
 
-	public void addWave(WaveSpawnSchema wave) {
+	public void addWaves(List<WaveSpawnSchema> waves) {
 		// TODO Auto-generated method stub
 
 	}
@@ -44,9 +45,12 @@ public class AuthorModel {
 	 * @return true if the bluePrint has everything it needs and is validated
 	 */
 	public boolean isBlueprintReady() {
-		// TODO Cody think about what kind of validation you would need to run
-		// to make sure it's ready to be passed into the data team.
-		return false;
+		//not implemented
+		return true;
+	}
+	
+	public GameBlueprint getBlueprint() {
+		return myGameBlueprint;
 	}
 
 }

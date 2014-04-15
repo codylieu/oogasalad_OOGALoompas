@@ -16,6 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
@@ -49,7 +50,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new SimpleMonsterSchema(objectName);
 	}
 
-	protected TabViewBuilder createSpecificTabViewBuilder() {
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new EnemyTabViewBuilder(this);
 	}
 
@@ -95,7 +96,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		// update schema with images
 	}
 
-	private class EnemyTabViewBuilder extends TabViewBuilder {
+	private class EnemyTabViewBuilder extends ObjectTabViewBuilder {
 
 		public EnemyTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
@@ -203,6 +204,12 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
 		// images
 
+	}
+
+	@Override
+	public void saveTabData() {
+		EnemyController controller = (EnemyController) myController;
+	
 	}
 
 }
