@@ -32,9 +32,6 @@ public class TowerSchema extends TDObjectSchema {
     public static final String RANGE_MEDIUM = "Medium";
     public static final String RANGE_LARGE = "Large";
 
-
-    
-
     public TowerSchema () {
         super(SimpleTower.class);
         myAttributeSet.add(BUILDUP);
@@ -52,6 +49,7 @@ public class TowerSchema extends TDObjectSchema {
         myAttributeSet.add(SHRAPNEL_DAMAGE);
         myAttributeSet.add(SHRAPNEL_IMAGE_NAME);
         myAttributeSet.add(FREEZE_SLOWDOWN_PROPORTION);
+        myAttributeSet.add(TowerSchema.UPGRADE_PATH);
     }
     
     public TowerSchema(String name) {
