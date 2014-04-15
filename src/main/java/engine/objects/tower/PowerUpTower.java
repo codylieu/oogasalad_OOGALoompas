@@ -9,7 +9,7 @@ public class PowerUpTower extends TowerBehaviorDecorator {
     private double myRange;
 
     public PowerUpTower (ITower baseTower, double range) {
-        super(baseTower);
+        super(baseTower, baseTower.getLauncher());
         myRange = range;
     }
 
@@ -17,7 +17,7 @@ public class PowerUpTower extends TowerBehaviorDecorator {
 
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
-        super.callTowerActions(environ);
+      //  super.callTowerActions(environ);
         List<ITower> nearbyTowers =
                 environ.getTowerCoordinatesInRange(getXCoordinate(), getYCoordinate(), myRange);
         for (ITower t : nearbyTowers) {

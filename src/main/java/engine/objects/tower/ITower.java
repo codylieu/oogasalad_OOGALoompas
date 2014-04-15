@@ -11,7 +11,7 @@ public interface ITower {
      * @param environ environment knowledge
      * @return
      */
-    public boolean callTowerActions (EnvironmentKnowledge environ);
+    public boolean callTowerActions (EnvironmentKnowledge environ, ProjectileLauncher launcher);
     
     /**
      * Checks if this tower's internal counter is at the interval passed in.
@@ -43,5 +43,8 @@ public interface ITower {
      * @param target
      */
     public double getCost();
+    
+    
+    public ProjectileLauncher getLauncher();
     
 }

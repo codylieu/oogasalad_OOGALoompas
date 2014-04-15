@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 
 import main.java.data.datahandler.DataHandler;
-import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import net.lingala.zip4j.exception.ZipException;
@@ -99,7 +98,7 @@ public class TestDataHandler {
 		GameSchema testSchema = new GameSchema();
 		testSchema.addAttribute("Lives",10);
 		GameBlueprint testBlueprint = new GameBlueprint();
-		testBlueprint.setMyGameSchema(testSchema);
+		testBlueprint.setMyGameScenario(testSchema);
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
 		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip");

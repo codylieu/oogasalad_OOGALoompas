@@ -16,6 +16,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.TowerController;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
@@ -47,7 +48,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	}
 
-	protected TabViewBuilder createSpecificTabViewBuilder() {
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new TowerTabViewBuilder(this);
 	}
 
@@ -128,7 +129,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	}
 
-	private class TowerTabViewBuilder extends TabViewBuilder {
+	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
 
 		public TowerTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
@@ -207,6 +208,13 @@ public class TowerEditorTab extends ObjectEditorTab {
 			return labels;
 		}
 
+	}
+
+	@Override
+	public void saveTabData() {
+		TowerController controller = (TowerController) myController;
+		
+		
 	}
 
 }
