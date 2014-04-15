@@ -210,10 +210,9 @@ public class MainController {
 				return enemyController.getEnemyList();
 			}
 		}
-		List<String> list = new ArrayList<String>();
-		return list;
+		
+		return null;
+		
 	}
-
-
-
+	
 }
