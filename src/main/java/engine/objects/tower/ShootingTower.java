@@ -43,7 +43,6 @@ public class ShootingTower extends TowerBehaviorDecorator {
         myFiringSpeed = firingSpeed;
         myRange = range;
         myBulletImage = bulletImage;
-        //TODO: put into schema
     }
 
     /**
@@ -57,7 +56,9 @@ public class ShootingTower extends TowerBehaviorDecorator {
              (double) TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
              (double) TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
                                                  DEFAULT_FIRING_SPEED),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.RANGE, DEFAULT_RANGE), img);
+             (double) TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
+            		 							DEFAULT_RANGE),
+             (String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""));
     }
 
     @Override
