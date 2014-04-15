@@ -20,7 +20,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	public static int FRAME_RATE_DELTA = 5;
 	public static int DEFAULT_FRAME_RATE = 45;
-	public static final String DEFAULT_TOWER_NAME = "test-tower-1";
+	//public static final String DEFAULT_TOWER_NAME = "test-tower-1";
 
 	private TowerChooser towerChooser;
 	private Model model;
@@ -35,7 +35,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public TDPlayerEngine() {
 		super();
 		initEngineComponent(960, 640);
-		towerName = DEFAULT_TOWER_NAME;
+		//towerName = DEFAULT_TOWER_NAME;
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
 		isFullScreen = false;
@@ -183,8 +183,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	}
 
 	public void update(){
+		System.out.println(towerChooser);
+		System.out.println(towerChooser.getTowerName());
 		towerName = towerChooser.getTowerName();
 	}
+	
 	public void toggleAddTower() {
 		if (getCursorState() == CursorState.AddTower){
 			setCursorState(CursorState.None);
