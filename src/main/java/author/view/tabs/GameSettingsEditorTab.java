@@ -297,4 +297,9 @@ public class GameSettingsEditorTab extends EditorTab{
 
 	}
 
+	public int getNumLevels() {
+		// TODO Auto-generated method stub
+		return (int) levelsPerGameSpinner.getValue();
+	}
+
 }

@@ -21,15 +21,16 @@ public class WaveController extends TabController {
 	}
 
 	public int getNumLevels() {
-		// hardcoded shit
-		return 4;
+		return mySuperController.getNumLevels();
 	}
 
 	public List<String> getEnemyList() {
+		
+		return mySuperController.getEnemyList();
 		// hardcoded shit
-		List<String> enemies = new ArrayList<String>();
+		/*List<String> enemies = new ArrayList<String>();
 		enemies.add("Dog");
 		enemies.add("Cat");
-		return enemies;
+		return enemies;*/
 	}
 }
