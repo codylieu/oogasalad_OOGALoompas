@@ -4,8 +4,8 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
-import main.java.engine.objects.Projectile;
 import main.java.engine.objects.TDObject;
+import main.java.engine.objects.projectiles.Projectile;
 import main.java.schema.tdobjects.TowerSchema;
 
 
@@ -70,7 +70,10 @@ public class ShootingTower extends TowerBehaviorDecorator {
         if (target == null) { return; }
         Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
         if (inFiringInterval() && target.distance(currCoor) < myRange) {
-            fireProjectile(target);
+            /* trigonometry from Guardian JGame example */
+            double angle =
+                    Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
+            fireProjectile(angle);
         }
     }
     
@@ -86,12 +89,17 @@ public class ShootingTower extends TowerBehaviorDecorator {
     }
 
     /**
-     * Fires projected at a target with the tower's damage factor
+     * Fires projected at a target angle with the tower's damage factor
      */
-    public void fireProjectile (Point2D target) {
-        /* trigonometry from Guardian JGame example */
-        double angle =
-                Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
+    public void fireProjectile (double angle) {
+  
         new Projectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
+    }
+    
+    /**
+     * Fires projected at a target x and y speed with the tower's damage factor
+     */
+    public void fireProjectile (double xspeed, double yspeed) {
+        new Projectile(getXCoordinate(), getYCoordinate(), xspeed, yspeed, myDamage, myBulletImage);
     }
 }

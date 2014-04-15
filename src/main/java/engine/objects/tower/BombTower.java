@@ -1,26 +1,38 @@
 package main.java.engine.objects.tower;
 
-import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
+import main.java.engine.objects.TDObject;
+import main.java.engine.objects.projectiles.Bomb;
+import main.java.schema.tdobjects.TowerSchema;
 
-import main.java.engine.EnvironmentKnowledge;
-import main.java.engine.objects.Projectile;
 
 public class BombTower extends ShootingTower {
 
-	public BombTower(ITower baseTower, Map<String, Serializable> attributes) {
-		super(baseTower, attributes);
-	}
+    public static final double DEFAULT_SHRAPNEL_DAMAGE = 10;
+    private String myShrapnelImage;
+    private double myShrapnelDamage;
 
-	@Override
-    public void fireProjectile (Point2D target) {
-        /* trigonometry from Guardian JGame example */
-        double angle =
-                Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
-        new Projectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
-        new Projectile(getXCoordinate(), getYCoordinate(), angle*1.5, myDamage, myBulletImage);
-        new Projectile(getXCoordinate(), getYCoordinate(), angle*.8, myDamage, myBulletImage);
+    /**
+     * Constructor used by the factory in decorating a final tower.
+     * 
+     * @param baseTower
+     * @param attributes
+     */
+    public BombTower (ITower baseTower, Map<String, Serializable> attributes) {
+        super(baseTower, attributes);
+        myShrapnelImage =
+                (String) TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_IMAGE_NAME,
+                                                    TowerSchema.BULLET_IMAGE_NAME);
+        myShrapnelDamage =
+                (double) TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_DAMAGE,
+                                                    DEFAULT_SHRAPNEL_DAMAGE);
+
+    }
+
+    @Override
+    public void fireProjectile (double angle) {
+        new Bomb(getXCoordinate(), getYCoordinate(), angle, myDamage, myShrapnelDamage, myBulletImage, myShrapnelImage);
     }
 
 }

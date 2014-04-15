@@ -81,6 +81,7 @@ public class Model {
         engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
         // make bullet image dynamic
         engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
+        engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
     }
 
     /**
@@ -429,7 +430,8 @@ public class Model {
         TowerSchema testTowerThree = new TowerSchema();
         testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
         testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet");
+        testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
         towerBehaviors3.add(TowerBehaviors.BOMBING);
         testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);

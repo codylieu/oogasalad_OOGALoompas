@@ -3,6 +3,7 @@ package main.java.engine.objects;
 import java.io.Serializable;
 import java.util.Map;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.projectiles.Projectile;
 import jgame.platform.JGEngine;
 
 
