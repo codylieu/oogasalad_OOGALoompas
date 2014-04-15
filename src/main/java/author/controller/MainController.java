@@ -9,6 +9,8 @@ import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import main.java.author.controller.tabbed_controllers.EnemyController;
+import main.java.author.controller.tabbed_controllers.GameSettingsController;
 import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
 import main.java.schema.map.GameMapSchema;
@@ -191,6 +193,26 @@ public class MainController {
 
 	}
 
+	public int getNumLevels() {
+		for (TabController controller : myTabControllers) {
+			if (controller instanceof GameSettingsController) {
+				GameSettingsController gameSettingsController = (GameSettingsController) controller;
+				return gameSettingsController.getNumLevels();
+			}
+		}
+		return 0;
+	}
 
-
+	public List<String> getEnemyList() {
+		for (TabController controller : myTabControllers) {
+			if (controller instanceof EnemyController) {
+				EnemyController enemyController = (EnemyController) controller;
+				return enemyController.getEnemyList();
+			}
+		}
+		
+		return new ArrayList<String>();
+		
+	}
+	
 }

@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
@@ -50,12 +52,12 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs() {
-		TabController enemyController = new EnemyController(myController);
-		TabController towerController = new TowerController(myController);
-		TabController waveController = new WaveController(myController);
-		TabController gameSettingsController = new GameSettingsController(
+		final EnemyController enemyController = new EnemyController(myController);
+		final TowerController towerController = new TowerController(myController);
+		final WaveController waveController = new WaveController(myController);
+		final GameSettingsController gameSettingsController = new GameSettingsController(
 				myController);
-		TabController terrainController = new TerrainController(myController);
+		final TerrainController terrainController = new TerrainController(myController);
 
 		tabbedPane
 				.add(GAME_SETTINGS_EDITOR_STRING,
@@ -72,6 +74,18 @@ public class AuthoringView extends JFrame {
 		tabbedPane
 				.add(WAVE_EDITOR_STRING,
 						new WaveEditorTab(waveController));
+		
+		tabbedPane.addChangeListener(new ChangeListener(){
+
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				// TODO Auto-generated method stub
+				if(tabbedPane.getSelectedComponent().getName().equals(WAVE_EDITOR_STRING)){
+					waveController.updateTable();
+				}
+			}
+			
+		});
 	}
 
 	public void createAndShowGUI() {
