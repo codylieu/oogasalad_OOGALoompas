@@ -188,7 +188,7 @@ public class Player {
 
 	private TDPlayerEngine makeGamePanel() {
 		engine = new TDPlayerEngine();
-		engine.setSubjectState(towerChooser);
+		engine.setSubject(towerChooser);
 		engine.stop();
 		return engine;
 	}
@@ -226,7 +226,7 @@ public class Player {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
-		engine.setSubjectState(towerChooser);//This probably does not belong here
+		engine.setSubject(towerChooser);//This probably does not belong here
 		
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
@@ -258,14 +258,14 @@ public class Player {
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubjectState(engine);
+		gameInfoPanel.setSubject(engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubjectState(engine);
+		unitInfoPanel.setSubject(engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}

@@ -41,7 +41,7 @@ public class GameInfoPanel extends JPanel implements Observing {
 	}
 
 	@Override
-	public void setSubjectState(Subject s) {
+	public void setSubject(Subject s) {
 		engine = (TDPlayerEngine) s;
 	}
 
