@@ -1,11 +1,12 @@
 package main.java.schema;
 
+import main.java.author.view.tabs.enemy.EnemyViewConstants;
 import main.java.engine.objects.monster.Monster;
 
 public abstract class MonsterSchema extends TDObjectSchema {
     public static final String HEALTH = "health";
 	public static final String SPEED = "speed";
-	public static final String MONEY_VALUE = "moneyValue";
+	public static final String REWARD = "moneyValue";
 	public static final String ENTRANCE_LOCATION = "entrance";
 	public static final String EXIT_LOCATION = "exit";
 	public static final String ENEMY_IMAGE_NAME = "enemyImageName";
@@ -28,9 +29,15 @@ public abstract class MonsterSchema extends TDObjectSchema {
 		myAttributeSet.add(MonsterSchema.ENTRANCE_LOCATION);
 		myAttributeSet.add(MonsterSchema.EXIT_LOCATION);
 		myAttributeSet.add(MonsterSchema.HEALTH);
-		myAttributeSet.add(MonsterSchema.MONEY_VALUE);
+		myAttributeSet.add(MonsterSchema.REWARD);
 		myAttributeSet.add(MonsterSchema.SPEED);
+		myAttributeSet.add(MonsterSchema.DAMAGE);
 		myAttributeSet.add(MonsterSchema.NAME);
+		myAttributeSet.add(MonsterSchema.FLYING_OR_GROUND);
+		myAttributeSet.add(MonsterSchema.TILE_SIZE);
+		myAttributeSet.add(MonsterSchema.ENEMY_IMAGE_NAME);
+		myAttributeSet.add(MonsterSchema.COLLISION_IMAGE_NAME);
+		
     }
     
 }
