@@ -38,10 +38,11 @@ public class TowerChooser extends JPanel implements ActionListener, Subject{
 		//engine call to get list of towers, also need size of list
 		//might end up just making into a list, then using separate method to convert to array
 		//temporary putting in random words to test 
-		List<String> towerNameList = engine.getListofTowers();
-	//	towerNameArray = new String[towerNameList.size()];
+		//List<String> towerNameList = engine.getListofTowers();
+		List<String> towerNameList = new ArrayList<String>();
+		//towerNameArray = new String[towerNameList.size()];
 		//towerNameArray[0] = "Add Tower";
-		towerNameArray = (String[]) towerNameList.toArray();
+		towerNameArray = towerNameList.toArray(new String[1]);
 		
 	}
 

@@ -30,9 +30,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import net.lingala.zip4j.exception.ZipException;
-
 import main.java.reflection.MethodAction;
+import net.lingala.zip4j.exception.ZipException;
 
 public class Player {
 
@@ -66,7 +65,7 @@ public class Player {
 		makeFrame();
 		makeCards();
 		addWelcomeCard();
-		//addGameCard();
+		addGameCard();
 		addHelpCard();
 		addOptionsCard();
 		addCreditsCard();
@@ -99,17 +98,14 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
-<<<<<<< HEAD
-					engine.loadMapFile(file.getAbsolutePath());
-					addGameCard();
-=======
+					//addGameCard(); //THIS NEEDS TO BE MOVED
+	
                     try {
 						engine.loadBlueprintFile(file.getAbsolutePath());
 					} catch (ClassNotFoundException | IOException | ZipException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} // TODO: replace to load game blueprint
->>>>>>> 4f9194640e0f1ee72a2caedb1c32cf5fecabb404
 					System.out.println("FILE CHOSEN: " + file.getName());
 				}
 			}
