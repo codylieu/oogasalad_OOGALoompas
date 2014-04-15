@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
@@ -30,6 +32,7 @@ import main.java.schema.WaveSpawnSchema;
 
 
 public class Model {
+
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
     public static final String RESOURCE_PATH = "/main/resources/";
 
@@ -60,9 +63,6 @@ public class Model {
         monsters = new ArrayList<Monster>();
         towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
-
-        levelManager.setEntrance(0, engine.pfHeight() / 2);
-        levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
 
         try {
             loadGameBlueprint(null);// TODO: REPLACE
@@ -170,7 +170,6 @@ public class Model {
      * @param x
      * @param y
      */
-
     public void checkAndRemoveTower (double x, double y) {
         int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
         if (isTowerPresent(coordinates)) {
@@ -352,7 +351,7 @@ public class Model {
         for (ITower[] towerRow : towers) {
             for (ITower t : towerRow) {
                 if (t != null) {
-                    t.callTowerActions(environ, t.getLauncher());
+                    t.callTowerActions(environ);
                 }
             }
         }
@@ -410,6 +409,7 @@ public class Model {
         TowerSchema testTowerOne = new TowerSchema();
         testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
         testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
         towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
         testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
@@ -419,12 +419,22 @@ public class Model {
         TowerSchema testTowerTwo = new TowerSchema();
         testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
         testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
         towerBehaviors2.add(TowerBehaviors.SHOOTING);
         testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
         testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerTwo);
-
+        
+        TowerSchema testTowerThree = new TowerSchema();
+        testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
+        testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
+        towerBehaviors3.add(TowerBehaviors.BOMBING);
+        testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
+        testTowerThree.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerThree);
         // Create test money tower
 
         // Create test monsters
@@ -468,4 +478,5 @@ public class Model {
     public List<String> getPossibleTowers () {
         return factory.getPossibleTowersNames();
     }
+
 }

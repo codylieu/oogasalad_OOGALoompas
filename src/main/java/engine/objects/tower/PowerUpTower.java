@@ -9,7 +9,7 @@ public class PowerUpTower extends TowerBehaviorDecorator {
     private double myRange;
 
     public PowerUpTower (ITower baseTower, double range) {
-        super(baseTower, baseTower.getLauncher());
+        super(baseTower);
         myRange = range;
     }
 

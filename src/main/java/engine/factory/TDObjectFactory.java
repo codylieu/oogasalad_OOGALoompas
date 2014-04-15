@@ -12,6 +12,7 @@ import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.tower.BombTower;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.MoneyTower;
 import main.java.engine.objects.tower.ShootingTower;
@@ -87,11 +88,14 @@ public class TDObjectFactory {
                 finalTower = new MoneyTower(finalTower, attributes);
             }
             if (towerBehavior.equals(TowerBehaviors.SHOOTING)) {
-                finalTower = new ShootingTower(finalTower, attributes, "red_bullet");
+                finalTower = new ShootingTower(finalTower, attributes);
             }
+            if (towerBehavior.equals(TowerBehaviors.BOMBING)) {
+                finalTower = new BombTower(finalTower, attributes);
+            }
+            //TODO: USE REFLECTION!
         }
         return finalTower;
-        //return new ShootingTower(finalTower, 20, 20, 200, "test-tower-1");
     }
 
     /**

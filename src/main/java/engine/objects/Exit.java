@@ -42,20 +42,34 @@ public class Exit extends JGObject implements Serializable {
     @Override
     public void hit (JGObject obj) {
         if (and(obj.colid, Monster.MONSTER_CID)) {
-            decreasePlayerLives();
+            decreasePlayerLives();  
+            ((Monster) obj).setDead();
             obj.remove();
         }
     }
+    
+    @Override
+    public void move() {
+    	if (myGraceTime>=0) myGraceTime--;
+    }
+    
     
     /**
      * Decreases player lives if grace time has passed. 
      */
     private void decreasePlayerLives () {
-        if(myGraceTime-- <= 0){
-            mySpawnManager.monsterExitAction();
-            //refill grace time
-            myGraceTime = GRACE_TIME;
-        }
+    	if (!withinGracePeriod()) {
+          mySpawnManager.monsterExitAction();
+          //refill grace time
+          myGraceTime = GRACE_TIME;
+    	}
+    }
+    
+    /**
+     * @return true we are in the grace period
+     */
+    private boolean withinGracePeriod() {
+    	return myGraceTime>0;
     }
 
     /**

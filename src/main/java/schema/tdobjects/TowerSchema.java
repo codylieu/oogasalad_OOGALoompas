@@ -19,7 +19,9 @@ public class TowerSchema extends TDObjectSchema {
     public static final String BUILDUP = "BuildUp";
     public static final String TOWER_IMAGE_NAME = "Tower Image Name";
     public static final String BULLET_IMAGE_NAME = "Bullet Image Name";
+    
     public static final String TOWER_BEHAVIORS = "Tower Behaviors USE CHECKBOXES?";
+    public static final String UPGRADE_PATH = "List of upgrade towers path";
 
     public static final String TILE_SIZE_SMALL = "Small Tile";
     public static final String TILE_SIZE_LARGE = "Large Tile";
@@ -58,6 +60,7 @@ public class TowerSchema extends TDObjectSchema {
         addAttribute(TowerSchema.RANGE, TowerViewConstants.RANGE_DEFAULT);
         addAttribute(TowerSchema.TOWER_IMAGE_NAME, "");
         addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
+        addAttribute(TowerSchema.UPGRADE_PATH, "");
     }
 
     @Override

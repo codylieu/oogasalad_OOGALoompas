@@ -94,6 +94,15 @@ public abstract class Monster extends TDObject {
 	public void takeDamage (double damage) {
 		myHealth -= damage;
 	}
+	
+	/**
+	 * Set the monster to be dead immediately, 
+	 * effectively removing it from the game
+	 */
+	public void setDead() {
+		myHealth = 0;
+		myMoneyValue = 0;
+	}
 
 
 	/**

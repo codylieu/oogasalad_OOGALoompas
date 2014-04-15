@@ -1,10 +1,13 @@
 package main.java.player;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import net.lingala.zip4j.exception.ZipException;
 
 import jgame.JGColor;
 import jgame.JGPoint;
@@ -260,8 +263,9 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 	}
 
 	//TODO: i added this kevin, will explain later - jordan
-	public void loadMapFile(String fileName) {
-		model.loadMapTest(fileName);
+	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {
+		model.loadGameBlueprint(fileName);
+		//model.loadMapTest(fileName);
 	}
 
 	public Map<String, String> getGameAttributes() {

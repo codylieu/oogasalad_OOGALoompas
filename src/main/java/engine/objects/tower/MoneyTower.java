@@ -37,7 +37,7 @@ public class MoneyTower extends TowerBehaviorDecorator {
      * 
      */
     public MoneyTower (ITower baseTower, int moneyGranted, int moneyGrantInterval) {
-        super(baseTower, baseTower.getLauncher());
+        super(baseTower);
     }
 
     

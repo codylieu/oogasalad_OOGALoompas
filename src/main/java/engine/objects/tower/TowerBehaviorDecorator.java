@@ -14,11 +14,9 @@ abstract class TowerBehaviorDecorator implements ITower {
      * The base tower that will have behaviors added to it ("decorations")
      */
     protected ITower baseTower;
-    protected ProjectileLauncher launcher;
 
-    public TowerBehaviorDecorator (ITower baseTower, ProjectileLauncher launcher) {
+    public TowerBehaviorDecorator (ITower baseTower) {
         this.baseTower = baseTower;
-        this.launcher = launcher;
     }
 
     @Override
@@ -47,23 +45,13 @@ abstract class TowerBehaviorDecorator implements ITower {
     }
 
     @Override
-    public boolean callTowerActions (EnvironmentKnowledge environ, ProjectileLauncher launcher) {
-        if (baseTower.callTowerActions(environ, this.launcher)) {
+    public boolean callTowerActions (EnvironmentKnowledge environ) {
+        if (baseTower.callTowerActions(environ)) {
             // in addition to base tower's behavior, also do additional behavior
-            if (launcher.isSet()){
-                launcher.fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
-            } else if(this.launcher.isSet()) {
-                this.launcher.fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
-            }
             doDecoratedBehavior(environ);
             return true;
         }
         return false;
-    }
-
-    @Override
-    public ProjectileLauncher getLauncher() {
-        return launcher;
     }
     
     /**
