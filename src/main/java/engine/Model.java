@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
@@ -30,6 +32,7 @@ import main.java.schema.WaveSpawnSchema;
 
 
 public class Model {
+
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
     public static final String RESOURCE_PATH = "/main/resources/";
 
@@ -464,4 +467,5 @@ public class Model {
     public List<String> getPossibleTowers () {
         return factory.getPossibleTowersNames();
     }
+
 }
