@@ -16,6 +16,7 @@ public class TowerSchema extends TDObjectSchema {
     public static final String COST = "Cost";
     public static final String MONEY_GRANTED = "Money granted";
     public static final String MONEY_GRANT_INTERVAL = "Money grant interval";
+    public static final String FREEZE_SLOWDOWN_PROPORTION = "Freeze slowdown speed";
     public static final String TILE_SIZE = "Size";
     public static final String BUILDUP = "BuildUp";
     public static final String TOWER_IMAGE_NAME = "Tower Image Name";
@@ -50,6 +51,7 @@ public class TowerSchema extends TDObjectSchema {
         myAttributeSet.add(TOWER_BEHAVIORS);
         myAttributeSet.add(SHRAPNEL_DAMAGE);
         myAttributeSet.add(SHRAPNEL_IMAGE_NAME);
+        myAttributeSet.add(FREEZE_SLOWDOWN_PROPORTION);
     }
     
     public TowerSchema(String name) {

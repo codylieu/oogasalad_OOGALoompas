@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
-import main.java.engine.objects.projectiles.Projectile;
+import main.java.engine.objects.projectile.DamageProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 
 
@@ -13,7 +13,7 @@ import main.java.schema.tdobjects.TowerSchema;
  * Towers decoration make the base tower fire a projectile at nearest enemies
  * 
  * @author Austin
- *
+ * 
  */
 public class ShootingTower extends TowerBehaviorDecorator {
 
@@ -22,7 +22,6 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public static final double DEFAULT_FIRING_SPEED = 5;
     public static final int FIRING_INTERVAL_STEP = 2;
     public static final int MIN_FIRING_INTERVAL = 21;
-    
 
     protected double myDamage;
     protected double myFiringSpeed;
@@ -37,7 +36,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
      * @param firingSpeed a value from 0.0 - 10.0, where 10 is the fastest firing speed.
      * @param range how far away tower can find targets to shoot at
      */
-    public ShootingTower (ITower baseTower, double damage, double firingSpeed, double range, String bulletImage) {
+    public ShootingTower (ITower baseTower,
+                          double damage,
+                          double firingSpeed,
+                          double range,
+                          String bulletImage) {
         super(baseTower);
         myDamage = damage;
         myFiringSpeed = firingSpeed;
@@ -47,6 +50,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
 
     /**
      * Constructor used by the factory in decorating a final tower.
+     * 
      * @param baseTower
      * @param attributes
      */
@@ -57,15 +61,15 @@ public class ShootingTower extends TowerBehaviorDecorator {
              (double) TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
                                                  DEFAULT_FIRING_SPEED),
              (double) TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
-            		 							DEFAULT_RANGE),
+                                                 DEFAULT_RANGE),
              (String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""));
     }
 
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
-    	fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
+        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
     }
-    
+
     public void fire (Point2D target) {
         if (target == null) { return; }
         Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
@@ -76,7 +80,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
             fireProjectile(angle);
         }
     }
-    
+
     /**
      * Returns whether or not it is time for the tower to fire, based on its
      * firing speed
@@ -85,21 +89,24 @@ public class ShootingTower extends TowerBehaviorDecorator {
      */
     private boolean inFiringInterval () {
         return baseTower.atInterval(MIN_FIRING_INTERVAL - FIRING_INTERVAL_STEP *
-                          (int) Math.min(myFiringSpeed, 10));
+                                    (int) Math.min(myFiringSpeed, 10));
     }
 
     /**
      * Fires projected at a target angle with the tower's damage factor
      */
+
     public void fireProjectile (double angle) {
-  
-        new Projectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
+
+        new DamageProjectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
+
     }
-    
+
     /**
      * Fires projected at a target x and y speed with the tower's damage factor
      */
     public void fireProjectile (double xspeed, double yspeed) {
-        new Projectile(getXCoordinate(), getYCoordinate(), xspeed, yspeed, myDamage, myBulletImage);
+        new DamageProjectile(getXCoordinate(), getYCoordinate(), xspeed, yspeed, myDamage,
+                             myBulletImage);
     }
 }

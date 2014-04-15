@@ -1,10 +1,10 @@
-package main.java.engine.objects.projectiles;
+package main.java.engine.objects.projectile;
 
 import main.java.engine.objects.monster.Monster;
 import jgame.JGObject;
 
 
-public class Bomb extends Projectile {
+public class Bomb extends DamageProjectile {
 
     public static final double[] BOMB_SPRAY_X = { 0.0, 0.0, -4.0, 4.0, 2.0 -2.0, 2.0, -2.0, 4.0};
     public static final double[] BOMB_SPRAY_Y = { -4.0, 4.0, 0.0, 0.0, 2.0, -2.0, -2.0, 2.0, 4.0};
@@ -43,7 +43,7 @@ public class Bomb extends Projectile {
             double explodeXcoordinate = this.x + randomOffset();
             double explodeYcoordinate = this.y + randomOffset();
             for (int i = 0; i < BOMB_SPRAY_X.length; i++) {
-                new Projectile(explodeXcoordinate, explodeYcoordinate, BOMB_SPRAY_X[i],
+                new DamageProjectile(explodeXcoordinate, explodeYcoordinate, BOMB_SPRAY_X[i],
                                BOMB_SPRAY_Y[i], shrapnelDamage, shrapnelImage);
             }
             this.remove();

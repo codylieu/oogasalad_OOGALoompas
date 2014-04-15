@@ -3,7 +3,7 @@ package main.java.engine.objects.tower;
 import java.io.Serializable;
 import java.util.Map;
 import main.java.engine.objects.TDObject;
-import main.java.engine.objects.projectiles.Bomb;
+import main.java.engine.objects.projectile.Bomb;
 import main.java.schema.tdobjects.TowerSchema;
 
 
@@ -32,7 +32,8 @@ public class BombTower extends ShootingTower {
 
     @Override
     public void fireProjectile (double angle) {
-        new Bomb(getXCoordinate(), getYCoordinate(), angle, myDamage, myShrapnelDamage, myBulletImage, myShrapnelImage);
+        new Bomb(getXCoordinate(), getYCoordinate(), angle, myDamage, myShrapnelDamage,
+                 myBulletImage, myShrapnelImage);
     }
 
 }
