@@ -1,5 +1,8 @@
 package main.java.author.controller;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.swing.JFileChooser;
@@ -8,10 +11,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
+import main.java.schema.map.GameMapSchema;
 import main.java.data.datahandler.DataHandler;
+import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.data.InvalidGameBlueprintException;
-import main.java.schema.map.GameMap;
+import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
+import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.WaveSpawnSchema;
@@ -68,13 +76,12 @@ public class MainController {
 	public void addGameSettingsToModel(GameSchema gameSchema) {
 		myModel.addGameSettings(gameSchema);
 	}
-
 	/**
 	 * Adds a schema representing characteristics of a game terrain map
 	 * to the game blueprint
 	 * @param gameMap
 	 */
-	public void addGameMapsToModel(GameMap gameMap) {
+	public void addGameMapsToModel(GameMapSchema gameMap) {
 		myModel.addGameMaps(gameMap);
 	}
 
@@ -100,7 +107,74 @@ public class MainController {
 		if (saveFileChooser.showSaveDialog(myAuthoringView) == JFileChooser.APPROVE_OPTION) {
 			filePath = saveFileChooser.getSelectedFile().getAbsolutePath() + ".zip";
 		}
-		handler.saveBlueprint(myModel.getBlueprint(), filePath);
+		//fake one
+		handler.saveBlueprint(createTestBlueprint(), filePath);
+		//handler.saveBlueprint(myModel.getBlueprint(), filePath);
+	}
+
+	private GameBlueprint createTestBlueprint() {
+		GameBlueprint testBlueprint = new GameBlueprint();
+
+        // Populate TDObjects
+        List<TDObjectSchema> testTDObjectSchema = new ArrayList<>();
+
+        // Create test towers
+        TowerSchema testTowerOne = new TowerSchema();
+        testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
+        testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
+        towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
+        testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
+        testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerOne);
+        
+        TowerSchema testTowerTwo = new TowerSchema();
+        testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
+        testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
+        towerBehaviors2.add(TowerBehaviors.SHOOTING);
+        testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
+        testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerTwo);
+
+        // Create test money tower
+
+        // Create test monsters
+        SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
+        testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
+        testMonsterOne.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+        testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
+        testTDObjectSchema.add(testMonsterOne);
+
+        testBlueprint.setMyTDObjectSchemas(testTDObjectSchema);
+
+        // Create test game schemas
+        GameSchema testGameSchema = new GameSchema();
+        testGameSchema.addAttribute(GameSchema.LIVES, 3);
+        testGameSchema.addAttribute(GameSchema.MONEY, 500);
+
+        testBlueprint.setMyGameScenario(testGameSchema);
+
+        // Create wave schemas
+        List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
+        MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterOne, 1);
+        WaveSpawnSchema testWaveSpawnSchemaOne = new WaveSpawnSchema();
+        testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
+        testWaves.add(testWaveSpawnSchemaOne);
+
+        MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 2);
+        WaveSpawnSchema testWaveSpawnSchemaTwo = new WaveSpawnSchema();
+        testWaveSpawnSchemaTwo.addMonsterSchema(testMonsterSpawnSchemaTwo);
+        testWaves.add(testWaveSpawnSchemaTwo);
+
+        MonsterSpawnSchema testMonsterSpawnSchemaThree = new MonsterSpawnSchema(testMonsterOne, 10);
+        WaveSpawnSchema testWaveSpawnSchemaThree = new WaveSpawnSchema();
+        testWaveSpawnSchemaThree.addMonsterSchema(testMonsterSpawnSchemaThree);
+        testWaves.add(testWaveSpawnSchemaThree);
+
+        testBlueprint.setMyLevelSchemas(testWaves);
+
+        return testBlueprint;
 	}
 
 	public static void main(String[] args) {

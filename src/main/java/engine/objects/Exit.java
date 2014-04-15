@@ -43,6 +43,7 @@ public class Exit extends JGObject implements Serializable {
     public void hit (JGObject obj) {
         if (and(obj.colid, Monster.MONSTER_CID)) {
             decreasePlayerLives();
+            obj.remove();
         }
     }
     

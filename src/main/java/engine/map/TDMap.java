@@ -1,13 +1,8 @@
 package main.java.engine.map;
 
-import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
-import main.java.author.view.tabs.terrain.Tile;
 import main.java.author.view.tabs.terrain.TileMap;
-import main.java.schema.map.GameMap;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.List;
 
 public class TDMap {
@@ -74,11 +69,11 @@ public class TDMap {
     }
 
     public void loadMapIntoGame(JGEngineInterface engine, String fileName) {
-//        GameMap mapToLoad = null;
+//        GameMapSchema mapToLoad = null;
 //        try {
 //            FileInputStream fis = new FileInputStream(fileName);
 //            ObjectInputStream is = new ObjectInputStream(fis);
-//            mapToLoad = (GameMap) is.readObject();
+//            mapToLoad = (GameMapSchema) is.readObject();
 //            is.close();
 //
 //            Tile[][] tileMap = mapToLoad.getMyTiles();

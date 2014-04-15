@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 
 import main.java.data.datahandler.DataHandler;
-import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import net.lingala.zip4j.exception.ZipException;
