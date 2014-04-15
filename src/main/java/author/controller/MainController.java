@@ -11,11 +11,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
+import main.java.schema.map.GameMapSchema;
 import main.java.data.datahandler.DataHandler;
-import main.java.engine.Model;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.data.InvalidGameBlueprintException;
-import main.java.schema.map.GameMap;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import main.java.schema.MonsterSpawnSchema;
@@ -77,13 +76,12 @@ public class MainController {
 	public void addGameSettingsToModel(GameSchema gameSchema) {
 		myModel.addGameSettings(gameSchema);
 	}
-
 	/**
 	 * Adds a schema representing characteristics of a game terrain map
 	 * to the game blueprint
 	 * @param gameMap
 	 */
-	public void addGameMapsToModel(GameMap gameMap) {
+	public void addGameMapsToModel(GameMapSchema gameMap) {
 		myModel.addGameMaps(gameMap);
 	}
 

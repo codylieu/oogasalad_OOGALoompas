@@ -9,24 +9,13 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -34,8 +23,7 @@ import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.terrain.types.TileObject;
-import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
-import main.java.schema.map.GameMap;
+import main.java.schema.map.GameMapSchema;
 import main.java.schema.map.TileMapSchema;
 import main.java.schema.map.TileSchema;
 import static main.java.author.util.ActionListenerUtil.actionListener;
@@ -108,7 +96,7 @@ public class TerrainEditorTab extends EditorTab {
 	
 	private JComboBox constructTerrainTypes() {
 		 JComboBox scrollableTerrainTypes = new JComboBox(terrainTypes);
-		 ((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);	
+		 ((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 		 scrollableTerrainTypes.addActionListener(actionListener(this, "updatePassabilityIndex"));
 		 scrollableTerrainTypes.setEnabled(false);
 		 return scrollableTerrainTypes;
@@ -256,15 +244,16 @@ public class TerrainEditorTab extends EditorTab {
         tileMapSchema.addAttribute(TileMapSchema.PIXEL_SIZE, tileDisp.getMyPixelSize());
         tileMapSchema.addAttribute(TileMapSchema.TILEMAP_FILE_NAME, tileDisp.getTileMapFile());
 	}
-	
+
 	/**
 	 * Serializes a 'GameMap' which contains multiple TileSchemas and 
 	 * TileMapSchemas. 
 	 * 
 	 * @param map
 	 */
-	private void writeMapToFile(GameMap map) {
+	private void writeMapToFile(GameMapSchema map) {
 		JFileChooser saveFileChooser = new JFileChooser();
+
         FileNameExtensionFilter filter = new FileNameExtensionFilter("SER Files", "ser");
         saveFileChooser.setFileFilter(filter);
         int returnVal = saveFileChooser.showSaveDialog(this);
@@ -320,7 +309,7 @@ public class TerrainEditorTab extends EditorTab {
 
 	@Override
 	public void saveTabData() {
-		GameMap myCompletedMap = new GameMap();
+		GameMapSchema myCompletedMap = new GameMapSchema();
 
 		List<Tile> gameTiles = myCanvas.getTiles();
 		List<TileSchema> gameTileSchemas = new ArrayList<TileSchema>();        
@@ -338,8 +327,8 @@ public class TerrainEditorTab extends EditorTab {
 			gameTileMapSchemas.add(tileMapSchema);
 		}
 
-		myCompletedMap.setTileSchemas(gameTileSchemas);
-		myCompletedMap.setTileMapSchemas(gameTileMapSchemas);
+		myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
+		myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable) gameTileMapSchemas);
 
 		TerrainController myControl = (TerrainController) myController;
 		myControl.addMaps(myCompletedMap);
