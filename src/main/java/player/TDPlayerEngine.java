@@ -19,10 +19,10 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	public static int FRAME_RATE_DELTA = 5;
+	public static int DEFAULT_FRAME_RATE = 45;
 	public static final String DEFAULT_TOWER_NAME = "test-tower-1";
 
 	private TowerChooser towerChooser;
-	private int myFrameRate;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
@@ -41,7 +41,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		isFullScreen = false;
 		soundOn = false;
 		cursorState = CursorState.None;
-		myFrameRate = 45;
 	}
 
 	@Override
@@ -51,7 +50,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	@Override
 	public void initGame() {
-		setFrameRate(myFrameRate, 1);
+		setFrameRate(DEFAULT_FRAME_RATE, 1);
 		this.model = new Model(this);
 		model.addNewPlayer();
         try {
