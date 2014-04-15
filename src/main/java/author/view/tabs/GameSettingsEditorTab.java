@@ -247,17 +247,6 @@ public class GameSettingsEditorTab extends EditorTab{
 
 			JPanel buttons = new JPanel(new GridLayout(0, 1));
 
-			submitButton = new JButton("Submit");
-			submitButton.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-			});
-
 			musicButton = new JButton("Choose Music");
 			musicButton.addActionListener(new ActionListener(){
 
@@ -285,8 +274,7 @@ public class GameSettingsEditorTab extends EditorTab{
 
 			});
 
-			buttons.add(musicButton, BorderLayout.NORTH);
-			buttons.add(submitButton, BorderLayout.SOUTH);
+			buttons.add(musicButton, BorderLayout.CENTER);
 
 			return buttons;
 
