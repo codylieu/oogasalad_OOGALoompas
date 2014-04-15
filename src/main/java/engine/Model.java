@@ -409,6 +409,7 @@ public class Model {
         TowerSchema testTowerOne = new TowerSchema();
         testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
         testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
         towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
         testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
@@ -418,12 +419,22 @@ public class Model {
         TowerSchema testTowerTwo = new TowerSchema();
         testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
         testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
         towerBehaviors2.add(TowerBehaviors.SHOOTING);
         testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
         testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerTwo);
-
+        
+        TowerSchema testTowerThree = new TowerSchema();
+        testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
+        testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
+        towerBehaviors3.add(TowerBehaviors.BOMBING);
+        testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
+        testTowerThree.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerThree);
         // Create test money tower
 
         // Create test monsters

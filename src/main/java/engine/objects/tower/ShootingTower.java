@@ -20,14 +20,14 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public static final double DEFAULT_DAMAGE = 10;
     public static final double DEFAULT_RANGE = 200;
     public static final double DEFAULT_FIRING_SPEED = 5;
-    private static final int FIRING_INTERVAL_STEP = 2;
-    private static final int MIN_FIRING_INTERVAL = 21;
+    public static final int FIRING_INTERVAL_STEP = 2;
+    public static final int MIN_FIRING_INTERVAL = 21;
     
 
-    private double myDamage;
-    private double myFiringSpeed;
-    private double myRange;
-    private String myBulletImage;
+    protected double myDamage;
+    protected double myFiringSpeed;
+    protected double myRange;
+    protected String myBulletImage;
 
     /**
      * Create a new tower by adding shooting behavior to an existing tower
@@ -50,7 +50,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
      * @param baseTower
      * @param attributes
      */
-    public ShootingTower (ITower baseTower, Map<String, Serializable> attributes, String img) {
+    public ShootingTower (ITower baseTower, Map<String, Serializable> attributes) {
         this(
              baseTower,
              (double) TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
