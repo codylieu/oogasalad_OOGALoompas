@@ -17,21 +17,25 @@ public class Canvas extends JPanel {
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
-	public static final int NUM_ROWS = 10;
-	public static final int NUM_COLS = 15;
-	public static final int TILE_SIZE = 40; // in pixels
+	private int numRows;
+	private int numCols;
+	private static final int TILE_SIZE = 25; // in pixels
 
 	private final Tile[][] myTiles;
 	private TileObject selectedTileObj;
+	private TerrainEditorTab myTerrainTab;
 
-	public Canvas(){
-		myTiles = new Tile[NUM_ROWS][NUM_COLS];
-		for (int row = 0; row < NUM_ROWS; row++) {
-			for (int col = 0; col < NUM_COLS; col++) {
+	public Canvas(int rows, int cols, TerrainEditorTab terrainTab){
+		numRows = rows;
+		numCols = cols;
+		myTerrainTab = terrainTab;
+		myTiles = new Tile[numRows][numCols];
+		for (int row = 0; row < numRows; row++) {
+			for (int col = 0; col < numCols; col++) {
 				myTiles[row][col] = new Tile(row, col, DEFAULT_TILE_COLOR);
 			}
 		}
-		setPreferredSize(new Dimension(NUM_COLS*TILE_SIZE, NUM_ROWS*TILE_SIZE)); // important for maintaining size of JPanel
+		setPreferredSize(new Dimension(numCols*TILE_SIZE, numRows*TILE_SIZE)); // important for maintaining size of JPanel
 		initCanvasListeners();
 	}
 	
@@ -55,7 +59,7 @@ public class Canvas extends JPanel {
 	}
 
 	/**
-	 * Updates tiles within the JPanel when the 'repaint()' method is called. Sets the
+	 * Updates tiles within the JPanel when the 'update(getGraphics())' method is called. Sets the
 	 * appropriate background and border of each tile accordingly. 
 	 */
 	@Override
@@ -63,8 +67,8 @@ public class Canvas extends JPanel {
 		super.paintComponent(g); // Call to super class is necessary
 		g.clearRect(0, 0, getWidth(), getHeight());
 
-		int rectWidth = getWidth() / NUM_COLS;
-		int rectHeight = getHeight() / NUM_ROWS;
+		int rectWidth = getWidth() / numCols;
+		int rectHeight = getHeight() / numRows;
 
 		int index = 0;
 		for (Tile tile : getTiles()) {
@@ -94,8 +98,8 @@ public class Canvas extends JPanel {
 	private Tile getTile(int x, int y) {
 		int row = y/TILE_SIZE;
 		int col = x/TILE_SIZE;
-		boolean validRow = row >= 0 && row <= NUM_ROWS - 1;
-		boolean validCol = col >= 0 && col <= NUM_COLS - 1;
+		boolean validRow = row >= 0 && row <= numRows - 1;
+		boolean validCol = col >= 0 && col <= numCols - 1;
 		if (validRow && validCol) {
 			return myTiles[row][col];
 		}
@@ -106,24 +110,29 @@ public class Canvas extends JPanel {
 	 * Obtains a list of tiles within the JPanel
 	 * @return all tiles within the JPanel
 	 */
-	private List<Tile> getTiles() {
+	protected List<Tile> getTiles() {
 		List<Tile> tiles = new ArrayList<Tile>();
-		for (int i = 0; i < NUM_ROWS; i++) {
-			for (int j = 0; j < NUM_COLS; j++) {
+		for (int i = 0; i < numRows; i++) {
+			for (int j = 0; j < numCols; j++) {
 				tiles.add(myTiles[i][j]);
 			}
 		}
 		return tiles;
 	}
 
+	/**
+	 * Updates a tile that has been clicked in the terrain map
+	 * with data from the TileObject that was selected in the
+	 * TileDisplay
+	 */
 	private void updateTile(MouseEvent e) {
 		Tile tile = getTile(e.getX(), e.getY());
-		if (tile == null) {
+		if (tile == null || selectedTileObj == null) {
 			return;
 		}
-		tile.setImage((selectedTileObj == null) ? null : selectedTileObj.getImage());
-		tile.setColor((selectedTileObj == null) ? DEFAULT_TILE_COLOR : selectedTileObj.getBGColor());
-		tile.setPassIndex((selectedTileObj == null) ? 0 : selectedTileObj.getPassabilityIndex());
+		tile.setImage(selectedTileObj.getImage());
+		tile.setColor(selectedTileObj.getBGColor());
+		tile.setPassIndex(myTerrainTab.getPassabilityIndex());
         tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
         tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
         tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
@@ -140,10 +149,6 @@ public class Canvas extends JPanel {
 			tile.setPassIndex(0);
 			repaint();
 		}
-	}
-	
-	protected Tile[][] getTileArray() {
-		return myTiles;
 	}
 
 	public void setSelectedTileObj(TileObject tObj) {

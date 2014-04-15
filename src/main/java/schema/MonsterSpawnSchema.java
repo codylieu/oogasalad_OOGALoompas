@@ -2,29 +2,30 @@ package main.java.schema;
 
 import java.io.Serializable;
 
+import main.java.schema.tdobjects.MonsterSchema;
+
+
 /**
  * A schema object/container to store information about which monsterschema to create, and how many of it to be
  * created per swarm.
  * 
  * @author Austin
- * 
  */
 public class MonsterSpawnSchema implements Serializable {
     private MonsterSchema myMonsterSchema;
     private int mySwarmSize;
-    private String myName;
 
     /**
-     * 
-     * @param monsterToCreate String representation for Factory creation
-     * @param swarmSize how many of the specified monster to be created
+     * Create a new MonsterSpawnSchema with the specified monster and
+     * number to be spawned
+     *
+     * @param monsterSchema MonsterSchema of monster to be created
+     * @param swarmSize How many of the specified monster to be created
      */
-    public MonsterSpawnSchema (String name, MonsterSchema monsterSchema, int swarmSize) {
+    public MonsterSpawnSchema (MonsterSchema monsterSchema, int swarmSize) {
     	myMonsterSchema = monsterSchema;
         mySwarmSize = swarmSize;
-        myName = name;
     }
-    
 
     /**
      * Get how many of this monster to create

@@ -1,27 +1,18 @@
 package main.java.data.datahandler;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import main.java.engine.GameState;
 import main.java.schema.GameBlueprint;
-import main.java.schema.GameMap;
 import main.java.schema.GameSchema;
 
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 
 public class JSONHandler {
 
@@ -62,9 +53,10 @@ public class JSONHandler {
 		testSchema.addAttribute("Lives",10);
 		GameBlueprint testBlueprint = new GameBlueprint();
 		testBlueprint.setMyGameScenario(testSchema);
-		List<GameMap> maps = new ArrayList<GameMap>();
+		//Game maps no longer exist
+		/*List<GameMap> maps = new ArrayList<GameMap>();
 		maps.add(new GameMap());
-		testBlueprint.setMyGameMaps(maps);
+		testBlueprint.setMyGameMaps(maps);*/
 		
 		TestObject t = new TestObject("t1",1,2);
 		

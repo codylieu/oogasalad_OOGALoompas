@@ -10,6 +10,7 @@ public class TowerSchema extends TDObjectSchema {
     public static final String LOCATION = "Location";
     public static final String HEALTH = "Health";
     public static final String DAMAGE = "Damage";
+    public static final String SHRAPNEL_DAMAGE = "Damage of bomb shrapnel";
     public static final String FIRING_SPEED = "Firing Speed";
     public static final String RANGE = "Range";
     public static final String COST = "Cost";
@@ -20,6 +21,7 @@ public class TowerSchema extends TDObjectSchema {
     public static final String BUILDUP = "BuildUp";
     public static final String TOWER_IMAGE_NAME = "Tower Image Name";
     public static final String BULLET_IMAGE_NAME = "Bullet Image Name";
+    public static final String SHRAPNEL_IMAGE_NAME = "Bomb's shrapnel image name";
     
     public static final String TOWER_BEHAVIORS = "Tower Behaviors USE CHECKBOXES?";
     public static final String UPGRADE_PATH = "List of upgrade towers path";
@@ -44,8 +46,10 @@ public class TowerSchema extends TDObjectSchema {
         myAttributeSet.add(LOCATION);
         myAttributeSet.add(NAME);
         myAttributeSet.add(TOWER_BEHAVIORS);
+        myAttributeSet.add(SHRAPNEL_DAMAGE);
+        myAttributeSet.add(SHRAPNEL_IMAGE_NAME);
         myAttributeSet.add(FREEZE_SLOWDOWN_PROPORTION);
-        myAttributeSet.add(TowerSchema.UPGRADE_PATH);
+        myAttributeSet.add(UPGRADE_PATH);
     }
     
     public TowerSchema(String name) {

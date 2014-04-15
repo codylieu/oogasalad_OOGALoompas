@@ -1,18 +1,19 @@
 package main.java.engine.objects;
 
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
-
 import jgame.JGObject;
+
 
 /**
  * Abstract extension of JGObject. Represents monsters, towers, etc.
  */
 public abstract class TDObject extends JGObject implements Serializable {
 
-    //TODO: abstract methods?
+    // TODO: abstract methods?
 
-	public TDObject (String name,
+    public TDObject (String name,
                      double x,
                      double y,
                      int cid,
@@ -28,9 +29,9 @@ public abstract class TDObject extends JGObject implements Serializable {
                      double xspeed,
                      double yspeed,
                      int expireOffView) {
-       super(name, true, x, y, cid, gfxname, xspeed, yspeed, expireOffView);
+        super(name, true, x, y, cid, gfxname, xspeed, yspeed, expireOffView);
     }
-    
+
     /**
      * Within an attribute map, returns the value of the attributeName or returns the defaultValue
      * otherwise
@@ -40,10 +41,18 @@ public abstract class TDObject extends JGObject implements Serializable {
      * @param defaultValue default value of attribute if not in attributes map
      * @return
      */
-    protected static Object getValueOrDefault (Map<String, Object> attributes,
-                                             String attributeName,
-                                             Object defaultValue) {
+    public static Object getValueOrDefault (Map<String, Serializable> attributes,
+                                            String attributeName,
+                                            Object defaultValue) {
         return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;
     }
-    
+
+    /**
+     * Get current coordinate in a Point2D
+     * 
+     * @return Current coordinate
+     */
+    public Point2D getCurrentCoor () {
+        return new Point2D.Double(this.x, this.y);
+    }
 }

@@ -5,13 +5,11 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.table.TableModel;
 
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 /**
  * @author garysheng

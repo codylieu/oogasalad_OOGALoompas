@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -15,14 +16,14 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
-import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.schema.MonsterSchema;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 //SplitPaneDemo itself is not a visible component.
 @SuppressWarnings("serial")
@@ -50,7 +51,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new SimpleMonsterSchema(objectName);
 	}
 
-	protected TabViewBuilder createSpecificTabViewBuilder() {
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new EnemyTabViewBuilder(this);
 	}
 
@@ -96,7 +97,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		// update schema with images
 	}
 
-	private class EnemyTabViewBuilder extends TabViewBuilder {
+	private class EnemyTabViewBuilder extends ObjectTabViewBuilder {
 
 		public EnemyTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
@@ -189,7 +190,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		// buttons
 		ButtonModel selectedFlyButtonModel = null;
 		ButtonModel selectedSizeButtonModel = null;
-		String flyOrGroundValue = (String) map.get(MonsterSchema.FLYING_OR_GROUND);
+		String flyOrGroundValue = (String) map
+				.get(MonsterSchema.FLYING_OR_GROUND);
 		String tileSizeValue = (String) map.get(MonsterSchema.TILE_SIZE);
 
 		for (JRadioButton radioButton : radioButtons) {
@@ -204,6 +206,17 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
 		// images
 
+	}
+
+	@Override
+	public void saveTabData() {
+		EnemyController controller = (EnemyController) myController;
+
+	}
+
+	public List<String> getEnemyList() {
+
+		return (List<String>) objectMap.keySet();
 	}
 
 }

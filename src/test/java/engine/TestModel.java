@@ -14,7 +14,7 @@ public class TestModel {
 		
 		final int testx = 200, testy = 200;
 //		System.out.println("ha");
-		System.out.println(model.placeTower(testx, testy));
+		System.out.println(model.placeTower(testx, testy,"name"));
 		System.out.println("ha");
 		model.isTowerPresent(testx, testy);
 		System.out.println("ha");

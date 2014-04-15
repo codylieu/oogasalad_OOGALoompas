@@ -21,8 +21,8 @@ import main.java.author.view.tabs.terrain.types.TileObject;
 
 public class TileDisplay extends JPanel {
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
-	private transient TileSelectionManager myTileManager;
-	private transient  Image[][] myImages;
+	private TileSelectionManager myTileManager;
+	private Image[][] myImages;
     private int myNumXTiles;
     private int myNumYTiles;
 	private int myPixelSize;
@@ -111,6 +111,18 @@ public class TileDisplay extends JPanel {
 		return myPixelSize;
 	}
 	
+	public int getNumRows() {
+		return myNumYTiles;
+	}
+	
+	public int getNumCols() {
+		return myNumXTiles;
+	}
+	
+	public String getTileMapFile() {
+		return myTileMapFile;
+	}
+	
 	/**
 	 * Allows for a scrollable view of the tiles
 	 */
@@ -132,9 +144,5 @@ public class TileDisplay extends JPanel {
 		myTileManager.getTileEditPanel().setImageAngle(0);
 		myTileManager.getTileEditPanel().update(myTileManager.getTileEditPanel().getGraphics());
 	}
-
-    // this method may be extraneous TODO: i'm pretty sure this can be designed better, sorry -jordan
-    public TileMap getTileMap() {
-        return new TileMap(myNumXTiles, myNumYTiles, myPixelSize, myTileMapFile);
-    }
+	
 }
