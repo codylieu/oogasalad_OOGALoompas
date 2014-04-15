@@ -13,6 +13,7 @@ import main.java.engine.Model;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.BombTower;
+import main.java.engine.objects.tower.FreezeTower;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.MoneyTower;
 import main.java.engine.objects.tower.ShootingTower;
@@ -84,16 +85,9 @@ public class TDObjectFactory {
         Collection<TowerBehaviors> towerBehaviors =
                 (Collection<TowerBehaviors>) attributes.get(TowerSchema.TOWER_BEHAVIORS);
         for (TowerBehaviors towerBehavior : towerBehaviors) {
-            if (towerBehavior.equals(TowerBehaviors.MONEY_FARMING)) {
-                finalTower = new MoneyTower(finalTower, attributes);
-            }
-            if (towerBehavior.equals(TowerBehaviors.SHOOTING)) {
-                finalTower = new ShootingTower(finalTower, attributes);
-            }
-            if (towerBehavior.equals(TowerBehaviors.BOMBING)) {
-                finalTower = new BombTower(finalTower, attributes);
-            }
-            //TODO: USE REFLECTION!
+            Class<? extends ITower> concreteType = towerBehavior.getConcreteClass();
+            Object[] towerParameters = { finalTower, attributes };
+            finalTower = (ITower) placeObject(concreteType, towerParameters);
         }
         return finalTower;
     }

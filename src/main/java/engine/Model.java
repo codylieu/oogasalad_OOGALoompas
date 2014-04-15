@@ -81,6 +81,7 @@ public class Model {
         engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
         // make bullet image dynamic
         engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
+        engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
     }
 
     /**
@@ -429,18 +430,30 @@ public class Model {
         TowerSchema testTowerThree = new TowerSchema();
         testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
         testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet");
+        testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
         towerBehaviors3.add(TowerBehaviors.BOMBING);
         testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
         testTowerThree.addAttribute(TowerSchema.COST, (double) 10);
         testTDObjectSchema.add(testTowerThree);
-        // Create test money tower
-
+        
+        TowerSchema testTowerFour = new TowerSchema();
+        testTowerFour.addAttribute(TowerSchema.NAME, "test-tower-4");
+        testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
+        Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
+        towerBehaviors4.add(TowerBehaviors.FREEZING);
+        testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors4);
+        testTowerFour.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerFour);
+        
         // Create test monsters
         SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
         testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
         testMonsterOne.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+        testMonsterOne.addAttribute(MonsterSchema.SPEED, (double) 1);
         testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
         testTDObjectSchema.add(testMonsterOne);
 
