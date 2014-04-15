@@ -1,6 +1,7 @@
 package main.java.author.view.tabs;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -78,26 +79,9 @@ public class GameSettingsEditorTab extends EditorTab{
 	 */
 	public GameSettingsEditorTab(TabController gameSettingsController){
 		super(gameSettingsController);
-		createSettingsPanel();
-		add(settingsPanel, BorderLayout.CENTER);
-	}
-
-	/**
-	 * Creates the main panel where all of the JComponents that deal with Game Settings attributes go
-	 */
-	private void createSettingsPanel() {
-
 		contentCreator = new GameSettingsTabContentCreator();
-
-		settingsPanel.setLayout(new BorderLayout());
-
-		settingsPanel.add(contentCreator.makeDropDownMenus(), BorderLayout.NORTH);
-		settingsPanel.add(contentCreator.makeAttributesPane(), BorderLayout.SOUTH);
-
-		settingsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		add(contentCreator.createSettingsPanel(), BorderLayout.CENTER);
 	}
-
-
 
 	@Override
 	public void saveTabData() {
@@ -121,6 +105,24 @@ public class GameSettingsEditorTab extends EditorTab{
 	 * Creates the contents of the Pane
 	 */
 	private class GameSettingsTabContentCreator{
+		
+		/**
+		 * Creates the main panel where all of the JComponents that deal with Game Settings attributes go
+		 * @return 
+		 */
+		private Component createSettingsPanel() {
+
+			settingsPanel.setLayout(new BorderLayout());
+
+			settingsPanel.add(makeDropDownMenus(), BorderLayout.NORTH);
+			settingsPanel.add(makeAttributesPane(), BorderLayout.SOUTH);
+
+			settingsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+			
+			return settingsPanel;
+			
+		}
+
 		/**
 		 * @return
 		 * Specifies the size and font of each JSpinner
