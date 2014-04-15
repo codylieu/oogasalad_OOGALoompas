@@ -46,7 +46,6 @@ public class Model {
 	private DataHandler dataHandler;
 	private LevelManager levelManager;
 	private EnvironmentKnowledge environ;
-	private boolean isBlueprintLoaded;
 
 	public Model (JGEngine engine) {
 		this.engine = engine;
@@ -66,7 +65,6 @@ public class Model {
 
 		levelManager.setEntrance(0, engine.pfHeight() / 2);
 		levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
-
 		try {
 			loadGameBlueprint(null);// TODO: REPLACE
 		} catch (Exception e) {
@@ -76,7 +74,6 @@ public class Model {
 		dataHandler = new DataHandler();
 
 		addNewPlayer();
-		isBlueprintLoaded = false;
 
 	}
 
@@ -209,14 +206,14 @@ public class Model {
 	public void loadGameBlueprint(String filePath) throws ClassNotFoundException, IOException, net.lingala.zip4j.exception.ZipException {
 		GameBlueprint bp = null;
 		// TODO: load from datahandler
-		try {
-			bp = dataHandler.loadBlueprint(filePath);
-			isBlueprintLoaded = true;
-		} catch (ZipException e) {
-			e.printStackTrace();
+		if(filePath != null) {
+			try {
+				bp = dataHandler.loadBlueprint(filePath);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
-
-		if(!isBlueprintLoaded) {
+		else {
 			System.out.println("using test blueprint");
 			bp = createTestBlueprint();
 		}
@@ -420,6 +417,7 @@ public class Model {
 		testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
 		towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
+		towerBehaviors.add(TowerBehaviors.SHOOTING);
 		testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
 		testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
 		testTDObjectSchema.add(testTowerOne);
