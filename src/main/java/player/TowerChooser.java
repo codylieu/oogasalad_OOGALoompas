@@ -5,50 +5,56 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
 public class TowerChooser extends JPanel implements ActionListener, Subject{
+	private JComboBox<String> towerComboBox;
 	private TDPlayerEngine engine;
-	private String[] towerNameArray;
-	private JComboBox towerComboBox;
 	private String currentTowerName;
 	private List<Observing> observers;
 	private boolean hasChanged;
+	private Vector<String> comboBoxItems;
+	private DefaultComboBoxModel<String> comboBoxModel;
 	
 	public TowerChooser(TDPlayerEngine myEngine){
 		super(new BorderLayout());
 		observers = new ArrayList<Observing>();
 		hasChanged = false;
 		engine = myEngine;
+		register(engine);
 		currentTowerName = "";
-		initTowerList();
+		//getTowerNames();
 		initComboBox();
 	}
 
 	private void initComboBox(){
-		towerComboBox = new JComboBox(towerNameArray);
-		towerComboBox.setSelectedIndex(0);
+		comboBoxItems = new Vector<String>();
+		comboBoxModel = new DefaultComboBoxModel<String>(comboBoxItems);
+		
+		towerComboBox = new JComboBox<String>(comboBoxModel);
+		//towerComboBox.setSelectedIndex(0);
 		towerComboBox.addActionListener(this);
+
 		add(towerComboBox);
 	}
 
-	private void initTowerList(){
-		//engine call to get list of towers, also need size of list
-		//might end up just making into a list, then using separate method to convert to array
-		//temporary putting in random words to test 
-		//List<String> towerNameList = engine.getListofTowers();
-		List<String> towerNameList = new ArrayList<String>();
-		//towerNameArray = new String[towerNameList.size()];
-		//towerNameArray[0] = "Add Tower";
-		towerNameArray = towerNameList.toArray(new String[1]);
+	public void getTowerNames(){
+		List<String> towerNameList = engine.getPossibleTowers();
+		comboBoxModel.removeAllElements();
+		for (String s: towerNameList) {
+			comboBoxModel.addElement(s);
+		}
 		
+		towerComboBox.setSelectedIndex(0);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JComboBox myBox = (JComboBox) e.getSource();
+		JComboBox<String> myBox = (JComboBox<String>) e.getSource();
 		String towerName = (String) myBox.getSelectedItem();
 		update(towerName);
 	}

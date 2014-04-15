@@ -98,15 +98,13 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
-					//addGameCard(); //THIS NEEDS TO BE MOVED
-	
+
+					addGameCard(); //THIS NEEDS TO BE MOVED
                     try {
 						engine.loadBlueprintFile(file.getAbsolutePath());
 					} catch (ClassNotFoundException | IOException | ZipException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					} // TODO: replace to load game blueprint
-					System.out.println("FILE CHOSEN: " + file.getName());
+					}
 				}
 			}
 		});
@@ -189,13 +187,8 @@ public class Player {
 	}
 
 	private TDPlayerEngine makeGamePanel() {
-		/*JPanel gamePanel = new JPanel();
-		gamePanel.setPreferredSize(new Dimension(600, 400));
-		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		return gamePanel;*/
-
 		engine = new TDPlayerEngine();
-		engine.setSubjectState(towerChooser);
+		engine.setSubject(towerChooser);
 		engine.stop();
 		return engine;
 	}
@@ -208,7 +201,7 @@ public class Player {
 		JButton mainMenuButton = makeMainMenuButton();
 
 		JButton playResumeButton = new JButton("Play/Pause");
-		playResumeButton.addActionListener(new MethodAction (engine, "toggleRunning"));
+		playResumeButton.addActionListener(new MethodAction (this, "populateTowerChooserAndToggleRunning"));
 		
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
@@ -233,7 +226,7 @@ public class Player {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
-		towerChooser.register(engine);
+		engine.setSubject(towerChooser);//This probably does not belong here
 		
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
@@ -257,17 +250,22 @@ public class Player {
 			soundOn = false;
 		}
 	}
+	
+	public void populateTowerChooserAndToggleRunning() {
+		towerChooser.getTowerNames();
+		engine.toggleRunning();
+	}
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubjectState(engine);
+		gameInfoPanel.setSubject(engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubjectState(engine);
+		unitInfoPanel.setSubject(engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
