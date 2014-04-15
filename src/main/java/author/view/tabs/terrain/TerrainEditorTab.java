@@ -22,7 +22,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
-import main.java.author.view.tabs.terrain.types.TileObject;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.map.TileMapSchema;
 import main.java.schema.map.TileSchema;
@@ -41,7 +40,6 @@ public class TerrainEditorTab extends EditorTab {
     private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
     private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
     
-    private String [] terrainTypes = {"Can Walk Over", "Can Walk and Fly Over", "Cannot Traverse"};
     private JComboBox terrainTypeChooser;
     private int selectedPassabilityIndex;
 
@@ -59,6 +57,7 @@ public class TerrainEditorTab extends EditorTab {
 	}
 	
 	/**
+	 * ACTION LISTENER METHOD
 	 * Initializes the terrain tab if the user has entered proper row/column 
 	 * information. If the user enters poor information, nothing happens.
 	 */
@@ -95,13 +94,21 @@ public class TerrainEditorTab extends EditorTab {
 	}
 	
 	private JComboBox constructTerrainTypes() {
-		 JComboBox scrollableTerrainTypes = new JComboBox(terrainTypes);
-		 ((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-		 scrollableTerrainTypes.addActionListener(actionListener(this, "updatePassabilityIndex"));
-		 scrollableTerrainTypes.setEnabled(false);
-		 return scrollableTerrainTypes;
+		
+		TerrainAttribute [] terrainAttributeTypes = TerrainAttribute.values();
+		
+		String [] terrainAttributeInfo = new String [terrainAttributeTypes.length];
+		for (int index = 0; index < terrainAttributeInfo.length; index++) {
+			terrainAttributeInfo[index] = terrainAttributeTypes[index].toString();
+		}
+
+		JComboBox scrollableTerrainTypes = new JComboBox(terrainAttributeInfo);
+		((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		scrollableTerrainTypes.addActionListener(actionListener(this, "updatePassabilityIndex"));
+		scrollableTerrainTypes.setEnabled(false);
+		return scrollableTerrainTypes;
 	}
-	
+
 	public void updatePassabilityIndex(ActionEvent e) {
 		TileObject selectedTile = myCanvas.getSelectedTileObj();
 		selectedPassabilityIndex = ((JComboBox) e.getSource()).getSelectedIndex();
@@ -244,31 +251,6 @@ public class TerrainEditorTab extends EditorTab {
         tileMapSchema.addAttribute(TileMapSchema.PIXEL_SIZE, tileDisp.getMyPixelSize());
         tileMapSchema.addAttribute(TileMapSchema.TILEMAP_FILE_NAME, tileDisp.getTileMapFile());
 	}
-
-	/**
-	 * Serializes a 'GameMap' which contains multiple TileSchemas and 
-	 * TileMapSchemas. 
-	 * 
-	 * @param map
-	 */
-	private void writeMapToFile(GameMapSchema map) {
-		JFileChooser saveFileChooser = new JFileChooser();
-
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("SER Files", "ser");
-        saveFileChooser.setFileFilter(filter);
-        int returnVal = saveFileChooser.showSaveDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            try {
-                FileOutputStream fout = new FileOutputStream(saveFileChooser.getSelectedFile().getAbsolutePath() + ".ser");
-                ObjectOutputStream oos = new ObjectOutputStream(fout);
-                oos.writeObject(map);
-                oos.close();
-            }
-            catch(Exception ex){
-                ex.printStackTrace();
-            }
-        }
-	}
 	
 	/**
 	 * Clears the canvas of all user placed Tiles
@@ -330,9 +312,7 @@ public class TerrainEditorTab extends EditorTab {
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable) gameTileMapSchemas);
 
-		TerrainController myControl = (TerrainController) myController;
-		myControl.addMaps(myCompletedMap);
-		
-		//writeMapToFile(myCompletedMap);
+		TerrainController myTerrainController = (TerrainController) myController;
+		myTerrainController.addMaps(myCompletedMap);
 	}
 }

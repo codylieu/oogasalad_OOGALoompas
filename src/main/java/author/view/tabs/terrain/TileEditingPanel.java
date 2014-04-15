@@ -16,8 +16,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import main.java.author.view.tabs.terrain.types.TileObject;
-
 public class TileEditingPanel extends JPanel {
 
 	private TileSelectionManager myTileManager;
