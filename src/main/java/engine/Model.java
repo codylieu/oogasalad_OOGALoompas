@@ -348,7 +348,7 @@ public class Model {
         for (ITower[] towerRow : towers) {
             for (ITower t : towerRow) {
                 if (t != null) {
-                    t.callTowerActions(environ, t.getLauncher());
+                    t.callTowerActions(environ);
                 }
             }
         }

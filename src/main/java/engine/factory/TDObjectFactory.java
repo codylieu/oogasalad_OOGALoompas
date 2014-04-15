@@ -91,7 +91,6 @@ public class TDObjectFactory {
             }
         }
         return finalTower;
-        //return new ShootingTower(finalTower, 20, 20, 200, "test-tower-1");
     }
 
     /**
