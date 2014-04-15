@@ -50,7 +50,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
 		this.model = new Model(this);
-		model.addNewPlayer();
+	
         try {
             model.loadGameBlueprint(null); // TODO: null for now
         } catch (Exception e) {

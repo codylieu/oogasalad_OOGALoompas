@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -189,7 +190,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		// buttons
 		ButtonModel selectedFlyButtonModel = null;
 		ButtonModel selectedSizeButtonModel = null;
-		String flyOrGroundValue = (String) map.get(MonsterSchema.FLYING_OR_GROUND);
+		String flyOrGroundValue = (String) map
+				.get(MonsterSchema.FLYING_OR_GROUND);
 		String tileSizeValue = (String) map.get(MonsterSchema.TILE_SIZE);
 
 		for (JRadioButton radioButton : radioButtons) {
@@ -209,7 +211,12 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	@Override
 	public void saveTabData() {
 		EnemyController controller = (EnemyController) myController;
-	
+
+	}
+
+	public List<String> getEnemyList() {
+
+		return (List<String>) objectMap.keySet();
 	}
 
 }
