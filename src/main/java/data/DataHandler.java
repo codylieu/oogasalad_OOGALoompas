@@ -1,4 +1,4 @@
-package main.java.data.datahandler;
+package main.java.data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -36,7 +36,7 @@ import main.java.schema.GameBlueprint;
  */
 
 public class DataHandler {
-	private final static String FILE_PATH = "src/test/resources"; // change back to src/main/resources after implementation is done!
+	private final static String FILE_PATH = "src/main/resources"; // change back to src/main/resources after implementation is done!
 	private final static String TEST_FILE_PATH = "src/test/resources.replacement.tester";
 	private final static int BUFF_SIZE = 4096;
 
@@ -81,6 +81,8 @@ public class DataHandler {
 	 * to the file path. The ZIP file which is 
 	 * saved to the file-path is a representation of a saved
 	 * authoring environment, with blueprint + resources
+	 * To avoid creating the blueprint.ser and zipped resources
+	 * folder, a temporary folder is created and later deleted
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
 	 * @throws InvalidGameBlueprintException 
@@ -88,24 +90,33 @@ public class DataHandler {
 
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
 		//		if (checkGameBlueprint(blueprint)){
+		// create a temp folder to put the serialized blueprint and zipped resources in
+		String tempDirLocation = filePath + "TempBlueprintHolder/";
+		Boolean tempDirCreated = new File(tempDirLocation).mkdir();
 		// zip the resources first
-		String zipResourcesLocation = filePath + "ZippedResources.zip";
-		File myResources = new File(FILE_PATH);
-		List<File> myFilesToZip = new ArrayList<File>();
-		//			myFilesToZip.add(myResources);
-		compressResources(myResources,zipResourcesLocation);
-		// zip to ZipResourcesLocation
-		myFilesToZip.add(new File(zipResourcesLocation));
+		if (tempDirCreated){
+			String zipResourcesLocation = tempDirLocation + "ZippedResources.zip";
+			File myResources = new File(FILE_PATH);
+			List<File> myFilesToZip = new ArrayList<File>();
+			//			myFilesToZip.add(myResources);
+			compressResources(myResources,zipResourcesLocation);
+			// zip to ZipResourcesLocation
+			myFilesToZip.add(new File(zipResourcesLocation));
 
-		String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
-		//				// serialize the blueprint so we can zip it
-		saveObjectToFile(blueprint,filePath + "MyBlueprint.ser"); 
-		myFilesToZip.add(new File(filePath + "MyBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
-		//				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
-		return compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation);
-
-		//		}
-		//		return false;
+			String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+			// serialize the blueprint to temp folder so we can zip it
+			saveObjectToFile(blueprint,tempDirLocation + "MyBlueprint.ser"); 
+			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
+			//				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
+			// compress it!
+			if (compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation)){
+				// delete the temp directory
+				deleteDirectory(new File(tempDirLocation)); 
+			}
+		} else {
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -199,14 +210,14 @@ public class DataHandler {
 	 * @throws IOException
 	 * @throws ZipException
 	 */
-	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
+	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException { // create another parameter isEngine that determine where it comes from
 		String zipDestinationPath = TEST_FILE_PATH + "MyAuthoringEnvironment/";
 		decompress(filePath, zipDestinationPath);
 		File myDir = new File(TEST_FILE_PATH); // change to resources folder after it's completed
 		deleteDirectory(myDir);
-		decompress(zipDestinationPath + "SavedBlueprintZippedResources.zip", TEST_FILE_PATH);
-		return ((GameBlueprint) loadObjectFromFile(zipDestinationPath + "SavedBlueprintMyBlueprint.ser"));
-//		return null;
+		decompress(zipDestinationPath + "ZippedResources.zip", TEST_FILE_PATH);
+		return ((GameBlueprint) loadObjectFromFile(zipDestinationPath + "MyBlueprint.ser"));
+		//		return null;
 	}
 
 	/**
@@ -305,7 +316,7 @@ public class DataHandler {
 					//can be used as shown below
 					UnzipUtil.applyFileAttributes(fileHeader, outFile);
 
-					System.out.println("Done extracting: " + fileHeader.getFileName());
+//					System.out.println("Done extracting: " + fileHeader.getFileName());
 				} else {
 					System.err.println("fileheader is null. Shouldn't be here");
 				}
@@ -385,8 +396,11 @@ public class DataHandler {
 		if(b.getMyGameScenario() == null)	{
 			throw new InvalidGameBlueprintException("myGameScenario");
 		}
-		else if(b.getMyTDObjectSchemas() == null){
-			throw new InvalidGameBlueprintException("myTDObjectSchemas");
+		else if(b.getMyTowerSchemas() == null){
+			throw new InvalidGameBlueprintException("myTowerSchemas");
+		}
+		else if(b.getMyMonsterSchemas() == null){
+			throw new InvalidGameBlueprintException("myMonsterSchemas");
 		}
 		else if(b.getMyLevelSchemas() == null){
 			throw new InvalidGameBlueprintException("myLevelSchemas");
@@ -435,13 +449,12 @@ public class DataHandler {
 		return count == obj.getClass().getDeclaredFields().length;
 	}
 
-
-	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvalidDataException	{
+	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvalidDataException, InvalidGameBlueprintException	{
 		DataHandler d = new DataHandler();
-		TestObject t2 = new TestObject(1,2,"t2");
+		TestObject t2 = new TestObject("t2",1,2);
 		System.out.println(d.checkPublicData(t2));
 		GameBlueprint b = new GameBlueprint();
-		System.out.println(d.checkPublicData(b));
+		System.out.println(d.checkGameBlueprint(b));
 
 	}
 }

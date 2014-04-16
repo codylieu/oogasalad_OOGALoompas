@@ -1,4 +1,4 @@
-package main.java.player;
+package main.java.player.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +8,8 @@ import javax.swing.ButtonGroup;
 import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+
+import main.java.player.TDPlayerEngine;
 
 public class DifficultyPanel extends JPanel{
 	public static final String EASY = "easy";

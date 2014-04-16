@@ -30,6 +30,15 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import main.java.player.dlc.RepositoryViewer;
+import main.java.player.panels.DifficultyPanel;
+import main.java.player.panels.GameInfoPanel;
+import main.java.player.panels.HelpTextPanel;
+import main.java.player.panels.InfoPanel;
+import main.java.player.panels.TowerChooser;
+import main.java.player.panels.UnitInfoPanel;
+import main.java.player.panels.WelcomeButtonPanelListener;
+import main.java.player.util.Sound;
 import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -387,9 +396,5 @@ public class Player {
 		frame.getContentPane().add(cards, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
-	}
-
-	public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-		new Player();
 	}
 }

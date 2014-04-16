@@ -1,8 +1,10 @@
-package main.java.player;
+package main.java.player.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
+
+import main.java.player.Player;
 
 public class WelcomeButtonPanelListener implements ActionListener{
 

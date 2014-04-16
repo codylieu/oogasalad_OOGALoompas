@@ -1,4 +1,4 @@
-package main.java.data.datahandler;
+package main.java.data;
 
 import java.awt.geom.Point2D;
 import java.util.List;
