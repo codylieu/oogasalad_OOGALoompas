@@ -45,6 +45,11 @@ public class TDMap {
         for (TileSchema ts : tileSchemas) {
             Map<String, Serializable> tsAttributeMap = ts.getAttributesMap();
             String tileMapFileName = (String) tsAttributeMap.get(TileSchema.TILEMAP_FILE_NAME);
+
+            if (tileMaps.get(tileMapFileName) == null) {
+                continue; // TODO: fix
+            }
+
             int tileRow = (Integer) tsAttributeMap.get(TileSchema.CANVAS_ROW);
             int tileCol = (Integer) tsAttributeMap.get(TileSchema.CANVAS_COL);
             int tileMapRow = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_ROW);
