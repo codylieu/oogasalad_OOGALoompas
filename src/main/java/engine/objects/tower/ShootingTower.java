@@ -9,6 +9,7 @@ import main.java.engine.objects.TDObject;
 import main.java.engine.objects.detector.TargetDetectorInterface;
 import main.java.engine.objects.detector.monsterdetector.*;
 import main.java.engine.objects.projectile.DamageProjectile;
+import main.java.engine.objects.projectile.PiercingProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 
 
@@ -107,7 +108,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
 
     public void fireProjectile (double angle) {
 
-        new DamageProjectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
+        new PiercingProjectile(getXCoordinate(), getYCoordinate(), angle, myDamage, myBulletImage);
 
     }
 
@@ -115,7 +116,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
      * Fires projected at a target x and y speed with the tower's damage factor
      */
     public void fireProjectile (double xspeed, double yspeed) {
-        new DamageProjectile(getXCoordinate(), getYCoordinate(), xspeed, yspeed, myDamage,
+        new PiercingProjectile(getXCoordinate(), getYCoordinate(), xspeed, yspeed, myDamage,
                              myBulletImage);
     }
 }

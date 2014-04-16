@@ -92,6 +92,7 @@ public class Model {
 		engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
 		engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
 		engine.defineImage("row_bomb", "-", TDItem.ITEM_CID, RESOURCE_PATH + "Big_Ben.png", "-");
+		engine.defineImage("fire", "-", 0, RESOURCE_PATH + "fire.png", "-");
 	}
 
 	/**

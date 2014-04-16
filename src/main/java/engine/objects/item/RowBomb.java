@@ -33,8 +33,14 @@ public class RowBomb extends TDItem{
 					m.takeDamage(DAMAGE);
 				}
 			}
+			lightFire();
 			setDead();
 		} else flash(timeCounter, FLASH_INTERVAL, IMAGE);
+	}
+
+	private void lightFire() {
+		
+		
 	}
 
 	private boolean isInRange(Monster m, double x, double y) {
