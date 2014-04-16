@@ -289,17 +289,7 @@ public class TerrainEditorTab extends EditorTab {
 	 * calls upon myTileSelectionManager to add the tile display
 	 */
 	private void importTileDisplay(File f) {
-		String pixels = queryUser(PIXEL_QUERY);
-		try {
-			int pixelCount = Integer.parseInt(pixels);
-			if (pixelCount < 40 && pixelCount > 10) {
-				myTileSelectionManager.addTileDisplay(f, pixelCount);
-			} else {
-				JOptionPane.showMessageDialog(this, PIXEL_RANGE);
-			}
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
+		myTileSelectionManager.addTileDisplay(f);
 	}
 
 	private String queryUser(String query) {

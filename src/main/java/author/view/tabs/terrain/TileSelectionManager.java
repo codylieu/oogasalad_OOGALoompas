@@ -24,8 +24,8 @@ public class TileSelectionManager {
 		myTileEditPanel = new TileEditingPanel(this);
 	}
 	
-	protected void addTileDisplay(File mapFile, int pixels) {
-		TileDisplay currTileDisp = new TileDisplay(this, mapFile, pixels);
+	protected void addTileDisplay(File mapFile) {
+		TileDisplay currTileDisp = new TileDisplay(this, mapFile);
 		myTileDisplays.add(currTileDisp);
 		myTileDisplayTab.addTab(mapFile.getName(), currTileDisp.getTileScrollPane());
 	}
