@@ -1,7 +1,9 @@
 package main.java.schema;
 
 import main.java.schema.map.GameMapSchema;
+import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 
 import java.io.Serializable;
 import java.util.List;
@@ -16,7 +18,8 @@ import java.util.List;
  */
 public class GameBlueprint implements Serializable {
 	private GameSchema myGameScenario;
-	private List<TDObjectSchema> myTDObjectSchemas;
+	private List<MonsterSchema> myMonsterSchemas;
+	private List<TowerSchema> myTowerSchemas;
 	private List<WaveSpawnSchema> myLevelSchemas;
 	private List<GameMapSchema> myGameMapSchemas;
 
@@ -28,13 +31,21 @@ public class GameBlueprint implements Serializable {
 		this.myGameScenario = myGameScenario;
 	}
 
-    public List<TDObjectSchema> getMyTDObjectSchemas() {
-        return myTDObjectSchemas;
-    }
+	public List<TowerSchema> getMyTowerSchemas() {
+		return myTowerSchemas;
+	}
 
-    public void setMyTDObjectSchemas(List<TDObjectSchema> myTDObjectSchemas) {
-        this.myTDObjectSchemas = myTDObjectSchemas;
-    }
+	public void setMyTowerSchemas(List<TowerSchema> myTowerSchemas) {
+		this.myTowerSchemas = myTowerSchemas;
+	}
+	
+	public List<MonsterSchema> getMyMonsterSchemas() {
+		return myMonsterSchemas;
+	}
+
+	public void setMyMonsterSchemas(List<MonsterSchema> myMonsterSchemas) {
+		this.myMonsterSchemas = myMonsterSchemas;
+	}
 
 	public List<WaveSpawnSchema> getMyLevelSchemas() {
 		return myLevelSchemas;
