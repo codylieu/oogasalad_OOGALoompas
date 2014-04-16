@@ -51,21 +51,21 @@ public class EnvironmentKnowledge {
      * @param y tower y-coor
      * @return coordinates of the nearest monster in the form of a Point2D object
      */
-    public Point2D getNearestMonsterCoordinate (double x, double y) {
-
-        double minDistance = Double.MAX_VALUE;
-        Point2D closestMonsterCoor = null;
-        Point2D towerCoordinate = new Point2D.Double(x, y);
-
-        for (Monster m : allMonsters) {
-            if (m.getCurrentCoor().distance(towerCoordinate) < minDistance) {
-                minDistance = m.getCurrentCoor().distance(towerCoordinate);
-                closestMonsterCoor = centerCoordinate(m);
-            }
-        }
-
-        return closestMonsterCoor;
-    }
+//    public Point2D getNearestMonsterCoordinate (double x, double y) {
+//
+//        double minDistance = Double.MAX_VALUE;
+//        Point2D closestMonsterCoor = null;
+//        Point2D towerCoordinate = new Point2D.Double(x, y);
+//
+//        for (Monster m : allMonsters) {
+//            if (m.getCurrentCoor().distance(towerCoordinate) < minDistance) {
+//                minDistance = m.getCurrentCoor().distance(towerCoordinate);
+//                closestMonsterCoor = centerCoordinate(m);
+//            }
+//        }
+//
+//        return closestMonsterCoor;
+//    }
 
     public List<ITower> getTowerCoordinatesInRange (double x, double y, double range) {
         Point2D towerCoordinate = new Point2D.Double(x, y);
@@ -100,6 +100,24 @@ public class EnvironmentKnowledge {
      */
     public void grantPlayerMoney (int grantedMoney) {
         currentPlayer.addMoney(grantedMoney);
+    }
+    
+    /**
+     * Returns the list of all the monsters on map
+     * 
+     * @return list of monsters
+     */
+    public List<Monster> getAllMonsters() {
+    	return allMonsters;
+    }
+    
+    /**
+     * Returns the array representing all towers on map
+     * 
+     * @return an array of towers
+     */
+    public ITower[][] getAllTowers() {
+    	return allTowers;
     }
 
 }

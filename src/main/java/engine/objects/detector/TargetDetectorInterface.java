@@ -1,0 +1,23 @@
+package main.java.engine.objects.detector;
+
+import java.util.List;
+
+import main.java.engine.EnvironmentKnowledge;
+import main.java.engine.objects.TDObject;
+
+/**
+ * Interface for the object's targeting behavior
+ * The object can be a tower, a monster, or an item
+ */
+public interface TargetDetectorInterface {
+	
+	/**
+	 * Find the appropriate target(s)
+	 * @param x: x-coor
+	 * @param y: y-coor
+	 * @param environmentKnowledge
+	 * @returna list of targeted objects
+	 */
+	public List<TDObject> findTarget(double x, double y, EnvironmentKnowledge environmentKnowledge);
+	
+}

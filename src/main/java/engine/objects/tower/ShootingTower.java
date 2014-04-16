@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
+import main.java.engine.objects.detector.TargetDetectorInterface;
+import main.java.engine.objects.detector.monsterdetector.NearestMonsterDetector;
 import main.java.engine.objects.projectile.DamageProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 
@@ -27,6 +29,8 @@ public class ShootingTower extends TowerBehaviorDecorator {
     protected double myFiringSpeed;
     protected double myRange;
     protected String myBulletImage;
+    
+    private TargetDetectorInterface myDetector = new NearestMonsterDetector();
 
     /**
      * Create a new tower by adding shooting behavior to an existing tower
@@ -67,10 +71,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
 
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
-        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
+//        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
+    	fire(myDetector.findTarget(getXCoordinate(), getYCoordinate(), environ).get(0));
     }
 
-    public void fire (Point2D target) {
+    private void fire (Point2D target) {
         if (target == null) { return; }
         Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
         if (inFiringInterval() && target.distance(currCoor) < myRange) {
@@ -79,6 +84,10 @@ public class ShootingTower extends TowerBehaviorDecorator {
                     Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
             fireProjectile(angle);
         }
+    }
+    
+    private void fire(TDObject target) {
+    	fire(new Point2D.Double((target).x, (target).y));
     }
 
     /**
