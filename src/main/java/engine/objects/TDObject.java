@@ -55,4 +55,20 @@ public abstract class TDObject extends JGObject implements Serializable {
     public Point2D getCurrentCoor () {
         return new Point2D.Double(this.x, this.y);
     }
+    
+    /**
+     * Flash by setting image to null based on flashInterval
+     * 
+     * @param myTimingCounter: timer
+     * @param flashInterval: the period at which the object should flash
+     * @param myImage: the image of the object when it's done flashing
+     */
+    protected void flash (double myTimingCounter, double flashInterval, String myImage) {
+        if (myTimingCounter % flashInterval == 0) {
+            this.setImage(myImage);
+        }
+        else {
+            this.setImage(null);
+        }
+    }
 }

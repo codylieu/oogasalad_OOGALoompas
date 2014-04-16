@@ -1,6 +1,7 @@
 package main.java.engine;
 
 import java.awt.event.KeyEvent;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import jgame.JGColor;
@@ -61,6 +62,14 @@ public class TestEngine extends JGEngine {
         	model.checkAndRemoveTower(getMouseX(), getMouseY());
 //        	model.upgradeTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
+        }
+        if (getKey(KeyEvent.VK_2)) {
+        	try {
+				model.placeItem("RowBomb", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_2);
         }
         try {
 			model.updateGame();
