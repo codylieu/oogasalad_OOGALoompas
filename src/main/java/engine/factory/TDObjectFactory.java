@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
 import main.java.engine.objects.Exit;
@@ -46,10 +47,21 @@ public class TDObjectFactory {
                     Model.RESOURCE_PATH + s.getAttributesMap().get(TDObjectSchema.IMAGE_NAME);
             engine.defineImage(objName, "-", 1, objImagePath, "-");
             tdObjectSchemaMap.put(objName, s);
-            if(s instanceof TowerSchema) {
-                possibleTowersNames.add(objName);
-            }
         }
+    }
+    
+    @SuppressWarnings("unchecked")
+	public void loadTowerSchemas (List<TowerSchema> schemas) {
+    	for (TowerSchema s: schemas) {
+    		possibleTowersNames.add((String) s.getAttributesMap().get(TDObjectSchema.NAME));
+    	}
+    	// Perhaps a better method of casting than using an intermediate wildcard type?
+    	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
+    }
+    
+    @SuppressWarnings("unchecked")
+	public void loadMonsterSchemas (List<MonsterSchema> schemas) {
+    	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
     }
 
     /**
