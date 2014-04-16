@@ -35,7 +35,7 @@ public class FreezeTower extends ShootingTower {
 
     @Override
     public void fireProjectile (double angle) {
-        new FreezeProjectile(getXCoordinate(), getYCoordinate(), angle, myFreezeSlowdownProportion,
+        new FreezeProjectile(centerCoordinate().getX(), centerCoordinate().getY(), angle, myFreezeSlowdownProportion,
                              myBulletImage);
     }
 
