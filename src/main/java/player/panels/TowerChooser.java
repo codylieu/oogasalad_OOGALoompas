@@ -1,4 +1,4 @@
-package main.java.player;
+package main.java.player.panels;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +10,10 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+
+import main.java.player.TDPlayerEngine;
+import main.java.player.util.Observing;
+import main.java.player.util.Subject;
 
 public class TowerChooser extends JPanel implements ActionListener, Subject{
 	private JComboBox<String> towerComboBox;
@@ -44,6 +48,7 @@ public class TowerChooser extends JPanel implements ActionListener, Subject{
 
 	public void getTowerNames(){
 		List<String> towerNameList = engine.getPossibleTowers();
+		System.out.println(engine.getPossibleTowers().size());
 		comboBoxModel.removeAllElements();
 		for (String s: towerNameList) {
 			comboBoxModel.addElement(s);

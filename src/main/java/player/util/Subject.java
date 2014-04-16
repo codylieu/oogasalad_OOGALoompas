@@ -1,4 +1,4 @@
-package main.java.player;
+package main.java.player.util;
 
 public interface Subject {
 	public void register(Observing o);

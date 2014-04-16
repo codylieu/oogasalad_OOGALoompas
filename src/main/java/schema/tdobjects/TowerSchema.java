@@ -49,7 +49,7 @@ public class TowerSchema extends TDObjectSchema {
         myAttributeSet.add(SHRAPNEL_DAMAGE);
         myAttributeSet.add(SHRAPNEL_IMAGE_NAME);
         myAttributeSet.add(FREEZE_SLOWDOWN_PROPORTION);
-        myAttributeSet.add(UPGRADE_PATH);
+        myAttributeSet.add(TowerSchema.UPGRADE_PATH);
     }
     
     public TowerSchema(String name) {

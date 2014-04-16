@@ -8,12 +8,15 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import net.lingala.zip4j.exception.ZipException;
-
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.engine.Model;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.player.panels.TowerChooser;
+import main.java.player.util.CursorState;
+import main.java.player.util.Observing;
+import main.java.player.util.Subject;
 
 
 public class TDPlayerEngine extends JGEngine implements Subject, Observing{
@@ -50,12 +53,13 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
 		this.model = new Model(this);
+		
 	
-        try {
+        /*try {
             model.loadGameBlueprint(null); // TODO: null for now
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 	}
 
 	/*public int getFramePerSecond(){

@@ -221,8 +221,8 @@ public class Model {
                                  (Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));
 
         // init factory objects
-        List<TDObjectSchema> tdObjectSchemas = testBP.getMyTDObjectSchemas();
-        factory.loadTDObjectSchemas(tdObjectSchemas);
+        factory.loadTowerSchemas(testBP.getMyTowerSchemas());
+        factory.loadMonsterSchemas(testBP.getMyMonsterSchemas());
 
         // init levels
         for (WaveSpawnSchema wave : testBP.getMyLevelSchemas()) {
@@ -404,8 +404,9 @@ public class Model {
         GameBlueprint testBlueprint = new GameBlueprint();
 
         // Populate TDObjects
-        List<TDObjectSchema> testTDObjectSchema = new ArrayList<>();
-
+        List<TowerSchema> testTowerSchema = new ArrayList<>();
+        List<MonsterSchema> testMonsterSchema = new ArrayList<>();
+        
         // Create test towers
         TowerSchema testTowerOne = new TowerSchema();
         testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
@@ -415,7 +416,7 @@ public class Model {
         towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
         testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
         testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
-        testTDObjectSchema.add(testTowerOne);
+        testTowerSchema.add(testTowerOne);
         
         TowerSchema testTowerTwo = new TowerSchema();
         testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
@@ -425,7 +426,7 @@ public class Model {
         towerBehaviors2.add(TowerBehaviors.SHOOTING);
         testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
         testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
-        testTDObjectSchema.add(testTowerTwo);
+        testTowerSchema.add(testTowerTwo);
         
         TowerSchema testTowerThree = new TowerSchema();
         testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
@@ -436,7 +437,7 @@ public class Model {
         towerBehaviors3.add(TowerBehaviors.BOMBING);
         testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
         testTowerThree.addAttribute(TowerSchema.COST, (double) 10);
-        testTDObjectSchema.add(testTowerThree);
+        testTowerSchema.add(testTowerThree);
         
         TowerSchema testTowerFour = new TowerSchema();
         testTowerFour.addAttribute(TowerSchema.NAME, "test-tower-4");
@@ -447,7 +448,7 @@ public class Model {
         towerBehaviors4.add(TowerBehaviors.FREEZING);
         testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors4);
         testTowerFour.addAttribute(TowerSchema.COST, (double) 10);
-        testTDObjectSchema.add(testTowerFour);
+        testTowerSchema.add(testTowerFour);
         
         // Create test monsters
         SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
@@ -455,9 +456,10 @@ public class Model {
         testMonsterOne.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
         testMonsterOne.addAttribute(MonsterSchema.SPEED, (double) 1);
         testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
-        testTDObjectSchema.add(testMonsterOne);
+        testMonsterSchema.add(testMonsterOne);
 
-        testBlueprint.setMyTDObjectSchemas(testTDObjectSchema);
+        testBlueprint.setMyTowerSchemas(testTowerSchema);
+        testBlueprint.setMyMonsterSchemas(testMonsterSchema);
 
         // Create test game schemas
         GameSchema testGameSchema = new GameSchema();

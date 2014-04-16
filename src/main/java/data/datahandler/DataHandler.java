@@ -396,8 +396,11 @@ public class DataHandler {
 		if(b.getMyGameScenario() == null)	{
 			throw new InvalidGameBlueprintException("myGameScenario");
 		}
-		else if(b.getMyTDObjectSchemas() == null){
-			throw new InvalidGameBlueprintException("myTDObjectSchemas");
+		else if(b.getMyTowerSchemas() == null){
+			throw new InvalidGameBlueprintException("myTowerSchemas");
+		}
+		else if(b.getMyMonsterSchemas() == null){
+			throw new InvalidGameBlueprintException("myMonsterSchemas");
 		}
 		else if(b.getMyLevelSchemas() == null){
 			throw new InvalidGameBlueprintException("myLevelSchemas");

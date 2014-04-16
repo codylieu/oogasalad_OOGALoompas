@@ -1,4 +1,4 @@
-package main.java.player;
+package main.java.player.panels;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
