@@ -1,6 +1,8 @@
 package main.java.engine;
 
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import jgame.JGColor;
@@ -8,6 +10,8 @@ import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import jgame.platform.StdGame;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+
+import javax.swing.*;
 import main.java.player.util.CursorState;
 import main.java.player.util.TowerGhost;
 
@@ -54,13 +58,27 @@ public class TestEngine extends JGEngine {
             clearKey(KeyEvent.VK_1);
         }
         if (getMouseButton(1)) {
-            model.placeTower(getMouseX(), getMouseY(), towers.get(currTower%towers.size()));
+            model.placeTower(getMouseX(), getMouseY(), towers.get(currTower % towers.size()));
             clearMouseButton(1);
         }
         if (getMouseButton(3)) { // right click
         	model.checkAndRemoveTower(getMouseX(), getMouseY());
 //        	model.upgradeTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
+        }
+        if (getKey(KeyEvent.VK_M)) {
+            JFileChooser fileChooser = new JFileChooser();
+            int response = fileChooser.showOpenDialog(null);
+            if(response == JFileChooser.APPROVE_OPTION){
+                File file = fileChooser.getSelectedFile();
+                try {
+                    model.loadMapTest(file.getAbsolutePath());
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } // TODO: replace to load game blueprint
+                System.out.println("FILE CHOSEN: " + file.getName());
+            }
         }
         try {
 			model.updateGame();
