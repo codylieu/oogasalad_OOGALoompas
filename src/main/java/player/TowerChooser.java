@@ -44,6 +44,7 @@ public class TowerChooser extends JPanel implements ActionListener, Subject{
 
 	public void getTowerNames(){
 		List<String> towerNameList = engine.getPossibleTowers();
+		System.out.println(engine.getPossibleTowers().size());
 		comboBoxModel.removeAllElements();
 		for (String s: towerNameList) {
 			comboBoxModel.addElement(s);
