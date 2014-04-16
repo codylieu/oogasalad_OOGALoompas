@@ -28,8 +28,10 @@ public class SplashTower extends ShootingTower {
     @Override
     public void fireProjectile (double angle) {
     	for (int i = 0; i < SPLASH_X.length; i++) {
-            new DamageProjectile(centerCoordinate().getX(), centerCoordinate().getY(), SPLASH_X[i],
-                           SPLASH_Y[i], myDamage, myBulletImage);
+            new DamageProjectile(
+            		((SimpleTower) baseTower).centerCoordinate().getX(),
+            		((SimpleTower) baseTower).centerCoordinate().getY(),
+            		SPLASH_X[i], SPLASH_Y[i], myDamage, myBulletImage);
         }
     }
 

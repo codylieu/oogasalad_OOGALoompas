@@ -108,7 +108,9 @@ public class ShootingTower extends TowerBehaviorDecorator {
 
     public void fireProjectile (double angle) {
 
-        new PiercingProjectile(centerCoordinate().getX(), centerCoordinate().getY(), 
+        new PiercingProjectile(
+        		((SimpleTower) baseTower).centerCoordinate().getX(),
+        		((SimpleTower) baseTower).centerCoordinate().getY(),
         		angle, myDamage, myBulletImage);
 
     }
@@ -117,20 +119,13 @@ public class ShootingTower extends TowerBehaviorDecorator {
      * Fires projected at a target x and y speed with the tower's damage factor
      */
     public void fireProjectile (double xspeed, double yspeed) {
-        new PiercingProjectile(centerCoordinate().getX(), centerCoordinate().getY(), 
+        new PiercingProjectile(
+        		((SimpleTower) baseTower).centerCoordinate().getX(),
+        		((SimpleTower) baseTower).centerCoordinate().getY(), 
         		xspeed, yspeed, myDamage, myBulletImage);
     }
     
-    /**
-     * Find the center coordinates of the tower
-     * which will be used as the origin of shooting
-     * 
-     * @return a Point2D object representing center coordinates
-     */
-    protected Point2D centerCoordinate () {
-        return new Point2D.Double(getXCoordinate() + ((SimpleTower) baseTower).getImageBBoxConst().width / 2,
-                                  getYCoordinate() + ((SimpleTower) baseTower).getImageBBoxConst().height / 2);
-    }
+
     
     
 }

@@ -3,6 +3,8 @@ package main.java.engine.objects;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
+
+import main.java.engine.objects.tower.SimpleTower;
 import jgame.JGObject;
 
 
@@ -70,5 +72,16 @@ public abstract class TDObject extends JGObject implements Serializable {
         else {
             this.setImage(null);
         }
+    }
+    
+    /**
+     * Find the center coordinates of the tower
+     * which will be used as the origin of shooting
+     * 
+     * @return a Point2D object representing center coordinates
+     */
+    public Point2D centerCoordinate () {
+        return new Point2D.Double(x + this.getImageBBoxConst().width / 2,
+                                  y + this.getImageBBoxConst().height / 2);
     }
 }
