@@ -8,8 +8,8 @@ import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import jgame.platform.StdGame;
 import main.java.exceptions.engine.MonsterCreationFailureException;
-import main.java.player.TowerGhost;
 import main.java.player.util.CursorState;
+import main.java.player.util.TowerGhost;
 
 public class TestEngine extends JGEngine {
     private static TestEngine engine;

@@ -1,4 +1,4 @@
-package main.java.player;
+package main.java.player.util;
 
 import jgame.JGObject;
 

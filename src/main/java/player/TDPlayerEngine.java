@@ -17,6 +17,7 @@ import main.java.player.panels.TowerChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
+import main.java.player.util.TowerGhost;
 
 
 public class TDPlayerEngine extends JGEngine implements Subject, Observing{
