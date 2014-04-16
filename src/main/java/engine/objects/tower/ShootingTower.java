@@ -80,7 +80,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
 
     private void fire (Point2D target) {
         if (target == null) { return; }
-        Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
+//        Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
 //        if (inFiringInterval() && target.distance(currCoor) < myRange) {
         if (inFiringInterval()) {
             /* trigonometry from Guardian JGame example */
