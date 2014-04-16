@@ -217,16 +217,17 @@ public class Model {
 	 */
 
 	public void loadGameBlueprint(String filePath) throws ClassNotFoundException, IOException {
-		GameBlueprint bp = null;
-        try {
-            bp = dataHandler.loadBlueprint(filePath);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
+//		GameBlueprint bp = null;
+//        try {
+//            bp = dataHandler.loadBlueprint(filePath);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return;
+//        }
 
 		// TODO: use the actual game blueprint (aka bp)
-		GameBlueprint testBP = bp;
+//		GameBlueprint testBP = bp;
+		GameBlueprint testBP = createTestBlueprint();
 
 		// init player
 		GameSchema gameSchema = testBP.getMyGameScenario();
@@ -245,7 +246,7 @@ public class Model {
 		}
 
         // init map
-        TDMap map = new TDMap(engine, testBP.getMyGameMapSchemas().get(0)); // TODO: load each map
+//        TDMap map = new TDMap(engine, testBP.getMyGameMapSchemas().get(0)); // TODO: load each map
 	}
 
 	/**
