@@ -7,6 +7,13 @@ import java.util.List;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.monster.Monster;
 
+/**
+ * A detector that finds the monster nearest to the exit, 
+ * given that it is within the range
+ * 
+ *  * @author Lawrence
+ *
+ */
 public class MonsterClosestToExitDetector extends MonsterDetector {
 	
 	@Override

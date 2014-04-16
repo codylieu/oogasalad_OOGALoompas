@@ -8,6 +8,8 @@ import main.java.engine.objects.TDObject;
 /**
  * Interface for the object's targeting behavior
  * The object can be a tower, a monster, or an item
+ * 
+ * @author Lawrence
  */
 public interface TargetDetectorInterface {
 	

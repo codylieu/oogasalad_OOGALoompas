@@ -10,7 +10,9 @@ import main.java.engine.objects.detector.TargetDetectorInterface;
 import main.java.engine.objects.monster.Monster;
 
 /**
- * A detector that detects the monster nearest to the coordinates
+ * A detector that finds the monster nearest to the coordinates
+ * 
+ * @author Lawrence
  * 
  */
 public class NearestMonsterDetector extends MonsterDetector{

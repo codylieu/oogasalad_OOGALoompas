@@ -8,6 +8,14 @@ import main.java.engine.objects.TDObject;
 import main.java.engine.objects.detector.TargetDetectorInterface;
 import main.java.engine.objects.monster.Monster;
 
+/**
+ * Abstract super class designed specifically for 
+ * monster detectors
+ * Contains some common methods to avoid duplication
+ * 
+ * @author Lawrence
+ *
+ */
 public abstract class MonsterDetector implements TargetDetectorInterface{
 	
     /**
