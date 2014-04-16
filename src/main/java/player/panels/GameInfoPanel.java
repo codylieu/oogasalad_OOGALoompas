@@ -1,10 +1,14 @@
-package main.java.player;
+package main.java.player.panels;
 
 import java.util.Map;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import main.java.player.TDPlayerEngine;
+import main.java.player.util.Observing;
+import main.java.player.util.Subject;
 
 @SuppressWarnings("serial")
 public class GameInfoPanel extends JPanel implements Observing {

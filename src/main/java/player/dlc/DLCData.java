@@ -1,4 +1,4 @@
-package main.java.player;
+package main.java.player.dlc;
 
 public class DLCData {
 	private String description;

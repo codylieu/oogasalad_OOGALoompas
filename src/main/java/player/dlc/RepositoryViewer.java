@@ -1,4 +1,4 @@
-package main.java.player;
+package main.java.player.dlc;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

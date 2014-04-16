@@ -1,7 +1,11 @@
-package main.java.player;
+package main.java.player.panels;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+
+import main.java.player.TDPlayerEngine;
+import main.java.player.util.Observing;
+import main.java.player.util.Subject;
 
 @SuppressWarnings("serial")
 public class UnitInfoPanel extends JPanel implements Observing {
