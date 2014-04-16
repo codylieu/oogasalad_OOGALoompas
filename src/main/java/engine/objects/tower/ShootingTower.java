@@ -72,7 +72,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
 //        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
-    	fire(myDetector.findTarget(getXCoordinate(), getYCoordinate(), environ).get(0));
+    	fire((Point2D) myDetector.findTarget(getXCoordinate(), getYCoordinate(), environ).get(0));
     }
 
     private void fire (Point2D target) {
@@ -84,10 +84,6 @@ public class ShootingTower extends TowerBehaviorDecorator {
                     Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
             fireProjectile(angle);
         }
-    }
-    
-    private void fire(TDObject target) {
-    	fire(new Point2D.Double((target).x, (target).y));
     }
 
     /**

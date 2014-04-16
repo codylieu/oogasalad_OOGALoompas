@@ -18,6 +18,6 @@ public interface TargetDetectorInterface {
 	 * @param environmentKnowledge
 	 * @returna list of targeted objects
 	 */
-	public List<TDObject> findTarget(double x, double y, EnvironmentKnowledge environmentKnowledge);
+	public List<Object> findTarget(double x, double y, EnvironmentKnowledge environmentKnowledge);
 	
 }
