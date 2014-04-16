@@ -78,10 +78,12 @@ public class TestDataHandler {
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
 		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip");
-		File testBlueprintAfterTestingFile = new File("src/test/resources.replacement.testermyAuthoringEnvironment/MyBlueprint.ser");
+		String savedBlueprintLocation = "src/main/resources.loaded/Blueprints/MyBlueprint.ser";
+		File testBlueprintAfterTestingFile = new File(savedBlueprintLocation);
 		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
 		assertEquals(testBlueprintFile.length(),testBlueprintAfterTestingFile.length());
-		// load a blueprint, simulates 
+		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
+				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
 		
 //		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 	}

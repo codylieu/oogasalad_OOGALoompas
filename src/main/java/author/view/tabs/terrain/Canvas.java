@@ -1,8 +1,6 @@
 package main.java.author.view.tabs.terrain;
 import javax.swing.*;
 
-import main.java.author.view.tabs.terrain.types.TileObject;
-
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;

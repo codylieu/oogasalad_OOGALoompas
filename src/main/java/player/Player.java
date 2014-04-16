@@ -82,8 +82,8 @@ public class Player {
 	}
 
 	private void initSong() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		song = new Sound("src/main/resources/fox.wav");
-		soundOn = false;
+		song = new Sound("src/main/resources/backgroundmusic.wav");
+		soundOn = true;
 	}
 
 	public void showCard(String cardName){
@@ -248,13 +248,12 @@ public class Player {
 	}
 
 	public void toggleSound(){
-		if(!soundOn){
+		soundOn = soundOn ? false : true;
+		if(soundOn) {
 			song.loop();
-			soundOn = true;
 		}
-		else{
+		else {
 			song.stop();
-			soundOn = false;
 		}
 	}
 	

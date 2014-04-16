@@ -80,7 +80,7 @@ public class AuthoringView extends JFrame {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
-				if(tabbedPane.getSelectedComponent().getName().equals(WAVE_EDITOR_STRING)){
+				if(tabbedPane.getSelectedComponent() instanceof WaveEditorTab){
 					waveController.updateTable();
 				}
 			}
