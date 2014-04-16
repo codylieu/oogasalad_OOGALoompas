@@ -2,9 +2,12 @@ package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
+import main.java.engine.objects.detector.TargetDetectorInterface;
+import main.java.engine.objects.detector.monsterdetector.*;
 import main.java.engine.objects.projectile.DamageProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 
@@ -27,6 +30,8 @@ public class ShootingTower extends TowerBehaviorDecorator {
     protected double myFiringSpeed;
     protected double myRange;
     protected String myBulletImage;
+    
+    private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
 
     /**
      * Create a new tower by adding shooting behavior to an existing tower
@@ -67,13 +72,17 @@ public class ShootingTower extends TowerBehaviorDecorator {
 
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
-        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
+//        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
+    	List<Object> target = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
+    	if (target.size() < 1) return;
+    	fire((Point2D) target.get(0));
     }
 
-    public void fire (Point2D target) {
+    private void fire (Point2D target) {
         if (target == null) { return; }
-        Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
-        if (inFiringInterval() && target.distance(currCoor) < myRange) {
+//        Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
+//        if (inFiringInterval() && target.distance(currCoor) < myRange) {
+        if (inFiringInterval()) {
             /* trigonometry from Guardian JGame example */
             double angle =
                     Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());

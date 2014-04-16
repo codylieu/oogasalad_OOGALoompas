@@ -178,7 +178,7 @@ public class MainController {
         // Create test game schemas
         GameSchema testGameSchema = new GameSchema();
         testGameSchema.addAttribute(GameSchema.LIVES, 3);
-        testGameSchema.addAttribute(GameSchema.MONEY, 500);
+        testGameSchema.addAttribute(GameSchema.MONEY, 503);
 
         testBlueprint.setMyGameScenario(testGameSchema);
 
@@ -200,6 +200,10 @@ public class MainController {
         testWaves.add(testWaveSpawnSchemaThree);
 
         testBlueprint.setMyLevelSchemas(testWaves);
+        
+        // create real map functionality
+        List<GameMapSchema> mapSchema = myModel.getBlueprint().getMyGameMapSchemas();
+        testBlueprint.setMyGameMapSchemas(mapSchema);
 
         return testBlueprint;
 	}

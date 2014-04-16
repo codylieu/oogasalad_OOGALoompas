@@ -17,8 +17,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import main.java.author.view.tabs.terrain.types.TileObject;
-
 public class TileDisplay extends JPanel {
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
 	private TileSelectionManager myTileManager;
@@ -92,8 +90,8 @@ public class TileDisplay extends JPanel {
 				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT); // scale down image
 
 				TileObject imgDisplayObj = new TileObject(im);
-                imgDisplayObj.setMyXIndex(i); // Set row and column of where the thing is displayed
-                imgDisplayObj.setMyYIndex(j);
+                imgDisplayObj.setMyXIndex(j); // Set row and column of where the thing is displayed
+                imgDisplayObj.setMyYIndex(i);
                 imgDisplayObj.setMyTileMapFileName(myTileMapFile);
 				imgDisplayObj.addActionListener(actionListener(this, "updateSelection"));
 				imgDisplayObj.setIcon(new ImageIcon(scaledIm)); // place scaled image as jbutton icon

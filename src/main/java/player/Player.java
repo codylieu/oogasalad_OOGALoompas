@@ -69,7 +69,7 @@ public class Player {
 	private boolean soundOn;
 	private TowerChooser towerChooser;
 
-	public Player() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+	public Player(){
 		initSong();
 		makeFrame();
 		makeCards();
@@ -81,9 +81,15 @@ public class Player {
 		show();
 	}
 
-	private void initSong() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		song = new Sound("src/main/resources/fox.wav");
-		soundOn = false;
+	private void initSong(){
+			try {
+				song = new Sound("src/main/resources/backgroundmusic.wav");
+			} catch (LineUnavailableException | IOException
+					| UnsupportedAudioFileException e) {
+				//tell user song not found
+			}
+	
+		soundOn = true;
 	}
 
 	public void showCard(String cardName){
@@ -108,7 +114,6 @@ public class Player {
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
 
-					addGameCard(); //THIS NEEDS TO BE MOVED
                     try {
 						engine.loadBlueprintFile(file.getAbsolutePath());
 					} catch (ClassNotFoundException | IOException | ZipException e1) {
@@ -250,13 +255,12 @@ public class Player {
 	}
 
 	public void toggleSound(){
-		if(!soundOn){
+		soundOn = soundOn ? false : true;
+		if(soundOn) {
 			song.loop();
-			soundOn = true;
 		}
-		else{
+		else {
 			song.stop();
-			soundOn = false;
 		}
 	}
 	

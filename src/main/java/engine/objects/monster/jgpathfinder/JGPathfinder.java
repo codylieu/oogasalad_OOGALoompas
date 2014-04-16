@@ -12,6 +12,14 @@ public class JGPathfinder implements JGPathfinderInterface {
     private JGTileMap tileMap;
     private NodeMap nodeMap;
 
+    /**
+     * Create a new pathfinder with the given tilemap and heuristic.
+     *
+     * @param tileMap The tilemap to use to find a path
+     * @param pathfinderHeuristic The heuristic used to calculate
+     *                            the next tile to use.
+     * @param engine The engine being played on.
+     */
     public JGPathfinder(JGTileMap tileMap, JGPathfinderHeuristicInterface pathfinderHeuristic,
                         JGEngineInterface engine) {
         this.engine = engine;
@@ -21,7 +29,7 @@ public class JGPathfinder implements JGPathfinderInterface {
     }
 
     @Override
-    public JGPath getPath(JGPoint source, JGPoint target) {
+    public JGPath getPath(JGPoint source, JGPoint target) throws NoPossiblePathException {
         PriorityQueue<Node> open = new PriorityQueue<Node>();
         HashSet<Node> closed = new HashSet<Node>();
         open.add(nodeMap.getNode(source));
@@ -33,7 +41,7 @@ public class JGPathfinder implements JGPathfinderInterface {
 
             for (JGPoint n :  tileMap.getNeighbors(current.index)) {
                 Node neighbor = nodeMap.getNode(n);
-                double cost = current.pathCost + tileMap.getCostToMove(current.index, neighbor.index);
+                double cost = current.pathCost + tileMap.getCostToMove(neighbor.index);
 
                 if (open.contains(neighbor) && cost < neighbor.pathCost) {
                     open.remove(neighbor);
@@ -51,10 +59,10 @@ public class JGPathfinder implements JGPathfinderInterface {
         }
 
         if (open.peek() == null) {
-            return null; // No path exists, TODO: throw exception?
+            throw new NoPossiblePathException();
         }
 
-        JGPath path = new JGPath();
+        JGPath path = new JGPath(engine);
         current = open.poll();
         while (current.parent != null) {
             path.addFirst(current.index);
