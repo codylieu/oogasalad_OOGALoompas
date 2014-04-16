@@ -44,7 +44,7 @@ public class DamageProjectile extends TDObject {
     public void hit (JGObject obj) {
         if (and(obj.colid, Monster.MONSTER_CID)) {
             ((Monster) obj).takeDamage(myDamage);
-//            this.remove();
+            this.remove();
         }
     }
 }
