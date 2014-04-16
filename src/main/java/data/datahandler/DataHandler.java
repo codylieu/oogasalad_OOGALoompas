@@ -36,7 +36,7 @@ import main.java.schema.GameBlueprint;
  */
 
 public class DataHandler {
-	private final static String FILE_PATH = "src/test/resources"; // change back to src/main/resources after implementation is done!
+	private final static String FILE_PATH = "src/main/resources"; // change back to src/main/resources after implementation is done!
 	private final static String TEST_FILE_PATH = "src/test/resources.replacement.tester";
 	private final static int BUFF_SIZE = 4096;
 
