@@ -10,8 +10,8 @@ import main.java.engine.objects.detector.TargetDetectorInterface;
 import main.java.engine.objects.monster.Monster;
 
 /**
- * A detector that finds targets based on distance
- *
+ * A detector that detects the monster nearest to the coordinates
+ * 
  */
 public class NearestMonsterDetector extends MonsterDetector{
 
@@ -24,6 +24,7 @@ public class NearestMonsterDetector extends MonsterDetector{
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
 			if (m.getCurrentCoor().distance(towerCoordinate) < minDistance) {
 				minDistance = m.getCurrentCoor().distance(towerCoordinate);
+				// a tower should only target one monster at a time
 				closestMonster.clear();
 				closestMonster.add(centerCoordinate(m));
 			}
