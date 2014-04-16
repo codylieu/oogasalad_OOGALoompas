@@ -7,6 +7,10 @@ import main.java.engine.objects.projectile.Bomb;
 import main.java.schema.tdobjects.TowerSchema;
 
 
+/**
+ * A type of tower that has splash impact upon hitting a target
+ *
+ */
 public class BombTower extends ShootingTower {
 
     public static final double DEFAULT_SHRAPNEL_DAMAGE = 10;
