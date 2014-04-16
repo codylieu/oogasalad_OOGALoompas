@@ -497,6 +497,16 @@ public class Model {
 		testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors4);
 		testTowerFour.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerFour);
+		
+		TowerSchema testTowerFive = new TowerSchema();
+		testTowerFive.addAttribute(TowerSchema.NAME, "test-tower-5");
+		testTowerFive.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+		testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+		Collection<TowerBehaviors> towerBehaviors5= new ArrayList<TowerBehaviors>();
+		towerBehaviors5.add(TowerBehaviors.SPLASHING);
+		testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors5);
+		testTowerFive.addAttribute(TowerSchema.COST, (double) 10);
+		testTowerSchema.add(testTowerFive);
 
 		// Create test monsters
 		SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();

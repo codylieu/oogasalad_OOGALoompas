@@ -6,8 +6,8 @@ import jgame.JGObject;
 
 public class Bomb extends DamageProjectile {
 
-    public static final double[] BOMB_SPRAY_X = { 0.0, 0.0, -4.0, 4.0, 2.0 -2.0, 2.0, -2.0, 4.0};
-    public static final double[] BOMB_SPRAY_Y = { -4.0, 4.0, 0.0, 0.0, 2.0, -2.0, -2.0, 2.0, 4.0};
+    public static final double[] BOMB_SPRAY_X = { 0.0, 0.0, -4.0, 4.0, 2.0, -2.0, 2.0, -2.0};
+    public static final double[] BOMB_SPRAY_Y = { -4.0, 4.0, 0.0, 0.0, 2.0, -2.0, -2.0, 2.0};
 
     private String shrapnelImage;
     private double shrapnelDamage;

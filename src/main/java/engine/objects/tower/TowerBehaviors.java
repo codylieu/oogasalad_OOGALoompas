@@ -7,7 +7,8 @@ public enum TowerBehaviors implements Serializable {
     SHOOTING(ShootingTower.class),
     MONEY_FARMING(MoneyTower.class),
     BOMBING(BombTower.class),
-    FREEZING(FreezeTower.class);
+    FREEZING(FreezeTower.class),
+    SPLASHING(SplashTower.class);
 
     private Class<? extends ITower> concreteClass;
 

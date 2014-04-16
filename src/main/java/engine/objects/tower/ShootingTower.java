@@ -119,4 +119,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
         new PiercingProjectile(getXCoordinate(), getYCoordinate(), xspeed, yspeed, myDamage,
                              myBulletImage);
     }
+    
+    protected Point2D centerCoordinate () {
+        return new Point2D.Double(getXCoordinate() + ((SimpleTower) baseTower).getImageBBoxConst().width / 2,
+                                  getYCoordinate() + ((SimpleTower) baseTower).getImageBBoxConst().height / 2);
+    }
+    
+    
 }
