@@ -45,11 +45,11 @@ public class TDMap {
         for (TileSchema ts : tileSchemas) {
             Map<String, Serializable> tsAttributeMap = ts.getAttributesMap();
             String tileMapFileName = (String) tsAttributeMap.get(TileSchema.TILEMAP_FILE_NAME);
-            int tileRow = (int) tsAttributeMap.get(TileSchema.CANVAS_ROW);
-            int tileCol = (int) tsAttributeMap.get(TileSchema.CANVAS_COL);
-            int tileMapRow = (int) tsAttributeMap.get(TileSchema.TILEMAP_ROW);
-            int tileMapCol = (int) tsAttributeMap.get(TileSchema.TILEMAP_COL);
-            int tileCID = (int) tsAttributeMap.get(TileSchema.TILE_CID);
+            int tileRow = (Integer) tsAttributeMap.get(TileSchema.CANVAS_ROW);
+            int tileCol = (Integer) tsAttributeMap.get(TileSchema.CANVAS_COL);
+            int tileMapRow = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_ROW);
+            int tileMapCol = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_COL);
+            int tileCID = (Integer) tsAttributeMap.get(TileSchema.TILE_CID);
             int tileIndex = tileMapRow * tileMaps.get(tileMapFileName).numCols + tileMapCol;
 
             String tileName = tileMapFileName + tileMapCol + tileMapRow;
@@ -72,9 +72,9 @@ public class TDMap {
         public TileMap(TileMapSchema tileMapSchema) {
             Map<String, Serializable> tmsAttributesMap = tileMapSchema.getAttributesMap();
             name = (String) tmsAttributesMap.get(TileMapSchema.TILEMAP_FILE_NAME);
-            pixelSize = (int) tmsAttributesMap.get(TileMapSchema.PIXEL_SIZE);
-            numRows = (int) tmsAttributesMap.get(TileMapSchema.NUM_ROWS);
-            numCols = (int) tmsAttributesMap.get(TileMapSchema.NUM_COLS);
+            pixelSize = (Integer) tmsAttributesMap.get(TileMapSchema.PIXEL_SIZE);
+            numRows = (Integer) tmsAttributesMap.get(TileMapSchema.NUM_ROWS);
+            numCols = (Integer) tmsAttributesMap.get(TileMapSchema.NUM_COLS);
         }
     }
 }

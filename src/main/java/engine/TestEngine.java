@@ -66,6 +66,14 @@ public class TestEngine extends JGEngine {
 //        	model.upgradeTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
         }
+        if (getKey(KeyEvent.VK_2)) {
+        	try {
+				model.placeItem("RowBomb", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_2);
+        }
         if (getKey(KeyEvent.VK_M)) {
             JFileChooser fileChooser = new JFileChooser();
             int response = fileChooser.showOpenDialog(null);
@@ -87,9 +95,8 @@ public class TestEngine extends JGEngine {
 			e.printStackTrace();
 		}
         moveObjects();
-        model.checkCollisions();
+        model.checkCollisions();}
 //        model.spawnMonster(100, 150);
-    }
 
     @Override
     public void paintFrame() {

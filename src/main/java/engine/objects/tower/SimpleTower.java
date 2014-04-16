@@ -72,7 +72,7 @@ public class SimpleTower extends TDObject implements ITower {
         myTimingCounter++;
         
         if (myTimingCounter <= myBuildUpTime) {
-            flash();
+            flash(myTimingCounter, FLASH_INTERVAL, myImage);
             return false;   
             // do no further behavior if still building up
         }
@@ -84,14 +84,14 @@ public class SimpleTower extends TDObject implements ITower {
     /**
      * Flash by setting image to null based on FLASH_INTERVAL
      */
-    private void flash () {
-        if (myTimingCounter % FLASH_INTERVAL == 0) {
-            this.setImage(myImage);
-        }
-        else {
-            this.setImage(null);
-        }
-    }
+//    private void flash () {
+//        if (myTimingCounter % FLASH_INTERVAL == 0) {
+//            this.setImage(myImage);
+//        }
+//        else {
+//            this.setImage(null);
+//        }
+//    }
 
     @Override
     public double getCost () {
