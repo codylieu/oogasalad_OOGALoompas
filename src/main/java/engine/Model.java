@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.zip.ZipException;
 
 import jgame.platform.JGEngine;
-import main.java.data.datahandler.DataHandler;
+import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;

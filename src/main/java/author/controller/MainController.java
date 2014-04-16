@@ -14,7 +14,7 @@ import main.java.author.controller.tabbed_controllers.GameSettingsController;
 import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
 import main.java.schema.map.GameMapSchema;
-import main.java.data.datahandler.DataHandler;
+import main.java.data.DataHandler;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.data.InvalidGameBlueprintException;
 import main.java.schema.GameBlueprint;

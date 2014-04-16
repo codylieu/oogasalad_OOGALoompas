@@ -1,4 +1,4 @@
-package main.java.data.datahandler;
+package main.java.data;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

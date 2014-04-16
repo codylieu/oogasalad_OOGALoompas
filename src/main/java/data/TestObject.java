@@ -1,4 +1,4 @@
-package main.java.data.datahandler;
+package main.java.data;
 
 public class TestObject {
 	public int x;
