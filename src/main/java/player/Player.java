@@ -89,7 +89,7 @@ public class Player {
 				//tell user song not found
 			}
 	
-		soundOn = true;
+		soundOn = false;
 	}
 
 	public void showCard(String cardName){

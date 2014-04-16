@@ -73,11 +73,11 @@ public class Model {
 		gameState = new GameState();
 		items = new ArrayList<TDItem>();
 
-		try {
+		/*try {
 			loadGameBlueprint(null);// TODO: REPLACE
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 
 		dataHandler = new DataHandler();
 
