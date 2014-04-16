@@ -73,6 +73,7 @@ public class TestEngine extends JGEngine {
 				e.printStackTrace();
 			}
         	clearKey(KeyEvent.VK_2);
+        }
         if (getKey(KeyEvent.VK_M)) {
             JFileChooser fileChooser = new JFileChooser();
             int response = fileChooser.showOpenDialog(null);
@@ -96,7 +97,6 @@ public class TestEngine extends JGEngine {
         moveObjects();
         model.checkCollisions();}
 //        model.spawnMonster(100, 150);
-    }
 
     @Override
     public void paintFrame() {
