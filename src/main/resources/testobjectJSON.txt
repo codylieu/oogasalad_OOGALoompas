@@ -1,0 +1,1 @@
+{"x":1,"y":2,"myName":"t1","myExtended":{"name":"wee","lives":10,"health":50}}
