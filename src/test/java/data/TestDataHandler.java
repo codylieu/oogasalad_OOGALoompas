@@ -54,30 +54,6 @@ public class TestDataHandler {
 //		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
 //	}
 	
-//	@Test
-//	public void testStateSavingAndLoading() {
-//		//Set up GameState
-//		GameState state = new GameState();
-//		state.updateGameStates(null, null, null, null, CURRENT_WAVE_NUMBER, null, 0, 0, 0, 0);
-//		
-//		//Try to save State
-//		DataHandler dataHandler = new DataHandler();
-//		try {
-//			dataHandler.saveState(state, FILE_PATH + STATE_PATH);
-//		} catch (IOException e1) {
-//			e1.printStackTrace();
-//		}
-//		
-//		//Load state
-//		GameState loadedState = null;
-//		try {
-//			loadedState = dataHandler.loadState(FILE_PATH + STATE_PATH);
-//		} catch (ClassNotFoundException | IOException e) {}
-//		
-//		//Check if the variable values are the same
-//		assertEquals(CURRENT_WAVE_NUMBER, loadedState.getCurrentWaveNumber());
-////		assertNotEquals(CURRENT_WAVE_NUMBER+1, loadedState.getCurrentWaveNumber());
-//	}
 
 	/**
 	 * Want to test Zippings and unzipping,
@@ -102,7 +78,7 @@ public class TestDataHandler {
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
 		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip");
-		File testBlueprintAfterTestingFile = new File("src/test/resources.replacement.tester/resources/SavedBluePrintMyBlueprint.ser");
+		File testBlueprintAfterTestingFile = new File("src/test/resources.replacement.testermyAuthoringEnvironment/MyBlueprint.ser");
 		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
 		assertEquals(testBlueprintFile.length(),testBlueprintAfterTestingFile.length());
 		// load a blueprint, simulates 
@@ -110,10 +86,5 @@ public class TestDataHandler {
 //		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 	}
 	
-//	@Test
-//	public void testDecompression() throws ClassNotFoundException, IOException, ZipException {
-//		DataHandler testDataHandler = new DataHandler();
-//		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip"); // attempt to load serialized blueprint in data bundle form
-//	}
 
 }
