@@ -60,6 +60,7 @@ public class MethodAction implements ActionListener
         }
         catch (Exception e)
         {
+        	e.printStackTrace();
             throw new ReflectionException(e.getMessage());
         }
     }
