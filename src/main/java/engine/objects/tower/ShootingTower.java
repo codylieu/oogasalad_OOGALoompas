@@ -7,7 +7,7 @@ import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.detector.TargetDetectorInterface;
-import main.java.engine.objects.detector.monsterdetector.NearestMonsterDetector;
+import main.java.engine.objects.detector.monsterdetector.*;
 import main.java.engine.objects.projectile.DamageProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 
@@ -31,7 +31,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
     protected double myRange;
     protected String myBulletImage;
     
-    private TargetDetectorInterface myDetector = new NearestMonsterDetector();
+    private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
 
     /**
      * Create a new tower by adding shooting behavior to an existing tower

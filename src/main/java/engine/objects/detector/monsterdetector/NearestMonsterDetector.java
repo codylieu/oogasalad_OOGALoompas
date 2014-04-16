@@ -23,8 +23,8 @@ public class NearestMonsterDetector extends MonsterDetector{
 		Point2D towerCoordinate = new Point2D.Double(x, y);
 
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
-			if (m.getCurrentCoor().distance(towerCoordinate) < minDistance && 
-					m.getCurrentCoor().distance(towerCoordinate) < range) {
+			if (isWithinDistance(m.getCurrentCoor(), towerCoordinate, minDistance) && 
+					isWithinDistance(m.getCurrentCoor(), towerCoordinate, range)) {
 				minDistance = m.getCurrentCoor().distance(towerCoordinate);
 				// a tower should only target one monster at a time
 				closestMonster.clear();

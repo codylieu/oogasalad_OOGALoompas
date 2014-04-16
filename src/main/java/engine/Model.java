@@ -91,7 +91,7 @@ public class Model {
         this.player = new Player();
         levelManager.registerPlayer(player);
 
-        environ = new EnvironmentKnowledge(monsters, player, towers);
+        environ = new EnvironmentKnowledge(monsters, player, towers, levelManager.getExit());
     }
 
     /**

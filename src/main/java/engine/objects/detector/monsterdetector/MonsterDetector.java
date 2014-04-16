@@ -20,4 +20,18 @@ public abstract class MonsterDetector implements TargetDetectorInterface{
         return new Point2D.Double(m.getCurrentCoor().getX() + m.getImageBBoxConst().width / 2,
                                   m.getCurrentCoor().getY() + m.getImageBBoxConst().height / 2);
     }
+	
+	/**
+	 * Check whether the distance between target and object
+	 * is smaller than distance passed in
+	 * @param obj
+	 * @param target
+	 * @param distance
+	 * @return true if the distance between target and object
+	 * is smaller than distance passed in
+	 */
+	protected boolean isWithinDistance(Point2D obj, Point2D target, double distance) {
+		return (obj.distance(target) < distance);
+	}
+
 }

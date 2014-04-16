@@ -8,18 +8,19 @@ import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.monster.Monster;
 
 public class MonsterClosestToExitDetector extends MonsterDetector {
-	private double range;
 	
 	@Override
 	public List<Object> findTarget(double x, double y,
 			double range, EnvironmentKnowledge environmentKnowledge) {
 		List<Object> targetMonster = new ArrayList<Object>();
 		Point2D towerCoordinate = new Point2D.Double(x, y);
-//		Point2D tower
+		Point2D exitCoordinate = getExitCoordinate(environmentKnowledge);
+		double minDistance = Double.MAX_VALUE;
 
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
-			if (m.getCurrentCoor().distance(towerCoordinate) < minDistance) {
-				minDistance = m.getCurrentCoor().distance(towerCoordinate);
+			if (isWithinDistance(m.getCurrentCoor(), exitCoordinate, minDistance) &&
+					isWithinDistance(m.getCurrentCoor(), towerCoordinate, range)) {
+				minDistance = m.getCurrentCoor().distance(exitCoordinate);
 				// a tower should only target one monster at a time
 				targetMonster.clear();
 				targetMonster.add(centerCoordinate(m));
@@ -29,10 +30,10 @@ public class MonsterClosestToExitDetector extends MonsterDetector {
 		return targetMonster;
 	}
 	
-	public List<Object> findTarget(double x, double y, 
-			EnvironmentKnowledge environmentKnowledge, double range) {
-		this.range = range;
-		return findTarget(x, y, environmentKnowledge);
+	private Point2D getExitCoordinate(EnvironmentKnowledge environmentKnowledge) {
+		double exitX = environmentKnowledge.getExit().x;
+		double exitY = environmentKnowledge.getExit().y;
+		return new Point2D.Double(exitX, exitY);
 	}
-
+	
 }
