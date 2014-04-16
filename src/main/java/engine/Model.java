@@ -1,7 +1,9 @@
 package main.java.engine;
 
 import java.awt.geom.Point2D;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -27,6 +29,7 @@ import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
+import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -192,8 +195,12 @@ public class Model {
     // TODO: use this instead of other one, will change -jordan
     public void loadMapTest (String fileName) {
         try {
-            TDMap tdMap = new TDMap();
-            tdMap.loadMapIntoGame(engine, fileName);
+            FileInputStream fis = new FileInputStream(fileName);
+            ObjectInputStream is = new ObjectInputStream(fis);
+            GameMapSchema mapToLoad = (GameMapSchema) is.readObject();
+            is.close();
+            
+            TDMap tdMap = new TDMap(engine, mapToLoad);
         }
         catch (Exception e) {
             e.printStackTrace();

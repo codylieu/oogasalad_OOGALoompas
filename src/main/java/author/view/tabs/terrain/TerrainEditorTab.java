@@ -333,6 +333,6 @@ public class TerrainEditorTab extends EditorTab {
 		TerrainController myControl = (TerrainController) myController;
 		myControl.addMaps(myCompletedMap);
 		
-		//writeMapToFile(myCompletedMap);
+		writeMapToFile(myCompletedMap);
 	}
 }

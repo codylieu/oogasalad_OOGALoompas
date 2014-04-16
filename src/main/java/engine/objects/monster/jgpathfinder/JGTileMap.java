@@ -87,13 +87,22 @@ public class JGTileMap {
     }
 
     /**
-     * Get the cost of moving from the source tile to the target tile. Tiles should be adjacent.
+     * Get the cost of moving on a given tile (for example a grass tile can have a cost of
+     * 1 while a mud tile can have a cost of 4).
      *
-     * @param source
-     * @param target
-     * @return
+     * @param source The tile that you are moving on
+     * @return The cost to move on that tile
      */
-    public int getCostToMove(JGPoint source, JGPoint target) {
-        return 1; // TODO: Change to use map to check cost? or edge set
+    public int getCostToMove(JGPoint source) {
+        // If no cost specified for a given tile, return 1
+        if (costMap == null) {
+            return 1;
+        }
+
+        if (!costMap.containsKey(engine.getTileCid(source.x, source.y))) {
+            return 1;
+        }
+
+        return costMap.get(engine.getTileCid(source.x, source.y));
     }
 }

@@ -10,5 +10,5 @@ public interface JGPathfinderInterface {
      * @param target Destination x and y coordinate
      * @return A Path for an object to follow
      */
-    public JGPath getPath(JGPoint source, JGPoint target);
+    public JGPath getPath(JGPoint source, JGPoint target) throws NoPossiblePathException;
 }
