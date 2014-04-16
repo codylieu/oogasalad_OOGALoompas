@@ -58,8 +58,12 @@ public abstract class Monster extends TDObject {
 		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic(), eng); // TODO: clean up
 		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
 		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
-		myPath = myPathFinder.getPath(pathEntrance, pathExit);
-	}
+        try {
+            myPath = myPathFinder.getPath(pathEntrance, pathExit);
+        } catch (NoPossiblePathException e) {
+            e.printStackTrace();
+        }
+    }
 
 	@Override
 	public void move () {
