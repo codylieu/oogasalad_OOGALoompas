@@ -91,7 +91,7 @@ public class DataHandler {
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
 		//		if (checkGameBlueprint(blueprint)){
 		// create a temp folder to put the serialized blueprint and zipped resources in
-		String tempDirLocation = filePath + "tempBlueprintHolder/";
+		String tempDirLocation = filePath + "TempBlueprintHolder/";
 		Boolean tempDirCreated = new File(tempDirLocation).mkdir();
 		// zip the resources first
 		if (tempDirCreated){
@@ -105,16 +105,18 @@ public class DataHandler {
 
 			String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
 			// serialize the blueprint to temp folder so we can zip it
-			saveObjectToFile(blueprint,filePath + "MyBlueprint.ser"); 
-			myFilesToZip.add(new File(filePath + "MyBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
+			saveObjectToFile(blueprint,tempDirLocation + "MyBlueprint.ser"); 
+			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
 			//				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
-			return compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation);
+			// compress it!
+			if (compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation)){
+				// delete the temp directory
+				deleteDirectory(new File(tempDirLocation)); 
+			}
 		} else {
 			return false;
 		}
-
-		//		}
-		//		return false;
+		return true;
 	}
 
 	/**
@@ -213,8 +215,8 @@ public class DataHandler {
 		decompress(filePath, zipDestinationPath);
 		File myDir = new File(TEST_FILE_PATH); // change to resources folder after it's completed
 		deleteDirectory(myDir);
-		decompress(zipDestinationPath + "SavedBlueprintZippedResources.zip", TEST_FILE_PATH);
-		return ((GameBlueprint) loadObjectFromFile(zipDestinationPath + "SavedBlueprintMyBlueprint.ser"));
+		decompress(zipDestinationPath + "ZippedResources.zip", TEST_FILE_PATH);
+		return ((GameBlueprint) loadObjectFromFile(zipDestinationPath + "MyBlueprint.ser"));
 		//		return null;
 	}
 
@@ -314,7 +316,7 @@ public class DataHandler {
 					//can be used as shown below
 					UnzipUtil.applyFileAttributes(fileHeader, outFile);
 
-					System.out.println("Done extracting: " + fileHeader.getFileName());
+//					System.out.println("Done extracting: " + fileHeader.getFileName());
 				} else {
 					System.err.println("fileheader is null. Shouldn't be here");
 				}

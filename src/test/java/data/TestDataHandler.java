@@ -79,7 +79,7 @@ public class TestDataHandler {
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
 		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip");
-		File testBlueprintAfterTestingFile = new File("src/test/resources.replacement.tester/resources/SavedBluePrintMyBlueprint.ser");
+		File testBlueprintAfterTestingFile = new File("src/test/resources.replacement.testermyAuthoringEnvironment/MyBlueprint.ser");
 		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
 		assertEquals(testBlueprintFile.length(),testBlueprintAfterTestingFile.length());
 		// load a blueprint, simulates 
