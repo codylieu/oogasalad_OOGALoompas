@@ -1,8 +1,10 @@
 package main.java.engine;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.List;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.tower.ITower;
 
 
 /**
@@ -25,18 +27,20 @@ public class EnvironmentKnowledge {
 
     List<Monster> allMonsters;
     Player currentPlayer;
+    ITower[][] allTowers;
 
     /**
      * Add necessary state info.
      * 
      * @param allMonsters
      */
-    public EnvironmentKnowledge (List<Monster> allMonsters, Player currentPlayer) {
+    public EnvironmentKnowledge (List<Monster> allMonsters, Player currentPlayer, ITower[][] towers) {
 
         // add more parameters as necessary
 
         this.allMonsters = allMonsters;
         this.currentPlayer = currentPlayer;
+        this.allTowers = towers;
 
     }
 
@@ -51,16 +55,31 @@ public class EnvironmentKnowledge {
 
         double minDistance = Double.MAX_VALUE;
         Point2D closestMonsterCoor = null;
-        Point2D towerCoor = new Point2D.Double(x, y);
+        Point2D towerCoordinate = new Point2D.Double(x, y);
 
         for (Monster m : allMonsters) {
-            if (m.getCurrentCoor().distance(towerCoor) < minDistance) {
-                minDistance = m.getCurrentCoor().distance(towerCoor);
+            if (m.getCurrentCoor().distance(towerCoordinate) < minDistance) {
+                minDistance = m.getCurrentCoor().distance(towerCoordinate);
                 closestMonsterCoor = centerCoordinate(m);
             }
         }
 
         return closestMonsterCoor;
+    }
+
+    public List<ITower> getTowerCoordinatesInRange (double x, double y, double range) {
+        Point2D towerCoordinate = new Point2D.Double(x, y);
+        List<ITower> nearbyTowersList = new ArrayList<ITower>();
+        for (ITower[] tArray : allTowers) {
+            for (ITower t : tArray) {
+                if (t != null &&
+                    new Point2D.Double(t.getXCoordinate(), t.getYCoordinate())
+                            .distance(towerCoordinate) < range) {
+                    nearbyTowersList.add(t);
+                }
+            }
+        }
+        return nearbyTowersList;
     }
 
     /**

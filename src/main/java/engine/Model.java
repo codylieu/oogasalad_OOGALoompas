@@ -2,12 +2,14 @@ package main.java.engine;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
 import main.java.data.datahandler.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
@@ -15,37 +17,31 @@ import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.tower.Tower;
-import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
+import main.java.engine.objects.tower.ITower;
+import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
-import main.java.schema.MonsterSchema;
+import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
-import main.java.schema.SimpleMonsterSchema;
-import main.java.schema.SimpleTowerSchema;
-import main.java.schema.TDObjectSchema;
-import main.java.schema.TowerSchema;
+import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
-import net.lingala.zip4j.exception.ZipException;
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 
 
 public class Model {
 
-    public static final String RESOURCE_PATH = "/main/resources/";
-
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
+    public static final String RESOURCE_PATH = "/main/resources/";
 
     private JGEngine engine;
     private TDObjectFactory factory;
     private Player player;
     private double gameClock;
-    private Tower[][] towers;
+    private ITower[][] towers;
     private List<Monster> monsters;
-    private Gson gsonParser;
     private CollisionManager collisionManager;
     private GameState gameState;
     private DataHandler dataHandler;
@@ -63,25 +59,29 @@ public class Model {
         levelManager.setEntrance(0, engine.pfHeight() / 2);
         levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
 
-        this.gsonParser = new Gson();
         this.gameClock = 0;
         monsters = new ArrayList<Monster>();
-        towers = new Tower[engine.viewTilesX()][engine.viewTilesY()];
+        towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
         gameState = new GameState();
 
-        levelManager.setEntrance(0, engine.pfHeight() / 2);
-        levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
-        loadGameBlueprint(null);// TODO: REPLACE
+        try {
+            loadGameBlueprint(null);// TODO: REPLACE
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         dataHandler = new DataHandler();
-        
-        environ = new EnvironmentKnowledge(monsters, player);
+
+        addNewPlayer();
 
     }
 
     private void defineAllStaticImages () {
+        // TODO: remove this method, make this a part of schemas
         engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
         // make bullet image dynamic
         engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
+        engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
     }
 
     /**
@@ -90,10 +90,8 @@ public class Model {
     public void addNewPlayer () {
         this.player = new Player();
         levelManager.registerPlayer(player);
-    }
 
-    public void removeMonster (Monster m) {
-        monsters.remove(m);
+        environ = new EnvironmentKnowledge(monsters, player, towers);
     }
 
     /**
@@ -101,16 +99,17 @@ public class Model {
      * 
      * @param x x coordinate of the tower
      * @param y y coordinate of the tower
+     * @param towerName Type tower to be placed
      */
-    public boolean placeTower (double x, double y) {
+    public boolean placeTower (double x, double y, String towerName) {
         try {
-
             Point2D location = new Point2D.Double(x, y);
             int[] currentTile = getTileCoordinates(location);
-            // if tower already exists in the tile clicked, do nothing
-            if (isTowerPresent(currentTile)) return false;
 
-            Tower newTower = factory.placeTower(location, "test-tower-1");
+            // if tower already exists in the tile clicked, do nothing
+            if (isTowerPresent(currentTile)) { return false; }
+
+            ITower newTower = factory.placeTower(location, towerName);
 
             if (player.getMoney() >= newTower.getCost()) {
                 // FIXME: Decrease money?
@@ -119,27 +118,15 @@ public class Model {
                 return true;
             }
             else {
-                destroyTower(newTower);
+                newTower.remove();
                 return false;
             }
-
         }
         catch (Exception e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return false;
-
-    }
-
-    /**
-     * Force destroy a tower
-     * 
-     * @param tower
-     */
-    private void destroyTower (Tower tower) {
-        tower.setImage(null);
-        tower.remove();
     }
 
     /**
@@ -152,6 +139,7 @@ public class Model {
     private int[] getTileCoordinates (Point2D location) {
         int curXTilePos = (int) (location.getX() / engine.tileWidth());
         int curYTilePos = (int) (location.getY() / engine.tileHeight());
+
         return new int[] { curXTilePos, curYTilePos };
     }
 
@@ -183,7 +171,7 @@ public class Model {
      * @param x
      * @param y
      */
-    public void checkAndRemoveTower (int x, int y) {
+    public void checkAndRemoveTower (double x, double y) {
         int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
         if (isTowerPresent(coordinates)) {
             int xtile = coordinates[0];
@@ -194,109 +182,52 @@ public class Model {
         }
     }
 
-    /**
-     * /**
-     * Loads a map/terrain into the engine.
-     * 
-     * @param fileName The name of the file which contains the map information
-     */
-    public void loadMap (String fileName) {
+    // TODO: use this instead of other one, will change -jordan
+    public void loadMapTest (String fileName) {
         try {
-            JsonReader reader =
-                    new JsonReader(new InputStreamReader(getClass()
-                            .getResourceAsStream(RESOURCE_PATH + fileName)));
-
-            TDMap map = gsonParser.fromJson(reader, TDMap.class);
-            map.loadIntoGame(engine);
+            TDMap tdMap = new TDMap();
+            tdMap.loadMapIntoGame(engine, fileName);
         }
         catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    //TODO: use this instead of other one, will change
-    public void loadMapTest(String fileName) {
-        try {
-            TDMap tdMap = new TDMap();
-            tdMap.loadMapIntoGame(engine, fileName);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
-     * Loads the game schemas from GameBlueprint and sets the appropriate state
+     * Deserialize and load into the engine the GameBlueprint obtained from the file path
      * 
-     * @param bp
-     * @throws InvalidParameterForConcreteTypeException
-     */
-    public void loadGameBlueprint (GameBlueprint bp) {
-        // Map<String, String> gameAttributes = bp.getMyGameSchema().getAttributes();
-        // player = new Player(gameAttributes.get(GameSchema.MONEY),
-        // gameAttributes.get(GameSchema.LIVES));
-
-        // GameSchema testGameSchema = new GameSchema();
-        // Map<String, String> gameSchemaMap = testGameSchema.getAttributesMap();
-        // player = new Player(gameSchemaMap.get(GameSchema.GOLD),
-        // gameSchemaMap.get(GameSchema.LIVES));
-        player = new Player();
-
-        List<TDObjectSchema> tdObjectSchemas = new ArrayList<>();
-
-        SimpleTowerSchema testTowerSchema = new SimpleTowerSchema();
-        testTowerSchema.addAttribute(TowerSchema.NAME, "test-tower-1");
-        testTowerSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
-        testTowerSchema.addAttribute(TowerSchema.COST, (double) 10);
-
-        tdObjectSchemas.add(testTowerSchema);
-
-        SimpleMonsterSchema testMonsterSchema = new SimpleMonsterSchema();
-        testMonsterSchema.addAttribute(MonsterSchema.NAME, "test-monster-1");
-        testMonsterSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
-        testMonsterSchema.addAttribute(MonsterSchema.REWARD, (double) 200);
-        tdObjectSchemas.add(testMonsterSchema);
-
-        factory.loadTDObjectSchemas(tdObjectSchemas);
-
-        levelManager.addNewWave(createTestWave(testMonsterSchema, 1));
-        levelManager.addNewWave(createTestWave(testMonsterSchema, 2));
-        levelManager.addNewWave(createTestWave(testMonsterSchema, 3));
-    }
-
-    /**
-     * Creates a wave of simple monsters for sans-factory testing ...
-     * 
-     * @param m1
-     * @param swarmSize
-     * @return
-     */
-    private WaveSpawnSchema createTestWave (SimpleMonsterSchema m1, int swarmSize) {
-        MonsterSpawnSchema mschema = new MonsterSpawnSchema("SimpleMonster", m1, swarmSize);
-        WaveSpawnSchema wschema = new WaveSpawnSchema();
-        wschema.addMonsterSchema(mschema);
-        return wschema;
-    }
-
-    /**
-     * Loads game schemas from the GameBlueprint obtained from the filePath
-     * 
-     * @param fileName
+     * @param filePath File path of the blueprint to be loaded
      * @throws IOException
      * @throws ClassNotFoundException
      */
-    public void loadGameSchemas (String filePath) throws ClassNotFoundException, IOException {
+
+    public void loadGameBlueprint(String filePath) throws ClassNotFoundException, IOException {
         GameBlueprint bp = null;
-        try {
-            bp = dataHandler.loadBlueprint(filePath);
+        // TODO: load from datahandler
+//        try {
+//            bp = dataHandler.loadBlueprint(filePath);
+//        } catch (ZipException e) {
+//            e.printStackTrace();
+//        }
+
+        // TODO: use the actual game blueprint (aka bp)
+        GameBlueprint testBP = createTestBlueprint();
+
+        // init player
+        GameSchema gameSchema = testBP.getMyGameScenario();
+        Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
+        this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
+
+                                 (Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));
+
+        // init factory objects
+        List<TDObjectSchema> tdObjectSchemas = testBP.getMyTDObjectSchemas();
+        factory.loadTDObjectSchemas(tdObjectSchemas);
+
+        // init levels
+        for (WaveSpawnSchema wave : testBP.getMyLevelSchemas()) {
+            levelManager.addNewWave(wave);
         }
-        catch (ZipException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        Map<String, Serializable> gameAttributes = bp.getMyGameScenario().getAttributesMap();
-        player =
-                new Player((Integer) gameAttributes.get(GameSchema.MONEY),
-                           (Integer) gameAttributes.get(GameSchema.LIVES));
     }
 
     /**
@@ -313,7 +244,7 @@ public class Model {
     /**
      * Get the score of the player
      * 
-     * @return current score
+     * @return player's current score
      */
     public double getScore () {
         return player.getScore();
@@ -325,8 +256,7 @@ public class Model {
      * @return true if game is lost
      */
     public boolean isGameLost () {
-        if (getPlayerLives() <= 0) return true;
-        return false;
+        return getPlayerLives() <= 0;
     }
 
     private void updateGameClockByFrame () {
@@ -360,25 +290,6 @@ public class Model {
         return player.getMoney();
     }
 
-    /**
-     * Loads a wave spawn schema into the model
-     * 
-     * @param fileName The name of the JSON file containing wave spawn schema info
-     */
-    public void loadWaveSpawnSchema (String fileName) {
-        try {
-            JsonReader reader =
-                    new JsonReader(new InputStreamReader(getClass()
-                            .getResourceAsStream(RESOURCE_PATH + fileName)));
-            WaveSpawnSchema newWave = gsonParser.fromJson(reader, WaveSpawnSchema.class);
-            levelManager.addNewWave(newWave);
-
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private boolean isGameWon () {
         return levelManager.checkAllWavesFinished();
     }
@@ -389,7 +300,6 @@ public class Model {
      * @throws MonsterCreationFailureException
      */
     public void doSpawnActivity () throws MonsterCreationFailureException {
-
         // at determined intervals:
         // if (gameClock % 100 == 0)
         // or if previous wave defeated:
@@ -438,15 +348,14 @@ public class Model {
      * Call this to do the individual behavior of each Tower
      */
     private void doTowerBehaviors () {
-      
-        for (Tower[] towerRow : towers) {
-            for (Tower t : towerRow) {
+
+        for (ITower[] towerRow : towers) {
+            for (ITower t : towerRow) {
                 if (t != null) {
                     t.callTowerActions(environ);
                 }
             }
         }
-
     }
 
     /**
@@ -470,7 +379,7 @@ public class Model {
             int xtile = coordinates[0];
             int ytile = coordinates[1];
             towers[xtile][ytile].remove();
-            Tower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
+            ITower newTower = factory.placeTower(new Point2D.Double(x, y), "test tower 2");
             // System.out.println(newTower.x);
             towers[xtile][ytile] = newTower;
             return true;
@@ -483,6 +392,104 @@ public class Model {
      */
     public void decrementLives () {
         player.decrementLives();
+    }
+
+    /**
+     * TEST METHOD - Create a test blueprint for testing purposes
+     * TODO: remove when we no longer need this
+     * 
+     * @return test blueprint
+     */
+    private GameBlueprint createTestBlueprint () {
+        GameBlueprint testBlueprint = new GameBlueprint();
+
+        // Populate TDObjects
+        List<TDObjectSchema> testTDObjectSchema = new ArrayList<>();
+
+        // Create test towers
+        TowerSchema testTowerOne = new TowerSchema();
+        testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
+        testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
+        towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
+        testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
+        testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerOne);
+        
+        TowerSchema testTowerTwo = new TowerSchema();
+        testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
+        testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
+        towerBehaviors2.add(TowerBehaviors.SHOOTING);
+        testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
+        testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerTwo);
+        
+        TowerSchema testTowerThree = new TowerSchema();
+        testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
+        testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet");
+        testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
+        Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
+        towerBehaviors3.add(TowerBehaviors.BOMBING);
+        testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
+        testTowerThree.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerThree);
+        
+        TowerSchema testTowerFour = new TowerSchema();
+        testTowerFour.addAttribute(TowerSchema.NAME, "test-tower-4");
+        testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+        testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
+        Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
+        towerBehaviors4.add(TowerBehaviors.FREEZING);
+        testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors4);
+        testTowerFour.addAttribute(TowerSchema.COST, (double) 10);
+        testTDObjectSchema.add(testTowerFour);
+        
+        // Create test monsters
+        SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
+        testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
+        testMonsterOne.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+        testMonsterOne.addAttribute(MonsterSchema.SPEED, (double) 1);
+        testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
+        testTDObjectSchema.add(testMonsterOne);
+
+        testBlueprint.setMyTDObjectSchemas(testTDObjectSchema);
+
+        // Create test game schemas
+        GameSchema testGameSchema = new GameSchema();
+        testGameSchema.addAttribute(GameSchema.LIVES, 3);
+        testGameSchema.addAttribute(GameSchema.MONEY, 500);
+
+        testBlueprint.setMyGameScenario(testGameSchema);
+
+        // Create wave schemas
+        List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
+        MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterOne, 1);
+        WaveSpawnSchema testWaveSpawnSchemaOne = new WaveSpawnSchema();
+        testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
+        testWaves.add(testWaveSpawnSchemaOne);
+
+        MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 2);
+        WaveSpawnSchema testWaveSpawnSchemaTwo = new WaveSpawnSchema();
+        testWaveSpawnSchemaTwo.addMonsterSchema(testMonsterSpawnSchemaTwo);
+        testWaves.add(testWaveSpawnSchemaTwo);
+
+        MonsterSpawnSchema testMonsterSpawnSchemaThree = new MonsterSpawnSchema(testMonsterOne, 10);
+        WaveSpawnSchema testWaveSpawnSchemaThree = new WaveSpawnSchema();
+        testWaveSpawnSchemaThree.addMonsterSchema(testMonsterSpawnSchemaThree);
+        testWaves.add(testWaveSpawnSchemaThree);
+
+        testBlueprint.setMyLevelSchemas(testWaves);
+
+        return testBlueprint;
+    }
+
+    public List<String> getPossibleTowers () {
+        return factory.getPossibleTowersNames();
     }
 
 }

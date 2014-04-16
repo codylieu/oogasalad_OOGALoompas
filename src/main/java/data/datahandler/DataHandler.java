@@ -402,7 +402,7 @@ public class DataHandler {
 		else if(b.getMyLevelSchemas() == null){
 			throw new InvalidGameBlueprintException("myLevelSchemas");
 		}
-		else if(b.getMyGameMaps() == null){
+		else if(b.getMyGameMapSchemas() == null){
 			throw new InvalidGameBlueprintException("myGameMaps");
 		}
 		return true;
@@ -448,7 +448,7 @@ public class DataHandler {
 
 	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvalidDataException, InvalidGameBlueprintException	{
 		DataHandler d = new DataHandler();
-		TestObject t2 = new TestObject(1,2,"t2");
+		TestObject t2 = new TestObject("t2",1,2);
 		System.out.println(d.checkPublicData(t2));
 		GameBlueprint b = new GameBlueprint();
 		System.out.println(d.checkGameBlueprint(b));

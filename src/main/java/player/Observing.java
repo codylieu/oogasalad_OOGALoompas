@@ -2,5 +2,5 @@ package main.java.player;
 
 public interface Observing {
 	public void update();
-	public void setSubjectState(Subject s);
+	public void setSubject(Subject s);
 }
