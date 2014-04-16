@@ -4,16 +4,16 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import jgame.platform.StdGame;
 import main.java.exceptions.engine.MonsterCreationFailureException;
-import main.java.player.CursorState;
-import main.java.player.TowerGhost;
-import net.lingala.zip4j.exception.ZipException;
 
 import javax.swing.*;
+import main.java.player.util.CursorState;
+import main.java.player.util.TowerGhost;
 
 public class TestEngine extends JGEngine {
     private static TestEngine engine;

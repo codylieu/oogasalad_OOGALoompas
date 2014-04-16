@@ -1,11 +1,13 @@
 package main.java.author.view.tabs;
 
 import java.awt.BorderLayout;
+import java.util.List;
 
 import javax.swing.JPanel;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
+import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.Canvas;
 
 public abstract class EditorTab extends JPanel {
@@ -22,5 +24,8 @@ public abstract class EditorTab extends JPanel {
 	 * saveTabData would call addEnemy
 	 */
 	public abstract void saveTabData();
+
+	
+
 
 }
