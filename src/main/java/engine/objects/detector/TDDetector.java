@@ -1,22 +1,20 @@
-package main.java.engine.objects.detector.monsterdetector;
+package main.java.engine.objects.detector;
 
 import java.awt.geom.Point2D;
 import java.util.List;
 
 import main.java.engine.EnvironmentKnowledge;
-import main.java.engine.objects.TDObject;
-import main.java.engine.objects.detector.TargetDetectorInterface;
 import main.java.engine.objects.monster.Monster;
 
 /**
  * Abstract super class designed specifically for 
- * monster detectors
+ * tower defense detectors. 
  * Contains some common methods to avoid duplication
  * 
  * @author Lawrence
  *
  */
-public abstract class MonsterDetector implements TargetDetectorInterface{
+public abstract class TDDetector implements TargetDetectorInterface{
 	
     /**
      * Returns the center of the object for targeting
@@ -43,3 +41,4 @@ public abstract class MonsterDetector implements TargetDetectorInterface{
 	}
 
 }
+

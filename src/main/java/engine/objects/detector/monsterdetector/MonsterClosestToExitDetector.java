@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.engine.EnvironmentKnowledge;
+import main.java.engine.objects.detector.TDDetector;
 import main.java.engine.objects.monster.Monster;
 
 /**
@@ -14,7 +15,7 @@ import main.java.engine.objects.monster.Monster;
  *  * @author Lawrence
  *
  */
-public class MonsterClosestToExitDetector extends MonsterDetector {
+public class MonsterClosestToExitDetector extends TDDetector {
 	
 	@Override
 	public List<Object> findTarget(double x, double y,
