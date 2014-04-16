@@ -22,7 +22,7 @@ public class MonsterClosestToExitDetector extends TDDetector {
 			double range, EnvironmentKnowledge environmentKnowledge) {
 		List<Object> targetMonster = new ArrayList<Object>();
 		Point2D towerCoordinate = new Point2D.Double(x, y);
-		Point2D exitCoordinate = getExitCoordinate(environmentKnowledge);
+		Point2D exitCoordinate = environmentKnowledge.getExit().getLocation();
 		double minDistance = Double.MAX_VALUE;
 
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
@@ -36,12 +36,6 @@ public class MonsterClosestToExitDetector extends TDDetector {
 		}
 
 		return targetMonster;
-	}
-	
-	private Point2D getExitCoordinate(EnvironmentKnowledge environmentKnowledge) {
-		double exitX = environmentKnowledge.getExit().x;
-		double exitY = environmentKnowledge.getExit().y;
-		return new Point2D.Double(exitX, exitY);
 	}
 	
 }
