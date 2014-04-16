@@ -18,14 +18,17 @@ public abstract class TDItem extends TDObject {
 	protected double buildupTime;
 	protected double timeCounter;
 	private boolean isDead;
+	protected double damage;
 
 	public TDItem(String name, double x, double y, 
-			String gfxname, double cost, double buildupTime) {
+			String gfxname, double cost, double buildupTime,
+			double damage) {
 		super(name, x, y, ITEM_CID, gfxname);
 		this.cost = cost;
 		this.buildupTime = buildupTime;
 		this.timeCounter = 0;
 		this.isDead = false;
+		this.damage = damage;
 	}
 	
 	/**
@@ -42,6 +45,10 @@ public abstract class TDItem extends TDObject {
 	
 	public boolean isDead() {
 		return isDead;
+	}
+	
+	public double getCost() {
+		return cost;
 	}
 
 }

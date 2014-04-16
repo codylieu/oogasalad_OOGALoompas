@@ -3,16 +3,25 @@ package main.java.engine.objects.item;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.monster.Monster;
 
+/**
+ * 
+ * A special bomb that destroys a row of monsters
+ * 
+ * @author Lawrence
+ *
+ */
 public class RowBomb extends TDItem{
 	
+	private static final int FLASH_INTERVAL = 5;
 	private static final String IMAGE = "row_bomb";
-	private static final double COST = 50;
+	private static final double COST = 100;
 	private static final double BUILDUP_Time = 100;
+	private static final double DAMAGE = Double.MAX_VALUE;
 	
 	private String image;
 
 	public RowBomb(double x, double y) {
-		super("row_bomb", x, y, IMAGE, COST, BUILDUP_Time);
+		super("row_bomb", x, y, IMAGE, COST, BUILDUP_Time, DAMAGE);
 	}
 
 	@Override
@@ -21,11 +30,11 @@ public class RowBomb extends TDItem{
 		if (timeCounter >= buildupTime) {
 			for (Monster m : environmentKnowledge.getAllMonsters()) {
 				if (isInRange(m, x, y)) {
-					m.setDead();
+					m.takeDamage(DAMAGE);
 				}
 			}
 			setDead();
-		} else flash(timeCounter, 5, IMAGE);
+		} else flash(timeCounter, FLASH_INTERVAL, IMAGE);
 	}
 
 	private boolean isInRange(Monster m, double x, double y) {
