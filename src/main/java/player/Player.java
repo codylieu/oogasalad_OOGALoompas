@@ -255,7 +255,7 @@ public class Player {
 	}
 
 	public void toggleSound(){
-		soundOn = soundOn ? false : true;
+		soundOn = !soundOn;
 		if(soundOn) {
 			song.loop();
 		}
