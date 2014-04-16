@@ -107,7 +107,6 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
-					addGameCard(); //THIS NEEDS TO BE MOVED
                     try {
 						engine.loadBlueprintFile(file.getAbsolutePath());
 					} catch (ClassNotFoundException | IOException | ZipException e1) {

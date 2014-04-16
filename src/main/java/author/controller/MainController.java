@@ -178,7 +178,7 @@ public class MainController {
         // Create test game schemas
         GameSchema testGameSchema = new GameSchema();
         testGameSchema.addAttribute(GameSchema.LIVES, 3);
-        testGameSchema.addAttribute(GameSchema.MONEY, 500);
+        testGameSchema.addAttribute(GameSchema.MONEY, 503);
 
         testBlueprint.setMyGameScenario(testGameSchema);
 
