@@ -62,7 +62,7 @@ public class JGPathfinder implements JGPathfinderInterface {
             throw new NoPossiblePathException();
         }
 
-        JGPath path = new JGPath();
+        JGPath path = new JGPath(engine);
         current = open.poll();
         while (current.parent != null) {
             path.addFirst(current.index);

@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.List;
 
+import jgame.JGColor;
 import jgame.JGPoint;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
@@ -120,4 +121,11 @@ public abstract class Monster extends TDObject {
 	public double getMoneyValue() {
 		return myMoneyValue;
 	}
+
+    @Override
+    public void paint() {
+        if (myPath != null) {
+            myPath.paint(5, JGColor.pink);
+        }
+    }
 }
