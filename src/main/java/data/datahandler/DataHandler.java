@@ -81,6 +81,8 @@ public class DataHandler {
 	 * to the file path. The ZIP file which is 
 	 * saved to the file-path is a representation of a saved
 	 * authoring environment, with blueprint + resources
+	 * To avoid creating the blueprint.ser and zipped resources
+	 * folder, a temporary folder is created and later deleted
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
 	 * @throws InvalidGameBlueprintException 
@@ -88,21 +90,28 @@ public class DataHandler {
 
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
 		//		if (checkGameBlueprint(blueprint)){
+		// create a temp folder to put the serialized blueprint and zipped resources in
+		String tempDirLocation = filePath + "tempBlueprintHolder/";
+		Boolean tempDirCreated = new File(tempDirLocation).mkdir();
 		// zip the resources first
-		String zipResourcesLocation = filePath + "ZippedResources.zip";
-		File myResources = new File(FILE_PATH);
-		List<File> myFilesToZip = new ArrayList<File>();
-		//			myFilesToZip.add(myResources);
-		compressResources(myResources,zipResourcesLocation);
-		// zip to ZipResourcesLocation
-		myFilesToZip.add(new File(zipResourcesLocation));
+		if (tempDirCreated){
+			String zipResourcesLocation = tempDirLocation + "ZippedResources.zip";
+			File myResources = new File(FILE_PATH);
+			List<File> myFilesToZip = new ArrayList<File>();
+			//			myFilesToZip.add(myResources);
+			compressResources(myResources,zipResourcesLocation);
+			// zip to ZipResourcesLocation
+			myFilesToZip.add(new File(zipResourcesLocation));
 
-		String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
-		//				// serialize the blueprint so we can zip it
-		saveObjectToFile(blueprint,filePath + "MyBlueprint.ser"); 
-		myFilesToZip.add(new File(filePath + "MyBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
-		//				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
-		return compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation);
+			String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+			// serialize the blueprint to temp folder so we can zip it
+			saveObjectToFile(blueprint,filePath + "MyBlueprint.ser"); 
+			myFilesToZip.add(new File(filePath + "MyBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
+			//				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
+			return compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation);
+		} else {
+			return false;
+		}
 
 		//		}
 		//		return false;
@@ -199,14 +208,14 @@ public class DataHandler {
 	 * @throws IOException
 	 * @throws ZipException
 	 */
-	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException {
+	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException { // create another parameter isEngine that determine where it comes from
 		String zipDestinationPath = TEST_FILE_PATH + "MyAuthoringEnvironment/";
 		decompress(filePath, zipDestinationPath);
 		File myDir = new File(TEST_FILE_PATH); // change to resources folder after it's completed
 		deleteDirectory(myDir);
 		decompress(zipDestinationPath + "SavedBlueprintZippedResources.zip", TEST_FILE_PATH);
 		return ((GameBlueprint) loadObjectFromFile(zipDestinationPath + "SavedBlueprintMyBlueprint.ser"));
-//		return null;
+		//		return null;
 	}
 
 	/**
