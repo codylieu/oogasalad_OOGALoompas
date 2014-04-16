@@ -163,19 +163,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
-		@Override
-		protected JComponent makeLabelPane() {
-
-			JPanel labels = new JPanel(new GridLayout(0, 1));
-			labels.add(new JLabel(EnemyViewConstants.HEALTH_STRING));
-			labels.add(new JLabel(EnemyViewConstants.SPEED_STRING));
-			labels.add(new JLabel(EnemyViewConstants.DAMAGE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.REWARD_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TYPE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TILE_SIZE_STRING));
-			return labels;
-		}
-
+		
 	}
 
 	@Override

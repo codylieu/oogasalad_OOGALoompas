@@ -34,6 +34,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
@@ -328,19 +329,28 @@ public abstract class ObjectEditorTab extends EditorTab {
 		public ObjectTabViewBuilder(EditorTab editorTab) {
 			myTab = editorTab;
 		}
-
-		public JSpinner makeAttributeSpinner() {
+		
+		protected Component makeSpinnerField(String labelString, JSpinner spinner) {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			JLabel label = new JLabel(labelString, SwingConstants.CENTER);
+			result.add(label, BorderLayout.NORTH);
+			result.add(spinner, BorderLayout.CENTER);
+			return result;
+			
+		}
+		protected JSpinner makeAttributeSpinner() {
 
 			SpinnerModel model = new SpinnerNumberModel(1, 1, 1000, 1);
 			JSpinner spinner = new JSpinner(model);
 			spinner.setMaximumSize(new Dimension(200, spinner.getHeight()));
 			Font bigFont = spinner.getFont().deriveFont(Font.PLAIN,
-					FontConstants.X_LARGE_FONT_SIZE);
+					FontConstants.LARGE_FONT_SIZE);
 			spinner.setFont(bigFont);
 			return spinner;
 		}
 
-		public Component makeDesignEnemyPane() {
+		protected Component makeDesignEnemyPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 			result.add(new JLabel("Design New Enemy"), BorderLayout.WEST);
@@ -354,7 +364,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return result;
 		}
 
-		public Component makeOverallContent() {
+		protected Component makeOverallContent() {
 			list = myBuilder.makeTable();
 
 			// Create a split pane with the two scroll panes in it.
@@ -389,7 +399,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 		private JComponent makeEditorPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			result.add(makeAttributesPane(), BorderLayout.CENTER);
+			result.add(makeFieldPane(), BorderLayout.CENTER);
 			result.add(makeImagesPane(), BorderLayout.EAST);
 			result.add(makeDeleteEnemyButton(), BorderLayout.SOUTH);
 
@@ -443,20 +453,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 			table.setRowHeight((int) FontConstants.MEDIUM_FONT_SIZE + 12);
 			return table;
 		}
-
-		protected JComponent makeAttributesPane() {
-			JPanel result = new JPanel();
-
-			result.setLayout(new BorderLayout());
-
-			result.add(makeLabelPane(), BorderLayout.WEST);
-			result.add(makeFieldPane(), BorderLayout.CENTER);
-			return result;
-		}
 		
 		protected abstract JComponent makeFieldPane();
 
-		protected abstract JComponent makeLabelPane();
 	}
 
 }

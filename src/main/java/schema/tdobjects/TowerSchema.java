@@ -49,7 +49,7 @@ public class TowerSchema extends TDObjectSchema {
         myAttributeSet.add(SHRAPNEL_DAMAGE);
         myAttributeSet.add(SHRAPNEL_IMAGE_NAME);
         myAttributeSet.add(FREEZE_SLOWDOWN_PROPORTION);
-        myAttributeSet.add(TowerSchema.UPGRADE_PATH);
+        myAttributeSet.add(UPGRADE_PATH);
     }
     
     public TowerSchema(String name) {
@@ -63,7 +63,6 @@ public class TowerSchema extends TDObjectSchema {
         addAttribute(TowerSchema.COST, TowerViewConstants.COST_DEFAULT);
         addAttribute(TowerSchema.DAMAGE, TowerViewConstants.DAMAGE_DEFAULT);
         addAttribute(TowerSchema.BUILDUP, TowerViewConstants.BUILDUP_DEFAULT);
-        addAttribute(TowerSchema.TILE_SIZE, TowerViewConstants.TILE_SIZE_DEFAULT);
         addAttribute(TowerSchema.RANGE, TowerViewConstants.RANGE_DEFAULT);
         addAttribute(TowerSchema.TOWER_IMAGE_NAME, "");
         addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");

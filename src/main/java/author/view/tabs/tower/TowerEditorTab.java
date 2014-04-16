@@ -29,11 +29,10 @@ public class TowerEditorTab extends ObjectEditorTab {
 	private JSpinner costSpinner;
 	private JSpinner damageSpinner;
 	private JSpinner buildUpSpinner;
-
-	private JRadioButton smallRangeButton;
-	private JRadioButton mediumRangeButton;
-	private JRadioButton largeRangeButton;
-	private JRadioButton smallSizeButton;
+	private JSpinner firingSpeedSpinner;
+	private JSpinner shrapnelDamageSpinner;
+	
+	private JRadioButton iceDamageButton;
 	private JRadioButton largeSizeButton;
 
 	private ButtonGroup rangeButtonGroup;
@@ -59,11 +58,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 		spinnerFields.add(damageSpinner);
 		spinnerFields.add(buildUpSpinner);
 		radioButtons = new ArrayList<JRadioButton>();
-		radioButtons.add(smallRangeButton);
-		radioButtons.add(mediumRangeButton);
-		radioButtons.add(largeRangeButton);
-		radioButtons.add(smallSizeButton);
-		radioButtons.add(largeSizeButton);
+		// no radio buttons right now
 
 	}
 
@@ -110,23 +105,20 @@ public class TowerEditorTab extends ObjectEditorTab {
 		damageSpinner.setValue(map.get(TowerSchema.DAMAGE));
 		buildUpSpinner.setValue(map.get(TowerSchema.BUILDUP));
 
-		// buttons
-		ButtonModel selectedRangeButtonModel = null;
+	/*
 		ButtonModel selectedSizeButtonModel = null;
-		String rangeValue = (String) map.get(TowerSchema.RANGE);
+		
 		String sizeValue = (String) map.get(TowerSchema.TILE_SIZE);
 
 		for (JRadioButton radioButton : radioButtons) {
 			ButtonModel theModel = radioButton.getModel();
 			String theButtonText = radioButton.getText();
-			if (theButtonText.equals(rangeValue))
-				selectedRangeButtonModel = theModel;
 			if (theButtonText.equals(sizeValue))
 				selectedSizeButtonModel = theModel;
 		}
-		rangeButtonGroup.setSelected(selectedRangeButtonModel, true);
+	
 		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
-
+*/
 	}
 
 	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
@@ -136,31 +128,9 @@ public class TowerEditorTab extends ObjectEditorTab {
 			// TODO Auto-generated constructor stub
 		}
 
-		private Component makeRangePane() {
-			JPanel result = new JPanel();
-			result.setLayout(new GridLayout(1, 0));
-
-			result.setBorder(BorderFactory.createEmptyBorder(0, // top
-					20, // left
-					0, // bottom
-					0)); // right
-
-			smallRangeButton = new JRadioButton(TowerSchema.RANGE_SMALL);
-			mediumRangeButton = new JRadioButton(TowerSchema.RANGE_MEDIUM);
-			largeRangeButton = new JRadioButton(TowerSchema.RANGE_LARGE);
-			rangeButtonGroup = new ButtonGroup();
-			rangeButtonGroup.add(smallRangeButton);
-			rangeButtonGroup.add(mediumRangeButton);
-			rangeButtonGroup.add(largeRangeButton);
-			result.add(smallRangeButton);
-			result.add(mediumRangeButton);
-			result.add(largeRangeButton);
-			return result;
-		}
-
 		private JComponent makeSizePane() {
 			JPanel result = new JPanel();
-			result.setLayout(new GridLayout(1, 0));
+			result.setLayout(new GridLayout(0, 1));
 
 			result.setBorder(BorderFactory.createEmptyBorder(0, // top
 					20, // left
@@ -168,44 +138,35 @@ public class TowerEditorTab extends ObjectEditorTab {
 					0)); // right
 
 			largeSizeButton = new JRadioButton(TowerSchema.TILE_SIZE_LARGE);
-			smallSizeButton = new JRadioButton(TowerSchema.TILE_SIZE_SMALL);
+			iceDamageButton = new JRadioButton(TowerSchema.TILE_SIZE_SMALL);
 			sizeButtonGroup = new ButtonGroup();
 			sizeButtonGroup.add(largeSizeButton);
-			sizeButtonGroup.add(smallSizeButton);
+			sizeButtonGroup.add(iceDamageButton);
+			//result.add(new JLabel(TowerViewConstants.));
 			result.add(largeSizeButton);
-			result.add(smallSizeButton);
+			result.add(iceDamageButton);
 			return result;
 		}
 
 		@Override
 		protected JComponent makeFieldPane() {
 
-			JPanel result = new JPanel(new GridLayout(0, 1));
-
+			JPanel result = new JPanel(new GridLayout(0, 2));
 			healthSpinner = makeAttributeSpinner();
 			costSpinner = makeAttributeSpinner();
 			damageSpinner = makeAttributeSpinner();
 			buildUpSpinner = makeAttributeSpinner();
-			result.add(healthSpinner);
-			result.add(costSpinner);
-			result.add(damageSpinner);
-			result.add(buildUpSpinner);
-			result.add(makeSizePane());
-			result.add(makeRangePane());
+			firingSpeedSpinner = makeAttributeSpinner();
+			shrapnelDamageSpinner = makeAttributeSpinner();
+			result.add(makeSpinnerField(TowerSchema.HEALTH, healthSpinner));
+			result.add(makeSpinnerField(TowerSchema.COST, costSpinner));
+			result.add(makeSpinnerField(TowerSchema.DAMAGE, damageSpinner));
+			result.add(makeSpinnerField(TowerSchema.BUILDUP, buildUpSpinner));
+			result.add(makeSpinnerField(TowerSchema.FIRING_SPEED,
+					firingSpeedSpinner));
+			result.add(makeSpinnerField(TowerSchema.SHRAPNEL_DAMAGE,
+					shrapnelDamageSpinner));
 			return result;
-		}
-
-		@Override
-		protected JComponent makeLabelPane() {
-
-			JPanel labels = new JPanel(new GridLayout(0, 1));
-			labels.add(new JLabel(TowerViewConstants.HEALTH_STRING));
-			labels.add(new JLabel(TowerViewConstants.COST_STRING));
-			labels.add(new JLabel(TowerViewConstants.DAMAGE_STRING));
-			labels.add(new JLabel(TowerViewConstants.BUILDUP_STRING));
-			labels.add(new JLabel(TowerViewConstants.RANGE_STRING));
-			labels.add(new JLabel(TowerViewConstants.TILE_SIZE_STRING));
-			return labels;
 		}
 
 	}
@@ -213,8 +174,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	@Override
 	public void saveTabData() {
 		TowerController controller = (TowerController) myController;
-		
-		
+
 	}
 
 }
