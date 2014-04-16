@@ -38,6 +38,7 @@ import main.java.schema.GameBlueprint;
 public class DataHandler {
 	private final static String FILE_PATH = "src/main/resources"; // change back to src/main/resources after implementation is done!
 	private final static String TEST_FILE_PATH = "src/test/resources.replacement.tester";
+	private final static String TEMP_FOLDER_PATH = "src/main/resources.loaded/Blueprints/";
 	private final static int BUFF_SIZE = 4096;
 
 	/*private Gson myGson;
@@ -211,13 +212,18 @@ public class DataHandler {
 	 * @throws ZipException
 	 */
 	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException { // create another parameter isEngine that determine where it comes from
-		String zipDestinationPath = TEST_FILE_PATH + "MyAuthoringEnvironment/";
-		decompress(filePath, zipDestinationPath);
-		File myDir = new File(TEST_FILE_PATH); // change to resources folder after it's completed
+		//		System.out.println(tempDirCreated);
+
+		// load the zipped blueprint + resources
+		decompress(filePath, TEMP_FOLDER_PATH);
+
+		// delete resources folder
+		File myDir = new File(FILE_PATH);
 		deleteDirectory(myDir);
-		decompress(zipDestinationPath + "ZippedResources.zip", TEST_FILE_PATH);
-		return ((GameBlueprint) loadObjectFromFile(zipDestinationPath + "MyBlueprint.ser"));
-		//		return null;
+		
+		// load saved resources folder into resources folder location
+		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
+		return ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
 	}
 
 	/**
@@ -276,8 +282,13 @@ public class DataHandler {
 			for (int i = 0; i < fileHeaderList.size(); i++) {
 				FileHeader fileHeader = (FileHeader)fileHeaderList.get(i);
 				if (fileHeader != null) {
+					String outFilePath;
+					if(fileHeader.getFileName().startsWith("resources/")){
 
-					String outFilePath = destinationPath + System.getProperty("file.separator") + fileHeader.getFileName();
+						outFilePath = destinationPath + System.getProperty("file.separator") + fileHeader.getFileName().substring(10); // take the resources out of the filename
+					} else {
+						outFilePath = destinationPath + System.getProperty("file.separator") + fileHeader.getFileName();
+					}
 					File outFile = new File(outFilePath);
 
 					//Checks if the file is a directory
@@ -316,7 +327,7 @@ public class DataHandler {
 					//can be used as shown below
 					UnzipUtil.applyFileAttributes(fileHeader, outFile);
 
-//					System.out.println("Done extracting: " + fileHeader.getFileName());
+					//					System.out.println("Done extracting: " + fileHeader.getFileName());
 				} else {
 					System.err.println("fileheader is null. Shouldn't be here");
 				}
