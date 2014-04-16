@@ -2,6 +2,7 @@ package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
@@ -72,13 +73,16 @@ public class ShootingTower extends TowerBehaviorDecorator {
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
 //        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
-    	fire((Point2D) myDetector.findTarget(getXCoordinate(), getYCoordinate(), environ).get(0));
+    	List<Object> target = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
+    	if (target.size() < 1) return;
+    	fire((Point2D) target.get(0));
     }
 
     private void fire (Point2D target) {
         if (target == null) { return; }
         Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
-        if (inFiringInterval() && target.distance(currCoor) < myRange) {
+//        if (inFiringInterval() && target.distance(currCoor) < myRange) {
+        if (inFiringInterval()) {
             /* trigonometry from Guardian JGame example */
             double angle =
                     Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());

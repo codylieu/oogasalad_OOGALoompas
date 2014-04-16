@@ -3,6 +3,8 @@ package main.java.engine;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+
+import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
 
@@ -28,19 +30,21 @@ public class EnvironmentKnowledge {
     List<Monster> allMonsters;
     Player currentPlayer;
     ITower[][] allTowers;
+    Exit exit;
 
     /**
      * Add necessary state info.
      * 
      * @param allMonsters
      */
-    public EnvironmentKnowledge (List<Monster> allMonsters, Player currentPlayer, ITower[][] towers) {
+    public EnvironmentKnowledge (List<Monster> allMonsters, Player currentPlayer, ITower[][] towers, Exit exit) {
 
         // add more parameters as necessary
 
         this.allMonsters = allMonsters;
         this.currentPlayer = currentPlayer;
         this.allTowers = towers;
+        this.exit = exit;
 
     }
 
@@ -118,6 +122,15 @@ public class EnvironmentKnowledge {
      */
     public ITower[][] getAllTowers() {
     	return allTowers;
+    }
+    
+    /**
+     * Returns the exit object
+     * 
+     * @return the exit object
+     */
+    public Exit getExit() {
+    	return exit;
     }
 
 }

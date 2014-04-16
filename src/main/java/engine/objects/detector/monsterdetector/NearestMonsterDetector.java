@@ -16,13 +16,15 @@ import main.java.engine.objects.monster.Monster;
 public class NearestMonsterDetector extends MonsterDetector{
 
 	@Override
-	public List<Object> findTarget(double x, double y, EnvironmentKnowledge environmentKnowledge) {
+	public List<Object> findTarget(double x, double y, 
+			double range, EnvironmentKnowledge environmentKnowledge) {
 		double minDistance = Double.MAX_VALUE;
 		List<Object> closestMonster = new ArrayList<Object>();
 		Point2D towerCoordinate = new Point2D.Double(x, y);
 
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
-			if (m.getCurrentCoor().distance(towerCoordinate) < minDistance) {
+			if (m.getCurrentCoor().distance(towerCoordinate) < minDistance && 
+					m.getCurrentCoor().distance(towerCoordinate) < range) {
 				minDistance = m.getCurrentCoor().distance(towerCoordinate);
 				// a tower should only target one monster at a time
 				closestMonster.clear();

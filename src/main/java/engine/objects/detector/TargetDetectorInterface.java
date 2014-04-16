@@ -15,9 +15,10 @@ public interface TargetDetectorInterface {
 	 * Find the appropriate target(s)
 	 * @param x: x-coor
 	 * @param y: y-coor
+	 * @param range: range of effect
 	 * @param environmentKnowledge
 	 * @returna list of targeted objects
 	 */
-	public List<Object> findTarget(double x, double y, EnvironmentKnowledge environmentKnowledge);
+	public List<Object> findTarget(double x, double y, double range, EnvironmentKnowledge environmentKnowledge);
 	
 }
