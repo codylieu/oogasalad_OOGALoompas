@@ -356,7 +356,7 @@ public class Model {
 	public void placeItem(String name, double x, double y) {
 		// TODO: make code better
 		try {
-			Class c = Class.forName("main.java.engine.objects.item.RowBomb");
+			Class c = Class.forName("main.java.engine.objects.item.InstantFreeze");
 			Constructor[] con = c.getConstructors();
 			TDItem newItem = (TDItem) con[0].newInstance(x, y);
 			if (newItem.getCost() <= player.getMoney()) {
