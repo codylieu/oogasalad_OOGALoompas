@@ -39,6 +39,7 @@ public class TerrainEditorTab extends EditorTab {
 	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
 	private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
 	private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
+	private static final String MAP_SAVED = "Map Saved";
 
 	private int selectedPassabilityIndex;
 
@@ -217,7 +218,7 @@ public class TerrainEditorTab extends EditorTab {
 	 * @param e
 	 */
 	public void saveMap(ActionEvent e) {
-		((JButton) e.getSource()).setEnabled(false);
+		JOptionPane.showMessageDialog(this, MAP_SAVED);
 		saveTabData();
 	}
 
