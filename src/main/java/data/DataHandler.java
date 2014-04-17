@@ -173,6 +173,12 @@ public class DataHandler {
 		return true;
 	}
 
+	/**
+	 * Method to compress the resources folder
+	 * @param folderToZIP
+	 * @param filePathToStoreTo
+	 * @return
+	 */
 	private boolean compressResources(File folderToZIP, String filePathToStoreTo){
 		try{
 			ZipFile zipFile = new ZipFile(filePathToStoreTo);
@@ -186,16 +192,6 @@ public class DataHandler {
 		return false;
 	}
 
-	/**
-	 * Loads a serialized blueprint (a ZIP file with serialized gameBlueprint + resources))
-	 * Deletes current resources folder and replaces it with the zipped resources
-	 * inside the databundle
-	 * @param filePath
-	 * @return unserialized gameblueprint
-	 * @throws IOException 
-	 * @throws ClassNotFoundException 
-	 * @throws ZipException 
-	 */
 
 	/**
 	 * Takes in the filePath to a ZIP,

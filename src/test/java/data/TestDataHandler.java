@@ -55,20 +55,14 @@ public class TestDataHandler {
 	//		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
 	//	}
 
-
 	/**
-	 * Want to test Zippings and unzipping,
-	 * do so by saving a testBlueprint to file
-	 * then saving/unsaving it
-	 * to file again, and finally comparing them
-	 * both to make sure it's the same size
-	 * the blueprint doesn't actually get compressed,
-	 * but still want to make sure it doesn't get changed
+	 * test to see if an incomplete blueprint
+	 * causes testDataHandler to throw a
+	 * InvalidGameBlueprintException
 	 * @throws ClassNotFoundException
 	 * @throws IOException
-	 * @throws ZipException 
+	 * @throws ZipException
 	 */
-
 	@Test(expected=InvalidGameBlueprintException.class)
 	public void testEngineLoadingBlueprint() throws ClassNotFoundException, IOException, ZipException {
 		DataHandler testDataHandler = new DataHandler();
@@ -80,6 +74,16 @@ public class TestDataHandler {
 		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip",true);
 	}
 
+	/**
+	 * Tests compression and decompression
+	 * only works if saveObjectFromFile
+	 * and loadObjectFromFile are public
+	 * so we can test pre-compressed size
+	 * and post-compressed size
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 * @throws ZipException
+	 */
 	@Test
 	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
 		DataHandler testDataHandler = new DataHandler();
