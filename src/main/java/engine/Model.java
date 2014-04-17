@@ -454,8 +454,9 @@ public class Model {
         }
         
         ITower newTower = factory.placeTower(new Point2D.Double(x, y), newTowerName);
-        player.changeMoney(newTower.getCost());
-        //TODO: Specify cost of upgrade, or give some discount?
+        player.changeMoney(-newTower.getCost());
+        // TODO: Specify cost of upgrade, calculate difference between old and new tower, or give
+        // some discount?
         existingTower.remove();
         towers[xtile][ytile] = newTower;
         return true;
