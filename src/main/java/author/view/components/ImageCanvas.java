@@ -7,9 +7,19 @@ import java.awt.Image;
 public class ImageCanvas extends Canvas {
 	private Image myImage;
 	private boolean fillsUpCanvas;
+	private String imagePath;
 
-	public ImageCanvas(boolean fillsUpCanvas) {
+	public String getImagePath() {
+		return imagePath;
+	}
+	public ImageCanvas(boolean fillsUpCanvas, String name) {
 		this.fillsUpCanvas = fillsUpCanvas;
+		setName(name);
+		this.imagePath = "";
+	}
+	
+	public void setImagePath(String newImagePath) {
+		imagePath = newImagePath;
 	}
 
 	public ImageCanvas() {

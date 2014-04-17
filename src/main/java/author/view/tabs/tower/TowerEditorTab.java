@@ -47,7 +47,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	private JComboBox<String> upgradeDropDown;
 
-	protected ImageCanvas collisionImageCanvas;
+	protected ImageCanvas bulletImageCanvas;
 	protected ImageCanvas shrapnelImageCanvas;
 	protected JButton collisionImageButton;
 	protected JButton shrapnelImageButton;
@@ -78,16 +78,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	 * 
 	 */
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
-		// fields (spinners)
-
-		for (JSpinner spinner : spinnerFields) {
-			spinner.setValue(map.get(spinner.getName()));
-		}
-
-		for (SpinnerTogglingRadioButton radioButton : radioButtons) {
-			radioButton.setSelected((Boolean) map.get(radioButton.getText()));
-
-		}
+		super.updateViewWithSchemaData(map);
 
 		upgradeDropDown.removeAllItems();
 		for (String tower : objectMap.keySet()) {
@@ -105,25 +96,9 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	}
 
-	/**
-	 * puts the view fields' data into the schema data
-	 */
 	protected void updateSchemaDataFromView() {
-		// update schema with fields
-		String name = getSelectedObjectName();
-		TDObjectSchema myCurrentObject = objectMap.get(name);
-
-		for (JSpinner spinner : spinnerFields) {
-
-			myCurrentObject.addAttribute(spinner.getName(),
-					(Integer) spinner.getValue());
-		}
-
-		for (SpinnerTogglingRadioButton button : radioButtons) {
-			myCurrentObject.addAttribute(button.getText(),
-					(Boolean) button.isSelected());
-		}
-		myCurrentObject.addAttribute(upgradeDropDown.getName(),
+		super.updateSchemaDataFromView();
+		getSelectedObject().addAttribute(upgradeDropDown.getName(),
 				(String) upgradeDropDown.getSelectedItem());
 
 	}
@@ -149,7 +124,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 		shrapnelImageButton.addActionListener(new FileChooserListener(
 				shrapnelImageCanvas));
 		collisionImageButton.addActionListener(new FileChooserListener(
-				collisionImageCanvas));
+				bulletImageCanvas));
 	}
 
 	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
@@ -184,19 +159,22 @@ public class TowerEditorTab extends ObjectEditorTab {
 					TowerSchema.TOWER_BEHAVIOR_FARMS_MONEY, true);
 			// other
 			upgradeDropDown = makeUpgradeDropdown();
+			//canvases
+			bulletImageCanvas = new ImageCanvas(true, TowerSchema.BULLET_IMAGE_NAME);
+			shrapnelImageCanvas = new ImageCanvas(true, TowerSchema.SHRAPNEL_IMAGE_NAME);
 			// clump data types
 			JSpinner[] spinners = { healthSpinner, costSpinner, buildUpSpinner,
 					damageSpinner, rangeSpinner, firingSpeedSpinner,
 					shrapnelDamageSpinner, moneyFarmAmountSpinner,
 					moneyFarmIntervalSpinner, freezeRatioSpinner };
-
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-
 			SpinnerTogglingRadioButton[] buttons = { shootsToggleButton,
 					freezeToggleButton, moneyFarmingToggleButton,
 					bombingToggleButton };
 			radioButtons = new ArrayList<SpinnerTogglingRadioButton>(
 					Arrays.asList(buttons));
+			ImageCanvas[] canvases = {bulletImageCanvas, shrapnelImageCanvas};
+			imageCanvases = new ArrayList<ImageCanvas>(Arrays.asList(canvases));
 
 		}
 
@@ -220,21 +198,20 @@ public class TowerEditorTab extends ObjectEditorTab {
 		protected JComponent makeSecondaryImagesGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			result.add(makeCollisionGraphicPane(), BorderLayout.WEST);
+			result.add(makeBulletGraphicPane(), BorderLayout.WEST);
 			result.add(makeShrapnelGraphicPane(), BorderLayout.CENTER);
 			return result;
 		}
 
-		private JComponent makeCollisionGraphicPane() {
+		private JComponent makeBulletGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			collisionImageCanvas = new ImageCanvas(true);
-			collisionImageCanvas.setSize(new Dimension(
+			bulletImageCanvas.setSize(new Dimension(
 					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2,
 					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2));
-			collisionImageCanvas.setBackground(Color.BLACK);
-			result.add(collisionImageCanvas, BorderLayout.CENTER);
-			collisionImageButton = makeChooseGraphicsButton("Set Collision Image");
+			bulletImageCanvas.setBackground(Color.BLACK);
+			result.add(bulletImageCanvas, BorderLayout.CENTER);
+			collisionImageButton = makeChooseGraphicsButton("Set Bullet Image");
 			result.add(collisionImageButton, BorderLayout.SOUTH);
 			return result;
 		}
@@ -242,13 +219,12 @@ public class TowerEditorTab extends ObjectEditorTab {
 		private JComponent makeShrapnelGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			shrapnelImageCanvas = new ImageCanvas(true);
 			shrapnelImageCanvas.setSize(new Dimension(
 					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2,
 					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2));
 			shrapnelImageCanvas.setBackground(Color.BLACK);
 			result.add(shrapnelImageCanvas, BorderLayout.CENTER);
-			shrapnelImageButton = makeChooseGraphicsButton("Set Object Image");
+			shrapnelImageButton = makeChooseGraphicsButton("Set Shrapnel Image");
 			result.add(shrapnelImageButton, BorderLayout.SOUTH);
 			return result;
 		}

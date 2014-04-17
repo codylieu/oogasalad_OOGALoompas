@@ -68,6 +68,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected List<JSpinner> spinnerFields;
 	protected JButton createObjectButton;
 	protected List<SpinnerTogglingRadioButton> radioButtons;
+	protected List<ImageCanvas> imageCanvases;
 	protected JTextField createObjectField;
 	
 	protected JButton deleteObjectButton;
@@ -195,6 +196,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected String getSelectedObjectName() {
 		return (String) listModel.getValueAt(list.getSelectedRow(), 0);
 	}
+	
+	protected TDObjectSchema getSelectedObject() {
+		return objectMap.get(getSelectedObjectName());
+	}
 
 	protected void init() {
 		setLayout(new BorderLayout());
@@ -231,16 +236,40 @@ public abstract class ObjectEditorTab extends EditorTab {
 		updateViewWithSchemaData(myCurrentObject.getAttributesMap());
 	}
 
-	/*
-	 * private void updateFieldToggling() { for (JSpinner spinner :
-	 * spinnerFields) { enableField(spinner); } for (SpinnerTogglingRadioButton
-	 * button : radioButtons) { button.setEnabled(true); } }
+	/**
+	 * puts the view fields' data into the schema data
 	 */
+	protected void updateSchemaDataFromView() {
+		// update schema with fields
+		String name = getSelectedObjectName();
+		TDObjectSchema myCurrentObject = objectMap.get(name);
 
-	protected abstract void updateSchemaDataFromView();
+		for (JSpinner spinner : spinnerFields) {
 
-	protected abstract void updateViewWithSchemaData(
-			Map<String, Serializable> attributesMap);
+			myCurrentObject.addAttribute(spinner.getName(),
+					(Integer) spinner.getValue());
+		}
+
+		for (SpinnerTogglingRadioButton button : radioButtons) {
+			myCurrentObject.addAttribute(button.getText(),
+					(Boolean) button.isSelected());
+		}
+		
+
+	}
+
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+		// fields (spinners)
+
+		for (JSpinner spinner : spinnerFields) {
+			spinner.setValue(map.get(spinner.getName()));
+		}
+
+		for (SpinnerTogglingRadioButton radioButton : radioButtons) {
+			radioButton.setSelected((Boolean) map.get(radioButton.getText()));
+
+		}
+	}
 
 	protected class FileChooserListener implements ActionListener {
 
@@ -323,7 +352,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 					ObjectEditorConstants.IMAGE_CANVAS_SIZE));
 			objectImageCanvas.setBackground(Color.BLACK);
 			result.add(objectImageCanvas, BorderLayout.CENTER);
-			objectImageButton = makeChooseGraphicsButton("Set Object Image");
+			objectImageButton = makeChooseGraphicsButton("Set "+objectName+" Image");
 			result.add(objectImageButton, BorderLayout.SOUTH);
 			return result;
 		}

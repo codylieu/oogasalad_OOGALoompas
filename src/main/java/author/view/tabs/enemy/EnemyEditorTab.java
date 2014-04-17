@@ -22,6 +22,7 @@ import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
@@ -36,32 +37,6 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 	private JSpinner healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
 
-	private class EnemyTabViewBuilder extends ObjectTabViewBuilder {
-
-		public EnemyTabViewBuilder(EditorTab editorTab) {
-			super(editorTab);
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		protected void instantiateAndClumpFields() {
-			// TODO Auto-generated method stub
-
-		}
-
-		@Override
-		protected JComponent makeFieldPane() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-		@Override
-		protected JComponent makeSecondaryImagesGraphicPane() {
-			// TODO Auto-generated method stub
-			return null;
-		}
-
-	}
 
 	@Override
 	public void saveTabData() {
@@ -76,14 +51,12 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 	@Override
 	protected TDObjectSchema createSpecificNewObject(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SimpleMonsterSchema();
 	}
 
 	@Override
 	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
-		// TODO Auto-generated method stub
-		return null;
+		return new EnemyTabViewBuilder(this);
 	}
 
 	@Override
@@ -96,6 +69,35 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	protected void updateViewWithSchemaData(
 			Map<String, Serializable> attributesMap) {
 		// TODO Auto-generated method stub
+
+	}
+	
+
+	private class EnemyTabViewBuilder extends ObjectTabViewBuilder {
+
+		public EnemyTabViewBuilder(EditorTab editorTab) {
+			super(editorTab);
+			// TODO Auto-generated constructor stub
+		}
+
+		@Override
+		protected void instantiateAndClumpFields() {
+			healthSpinner = makeAttributeSpinner(MonsterSchema.HEALTH);
+			//healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
+
+		}
+
+		@Override
+		protected JComponent makeFieldPane() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		protected JComponent makeSecondaryImagesGraphicPane() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 
 	}
 
