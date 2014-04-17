@@ -220,7 +220,7 @@ public class Model {
 	public void loadGameBlueprint(String filePath) throws ClassNotFoundException, IOException {
 //		GameBlueprint bp = null;
 //        try {
-//            bp = dataHandler.loadBlueprint(filePath);
+//            bp = dataHandler.loadBlueprint(filePath,true);
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //            return;
