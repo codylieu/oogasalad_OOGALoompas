@@ -14,18 +14,25 @@ import javax.swing.JTextField;
 import javax.swing.JSpinner.DefaultEditor;
 
 import main.java.author.view.global_constants.FontConstants;
+import main.java.engine.objects.tower.TowerBehaviors;
 
-public class SpinnerTogglingRadioButton extends JRadioButton {
+public class BehaviorTogglingRadioButton extends JRadioButton {
 
 	private JComponent[] fieldsToToggle;
 	private Font regularFont;
+	private TowerBehaviors towerBehavior;
 
-	public SpinnerTogglingRadioButton() {
+	public BehaviorTogglingRadioButton() {
 
 	}
 
-	public SpinnerTogglingRadioButton(String towerBehaviorShoots, boolean b) {
-		super(towerBehaviorShoots, b);
+	public BehaviorTogglingRadioButton(String towerBehaviorName, TowerBehaviors towerBehavior, boolean b) {
+		super(towerBehaviorName, b);
+		this.towerBehavior = towerBehavior;
+	}
+	
+	public TowerBehaviors getBehavior() {
+		return towerBehavior;
 	}
 
 	public void setFieldsToToggle(JComponent... fieldsToToggle) {

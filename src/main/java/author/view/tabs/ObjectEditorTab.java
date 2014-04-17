@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,9 +54,10 @@ import javax.swing.table.DefaultTableModel;
 import main.java.author.controller.TabController;
 import main.java.author.util.ObjectUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
-import main.java.author.view.components.SpinnerTogglingRadioButton;
+import main.java.author.view.components.BehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.author.view.global_constants.ObjectEditorConstants;
+import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 
 public abstract class ObjectEditorTab extends EditorTab {
@@ -65,7 +67,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected JSplitPane splitPane;
 	protected List<JSpinner> spinnerFields;
 	protected JButton createObjectButton;
-	protected List<SpinnerTogglingRadioButton> radioButtons;
+	protected List<BehaviorTogglingRadioButton> radioButtons;
 	protected List<ImageCanvas> imageCanvases;
 	protected JTextField createObjectField;
 
@@ -137,12 +139,12 @@ public abstract class ObjectEditorTab extends EditorTab {
 			});
 		}
 
-		for (SpinnerTogglingRadioButton button : radioButtons) {
+		for (BehaviorTogglingRadioButton button : radioButtons) {
 			button.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					SpinnerTogglingRadioButton button = (SpinnerTogglingRadioButton) e
+					BehaviorTogglingRadioButton button = (BehaviorTogglingRadioButton) e
 							.getSource();
 					button.toggle();
 					updateSchemaDataFromView();
@@ -238,18 +240,12 @@ public abstract class ObjectEditorTab extends EditorTab {
 	 */
 	protected void updateSchemaDataFromView() {
 		// update schema with fields
-		String name = getSelectedObjectName();
-		TDObjectSchema myCurrentObject = objectMap.get(name);
+		TDObjectSchema myCurrentObject = getSelectedObject();
 
 		for (JSpinner spinner : spinnerFields) {
 
 			myCurrentObject.addAttribute(spinner.getName(),
 					(Integer) spinner.getValue());
-		}
-
-		for (SpinnerTogglingRadioButton button : radioButtons) {
-			myCurrentObject.addAttribute(button.getText(),
-					(Boolean) button.isSelected());
 		}
 
 		for (ImageCanvas canvas : imageCanvases) {
@@ -266,10 +262,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 			spinner.setValue(map.get(spinner.getName()));
 		}
 
-		for (SpinnerTogglingRadioButton radioButton : radioButtons) {
-			radioButton.setSelected((Boolean) map.get(radioButton.getText()));
-
-		}
 		
 		for (ImageCanvas canvas : imageCanvases) {
 			canvas.clearImagePath();
@@ -461,7 +453,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 		protected Component makeTypeTogglePane() {
 			JPanel result = new JPanel();
 			result.setLayout(new GridLayout(1, 0));
-			for (SpinnerTogglingRadioButton button : radioButtons) {
+			for (BehaviorTogglingRadioButton button : radioButtons) {
 				result.add(button);
 			}
 

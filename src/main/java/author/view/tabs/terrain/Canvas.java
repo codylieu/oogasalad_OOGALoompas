@@ -30,7 +30,7 @@ public class Canvas extends JPanel {
 		myTiles = new Tile[numRows][numCols];
 		for (int row = 0; row < numRows; row++) {
 			for (int col = 0; col < numCols; col++) {
-				myTiles[row][col] = new Tile(row, col, DEFAULT_TILE_COLOR);
+				myTiles[row][col] = new Tile(row, col);
 			}
 		}
 		setPreferredSize(new Dimension(numCols*TILE_SIZE, numRows*TILE_SIZE)); // important for maintaining size of JPanel
@@ -73,14 +73,13 @@ public class Canvas extends JPanel {
 			// Upper left corner of the tile
 			int x = tile.getCol() * rectWidth;
 			int y = tile.getRow() * rectHeight;
-			Color tileColor = tile.getColor();
 			Image tileImage = tile.getImage();
 
 			if (tileImage == null) {
-				g.setColor(tileColor);
+				g.setColor(DEFAULT_TILE_COLOR);
 				g.fillRect(x, y, rectWidth, rectHeight); // filling appropriate Tile background colors
 			} else {
-				g.drawImage(tileImage,x,y, rectWidth, rectHeight, tileColor, null);
+				g.drawImage(tileImage,x,y, rectWidth, rectHeight, DEFAULT_TILE_COLOR, null);
 			}
 			g.setColor(DEFAULT_BORDER_COLOR);
 			g.drawRect(x, y, rectWidth, rectHeight); // drawing appropriate Tile borders
@@ -129,7 +128,6 @@ public class Canvas extends JPanel {
 			return;
 		}
 		tile.setImage(selectedTileObj.getImage());
-		tile.setColor(selectedTileObj.getBGColor());
 		tile.setPassIndex(myTerrainTab.getPassabilityIndex());
         tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
         tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
@@ -143,7 +141,6 @@ public class Canvas extends JPanel {
 	protected void clearTiles() {
 		for (Tile tile : getTiles()) {
 			tile.setImage(null);
-			tile.setColor(DEFAULT_TILE_COLOR);
 			tile.setPassIndex(0);
 			repaint();
 		}
