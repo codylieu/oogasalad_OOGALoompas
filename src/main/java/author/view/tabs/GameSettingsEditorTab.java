@@ -8,27 +8,21 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.GameSettingsController;
 import main.java.author.view.global_constants.FontConstants;
@@ -295,11 +289,6 @@ public class GameSettingsEditorTab extends EditorTab{
 
 		}
 
-	}
-
-	public int getNumLevels() {
-		// TODO Auto-generated method stub
-		return (int) levelsPerGameSpinner.getValue();
 	}
 
 }

@@ -20,10 +20,6 @@ public class WaveController extends TabController {
 		mySuperController.addWaveToModel(waves);
 	}
 
-	public int getNumLevels() {
-		return mySuperController.getNumLevels();
-	}
-
 	public List<String> getEnemyList() {
 		
 		return mySuperController.getEnemyList();
@@ -36,7 +32,7 @@ public class WaveController extends TabController {
 	
 	public void updateTable(){
 		WaveEditorTab waveEditorTab = (WaveEditorTab) myEditorTab;
-		waveEditorTab.updateTable();
+		waveEditorTab.updateEnemyList();
 	}
 	
 }

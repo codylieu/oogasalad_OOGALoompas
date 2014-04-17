@@ -17,9 +17,4 @@ public class GameSettingsController extends TabController {
 		mySuperController.addGameSettingsToModel(gameSchema);
 	}
 
-	public int getNumLevels() {
-		GameSettingsEditorTab myTab = (GameSettingsEditorTab) myEditorTab;
-		return myTab.getNumLevels();
-	}
-
 }
