@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
@@ -30,10 +31,10 @@ import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
-import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
 
 

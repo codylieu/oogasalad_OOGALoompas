@@ -1,10 +1,14 @@
 package main.java.schema.tdobjects;
 
+import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import main.java.author.view.tabs.tower.TowerViewConstants;
 import main.java.engine.objects.tower.SimpleTower;
+import main.java.engine.objects.tower.TowerBehaviors;
 
 public class TowerSchema extends TDObjectSchema {
 	public static final String LOCATION = "Location";
@@ -17,6 +21,7 @@ public class TowerSchema extends TDObjectSchema {
 	public static final String MONEY_GRANTED = "Money Granted Per Interval";
 	public static final String MONEY_GRANT_INTERVAL = "Money Grant Interval (sec)";
 	public static final String FREEZE_SLOWDOWN_PROPORTION = "Freeze Slowdown (%)";
+	public static final String SPLASH_AMOUNT = "Splash Amount (%)";
 	public static final String TILE_SIZE = "Size";
 	public static final String BUILDUP = "Build Up Time (sec)";
 	public static final String TOWER_IMAGE_NAME = "Tower Image Name";
@@ -49,10 +54,6 @@ public class TowerSchema extends TDObjectSchema {
 		myAttributeSet.add(RANGE);
 		myAttributeSet.add(NAME);
 		myAttributeSet.add(TOWER_BEHAVIORS);
-		myAttributeSet.add(TOWER_BEHAVIOR_BOMBS);
-		myAttributeSet.add(TOWER_BEHAVIOR_FARMS_MONEY);
-		myAttributeSet.add(TOWER_BEHAVIOR_FREEZES);
-		myAttributeSet.add(TOWER_BEHAVIOR_SHOOTS);
 		myAttributeSet.add(MONEY_GRANTED);
 		myAttributeSet.add(MONEY_GRANT_INTERVAL);
 		myAttributeSet.add(SHRAPNEL_DAMAGE);
@@ -87,10 +88,8 @@ public class TowerSchema extends TDObjectSchema {
 		addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "");
 		addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
 		addAttribute(TowerSchema.UPGRADE_PATH, "");
-		addAttribute(TowerSchema.TOWER_BEHAVIOR_BOMBS, true);
-		addAttribute(TowerSchema.TOWER_BEHAVIOR_FARMS_MONEY, true);
-		addAttribute(TowerSchema.TOWER_BEHAVIOR_FREEZES, true);
-		addAttribute(TowerSchema.TOWER_BEHAVIOR_SHOOTS, true);
+		List<TowerBehaviors> defaultBehaviors = Arrays.asList(TowerBehaviors.values());
+		addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) defaultBehaviors);
 	}
 
 	@Override
