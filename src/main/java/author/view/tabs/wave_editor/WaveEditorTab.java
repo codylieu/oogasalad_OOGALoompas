@@ -26,24 +26,24 @@ import main.java.schema.WaveSpawnSchema;
 public class WaveEditorTab extends EditorTab {
 
 	private List<WaveSpawnSchema> myWaves;
-	
+
 	private String[] columnNames = {"Waves", "Monster 1", "Monster 2", "Monster 3"};
 	private Object[][] data = {};
-	
+
 	private JTable table;
-	
+
 	private static int NUMBER_OF_WAVES = 0;
-	
+
 	private WaveTabContentCreator tabCreator = new WaveTabContentCreator();
 
 	public WaveEditorTab(TabController tabController) {
 		super(tabController);
 		add(tabCreator.createWaveEditorContent(), BorderLayout.CENTER);
 	}
-	
+
 	// Will make all of the values in the fields initially 0. Have to write a method since list of enemies is dynamic
 	public void populateFields(){
-		
+
 	}
 
 	private void addWaveData() {
@@ -55,15 +55,15 @@ public class WaveEditorTab extends EditorTab {
 		List<String> possibleEnemies = waveController.getEnemyList();
 		//do stuff with table
 	}
-	
+
 	@Override
 	public void saveTabData() {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	private class WaveTabContentCreator{
-		
+
 		public JComponent createWaveEditorContent(){
 
 			JPanel content = new JPanel(new BorderLayout());
@@ -113,7 +113,7 @@ public class WaveEditorTab extends EditorTab {
 
 			return addNewWaveButton;
 		}
-		
+
 		// Just here to test simpler case of removing rows
 		private JComponent makeRemoveMostRecentWaveButton(){
 			JButton removeMostRecentWaveButton = new JButton("Remove Last Wave");
@@ -153,29 +153,29 @@ public class WaveEditorTab extends EditorTab {
 
 			return removeWaveButton;
 		}
-		
+
 		private JComponent makeClearAllWavesButton(){
-			
+
 			JButton clearAllWavesButton = new JButton("Clear All Waves");
-			
+
 			clearAllWavesButton.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					
+
 					DefaultTableModel model = (DefaultTableModel) table.getModel();
-					
+
 					while(NUMBER_OF_WAVES > 0){
 						NUMBER_OF_WAVES--;
 						model.removeRow(NUMBER_OF_WAVES);
 					}
-					
+
 				}
 			});
-			
+
 			return clearAllWavesButton;
 		}
-		
+
 	}
 
 }
