@@ -49,10 +49,10 @@ public class JSONHandler {
 	}
 
 	public static void main(String[] args) throws IOException	{
-		GameSchema testSchema = new GameSchema();
-		testSchema.addAttribute("Lives",10);
-		GameBlueprint testBlueprint = new GameBlueprint();
-		testBlueprint.setMyGameScenario(testSchema);
+//		GameSchema testSchema = new GameSchema();
+//		testSchema.addAttribute("Lives",10);
+//		GameBlueprint testBlueprint = new GameBlueprint();
+//		testBlueprint.setMyGameScenario(testSchema);
 		//Game maps no longer exist
 		/*List<GameMap> maps = new ArrayList<GameMap>();
 		maps.add(new GameMap());
