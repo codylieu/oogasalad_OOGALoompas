@@ -1,6 +1,8 @@
 package main.java.engine.objects.item;
 
+import jgame.JGObject;
 import main.java.engine.EnvironmentKnowledge;
+import main.java.engine.objects.item.decorations.Fire;
 import main.java.engine.objects.monster.Monster;
 
 /**
@@ -30,17 +32,16 @@ public class RowBomb extends TDItem{
 		if (timeCounter >= buildupTime) {
 			for (Monster m : environmentKnowledge.getAllMonsters()) {
 				if (isInRange(m, x, y)) {
+					setFireToTheRain(m);
 					m.takeDamage(DAMAGE);
 				}
 			}
-			lightFire();
 			terminateItem();
 		} else flash(timeCounter, FLASH_INTERVAL, IMAGE);
 	}
 
-	private void lightFire() {
-		
-		
+	private void setFireToTheRain(Monster m) {
+		new Fire(m.x, m.y);
 	}
 
 	private boolean isInRange(Monster m, double x, double y) {

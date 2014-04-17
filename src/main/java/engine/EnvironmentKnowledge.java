@@ -82,6 +82,9 @@ public class EnvironmentKnowledge {
     	return exit;
     }
     
+    /**
+     * Add a life to the current player
+     */
     public void grantPlayerLife() {
     	currentPlayer.incrementLives();
     }

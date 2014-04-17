@@ -21,10 +21,14 @@ public class InstantFreeze extends TDItem {
 	public InstantFreeze(double x, double y) {
 		super("instance_freeze", x, y, IMAGE, COST, BUILDUP_TIME, DAMAGE);
 	}
+	
+	@Override
+	public void move() {
+		timeCounter++;
+	}
 
 	@Override
 	public void doAction(EnvironmentKnowledge environmentKnowledge) {
-		timeCounter++;
 		if (timeCounter < buildupTime) {
 			freezeMonsters(environmentKnowledge);
 		} else {
@@ -37,12 +41,14 @@ public class InstantFreeze extends TDItem {
 	private void freezeMonsters(EnvironmentKnowledge environmentKnowledge) {
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
 			m.setSpeed(0, 0);
+			m.setImage("ice");
 		}
 	}
 	
 	private void recoverMonsterSpeed(EnvironmentKnowledge environmentKnowledge) {
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
 			m.setSpeed(m.getOriginalSpeed());
+			m.setImage(m.getOriginalImage());
 		}
 	}
 

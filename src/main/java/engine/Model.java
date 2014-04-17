@@ -93,6 +93,7 @@ public class Model {
 		engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
 		engine.defineImage("row_bomb", "-", TDItem.ITEM_CID, RESOURCE_PATH + "Big_Ben.png", "-");
 		engine.defineImage("fire", "-", 0, RESOURCE_PATH + "fire.png", "-");
+		engine.defineImage("ice", "-", 0, RESOURCE_PATH + "ice.png", "-");
 	}
 
 	/**
@@ -361,7 +362,7 @@ public class Model {
 	public void placeItem(String name, double x, double y) {
 		// TODO: make code better. move code to TDObjectFacotry
 		try {
-			Class c = Class.forName("main.java.engine.objects.item.LifeSaver");
+			Class c = Class.forName("main.java.engine.objects.item.InstantFreeze");
 			Constructor[] con = c.getConstructors();
 			TDItem newItem = (TDItem) con[0].newInstance(x, y);
 			if (newItem.getCost() <= player.getMoney()) {

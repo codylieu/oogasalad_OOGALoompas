@@ -28,6 +28,7 @@ public abstract class Monster extends TDObject {
 	protected Point2D myEntrance;
 	protected Exit myExit;
 	protected JGPath myPath;
+	protected String originalImage;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
 	 */
@@ -60,6 +61,7 @@ public abstract class Monster extends TDObject {
 		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
 		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
 		this.setSpeed(myMoveSpeed);
+		originalImage = graphic;
 		try {
 			myPath = myPathFinder.getPath(pathEntrance, pathExit);
 		} catch (NoPossiblePathException e) {
@@ -127,6 +129,15 @@ public abstract class Monster extends TDObject {
 	 */
 	public double getMoneyValue() {
 		return myMoneyValue;
+	}
+	
+	/**
+	 * Get the original image of this monster
+	 * 
+	 * @return original image of the monster
+	 */
+	public String getOriginalImage() {
+		return originalImage;
 	}
 
 	@Override
