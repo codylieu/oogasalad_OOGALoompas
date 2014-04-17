@@ -37,6 +37,11 @@ public class WaveEditorTab extends EditorTab {
 		super(tabController);
 		add(createWaveEditorContent(), BorderLayout.CENTER);
 	}
+	
+	// Will make all of the values in the fields initially 0. Have to write a method since list of enemies is dynamic
+	public void populateFields(){
+		
+	}
 
 	public JComponent createWaveEditorContent(){
 

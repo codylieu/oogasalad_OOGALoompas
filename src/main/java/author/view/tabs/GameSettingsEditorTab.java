@@ -45,17 +45,14 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JComboBox gameModeList;
 	private JComboBox gameDifficultyList;
 
-	private JLabel levelsPerGameLabel;
 	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
 
-	private JSpinner levelsPerGameSpinner;
 	private JSpinner livesSpinner;
 	private JSpinner beginningMoneySpinner;
 
 	private List<JSpinner> spinnerFields;
 
-	private static final String LEVELS_STRING = "Levels Per Game: ";
 	private static final String LIVES_STRING = "Lives: ";
 	private static final String WAVES_STRING = "Waves Per Level: ";
 	private static final String ENEMIES_STRING = "Enemies Per Wave: ";
@@ -92,7 +89,6 @@ public class GameSettingsEditorTab extends EditorTab{
 
 		gameSchema = new GameSchema();
 
-		gameSchema.addAttribute(GameSchema.LEVELS, (Integer) levelsPerGameSpinner.getValue());
 		gameSchema.addAttribute(GameSchema.LIVES, (Integer) livesSpinner.getValue());
 		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
 
@@ -163,13 +159,11 @@ public class GameSettingsEditorTab extends EditorTab{
 		 * Makes the labels for the attributes that have corresponding JSpinners
 		 */
 		private JComponent makeLabelPane(){
-			levelsPerGameLabel = new JLabel(LEVELS_STRING);
 			livesLabel = new JLabel(LIVES_STRING);
 			beginningMoneyLabel = new JLabel(MONEY_STRING);
 
 			JPanel labels = new JPanel(new GridLayout(0, 1));
 
-			labels.add(levelsPerGameLabel);
 			labels.add(livesLabel);
 			labels.add(beginningMoneyLabel);
 
@@ -184,15 +178,12 @@ public class GameSettingsEditorTab extends EditorTab{
 
 			JPanel fields = new JPanel(new GridLayout(0, 1));
 
-			levelsPerGameSpinner = makeAttributeSpinner();
 			livesSpinner = makeAttributeSpinner();
 			beginningMoneySpinner = makeAttributeSpinner();
 
-			levelsPerGameSpinner.setValue(10);
 			livesSpinner.setValue(5);
 			beginningMoneySpinner.setValue(500);
 
-			fields.add(levelsPerGameSpinner);
 			fields.add(livesSpinner);
 			fields.add(beginningMoneySpinner);
 
@@ -296,11 +287,6 @@ public class GameSettingsEditorTab extends EditorTab{
 
 		}
 
-	}
-
-	public int getNumLevels() {
-		// TODO Auto-generated method stub
-		return (int) levelsPerGameSpinner.getValue();
 	}
 
 }
