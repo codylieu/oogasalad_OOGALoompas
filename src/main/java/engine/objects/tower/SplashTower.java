@@ -6,6 +6,7 @@ import java.util.Map;
 
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.projectile.Bomb;
 import main.java.engine.objects.projectile.DamageProjectile;
 import main.java.engine.objects.projectile.FreezeProjectile;
 import main.java.schema.tdobjects.TowerSchema;
@@ -17,9 +18,6 @@ import main.java.schema.tdobjects.TowerSchema;
  *
  */
 public class SplashTower extends ShootingTower {
-
-    public static final double[] SPLASH_X = { 0.0, 0.0, -4.0, 4.0, 2.0, -2.0, 2.0, -2.0};
-    public static final double[] SPLASH_Y = { -4.0, 4.0, 0.0, 0.0, 2.0, -2.0, -2.0, 2.0};
 	
 	public SplashTower(ITower baseTower, Map<String, Serializable> attributes) {
 		super(baseTower, attributes);
@@ -27,11 +25,11 @@ public class SplashTower extends ShootingTower {
 	
     @Override
     public void fireProjectile (double angle) {
-    	for (int i = 0; i < SPLASH_X.length; i++) {
+    	for (int i = 0; i < Bomb.BOMB_SPRAY_X.length; i++) {
             new DamageProjectile(
             		((SimpleTower) baseTower).centerCoordinate().getX(),
             		((SimpleTower) baseTower).centerCoordinate().getY(),
-            		SPLASH_X[i], SPLASH_Y[i], myDamage, myBulletImage);
+            		Bomb.BOMB_SPRAY_X[i], Bomb.BOMB_SPRAY_Y[i], myDamage, myBulletImage);
         }
     }
 

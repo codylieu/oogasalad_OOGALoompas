@@ -52,7 +52,7 @@ public class EnvironmentKnowledge {
      * @param grantedMoney money to be given to player
      */
     public void grantPlayerMoney (int grantedMoney) {
-        currentPlayer.addMoney(grantedMoney);
+        currentPlayer.changeMoney(grantedMoney);
     }
     
     /**

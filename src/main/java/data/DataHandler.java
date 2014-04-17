@@ -38,7 +38,7 @@ import main.java.schema.GameBlueprint;
 public class DataHandler {
 	private final static String FILE_PATH = "src/main/resources"; // change back to src/main/resources after implementation is done!
 	private final static String TEST_FILE_PATH = "src/test/resources.replacement.tester";
-	private final static String TEMP_FOLDER_PATH = "src/main/resources.loaded/Blueprints/";
+	private final static String TEMP_FOLDER_PATH = "src/main/resources.loaded/";
 	private final static int BUFF_SIZE = 4096;
 
 	/*private Gson myGson;
@@ -211,19 +211,38 @@ public class DataHandler {
 	 * @throws IOException
 	 * @throws ZipException
 	 */
-	public GameBlueprint loadBlueprint(String filePath) throws ClassNotFoundException, IOException, ZipException { // create another parameter isEngine that determine where it comes from
-		//		System.out.println(tempDirCreated);
+	public GameBlueprint loadBlueprint(String filePath, boolean isEngine) throws ClassNotFoundException, IOException, ZipException { // create another parameter isEngine that determine where it comes from
+		//	If method is being used by Engine, throw exceptions of unfinished state
+		//  If method is being used by Author (isEngine is false), allow them to load an unfinished state
 
 		// load the zipped blueprint + resources
 		decompress(filePath, TEMP_FOLDER_PATH);
 
-		// delete resources folder
-		File myDir = new File(FILE_PATH);
-		deleteDirectory(myDir);
+		// check the blueprint, if it is incomplete and isEngine is true, then throw exceptions
+		GameBlueprint toReturn = ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
+
+		// if authoring is loading, no need to check for exceptions
 		
-		// load saved resources folder into resources folder location
-		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
-		return ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
+		if (!isEngine){
+
+			// delete resources folder
+			File myDir = new File(FILE_PATH);
+			deleteDirectory(myDir);
+
+			// load saved resources folder into resources folder location and delete the temp directory
+			decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
+			deleteDirectory(new File(TEMP_FOLDER_PATH));
+			
+		} else {
+			// engine is loading the gameBlueprint for first iteration of game, must be complete
+			deleteDirectory(new File(TEMP_FOLDER_PATH));
+			// throw stuff if it isn't complete
+			System.out.println(checkGameBlueprint(toReturn));
+		}
+		
+		// return the blueprint in case of (Author - any) (Engine - complete blueprint)
+		return toReturn;
+		
 	}
 
 	/**

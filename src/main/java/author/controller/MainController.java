@@ -220,6 +220,7 @@ public class MainController {
 			}
 		});
 
+		
 	}
 
 	public List<String> getEnemyList() {

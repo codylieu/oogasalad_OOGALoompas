@@ -6,11 +6,13 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -24,13 +26,12 @@ import main.java.schema.WaveSpawnSchema;
 public class WaveEditorTab extends EditorTab {
 
 	private List<WaveSpawnSchema> myWaves;
-
-	String[] columnNames = {"Waves", "Monster 1", "Monster 2", "Monster 3"};
-
-	Object[][] data = {};
-
-	JTable table;
-
+	
+	private String[] columnNames = {"Waves", "Monster 1", "Monster 2", "Monster 3"};
+	private Object[][] data = {};
+	
+	private JTable table;
+	
 	private static int NUMBER_OF_WAVES = 0;
 
 	public WaveEditorTab(TabController tabController) {
@@ -71,6 +72,7 @@ public class WaveEditorTab extends EditorTab {
 		panel.add(makeRemoveWaveButton(), BorderLayout.SOUTH);
 
 		return panel;
+
 	}
 
 	private JComponent makeNewWaveButton(){
@@ -90,10 +92,9 @@ public class WaveEditorTab extends EditorTab {
 
 		return addNewWaveButton;
 	}
-
+	
 	// Just here to test simpler case of removing rows
 	private JComponent makeRemoveMostRecentWaveButton(){
-
 		JButton removeMostRecentWaveButton = new JButton("Remove Last Wave");
 
 		removeMostRecentWaveButton.addActionListener(new ActionListener(){
@@ -136,19 +137,12 @@ public class WaveEditorTab extends EditorTab {
 
 	}
 
-	/**
-	 * Gets called when the author clicks on the Wave tab. Updates a table based
-	 * on the number of rows and columns specified. Enemy names that no longer
-	 * exist get deleted, and rows get increased or decreased based on changes
-	 * to that value;
-	 */
-	public void updateTable() {
+	public void updateEnemyList() {
 		WaveController waveController = (WaveController) myController;
-		//		int numLevels = waveController.getNumLevels();
 		List<String> possibleEnemies = waveController.getEnemyList();
 		//do stuff with table
 	}
-
+	
 	@Override
 	public void saveTabData() {
 		// TODO Auto-generated method stub

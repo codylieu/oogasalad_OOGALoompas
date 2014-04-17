@@ -32,7 +32,7 @@ public class WaveController extends TabController {
 	
 	public void updateTable(){
 		WaveEditorTab waveEditorTab = (WaveEditorTab) myEditorTab;
-		waveEditorTab.updateTable();
+		waveEditorTab.updateEnemyList();
 	}
 	
 }

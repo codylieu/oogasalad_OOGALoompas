@@ -44,4 +44,11 @@ public interface ITower {
      */
     public double getCost();
     
+    /**
+     * Get the upgraded replacement tower's name.
+     * Returns empty string if no upgraded tower is available.
+     * @return String name of upgraded tower to replace the current one
+     */
+    public String getUpgradeTowerName();
+    
 }

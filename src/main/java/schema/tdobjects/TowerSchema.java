@@ -28,8 +28,11 @@ public class TowerSchema extends TDObjectSchema {
 	public static final String TOWER_BEHAVIOR_SHOOTS = "Can Shoot";
 	public static final String TOWER_BEHAVIOR_FARMS_MONEY = "Farms Money";
 	public static final String TOWER_BEHAVIOR_BOMBS = "Creates Shrapnel";
+	
 	public static final String UPGRADE_PATH = "Upgrade Tower";
 	public static final String UPGRADE_PATH_NONE = "No Upgrade";
+	
+	public static final String UPGRADE_TOWER = "Name of tower to be upgrade into";
 
 	public static final String TILE_SIZE_SMALL = "Small Tile";
 	public static final String TILE_SIZE_LARGE = "Large Tile";
@@ -60,7 +63,7 @@ public class TowerSchema extends TDObjectSchema {
 		myAttributeSet.add(SHRAPNEL_DAMAGE);
 		myAttributeSet.add(SHRAPNEL_IMAGE_NAME);
 		myAttributeSet.add(FREEZE_SLOWDOWN_PROPORTION);
-		myAttributeSet.add(UPGRADE_PATH);
+		myAttributeSet.add(UPGRADE_TOWER);
 	}
 
 	public TowerSchema(String name) {
@@ -87,7 +90,7 @@ public class TowerSchema extends TDObjectSchema {
 				TowerViewConstants.BUILDUP_DEFAULT);
 		addAttribute(TowerSchema.TOWER_IMAGE_NAME, "");
 		addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
-		addAttribute(TowerSchema.UPGRADE_PATH, "");
+		addAttribute(TowerSchema.UPGRADE_TOWER, "");
 		addAttribute(TowerSchema.TOWER_BEHAVIOR_BOMBS, true);
 		addAttribute(TowerSchema.TOWER_BEHAVIOR_FARMS_MONEY, true);
 		addAttribute(TowerSchema.TOWER_BEHAVIOR_FREEZES, true);

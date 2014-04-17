@@ -30,7 +30,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import net.lingala.zip4j.exception.ZipException;
 import main.java.player.dlc.RepositoryViewer;
 import main.java.player.panels.DifficultyPanel;
 import main.java.player.panels.GameInfoPanel;
@@ -41,6 +40,7 @@ import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.Sound;
 import main.java.reflection.MethodAction;
+import net.lingala.zip4j.exception.ZipException;
 
 public class Player {
 
@@ -69,7 +69,7 @@ public class Player {
 	private boolean soundOn;
 	private TowerChooser towerChooser;
 
-	public Player() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+	public Player(){
 		initSong();
 		makeFrame();
 		makeCards();
@@ -81,9 +81,15 @@ public class Player {
 		show();
 	}
 
-	private void initSong() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		song = new Sound("src/main/resources/backgroundmusic.wav");
-		soundOn = true;
+	private void initSong(){
+			try {
+				song = new Sound("src/main/resources/backgroundmusic.wav");
+			} catch (LineUnavailableException | IOException
+					| UnsupportedAudioFileException e) {
+				//tell user song not found
+			}
+	
+		soundOn = false;
 	}
 
 	public void showCard(String cardName){
@@ -107,6 +113,7 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
+
                     try {
 						engine.loadBlueprintFile(file.getAbsolutePath());
 					} catch (ClassNotFoundException | IOException | ZipException e1) {
@@ -248,7 +255,7 @@ public class Player {
 	}
 
 	public void toggleSound(){
-		soundOn = soundOn ? false : true;
+		soundOn = !soundOn;
 		if(soundOn) {
 			song.loop();
 		}
