@@ -52,7 +52,12 @@ public class Player {
 		return this.money;
 	}
 	
-	public void addMoney(double value) {
+	/**
+	 * Change player's money by this value.
+	 * Positive for increasing, negative for decreasing.
+	 * @param value
+	 */
+	public void changeMoney(double value) {
 		this.money+=value;
 	}
 	

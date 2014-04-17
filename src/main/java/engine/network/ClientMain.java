@@ -12,7 +12,7 @@ public class ClientMain {
 //		 client.sendObjectToServer("java.lang.String", temp);
 //		 client.sendObjectToServer("java.lang.String", temp);
 		 Player p = client.getPlayer();
-		 p.addMoney(200);
+		 p.changeMoney(200);
 		 p.addScore(300);
 		 Integer money = p.getMoney();
 		 Double score = p.getScore();

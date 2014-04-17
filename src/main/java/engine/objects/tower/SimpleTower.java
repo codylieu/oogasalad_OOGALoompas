@@ -55,7 +55,7 @@ public class SimpleTower extends TDObject implements ITower {
      * @param cost money cost of creating tower
      * @param buildup time for this tower's construction
      */
-    public SimpleTower (Point2D location, double health, double cost, double buildup, String name, String upgradeTower) {
+    public SimpleTower (Point2D location, double health, double cost, double buildup, String upgradeTower, String name) {
         super("tower", location.getX(), location.getY(), TOWER_CID, name);
         myHealth = health;
         myImage = name;

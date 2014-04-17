@@ -10,6 +10,7 @@ import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import jgame.platform.StdGame;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.exceptions.engine.TowerCreationFailureException;
 
 import javax.swing.*;
 import main.java.player.util.CursorState;
@@ -66,6 +67,17 @@ public class TestEngine extends JGEngine {
 //        	model.upgradeTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
         }
+        
+        if (getKey(KeyEvent.VK_SHIFT)) {
+            // press shift for upgrading a tower that the mouse is pointing to
+            try {
+                model.upgradeTower(getMouseX(), getMouseY());
+            }
+            catch (TowerCreationFailureException e) {
+                e.printStackTrace();
+            }
+            clearKey(KeyEvent.VK_SHIFT);
+    }
         if (getKey(KeyEvent.VK_R)) {
         	try {
 				model.placeItem("RowBomb", getMouseX(), getMouseY());
