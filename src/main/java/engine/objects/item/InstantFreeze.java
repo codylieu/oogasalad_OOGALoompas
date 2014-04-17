@@ -15,11 +15,11 @@ public class InstantFreeze extends TDItem {
 	private static final int FLASH_INTERVAL = 5;
 	private static final String IMAGE = "row_bomb";
 	private static final double COST = 100;
-	private static final double BUILDUP_Time = 100;
+	private static final double BUILDUP_TIME = 100;
 	private static final double DAMAGE = 0;
 
 	public InstantFreeze(double x, double y) {
-		super("instance_freeze", x, y, IMAGE, COST, BUILDUP_Time, DAMAGE);
+		super("instance_freeze", x, y, IMAGE, COST, BUILDUP_TIME, DAMAGE);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class InstantFreeze extends TDItem {
 			freezeMonsters(environmentKnowledge);
 		} else {
 			recoverMonsterSpeed(environmentKnowledge);
-			setDead();
+			terminateItem();
 		}
 
 	}
