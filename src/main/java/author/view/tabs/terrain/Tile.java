@@ -10,18 +10,15 @@ public class Tile implements Serializable {
     private int myMapXIndex;    // image x index in tilemap
     private int myMapYIndex;    // image y index in tilemap
     private String myTileMapFileName; // tilemap name
-	private Color myColor;
 	private int myPassIndex;
-	private boolean isSelected;
 	
 	public static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
 	private transient Image myImg;
 
-	public Tile(int row, int column, Color color) {
+	public Tile(int row, int column) {
 	    myRow = row;
 	    myColumn = column;
-	    myColor = color;
 	}
 	
 	public Image getImage() {

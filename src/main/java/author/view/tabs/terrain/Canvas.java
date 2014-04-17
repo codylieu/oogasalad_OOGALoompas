@@ -30,7 +30,7 @@ public class Canvas extends JPanel {
 		myTiles = new Tile[numRows][numCols];
 		for (int row = 0; row < numRows; row++) {
 			for (int col = 0; col < numCols; col++) {
-				myTiles[row][col] = new Tile(row, col, DEFAULT_TILE_COLOR);
+				myTiles[row][col] = new Tile(row, col);
 			}
 		}
 		setPreferredSize(new Dimension(numCols*TILE_SIZE, numRows*TILE_SIZE)); // important for maintaining size of JPanel
@@ -141,6 +141,7 @@ public class Canvas extends JPanel {
 	protected void clearTiles() {
 		for (Tile tile : getTiles()) {
 			tile.setImage(null);
+			tile.setPassIndex(0);
 			repaint();
 		}
 	}
