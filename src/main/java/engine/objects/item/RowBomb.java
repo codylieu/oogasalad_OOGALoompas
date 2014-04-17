@@ -19,8 +19,6 @@ public class RowBomb extends TDItem{
 	private static final double COST = 100;
 	private static final double BUILDUP_TIME = 100;
 	private static final double DAMAGE = Double.MAX_VALUE;
-	
-	private String image;
 
 	public RowBomb(double x, double y) {
 		super("row_bomb", x, y, IMAGE, COST, BUILDUP_TIME, DAMAGE);
@@ -31,7 +29,7 @@ public class RowBomb extends TDItem{
 		timeCounter++;
 		if (timeCounter >= buildupTime) {
 			for (Monster m : environmentKnowledge.getAllMonsters()) {
-				if (isInRange(m, x, y)) {
+				if (isInRange(m)) {
 					setFireToTheRain(m);
 					m.takeDamage(DAMAGE);
 				}
@@ -44,7 +42,7 @@ public class RowBomb extends TDItem{
 		new Fire(m.x, m.y);
 	}
 
-	private boolean isInRange(Monster m, double x, double y) {
+	protected boolean isInRange(Monster m) {
 		double lower = y - m.getImageBBoxConst().height/2;
 		double upper = y + m.getImageBBoxConst().height/2;
 		return ((m.y > lower) && (m.y < upper));
