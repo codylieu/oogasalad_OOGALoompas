@@ -1,11 +1,6 @@
 package main.java.author.view.tabs.wave_editor;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -41,11 +36,6 @@ public class WaveEditorTab extends EditorTab {
 		add(tabCreator.createWaveEditorContent(), BorderLayout.CENTER);
 	}
 
-	// Will make all of the values in the fields initially 0. Have to write a method since list of enemies is dynamic
-	public void populateFields(){
-
-	}
-
 	private void addWaveData() {
 
 	}
@@ -63,6 +53,11 @@ public class WaveEditorTab extends EditorTab {
 	}
 
 	private class WaveTabContentCreator{
+		
+		// Will make all of the values in the fields initially 0. Have to write a method since list of enemies is dynamic
+		public void populateTableCells(){
+
+		}
 
 		public JComponent createWaveEditorContent(){
 
