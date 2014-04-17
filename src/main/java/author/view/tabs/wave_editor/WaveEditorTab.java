@@ -2,7 +2,19 @@ package main.java.author.view.tabs.wave_editor;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.WaveController;
@@ -12,22 +24,55 @@ import main.java.schema.WaveSpawnSchema;
 public class WaveEditorTab extends EditorTab {
 	
 	private List<WaveSpawnSchema> myWaves;
-	private WaveTabViewBuilder myBuilder;
+	
+	String[] columnNames = {"Wave:", "1", "2"};
+	Object[][] data = {{"MonsterA", new Integer(0), new Integer(0)},
+						{"MonsterB", new Integer(0), new Integer(0)},
+						{"MonsterC", new Integer(0), new Integer(0)}
+						};
 
 	public WaveEditorTab(TabController tabController) {
 		super(tabController);
-		init();
+		add(createTable(), BorderLayout.CENTER);
+	}
+	
+	public JComponent createWaveEditorContent(){
+		
+		JPanel content = new JPanel(new BorderLayout());
+		
+		content.add(createTable(), BorderLayout.NORTH);
+		content.add(makeNewWaveButton(), BorderLayout.SOUTH);
+		
+		return content;
+	}
+	
+	public JComponent createTable(){
+		
+		JTable table = new JTable(data, columnNames);
+		
+		JScrollPane sp = new JScrollPane(table);
+		
+		return sp;
+	}
+
+	private JComponent makeNewWaveButton() {
+		
+		JButton addNewWaveButton = new JButton("Add New Row");
+		
+		addNewWaveButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		return addNewWaveButton;
 	}
 
 	private void addWaveData() {
 		
-	}
-	
-	private void init() {
-		setLayout(new BorderLayout());
-		myBuilder = new WaveTabViewBuilder(this);
-		add(myBuilder.createTable(), BorderLayout.CENTER);
-		updateTable();
 	}
 
 	/**
@@ -38,22 +83,9 @@ public class WaveEditorTab extends EditorTab {
 	 */
 	public void updateTable() {
 		WaveController waveController = (WaveController) myController;
-		int numLevels = waveController.getNumLevels();
+//		int numLevels = waveController.getNumLevels();
 		List<String> possibleEnemies = waveController.getEnemyList();
 		//do stuff with table
-	}
-
-	private class WaveTabViewBuilder {
-		WaveEditorTab myTab;
-
-		public WaveTabViewBuilder(WaveEditorTab tab) {
-			myTab = tab;
-		}
-
-		public Component createTable() {
-			// TODO Auto-generated method stub
-			return null;
-		}
 	}
 
 	@Override

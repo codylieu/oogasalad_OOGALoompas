@@ -23,7 +23,7 @@ import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
-import main.java.author.view.tabs.wave.WaveEditorTab;
+import main.java.author.view.tabs.wave_editor.WaveEditorTab;
 import main.java.exceptions.data.InvalidGameBlueprintException;
 
 /**
