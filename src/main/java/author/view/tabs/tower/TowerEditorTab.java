@@ -47,8 +47,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	private JComboBox<String> upgradeDropDown;
 
-	protected ImageCanvas bulletImageCanvas;
-	protected ImageCanvas shrapnelImageCanvas;
+	protected ImageCanvas bulletImageCanvas, towerImageCanvas, shrapnelImageCanvas;
 	protected JButton collisionImageButton;
 	protected JButton shrapnelImageButton;
 
@@ -125,6 +124,8 @@ public class TowerEditorTab extends ObjectEditorTab {
 				shrapnelImageCanvas));
 		collisionImageButton.addActionListener(new FileChooserListener(
 				bulletImageCanvas));
+		towerImageButton.addActionListener(new FileChooserListener(
+				towerImageCanvas));
 	}
 
 	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
@@ -159,9 +160,13 @@ public class TowerEditorTab extends ObjectEditorTab {
 					TowerSchema.TOWER_BEHAVIOR_FARMS_MONEY, true);
 			// other
 			upgradeDropDown = makeUpgradeDropdown();
-			//canvases
-			bulletImageCanvas = new ImageCanvas(true, TowerSchema.BULLET_IMAGE_NAME);
-			shrapnelImageCanvas = new ImageCanvas(true, TowerSchema.SHRAPNEL_IMAGE_NAME);
+			// canvases
+			bulletImageCanvas = new ImageCanvas(true,
+					TowerSchema.BULLET_IMAGE_NAME);
+			shrapnelImageCanvas = new ImageCanvas(true,
+					TowerSchema.SHRAPNEL_IMAGE_NAME);
+			towerImageCanvas = new ImageCanvas(false,
+					TowerSchema.TOWER_IMAGE_NAME);
 			// clump data types
 			JSpinner[] spinners = { healthSpinner, costSpinner, buildUpSpinner,
 					damageSpinner, rangeSpinner, firingSpeedSpinner,
@@ -173,7 +178,8 @@ public class TowerEditorTab extends ObjectEditorTab {
 					bombingToggleButton };
 			radioButtons = new ArrayList<SpinnerTogglingRadioButton>(
 					Arrays.asList(buttons));
-			ImageCanvas[] canvases = {bulletImageCanvas, shrapnelImageCanvas};
+			ImageCanvas[] canvases = { bulletImageCanvas, shrapnelImageCanvas,
+					towerImageCanvas };
 			imageCanvases = new ArrayList<ImageCanvas>(Arrays.asList(canvases));
 
 		}
@@ -226,6 +232,27 @@ public class TowerEditorTab extends ObjectEditorTab {
 			result.add(shrapnelImageCanvas, BorderLayout.CENTER);
 			shrapnelImageButton = makeChooseGraphicsButton("Set Shrapnel Image");
 			result.add(shrapnelImageButton, BorderLayout.SOUTH);
+			return result;
+		}
+
+		@Override
+		protected String getObjectGraphicKey() {
+			return TowerSchema.TOWER_IMAGE_NAME;
+		}
+
+		@Override
+		protected JComponent makePrimaryObjectGraphicPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+
+			towerImageCanvas.setSize(new Dimension(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE));
+			towerImageCanvas.setBackground(Color.BLACK);
+			result.add(towerImageCanvas, BorderLayout.CENTER);
+			towerImageButton = makeChooseGraphicsButton("Set " + objectName
+					+ " Image");
+			result.add(towerImageButton, BorderLayout.SOUTH);
 			return result;
 		}
 

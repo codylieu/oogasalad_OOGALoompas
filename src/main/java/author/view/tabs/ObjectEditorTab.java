@@ -60,8 +60,6 @@ import main.java.schema.tdobjects.TDObjectSchema;
 
 public abstract class ObjectEditorTab extends EditorTab {
 
-	
-	protected ImageCanvas objectImageCanvas;
 	protected DefaultTableModel listModel;
 	protected JTable list;
 	protected JSplitPane splitPane;
@@ -70,9 +68,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected List<SpinnerTogglingRadioButton> radioButtons;
 	protected List<ImageCanvas> imageCanvases;
 	protected JTextField createObjectField;
-	
+
 	protected JButton deleteObjectButton;
-	protected JButton objectImageButton;
+	protected JButton towerImageButton;
 	protected Border originalCreateObjectFieldBorder;
 	protected ObjectTabViewBuilder myBuilder;
 	protected HashMap<String, TDObjectSchema> objectMap;
@@ -177,8 +175,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 			}
 		});
 
-		objectImageButton.addActionListener(new FileChooserListener(
-				objectImageCanvas));
+		
 
 	}
 
@@ -196,7 +193,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected String getSelectedObjectName() {
 		return (String) listModel.getValueAt(list.getSelectedRow(), 0);
 	}
-	
+
 	protected TDObjectSchema getSelectedObject() {
 		return objectMap.get(getSelectedObjectName());
 	}
@@ -254,7 +251,11 @@ public abstract class ObjectEditorTab extends EditorTab {
 			myCurrentObject.addAttribute(button.getText(),
 					(Boolean) button.isSelected());
 		}
-		
+
+		for (ImageCanvas canvas : imageCanvases) {
+			myCurrentObject.addAttribute(canvas.getName(),
+					(String) canvas.getImagePath());
+		}
 
 	}
 
@@ -268,6 +269,20 @@ public abstract class ObjectEditorTab extends EditorTab {
 		for (SpinnerTogglingRadioButton radioButton : radioButtons) {
 			radioButton.setSelected((Boolean) map.get(radioButton.getText()));
 
+		}
+		
+		for (ImageCanvas canvas : imageCanvases) {
+			canvas.clearImagePath();
+			if (map.get(canvas.getName()) != "") {
+				try {
+					canvas.setImageFromPath((String) map.get(canvas.getName()));
+					canvas.repaint();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				canvas.repaint();
+			}
 		}
 	}
 
@@ -288,8 +303,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 				File file = fileChooser.getSelectedFile();
 				try {
 					System.out.println("Opening: " + file.getName() + ".\n");
-					BufferedImage image = ImageIO.read(file);
-					myCanvas.setImage(image);
+					
+					myCanvas.setImageFromPath(file.getAbsolutePath());
+					updateSchemaDataFromView();
 					myCanvas.repaint();
 				} catch (IOException e1) {
 				}
@@ -343,24 +359,14 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return result;
 		}
 
-		private JComponent makeObjectGraphicPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			objectImageCanvas = new ImageCanvas();
-			objectImageCanvas.setSize(new Dimension(
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE));
-			objectImageCanvas.setBackground(Color.BLACK);
-			result.add(objectImageCanvas, BorderLayout.CENTER);
-			objectImageButton = makeChooseGraphicsButton("Set "+objectName+" Image");
-			result.add(objectImageButton, BorderLayout.SOUTH);
-			return result;
-		}
+		protected abstract JComponent makePrimaryObjectGraphicPane();
+
+		protected abstract String getObjectGraphicKey();
 
 		private JComponent makeImagesPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			result.add(myBuilder.makeObjectGraphicPane(), BorderLayout.CENTER);
+			result.add(myBuilder.makePrimaryObjectGraphicPane(), BorderLayout.CENTER);
 			result.add(myBuilder.makeSecondaryImagesGraphicPane(),
 					BorderLayout.SOUTH);
 			return result;
@@ -384,7 +390,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 		}
 
 		private JTable makeTable() {
-			listModel = new DefaultTableModel(new Object[] { objectName + " Name" }, 0);
+			listModel = new DefaultTableModel(new Object[] { objectName
+					+ " Name" }, 0);
 			JTable table = new JTable(listModel);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			Font tableFont = table.getFont().deriveFont(
@@ -415,7 +422,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 		protected Component makeDesignObjectPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			result.add(new JLabel("Design New " + objectName), BorderLayout.WEST);
+			result.add(new JLabel("Design New " + objectName),
+					BorderLayout.WEST);
 
 			createObjectField = new JTextField();
 			originalCreateObjectFieldBorder = createObjectField.getBorder();
