@@ -38,7 +38,7 @@ import main.java.schema.GameBlueprint;
 public class DataHandler {
 	private final static String FILE_PATH = "src/main/resources"; // change back to src/main/resources after implementation is done!
 	private final static String TEST_FILE_PATH = "src/test/resources.replacement.tester";
-	private final static String TEMP_FOLDER_PATH = "src/main/resources.loaded/Blueprints/";
+	private final static String TEMP_FOLDER_PATH = "src/main/resources.loaded/";
 	private final static int BUFF_SIZE = 4096;
 
 	/*private Gson myGson;
@@ -223,7 +223,9 @@ public class DataHandler {
 		
 		// load saved resources folder into resources folder location
 		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
-		return ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
+		GameBlueprint toReturn = ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
+		deleteDirectory(new File(TEMP_FOLDER_PATH));
+		return toReturn;
 	}
 
 	/**
