@@ -66,13 +66,37 @@ public class TestEngine extends JGEngine {
 //        	model.upgradeTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
         }
-        if (getKey(KeyEvent.VK_2)) {
+        if (getKey(KeyEvent.VK_R)) {
         	try {
 				model.placeItem("RowBomb", getMouseX(), getMouseY());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-        	clearKey(KeyEvent.VK_2);
+        	clearKey(KeyEvent.VK_R);
+        }
+        if (getKey(KeyEvent.VK_A)) {
+        	try {
+				model.placeItem("Annihilator", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_A);
+        }
+        if (getKey(KeyEvent.VK_I)) {
+        	try {
+				model.placeItem("InstantFreeze", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_I);
+        }
+        if (getKey(KeyEvent.VK_L)) {
+        	try {
+				model.placeItem("LifeSaver", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_L);
         }
         if (getKey(KeyEvent.VK_M)) {
             JFileChooser fileChooser = new JFileChooser();

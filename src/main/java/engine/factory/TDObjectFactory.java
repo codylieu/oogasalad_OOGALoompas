@@ -2,6 +2,8 @@ package main.java.engine.factory;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,6 +14,7 @@ import java.util.Map;
 import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
 import main.java.engine.objects.Exit;
+import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.BombTower;
 import main.java.engine.objects.tower.FreezeTower;
@@ -29,7 +32,8 @@ import main.java.schema.tdobjects.TowerSchema;
 
 
 public class TDObjectFactory {
-    private JGEngineInterface engine;
+    private static final String ITEM_PATH = "main.java.engine.objects.item.";
+	private JGEngineInterface engine;
     private Map<String, TDObjectSchema> tdObjectSchemaMap;
     private List<String> possibleTowersNames;
 
@@ -133,6 +137,21 @@ public class TDObjectFactory {
             throw new MonsterCreationFailureException(e);
         }
     }
+    
+    public TDItem placeItem (Point2D location, String itemName) throws 
+    	ClassNotFoundException, 
+    	InstantiationException, 
+    	IllegalAccessException, 
+    	IllegalArgumentException, 
+    	InvocationTargetException {
+    	
+    	// TODO: use schema to create item objects!!
+    	Point2D tileOrigin = findTileOrigin(location);
+    	Class c = Class.forName(ITEM_PATH + itemName);
+		Constructor[] con = c.getConstructors();
+		TDItem newItem = (TDItem) con[0].newInstance(tileOrigin.getX(), tileOrigin.getY());
+    	return newItem;
+    }
 
     /**
      * Uses the Reflection utility class to create the appropriate object with parameters
@@ -141,7 +160,6 @@ public class TDObjectFactory {
      * @param parameters
      * @return
      */
-
     private Object placeObject (Class<?> objectType, Object[] parameters) {
         return Reflection.createInstance(objectType.getName(), parameters);
     }

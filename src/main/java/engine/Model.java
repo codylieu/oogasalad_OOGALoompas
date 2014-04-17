@@ -359,22 +359,29 @@ public class Model {
 		}
 	}
 
-	public void placeItem(String name, double x, double y) {
-		// TODO: make code better. move code to TDObjectFacotry
+	/**
+	 * Place an item at the specified location. 
+	 * If it costs more than the player has, do nothing. 
+	 * 
+	 * @param name
+	 * @param x
+	 * @param y
+	 */
+	public boolean placeItem(String name, double x, double y) {
 		try {
-			Class c = Class.forName("main.java.engine.objects.item.AreaBomb");
-			Constructor[] con = c.getConstructors();
-			TDItem newItem = (TDItem) con[0].newInstance(x, y, 100);
+			TDItem newItem = factory.placeItem(new Point2D.Double(x, y), name);
 			if (newItem.getCost() <= player.getMoney()) {
 				items.add(newItem);
 				player.addMoney(-newItem.getCost());
-				return;
+				return true;
 			} else {
 				newItem.setImage(null);
 				newItem.remove();
+				return false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
