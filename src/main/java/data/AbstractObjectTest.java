@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
+
 public abstract class AbstractObjectTest {
 	protected Map<String, Serializable> myAttributesMap;
 	protected Set<String> myAttributeSet;
@@ -25,6 +27,18 @@ public abstract class AbstractObjectTest {
 //		myExtended = new ExtendedTestObject("wee");
 //		
 //	}
+	
+	public void addAttribute(String attributeName, Serializable attributeValue){
+		if (myAttributeSet.contains(attributeName)) {
+            myAttributesMap.put(attributeName, attributeValue);
+        } else {
+            try {
+                throw new InvalidParameterForConcreteTypeException(); // TODO: actually throw instead of catching
+            } catch (InvalidParameterForConcreteTypeException e) {
+                e.printStackTrace();
+            }
+        }
+	}
 	
 	public Map<String, Serializable> getAttributesMap() {
         return new HashMap<>(myAttributesMap);

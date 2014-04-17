@@ -15,9 +15,9 @@ public class TestObject extends AbstractObjectTest {
 		myAttributeSet.add(NAME);
 	}
 	
-	public void populateDefaultAttributes(String Name){
+	public void populateDefaultAttributes(String name){
 		addAttribute(TestObject.DAMAGE, 10);
-		addAttribute()
+		addAttribute(TestObject.NAME, name);
 	}
 	
 	@Override

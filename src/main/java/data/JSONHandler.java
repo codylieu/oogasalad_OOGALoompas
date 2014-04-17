@@ -58,7 +58,9 @@ public class JSONHandler {
 		maps.add(new GameMap());
 		testBlueprint.setMyGameMaps(maps);*/
 		
-		TestObject t = new TestObject("t1",1,2);
+		// creates a test object with a map and set, mirrors actual gameblueprint design hierarchy to test JSON
+		TestObject t = new TestObject();
+		t.populateDefaultAttributes("testObjectName");
 		
 		JSONHandler j = new JSONHandler();
 		j.serializeObjectToJSON("testobjectJSON",t);
