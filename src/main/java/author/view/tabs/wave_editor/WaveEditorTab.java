@@ -42,6 +42,20 @@ public class WaveEditorTab extends EditorTab {
 		super(tabController);
 		add(tabCreator.createWaveEditorContent(), BorderLayout.CENTER);
 	}
+	
+	public void addNewEnemyColumn(){
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		// Make method to make this column
+		Integer[] zerosColumn = {new Integer(0), 
+				new Integer(0), 
+				new Integer(0), 
+				new Integer(0), 
+				new Integer(0)};
+		
+		model.addColumn("Monster 4", zerosColumn);
+//		model.addColumn("Monster 4", makeZerosColumn());
+		// Expand Size of Table here every time method is called
+	}
 
 	private void addWaveData() {
 
@@ -72,6 +86,11 @@ public class WaveEditorTab extends EditorTab {
 		public void populateTableCells(){
 
 		}
+		// Makes Zeros Column of length waves after a new enemy is added in the Enemy Editor
+		public Integer[] makeZerosColumn(){
+			return null;
+			
+		}
 
 		/**
 		 * @return
@@ -99,6 +118,25 @@ public class WaveEditorTab extends EditorTab {
 
 			return sp;
 		}
+		
+		private JComponent makeAddEnemyColumnTestButton(){
+			
+			JButton addEnemyColumn = new JButton("Add Enemy Column");
+			
+			addEnemyColumn.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					addNewEnemyColumn();
+					
+				}
+				
+			});
+			
+			return addEnemyColumn;
+			
+		}
 
 		/**
 		 * @return
@@ -112,6 +150,7 @@ public class WaveEditorTab extends EditorTab {
 			panel.add(makeRemoveMostRecentWaveButton(), BorderLayout.CENTER);
 			panel.add(makeRemoveWaveButton(), BorderLayout.CENTER);
 			panel.add(makeClearAllWavesButton(), BorderLayout.SOUTH);
+			panel.add(makeAddEnemyColumnTestButton(), BorderLayout.SOUTH);
 
 			return panel;
 
