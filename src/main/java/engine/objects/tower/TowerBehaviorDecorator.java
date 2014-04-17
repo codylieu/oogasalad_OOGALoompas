@@ -54,9 +54,15 @@ abstract class TowerBehaviorDecorator implements ITower {
         return false;
     }
     
+    @Override
+    public String getUpgradeTowerName () {
+        return baseTower.getUpgradeTowerName();
+    }
+    
     /**
      * Do the additional behavior granted by this behavior decoration.
      * @param environ
      */
     abstract void doDecoratedBehavior (EnvironmentKnowledge environ);
+    
 }
