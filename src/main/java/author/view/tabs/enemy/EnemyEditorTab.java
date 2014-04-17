@@ -55,7 +55,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new EnemyTabViewBuilder(this);
 	}
 
-	protected void initDataFields() {
+	protected void clumpDataFields() {
 		spinnerFields = new ArrayList<JSpinner>();
 		spinnerFields.add(healthSpinner);
 		spinnerFields.add(speedSpinner);
@@ -71,7 +71,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	}
 
 	protected void setDefaultObjectName() {
-		defaultObjectName = "Monster A";
+		objectName = "Monster A";
 	}
 
 	/**
@@ -164,18 +164,18 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		}
 
 		@Override
-		protected JComponent makeLabelPane() {
-
-			JPanel labels = new JPanel(new GridLayout(0, 1));
-			labels.add(new JLabel(EnemyViewConstants.HEALTH_STRING));
-			labels.add(new JLabel(EnemyViewConstants.SPEED_STRING));
-			labels.add(new JLabel(EnemyViewConstants.DAMAGE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.REWARD_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TYPE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TILE_SIZE_STRING));
-			return labels;
+		protected Component makeTypeTogglePane() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
+		@Override
+		protected void instantiateFields() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		
 	}
 
 	@Override
