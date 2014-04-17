@@ -28,7 +28,8 @@ public class TowerSchema extends TDObjectSchema {
 	public static final String TOWER_BEHAVIOR_SHOOTS = "Can Shoot";
 	public static final String TOWER_BEHAVIOR_FARMS_MONEY = "Farms Money";
 	public static final String TOWER_BEHAVIOR_BOMBS = "Creates Shrapnel";
-	public static final String UPGRADE_PATH = "List of upgrade towers path";
+	public static final String UPGRADE_PATH = "Upgrade Tower";
+	public static final String UPGRADE_PATH_NONE = "No Upgrade";
 
 	public static final String TILE_SIZE_SMALL = "Small Tile";
 	public static final String TILE_SIZE_LARGE = "Large Tile";

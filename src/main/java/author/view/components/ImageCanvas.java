@@ -5,10 +5,11 @@ import java.awt.Graphics;
 import java.awt.Image;
 
 public class ImageCanvas extends Canvas {
-	Image myImage;
+	private Image myImage;
+	private boolean fillsUpCanvas;
 
-	public ImageCanvas(Image img) {
-		myImage = img;
+	public ImageCanvas(boolean fillsUpCanvas) {
+		this.fillsUpCanvas = fillsUpCanvas;
 	}
 
 	public ImageCanvas() {
@@ -17,8 +18,19 @@ public class ImageCanvas extends Canvas {
 
 	public void paint(Graphics g) {
 		if (myImage != null) {
-			g.drawImage(myImage, getWidth() / 4, getHeight() / 4,
-					getWidth() / 2, getHeight() / 2, this);
+			if (fillsUpCanvas) {
+				int minimumDimension = Math.min(getHeight(), getWidth());
+				int maximumDimension = Math.max(getHeight(), getWidth());
+				if (maximumDimension == getHeight()) {
+					g.drawImage(myImage, 0, (getHeight() - getWidth())/2, minimumDimension, minimumDimension, this);
+				} else {
+					g.drawImage(myImage, (getWidth() - getHeight())/2, 0, minimumDimension, minimumDimension, this);
+				}
+				
+			} else {
+				g.drawImage(myImage, getWidth() / 3, getHeight() / 2
+						- getWidth() / 6, getWidth() / 3, getWidth() / 3, this);
+			}
 		}
 	}
 
