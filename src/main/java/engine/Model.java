@@ -212,22 +212,26 @@ public class Model {
         // TODO: use the actual game blueprint (aka bp)
         GameBlueprint testBP = createTestBlueprint();
 
-        // init player
-        GameSchema gameSchema = testBP.getMyGameScenario();
+        initializeBlueprintContents(testBP);
+    }
+
+	public void initializeBlueprintContents(GameBlueprint blueprint) {
+		// init player
+        GameSchema gameSchema = blueprint.getMyGameScenario();
         Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
         this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
 
                                  (Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));
 
         // init factory objects
-        List<TDObjectSchema> tdObjectSchemas = testBP.getMyTDObjectSchemas();
+        List<TDObjectSchema> tdObjectSchemas = blueprint.getMyTDObjectSchemas();
         factory.loadTDObjectSchemas(tdObjectSchemas);
 
         // init levels
-        for (WaveSpawnSchema wave : testBP.getMyLevelSchemas()) {
+        for (WaveSpawnSchema wave : blueprint.getMyLevelSchemas()) {
             levelManager.addNewWave(wave);
         }
-    }
+	}
 
     /**
      * Reset the game clock

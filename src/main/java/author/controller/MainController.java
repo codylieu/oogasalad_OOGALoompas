@@ -107,6 +107,7 @@ public class MainController {
 		if (saveFileChooser.showSaveDialog(myAuthoringView) == JFileChooser.APPROVE_OPTION) {
 			filePath = saveFileChooser.getSelectedFile().getAbsolutePath() + ".zip";
 		}
+		System.out.println(filePath);
 		//fake one
 		handler.saveBlueprint(createTestBlueprint(), filePath);
 		//handler.saveBlueprint(myModel.getBlueprint(), filePath);
