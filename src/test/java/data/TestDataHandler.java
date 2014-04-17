@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -157,10 +158,14 @@ public class TestDataHandler {
 	//	}
 
 	@Test
-	public void testJsonSerializationAndDeserialization(){
+	public void testJsonSerializationAndDeserialization() throws IOException{
 		JSONHandler testDataHandler = new JSONHandler();
 		GameBlueprint testBlueprint = this.createTestBlueprint();
-		testDataHandler.serializeObjectToJSON(, obj)
+		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
+		String savedBlueprintLocation = "src/main/java/resources/testBlueprintJSON.json";
+		testDataHandler.serializeObjectToJSON("testBlueprintJSON",testBlueprint);
+		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(savedBlueprintLocation, testBlueprint));
+		testDataHandler.serializeObjectToJSON("testBlueprintAfterJSONSerialized",loadedBlueprint);
 
 	}
 
