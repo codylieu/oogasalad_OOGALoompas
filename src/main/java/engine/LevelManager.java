@@ -133,5 +133,14 @@ public class LevelManager {
         myPlayer = player;
 
     }
+    
+    /**
+     * Get the exit for the current level
+     * 
+     * @return exit object of the current level
+     */
+    public Exit getExit() {
+    	return exit;
+    }
 
 }

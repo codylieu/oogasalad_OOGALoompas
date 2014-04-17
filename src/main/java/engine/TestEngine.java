@@ -1,14 +1,20 @@
 package main.java.engine;
 
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import jgame.platform.StdGame;
 import main.java.exceptions.engine.MonsterCreationFailureException;
-import main.java.player.CursorState;
-import main.java.player.TowerGhost;
+import main.java.exceptions.engine.TowerCreationFailureException;
+
+import javax.swing.*;
+import main.java.player.util.CursorState;
+import main.java.player.util.TowerGhost;
 
 public class TestEngine extends JGEngine {
     private static TestEngine engine;
@@ -53,13 +59,70 @@ public class TestEngine extends JGEngine {
             clearKey(KeyEvent.VK_1);
         }
         if (getMouseButton(1)) {
-            model.placeTower(getMouseX(), getMouseY(), towers.get(currTower%towers.size()));
+            model.placeTower(getMouseX(), getMouseY(), towers.get(currTower % towers.size()));
             clearMouseButton(1);
         }
         if (getMouseButton(3)) { // right click
         	model.checkAndRemoveTower(getMouseX(), getMouseY());
 //        	model.upgradeTower(getMouseX(), getMouseY());
         	clearMouseButton(3);
+        }
+        
+        if (getKey(KeyEvent.VK_SHIFT)) {
+            // press shift for upgrading a tower that the mouse is pointing to
+            try {
+                model.upgradeTower(getMouseX(), getMouseY());
+            }
+            catch (TowerCreationFailureException e) {
+                e.printStackTrace();
+            }
+            clearKey(KeyEvent.VK_SHIFT);
+    }
+        if (getKey(KeyEvent.VK_R)) {
+        	try {
+				model.placeItem("RowBomb", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_R);
+        }
+        if (getKey(KeyEvent.VK_A)) {
+        	try {
+				model.placeItem("Annihilator", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_A);
+        }
+        if (getKey(KeyEvent.VK_I)) {
+        	try {
+				model.placeItem("InstantFreeze", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_I);
+        }
+        if (getKey(KeyEvent.VK_L)) {
+        	try {
+				model.placeItem("LifeSaver", getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+        	clearKey(KeyEvent.VK_L);
+        }
+        if (getKey(KeyEvent.VK_M)) {
+            JFileChooser fileChooser = new JFileChooser();
+            int response = fileChooser.showOpenDialog(null);
+            if(response == JFileChooser.APPROVE_OPTION){
+                File file = fileChooser.getSelectedFile();
+                try {
+                    model.loadMapTest(file.getAbsolutePath());
+                } catch (Exception e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } // TODO: replace to load game blueprint
+                System.out.println("FILE CHOSEN: " + file.getName());
+            }
         }
         try {
 			model.updateGame();
@@ -68,9 +131,8 @@ public class TestEngine extends JGEngine {
 			e.printStackTrace();
 		}
         moveObjects();
-        model.checkCollisions();
+        model.checkCollisions();}
 //        model.spawnMonster(100, 150);
-    }
 
     @Override
     public void paintFrame() {

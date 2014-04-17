@@ -1,16 +1,20 @@
 package main.java.engine.objects.monster.jgpathfinder;
 
+import jgame.JGColor;
 import jgame.JGPoint;
+import jgame.impl.JGEngineInterface;
 
 import java.util.LinkedList;
 
 public class JGPath {
+    private JGEngineInterface engine; // TODO: bad design?
     private LinkedList<JGPoint> path;
 
     /**
      * Create a new, empty JGPath.
      */
-    public JGPath() {
+    public JGPath(JGEngineInterface engine) {
+        this.engine = engine;
         path = new LinkedList<JGPoint>();
     }
 
@@ -79,5 +83,19 @@ public class JGPath {
      */
     public JGPoint peek() {
         return path.peek();
+    }
+
+    /**
+     * Paint the path by placing a circle in the center of each one.
+     *
+     * @param radius Radius of the circle
+     * @param color Color of the circle
+     */
+    public void paint(int radius, JGColor color) {
+        for (JGPoint p : path) {
+            JGPoint coord = engine.getTileCoord(p);
+            engine.drawOval(coord.x + engine.tileWidth()/2, coord.y + engine.tileHeight()/2,
+                    radius, radius, true, true, radius, color);
+        }
     }
 }

@@ -34,6 +34,12 @@ public class SimpleTower extends TDObject implements ITower {
     protected String myImage; 
     protected double myHealth;
     
+    
+    /**
+     * Name of tower to be upgraded into
+     */
+    protected String myUpgradeTower;
+    
     /**
      * Internal timer shooting at intervals and timing build up phase.
      */
@@ -49,12 +55,13 @@ public class SimpleTower extends TDObject implements ITower {
      * @param cost money cost of creating tower
      * @param buildup time for this tower's construction
      */
-    public SimpleTower (Point2D location, double health, double cost, double buildup, String name) {
+    public SimpleTower (Point2D location, double health, double cost, double buildup, String upgradeTower, String name) {
         super("tower", location.getX(), location.getY(), TOWER_CID, name);
         myHealth = health;
         myImage = name;
         myCost = cost;
         myBuildUpTime = buildup;
+        myUpgradeTower = upgradeTower;
     }
     
     public SimpleTower (Map<String, Serializable> attributes) {
@@ -63,6 +70,7 @@ public class SimpleTower extends TDObject implements ITower {
              (double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),
              (double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
              (double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
+             (String) getValueOrDefault(attributes, TowerSchema.UPGRADE_TOWER, ""),
              (String) attributes.get(TowerSchema.NAME));     
 }
 
@@ -72,7 +80,7 @@ public class SimpleTower extends TDObject implements ITower {
         myTimingCounter++;
         
         if (myTimingCounter <= myBuildUpTime) {
-            flash();
+            flash(myTimingCounter, FLASH_INTERVAL, myImage);
             return false;   
             // do no further behavior if still building up
         }
@@ -84,14 +92,14 @@ public class SimpleTower extends TDObject implements ITower {
     /**
      * Flash by setting image to null based on FLASH_INTERVAL
      */
-    private void flash () {
-        if (myTimingCounter % FLASH_INTERVAL == 0) {
-            this.setImage(myImage);
-        }
-        else {
-            this.setImage(null);
-        }
-    }
+//    private void flash () {
+//        if (myTimingCounter % FLASH_INTERVAL == 0) {
+//            this.setImage(myImage);
+//        }
+//        else {
+//            this.setImage(null);
+//        }
+//    }
 
     @Override
     public double getCost () {
@@ -122,6 +130,11 @@ public class SimpleTower extends TDObject implements ITower {
     public void remove() {
         setImage(null);
         super.remove();
+    }
+
+    @Override
+    public String getUpgradeTowerName () {
+        return myUpgradeTower;
     }
 
 }

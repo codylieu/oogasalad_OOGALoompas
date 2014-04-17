@@ -2,7 +2,7 @@ package test.java.engine;
 
 import static org.junit.Assert.assertEquals;
 
-import main.java.data.datahandler.DataHandler;
+import main.java.data.DataHandler;
 import main.java.engine.Model;
 import main.java.engine.TestEngine;
 import main.java.schema.GameBlueprint;
@@ -19,7 +19,7 @@ public class TestBlueprintLoading {
 	public void setUp() throws Exception {
 		dataHandler = new DataHandler();
 		Model model = new Model(new TestEngine());
-		blueprint = dataHandler.loadBlueprint("src/test/java/engine/TestBlueprint.zipZippedResources.zip");
+		blueprint = dataHandler.loadBlueprint("src/test/java/engine/TestBlueprint.zipZippedResources.zip",true);
 		// TODO: Eventually call the loadBlueprint method with the file path (actually load the blueprint rather than using test in Model)
 		model.initializeBlueprintContents(blueprint);
 	}

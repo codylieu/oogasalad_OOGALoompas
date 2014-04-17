@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.HashSet;
 import java.util.List;
 
+import jgame.JGColor;
 import jgame.JGPoint;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
@@ -27,6 +28,7 @@ public abstract class Monster extends TDObject {
 	protected Point2D myEntrance;
 	protected Exit myExit;
 	protected JGPath myPath;
+	protected String originalImage;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
 	 */
@@ -58,25 +60,33 @@ public abstract class Monster extends TDObject {
 		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic(), eng); // TODO: clean up
 		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
 		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
-		myPath = myPathFinder.getPath(pathEntrance, pathExit);
+		this.setSpeed(myMoveSpeed);
+		originalImage = graphic;
+		try {
+			myPath = myPathFinder.getPath(pathEntrance, pathExit);
+		} catch (NoPossiblePathException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void move () {
-		if (myPath.peek() != null) {
-			JGPoint waypoint = eng.getTileCoord(myPath.peek());
+		if (this.xspeed != 0) {
+			if (myPath.peek() != null) {
+				JGPoint waypoint = eng.getTileCoord(myPath.peek());
 
-			// TODO: refactor, quick implementation to test - jordan
-			if (((int) (x + 10) >= waypoint.x && (int) (x - 10) <= waypoint.x) &&
-					((int) (y + 10) >= waypoint.y && (int) (y - 10) <= waypoint.y)) {
-				waypoint = myPath.getNext();
+				// TODO: refactor, quick implementation to test - jordan
+				if (((int) (x + 10) >= waypoint.x && (int) (x - 10) <= waypoint.x) &&
+						((int) (y + 10) >= waypoint.y && (int) (y - 10) <= waypoint.y)) {
+					waypoint = myPath.getNext();
+				}
+
+				xdir = Double.compare(waypoint.x, x);
+				ydir = Double.compare(waypoint.y, y);
+				setDirSpeed(xdir, ydir, myMoveSpeed);
+			} else {
+				setSpeed(0);
 			}
-
-			xdir = Double.compare(waypoint.x, x);
-			ydir = Double.compare(waypoint.y, y);
-			setDirSpeed(xdir, ydir, myMoveSpeed);
-		} else {
-			setSpeed(0);
 		}
 	}
 
@@ -93,6 +103,10 @@ public abstract class Monster extends TDObject {
 	 */
 	public void takeDamage (double damage) {
 		myHealth -= damage;
+	}
+
+	public double getOriginalSpeed() {
+		return myMoveSpeed;
 	}
 
 	public void reduceSpeed (double speed) {
@@ -115,5 +129,21 @@ public abstract class Monster extends TDObject {
 	 */
 	public double getMoneyValue() {
 		return myMoneyValue;
+	}
+	
+	/**
+	 * Get the original image of this monster
+	 * 
+	 * @return original image of the monster
+	 */
+	public String getOriginalImage() {
+		return originalImage;
+	}
+
+	@Override
+	public void paint() {
+		if (myPath != null) {
+			myPath.paint(5, JGColor.pink);
+		}
 	}
 }

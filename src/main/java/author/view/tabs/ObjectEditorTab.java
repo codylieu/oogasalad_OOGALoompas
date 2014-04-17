@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -25,7 +27,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
@@ -34,17 +35,24 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.SpinnerUI;
 import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.TabController;
 import main.java.author.util.EnemyUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
+import main.java.author.view.components.SpinnerTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.schema.tdobjects.TDObjectSchema;
@@ -61,7 +69,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected JSplitPane splitPane;
 	protected List<JSpinner> spinnerFields;
 	protected JButton createObjectButton;
-	protected List<JRadioButton> radioButtons;
+	protected List<SpinnerTogglingRadioButton> radioButtons;
 	protected JTextField createObjectField;
 	protected JButton collisionImageButton;
 	protected JButton deleteObjectButton;
@@ -69,28 +77,27 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected Border originalCreateObjectFieldBorder;
 	protected ObjectTabViewBuilder myBuilder;
 	protected HashMap<String, TDObjectSchema> objectMap;
-	protected String defaultObjectName = "Default Object";
+	protected String objectName = "Default Object Name";
 
-	public ObjectEditorTab(TabController towerController) {
+	public ObjectEditorTab(TabController towerController, String objectName) {
 		super(towerController);
+		this.objectName = objectName;
 		init();
 	}
 
 	protected void init() {
 		setLayout(new BorderLayout());
-		setDefaultObjectName();
 		objectMap = new HashMap<String, TDObjectSchema>();
 		myBuilder = createSpecificTabViewBuilder();
+		myBuilder.instantiateFields();
+		clumpDataFields();
 		this.add(myBuilder.makeDesignEnemyPane(), BorderLayout.NORTH);
 		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
-		initDataFields();
-		addObjectNameToList(defaultObjectName);
-		updateFieldDataUponNewSelection();
+		addObjectNameToList(objectName);
 		addListeners();
+		updateFieldDataUponNewSelection();
+		
 	}
-
-	protected abstract void setDefaultObjectName();
-
 
 	protected void addListeners() {
 
@@ -100,8 +107,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			public void actionPerformed(ActionEvent e) {
 				if (list.getRowCount() == 1) {
 					JOptionPane.showMessageDialog(null,
-							"Please design at least one enemy.", "Alert!",
-							JOptionPane.ERROR_MESSAGE);
+							"Please design at least one " + objectName,
+							"Alert!", JOptionPane.ERROR_MESSAGE);
 
 					return;
 				}
@@ -141,15 +148,15 @@ public abstract class ObjectEditorTab extends EditorTab {
 			});
 		}
 
-		for (JRadioButton button : radioButtons) {
+		for (SpinnerTogglingRadioButton button : radioButtons) {
 			button.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
+						SpinnerTogglingRadioButton button = (SpinnerTogglingRadioButton) e.getSource();
+						button.toggle();
 						updateSchemaDataFromView();
-					}
+					
 				}
 
 			});
@@ -183,7 +190,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileChooser = new JFileChooser();
-				int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
+				int returnVal = fileChooser
+						.showOpenDialog(ObjectEditorTab.this);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
@@ -206,7 +214,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileChooser = new JFileChooser();
-				int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
+				int returnVal = fileChooser
+						.showOpenDialog(ObjectEditorTab.this);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
@@ -226,9 +235,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
-	protected abstract void initDataFields();
+	protected abstract void clumpDataFields();
 
-	protected abstract void updateViewWithSchemaData(Map<String, Serializable> map);
+	protected abstract void updateViewWithSchemaData(
+			Map<String, Serializable> map);
 
 	protected abstract void updateSchemaDataFromView();
 
@@ -267,9 +277,18 @@ public abstract class ObjectEditorTab extends EditorTab {
 		} else {
 			myCurrentObject = objectMap.get(name);
 		}
-
+		//updateFieldToggling();
 		updateViewWithSchemaData(myCurrentObject.getAttributesMap());
 	}
+/*
+	private void updateFieldToggling() {
+		for (JSpinner spinner : spinnerFields) {
+			enableField(spinner);
+		}
+		for (SpinnerTogglingRadioButton button : radioButtons) {
+			button.setEnabled(true);
+		}
+	}*/
 
 	protected String getSelectedObjectName() {
 		return (String) listModel.getValueAt(list.getSelectedRow(), 0);
@@ -329,18 +348,40 @@ public abstract class ObjectEditorTab extends EditorTab {
 			myTab = editorTab;
 		}
 
-		public JSpinner makeAttributeSpinner() {
+		protected Component makeSpinnerField(JSpinner spinner) {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			JLabel label = new JLabel(spinner.getName(), SwingConstants.CENTER);
+			result.add(label, BorderLayout.NORTH);
+			result.add(spinner, BorderLayout.CENTER);
+			return result;
+
+		}
+
+		protected JSpinner makeAttributeSpinner(String labelString,
+				boolean percentBased) {
+
+			return percentBased ? makeAttributeSpinner(labelString, 100)
+					: makeAttributeSpinner(labelString);
+		}
+
+		protected JSpinner makeAttributeSpinner(String labelString) {
+			return makeAttributeSpinner(labelString, 1000);
+		}
+
+		private JSpinner makeAttributeSpinner(String labelString, int max) {
 
 			SpinnerModel model = new SpinnerNumberModel(1, 1, 1000, 1);
 			JSpinner spinner = new JSpinner(model);
 			spinner.setMaximumSize(new Dimension(200, spinner.getHeight()));
 			Font bigFont = spinner.getFont().deriveFont(Font.PLAIN,
-					FontConstants.X_LARGE_FONT_SIZE);
+					FontConstants.LARGE_FONT_SIZE);
 			spinner.setFont(bigFont);
+			spinner.setName(labelString);
 			return spinner;
 		}
 
-		public Component makeDesignEnemyPane() {
+		protected Component makeDesignEnemyPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 			result.add(new JLabel("Design New Enemy"), BorderLayout.WEST);
@@ -354,7 +395,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return result;
 		}
 
-		public Component makeOverallContent() {
+		protected Component makeOverallContent() {
 			list = myBuilder.makeTable();
 
 			// Create a split pane with the two scroll panes in it.
@@ -372,7 +413,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 			collisionImageCanvas = new ImageCanvas();
-			collisionImageCanvas.setSize(ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+			collisionImageCanvas.setSize(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
 					ObjectEditorConstants.IMAGE_CANVAS_SIZE);
 			collisionImageCanvas.setBackground(Color.BLACK);
 			result.add(collisionImageCanvas, BorderLayout.NORTH);
@@ -423,7 +465,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 					listScrollPane, editorPane);
 
-			splitPane.setDividerLocation(ObjectEditorConstants.DIVIDER_LOCATION);
+			splitPane
+					.setDividerLocation(ObjectEditorConstants.DIVIDER_LOCATION);
 
 			Dimension minimumSize = new Dimension(100, 50);
 			listScrollPane.setMinimumSize(minimumSize);
@@ -444,19 +487,42 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return table;
 		}
 
-		protected JComponent makeAttributesPane() {
+		private Component makeAttributesPane() {
 			JPanel result = new JPanel();
-
 			result.setLayout(new BorderLayout());
-
-			result.add(makeLabelPane(), BorderLayout.WEST);
 			result.add(makeFieldPane(), BorderLayout.CENTER);
+			result.add(makeTypeTogglePane(), BorderLayout.NORTH);
 			return result;
 		}
-		
-		protected abstract JComponent makeFieldPane();
 
-		protected abstract JComponent makeLabelPane();
+		protected Component makeTypeTogglePane() {
+			JPanel result = new JPanel();
+			result.setLayout(new GridLayout(1, 0));
+			for (SpinnerTogglingRadioButton button : radioButtons) {
+				result.add(button);
+			}
+
+			TitledBorder title;
+			Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+			title = BorderFactory.createTitledBorder(loweredbevel, objectName
+					+ " Type");
+			title.setTitleJustification(TitledBorder.CENTER);
+			result.setBorder(title);
+			return result;
+		}
+
+		protected JComponent makeFieldPane() {
+			JPanel result = new JPanel(new GridLayout(0, 2));
+			for (JSpinner spinner : spinnerFields) {
+				result.add(makeSpinnerField(spinner));
+			}
+			return result;
+		};
+
+		protected abstract void instantiateFields();
+
 	}
+
+	
 
 }

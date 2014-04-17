@@ -8,49 +8,41 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import net.lingala.zip4j.exception.ZipException;
-
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.engine.Model;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.player.panels.TowerChooser;
+import main.java.player.util.CursorState;
+import main.java.player.util.Observing;
+import main.java.player.util.Subject;
+import main.java.player.util.TowerGhost;
 
 
-public class TDPlayerEngine extends JGEngine implements Subject {
+public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	public static int FRAME_RATE_DELTA = 5;
+	public static int DEFAULT_FRAME_RATE = 45;
+	//public static final String DEFAULT_TOWER_NAME = "test-tower-1";
 
-	private int myFrameRate;
+	private TowerChooser towerChooser;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
 	private boolean hasChanged;
 	private boolean isFullScreen;
-	private boolean soundOn;
+	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 
 	public TDPlayerEngine() {
 		super();
-		defineAudioClip("song", "fox.wav");
 		initEngineComponent(960, 640);
+		//towerName = DEFAULT_TOWER_NAME;
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
 		isFullScreen = false;
-		soundOn = false;
 		cursorState = CursorState.None;
-		myFrameRate = 45;
-	}
-
-	public void playSound(){
-		soundOn = true;
-		if(soundOn)
-			playAudio("song");
-	}
-
-
-	public void stopSound(){
-		soundOn = false;
-		stopAudio();
 	}
 
 	@Override
@@ -60,14 +52,15 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 
 	@Override
 	public void initGame() {
-		setFrameRate(myFrameRate, 1);
+		setFrameRate(DEFAULT_FRAME_RATE, 1);
 		this.model = new Model(this);
-		model.addNewPlayer();
-        try {
+		
+	
+        /*try {
             model.loadGameBlueprint(null); // TODO: null for now
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
 	}
 
 	/*public int getFramePerSecond(){
@@ -127,12 +120,12 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
-	private void displayGameStats() {
+	/*private void displayGameStats() {
 		this.drawString("Score: "+model.getScore(), 50, 25, -1);
 		this.drawString("Lives left: "+model.getPlayerLives(), 50, 50, -1);
 		this.drawString("Money: "+model.getMoney(), 50, 75, -1);
 		this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
-	}
+	}*/
 
 	/*public TDObject getSelectedObject() {
 		JGPoint mousePos = getMousePos();
@@ -157,13 +150,14 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		return "";
 
 	}
-
+	
+	
 	@Override
 	public void doFrame() {
 		super.doFrame();
 		if (cursorState == CursorState.AddTower){
 			if (getMouseButton(1)) {
-				model.placeTower(getMouseX(), getMouseY(), "test-tower-1");
+				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(1);
@@ -191,6 +185,12 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		//        model.spawnMonster(100, 150);
 	}
 
+	public void update(){
+		System.out.println(towerChooser);
+		System.out.println(towerChooser.getTowerName());
+		towerName = towerChooser.getTowerName();
+	}
+	
 	public void toggleAddTower() {
 		if (getCursorState() == CursorState.AddTower){
 			setCursorState(CursorState.None);
@@ -262,6 +262,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		}
 	}
 
+	public List<String> getPossibleTowers(){
+		return model.getPossibleTowers();
+	}
+	
 	//TODO: i added this kevin, will explain later - jordan
 	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {
 		model.loadGameBlueprint(fileName);
@@ -276,5 +280,10 @@ public class TDPlayerEngine extends JGEngine implements Subject {
 		gameStats.put("Money", "Money: " + model.getMoney());
 		gameStats.put("Time", "Game clock: " + model.getGameClock());
 		return gameStats;
+	}
+	
+	@Override
+	public void setSubject(Subject s) {
+		towerChooser = (TowerChooser) s;
 	}
 }

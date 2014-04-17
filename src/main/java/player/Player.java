@@ -30,9 +30,17 @@ import javax.swing.JMenuBar;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import net.lingala.zip4j.exception.ZipException;
-
+import main.java.player.dlc.RepositoryViewer;
+import main.java.player.panels.DifficultyPanel;
+import main.java.player.panels.GameInfoPanel;
+import main.java.player.panels.HelpTextPanel;
+import main.java.player.panels.InfoPanel;
+import main.java.player.panels.TowerChooser;
+import main.java.player.panels.UnitInfoPanel;
+import main.java.player.panels.WelcomeButtonPanelListener;
+import main.java.player.util.Sound;
 import main.java.reflection.MethodAction;
+import net.lingala.zip4j.exception.ZipException;
 
 public class Player {
 
@@ -59,8 +67,9 @@ public class Player {
 	private TDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
+	private TowerChooser towerChooser;
 
-	public Player() throws LineUnavailableException, IOException, UnsupportedAudioFileException {
+	public Player(){
 		initSong();
 		makeFrame();
 		makeCards();
@@ -72,8 +81,14 @@ public class Player {
 		show();
 	}
 
-	private void initSong() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		song = new Sound("src/main/resources/fox.wav");
+	private void initSong(){
+			try {
+				song = new Sound("src/main/resources/backgroundmusic.wav");
+			} catch (LineUnavailableException | IOException
+					| UnsupportedAudioFileException e) {
+				//tell user song not found
+			}
+	
 		soundOn = false;
 	}
 
@@ -98,13 +113,12 @@ public class Player {
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
+
                     try {
 						engine.loadBlueprintFile(file.getAbsolutePath());
 					} catch (ClassNotFoundException | IOException | ZipException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
-					} // TODO: replace to load game blueprint
-					System.out.println("FILE CHOSEN: " + file.getName());
+					}
 				}
 			}
 		});
@@ -182,17 +196,13 @@ public class Player {
 		constraints.gridy = 1;
 		gameCard.add(makeUnitInfoPanel(), constraints);
 
-
+		
 		cards.add(gameCard, "gameCard");
 	}
 
 	private TDPlayerEngine makeGamePanel() {
-		/*JPanel gamePanel = new JPanel();
-		gamePanel.setPreferredSize(new Dimension(600, 400));
-		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		return gamePanel;*/
-
 		engine = new TDPlayerEngine();
+		engine.setSubject(towerChooser);
 		engine.stop();
 		return engine;
 	}
@@ -205,7 +215,7 @@ public class Player {
 		JButton mainMenuButton = makeMainMenuButton();
 
 		JButton playResumeButton = new JButton("Play/Pause");
-		playResumeButton.addActionListener(new MethodAction (engine, "toggleRunning"));
+		playResumeButton.addActionListener(new MethodAction (this, "populateTowerChooserAndToggleRunning"));
 		
 		JButton saveButton = new JButton("Save");
 		saveButton.addActionListener(new ActionListener() {
@@ -229,6 +239,9 @@ public class Player {
 		JButton soundButton = new JButton("Sound On/Off");
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
+		towerChooser = new TowerChooser(engine);
+		engine.setSubject(towerChooser);//This probably does not belong here
+		
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
@@ -237,31 +250,35 @@ public class Player {
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
-		gameButtonPanel.add(new TowerChooser(engine));
+		gameButtonPanel.add(towerChooser);
 		return gameButtonPanel;
 	}
 
 	public void toggleSound(){
-		if(!soundOn){
+		soundOn = !soundOn;
+		if(soundOn) {
 			song.loop();
-			soundOn = true;
 		}
-		else{
+		else {
 			song.stop();
-			soundOn = false;
 		}
-
 	}
+	
+	public void populateTowerChooserAndToggleRunning() {
+		towerChooser.getTowerNames();
+		engine.toggleRunning();
+	}
+
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubjectState(engine);
+		gameInfoPanel.setSubject(engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubjectState(engine);
+		unitInfoPanel.setSubject(engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
@@ -383,9 +400,5 @@ public class Player {
 		frame.getContentPane().add(cards, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
-	}
-
-	public static void main(String[] args) throws LineUnavailableException, IOException, UnsupportedAudioFileException {
-		new Player();
 	}
 }

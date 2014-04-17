@@ -1,23 +1,17 @@
 package main.java.author.view.tabs.tower;
 
-import java.awt.Component;
-import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TowerController;
-import main.java.author.util.GroupButtonUtil;
+import main.java.author.view.components.SpinnerTogglingRadioButton;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.TowerSchema;
@@ -25,73 +19,79 @@ import main.java.schema.tdobjects.TDObjectSchema;
 
 public class TowerEditorTab extends ObjectEditorTab {
 
-	private JSpinner healthSpinner;
-	private JSpinner costSpinner;
-	private JSpinner damageSpinner;
-	private JSpinner buildUpSpinner;
+	private JSpinner healthSpinner, costSpinner, damageSpinner, rangeSpinner,
+			buildUpSpinner, firingSpeedSpinner, shrapnelDamageSpinner,
+			moneyFarmAmountSpinner, moneyFarmIntervalSpinner,
+			freezeRatioSpinner;
 
-	private JRadioButton smallRangeButton;
-	private JRadioButton mediumRangeButton;
-	private JRadioButton largeRangeButton;
-	private JRadioButton smallSizeButton;
-	private JRadioButton largeSizeButton;
+	private SpinnerTogglingRadioButton freezeToggleButton, shootsToggleButton,
+			moneyFarmingToggleButton, bombingToggleButton;
 
-	private ButtonGroup rangeButtonGroup;
-	private ButtonGroup sizeButtonGroup;
+	private ButtonGroup rangeButtonGroup, sizeButtonGroup;
 
-	public TowerEditorTab(TabController towerController) {
-		super(towerController);
+	public TowerEditorTab(TabController towerController, String objectName) {
+		super(towerController, objectName);
 	}
 
+	@Override
 	protected TDObjectSchema createSpecificNewObject(String objectName) {
 		return new TowerSchema(objectName);
 
 	}
 
+	@Override
 	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new TowerTabViewBuilder(this);
 	}
 
-	protected void initDataFields() {
-		spinnerFields = new ArrayList<JSpinner>();
-		spinnerFields.add(healthSpinner);
-		spinnerFields.add(costSpinner);
-		spinnerFields.add(damageSpinner);
-		spinnerFields.add(buildUpSpinner);
-		radioButtons = new ArrayList<JRadioButton>();
-		radioButtons.add(smallRangeButton);
-		radioButtons.add(mediumRangeButton);
-		radioButtons.add(largeRangeButton);
-		radioButtons.add(smallSizeButton);
-		radioButtons.add(largeSizeButton);
+	@Override
+	protected void clumpDataFields() {
+		JSpinner[] spinners = { healthSpinner, costSpinner, buildUpSpinner,
+				damageSpinner, rangeSpinner, firingSpeedSpinner,
+				shrapnelDamageSpinner, moneyFarmAmountSpinner,
+				moneyFarmIntervalSpinner, freezeRatioSpinner };
+		spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
+		SpinnerTogglingRadioButton[] buttons = { shootsToggleButton,
+				freezeToggleButton, moneyFarmingToggleButton,
+				bombingToggleButton };
+		radioButtons = new ArrayList<SpinnerTogglingRadioButton>(
+				Arrays.asList(buttons));
+
+		// no radio buttons right now
 
 	}
 
-	protected void setDefaultObjectName() {
-		defaultObjectName = "Tower A";
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+		shootsToggleButton.setFieldsToToggle(damageSpinner, firingSpeedSpinner,
+				shrapnelDamageSpinner, rangeSpinner, freezeToggleButton,
+				bombingToggleButton);
+		bombingToggleButton.setFieldsToToggle(shrapnelDamageSpinner);
+		moneyFarmingToggleButton.setFieldsToToggle(moneyFarmAmountSpinner,
+				moneyFarmIntervalSpinner);
+		freezeToggleButton.setFieldsToToggle(freezeRatioSpinner);
 	}
 
 	/**
 	 * puts the view fields' data into the schema data
 	 */
+	@Override
 	protected void updateSchemaDataFromView() {
 		// update schema with fields
 		String name = getSelectedObjectName();
 		TDObjectSchema myCurrentTower = objectMap.get(name);
-		Integer health = (Integer) healthSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.HEALTH, health);
-		Integer cost = (Integer) costSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.COST, cost);
-		Integer damage = (Integer) damageSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.DAMAGE, damage);
-		Integer buildUp = (Integer) buildUpSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.BUILDUP, buildUp);
-		// update schema with buttons
-		myCurrentTower.addAttribute(TowerSchema.TILE_SIZE,
-				GroupButtonUtil.getSelectedButtonText(sizeButtonGroup));
-		myCurrentTower.addAttribute(TowerSchema.RANGE,
-				GroupButtonUtil.getSelectedButtonText(rangeButtonGroup));
-		// update schema with images
+
+		for (JSpinner spinner : spinnerFields) {
+
+			myCurrentTower.addAttribute(spinner.getName(),
+					(Integer) spinner.getValue());
+		}
+
+		for (SpinnerTogglingRadioButton button : radioButtons) {
+			myCurrentTower.addAttribute(button.getText(),
+					(Boolean) button.isSelected());
+		}
 	}
 
 	/**
@@ -102,31 +102,18 @@ public class TowerEditorTab extends ObjectEditorTab {
 	 *            the monster's schema attributes
 	 * 
 	 */
+	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
 
-		healthSpinner.setValue(map.get(TowerSchema.HEALTH));
-		costSpinner.setValue(map.get(TowerSchema.COST));
-		damageSpinner.setValue(map.get(TowerSchema.DAMAGE));
-		buildUpSpinner.setValue(map.get(TowerSchema.BUILDUP));
-
-		// buttons
-		ButtonModel selectedRangeButtonModel = null;
-		ButtonModel selectedSizeButtonModel = null;
-		String rangeValue = (String) map.get(TowerSchema.RANGE);
-		String sizeValue = (String) map.get(TowerSchema.TILE_SIZE);
-
-		for (JRadioButton radioButton : radioButtons) {
-			ButtonModel theModel = radioButton.getModel();
-			String theButtonText = radioButton.getText();
-			if (theButtonText.equals(rangeValue))
-				selectedRangeButtonModel = theModel;
-			if (theButtonText.equals(sizeValue))
-				selectedSizeButtonModel = theModel;
+		for (JSpinner spinner : spinnerFields) {
+			spinner.setValue(map.get(spinner.getName()));
 		}
-		rangeButtonGroup.setSelected(selectedRangeButtonModel, true);
-		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
 
+		for (SpinnerTogglingRadioButton radioButton : radioButtons) {
+			radioButton.setSelected((Boolean) map.get(radioButton.getText()));
+
+		}
 	}
 
 	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
@@ -136,76 +123,28 @@ public class TowerEditorTab extends ObjectEditorTab {
 			// TODO Auto-generated constructor stub
 		}
 
-		private Component makeRangePane() {
-			JPanel result = new JPanel();
-			result.setLayout(new GridLayout(1, 0));
-
-			result.setBorder(BorderFactory.createEmptyBorder(0, // top
-					20, // left
-					0, // bottom
-					0)); // right
-
-			smallRangeButton = new JRadioButton(TowerSchema.RANGE_SMALL);
-			mediumRangeButton = new JRadioButton(TowerSchema.RANGE_MEDIUM);
-			largeRangeButton = new JRadioButton(TowerSchema.RANGE_LARGE);
-			rangeButtonGroup = new ButtonGroup();
-			rangeButtonGroup.add(smallRangeButton);
-			rangeButtonGroup.add(mediumRangeButton);
-			rangeButtonGroup.add(largeRangeButton);
-			result.add(smallRangeButton);
-			result.add(mediumRangeButton);
-			result.add(largeRangeButton);
-			return result;
-		}
-
-		private JComponent makeSizePane() {
-			JPanel result = new JPanel();
-			result.setLayout(new GridLayout(1, 0));
-
-			result.setBorder(BorderFactory.createEmptyBorder(0, // top
-					20, // left
-					0, // bottom
-					0)); // right
-
-			largeSizeButton = new JRadioButton(TowerSchema.TILE_SIZE_LARGE);
-			smallSizeButton = new JRadioButton(TowerSchema.TILE_SIZE_SMALL);
-			sizeButtonGroup = new ButtonGroup();
-			sizeButtonGroup.add(largeSizeButton);
-			sizeButtonGroup.add(smallSizeButton);
-			result.add(largeSizeButton);
-			result.add(smallSizeButton);
-			return result;
-		}
-
 		@Override
-		protected JComponent makeFieldPane() {
+		protected void instantiateFields() {
+			healthSpinner = makeAttributeSpinner(TowerSchema.HEALTH);
+			costSpinner = makeAttributeSpinner(TowerSchema.COST);
+			damageSpinner = makeAttributeSpinner(TowerSchema.DAMAGE);
+			rangeSpinner = makeAttributeSpinner(TowerSchema.RANGE);
+			buildUpSpinner = makeAttributeSpinner(TowerSchema.BUILDUP);
+			firingSpeedSpinner = makeAttributeSpinner(TowerSchema.FIRING_SPEED);
+			shrapnelDamageSpinner = makeAttributeSpinner(TowerSchema.SHRAPNEL_DAMAGE);
+			moneyFarmAmountSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANTED);
+			moneyFarmIntervalSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANT_INTERVAL);
+			freezeRatioSpinner = makeAttributeSpinner(
+					TowerSchema.FREEZE_SLOWDOWN_PROPORTION, true);
 
-			JPanel result = new JPanel(new GridLayout(0, 1));
-
-			healthSpinner = makeAttributeSpinner();
-			costSpinner = makeAttributeSpinner();
-			damageSpinner = makeAttributeSpinner();
-			buildUpSpinner = makeAttributeSpinner();
-			result.add(healthSpinner);
-			result.add(costSpinner);
-			result.add(damageSpinner);
-			result.add(buildUpSpinner);
-			result.add(makeSizePane());
-			result.add(makeRangePane());
-			return result;
-		}
-
-		@Override
-		protected JComponent makeLabelPane() {
-
-			JPanel labels = new JPanel(new GridLayout(0, 1));
-			labels.add(new JLabel(TowerViewConstants.HEALTH_STRING));
-			labels.add(new JLabel(TowerViewConstants.COST_STRING));
-			labels.add(new JLabel(TowerViewConstants.DAMAGE_STRING));
-			labels.add(new JLabel(TowerViewConstants.BUILDUP_STRING));
-			labels.add(new JLabel(TowerViewConstants.RANGE_STRING));
-			labels.add(new JLabel(TowerViewConstants.TILE_SIZE_STRING));
-			return labels;
+			shootsToggleButton = new SpinnerTogglingRadioButton(
+					TowerSchema.TOWER_BEHAVIOR_SHOOTS, true);
+			freezeToggleButton = new SpinnerTogglingRadioButton(
+					TowerSchema.TOWER_BEHAVIOR_FREEZES, true);
+			bombingToggleButton = new SpinnerTogglingRadioButton(
+					TowerSchema.TOWER_BEHAVIOR_BOMBS, true);
+			moneyFarmingToggleButton = new SpinnerTogglingRadioButton(
+					TowerSchema.TOWER_BEHAVIOR_FARMS_MONEY, true);
 		}
 
 	}
@@ -213,8 +152,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	@Override
 	public void saveTabData() {
 		TowerController controller = (TowerController) myController;
-		
-		
+
 	}
 
 }

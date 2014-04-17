@@ -1,9 +1,8 @@
 package main.java.engine.objects;
 
-import java.io.Serializable;
-import java.util.Map;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.projectile.DamageProjectile;
+
 import jgame.platform.JGEngine;
 
 

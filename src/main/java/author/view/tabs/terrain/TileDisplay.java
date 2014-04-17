@@ -17,21 +17,19 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import main.java.author.view.tabs.terrain.types.TileObject;
-
 public class TileDisplay extends JPanel {
+	private static int PIXEL_SIZE = 32;
 	private static final int SCALE_PIXEL_SIZE = 16; // pixel size for jbutton icon display
 	private TileSelectionManager myTileManager;
 	private Image[][] myImages;
     private int myNumXTiles;
     private int myNumYTiles;
-	private int myPixelSize;
+
     private String myTileMapFile;
 	
-	public TileDisplay(TileSelectionManager tileManager, File tileMapFile, int pixelSize) {
+	public TileDisplay(TileSelectionManager tileManager, File tileMapFile) {
 		myTileManager = tileManager;
         myTileMapFile = tileMapFile.getAbsolutePath();
-		myPixelSize = pixelSize;
 		initTileDisplay(tileMapFile);
 		displayTiles();
 		setVisible(true);
@@ -55,13 +53,13 @@ public class TileDisplay extends JPanel {
 		try {
 			img = ImageIO.read(tileMap);
 
-            myNumXTiles = img.getWidth()/myPixelSize;
-            myNumYTiles = img.getHeight()/myPixelSize;
+            myNumXTiles = img.getWidth()/PIXEL_SIZE;
+            myNumYTiles = img.getHeight()/PIXEL_SIZE;
 			Image [][] myImageArray = new Image[myNumYTiles][myNumXTiles];
 			for (int i = 0; i < myNumYTiles; i++) {
 				for (int j = 0; j < myNumXTiles; j++) {
-					myImageArray[i][j] = img.getSubimage(j * myPixelSize, i * myPixelSize,
-                            myPixelSize, myPixelSize);
+					myImageArray[i][j] = img.getSubimage(j * PIXEL_SIZE, i * PIXEL_SIZE,
+                            PIXEL_SIZE, PIXEL_SIZE);
 				}
 			}
 
@@ -92,8 +90,8 @@ public class TileDisplay extends JPanel {
 				Image scaledIm = im.getScaledInstance(SCALE_PIXEL_SIZE, SCALE_PIXEL_SIZE, Image.SCALE_DEFAULT); // scale down image
 
 				TileObject imgDisplayObj = new TileObject(im);
-                imgDisplayObj.setMyXIndex(i); // Set row and column of where the thing is displayed
-                imgDisplayObj.setMyYIndex(j);
+                imgDisplayObj.setMyXIndex(j); // Set row and column of where the thing is displayed
+                imgDisplayObj.setMyYIndex(i);
                 imgDisplayObj.setMyTileMapFileName(myTileMapFile);
 				imgDisplayObj.addActionListener(actionListener(this, "updateSelection"));
 				imgDisplayObj.setIcon(new ImageIcon(scaledIm)); // place scaled image as jbutton icon
@@ -108,7 +106,7 @@ public class TileDisplay extends JPanel {
 	 * Obtains the side length of images in the bitmap, in pixels
 	 */
 	public int getMyPixelSize() {
-		return myPixelSize;
+		return PIXEL_SIZE;
 	}
 	
 	public int getNumRows() {

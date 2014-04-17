@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -54,7 +55,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new EnemyTabViewBuilder(this);
 	}
 
-	protected void initDataFields() {
+	protected void clumpDataFields() {
 		spinnerFields = new ArrayList<JSpinner>();
 		spinnerFields.add(healthSpinner);
 		spinnerFields.add(speedSpinner);
@@ -70,7 +71,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	}
 
 	protected void setDefaultObjectName() {
-		defaultObjectName = "Monster A";
+		objectName = "Monster A";
 	}
 
 	/**
@@ -163,18 +164,18 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		}
 
 		@Override
-		protected JComponent makeLabelPane() {
-
-			JPanel labels = new JPanel(new GridLayout(0, 1));
-			labels.add(new JLabel(EnemyViewConstants.HEALTH_STRING));
-			labels.add(new JLabel(EnemyViewConstants.SPEED_STRING));
-			labels.add(new JLabel(EnemyViewConstants.DAMAGE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.REWARD_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TYPE_STRING));
-			labels.add(new JLabel(EnemyViewConstants.TILE_SIZE_STRING));
-			return labels;
+		protected Component makeTypeTogglePane() {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
+		@Override
+		protected void instantiateFields() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		
 	}
 
 	@Override
@@ -189,7 +190,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		// buttons
 		ButtonModel selectedFlyButtonModel = null;
 		ButtonModel selectedSizeButtonModel = null;
-		String flyOrGroundValue = (String) map.get(MonsterSchema.FLYING_OR_GROUND);
+		String flyOrGroundValue = (String) map
+				.get(MonsterSchema.FLYING_OR_GROUND);
 		String tileSizeValue = (String) map.get(MonsterSchema.TILE_SIZE);
 
 		for (JRadioButton radioButton : radioButtons) {
@@ -209,7 +211,12 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	@Override
 	public void saveTabData() {
 		EnemyController controller = (EnemyController) myController;
-	
+
+	}
+
+	public List<String> getEnemyList() {
+
+		return (List<String>) objectMap.keySet();
 	}
 
 }
