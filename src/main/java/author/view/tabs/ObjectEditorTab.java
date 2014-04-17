@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -18,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -35,12 +37,17 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.UIDefaults;
+import javax.swing.UIManager;
+import javax.swing.JSpinner.DefaultEditor;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.plaf.SpinnerUI;
 import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.TabController;
@@ -70,10 +77,13 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected Border originalCreateObjectFieldBorder;
 	protected ObjectTabViewBuilder myBuilder;
 	protected HashMap<String, TDObjectSchema> objectMap;
-	protected String defaultObjectName = "Default Object";
+	protected String objectName = "Default Object Name";
 
-	public ObjectEditorTab(TabController towerController) {
+	protected Font SPINNER_FONT_DEFAULT;
+
+	public ObjectEditorTab(TabController towerController, String objectName) {
 		super(towerController);
+		this.objectName = objectName;
 		init();
 	}
 
@@ -82,16 +92,16 @@ public abstract class ObjectEditorTab extends EditorTab {
 		setDefaultObjectName();
 		objectMap = new HashMap<String, TDObjectSchema>();
 		myBuilder = createSpecificTabViewBuilder();
+		myBuilder.instantiateFields();
+		clumpDataFields();
 		this.add(myBuilder.makeDesignEnemyPane(), BorderLayout.NORTH);
 		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
-		initDataFields();
-		addObjectNameToList(defaultObjectName);
+		addObjectNameToList(objectName);
 		updateFieldDataUponNewSelection();
 		addListeners();
 	}
 
 	protected abstract void setDefaultObjectName();
-
 
 	protected void addListeners() {
 
@@ -101,8 +111,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			public void actionPerformed(ActionEvent e) {
 				if (list.getRowCount() == 1) {
 					JOptionPane.showMessageDialog(null,
-							"Please design at least one enemy.", "Alert!",
-							JOptionPane.ERROR_MESSAGE);
+							"Please design at least one " + objectName,
+							"Alert!", JOptionPane.ERROR_MESSAGE);
 
 					return;
 				}
@@ -184,7 +194,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileChooser = new JFileChooser();
-				int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
+				int returnVal = fileChooser
+						.showOpenDialog(ObjectEditorTab.this);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
@@ -207,7 +218,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				fileChooser = new JFileChooser();
-				int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
+				int returnVal = fileChooser
+						.showOpenDialog(ObjectEditorTab.this);
 
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
@@ -227,9 +239,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
-	protected abstract void initDataFields();
+	protected abstract void clumpDataFields();
 
-	protected abstract void updateViewWithSchemaData(Map<String, Serializable> map);
+	protected abstract void updateViewWithSchemaData(
+			Map<String, Serializable> map);
 
 	protected abstract void updateSchemaDataFromView();
 
@@ -329,17 +342,29 @@ public abstract class ObjectEditorTab extends EditorTab {
 		public ObjectTabViewBuilder(EditorTab editorTab) {
 			myTab = editorTab;
 		}
-		
-		protected Component makeSpinnerField(String labelString, JSpinner spinner) {
+
+		protected Component makeSpinnerField(JSpinner spinner) {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			JLabel label = new JLabel(labelString, SwingConstants.CENTER);
+			JLabel label = new JLabel(spinner.getName(), SwingConstants.CENTER);
 			result.add(label, BorderLayout.NORTH);
 			result.add(spinner, BorderLayout.CENTER);
 			return result;
-			
+
 		}
-		protected JSpinner makeAttributeSpinner() {
+
+		protected JSpinner makeAttributeSpinner(String labelString,
+				boolean percentBased) {
+
+			return percentBased ? makeAttributeSpinner(labelString, 100)
+					: makeAttributeSpinner(labelString);
+		}
+
+		protected JSpinner makeAttributeSpinner(String labelString) {
+			return makeAttributeSpinner(labelString, 1000);
+		}
+
+		private JSpinner makeAttributeSpinner(String labelString, int max) {
 
 			SpinnerModel model = new SpinnerNumberModel(1, 1, 1000, 1);
 			JSpinner spinner = new JSpinner(model);
@@ -347,6 +372,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			Font bigFont = spinner.getFont().deriveFont(Font.PLAIN,
 					FontConstants.LARGE_FONT_SIZE);
 			spinner.setFont(bigFont);
+			spinner.setName(labelString);
+			SPINNER_FONT_DEFAULT = spinner.getFont();
 			return spinner;
 		}
 
@@ -382,7 +409,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 			collisionImageCanvas = new ImageCanvas();
-			collisionImageCanvas.setSize(ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+			collisionImageCanvas.setSize(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
 					ObjectEditorConstants.IMAGE_CANVAS_SIZE);
 			collisionImageCanvas.setBackground(Color.BLACK);
 			result.add(collisionImageCanvas, BorderLayout.NORTH);
@@ -399,7 +427,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 		private JComponent makeEditorPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			result.add(makeFieldPane(), BorderLayout.CENTER);
+			result.add(makeAttributesPane(), BorderLayout.CENTER);
 			result.add(makeImagesPane(), BorderLayout.EAST);
 			result.add(makeDeleteEnemyButton(), BorderLayout.SOUTH);
 
@@ -433,7 +461,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 					listScrollPane, editorPane);
 
-			splitPane.setDividerLocation(ObjectEditorConstants.DIVIDER_LOCATION);
+			splitPane
+					.setDividerLocation(ObjectEditorConstants.DIVIDER_LOCATION);
 
 			Dimension minimumSize = new Dimension(100, 50);
 			listScrollPane.setMinimumSize(minimumSize);
@@ -453,8 +482,122 @@ public abstract class ObjectEditorTab extends EditorTab {
 			table.setRowHeight((int) FontConstants.MEDIUM_FONT_SIZE + 12);
 			return table;
 		}
-		
-		protected abstract JComponent makeFieldPane();
+
+		private Component makeAttributesPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			result.add(makeFieldPane(), BorderLayout.CENTER);
+			result.add(makeTypeTogglePane(), BorderLayout.NORTH);
+			return result;
+		}
+
+		protected Component makeTypeTogglePane() {
+			JPanel result = new JPanel();
+			result.setLayout(new GridLayout(1, 0));
+			for (JRadioButton button : radioButtons) {
+				result.add(button);
+			}
+
+			TitledBorder title;
+			Border loweredbevel = BorderFactory.createLoweredBevelBorder();
+			title = BorderFactory.createTitledBorder(loweredbevel, objectName
+					+ " Type");
+			title.setTitleJustification(TitledBorder.CENTER);
+			result.setBorder(title);
+			return result;
+		}
+
+		protected JComponent makeFieldPane() {
+			JPanel result = new JPanel(new GridLayout(0, 2));
+			for (JSpinner spinner : spinnerFields) {
+				result.add(makeSpinnerField(spinner));
+			}
+			return result;
+		};
+
+		protected abstract void instantiateFields();
+
+	}
+
+	/**
+	 * @author garysheng
+	 * 
+	 *         Toggles specific spinner fields on or off based on radio button
+	 *         selection
+	 */
+	protected class FieldToggleActionListener implements ActionListener {
+		private JSpinner[] fieldsToToggle;
+
+		public FieldToggleActionListener(JSpinner... fieldsToToggle) {
+			this.fieldsToToggle = fieldsToToggle;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+
+			JRadioButton button = (JRadioButton) e.getSource();
+			if (!button.isSelected()) {
+				for (JSpinner spinner : fieldsToToggle) {
+					disableField(spinner);
+				}
+				return;
+			} else {
+				for (JSpinner spinner : fieldsToToggle) {
+					enableField(spinner);
+				}
+			}
+		}
+
+		protected void disableField(JSpinner spinner) {
+			JTextField textField = ((DefaultEditor) spinner.getEditor())
+					.getTextField();
+			if (!textField.isEditable()) {
+				return;
+			}
+
+			textField.setEditable(false);
+			textField.setBackground(Color.DARK_GRAY);
+			spinner.setFocusable(false);
+			spinner.setUI(new javax.swing.plaf.basic.BasicSpinnerUI() {
+				protected Component createNextButton() {
+					Component c = new JButton();
+					c.setPreferredSize(new Dimension(0, 0));
+					return c;
+				}
+
+				protected Component createPreviousButton() {
+					Component c = new JButton();
+					c.setPreferredSize(new Dimension(0, 0));
+					return c;
+				}
+			});
+
+		}
+
+		protected void toggleField(JSpinner spinner) {
+			JTextField textField = ((DefaultEditor) spinner.getEditor())
+					.getTextField();
+			if (textField.isEditable()) {
+				disableField(spinner);
+			} else {
+				enableField(spinner);
+			}
+
+		}
+
+		protected void enableField(JSpinner spinner) {
+			JTextField textField = ((DefaultEditor) spinner.getEditor())
+					.getTextField();
+			if (textField.isEditable()) {
+				return;
+			}
+			textField.setEditable(true);
+			textField.setBackground(Color.WHITE);
+			spinner.setFocusable(true);
+			spinner.updateUI();
+			spinner.setFont(SPINNER_FONT_DEFAULT);
+
+		}
 
 	}
 

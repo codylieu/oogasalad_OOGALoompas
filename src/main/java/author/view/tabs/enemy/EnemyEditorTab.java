@@ -55,7 +55,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new EnemyTabViewBuilder(this);
 	}
 
-	protected void initDataFields() {
+	protected void clumpDataFields() {
 		spinnerFields = new ArrayList<JSpinner>();
 		spinnerFields.add(healthSpinner);
 		spinnerFields.add(speedSpinner);
@@ -71,7 +71,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	}
 
 	protected void setDefaultObjectName() {
-		defaultObjectName = "Monster A";
+		objectName = "Monster A";
 	}
 
 	/**
@@ -161,6 +161,18 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			result.add(makeTypePane());
 			result.add(makeDimensionPane());
 			return result;
+		}
+
+		@Override
+		protected Component makeTypeTogglePane() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		protected void instantiateFields() {
+			// TODO Auto-generated method stub
+			
 		}
 
 		

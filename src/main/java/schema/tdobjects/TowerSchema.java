@@ -10,8 +10,8 @@ public class TowerSchema extends TDObjectSchema {
     public static final String LOCATION = "Location";
     public static final String HEALTH = "Health";
     public static final String DAMAGE = "Damage";
-    public static final String SHRAPNEL_DAMAGE = "Damage of bomb shrapnel";
-    public static final String FIRING_SPEED = "Firing Speed";
+    public static final String SHRAPNEL_DAMAGE = "Bomb Shrapnel Damage";
+    public static final String FIRING_SPEED = "Firing Speed (per sec)";
     public static final String RANGE = "Range";
     public static final String COST = "Cost";
     public static final String MONEY_GRANTED = "Money granted";
@@ -46,6 +46,8 @@ public class TowerSchema extends TDObjectSchema {
         myAttributeSet.add(LOCATION);
         myAttributeSet.add(NAME);
         myAttributeSet.add(TOWER_BEHAVIORS);
+        myAttributeSet.add(MONEY_GRANTED);
+        myAttributeSet.add(MONEY_GRANT_INTERVAL);
         myAttributeSet.add(SHRAPNEL_DAMAGE);
         myAttributeSet.add(SHRAPNEL_IMAGE_NAME);
         myAttributeSet.add(FREEZE_SLOWDOWN_PROPORTION);
@@ -62,8 +64,12 @@ public class TowerSchema extends TDObjectSchema {
         addAttribute(TowerSchema.HEALTH, TowerViewConstants.HEALTH_DEFAULT);
         addAttribute(TowerSchema.COST, TowerViewConstants.COST_DEFAULT);
         addAttribute(TowerSchema.DAMAGE, TowerViewConstants.DAMAGE_DEFAULT);
-        addAttribute(TowerSchema.BUILDUP, TowerViewConstants.BUILDUP_DEFAULT);
         addAttribute(TowerSchema.RANGE, TowerViewConstants.RANGE_DEFAULT);
+        addAttribute(TowerSchema.BUILDUP, TowerViewConstants.BUILDUP_DEFAULT);
+        addAttribute(TowerSchema.FIRING_SPEED, TowerViewConstants.FIRING_SPEED_DEFAULT);
+        addAttribute(TowerSchema.MONEY_GRANTED, TowerViewConstants.MONEY_GRANTED_DEFAULT);
+        addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, TowerViewConstants.FREEZE_SLOWDOWN_DEFAULT);
+        addAttribute(TowerSchema.SHRAPNEL_DAMAGE, TowerViewConstants.BUILDUP_DEFAULT);
         addAttribute(TowerSchema.TOWER_IMAGE_NAME, "");
         addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
         addAttribute(TowerSchema.UPGRADE_PATH, "");
