@@ -14,6 +14,12 @@ import main.java.schema.GameSchema;
 
 import com.google.gson.Gson;
 
+/**
+ * Deals with serializing objects to json
+ * and deserializing json to objects
+ * @author Inyoung Jo
+ *
+ */
 public class JSONHandler {
 
 	private static String FILE_PATH = "src/main/resources/";
