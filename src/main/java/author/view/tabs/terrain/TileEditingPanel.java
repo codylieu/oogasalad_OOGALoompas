@@ -16,6 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/**
+ * Originally written to allow author to alter look of images. However, class is currently
+ * not used.
+ *
+ */
 public class TileEditingPanel extends JPanel {
 
 	private TileSelectionManager myTileManager;

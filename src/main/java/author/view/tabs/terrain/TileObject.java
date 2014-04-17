@@ -37,10 +37,6 @@ public class TileObject extends JButton {
 		myPassabilityIndex = index;
 	}
 	
-	public Color getBGColor() {
-		return null;
-	}
-	
 	public Image getImage() {
 		return myImage;
 	}

@@ -24,14 +24,6 @@ public class Tile implements Serializable {
 	    myColor = color;
 	}
 	
-	public Color getColor() {
-		return myColor;
-	}
-	
-	public void setColor(Color color) {
-		myColor = color;
-	}
-	
 	public Image getImage() {
 		return myImg;
 	}
