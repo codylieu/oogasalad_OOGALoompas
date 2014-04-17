@@ -24,8 +24,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	public static int FRAME_RATE_DELTA = 5;
 	public static int DEFAULT_FRAME_RATE = 45;
-	//public static final String DEFAULT_TOWER_NAME = "test-tower-1";
-
+	public static int LEFT_CLICK = 1;
+	public static int RIGHT_CLICK = 3;
+	
 	private TowerChooser towerChooser;
 	private Model model;
 	private List<Observing> observers;
@@ -38,7 +39,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public TDPlayerEngine() {
 		super();
 		initEngineComponent(960, 640);
-		//towerName = DEFAULT_TOWER_NAME;
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
 		isFullScreen = false;
@@ -54,24 +54,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
 		this.model = new Model(this);
-		
-	
-        /*try {
-            model.loadGameBlueprint(null); // TODO: null for now
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
 	}
-
-	/*public int getFramePerSecond(){
-		return myFrameRate;
-	}
-
-	public void setFramePerSecond(int newFrame){
-		myFrameRate = newFrame;
-		setFrameRate(myFrameRate,1);
-		System.out.println("hi");
-	}*/
 
 	public void speedUp() {
 		setFrameRate(getFrameRate() + FRAME_RATE_DELTA, 1);
@@ -108,15 +91,24 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		int curXTilePos = mousePos.x/tileWidth() * tileWidth();
 		int curYTilePos = mousePos.y/tileHeight() * tileHeight();
 		JGColor color = JGColor.yellow;
-		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0)
-			if (cursorState == CursorState.AddTower)
-				if (model.isTowerPresent(mousePos.x, mousePos.y))
+		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0) {
+			if (cursorState == CursorState.AddTower) {
+				if (model.isTowerPresent(mousePos.x, mousePos.y)) {
 					color = JGColor.red;
-				else
+				}
+				else {
 					color = JGColor.green;
-			else
-				if (model.isTowerPresent(mousePos.x, mousePos.y))
+				}
+
+			}
+			else {
+				if (model.isTowerPresent(mousePos.x, mousePos.y)) {
 					color = JGColor.orange;
+				}
+			}
+
+		}
+
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
@@ -150,17 +142,17 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		return "";
 
 	}
-	
-	
+
+
 	@Override
 	public void doFrame() {
 		super.doFrame();
 		if (cursorState == CursorState.AddTower){
-			if (getMouseButton(1)) {
+			if (getMouseButton(LEFT_CLICK)) {
 				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
-				clearMouseButton(1);
+				clearMouseButton(LEFT_CLICK);
 			}
 			else
 				drawTowerGhost();
@@ -170,19 +162,17 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 		checkKeys();
 
-		if (getMouseButton(3)) { // right click
+		if (getMouseButton(RIGHT_CLICK)) {
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
 		}
 		try {
 			model.updateGame();
 		} catch (MonsterCreationFailureException e) {
-			// TODO Implement exception
 			e.printStackTrace();
 		}
 		moveObjects();
 		model.checkCollisions();
-		//        model.spawnMonster(100, 150);
 	}
 
 	public void update(){
@@ -190,7 +180,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		System.out.println(towerChooser.getTowerName());
 		towerName = towerChooser.getTowerName();
 	}
-	
+
 	public void toggleAddTower() {
 		if (getCursorState() == CursorState.AddTower){
 			setCursorState(CursorState.None);
@@ -265,8 +255,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public List<String> getPossibleTowers(){
 		return model.getPossibleTowers();
 	}
-	
-	//TODO: i added this kevin, will explain later - jordan
+
 	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {
 		model.loadGameBlueprint(fileName);
 		//model.loadMapTest(fileName);
@@ -281,7 +270,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		gameStats.put("Time", "Game clock: " + model.getGameClock());
 		return gameStats;
 	}
-	
+
 	@Override
 	public void setSubject(Subject s) {
 		towerChooser = (TowerChooser) s;
