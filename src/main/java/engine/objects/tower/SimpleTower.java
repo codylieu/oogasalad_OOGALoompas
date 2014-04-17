@@ -3,6 +3,7 @@ package main.java.engine.objects.tower;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
+
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 import main.java.schema.tdobjects.TowerSchema;
@@ -70,7 +71,7 @@ public class SimpleTower extends TDObject implements ITower {
              (double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),
              (double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
              (double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
-             (String) getValueOrDefault(attributes, TowerSchema.UPGRADE_TOWER, ""),
+             (String) getValueOrDefault(attributes, TowerSchema.UPGRADE_PATH, ""),
              (String) attributes.get(TowerSchema.NAME));     
 }
 

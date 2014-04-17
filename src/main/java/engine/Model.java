@@ -505,7 +505,7 @@ public class Model {
 		testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
 		Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
 		towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
-		testTowerOne.addAttribute(TowerSchema.UPGRADE_TOWER, "test-tower-3");
+		testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "test-tower-3");
 		testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
 		testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerOne);

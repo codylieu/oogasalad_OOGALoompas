@@ -1,21 +1,36 @@
 package main.java.author.view.tabs.tower;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TowerController;
-import main.java.author.view.components.SpinnerTogglingRadioButton;
+import main.java.author.util.ComboBoxUtil;
+import main.java.author.view.components.ImageCanvas;
+import main.java.author.view.components.BehaviorTogglingRadioButton;
+import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.schema.tdobjects.TowerSchema;
+import main.java.engine.objects.TDObject;
+import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 
 public class TowerEditorTab extends ObjectEditorTab {
 
@@ -24,13 +39,50 @@ public class TowerEditorTab extends ObjectEditorTab {
 			moneyFarmAmountSpinner, moneyFarmIntervalSpinner,
 			freezeRatioSpinner;
 
-	private SpinnerTogglingRadioButton freezeToggleButton, shootsToggleButton,
+	private BehaviorTogglingRadioButton freezeToggleButton, shootsToggleButton,
 			moneyFarmingToggleButton, bombingToggleButton;
 
-	private ButtonGroup rangeButtonGroup, sizeButtonGroup;
+	private JComboBox<String> upgradeDropDown;
+
+	protected ImageCanvas bulletImageCanvas, towerImageCanvas,
+			shrapnelImageCanvas;
+	protected JButton collisionImageButton;
+	protected JButton shrapnelImageButton;
 
 	public TowerEditorTab(TabController towerController, String objectName) {
 		super(towerController, objectName);
+	}
+
+	@Override
+	public void saveTabData() {
+		TowerController controller = (TowerController) myController;
+
+	}
+
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+		shootsToggleButton.setFieldsToToggle(damageSpinner, firingSpeedSpinner,
+				shrapnelDamageSpinner, rangeSpinner, freezeToggleButton,
+				bombingToggleButton);
+		bombingToggleButton.setFieldsToToggle(shrapnelDamageSpinner);
+		moneyFarmingToggleButton.setFieldsToToggle(moneyFarmAmountSpinner,
+				moneyFarmIntervalSpinner);
+		freezeToggleButton.setFieldsToToggle(freezeRatioSpinner);
+		upgradeDropDown.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateSchemaDataFromView();
+			}
+		});
+
+		shrapnelImageButton.addActionListener(new FileChooserListener(
+				shrapnelImageCanvas));
+		collisionImageButton.addActionListener(new FileChooserListener(
+				bulletImageCanvas));
+		towerImageButton.addActionListener(new FileChooserListener(
+				towerImageCanvas));
 	}
 
 	@Override
@@ -45,53 +97,23 @@ public class TowerEditorTab extends ObjectEditorTab {
 	}
 
 	@Override
-	protected void clumpDataFields() {
-		JSpinner[] spinners = { healthSpinner, costSpinner, buildUpSpinner,
-				damageSpinner, rangeSpinner, firingSpeedSpinner,
-				shrapnelDamageSpinner, moneyFarmAmountSpinner,
-				moneyFarmIntervalSpinner, freezeRatioSpinner };
-		spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-		SpinnerTogglingRadioButton[] buttons = { shootsToggleButton,
-				freezeToggleButton, moneyFarmingToggleButton,
-				bombingToggleButton };
-		radioButtons = new ArrayList<SpinnerTogglingRadioButton>(
-				Arrays.asList(buttons));
-
-		// no radio buttons right now
-
-	}
-
-	@Override
-	protected void addListeners() {
-		super.addListeners();
-		shootsToggleButton.setFieldsToToggle(damageSpinner, firingSpeedSpinner,
-				shrapnelDamageSpinner, rangeSpinner, freezeToggleButton,
-				bombingToggleButton);
-		bombingToggleButton.setFieldsToToggle(shrapnelDamageSpinner);
-		moneyFarmingToggleButton.setFieldsToToggle(moneyFarmAmountSpinner,
-				moneyFarmIntervalSpinner);
-		freezeToggleButton.setFieldsToToggle(freezeRatioSpinner);
-	}
-
-	/**
-	 * puts the view fields' data into the schema data
-	 */
-	@Override
 	protected void updateSchemaDataFromView() {
-		// update schema with fields
-		String name = getSelectedObjectName();
-		TDObjectSchema myCurrentTower = objectMap.get(name);
+		super.updateSchemaDataFromView();
 
-		for (JSpinner spinner : spinnerFields) {
+		TDObjectSchema myCurrentObject = getSelectedObject();
+		List<TowerBehaviors> behaviorsToggled = new ArrayList<TowerBehaviors>();
+		for (BehaviorTogglingRadioButton button : radioButtons) {
+			if (button.isSelected()) {
+				behaviorsToggled.add(button.getBehavior());
+			}
 
-			myCurrentTower.addAttribute(spinner.getName(),
-					(Integer) spinner.getValue());
 		}
+		myCurrentObject.addAttribute(TowerSchema.TOWER_BEHAVIORS,
+				(Serializable) behaviorsToggled);
 
-		for (SpinnerTogglingRadioButton button : radioButtons) {
-			myCurrentTower.addAttribute(button.getText(),
-					(Boolean) button.isSelected());
-		}
+		myCurrentObject.addAttribute(upgradeDropDown.getName(),
+				(String) upgradeDropDown.getSelectedItem());
+
 	}
 
 	/**
@@ -99,21 +121,36 @@ public class TowerEditorTab extends ObjectEditorTab {
 	 * puts the schema data into the view field
 	 * 
 	 * @param map
-	 *            the monster's schema attributes
+	 *            the object's schema attributes
 	 * 
 	 */
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
-		// fields (spinners)
+		super.updateViewWithSchemaData(map);
 
-		for (JSpinner spinner : spinnerFields) {
-			spinner.setValue(map.get(spinner.getName()));
+		upgradeDropDown.removeAllItems();
+		for (String tower : objectMap.keySet()) {
+			if (!tower.equals(getSelectedObjectName()))
+				upgradeDropDown.addItem(tower);
 		}
 
-		for (SpinnerTogglingRadioButton radioButton : radioButtons) {
-			radioButton.setSelected((Boolean) map.get(radioButton.getText()));
-
+		if (ComboBoxUtil.containsValue(upgradeDropDown,
+				(String) map.get(upgradeDropDown.getName()))) {
+			upgradeDropDown.setSelectedItem(map.get(upgradeDropDown.getName()));
+		} else {
+			upgradeDropDown.addItem(TowerSchema.UPGRADE_PATH_NONE);
+			upgradeDropDown.setSelectedItem(TowerSchema.UPGRADE_PATH_NONE);
 		}
+
+		List<TowerBehaviors> behaviorsToToggle = (List<TowerBehaviors>) map.get(TowerSchema.TOWER_BEHAVIORS);
+		for (BehaviorTogglingRadioButton radioButton : radioButtons) {
+			if (behaviorsToToggle.contains(radioButton.getBehavior())) {
+				radioButton.setSelected(true);
+			} else {
+				radioButton.setSelected(false);
+			}
+		}
+
 	}
 
 	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
@@ -123,8 +160,47 @@ public class TowerEditorTab extends ObjectEditorTab {
 			// TODO Auto-generated constructor stub
 		}
 
+		private JComponent makeBulletGraphicPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			bulletImageCanvas.setSize(new Dimension(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2));
+			bulletImageCanvas.setBackground(Color.BLACK);
+			result.add(bulletImageCanvas, BorderLayout.CENTER);
+			collisionImageButton = makeChooseGraphicsButton("Set Bullet Image");
+			result.add(collisionImageButton, BorderLayout.SOUTH);
+			return result;
+		}
+
+		private JComponent makeShrapnelGraphicPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			shrapnelImageCanvas.setSize(new Dimension(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2));
+			shrapnelImageCanvas.setBackground(Color.BLACK);
+			result.add(shrapnelImageCanvas, BorderLayout.CENTER);
+			shrapnelImageButton = makeChooseGraphicsButton("Set Shrapnel Image");
+			result.add(shrapnelImageButton, BorderLayout.SOUTH);
+			return result;
+		}
+
+		private JComboBox<String> makeUpgradeDropdown() {
+
+			JComboBox<String> result = new JComboBox<String>();
+			result.setName(TowerSchema.UPGRADE_PATH);
+			return result;
+		}
+
 		@Override
-		protected void instantiateFields() {
+		protected String getObjectGraphicKey() {
+			return TowerSchema.TOWER_IMAGE_NAME;
+		}
+
+		@Override
+		protected void instantiateAndClumpFields() {
+			// spinners
 			healthSpinner = makeAttributeSpinner(TowerSchema.HEALTH);
 			costSpinner = makeAttributeSpinner(TowerSchema.COST);
 			damageSpinner = makeAttributeSpinner(TowerSchema.DAMAGE);
@@ -136,22 +212,83 @@ public class TowerEditorTab extends ObjectEditorTab {
 			moneyFarmIntervalSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANT_INTERVAL);
 			freezeRatioSpinner = makeAttributeSpinner(
 					TowerSchema.FREEZE_SLOWDOWN_PROPORTION, true);
+			// radio buttons
+			shootsToggleButton = new BehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_SHOOTS, TowerBehaviors.SHOOTING,
+					true);
+			freezeToggleButton = new BehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_FREEZES,
+					TowerBehaviors.FREEZING, true);
+			bombingToggleButton = new BehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_BOMBS, TowerBehaviors.BOMBING,
+					true);
+			moneyFarmingToggleButton = new BehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_FARMS_MONEY,
+					TowerBehaviors.MONEY_FARMING, true);
+			// other
+			upgradeDropDown = makeUpgradeDropdown();
+			// canvases
+			bulletImageCanvas = new ImageCanvas(true,
+					TowerSchema.BULLET_IMAGE_NAME);
+			shrapnelImageCanvas = new ImageCanvas(true,
+					TowerSchema.SHRAPNEL_IMAGE_NAME);
+			towerImageCanvas = new ImageCanvas(false,
+					TowerSchema.TOWER_IMAGE_NAME);
+			// clump data types
+			clumpFieldsIntoGroups();
 
-			shootsToggleButton = new SpinnerTogglingRadioButton(
-					TowerSchema.TOWER_BEHAVIOR_SHOOTS, true);
-			freezeToggleButton = new SpinnerTogglingRadioButton(
-					TowerSchema.TOWER_BEHAVIOR_FREEZES, true);
-			bombingToggleButton = new SpinnerTogglingRadioButton(
-					TowerSchema.TOWER_BEHAVIOR_BOMBS, true);
-			moneyFarmingToggleButton = new SpinnerTogglingRadioButton(
-					TowerSchema.TOWER_BEHAVIOR_FARMS_MONEY, true);
 		}
 
-	}
+		private void clumpFieldsIntoGroups() {
+			JSpinner[] spinners = { healthSpinner, costSpinner, buildUpSpinner,
+					damageSpinner, rangeSpinner, firingSpeedSpinner,
+					shrapnelDamageSpinner, moneyFarmAmountSpinner,
+					moneyFarmIntervalSpinner, freezeRatioSpinner };
+			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
+			BehaviorTogglingRadioButton[] buttons = { shootsToggleButton,
+					freezeToggleButton, moneyFarmingToggleButton,
+					bombingToggleButton };
+			radioButtons = new ArrayList<BehaviorTogglingRadioButton>(
+					Arrays.asList(buttons));
+			ImageCanvas[] canvases = { bulletImageCanvas, shrapnelImageCanvas,
+					towerImageCanvas };
+			imageCanvases = new ArrayList<ImageCanvas>(Arrays.asList(canvases));
+		}
 
-	@Override
-	public void saveTabData() {
-		TowerController controller = (TowerController) myController;
+		@Override
+		protected JComponent makeFieldPane() {
+			JPanel result = new JPanel(new GridLayout(0, 3));
+			for (JSpinner spinner : spinnerFields) {
+				result.add(makeFieldTile(spinner));
+			}
+			result.add(makeFieldTile(upgradeDropDown));
+			return result;
+		}
+
+		@Override
+		protected JComponent makePrimaryObjectGraphicPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+
+			towerImageCanvas.setSize(new Dimension(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE));
+			towerImageCanvas.setBackground(Color.BLACK);
+			result.add(towerImageCanvas, BorderLayout.CENTER);
+			towerImageButton = makeChooseGraphicsButton("Set " + objectName
+					+ " Image");
+			result.add(towerImageButton, BorderLayout.SOUTH);
+			return result;
+		}
+
+		@Override
+		protected JComponent makeSecondaryImagesGraphicPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			result.add(makeBulletGraphicPane(), BorderLayout.WEST);
+			result.add(makeShrapnelGraphicPane(), BorderLayout.CENTER);
+			return result;
+		}
 
 	}
 

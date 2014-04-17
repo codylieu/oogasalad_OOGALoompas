@@ -221,16 +221,7 @@ public class MainController {
 			}
 		});
 
-	}
-
-	public int getNumLevels() {
-		for (TabController controller : myTabControllers) {
-			if (controller instanceof GameSettingsController) {
-				GameSettingsController gameSettingsController = (GameSettingsController) controller;
-				return gameSettingsController.getNumLevels();
-			}
-		}
-		return 0;
+		
 	}
 
 	public List<String> getEnemyList() {

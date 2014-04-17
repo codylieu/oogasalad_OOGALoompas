@@ -29,14 +29,11 @@ import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {
 	private static final String CLEAR = "Clear Tiles";
-	private static final String EDIT_TILE = "Edit Tile";
 	private static final String SAVE_MAP = "Save Map";
 	private static final String ADD_TILEMAP = "Import Image File";
 	private static final String TERRAIN_CHOOSER = "Choose Terrain Type";
-	private static final String PIXEL_QUERY = "How many pixels are in the bitmap?";
 	private static final String ROW_QUERY = "Enter Row Count";
 	private static final String COL_QUERY = "Enter Column Count";
-	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
 	private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
 	private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
 	private static final String MAP_SAVED = "Map Saved";
@@ -124,7 +121,6 @@ public class TerrainEditorTab extends EditorTab {
 	private void constructButtonDisplay() {
 		displayOptions = new LinkedHashMap<String, JComponent>();
 		displayOptions.put(TERRAIN_CHOOSER, constructTerrainTypes());
-		displayOptions.put(EDIT_TILE, initEditorButton());
 		displayOptions.put(ADD_TILEMAP, initNewTileMap());
 		displayOptions.put(CLEAR, initClearButton());
 		displayOptions.put(SAVE_MAP, initSaveButton());
@@ -177,16 +173,6 @@ public class TerrainEditorTab extends EditorTab {
 	}
 
 	/**
-	 * Constructs a JButton that allows the user to edit the features of an image
-	 */
-	private JButton initEditorButton() {
-		JButton openBGTiles = new JButton(EDIT_TILE);
-		openBGTiles.addActionListener(actionListener(this, "openEditorWindow"));
-		openBGTiles.setEnabled(false);
-		return openBGTiles;
-	}
-
-	/**
 	 * Allows the user to enter a grid of images that they would like to use,
 	 * which can then be parsed based on the pixel size of each image within
 	 * the grid.
@@ -202,7 +188,6 @@ public class TerrainEditorTab extends EditorTab {
 		int fileReturn = fileChooser.showOpenDialog(this);
 		if (fileReturn == JFileChooser.APPROVE_OPTION) {
 			importTileDisplay(fileChooser.getSelectedFile());
-			displayOptions.get(EDIT_TILE).setEnabled(true);
 			displayOptions.get(TERRAIN_CHOOSER).setEnabled(true);
 			revalidate();
 			repaint();
@@ -296,15 +281,4 @@ public class TerrainEditorTab extends EditorTab {
 		return JOptionPane.showInputDialog(query);
 	}
 
-	/**
-	 * Opens a window that allows the user to edit information about
-	 * the selected Tile
-	 */
-	public void openEditorWindow(ActionEvent e) {
-		JFrame selectionFrame = new JFrame();
-		selectionFrame.add(myTileSelectionManager.getTileEditPanel(), BorderLayout.CENTER);
-		selectionFrame.setLocation(this.getWidth() + 25, 0);
-		selectionFrame.pack();
-		selectionFrame.setVisible(true);
-	}
 }

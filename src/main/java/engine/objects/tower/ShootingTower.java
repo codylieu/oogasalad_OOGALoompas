@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.detector.TargetDetectorInterface;

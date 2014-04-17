@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -50,30 +52,27 @@ import javax.swing.plaf.SpinnerUI;
 import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.TabController;
-import main.java.author.util.EnemyUtilFunctions;
+import main.java.author.util.ObjectUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
-import main.java.author.view.components.SpinnerTogglingRadioButton;
+import main.java.author.view.components.BehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.author.view.global_constants.ObjectEditorConstants;
+import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 
 public abstract class ObjectEditorTab extends EditorTab {
 
-	protected JFileChooser fileChooser;
-	protected BufferedImage collisionImage;
-	protected BufferedImage objectImage;
-	protected ImageCanvas collisionImageCanvas;
-	protected ImageCanvas objectImageCanvas;
 	protected DefaultTableModel listModel;
 	protected JTable list;
 	protected JSplitPane splitPane;
 	protected List<JSpinner> spinnerFields;
 	protected JButton createObjectButton;
-	protected List<SpinnerTogglingRadioButton> radioButtons;
+	protected List<BehaviorTogglingRadioButton> radioButtons;
+	protected List<ImageCanvas> imageCanvases;
 	protected JTextField createObjectField;
-	protected JButton collisionImageButton;
+
 	protected JButton deleteObjectButton;
-	protected JButton objectImageButton;
+	protected JButton towerImageButton;
 	protected Border originalCreateObjectFieldBorder;
 	protected ObjectTabViewBuilder myBuilder;
 	protected HashMap<String, TDObjectSchema> objectMap;
@@ -85,18 +84,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 		init();
 	}
 
-	protected void init() {
-		setLayout(new BorderLayout());
-		objectMap = new HashMap<String, TDObjectSchema>();
-		myBuilder = createSpecificTabViewBuilder();
-		myBuilder.instantiateFields();
-		clumpDataFields();
-		this.add(myBuilder.makeDesignEnemyPane(), BorderLayout.NORTH);
-		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
-		addObjectNameToList(objectName);
-		addListeners();
-		updateFieldDataUponNewSelection();
-		
+	private void replaceKeysInObjectMap(String originalKey, String newKey) {
+		TDObjectSchema objectSchema = objectMap.get(originalKey);
+		objectMap.remove(originalKey);
+		objectMap.put(newKey, objectSchema);
 	}
 
 	protected void addListeners() {
@@ -148,15 +139,16 @@ public abstract class ObjectEditorTab extends EditorTab {
 			});
 		}
 
-		for (SpinnerTogglingRadioButton button : radioButtons) {
+		for (BehaviorTogglingRadioButton button : radioButtons) {
 			button.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-						SpinnerTogglingRadioButton button = (SpinnerTogglingRadioButton) e.getSource();
-						button.toggle();
-						updateSchemaDataFromView();
-					
+					BehaviorTogglingRadioButton button = (BehaviorTogglingRadioButton) e
+							.getSource();
+					button.toggle();
+					updateSchemaDataFromView();
+
 				}
 
 			});
@@ -169,7 +161,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 				String objectName = createObjectField.getText();
 
 				objectName = objectName.trim().replaceAll(" +", " ");
-				if (EnemyUtilFunctions.newObjectNameIsValid(objectName,
+				if (ObjectUtilFunctions.newObjectNameIsValid(objectName,
 						objectMap)) {
 
 					addObjectNameToList(objectName);
@@ -185,69 +177,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			}
 		});
 
-		collisionImageButton.addActionListener(new ActionListener() {
+		
 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				int returnVal = fileChooser
-						.showOpenDialog(ObjectEditorTab.this);
-
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fileChooser.getSelectedFile();
-					try {
-						System.out.println("Opening: " + file.getName() + ".\n");
-						collisionImage = ImageIO.read(file);
-
-						collisionImageCanvas.setImage(collisionImage);
-						collisionImageCanvas.repaint();
-					} catch (IOException e1) {
-					}
-
-				} else {
-					System.out.println("Cancelled");
-				}
-			}
-		});
-		objectImageButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				fileChooser = new JFileChooser();
-				int returnVal = fileChooser
-						.showOpenDialog(ObjectEditorTab.this);
-
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File file = fileChooser.getSelectedFile();
-					try {
-						System.out.println("Opening: " + file.getName() + ".\n");
-						objectImage = ImageIO.read(file);
-						objectImageCanvas.setImage(objectImage);
-						objectImageCanvas.repaint();
-					} catch (IOException e1) {
-					}
-
-				} else {
-					System.out.println("Cancelled");
-				}
-			}
-		});
-
-	}
-
-	protected abstract void clumpDataFields();
-
-	protected abstract void updateViewWithSchemaData(
-			Map<String, Serializable> map);
-
-	protected abstract void updateSchemaDataFromView();
-
-	protected abstract ObjectTabViewBuilder createSpecificTabViewBuilder();
-
-	private void replaceKeysInEnemyMap(String originalKey, String newKey) {
-		TDObjectSchema objectSchema = objectMap.get(originalKey);
-		objectMap.remove(originalKey);
-		objectMap.put(newKey, objectSchema);
 	}
 
 	protected void addObjectNameToList(String objectName) {
@@ -258,6 +189,29 @@ public abstract class ObjectEditorTab extends EditorTab {
 	}
 
 	protected abstract TDObjectSchema createSpecificNewObject(String name);
+
+	protected abstract ObjectTabViewBuilder createSpecificTabViewBuilder();
+
+	protected String getSelectedObjectName() {
+		return (String) listModel.getValueAt(list.getSelectedRow(), 0);
+	}
+
+	protected TDObjectSchema getSelectedObject() {
+		return objectMap.get(getSelectedObjectName());
+	}
+
+	protected void init() {
+		setLayout(new BorderLayout());
+		objectMap = new HashMap<String, TDObjectSchema>();
+		myBuilder = createSpecificTabViewBuilder();
+		myBuilder.instantiateAndClumpFields();
+		this.add(myBuilder.makeDesignObjectPane(), BorderLayout.NORTH);
+		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
+		addObjectNameToList(objectName);
+		addListeners();
+		updateFieldDataUponNewSelection();
+
+	}
 
 	protected void showInvalidObjectNameDialog() {
 		JOptionPane
@@ -277,96 +231,97 @@ public abstract class ObjectEditorTab extends EditorTab {
 		} else {
 			myCurrentObject = objectMap.get(name);
 		}
-		//updateFieldToggling();
+		// updateFieldToggling();
 		updateViewWithSchemaData(myCurrentObject.getAttributesMap());
 	}
-/*
-	private void updateFieldToggling() {
-		for (JSpinner spinner : spinnerFields) {
-			enableField(spinner);
-		}
-		for (SpinnerTogglingRadioButton button : radioButtons) {
-			button.setEnabled(true);
-		}
-	}*/
 
-	protected String getSelectedObjectName() {
-		return (String) listModel.getValueAt(list.getSelectedRow(), 0);
+	/**
+	 * puts the view fields' data into the schema data
+	 */
+	protected void updateSchemaDataFromView() {
+		// update schema with fields
+		TDObjectSchema myCurrentObject = getSelectedObject();
+
+		for (JSpinner spinner : spinnerFields) {
+
+			myCurrentObject.addAttribute(spinner.getName(),
+					(Integer) spinner.getValue());
+		}
+
+		for (ImageCanvas canvas : imageCanvases) {
+			myCurrentObject.addAttribute(canvas.getName(),
+					(String) canvas.getImagePath());
+		}
+
 	}
 
-	protected class TDObjectCellEditor extends DefaultCellEditor {
-		public TDObjectCellEditor() {
-			super(new JTextField());
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+		// fields (spinners)
+
+		for (JSpinner spinner : spinnerFields) {
+			spinner.setValue(map.get(spinner.getName()));
+		}
+
+		
+		for (ImageCanvas canvas : imageCanvases) {
+			canvas.clearImagePath();
+			if (map.get(canvas.getName()) != "") {
+				try {
+					canvas.setImageFromPath((String) map.get(canvas.getName()));
+					canvas.repaint();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else {
+				canvas.repaint();
+			}
+		}
+	}
+
+	protected class FileChooserListener implements ActionListener {
+
+		private ImageCanvas myCanvas;
+
+		public FileChooserListener(ImageCanvas objectImageCanvas) {
+			myCanvas = objectImageCanvas;
 		}
 
 		@Override
-		public boolean stopCellEditing() {
-			JTable table = (JTable) getComponent().getParent();
-			String originalKey = getSelectedObjectName();
+		public void actionPerformed(ActionEvent e) {
+			JFileChooser fileChooser = new JFileChooser();
+			int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
 
-			try {
-				String editedKey = (String) getCellEditorValue();
-
-				if (!originalKey.equals(editedKey)
-						&& !EnemyUtilFunctions.newObjectNameIsValid(editedKey,
-								objectMap)) {
-					JTextField textField = (JTextField) getComponent();
-					textField.setBorder(new LineBorder(Color.red));
-					textField.selectAll();
-					textField.requestFocusInWindow();
-
-					showInvalidObjectNameDialog();
-					return false;
-
-				} else {
-					replaceKeysInEnemyMap(originalKey, editedKey);
+			if (returnVal == JFileChooser.APPROVE_OPTION) {
+				File file = fileChooser.getSelectedFile();
+				try {
+					System.out.println("Opening: " + file.getName() + ".\n");
+					
+					myCanvas.setImageFromPath(file.getAbsolutePath());
+					updateSchemaDataFromView();
+					myCanvas.repaint();
+				} catch (IOException e1) {
 				}
 
-			} catch (ClassCastException exception) {
-				return false;
+			} else {
+				System.out.println("Cancelled");
 			}
-
-			return super.stopCellEditing();
 		}
-
-		@Override
-		public Component getTableCellEditorComponent(JTable table,
-				Object value, boolean isSelected, int row, int column) {
-			Component c = super.getTableCellEditorComponent(table, value,
-					isSelected, row, column);
-			((JComponent) c).setBorder(new LineBorder(Color.black));
-
-			return c;
-		}
-
 	}
 
 	protected abstract class ObjectTabViewBuilder {
+
 		EditorTab myTab;
 
 		public ObjectTabViewBuilder(EditorTab editorTab) {
 			myTab = editorTab;
 		}
 
-		protected Component makeSpinnerField(JSpinner spinner) {
+		private Component makeAttributesPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			JLabel label = new JLabel(spinner.getName(), SwingConstants.CENTER);
-			result.add(label, BorderLayout.NORTH);
-			result.add(spinner, BorderLayout.CENTER);
+			result.add(makeFieldPane(), BorderLayout.CENTER);
+			result.add(makeTypeTogglePane(), BorderLayout.NORTH);
 			return result;
-
-		}
-
-		protected JSpinner makeAttributeSpinner(String labelString,
-				boolean percentBased) {
-
-			return percentBased ? makeAttributeSpinner(labelString, 100)
-					: makeAttributeSpinner(labelString);
-		}
-
-		protected JSpinner makeAttributeSpinner(String labelString) {
-			return makeAttributeSpinner(labelString, 1000);
 		}
 
 		private JSpinner makeAttributeSpinner(String labelString, int max) {
@@ -381,50 +336,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return spinner;
 		}
 
-		protected Component makeDesignEnemyPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			result.add(new JLabel("Design New Enemy"), BorderLayout.WEST);
-
-			createObjectField = new JTextField();
-			originalCreateObjectFieldBorder = createObjectField.getBorder();
-			createObjectButton = new JButton("Begin");
-			result.add(createObjectField, BorderLayout.CENTER);
-			result.add(createObjectButton, BorderLayout.EAST);
-
-			return result;
-		}
-
-		protected Component makeOverallContent() {
-			list = myBuilder.makeTable();
-
-			// Create a split pane with the two scroll panes in it.
-			splitPane = myBuilder.makeSplitPane(new JScrollPane(list),
-					makeEditorPane());
-			return splitPane;
-		}
-
-		private JButton makeChooseGraphicsButton(String buttonString) {
-			JButton result = new JButton(buttonString);
-			return result;
-		}
-
-		private JComponent makeCollisionGraphicPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			collisionImageCanvas = new ImageCanvas();
-			collisionImageCanvas.setSize(
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE);
-			collisionImageCanvas.setBackground(Color.BLACK);
-			result.add(collisionImageCanvas, BorderLayout.NORTH);
-			collisionImageButton = makeChooseGraphicsButton("Set Collision Image");
-			result.add(collisionImageButton, BorderLayout.SOUTH);
-			return result;
-		}
-
-		private Component makeDeleteEnemyButton() {
-			deleteObjectButton = new JButton("Delete Enemy");
+		private Component makeDeleteObjectButton() {
+			deleteObjectButton = new JButton("Delete " + objectName);
 			return deleteObjectButton;
 		}
 
@@ -433,29 +346,21 @@ public abstract class ObjectEditorTab extends EditorTab {
 			result.setLayout(new BorderLayout());
 			result.add(makeAttributesPane(), BorderLayout.CENTER);
 			result.add(makeImagesPane(), BorderLayout.EAST);
-			result.add(makeDeleteEnemyButton(), BorderLayout.SOUTH);
+			result.add(makeDeleteObjectButton(), BorderLayout.SOUTH);
 
 			return result;
 		}
 
-		private JComponent makeEnemyGraphicPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			objectImageCanvas = new ImageCanvas();
-			objectImageCanvas.setSize(ObjectEditorConstants.IMAGE_CANVAS_SIZE,
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE);
-			objectImageCanvas.setBackground(Color.BLACK);
-			result.add(objectImageCanvas, BorderLayout.NORTH);
-			objectImageButton = makeChooseGraphicsButton("Set Object Image");
-			result.add(objectImageButton, BorderLayout.SOUTH);
-			return result;
-		}
+		protected abstract JComponent makePrimaryObjectGraphicPane();
+
+		protected abstract String getObjectGraphicKey();
 
 		private JComponent makeImagesPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			result.add(myBuilder.makeEnemyGraphicPane(), BorderLayout.NORTH);
-			result.add(myBuilder.makeCollisionGraphicPane(), BorderLayout.SOUTH);
+			result.add(myBuilder.makePrimaryObjectGraphicPane(), BorderLayout.CENTER);
+			result.add(myBuilder.makeSecondaryImagesGraphicPane(),
+					BorderLayout.SOUTH);
 			return result;
 		}
 
@@ -477,7 +382,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 		}
 
 		private JTable makeTable() {
-			listModel = new DefaultTableModel(new Object[] { "Enemy Name" }, 0);
+			listModel = new DefaultTableModel(new Object[] { objectName
+					+ " Name" }, 0);
 			JTable table = new JTable(listModel);
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			Font tableFont = table.getFont().deriveFont(
@@ -487,18 +393,67 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return table;
 		}
 
-		private Component makeAttributesPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-			result.add(makeFieldPane(), BorderLayout.CENTER);
-			result.add(makeTypeTogglePane(), BorderLayout.NORTH);
+		protected abstract void instantiateAndClumpFields();
+
+		protected JSpinner makeAttributeSpinner(String labelString) {
+			return makeAttributeSpinner(labelString, 1000);
+		}
+
+		protected JSpinner makeAttributeSpinner(String labelString,
+				boolean percentBased) {
+
+			return percentBased ? makeAttributeSpinner(labelString, 100)
+					: makeAttributeSpinner(labelString);
+		}
+
+		protected JButton makeChooseGraphicsButton(String buttonString) {
+			JButton result = new JButton(buttonString);
 			return result;
 		}
+
+		protected Component makeDesignObjectPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			result.add(new JLabel("Design New " + objectName),
+					BorderLayout.WEST);
+
+			createObjectField = new JTextField();
+			originalCreateObjectFieldBorder = createObjectField.getBorder();
+			createObjectButton = new JButton("Begin");
+			result.add(createObjectField, BorderLayout.CENTER);
+			result.add(createObjectButton, BorderLayout.EAST);
+
+			return result;
+		}
+
+		protected abstract JComponent makeFieldPane();
+
+		protected Component makeFieldTile(JComponent component) {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			JLabel label = new JLabel(component.getName(),
+					SwingConstants.CENTER);
+			result.add(label, BorderLayout.NORTH);
+			result.add(component, BorderLayout.CENTER);
+			return result;
+
+		}
+
+		protected Component makeOverallContent() {
+			list = myBuilder.makeTable();
+
+			// Create a split pane with the two scroll panes in it.
+			splitPane = myBuilder.makeSplitPane(new JScrollPane(list),
+					makeEditorPane());
+			return splitPane;
+		}
+
+		protected abstract JComponent makeSecondaryImagesGraphicPane();
 
 		protected Component makeTypeTogglePane() {
 			JPanel result = new JPanel();
 			result.setLayout(new GridLayout(1, 0));
-			for (SpinnerTogglingRadioButton button : radioButtons) {
+			for (BehaviorTogglingRadioButton button : radioButtons) {
 				result.add(button);
 			}
 
@@ -511,18 +466,53 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return result;
 		}
 
-		protected JComponent makeFieldPane() {
-			JPanel result = new JPanel(new GridLayout(0, 2));
-			for (JSpinner spinner : spinnerFields) {
-				result.add(makeSpinnerField(spinner));
-			}
-			return result;
-		};
-
-		protected abstract void instantiateFields();
-
 	}
 
-	
+	protected class TDObjectCellEditor extends DefaultCellEditor {
+		public TDObjectCellEditor() {
+			super(new JTextField());
+		}
+
+		@Override
+		public Component getTableCellEditorComponent(JTable table,
+				Object value, boolean isSelected, int row, int column) {
+			Component c = super.getTableCellEditorComponent(table, value,
+					isSelected, row, column);
+			((JComponent) c).setBorder(new LineBorder(Color.black));
+
+			return c;
+		}
+
+		@Override
+		public boolean stopCellEditing() {
+			JTable table = (JTable) getComponent().getParent();
+			String originalKey = getSelectedObjectName();
+
+			try {
+				String editedKey = (String) getCellEditorValue();
+
+				if (!originalKey.equals(editedKey)
+						&& !ObjectUtilFunctions.newObjectNameIsValid(editedKey,
+								objectMap)) {
+					JTextField textField = (JTextField) getComponent();
+					textField.setBorder(new LineBorder(Color.red));
+					textField.selectAll();
+					textField.requestFocusInWindow();
+
+					showInvalidObjectNameDialog();
+					return false;
+
+				} else {
+					replaceKeysInObjectMap(originalKey, editedKey);
+				}
+
+			} catch (ClassCastException exception) {
+				return false;
+			}
+
+			return super.stopCellEditing();
+		}
+
+	}
 
 }

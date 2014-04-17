@@ -13,7 +13,6 @@ import javax.swing.JTabbedPane;
  */
 public class TileSelectionManager {
 	private Canvas myCanvas;
-	private TileEditingPanel myTileEditPanel;
 	private List<TileDisplay> myTileDisplays;
 	private JTabbedPane myTileDisplayTab;
 	
@@ -21,7 +20,6 @@ public class TileSelectionManager {
 		myCanvas = canvas;
         myTileDisplays = new ArrayList<TileDisplay>();
         myTileDisplayTab = new JTabbedPane();
-		myTileEditPanel = new TileEditingPanel(this);
 	}
 	
 	protected void addTileDisplay(File mapFile) {
@@ -42,10 +40,6 @@ public class TileSelectionManager {
     public List<TileDisplay> getAllTileDisplays() {
         return myTileDisplays; // TODO: make unmodifiable?
     }
-	
-	public TileEditingPanel getTileEditPanel() {
-		return myTileEditPanel;
-	}
 	
 	public Canvas getCanvas() {
 		return myCanvas;
