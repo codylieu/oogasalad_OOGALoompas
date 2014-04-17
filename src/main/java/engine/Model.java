@@ -205,7 +205,7 @@ public class Model {
 		//GameBlueprint bp = createTestBlueprint();
 		GameBlueprint bp = null;
 		try {
-			bp = dataHandler.loadBlueprint(filePath);
+			bp = dataHandler.loadBlueprint(filePath,true);
 		} catch (ZipException | net.lingala.zip4j.exception.ZipException e) {
 			e.printStackTrace();
 		}
