@@ -64,6 +64,10 @@ public class Player {
 	public void decrementLives(){
 	    lives--;
 	}
+	
+	public void incrementLives() {
+		lives++;
+	}
 
 	public double getScore() {
 		return this.score;

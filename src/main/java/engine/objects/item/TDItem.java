@@ -39,7 +39,7 @@ public abstract class TDItem extends TDObject {
 	 */
 	public abstract void doAction(EnvironmentKnowledge environmentKnowledge);
 	
-	protected void setDead() {
+	protected void terminateItem() {
 		isDead = true;
 	}
 	

@@ -36,7 +36,10 @@ public class BombTower extends ShootingTower {
 
     @Override
     public void fireProjectile (double angle) {
-        new Bomb(getXCoordinate(), getYCoordinate(), angle, myDamage, myShrapnelDamage,
+        new Bomb(
+        		((SimpleTower) baseTower).centerCoordinate().getX(),
+        		((SimpleTower) baseTower).centerCoordinate().getY(), 
+        		angle, myDamage, myShrapnelDamage,
                  myBulletImage, myShrapnelImage);
     }
 

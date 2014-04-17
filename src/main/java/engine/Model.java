@@ -92,6 +92,8 @@ public class Model {
 		engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
 		engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
 		engine.defineImage("row_bomb", "-", TDItem.ITEM_CID, RESOURCE_PATH + "Big_Ben.png", "-");
+		engine.defineImage("fire", "-", 0, RESOURCE_PATH + "fire.png", "-");
+		engine.defineImage("ice", "-", 0, RESOURCE_PATH + "ice.png", "-");
 	}
 
 	/**
@@ -216,15 +218,16 @@ public class Model {
 	 */
 
 	public void loadGameBlueprint(String filePath) throws ClassNotFoundException, IOException {
-		GameBlueprint bp = null;
-		// TODO: load from datahandler
-		//        try {
-		//            bp = dataHandler.loadBlueprint(filePath);
-		//        } catch (ZipException e) {
-		//            e.printStackTrace();
-		//        }
+//		GameBlueprint bp = null;
+//        try {
+//            bp = dataHandler.loadBlueprint(filePath);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return;
+//        }
 
 		// TODO: use the actual game blueprint (aka bp)
+//		GameBlueprint testBP = bp;
 		GameBlueprint testBP = createTestBlueprint();
 
 		// init player
@@ -242,6 +245,9 @@ public class Model {
 		for (WaveSpawnSchema wave : testBP.getMyLevelSchemas()) {
 			levelManager.addNewWave(wave);
 		}
+
+        // init map
+//        TDMap map = new TDMap(engine, testBP.getMyGameMapSchemas().get(0)); // TODO: load each map
 	}
 
 	/**
@@ -353,22 +359,29 @@ public class Model {
 		}
 	}
 
-	public void placeItem(String name, double x, double y) {
-		// TODO: make code better
+	/**
+	 * Place an item at the specified location. 
+	 * If it costs more than the player has, do nothing. 
+	 * 
+	 * @param name
+	 * @param x
+	 * @param y
+	 */
+	public boolean placeItem(String name, double x, double y) {
 		try {
-			Class c = Class.forName("main.java.engine.objects.item.InstantFreeze");
-			Constructor[] con = c.getConstructors();
-			TDItem newItem = (TDItem) con[0].newInstance(x, y);
+			TDItem newItem = factory.placeItem(new Point2D.Double(x, y), name);
 			if (newItem.getCost() <= player.getMoney()) {
 				items.add(newItem);
 				player.addMoney(-newItem.getCost());
-				return;
+				return true;
 			} else {
 				newItem.setImage(null);
 				newItem.remove();
+				return false;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 	}
 
@@ -496,6 +509,16 @@ public class Model {
 		testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors4);
 		testTowerFour.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerFour);
+		
+		TowerSchema testTowerFive = new TowerSchema();
+		testTowerFive.addAttribute(TowerSchema.NAME, "test-tower-5");
+		testTowerFive.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
+		testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+		Collection<TowerBehaviors> towerBehaviors5= new ArrayList<TowerBehaviors>();
+		towerBehaviors5.add(TowerBehaviors.SPLASHING);
+		testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors5);
+		testTowerFive.addAttribute(TowerSchema.COST, (double) 10);
+		testTowerSchema.add(testTowerFive);
 
 		// Create test monsters
 		SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
@@ -517,7 +540,7 @@ public class Model {
 
 		// Create wave schemas
 		List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
-		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterOne, 1);
+		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterOne, 5);
 		WaveSpawnSchema testWaveSpawnSchemaOne = new WaveSpawnSchema();
 		testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
 		testWaves.add(testWaveSpawnSchemaOne);
