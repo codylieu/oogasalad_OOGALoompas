@@ -359,9 +359,9 @@ public class Model {
 	}
 
 	public void placeItem(String name, double x, double y) {
-		// TODO: make code better
+		// TODO: make code better. move code to TDObjectFacotry
 		try {
-			Class c = Class.forName("main.java.engine.objects.item.InstantFreeze");
+			Class c = Class.forName("main.java.engine.objects.item.LifeSaver");
 			Constructor[] con = c.getConstructors();
 			TDItem newItem = (TDItem) con[0].newInstance(x, y);
 			if (newItem.getCost() <= player.getMoney()) {
