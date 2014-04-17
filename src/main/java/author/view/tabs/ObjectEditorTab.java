@@ -27,7 +27,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JSplitPane;
@@ -53,6 +52,7 @@ import javax.swing.table.DefaultTableModel;
 import main.java.author.controller.TabController;
 import main.java.author.util.EnemyUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
+import main.java.author.view.components.SpinnerTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.schema.tdobjects.TDObjectSchema;
@@ -69,7 +69,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected JSplitPane splitPane;
 	protected List<JSpinner> spinnerFields;
 	protected JButton createObjectButton;
-	protected List<JRadioButton> radioButtons;
+	protected List<SpinnerTogglingRadioButton> radioButtons;
 	protected JTextField createObjectField;
 	protected JButton collisionImageButton;
 	protected JButton deleteObjectButton;
@@ -79,8 +79,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected HashMap<String, TDObjectSchema> objectMap;
 	protected String objectName = "Default Object Name";
 
-	protected Font SPINNER_FONT_DEFAULT;
-
 	public ObjectEditorTab(TabController towerController, String objectName) {
 		super(towerController);
 		this.objectName = objectName;
@@ -89,7 +87,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	protected void init() {
 		setLayout(new BorderLayout());
-		setDefaultObjectName();
 		objectMap = new HashMap<String, TDObjectSchema>();
 		myBuilder = createSpecificTabViewBuilder();
 		myBuilder.instantiateFields();
@@ -97,11 +94,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 		this.add(myBuilder.makeDesignEnemyPane(), BorderLayout.NORTH);
 		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
 		addObjectNameToList(objectName);
-		updateFieldDataUponNewSelection();
 		addListeners();
+		updateFieldDataUponNewSelection();
+		
 	}
-
-	protected abstract void setDefaultObjectName();
 
 	protected void addListeners() {
 
@@ -152,15 +148,15 @@ public abstract class ObjectEditorTab extends EditorTab {
 			});
 		}
 
-		for (JRadioButton button : radioButtons) {
+		for (SpinnerTogglingRadioButton button : radioButtons) {
 			button.addItemListener(new ItemListener() {
 
 				@Override
 				public void itemStateChanged(ItemEvent e) {
-					if (e.getStateChange() == ItemEvent.SELECTED) {
-
+						SpinnerTogglingRadioButton button = (SpinnerTogglingRadioButton) e.getSource();
+						button.toggle();
 						updateSchemaDataFromView();
-					}
+					
 				}
 
 			});
@@ -281,9 +277,18 @@ public abstract class ObjectEditorTab extends EditorTab {
 		} else {
 			myCurrentObject = objectMap.get(name);
 		}
-
+		//updateFieldToggling();
 		updateViewWithSchemaData(myCurrentObject.getAttributesMap());
 	}
+/*
+	private void updateFieldToggling() {
+		for (JSpinner spinner : spinnerFields) {
+			enableField(spinner);
+		}
+		for (SpinnerTogglingRadioButton button : radioButtons) {
+			button.setEnabled(true);
+		}
+	}*/
 
 	protected String getSelectedObjectName() {
 		return (String) listModel.getValueAt(list.getSelectedRow(), 0);
@@ -373,7 +378,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 					FontConstants.LARGE_FONT_SIZE);
 			spinner.setFont(bigFont);
 			spinner.setName(labelString);
-			SPINNER_FONT_DEFAULT = spinner.getFont();
 			return spinner;
 		}
 
@@ -494,7 +498,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 		protected Component makeTypeTogglePane() {
 			JPanel result = new JPanel();
 			result.setLayout(new GridLayout(1, 0));
-			for (JRadioButton button : radioButtons) {
+			for (SpinnerTogglingRadioButton button : radioButtons) {
 				result.add(button);
 			}
 
@@ -519,86 +523,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
-	/**
-	 * @author garysheng
-	 * 
-	 *         Toggles specific spinner fields on or off based on radio button
-	 *         selection
-	 */
-	protected class FieldToggleActionListener implements ActionListener {
-		private JSpinner[] fieldsToToggle;
-
-		public FieldToggleActionListener(JSpinner... fieldsToToggle) {
-			this.fieldsToToggle = fieldsToToggle;
-		}
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-
-			JRadioButton button = (JRadioButton) e.getSource();
-			if (!button.isSelected()) {
-				for (JSpinner spinner : fieldsToToggle) {
-					disableField(spinner);
-				}
-				return;
-			} else {
-				for (JSpinner spinner : fieldsToToggle) {
-					enableField(spinner);
-				}
-			}
-		}
-
-		protected void disableField(JSpinner spinner) {
-			JTextField textField = ((DefaultEditor) spinner.getEditor())
-					.getTextField();
-			if (!textField.isEditable()) {
-				return;
-			}
-
-			textField.setEditable(false);
-			textField.setBackground(Color.DARK_GRAY);
-			spinner.setFocusable(false);
-			spinner.setUI(new javax.swing.plaf.basic.BasicSpinnerUI() {
-				protected Component createNextButton() {
-					Component c = new JButton();
-					c.setPreferredSize(new Dimension(0, 0));
-					return c;
-				}
-
-				protected Component createPreviousButton() {
-					Component c = new JButton();
-					c.setPreferredSize(new Dimension(0, 0));
-					return c;
-				}
-			});
-
-		}
-
-		protected void toggleField(JSpinner spinner) {
-			JTextField textField = ((DefaultEditor) spinner.getEditor())
-					.getTextField();
-			if (textField.isEditable()) {
-				disableField(spinner);
-			} else {
-				enableField(spinner);
-			}
-
-		}
-
-		protected void enableField(JSpinner spinner) {
-			JTextField textField = ((DefaultEditor) spinner.getEditor())
-					.getTextField();
-			if (textField.isEditable()) {
-				return;
-			}
-			textField.setEditable(true);
-			textField.setBackground(Color.WHITE);
-			spinner.setFocusable(true);
-			spinner.updateUI();
-			spinner.setFont(SPINNER_FONT_DEFAULT);
-
-		}
-
-	}
+	
 
 }
