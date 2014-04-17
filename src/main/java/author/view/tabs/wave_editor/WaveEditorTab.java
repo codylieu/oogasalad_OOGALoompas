@@ -69,7 +69,8 @@ public class WaveEditorTab extends EditorTab {
 
 		panel.add(makeNewWaveButton(), BorderLayout.NORTH);
 		panel.add(makeRemoveMostRecentWaveButton(), BorderLayout.CENTER);
-		panel.add(makeRemoveWaveButton(), BorderLayout.SOUTH);
+		panel.add(makeRemoveWaveButton(), BorderLayout.CENTER);
+		panel.add(makeClearAllWavesButton(), BorderLayout.SOUTH);
 
 		return panel;
 
@@ -131,6 +132,28 @@ public class WaveEditorTab extends EditorTab {
 		});
 
 		return removeWaveButton;
+	}
+	
+	private JComponent makeClearAllWavesButton(){
+		
+		JButton clearAllWavesButton = new JButton("Clear All Waves");
+		
+		clearAllWavesButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				DefaultTableModel model = (DefaultTableModel) table.getModel();
+				
+				while(NUMBER_OF_WAVES > 0){
+					NUMBER_OF_WAVES--;
+					model.removeRow(NUMBER_OF_WAVES);
+				}
+				
+			}
+		});
+		
+		return clearAllWavesButton;
 	}
 
 	private void addWaveData() {
