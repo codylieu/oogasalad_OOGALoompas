@@ -30,7 +30,7 @@ public class JSONHandler {
 	 * @throws FileNotFoundException
 	 */
 	public void serializeObjectToJSON(String filename, Object obj) throws FileNotFoundException	{
-		File outputFile = new File(FILE_PATH + filename + ".txt");
+		File outputFile = new File(FILE_PATH + filename + ".json");
 		PrintWriter output = new PrintWriter(outputFile);
 		String json = myGson.toJson(obj);
 		System.out.println(json);
@@ -38,11 +38,22 @@ public class JSONHandler {
 		output.close();
 	}
 	
+	/**
+	 * 
+	 * Takes a JSON file and creates the object
+	 * from it, will mostly be used to load gameblueprints
+	 * 
+	 * @param filepath
+	 * @param obj
+	 * @return
+	 * @throws IOException
+	 */
 	public Object deserializeObjectFromJSON(String filepath, Object obj) throws IOException	{
 		BufferedReader reader = new BufferedReader(new FileReader(filepath));
 		String json = "";
 		String line = null;
 		while ((line = reader.readLine()) != null) {
+//			System.out.println(line);
 		    json += line;
 		}
 		return new Gson().fromJson(json, obj.getClass());
