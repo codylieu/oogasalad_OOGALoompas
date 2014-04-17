@@ -33,127 +33,17 @@ public class WaveEditorTab extends EditorTab {
 	private JTable table;
 	
 	private static int NUMBER_OF_WAVES = 0;
+	
+	private WaveTabContentCreator tabCreator = new WaveTabContentCreator();
 
 	public WaveEditorTab(TabController tabController) {
 		super(tabController);
-		add(createWaveEditorContent(), BorderLayout.CENTER);
+		add(tabCreator.createWaveEditorContent(), BorderLayout.CENTER);
 	}
 	
 	// Will make all of the values in the fields initially 0. Have to write a method since list of enemies is dynamic
 	public void populateFields(){
 		
-	}
-
-	public JComponent createWaveEditorContent(){
-
-		JPanel content = new JPanel(new BorderLayout());
-
-		content.add(createTable(), BorderLayout.NORTH);
-		content.add(makeButtons(), BorderLayout.SOUTH);
-
-		return content;
-	}
-
-	public JComponent createTable(){
-
-		table = new JTable(new DefaultTableModel(data, columnNames));
-
-		JScrollPane sp = new JScrollPane(table);
-
-		return sp;
-	}
-
-	private JComponent makeButtons(){
-
-		JPanel panel = new JPanel(new GridLayout(0, 1));
-
-		panel.add(makeNewWaveButton(), BorderLayout.NORTH);
-		panel.add(makeRemoveMostRecentWaveButton(), BorderLayout.CENTER);
-		panel.add(makeRemoveWaveButton(), BorderLayout.CENTER);
-		panel.add(makeClearAllWavesButton(), BorderLayout.SOUTH);
-
-		return panel;
-
-	}
-
-	private JComponent makeNewWaveButton(){
-
-		JButton addNewWaveButton = new JButton("Add New Wave");
-
-		addNewWaveButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				NUMBER_OF_WAVES++;
-				model.addRow(new Object[]{"Wave " + NUMBER_OF_WAVES, new Integer(0), new Integer(0), new Integer(0)});
-
-			}
-		});
-
-		return addNewWaveButton;
-	}
-	
-	// Just here to test simpler case of removing rows
-	private JComponent makeRemoveMostRecentWaveButton(){
-		JButton removeMostRecentWaveButton = new JButton("Remove Last Wave");
-
-		removeMostRecentWaveButton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				if(NUMBER_OF_WAVES > 0){
-					NUMBER_OF_WAVES--;
-					model.removeRow(NUMBER_OF_WAVES);
-				}
-			}
-
-		});
-
-		return removeMostRecentWaveButton;
-	}
-
-	// Currently does nothing, will figure it out later
-	private JComponent makeRemoveWaveButton(){
-
-		JButton removeWaveButton = new JButton("Remove Wave");
-
-		removeWaveButton.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				//				model.removeRow();
-			}
-
-		});
-
-		return removeWaveButton;
-	}
-	
-	private JComponent makeClearAllWavesButton(){
-		
-		JButton clearAllWavesButton = new JButton("Clear All Waves");
-		
-		clearAllWavesButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				
-				DefaultTableModel model = (DefaultTableModel) table.getModel();
-				
-				while(NUMBER_OF_WAVES > 0){
-					NUMBER_OF_WAVES--;
-					model.removeRow(NUMBER_OF_WAVES);
-				}
-				
-			}
-		});
-		
-		return clearAllWavesButton;
 	}
 
 	private void addWaveData() {
@@ -170,6 +60,122 @@ public class WaveEditorTab extends EditorTab {
 	public void saveTabData() {
 		// TODO Auto-generated method stub
 
+	}
+	
+	private class WaveTabContentCreator{
+		
+		public JComponent createWaveEditorContent(){
+
+			JPanel content = new JPanel(new BorderLayout());
+
+			content.add(createTable(), BorderLayout.NORTH);
+			content.add(makeButtons(), BorderLayout.SOUTH);
+
+			return content;
+		}
+
+		public JComponent createTable(){
+
+			table = new JTable(new DefaultTableModel(data, columnNames));
+
+			JScrollPane sp = new JScrollPane(table);
+
+			return sp;
+		}
+
+		private JComponent makeButtons(){
+
+			JPanel panel = new JPanel(new GridLayout(0, 1));
+
+			panel.add(makeNewWaveButton(), BorderLayout.NORTH);
+			panel.add(makeRemoveMostRecentWaveButton(), BorderLayout.CENTER);
+			panel.add(makeRemoveWaveButton(), BorderLayout.CENTER);
+			panel.add(makeClearAllWavesButton(), BorderLayout.SOUTH);
+
+			return panel;
+
+		}
+
+		private JComponent makeNewWaveButton(){
+
+			JButton addNewWaveButton = new JButton("Add New Wave");
+
+			addNewWaveButton.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					NUMBER_OF_WAVES++;
+					model.addRow(new Object[]{"Wave " + NUMBER_OF_WAVES, new Integer(0), new Integer(0), new Integer(0)});
+
+				}
+			});
+
+			return addNewWaveButton;
+		}
+		
+		// Just here to test simpler case of removing rows
+		private JComponent makeRemoveMostRecentWaveButton(){
+			JButton removeMostRecentWaveButton = new JButton("Remove Last Wave");
+
+			removeMostRecentWaveButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					if(NUMBER_OF_WAVES > 0){
+						NUMBER_OF_WAVES--;
+						model.removeRow(NUMBER_OF_WAVES);
+					}
+				}
+
+			});
+
+			return removeMostRecentWaveButton;
+		}
+
+		// Currently does nothing, will figure it out later
+		private JComponent makeRemoveWaveButton(){
+
+			JButton removeWaveButton = new JButton("Remove Wave");
+
+			removeWaveButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					//				model.removeRow();
+				}
+
+			});
+
+			return removeWaveButton;
+		}
+		
+		private JComponent makeClearAllWavesButton(){
+			
+			JButton clearAllWavesButton = new JButton("Clear All Waves");
+			
+			clearAllWavesButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					
+					while(NUMBER_OF_WAVES > 0){
+						NUMBER_OF_WAVES--;
+						model.removeRow(NUMBER_OF_WAVES);
+					}
+					
+				}
+			});
+			
+			return clearAllWavesButton;
+		}
+		
 	}
 
 }
