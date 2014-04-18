@@ -33,7 +33,7 @@ import org.junit.Test;
 public class TestDataHandler {
 
 	public final static String FILE_PATH = "src/test/resources/";
-	public final static String BLUEPRINT_PATH = "TestBlueprint.ser";
+	public final static String BLUEPRINT_PATH = "TestBlueprint";
 	public final static String SAVEBLUEPRINT_PATH = "SavedBlueprint";
 	public final static String ZIPPED_RESOURCES = "ZippedResources.zip";
 	public final static String STATE_PATH = "TestState.ser";
@@ -163,9 +163,9 @@ public class TestDataHandler {
 		GameBlueprint testBlueprint = this.createTestBlueprint();
 		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
 		String savedBlueprintLocation = "src/main/java/resources/testBlueprintJSON.json";
-		testDataHandler.serializeObjectToJSON("testBlueprintJSON",testBlueprint);
-		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(savedBlueprintLocation, testBlueprint));
-		testDataHandler.serializeObjectToJSON("testBlueprintAfterJSONSerialized",loadedBlueprint);
+		testDataHandler.serializeObjectToJSON(testBlueprint,"testBlueprintJSON");
+		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint,savedBlueprintLocation));
+		testDataHandler.serializeObjectToJSON(loadedBlueprint,"testBlueprintAfterJSONSerialized");
 
 	}
 
