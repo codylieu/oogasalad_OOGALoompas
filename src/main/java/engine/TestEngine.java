@@ -124,7 +124,7 @@ public class TestEngine extends JGEngine {
 			if(response == JFileChooser.APPROVE_OPTION){
 				File file = fileChooser.getSelectedFile();
 				try {
-					model.loadMapTest(file.getAbsolutePath());
+					model.loadGameBlueprint(file.getAbsolutePath());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

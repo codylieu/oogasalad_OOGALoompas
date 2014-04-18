@@ -201,21 +201,6 @@ public class Model {
 		}
 	}
 
-	// TODO: use this instead of other one, will change -jordan
-	public void loadMapTest (String fileName) {
-		try {
-			FileInputStream fis = new FileInputStream(fileName);
-			ObjectInputStream is = new ObjectInputStream(fis);
-			GameMapSchema mapToLoad = (GameMapSchema) is.readObject();
-			is.close();
-
-			TDMap tdMap = new TDMap(engine, mapToLoad);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Deserialize and load into the engine the GameBlueprint obtained from the file path
 	 * 
