@@ -15,11 +15,11 @@ public class InstantFreeze extends TDItem {
 	private static final int FLASH_INTERVAL = 5;
 	private static final String IMAGE = "row_bomb";
 	private static final double COST = 100;
-	private static final double BUILDUP_TIME = 100;
+	private static final double FREEZE_DURATION = 100;
 	private static final double DAMAGE = 0;
 
 	public InstantFreeze(double x, double y) {
-		super("instance_freeze", x, y, IMAGE, COST, BUILDUP_TIME, DAMAGE);
+		super("instance_freeze", x, y, IMAGE, COST, FREEZE_DURATION, DAMAGE);
 	}
 	
 	@Override

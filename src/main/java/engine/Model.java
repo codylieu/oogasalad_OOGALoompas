@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
@@ -31,7 +32,9 @@ import main.java.schema.GameSchema;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
@@ -245,6 +248,7 @@ public class Model {
 
 		factory.loadTowerSchemas(blueprint.getMyTowerSchemas());
 		factory.loadMonsterSchemas(blueprint.getMyMonsterSchemas());
+		factory.loadItemSchemas(blueprint.getMyItemSchemas());
 
 		// init levels
 		for (WaveSpawnSchema wave : blueprint.getMyLevelSchemas()) {
@@ -497,6 +501,15 @@ public class Model {
 		// Populate TDObjects
 		List<TowerSchema> testTowerSchema = new ArrayList<>();
 		List<MonsterSchema> testMonsterSchema = new ArrayList<>();
+		List<ItemSchema> testItemSchema = new ArrayList<>();
+
+		// Create test items
+		AnnihilatorItemSchema testAnnihilatorItem = new AnnihilatorItemSchema();
+		testAnnihilatorItem.addAttribute(ItemSchema.NAME, "Annihilator");
+		testAnnihilatorItem.addAttribute(TowerSchema.IMAGE_NAME, "fire.png");
+		testAnnihilatorItem.addAttribute(ItemSchema.COST, (double) 1);
+		testAnnihilatorItem.addAttribute(ItemSchema.DAMAGE, (double) 999);
+		testItemSchema.add(testAnnihilatorItem);
 
 		// Create test towers
 		TowerSchema testTowerOne = new TowerSchema();
@@ -562,6 +575,7 @@ public class Model {
 
 		testBlueprint.setMyTowerSchemas(testTowerSchema);
 		testBlueprint.setMyMonsterSchemas(testMonsterSchema);
+		testBlueprint.setMyItemSchemas(testItemSchema);
 
 		// Create test game schemas
 		GameSchema testGameSchema = new GameSchema();
