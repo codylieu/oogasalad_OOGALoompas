@@ -12,14 +12,15 @@ import java.util.*;
 import java.util.List;
 
 public class Canvas extends JPanel {
+	
+	private static final int TILE_SIZE = 25; // in pixels
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
 	private int numRows;
 	private int numCols;
-	private static final int TILE_SIZE = 25; // in pixels
 
-	private final Tile[][] myTiles;
+	private Tile[][] myTiles;
 	private TileObject selectedTileObj;
 	private TerrainEditorTab myTerrainTab;
 
@@ -65,24 +66,20 @@ public class Canvas extends JPanel {
 		super.paintComponent(g); // Call to super class is necessary
 		g.clearRect(0, 0, getWidth(), getHeight());
 
-		int rectWidth = getWidth() / numCols;
-		int rectHeight = getHeight() / numRows;
-
-		int index = 0;
 		for (Tile tile : getTiles()) {
 			// Upper left corner of the tile
-			int x = tile.getCol() * rectWidth;
-			int y = tile.getRow() * rectHeight;
+			int x = tile.getCol() * TILE_SIZE;
+			int y = tile.getRow() * TILE_SIZE;
 			Image tileImage = tile.getImage();
 
 			if (tileImage == null) {
 				g.setColor(DEFAULT_TILE_COLOR);
-				g.fillRect(x, y, rectWidth, rectHeight); // filling appropriate Tile background colors
+				g.fillRect(x, y, TILE_SIZE, TILE_SIZE); // filling appropriate Tile background colors
 			} else {
-				g.drawImage(tileImage,x,y, rectWidth, rectHeight, DEFAULT_TILE_COLOR, null);
+				g.drawImage(tileImage,x,y, TILE_SIZE, TILE_SIZE, DEFAULT_TILE_COLOR, null);
 			}
 			g.setColor(DEFAULT_BORDER_COLOR);
-			g.drawRect(x, y, rectWidth, rectHeight); // drawing appropriate Tile borders
+			g.drawRect(x, y, TILE_SIZE, TILE_SIZE); // drawing appropriate Tile borders
 		}
 	}
 
@@ -146,10 +143,17 @@ public class Canvas extends JPanel {
 		}
 	}
 
+	/**
+	 * Updates the 'selected' TileObject so that on a mouse press,
+	 * we can update the underlying Tile on the Canvas accordingly
+	 */
 	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
 	}
 	
+	/**
+	 * Obtains the 'selected' TileObject
+	 */
 	public TileObject getSelectedTileObj() {
 		return selectedTileObj;
 	}
