@@ -65,9 +65,9 @@ public class AuthoringView extends JFrame {
 		tabbedPane
 				.add(TOWER_EDITOR_STRING,
 						new TowerEditorTab(towerController, "Tower"));
-		/*tabbedPane
+		tabbedPane
 				.add(ENEMY_EDITOR_STRING,
-						new EnemyEditorTab(enemyController));*/
+						new EnemyEditorTab(enemyController, "Monster"));
 		tabbedPane
 				.add(TERRAIN_EDITOR_STRING,
 						new TerrainEditorTab(terrainController));
