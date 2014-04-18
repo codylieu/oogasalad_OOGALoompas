@@ -9,11 +9,7 @@ import java.util.Set;
 
 /**
  * 
- * This is a settings object for a specific type of Enemy and at a high level is
- * a wrapper for a bunch of key value pairs that the Engine will need to
- * reference to create TDObjects. This class is not a specific instance of a
- * Enemy. Please refer to the Game Engine's TDObjects for the objects related to
- * ones you will see onscreen.
+ * This is a settings object for a specific type of Monster.
  */
 public class SimpleMonsterSchema extends MonsterSchema {
 	public static final Class<SimpleMonster> MY_CONCRETE_TYPE = SimpleMonster.class;

@@ -11,4 +11,5 @@ public class ItemViewConstants {
 	public static final double DAMAGE_DEFAULT = 5;
 	public static final double FREEZE_DURATION_DEFAULT = 5;
 	public static final String IMAGE_DEFAULT = "row_bomb";
+	public static final double RANGE_DEFAULT = 10;
 }

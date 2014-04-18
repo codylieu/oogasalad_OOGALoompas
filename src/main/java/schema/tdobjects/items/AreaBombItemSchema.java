@@ -1,30 +1,28 @@
 package main.java.schema.tdobjects.items;
 
-import main.java.author.view.tabs.enemy.EnemyViewConstants;
 import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.objects.item.Annihilator;
-import main.java.engine.objects.monster.SimpleMonster;
+import main.java.engine.objects.item.AreaBomb;
 import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.MonsterSchema;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
  * 
- * This is a settings object for a specific type of Annihilator.
+ * This is a settings object for a specific type of AreaBomb.
  */
-public class AnnihilatorItemSchema extends ItemSchema {
-	public static final Class<Annihilator> MY_CONCRETE_TYPE = Annihilator.class;
+public class AreaBombItemSchema extends ItemSchema {
+	public static final Class<AreaBomb> MY_CONCRETE_TYPE = AreaBomb.class;
+	public static final String RANGE = "Range";
 
-	public AnnihilatorItemSchema() {
+	public AreaBombItemSchema() {
 		super(MY_CONCRETE_TYPE);
 	}
 
 	/**
 	 * @param name name of monster
 	 */
-	public AnnihilatorItemSchema(String name) {
+	public AreaBombItemSchema(String name) {
 		this();
 		populateDefaultAttributes(name);
 	}
@@ -41,6 +39,7 @@ public class AnnihilatorItemSchema extends ItemSchema {
 
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		return new HashSet<String>(); // empty set, no new attributes
+		myAttributeSet.add(AreaBombItemSchema.RANGE);
+		return myAttributeSet;
 	}
 }

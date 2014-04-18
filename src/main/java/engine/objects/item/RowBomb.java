@@ -21,7 +21,7 @@ public class RowBomb extends TDItem{
 	private static final double DAMAGE = Double.MAX_VALUE;
 
 	public RowBomb(double x, double y) {
-		super("row_bomb", x, y, IMAGE, COST, BUILDUP_TIME, DAMAGE);
+		super("row_bomb", x, y, IMAGE, COST, BUILDUP_TIME, DAMAGE, 5);
 	}
 
 	@Override

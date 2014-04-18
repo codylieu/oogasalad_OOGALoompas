@@ -33,6 +33,7 @@ import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
+import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
@@ -506,10 +507,17 @@ public class Model {
 		// Create test items
 		AnnihilatorItemSchema testAnnihilatorItem = new AnnihilatorItemSchema();
 		testAnnihilatorItem.addAttribute(ItemSchema.NAME, "Annihilator");
-		testAnnihilatorItem.addAttribute(TowerSchema.IMAGE_NAME, "fire.png");
+		testAnnihilatorItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
 		testAnnihilatorItem.addAttribute(ItemSchema.COST, (double) 1);
 		testAnnihilatorItem.addAttribute(ItemSchema.DAMAGE, (double) 999);
 		testItemSchema.add(testAnnihilatorItem);
+		
+		AreaBombItemSchema testAreaBombItem = new AreaBombItemSchema();
+		testAreaBombItem.addAttribute(ItemSchema.NAME, "AreaBomb");
+		testAreaBombItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
+		testAreaBombItem.addAttribute(AreaBombItemSchema.RANGE, (double) 100);
+		testItemSchema.add(testAreaBombItem);
+
 
 		// Create test towers
 		TowerSchema testTowerOne = new TowerSchema();
