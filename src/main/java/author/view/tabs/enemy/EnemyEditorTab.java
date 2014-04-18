@@ -99,6 +99,18 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			return null;
 		}
 
+		@Override
+		protected JComponent makePrimaryObjectGraphicPane() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		protected String getObjectGraphicKey() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 }

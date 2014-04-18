@@ -1,7 +1,9 @@
 package main.java.author.view.tabs.wave_editor;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -92,8 +94,8 @@ public class WaveEditorTab extends EditorTab {
 
 			JPanel content = new JPanel(new BorderLayout());
 
-			content.add(createTable(), BorderLayout.NORTH);
-			content.add(buttonMaker.makeButtons(), BorderLayout.SOUTH);
+			content.add(createTable(), BorderLayout.WEST);
+			content.add(buttonMaker.makeButtons(), BorderLayout.EAST);
 
 			return content;
 		}
@@ -105,9 +107,12 @@ public class WaveEditorTab extends EditorTab {
 		public JComponent createTable(){
 
 			table = new JTable(new DefaultTableModel(data, columnNames));
-
-			JScrollPane sp = new JScrollPane(table);
-
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+			
+			JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+			sp.setPreferredSize(new Dimension(1000, 550));
+			
+			
 			return sp;
 		}
 		

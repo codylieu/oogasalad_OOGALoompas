@@ -43,7 +43,7 @@ public class TileEditingPanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		TileObject selectedTile = myTileManager.getCanvas().getSelectedTileObj();
 		int pixelSize = myTileManager.getCurrentTileDisplay().getMyPixelSize();
-		Image img = (selectedTile == null) ? null : selectedTile.getUneditedImage();
+		Image img = (selectedTile == null) ? null : selectedTile.getImage();
 
 		if (img != null) {
 			img = rotate((BufferedImage) img, myImgAngle);

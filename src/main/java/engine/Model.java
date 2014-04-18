@@ -4,7 +4,6 @@ import java.awt.geom.Point2D;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -31,10 +30,16 @@ import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.MonsterSchema;
-import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
+import main.java.schema.tdobjects.items.AreaBombItemSchema;
+import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
+import main.java.schema.tdobjects.items.LifeSaverItemSchema;
+import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.WaveSpawnSchema;
 
 
@@ -502,7 +507,7 @@ public class Model {
         Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
         towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
         testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "test-tower-3");
-        testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
+        testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors);
         testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
         testTowerSchema.add(testTowerOne);
 
@@ -512,7 +517,7 @@ public class Model {
         testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
         towerBehaviors2.add(TowerBehaviors.SHOOTING);
-        testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
+        testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors2);
         testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
         testTowerSchema.add(testTowerTwo);
 
@@ -523,7 +528,7 @@ public class Model {
         testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
         towerBehaviors3.add(TowerBehaviors.BOMBING);
-        testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
+        testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors3);
         testTowerThree.addAttribute(TowerSchema.COST, (double) 10);
         testTowerSchema.add(testTowerThree);
 
@@ -534,7 +539,7 @@ public class Model {
         testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
         Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
         towerBehaviors4.add(TowerBehaviors.FREEZING);
-        testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors4);
+        testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors4);
         testTowerFour.addAttribute(TowerSchema.COST, (double) 10);
         testTowerSchema.add(testTowerFour);
 
@@ -544,7 +549,7 @@ public class Model {
         testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors5 = new ArrayList<TowerBehaviors>();
         towerBehaviors5.add(TowerBehaviors.SPLASHING);
-        testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors5);
+        testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors5);
         testTowerFive.addAttribute(TowerSchema.COST, (double) 10);
         testTowerSchema.add(testTowerFive);
 
