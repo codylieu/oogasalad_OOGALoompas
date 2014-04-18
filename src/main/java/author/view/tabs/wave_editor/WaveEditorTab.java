@@ -105,8 +105,10 @@ public class WaveEditorTab extends EditorTab {
 		public JComponent createTable(){
 
 			table = new JTable(new DefaultTableModel(data, columnNames));
+			
+			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
-			JScrollPane sp = new JScrollPane(table);
+			JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 
 			return sp;
 		}
