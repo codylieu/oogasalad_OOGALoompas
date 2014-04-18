@@ -233,7 +233,7 @@ public class Model {
 
         // init player
         GameSchema gameSchema = testBP.getMyGameScenario();
-        Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
+        Map<String, Object> gameSchemaAttributeMap = gameSchema.getAttributesMap();
         this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
 
                                  (Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));

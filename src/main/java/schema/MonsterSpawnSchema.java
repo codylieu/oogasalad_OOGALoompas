@@ -11,7 +11,7 @@ import main.java.schema.tdobjects.MonsterSchema;
  * 
  * @author Austin
  */
-public class MonsterSpawnSchema implements Serializable {
+public class MonsterSpawnSchema {
     private MonsterSchema myMonsterSchema;
     private int mySwarmSize;
 

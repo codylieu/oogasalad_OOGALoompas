@@ -97,7 +97,7 @@ public class TDObjectFactory {
 
     private ITower addTowerBehaviors (SimpleTower baseTower, TDObjectSchema schema) {
         ITower finalTower = baseTower;
-        Map<String, Serializable> attributes = schema.getAttributesMap();
+        Map<String, Object> attributes = schema.getAttributesMap();
         Collection<TowerBehaviors> towerBehaviors =
                 (Collection<TowerBehaviors>) attributes.get(TowerSchema.TOWER_BEHAVIORS);
         for (TowerBehaviors towerBehavior : towerBehaviors) {
