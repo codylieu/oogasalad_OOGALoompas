@@ -41,6 +41,10 @@ public class TileSelectionManager {
         return myTileDisplays; // TODO: make unmodifiable?
     }
 	
+    public void setCanvas(Canvas canvas) {
+    	myCanvas = canvas;
+    }
+    
 	public Canvas getCanvas() {
 		return myCanvas;
 	}
