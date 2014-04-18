@@ -9,7 +9,7 @@ import java.util.Set;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
 public abstract class AbstractObjectTest {
-	protected Map<String, Serializable> myAttributesMap;
+	protected Map<String, Object> myAttributesMap;
 	protected Set<String> myAttributeSet;
 	
 	public AbstractObjectTest()	{
@@ -28,7 +28,7 @@ public abstract class AbstractObjectTest {
 //		
 //	}
 	
-	public void addAttribute(String attributeName, Serializable attributeValue){
+	public void addAttribute(String attributeName, Object attributeValue){
 		if (myAttributeSet.contains(attributeName)) {
             myAttributesMap.put(attributeName, attributeValue);
         } else {
@@ -40,6 +40,6 @@ public abstract class AbstractObjectTest {
         }
 	}
 	
-	public Map<String, Serializable> getAttributesMap() {
+	public Map<String, Object> getAttributesMap() {
         return new HashMap<>(myAttributesMap);
 	}}
