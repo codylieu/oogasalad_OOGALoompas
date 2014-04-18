@@ -53,19 +53,36 @@ public class LevelManager {
         Collection<Monster> spawnedMonsters = new ArrayList<Monster>();
         for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave)
                 .getMonsterSpawnSchemas()) {
-            for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Monster newlyAdded =
-                        myFactory.placeMonster(entrance, exit,
-                                               (String) spawnSchema.getMonsterSchema()
-                                                       .getAttributesMap().get(TDObjectSchema.NAME));
-                spawnedMonsters.add(newlyAdded);
-            }
+            spawnedMonsters.addAll(spawnMonsterSpawnSchema(spawnSchema));
             if (++myCurrentWave >= myAllWaves.size()) {
                 myCurrentWave = 0;
             }
         }
         return spawnedMonsters;
     }
+
+	/**
+	 * Spawn a particular spawn schema. This can be called to spawn a monsters
+	 * schema out of sync with wave spawns.
+	 *
+	 * Return list of newly spawned monsters.
+	 * 
+	 * @param spawnSchema
+	 * @return
+	 * @throws MonsterCreationFailureException
+	 */
+	public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema)
+			throws MonsterCreationFailureException {
+		List<Monster> spawnedMonsters = new ArrayList<Monster>();
+		for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
+		    Monster newlyAdded =
+		            myFactory.placeMonster(entrance, exit,
+		                                   (String) spawnSchema.getMonsterSchema()
+		                                           .getAttributesMap().get(TDObjectSchema.NAME));
+		    spawnedMonsters.add(newlyAdded);
+		}
+		return spawnedMonsters;
+	}
 
     /**
      * Returns whether or not all waves completed.

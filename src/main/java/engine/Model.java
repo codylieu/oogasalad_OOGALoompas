@@ -409,6 +409,17 @@ public class Model {
 		while (monsterIter.hasNext()) {
 			Monster currentMonster = monsterIter.next();
 			if (currentMonster.isDead()) {
+				MonsterSpawnSchema resurrectSchema = currentMonster.getResurrrectMonsterSpawnSchema();
+				if(resurrectSchema != null) {
+				try {
+					//monsters.addAll( ... )
+					System.out.println("resurrect spawned " + resurrectSchema.getSwarmSize());
+					levelManager.spawnMonsterSpawnSchema(resurrectSchema);
+				} catch (MonsterCreationFailureException e) {
+					// resurrection schema could not be spawned, so ignore it.
+					e.printStackTrace();
+				}
+				}
 				monsterIter.remove();
 				addMoney(currentMonster.getMoneyValue());
 				currentMonster.remove();
@@ -600,6 +611,17 @@ public class Model {
 		testMonsterOne.addAttribute(MonsterSchema.SPEED, (double) 1);
 		testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
 		testMonsterSchema.add(testMonsterOne);
+		
+		SimpleMonsterSchema testMonsterResurrects = new SimpleMonsterSchema();
+		testMonsterResurrects.addAttribute(MonsterSchema.NAME, "test-monster-2");
+		testMonsterResurrects.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+		//resurrect spawn schema is 2 testMonsterOnes
+		MonsterSpawnSchema resurrect = new MonsterSpawnSchema(testMonsterOne, 2);
+		testMonsterResurrects.addAttribute(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, resurrect);
+		testMonsterResurrects.addAttribute(MonsterSchema.SPEED, (double) 1);
+		testMonsterResurrects.addAttribute(MonsterSchema.REWARD, (double) 200);
+		testMonsterSchema.add(testMonsterResurrects);
+
 
 		testBlueprint.setMyTowerSchemas(testTowerSchema);
 		testBlueprint.setMyMonsterSchemas(testMonsterSchema);
@@ -614,7 +636,7 @@ public class Model {
 
 		// Create wave schemas
 		List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
-		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterOne, 5);
+		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterResurrects, 1);
 		WaveSpawnSchema testWaveSpawnSchemaOne = new WaveSpawnSchema();
 		testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
 		testWaves.add(testWaveSpawnSchemaOne);

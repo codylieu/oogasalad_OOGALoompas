@@ -23,6 +23,8 @@ public abstract class MonsterSchema extends TDObjectSchema {
 	
 	public static final String DAMAGE = "attackDamage";
 
+	public static final String RESURRECT_MONSTERSPAWNSCHEMA = "Monster schema to spawn upon this monster's death.";
+
 	protected MonsterSchema(Class<? extends Monster> myConcreteType) {
         super(myConcreteType);
 
@@ -38,5 +40,6 @@ public abstract class MonsterSchema extends TDObjectSchema {
 		myAttributeSet.add(MonsterSchema.TILE_SIZE);
 		myAttributeSet.add(MonsterSchema.ENEMY_IMAGE_NAME);
 		myAttributeSet.add(MonsterSchema.COLLISION_IMAGE_NAME);
+		myAttributeSet.add(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
     }
 }
