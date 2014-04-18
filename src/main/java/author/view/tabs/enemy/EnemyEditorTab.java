@@ -55,9 +55,10 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 	}
 
-	public List<String> getEnemyList() {
-
-		return (List<String>) objectMap.keySet();
+	public String[] getEnemyNamesArray() {
+		
+		int size = objectMap.keySet().size();
+		return objectMap.keySet().toArray(new String[size]);
 	}
 
 	protected void updateSchemaDataFromView() {

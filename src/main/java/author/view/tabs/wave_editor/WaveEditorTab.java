@@ -16,6 +16,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.controller.tabbed_controllers.WaveController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.schema.WaveSpawnSchema;
@@ -27,7 +28,7 @@ public class WaveEditorTab extends EditorTab {
 
 	private List<WaveSpawnSchema> myWaves;
 
-	private String[] columnNames = {"Waves", "Monster 1", "Monster 2", "Monster 3"};
+	private String[] columnNames;
 	private Object[][] data = {};
 
 	private JTable table;
@@ -68,8 +69,9 @@ public class WaveEditorTab extends EditorTab {
 	 */
 	public void updateEnemyList() {
 		WaveController waveController = (WaveController) myController;
-		List<String> possibleEnemies = waveController.getEnemyList();
-		//do stuff with table
+		columnNames = waveController.getEnemyNames();
+		table.setModel(new DefaultTableModel(data, columnNames));
+		
 	}
 
 	@Override
@@ -105,8 +107,10 @@ public class WaveEditorTab extends EditorTab {
 		 * Creates a table used to specify the attributes of each wave
 		 */
 		public JComponent createTable(){
-
+			WaveController waveController = (WaveController) myController;
+			columnNames = waveController.getEnemyNames();
 			table = new JTable(new DefaultTableModel(data, columnNames));
+			
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			
 			JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

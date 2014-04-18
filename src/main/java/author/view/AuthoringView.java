@@ -58,6 +58,11 @@ public class AuthoringView extends JFrame {
 		final GameSettingsController gameSettingsController = new GameSettingsController(
 				myController);
 		final TerrainController terrainController = new TerrainController(myController);
+		myController.addTabController(enemyController);
+		myController.addTabController(towerController);
+		myController.addTabController(waveController);
+		myController.addTabController(gameSettingsController);
+		myController.addTabController(terrainController);
 
 		tabbedPane
 				.add(GAME_SETTINGS_EDITOR_STRING,
