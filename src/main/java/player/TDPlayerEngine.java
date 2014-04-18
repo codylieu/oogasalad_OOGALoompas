@@ -1,5 +1,6 @@
 package main.java.player;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -170,6 +171,42 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				clearMouseButton(LEFT_CLICK);
 				clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 			}
+			
+			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("RowBomb")))) {
+	        	try {
+					model.placeItem("RowBomb", getMouseX(), getMouseY());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	        	clearKey(Integer.parseInt(hotkeys.getString("RowBomb")));
+	        }
+			
+			//Working on this
+	        /*if (getKey(KeyEvent.VK_A)) {
+	        	try {
+					model.placeItem("Annihilator", getMouseX(), getMouseY());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	        	clearKey(KeyEvent.VK_A);
+	        }
+	        
+	        if (getKey(KeyEvent.VK_I)) {
+	        	try {
+					model.placeItem("InstantFreeze", getMouseX(), getMouseY());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	        	clearKey(KeyEvent.VK_I);
+	        }
+	        if (getKey(KeyEvent.VK_L)) {
+	        	try {
+					model.placeItem("LifeSaver", getMouseX(), getMouseY());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+	        	clearKey(KeyEvent.VK_L);
+	        }*/
 		}
 
 		notifyObservers();
