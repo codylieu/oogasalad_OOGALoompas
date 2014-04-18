@@ -180,33 +180,17 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				}
 	        	clearKey(Integer.parseInt(hotkeys.getString("RowBomb")));
 	        }
-			
-			//Working on this
-	        /*if (getKey(KeyEvent.VK_A)) {
+			//n key
+			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("Annihilator")))) {
 	        	try {
 					model.placeItem("Annihilator", getMouseX(), getMouseY());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-	        	clearKey(KeyEvent.VK_A);
+	        	clearKey(Integer.parseInt(hotkeys.getString("Annihilator")));
 	        }
-	        
-	        if (getKey(KeyEvent.VK_I)) {
-	        	try {
-					model.placeItem("InstantFreeze", getMouseX(), getMouseY());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	        	clearKey(KeyEvent.VK_I);
-	        }
-	        if (getKey(KeyEvent.VK_L)) {
-	        	try {
-					model.placeItem("LifeSaver", getMouseX(), getMouseY());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	        	clearKey(KeyEvent.VK_L);
-	        }*/
+			
+			
 		}
 
 		notifyObservers();
