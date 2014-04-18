@@ -29,14 +29,16 @@ public class TowerSchema extends TDObjectSchema {
 	public static final String SHRAPNEL_IMAGE_NAME = "Bomb's Shrapnel Image Name";
 
 	public static final String TOWER_BEHAVIORS = "Tower Behaviors";
-	public static final String TOWER_BEHAVIOR_FREEZES = "Deals Frost Damage";
-	public static final String TOWER_BEHAVIOR_SHOOTS = "Can Shoot";
-	public static final String TOWER_BEHAVIOR_FARMS_MONEY = "Farms Money";
-	public static final String TOWER_BEHAVIOR_BOMBS = "Creates Shrapnel";
 
 	public static final String UPGRADE_PATH = "Upgrade Tower";
+	
+	/**
+	 * Do not use this, UPGRADE_PATH is enough. Model will know there is no
+	 * upgrade if UPGRADE_PATH is not put into the map, or if its value is the
+	 * empty string.
+	 */
+	@Deprecated
 	public static final String UPGRADE_PATH_NONE = "No Upgrade";
-
 
 	public TowerSchema() {
 		super(SimpleTower.class);
@@ -88,8 +90,7 @@ public class TowerSchema extends TDObjectSchema {
 		addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "");
 		addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
 		addAttribute(TowerSchema.UPGRADE_PATH, "");
-		List<TowerBehaviors> defaultBehaviors = Arrays.asList(TowerBehaviors.values());
-		addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) defaultBehaviors);
+		addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) Arrays.asList(TowerBehaviors.values()));
 	}
 
 	@Override

@@ -1,7 +1,13 @@
 package main.java.engine.objects.item;
 
+import java.io.Serializable;
+import java.util.Map;
+
+import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.monster.Monster;
+import main.java.schema.tdobjects.TowerSchema;
+import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 
 /**
  * Removes all current monsters from map
@@ -9,14 +15,18 @@ import main.java.engine.objects.monster.Monster;
  */
 public class Annihilator extends TDItem {
 
-	private static final int FLASH_INTERVAL = 5;
-	private static final String IMAGE = "row_bomb";
-	private static final double COST = 1000;
-	private static final double BUILDUP_TIME = 100;
-	private static final double DAMAGE = Double.MAX_VALUE;
-	
-	public Annihilator(double x, double y) {
-		super("annihilator", x, y, IMAGE, COST, BUILDUP_TIME, DAMAGE);
+	public Annihilator(String image, double cost, double buildup_time, double damage, int flash_interval) {
+		super("annihilator", 0, 0, image, cost, buildup_time, damage, flash_interval);
+	}
+
+	public Annihilator(Map<String, Serializable> attributes) {
+		this(
+				(String) getValueOrDefault(attributes, AnnihilatorItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
+				(Double) getValueOrDefault(attributes, AnnihilatorItemSchema.COST, ItemViewConstants.COST_DEFAULT),
+				(Double) getValueOrDefault(attributes, AnnihilatorItemSchema.BUILDUP_TIME, ItemViewConstants.BUILDUP_DEFAULT),
+				(Double) getValueOrDefault(attributes, AnnihilatorItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
+				(Integer) getValueOrDefault(attributes, AnnihilatorItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
+				);
 	}
 
 	@Override
@@ -24,10 +34,10 @@ public class Annihilator extends TDItem {
 		timeCounter++;
 		if (timeCounter >= buildupTime) {
 			for (Monster m : environmentKnowledge.getAllMonsters()) {
-				m.takeDamage(DAMAGE);
+				m.takeDamage(damage);
 			}
 			terminateItem();
-		} else flash(timeCounter, FLASH_INTERVAL, IMAGE);
+		} else flash(timeCounter, flash_interval, image);
 	}
 
 }

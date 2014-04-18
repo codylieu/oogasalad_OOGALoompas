@@ -19,16 +19,19 @@ public abstract class TDItem extends TDObject {
 	protected double timeCounter;
 	private boolean isDead;
 	protected double damage;
+	protected String image;
+	protected int flash_interval;
 
 	public TDItem(String name, double x, double y, 
 			String gfxname, double cost, double buildupTime,
-			double damage) {
+			double damage, int flash_interval) {
 		super(name, x, y, ITEM_CID, gfxname);
 		this.cost = cost;
 		this.buildupTime = buildupTime;
 		this.timeCounter = 0;
 		this.isDead = false;
 		this.damage = damage;
+		this.flash_interval = flash_interval;
 	}
 	
 	/**

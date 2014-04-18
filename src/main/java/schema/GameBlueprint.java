@@ -1,6 +1,7 @@
 package main.java.schema;
 
 import main.java.schema.map.GameMapSchema;
+import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
@@ -22,6 +23,7 @@ public class GameBlueprint implements Serializable {
 	private List<TowerSchema> myTowerSchemas;
 	private List<WaveSpawnSchema> myLevelSchemas;
 	private List<GameMapSchema> myGameMapSchemas;
+	private List<ItemSchema> myItemSchema;
 
 	public GameSchema getMyGameScenario() {
 		return myGameScenario;
@@ -61,5 +63,13 @@ public class GameBlueprint implements Serializable {
 
 	public void setMyGameMapSchemas(List<GameMapSchema> myGameMapSchemas) {
 		this.myGameMapSchemas = myGameMapSchemas;
+	}
+
+	public void setMyItemSchemas(List<ItemSchema> myItemSchema) {
+		this.myItemSchema = myItemSchema;		
+	}
+	
+	public List<ItemSchema> getMyItemSchemas() {
+		return myItemSchema;
 	}
 }
