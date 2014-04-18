@@ -34,6 +34,8 @@ import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
+import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
+import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
@@ -517,7 +519,19 @@ public class Model {
 		testAreaBombItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
 		testAreaBombItem.addAttribute(AreaBombItemSchema.RANGE, (double) 100);
 		testItemSchema.add(testAreaBombItem);
-
+		
+		RowBombItemSchema testRowBombItem = new RowBombItemSchema();
+		testRowBombItem.addAttribute(ItemSchema.NAME, "RowBomb");
+		testRowBombItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
+		testRowBombItem.addAttribute(ItemSchema.COST, (double) 1);
+		testItemSchema.add(testRowBombItem);
+		
+		InstantFreezeItemSchema testInstantFreezeItem = new InstantFreezeItemSchema();
+		testInstantFreezeItem.addAttribute(ItemSchema.NAME, "InstantFreeze");
+		testInstantFreezeItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
+		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 5);
+		testItemSchema.add(testInstantFreezeItem);
+		
 
 		// Create test towers
 		TowerSchema testTowerOne = new TowerSchema();

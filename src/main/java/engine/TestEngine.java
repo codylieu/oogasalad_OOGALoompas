@@ -91,7 +91,7 @@ public class TestEngine extends JGEngine {
 				model.placeItem("AreaBomb", getMouseX(), getMouseY());
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}	
         	clearKey(KeyEvent.VK_B);
         }
 		if (getKey(KeyEvent.VK_A)) {
