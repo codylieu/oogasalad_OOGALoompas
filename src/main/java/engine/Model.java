@@ -35,6 +35,7 @@ import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
+import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.ItemSchema;
@@ -532,6 +533,11 @@ public class Model {
 		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 5);
 		testItemSchema.add(testInstantFreezeItem);
 		
+		LifeSaverItemSchema testLifeSaverItem = new LifeSaverItemSchema();
+		testLifeSaverItem.addAttribute(ItemSchema.NAME, "LifeSaver");
+		testLifeSaverItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
+		testItemSchema.add(testLifeSaverItem);
+
 
 		// Create test towers
 		TowerSchema testTowerOne = new TowerSchema();

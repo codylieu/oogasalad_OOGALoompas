@@ -7,7 +7,6 @@ import java.util.Map;
 import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 
 /**
