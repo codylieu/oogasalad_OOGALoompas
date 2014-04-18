@@ -15,7 +15,8 @@ import main.java.player.util.Subject;
 
 public class HighScoreCard extends JPanel implements Observing, ActionListener {
 
-	public static final String INITIAL = "enter name after deleting this message";
+	public static final String INITIAL_PLAYER_NAME = "enter name after deleting this message";
+	public static final String INITIAL_HIGH_SCORE_BOX = "HIGHSCORE\n";
 	public static final String SPACER_FOR_HIGH_SCORE = ": ";
 	public static final String NEWLINE = "\n";
 	private JTextField playerName;
@@ -27,9 +28,10 @@ public class HighScoreCard extends JPanel implements Observing, ActionListener {
 		setLayout(new GridBagLayout());
 		playerName = new JTextField(20);
 		playerName.addActionListener(this);
-		playerName.setText(INITIAL);
+		playerName.setText(INITIAL_PLAYER_NAME);
 		highScoreDisplay = new JTextArea(20,50);
 		highScoreDisplay.setEditable(false);
+		highScoreDisplay.setText(INITIAL_HIGH_SCORE_BOX);
 		addComponents();
 	}
 
@@ -61,7 +63,7 @@ public class HighScoreCard extends JPanel implements Observing, ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String name = playerName.getText();
-		playerName.setText(INITIAL);
+		playerName.setText(INITIAL_PLAYER_NAME);
 		highScoreDisplay.append(name + SPACER_FOR_HIGH_SCORE + highScore +  NEWLINE);
 	}
 
