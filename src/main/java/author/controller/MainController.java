@@ -236,5 +236,9 @@ public class MainController {
 		return new String[0];
 		
 	}
+
+	public void shiftToEnemyTab() {
+		myAuthoringView.shiftToEnemyTab();
+	}
 	
 }

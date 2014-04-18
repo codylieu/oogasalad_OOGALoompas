@@ -30,5 +30,9 @@ public class WaveController extends TabController {
 		WaveEditorTab waveEditorTab = (WaveEditorTab) myEditorTab;
 		waveEditorTab.updateEnemyList();
 	}
+
+	public void shiftToEnemyTab() {
+		mySuperController.shiftToEnemyTab();
+	}
 	
 }
