@@ -255,7 +255,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
-	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+	protected void updateViewWithSchemaData(Map<String, Object> map) {
 		// fields (spinners)
 
 		for (JSpinner spinner : spinnerFields) {

@@ -597,4 +597,9 @@ public class Model {
         return factory.getPossibleTowersNames();
     }
 
+	public void initializeBlueprintContents(GameBlueprint blueprint) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
