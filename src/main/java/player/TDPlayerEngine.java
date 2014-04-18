@@ -24,12 +24,16 @@ import net.lingala.zip4j.exception.ZipException;
 
 public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
+	public static final String LIFE_SAVER = "LifeSaver";
+	public static final String INSTANT_FREEZE = "InstantFreeze";
+	public static final String ANNIHILATOR = "Annihilator";
+	public static final String ROW_BOMB = "RowBomb";
 	private static final long serialVersionUID = 1L;
 	public static int FRAME_RATE_DELTA = 5;
 	public static int DEFAULT_FRAME_RATE = 45;
 	public static int LEFT_CLICK = 1;
 	public static int RIGHT_CLICK = 3;
-	
+
 	private ITowerChooser towerChooser;
 	private Model model;
 	private List<Observing> observers;
@@ -167,49 +171,15 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				} catch (TowerCreationFailureException e) {
 					e.printStackTrace();
 				}
-				
+
 				clearMouseButton(LEFT_CLICK);
 				clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 			}
-			
-			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("RowBomb")))) {
-	        	try {
-					model.placeItem("RowBomb", getMouseX(), getMouseY());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	        	clearKey(Integer.parseInt(hotkeys.getString("RowBomb")));
-	        }
-			//n key
-			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("Annihilator")))) {
-	        	try {
-					model.placeItem("Annihilator", getMouseX(), getMouseY());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	        	clearKey(Integer.parseInt(hotkeys.getString("Annihilator")));
-	        }
-			
-			//i key
-			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("InstantFreeze")))) {
-	        	try {
-					model.placeItem("InstantFreeze", getMouseX(), getMouseY());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	        	clearKey(Integer.parseInt(hotkeys.getString("InstantFreeze")));
-	        }
-						
-			//l key
-			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("LifeSaver")))) {
-	        	try {
-					model.placeItem("LifeSaver", getMouseX(), getMouseY());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	        	clearKey(Integer.parseInt(hotkeys.getString("LifeSaver")));
-	        }
-			
+
+			setItem(LEFT_CLICK, ROW_BOMB);
+			setItem(LEFT_CLICK, ANNIHILATOR); // n key
+			setItem(LEFT_CLICK, INSTANT_FREEZE); // i key
+			setItem(LEFT_CLICK, LIFE_SAVER); // l key
 		}
 
 		notifyObservers();
@@ -227,6 +197,17 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		}
 		moveObjects();
 		model.checkCollisions();
+	}
+
+	private void setItem(int clickName ,String itemName){
+		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
+			try {
+				model.placeItem(itemName, getMouseX(), getMouseY());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
+		}
 	}
 
 	public void update(){
@@ -260,7 +241,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
 		}
-		
+
 	}
 
 	public void toggleFullScreen(){
