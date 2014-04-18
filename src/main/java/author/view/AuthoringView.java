@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -112,7 +113,7 @@ public class AuthoringView extends JFrame {
 				if (myController.isGameValid()) {
 					try {
 						myController.saveBlueprint();
-					} catch (InvalidGameBlueprintException e1) {
+					} catch (InvalidGameBlueprintException | FileNotFoundException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}

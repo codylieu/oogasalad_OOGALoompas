@@ -1,5 +1,6 @@
 package main.java.author.controller;
 
+import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -99,8 +100,9 @@ public class MainController {
 	 * Saves the game blueprint and lets the data team know that they
 	 * can begin serializing data
 	 * @throws InvalidGameBlueprintException 
+	 * @throws FileNotFoundException 
 	 */
-	public void saveBlueprint() throws InvalidGameBlueprintException {
+	public void saveBlueprint() throws InvalidGameBlueprintException, FileNotFoundException {
 		DataHandler handler = new DataHandler();
 		JFileChooser saveFileChooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("ZIP File", "zip");
