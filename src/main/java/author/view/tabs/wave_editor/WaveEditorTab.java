@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -18,6 +19,9 @@ import javax.swing.table.DefaultTableModel;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.controller.tabbed_controllers.WaveController;
+import main.java.author.util.ArrayUtil;
+import main.java.author.util.JTableUtil;
+import main.java.author.view.components.ColumnRemovableTableModel;
 import main.java.author.view.tabs.EditorTab;
 import main.java.schema.WaveSpawnSchema;
 
@@ -26,12 +30,15 @@ import main.java.schema.WaveSpawnSchema;
  */
 public class WaveEditorTab extends EditorTab {
 
+	private static final String WAVE_STRING = "Waves";
+
 	private List<WaveSpawnSchema> myWaves;
 
-	private String[] columnNames;
+	private String[] columnNames = {};
 	private Object[][] data = {};
 
 	private JTable table;
+	private ColumnRemovableTableModel tableModel;
 
 	private static int NUMBER_OF_WAVES = 0;
 
@@ -39,59 +46,61 @@ public class WaveEditorTab extends EditorTab {
 
 	/**
 	 * @param tabController
-	 * Constructor for the WaveEditorTab
+	 *            Constructor for the WaveEditorTab
 	 */
 	public WaveEditorTab(TabController tabController) {
 		super(tabController);
 		add(tabCreator.createWaveEditorContent(), BorderLayout.CENTER);
 	}
-	
-	public void addNewEnemyColumn(){
-		DefaultTableModel model = (DefaultTableModel) table.getModel();
-		// Make method to make this column
-		Integer[] zerosColumn = {new Integer(0), 
-				new Integer(0), 
-				new Integer(0), 
-				new Integer(0), 
-				new Integer(0)};
-		
-		model.addColumn("Monster 4", zerosColumn);
-//		model.addColumn("Monster 4", makeZerosColumn());
-		// Expand Size of Table here every time method is called
-	}
 
-	private void addWaveData() {
-
+	public void addNewEnemyColumn(String columnName) {
+		List<Integer> zeroesColumnList = new ArrayList<Integer>();
+		for (int i = 0 ; i< tableModel.getRowCount(); i ++) {
+			zeroesColumnList.add(0);
+		}
+		tableModel.addColumn(columnName, zeroesColumnList.toArray());
 	}
 
 	/**
-	 * Updates the Enemy List in the table every time a new enemy is added in EnemyEditorTab
+	 * Updates the Enemy List in the table every time a new enemy is added in
+	 * EnemyEditorTab
 	 */
 	public void updateEnemyList() {
 		WaveController waveController = (WaveController) myController;
-		columnNames = waveController.getEnemyNames();
-		table.setModel(new DefaultTableModel(data, columnNames));
-		
+		String[] newColumns = waveController.getEnemyNames();
+		String[] oldColumns = JTableUtil.getColumnNames(tableModel);
+		List<String> columnsToAdd = ArrayUtil.getElementsToAdd(newColumns,
+				oldColumns, WAVE_STRING);
+		List<String> columnsToRemove = ArrayUtil.getElementsToRemove(
+				newColumns, oldColumns, WAVE_STRING);
+		for (String columnToAdd : columnsToAdd) {
+			addNewEnemyColumn(columnToAdd);
+		}
+		for (String columnToRemove : columnsToRemove) {
+			tableModel.removeColumnAndData(table, JTableUtil
+					.getColumnIndexFromName(tableModel, columnToRemove));
+		}
+
 	}
 
 	@Override
 	public void saveTabData() {
-		// TODO Auto-generated method stub
+		// TODO CODY
 
 	}
 
 	/**
 	 * Creates the content of the Wave Editor Tab
 	 */
-	private class WaveTabContentCreator{
-		// Need to refactor all of the action listeners in the Button Maker class
+	private class WaveTabContentCreator {
+		// Need to refactor all of the action listeners in the Button Maker
+		// class
 
 		/**
-		 * @return
-		 * Creates the panel with all of the Wave Editor Content
+		 * @return Creates the panel with all of the Wave Editor Content
 		 */
-		public JComponent createWaveEditorContent(){
-			
+		public JComponent createWaveEditorContent() {
+
 			ButtonMaker buttonMaker = new ButtonMaker();
 
 			JPanel content = new JPanel(new BorderLayout());
@@ -103,44 +112,53 @@ public class WaveEditorTab extends EditorTab {
 		}
 
 		/**
-		 * @return
-		 * Creates a table used to specify the attributes of each wave
+		 * @return Creates a table used to specify the attributes of each wave
 		 */
-		public JComponent createTable(){
+		public JComponent createTable() {
 			WaveController waveController = (WaveController) myController;
+
 			columnNames = waveController.getEnemyNames();
-			table = new JTable(new DefaultTableModel(data, columnNames));
-			
+			String[] columnNamesAndWave = new String[columnNames.length + 1];
+			columnNamesAndWave[0] = WAVE_STRING;
+			for (int i = 0; i < columnNames.length; i++) {
+				columnNamesAndWave[i+1] = columnNames[i];
+			}
+			tableModel = new ColumnRemovableTableModel(data, columnNamesAndWave);
+			table = new JTable(tableModel);
+
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-			
-			JScrollPane sp = new JScrollPane(table, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+			JScrollPane sp = new JScrollPane(table,
+					JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 			sp.setPreferredSize(new Dimension(1000, 550));
-			
-			
+
 			return sp;
 		}
-		
-		// Will make all of the values in the fields initially 0. Have to write a method since list of enemies is dynamic
-		public void populateTableCells(){
+
+		// Will make all of the values in the fields initially 0. Have to write
+		// a method since list of enemies is dynamic
+		public void populateTableCells() {
 
 		}
-		
-		// Makes Zeros Column of length waves after a new enemy is added in the Enemy Editor
-		public Integer[] makeZerosColumn(){
-			
+
+		// Makes Zeros Column of length waves after a new enemy is added in the
+		// Enemy Editor
+		public Integer[] makeZerosColumn() {
+
 			Integer[] zerosColumn = new Integer[NUMBER_OF_WAVES];
-			
+
 			return zerosColumn;
-			
+
 		}
-		
-		private class ButtonMaker{
-			
+
+		private class ButtonMaker {
+
 			/**
-			 * @return
-			 * Makes a JPanel that contains all of the buttons used by the Wave Editor Tab
+			 * @return Makes a JPanel that contains all of the buttons used by
+			 *         the Wave Editor Tab
 			 */
-			private JComponent makeButtons(){
+			private JComponent makeButtons() {
 
 				JPanel panel = new JPanel(new GridLayout(0, 1));
 
@@ -153,31 +171,30 @@ public class WaveEditorTab extends EditorTab {
 				return panel;
 
 			}
-			
-			private JComponent makeAddEnemyColumnTestButton(){
-				
+
+			private JComponent makeAddEnemyColumnTestButton() {
+
 				JButton addEnemyColumn = new JButton("Add Enemy Column");
-				
+
 				addEnemyColumn.addActionListener(new ActionListener() {
-					
+
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						
-						addNewEnemyColumn();
-						
+
+						// addNewEnemyColumn();
+
 					}
-					
+
 				});
-				
+
 				return addEnemyColumn;
-				
+
 			}
 
 			/**
-			 * @return
-			 * Makes a button that adds a new wave to the table
+			 * @return Makes a button that adds a new wave to the table
 			 */
-			private JComponent makeAddNewWaveButton(){
+			private JComponent makeAddNewWaveButton() {
 
 				JButton addNewWaveButton = new JButton("Add New Wave");
 
@@ -185,9 +202,11 @@ public class WaveEditorTab extends EditorTab {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						DefaultTableModel model = (DefaultTableModel) table.getModel();
+						ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+								.getModel();
 						NUMBER_OF_WAVES++;
-						model.addRow(new Object[]{"Wave " + NUMBER_OF_WAVES, new Integer(0), new Integer(0), new Integer(0)});
+						model.addRow(new Object[] { "Wave " + NUMBER_OF_WAVES,
+								new Integer(0), new Integer(0), new Integer(0) });
 
 					}
 				});
@@ -197,45 +216,47 @@ public class WaveEditorTab extends EditorTab {
 
 			// Just here to test simpler case of removing rows
 			/**
-			 * @return
-			 * Makes a button that removes the last wave
+			 * @return Makes a button that removes the last wave
 			 */
-			private JComponent makeRemoveMostRecentWaveButton(){
-				JButton removeMostRecentWaveButton = new JButton("Remove Last Wave");
+			private JComponent makeRemoveMostRecentWaveButton() {
+				JButton removeMostRecentWaveButton = new JButton(
+						"Remove Last Wave");
 
-				removeMostRecentWaveButton.addActionListener(new ActionListener(){
+				removeMostRecentWaveButton
+						.addActionListener(new ActionListener() {
 
-					@Override
-					public void actionPerformed(ActionEvent e) {
+							@Override
+							public void actionPerformed(ActionEvent e) {
 
-						DefaultTableModel model = (DefaultTableModel) table.getModel();
-						if(NUMBER_OF_WAVES > 0){
-							NUMBER_OF_WAVES--;
-							model.removeRow(NUMBER_OF_WAVES);
-						}
-					}
+								ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+										.getModel();
+								if (NUMBER_OF_WAVES > 0) {
+									NUMBER_OF_WAVES--;
+									model.removeRow(NUMBER_OF_WAVES);
+								}
+							}
 
-				});
+						});
 
 				return removeMostRecentWaveButton;
 			}
 
 			// Currently does nothing, will figure it out later
 			/**
-			 * @return
-			 * Makes a button to remove a wave chosen by the user
+			 * @return Makes a button to remove a wave chosen by the user
 			 */
-			private JComponent makeRemoveWaveButton(){
+			private JComponent makeRemoveWaveButton() {
 
 				JButton removeWaveButton = new JButton("Remove Wave");
 
-				removeWaveButton.addActionListener(new ActionListener(){
+				removeWaveButton.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 
-						DefaultTableModel model = (DefaultTableModel) table.getModel();
-						//				model.removeRow();
+						ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+								.getModel();
+						// model.removeRow();
 					}
 
 				});
@@ -244,10 +265,9 @@ public class WaveEditorTab extends EditorTab {
 			}
 
 			/**
-			 * @return
-			 * Makes a button that clears all of the waves
+			 * @return Makes a button that clears all of the waves
 			 */
-			private JComponent makeClearAllWavesButton(){
+			private JComponent makeClearAllWavesButton() {
 
 				JButton clearAllWavesButton = new JButton("Clear All Waves");
 
@@ -256,9 +276,10 @@ public class WaveEditorTab extends EditorTab {
 					@Override
 					public void actionPerformed(ActionEvent e) {
 
-						DefaultTableModel model = (DefaultTableModel) table.getModel();
+						ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+								.getModel();
 
-						while(NUMBER_OF_WAVES > 0){
+						while (NUMBER_OF_WAVES > 0) {
 							NUMBER_OF_WAVES--;
 							model.removeRow(NUMBER_OF_WAVES);
 						}
