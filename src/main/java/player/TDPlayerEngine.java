@@ -42,7 +42,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	private boolean isFullScreen;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
-
+	private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
+	
 	public TDPlayerEngine() {
 		super();
 		initEngineComponent(960, 640);
@@ -175,11 +176,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				clearMouseButton(LEFT_CLICK);
 				clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 			}
-
-			setItem(LEFT_CLICK, ROW_BOMB);
-			setItem(LEFT_CLICK, ANNIHILATOR); // n key
-			setItem(LEFT_CLICK, INSTANT_FREEZE); // i key
-			setItem(LEFT_CLICK, LIFE_SAVER); // l key
+			
+			setAllItems();
+			
 		}
 
 		notifyObservers();
@@ -198,7 +197,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		moveObjects();
 		model.checkCollisions();
 	}
-
+	private void setAllItems(){
+		for(String s: items.keySet()){
+			setItem(LEFT_CLICK, items.getString(s));
+		}	
+	}
 	private void setItem(int clickName ,String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
