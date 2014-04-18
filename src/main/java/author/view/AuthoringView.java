@@ -33,6 +33,7 @@ import main.java.exceptions.data.InvalidGameBlueprintException;
 public class AuthoringView extends JFrame {
 	private MainController myController;
 	private JButton finalizeGameButton;
+	private EnemyEditorTab enemyEditorTab;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -58,6 +59,11 @@ public class AuthoringView extends JFrame {
 		final GameSettingsController gameSettingsController = new GameSettingsController(
 				myController);
 		final TerrainController terrainController = new TerrainController(myController);
+		myController.addTabController(enemyController);
+		myController.addTabController(towerController);
+		myController.addTabController(waveController);
+		myController.addTabController(gameSettingsController);
+		myController.addTabController(terrainController);
 
 		tabbedPane
 				.add(GAME_SETTINGS_EDITOR_STRING,
@@ -65,9 +71,10 @@ public class AuthoringView extends JFrame {
 		tabbedPane
 				.add(TOWER_EDITOR_STRING,
 						new TowerEditorTab(towerController, "Tower"));
+		enemyEditorTab = new EnemyEditorTab(enemyController, "Monster");
 		tabbedPane
-				.add(ENEMY_EDITOR_STRING,
-						new EnemyEditorTab(enemyController, "Monster"));
+				.add(ENEMY_EDITOR_STRING, enemyEditorTab
+						);
 		tabbedPane
 				.add(TERRAIN_EDITOR_STRING,
 						new TerrainEditorTab(terrainController));
@@ -130,6 +137,10 @@ public class AuthoringView extends JFrame {
 	private JButton createFinalizeGameButton() {
 		finalizeGameButton = new JButton("Finalize Game");
 		return finalizeGameButton;
+	}
+
+	public void shiftToEnemyTab() {
+		tabbedPane.setSelectedComponent(enemyEditorTab);
 	}
 
 }
