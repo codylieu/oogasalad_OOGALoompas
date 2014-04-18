@@ -61,6 +61,12 @@ public class LevelManager {
         return spawnedMonsters;
     }
 
+    public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema)
+			throws MonsterCreationFailureException {
+		return spawnMonsterSpawnSchema(spawnSchema, entrance);
+	}
+    
+    
 	/**
 	 * Spawn a particular spawn schema. This can be called to spawn a monsters
 	 * schema out of sync with wave spawns.
@@ -71,12 +77,13 @@ public class LevelManager {
 	 * @return
 	 * @throws MonsterCreationFailureException
 	 */
-	public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema)
+	public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema, Point2D newEntrance)
 			throws MonsterCreationFailureException {
 		List<Monster> spawnedMonsters = new ArrayList<Monster>();
 		for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
+
 		    Monster newlyAdded =
-		            myFactory.placeMonster(entrance, exit,
+		            myFactory.placeMonster(newEntrance, exit,
 		                                   (String) spawnSchema.getMonsterSchema()
 		                                           .getAttributesMap().get(TDObjectSchema.NAME));
 		    spawnedMonsters.add(newlyAdded);

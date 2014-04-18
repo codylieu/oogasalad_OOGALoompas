@@ -406,6 +406,7 @@ public class Model {
 	 */
 	private void removeDeadMonsters () {
 		Iterator<Monster> monsterIter = monsters.iterator();
+		List<Monster> newlyAdded = new ArrayList<Monster>();
 		while (monsterIter.hasNext()) {
 			Monster currentMonster = monsterIter.next();
 			if (currentMonster.isDead()) {
@@ -414,7 +415,7 @@ public class Model {
 				try {
 					//monsters.addAll( ... )
 					System.out.println("resurrect spawned " + resurrectSchema.getSwarmSize());
-					levelManager.spawnMonsterSpawnSchema(resurrectSchema);
+					newlyAdded = levelManager.spawnMonsterSpawnSchema(resurrectSchema, currentMonster.getCurrentCoor());
 				} catch (MonsterCreationFailureException e) {
 					// resurrection schema could not be spawned, so ignore it.
 					e.printStackTrace();
@@ -425,6 +426,7 @@ public class Model {
 				currentMonster.remove();
 			}
 		}
+		monsters.addAll(newlyAdded);
 	}
 
 	private void addMoney (double moneyValue) {
@@ -641,7 +643,7 @@ public class Model {
 		testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
 		testWaves.add(testWaveSpawnSchemaOne);
 
-		MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 2);
+		MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 3);
 		WaveSpawnSchema testWaveSpawnSchemaTwo = new WaveSpawnSchema();
 		testWaveSpawnSchemaTwo.addMonsterSchema(testMonsterSpawnSchemaTwo);
 		testWaves.add(testWaveSpawnSchemaTwo);
