@@ -406,14 +406,27 @@ public class Model {
 	 */
 	private void removeDeadMonsters () {
 		Iterator<Monster> monsterIter = monsters.iterator();
+		List<Monster> newlyAdded = new ArrayList<Monster>();
 		while (monsterIter.hasNext()) {
 			Monster currentMonster = monsterIter.next();
 			if (currentMonster.isDead()) {
+				MonsterSpawnSchema resurrectSchema = currentMonster.getResurrrectMonsterSpawnSchema();
+				if(resurrectSchema != null) {
+				try {
+					//monsters.addAll( ... )
+					System.out.println("resurrect spawned " + resurrectSchema.getSwarmSize());
+					newlyAdded = levelManager.spawnMonsterSpawnSchema(resurrectSchema, currentMonster.getCurrentCoor());
+				} catch (MonsterCreationFailureException e) {
+					// resurrection schema could not be spawned, so ignore it.
+					e.printStackTrace();
+				}
+				}
 				monsterIter.remove();
 				addMoney(currentMonster.getMoneyValue());
 				currentMonster.remove();
 			}
 		}
+		monsters.addAll(newlyAdded);
 	}
 
 	private void addMoney (double moneyValue) {
@@ -600,6 +613,17 @@ public class Model {
 		testMonsterOne.addAttribute(MonsterSchema.SPEED, (double) 1);
 		testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
 		testMonsterSchema.add(testMonsterOne);
+		
+		SimpleMonsterSchema testMonsterResurrects = new SimpleMonsterSchema();
+		testMonsterResurrects.addAttribute(MonsterSchema.NAME, "test-monster-2");
+		testMonsterResurrects.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+		//resurrect spawn schema is 2 testMonsterOnes
+		MonsterSpawnSchema resurrect = new MonsterSpawnSchema(testMonsterOne, 2);
+		testMonsterResurrects.addAttribute(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, resurrect);
+		testMonsterResurrects.addAttribute(MonsterSchema.SPEED, (double) 1);
+		testMonsterResurrects.addAttribute(MonsterSchema.REWARD, (double) 200);
+		testMonsterSchema.add(testMonsterResurrects);
+
 
 		testBlueprint.setMyTowerSchemas(testTowerSchema);
 		testBlueprint.setMyMonsterSchemas(testMonsterSchema);
@@ -614,12 +638,12 @@ public class Model {
 
 		// Create wave schemas
 		List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
-		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterOne, 5);
+		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterResurrects, 1);
 		WaveSpawnSchema testWaveSpawnSchemaOne = new WaveSpawnSchema();
 		testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
 		testWaves.add(testWaveSpawnSchemaOne);
 
-		MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 2);
+		MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 3);
 		WaveSpawnSchema testWaveSpawnSchemaTwo = new WaveSpawnSchema();
 		testWaveSpawnSchemaTwo.addMonsterSchema(testMonsterSpawnSchemaTwo);
 		testWaves.add(testWaveSpawnSchemaTwo);
