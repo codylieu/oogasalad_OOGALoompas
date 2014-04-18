@@ -20,9 +20,9 @@ public class EnemyController extends TabController {
 
 	}
 
-	public List<String> getEnemyList() {
+	public String[] getEnemyNames() {
 		EnemyEditorTab editorTab = (EnemyEditorTab) myEditorTab;
-		return editorTab.getEnemyList();
+		return editorTab.getEnemyNamesArray();
 	}
 
 	
