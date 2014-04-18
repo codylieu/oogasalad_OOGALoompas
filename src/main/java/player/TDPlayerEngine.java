@@ -13,6 +13,7 @@ import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.engine.Model;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.player.panels.TowerChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
@@ -148,7 +149,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	@Override
 	public void doFrame() {
 		super.doFrame();
-		if (cursorState == CursorState.AddTower){
+		if (cursorState == CursorState.AddTower) {
 			if (getMouseButton(LEFT_CLICK)) {
 				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
@@ -157,6 +158,18 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			}
 			else
 				drawTowerGhost();
+		}
+		else if (cursorState == CursorState.None) {
+			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))) {
+				try {
+					model.upgradeTower(getMouseX(), getMouseY());
+				} catch (TowerCreationFailureException e) {
+					e.printStackTrace();
+				}
+				
+				clearMouseButton(LEFT_CLICK);
+				clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
+			}
 		}
 
 		notifyObservers();
@@ -203,10 +216,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			clearKey(Integer.parseInt(hotkeys.getString("ToggleRunning")));
 		}
 
-		if(getKey(Integer.parseInt(hotkeys.getString("FullScreen")))){
+		if (getKey(Integer.parseInt(hotkeys.getString("FullScreen")))){
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
 		}
+		
 	}
 
 	public void toggleFullScreen(){
