@@ -22,6 +22,7 @@ import main.java.player.util.TowerGhost;
 
 public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
+	private static final long serialVersionUID = 1L;
 	public static int FRAME_RATE_DELTA = 5;
 	public static int DEFAULT_FRAME_RATE = 45;
 	public static int LEFT_CLICK = 1;

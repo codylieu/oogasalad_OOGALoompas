@@ -43,12 +43,17 @@ import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
 public class Player {
+	
+	public static final int BUTTON_PADDING = 10;
+	public static final String USER_DIR = "user.dir";
+	public static final String DEFAULT_MUSIC_PATH = "src/main/resources/backgroundmusic.wav";
 
-	public static final String WELCOME_LABEL_TEXT = "Ooga Loompas Tower Defense";
-	public static final String LOAD_GAME_DATA = "Load Game Data";
-	public static final String LOAD_LIBRARY = "Browse library";
-	public static final String FILELABEL = "File";
-	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \nAdding towers uses up money. Right click on towers to sell. \nA proportion of the tower's original cost will be added to money";
+	public static final String WELCOME_CARD = "welcomeCard";
+	public static final String GAME_CARD = "gameCard";
+	public static final String OPTION_CARD = "optionCard";
+	public static final String HELP_CARD = "helpCard";	
+	public static final String CREDITS_CARD = "creditsCard";
+	
 	public static final String DIFFICULTY = "Difficulty";
 	public static final String EASY = "Easy Mode";
 	public static final String MEDIUM = "Medium Mode";
@@ -56,23 +61,27 @@ public class Player {
 	public static final String SOUND = "Sound";
 	public static final String ON = "On";
 	public static final String OFF = "Off";
-	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
-	public static final int BUTTON_PADDING = 10;
-	public static final String USER_DIR = "user.dir";
-	public static final String DEFAULT_MUSIC_PATH = "src/main/resources/backgroundmusic.wav";
-	
-	public static final String WELCOME_CARD = "welcomeCard";
-	public static final String GAME_CARD = "gameCard";
-	public static final String OPTION_CARD = "optionCard";
-	public static final String HELP_CARD = "helpCard";	
-	public static final String CREDITS_CARD = "creditsCard";
-	
+	public static final String WELCOME_LABEL_TEXT = "Ooga Loompas Tower Defense";
+	public static final String LOAD_GAME_TEXT = "Load Game Data";
+	public static final String LOAD_LIBRARY_TEXT = "Browse library";
+	public static final String FILE_LABEL = "File";
 	public static final String PLAY_PAUSE_TEXT = "Play/Pause";
 	public static final String SAVE_TEXT = "Save game state";
 	public static final String SPEED_UP_TEXT = "Speed up";
 	public static final String SLOW_DOWN_TEXT = "Slow down";
 	public static final String ADD_TOWER_TEXT = "Add Tower";
 	public static final String SOUND_ONOFF_TEXT = "Sound On/Off";
+	public static final String MUSIC_TEXT = "Music";
+	public static final String MAIN_MENU_TEXT = "Main Menu";
+	public static final String QUIT_TEXT = "Quit";
+	
+	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \n"
+			+ "Adding towers uses up money. Right click on towers to sell. \n"
+			+ "A proportion of the tower's original cost will be added to money";
+	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park"
+			+ "\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\n"
+			+ "Dianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
+	
 
 	private JFrame frame;
 	private JPanel cards;
@@ -122,8 +131,8 @@ public class Player {
 
 	@SuppressWarnings("serial")
 	private JMenu makeFileMenu(){
-		JMenu files = new JMenu(FILELABEL);
-		files.add(new AbstractAction(LOAD_GAME_DATA){
+		JMenu files = new JMenu(FILE_LABEL);
+		files.add(new AbstractAction(LOAD_GAME_TEXT){
 			public void actionPerformed(ActionEvent e){
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
@@ -137,7 +146,7 @@ public class Player {
 				}
 			}
 		});
-		files.add(new RepositoryViewer(LOAD_LIBRARY));
+		files.add(new RepositoryViewer(LOAD_LIBRARY_TEXT));
 		return files;
 	}
 
@@ -336,7 +345,7 @@ public class Player {
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
 		
-		JCheckBox soundCheckBox = new JCheckBox("Music");
+		JCheckBox soundCheckBox = new JCheckBox(MUSIC_TEXT);
 		soundCheckBox.addActionListener(new MethodAction(this, "toggleSound"));
 		
 		soundRadioButtonPanel.add(soundCheckBox);
@@ -386,12 +395,11 @@ public class Player {
 	}
 
 	private JButton makeMainMenuButton() {
-		JButton mainMenuButton = new JButton("Main Menu");
-		//mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JButton mainMenuButton = new JButton(MAIN_MENU_TEXT);
 		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				engine.toggleRunning();
-				cardLayout.show(cards, "welcomeCard");
+				cardLayout.show(cards, WELCOME_CARD);
 				frame.pack();
 			}
 		});
@@ -400,7 +408,7 @@ public class Player {
 	}
 
 	private JButton makeQuitButton(){
-		JButton exitButton = new JButton("Quit");
+		JButton exitButton = new JButton(QUIT_TEXT);
 		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		exitButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -412,7 +420,7 @@ public class Player {
 	}
 
 	private void show() {
-		cardLayout.show(cards, "welcomeCard");
+		cardLayout.show(cards, WELCOME_CARD);
 		frame.getContentPane().add(cards, BorderLayout.CENTER);
 		frame.pack();
 		frame.setVisible(true);
