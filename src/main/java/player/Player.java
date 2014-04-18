@@ -34,6 +34,7 @@ import main.java.player.dlc.RepositoryViewer;
 import main.java.player.panels.DifficultyPanel;
 import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
+import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.InfoPanel;
 import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
@@ -43,7 +44,7 @@ import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
 public class Player {
-	
+
 	public static final int BUTTON_PADDING = 10;
 	public static final String USER_DIR = "user.dir";
 	public static final String DEFAULT_MUSIC_PATH = "src/main/resources/backgroundmusic.wav";
@@ -53,7 +54,8 @@ public class Player {
 	public static final String OPTION_CARD = "optionCard";
 	public static final String HELP_CARD = "helpCard";	
 	public static final String CREDITS_CARD = "creditsCard";
-	
+	public static final String HIGH_SCORE_CARD = "highScoreCard";
+
 	public static final String DIFFICULTY = "Difficulty";
 	public static final String EASY = "Easy Mode";
 	public static final String MEDIUM = "Medium Mode";
@@ -74,14 +76,14 @@ public class Player {
 	public static final String MUSIC_TEXT = "Music";
 	public static final String MAIN_MENU_TEXT = "Main Menu";
 	public static final String QUIT_TEXT = "Quit";
-	
+
 	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \n"
 			+ "Adding towers uses up money. Right click on towers to sell. \n"
 			+ "A proportion of the tower's original cost will be added to money";
 	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park"
 			+ "\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\n"
 			+ "Dianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
-	
+
 
 	private JFrame frame;
 	private JPanel cards;
@@ -102,17 +104,18 @@ public class Player {
 		addHelpCard();
 		addOptionsCard();
 		addCreditsCard();
+		addHighScoreCard();
 		show();
 	}
 
 	private void initSong(){
-			try {
-				song = new Sound(DEFAULT_MUSIC_PATH);
-			} catch (LineUnavailableException | IOException
-					| UnsupportedAudioFileException e) {
-				//tell user song not found
-			}
-	
+		try {
+			song = new Sound(DEFAULT_MUSIC_PATH);
+		} catch (LineUnavailableException | IOException
+				| UnsupportedAudioFileException e) {
+			//tell user song not found
+		}
+
 		soundOn = false;
 	}
 
@@ -138,7 +141,7 @@ public class Player {
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
 
-                    try {
+					try {
 						engine.loadBlueprintFile(file.getAbsolutePath());
 					} catch (ClassNotFoundException | IOException | ZipException e1) {
 						e1.printStackTrace();
@@ -220,7 +223,7 @@ public class Player {
 		constraints.gridy = 1;
 		gameCard.add(makeUnitInfoPanel(), constraints);
 
-		
+
 		cards.add(gameCard, GAME_CARD);
 	}
 
@@ -231,7 +234,6 @@ public class Player {
 		return engine;
 	}
 
-
 	private JPanel makeGameButtonPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
@@ -240,7 +242,7 @@ public class Player {
 
 		JButton playResumeButton = new JButton(PLAY_PAUSE_TEXT);
 		playResumeButton.addActionListener(new MethodAction (this, "populateTowerChooserAndToggleRunning"));
-		
+
 		JButton saveButton = new JButton(SAVE_TEXT);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -248,24 +250,24 @@ public class Player {
 				frame.pack();
 			}
 		});
-		
+
 		JButton speedUpButton = new JButton(SPEED_UP_TEXT);
 		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
-		
+
 		JButton slowDownButton = new JButton(SLOW_DOWN_TEXT);
 		slowDownButton.addActionListener(new MethodAction (engine, "slowDown"));
-		
+
 		JButton quitButton = makeQuitButton();
-		
+
 		JButton addTowerButton = new JButton(ADD_TOWER_TEXT);
 		addTowerButton.addActionListener(new MethodAction (engine, "toggleAddTower"));
-		
+
 		JButton soundButton = new JButton(SOUND_ONOFF_TEXT);
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
 		engine.setSubject(towerChooser);//This probably does not belong here
-		
+
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
@@ -278,9 +280,11 @@ public class Player {
 		return gameButtonPanel;
 	}
 
+
+
 	public void toggleSound(){
 		soundOn = !soundOn;
-		
+
 		if(soundOn) {
 			song.loop();
 		}
@@ -288,7 +292,7 @@ public class Player {
 			song.stop();
 		}
 	}
-	
+
 	public void populateTowerChooserAndToggleRunning() {
 		towerChooser.getTowerNames();
 		engine.toggleRunning();
@@ -308,6 +312,14 @@ public class Player {
 		return unitInfoPanel;
 	}
 
+	//need to add when game ends to route to here, also need to work on saving the scores 
+	private void addHighScoreCard(){
+		HighScoreCard highScoreCard = new HighScoreCard();
+		highScoreCard.setSubject(engine);
+		engine.register(highScoreCard);
+		cards.add(highScoreCard, HIGH_SCORE_CARD);
+	}
+	
 	private void addOptionsCard() {
 		JPanel optionCard = new JPanel();
 		optionCard.setLayout(new GridBagLayout());
@@ -344,12 +356,12 @@ public class Player {
 
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
-		
+
 		JCheckBox soundCheckBox = new JCheckBox(MUSIC_TEXT);
 		soundCheckBox.addActionListener(new MethodAction(this, "toggleSound"));
-		
+
 		soundRadioButtonPanel.add(soundCheckBox);
-		
+
 		return soundRadioButtonPanel;
 	}
 
