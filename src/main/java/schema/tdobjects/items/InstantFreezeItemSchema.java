@@ -11,7 +11,7 @@ import java.util.Set;
 
 /**
  * 
- * This is a settings object for a specific type of AreaBomb.
+ * This is a settings object for a specific type of InstantFreeze.
  */
 public class InstantFreezeItemSchema extends ItemSchema {
 	public static final Class<InstantFreeze> MY_CONCRETE_TYPE = InstantFreeze.class;
