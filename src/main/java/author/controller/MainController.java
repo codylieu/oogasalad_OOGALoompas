@@ -225,6 +225,16 @@ public class MainController {
 		
 	}
 
+	public List<MonsterSchema> getMonsterSchemas() {
+		for (TabController controller : myTabControllers) {
+			if (controller instanceof EnemyController) {
+				EnemyController enemyController = (EnemyController) controller;
+				return enemyController.getMonsterSchemas();
+			}
+		}
+		return null;	
+	}
+	
 	public String[] getEnemyNames() {
 		for (TabController controller : myTabControllers) {
 			if (controller instanceof EnemyController) {

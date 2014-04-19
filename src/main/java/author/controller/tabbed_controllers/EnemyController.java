@@ -25,6 +25,11 @@ public class EnemyController extends TabController {
 		EnemyEditorTab editorTab = (EnemyEditorTab) myEditorTab;
 		return editorTab.getEnemyNamesArray();
 	}
+	
+	public List<MonsterSchema> getMonsterSchemas() {
+		EnemyEditorTab editorTab = (EnemyEditorTab) myEditorTab;
+		return editorTab.getMonsterSchemas();
+	}
 
 	
 
