@@ -79,7 +79,12 @@ public class Player {
 
 	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \n"
 			+ "Adding towers uses up money. Right click on towers to sell. \n"
-			+ "A proportion of the tower's original cost will be added to money";
+			+ "A proportion of the tower's original cost will be added to money\n"
+			+ "N-click: Annihilator\n"
+			+ "I-click: InstantFreeze\n"
+			+ "L-click: LifeSaver\n"
+			+ "shift-click: Upgrade towers\n"
+			+ "R-click: Row-bomb";
 	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park"
 			+ "\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\n"
 			+ "Dianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
