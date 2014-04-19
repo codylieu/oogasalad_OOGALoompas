@@ -11,7 +11,7 @@ import java.util.Collections;
  * 
  * @author Austin
  */
-public class WaveSpawnSchema {
+public class WaveSpawnSchema implements Serializable {
     Collection<MonsterSpawnSchema> myMonsterSchemas = new ArrayList<MonsterSpawnSchema>();
 
     /**

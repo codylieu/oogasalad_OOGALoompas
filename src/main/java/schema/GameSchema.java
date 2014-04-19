@@ -20,7 +20,7 @@ public class GameSchema extends AbstractSchema {
 	}
 	
 	@Override
-	public void addAttribute(String attributeName, Object attributeValue) {
+	public void addAttribute(String attributeName, Serializable attributeValue) {
 		myAttributesMap.put(attributeName, attributeValue);
 	}
 	

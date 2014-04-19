@@ -67,7 +67,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 	@Override
 	protected void updateViewWithSchemaData(
-			Map<String, Object> attributesMap) {
+			Map<String, Serializable> attributesMap) {
 		// TODO Auto-generated method stub
 
 	}

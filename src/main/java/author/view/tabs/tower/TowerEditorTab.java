@@ -125,7 +125,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	 * 
 	 */
 	@Override
-	protected void updateViewWithSchemaData(Map<String, Object> map) {
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 
 		upgradeDropDown.removeAllItems();
