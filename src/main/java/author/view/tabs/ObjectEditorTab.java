@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -90,7 +93,32 @@ public abstract class ObjectEditorTab extends EditorTab {
 		objectMap.put(newKey, objectSchema);
 	}
 
+	private void createObject() {
+		String objectName = createObjectField.getText();
+
+		objectName = objectName.trim().replaceAll(" +", " ");
+		if (ObjectUtilFunctions.newObjectNameIsValid(objectName, objectMap)) {
+
+			addObjectNameToList(objectName);
+			createObjectField.setText("");
+			createObjectField.setBorder(originalCreateObjectFieldBorder);
+		} else {
+			createObjectField.setBorder(new LineBorder(Color.red));
+			createObjectField.selectAll();
+			createObjectField.requestFocusInWindow();
+			showInvalidObjectNameDialog();
+		}
+	}
+
 	protected void addListeners() {
+
+		createObjectField.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					createObject();
+				}
+			}
+		});
 
 		deleteObjectButton.addActionListener(new ActionListener() {
 
@@ -159,23 +187,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String objectName = createObjectField.getText();
-
-				objectName = objectName.trim().replaceAll(" +", " ");
-				if (ObjectUtilFunctions.newObjectNameIsValid(objectName,
-						objectMap)) {
-
-					addObjectNameToList(objectName);
-					createObjectField.setText("");
-					createObjectField
-							.setBorder(originalCreateObjectFieldBorder);
-				} else {
-					createObjectField.setBorder(new LineBorder(Color.red));
-					createObjectField.selectAll();
-					createObjectField.requestFocusInWindow();
-					showInvalidObjectNameDialog();
-				}
+				createObject();
 			}
+
 		});
 
 	}

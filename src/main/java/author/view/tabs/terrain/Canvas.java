@@ -100,6 +100,15 @@ public class Canvas extends JPanel {
 		return null;
 	}
 
+	protected void updateTile(Tile newTile) {
+		int newTileRow = newTile.getRow();
+		int newTileCol = newTile.getCol();
+	
+		if (newTileRow < numRows && newTileCol < numCols) {
+			myTiles[newTileRow][newTileCol] = newTile;
+		}
+	}
+	
 	/**
 	 * Obtains a list of tiles within the JPanel
 	 * @return all tiles within the JPanel
