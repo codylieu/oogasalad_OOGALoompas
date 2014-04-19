@@ -54,7 +54,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	public void saveTabData() {
 		EnemyController controller = (EnemyController) myController;
 		
-		List<SimpleMonsterSchema> monsterSchemas = new ArrayList<SimpleMonsterSchema>();
+		List<MonsterSchema> monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
 			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
 			Map<String, Serializable> monsterAttributes = monster.getAttributesMap();

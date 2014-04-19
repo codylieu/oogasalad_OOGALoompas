@@ -68,7 +68,7 @@ public class MainController {
 	 * Adds a schema representing an enemy object to the game blueprint
 	 * @param enemySchema
 	 */
-	public void addEnemiesToModel(List<SimpleMonsterSchema> enemySchema) {
+	public void addEnemiesToModel(List<MonsterSchema> enemySchema) {
 		myModel.addEnemies(enemySchema);
 	}
 

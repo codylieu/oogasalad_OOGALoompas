@@ -6,6 +6,7 @@ import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
+import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 
 public class EnemyController extends TabController {
@@ -14,7 +15,7 @@ public class EnemyController extends TabController {
 		super(superController);
 	}
 
-	public void addEnemies(List<SimpleMonsterSchema> enemySchema) {
+	public void addEnemies(List<MonsterSchema> enemySchema) {
 
 		mySuperController.addEnemiesToModel(enemySchema);
 
