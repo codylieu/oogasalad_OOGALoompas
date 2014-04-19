@@ -185,9 +185,10 @@ public class TerrainEditorTab extends EditorTab {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				List<Tile> oldTiles = myCanvas.getTiles();
 				myCanvasPanel.remove(myCanvas);
-
 				initCanvas();
+				updateCanvas(oldTiles);
 				myTileSelectionManager.setCanvas(myCanvas);
 				revalidate();
 				repaint();
@@ -195,6 +196,12 @@ public class TerrainEditorTab extends EditorTab {
 
 		});
 		return createNewCanvas;
+	}
+	
+	private void updateCanvas(List<Tile> oldTiles) {
+		for (Tile t : oldTiles) {
+			myCanvas.updateTile(t);;
+		}
 	}
 
 	/**
