@@ -133,7 +133,21 @@ public class WaveEditorTab extends EditorTab {
 			for (int i = 0; i < columnNames.length; i++) {
 				columnNamesAndWave[i + 1] = columnNames[i];
 			}
-			tableModel = new ColumnRemovableTableModel(data, columnNamesAndWave);
+			tableModel = new ColumnRemovableTableModel(data, columnNamesAndWave){
+				
+				public boolean isCellEditable(int row, int col){
+					
+					if(col == 0){
+						
+						return false;
+						
+					}
+					
+					return true;
+					
+				}
+				
+			};
 			table = new JTable(tableModel);
 
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -242,20 +256,20 @@ public class WaveEditorTab extends EditorTab {
 						"Remove Last Wave");
 
 				removeMostRecentWaveButton
-						.addActionListener(new ActionListener() {
+				.addActionListener(new ActionListener() {
 
-							@Override
-							public void actionPerformed(ActionEvent e) {
+					@Override
+					public void actionPerformed(ActionEvent e) {
 
-								ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
-										.getModel();
+						ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+								.getModel();
 
-								if (tableModel.getRowCount() > 0) {
-									model.removeRow(tableModel.getRowCount() - 1);
-								}
-							}
+						if (tableModel.getRowCount() > 0) {
+							model.removeRow(tableModel.getRowCount() - 1);
+						}
+					}
 
-						});
+				});
 
 				return removeMostRecentWaveButton;
 			}
