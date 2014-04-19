@@ -30,7 +30,6 @@ import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {
 	private static final String CLEAR = "Clear Tiles";
-	private static final String SAVE_MAP = "Save Map";
 	private static final String ADD_TILEMAP = "Import Image File";
 	private static final String TERRAIN_CHOOSER = "Choose Terrain Type";
 	private static final String ROW_QUERY = "Enter Row Count";
@@ -129,7 +128,6 @@ public class TerrainEditorTab extends EditorTab {
 		displayOptions.put(TERRAIN_CHOOSER, constructTerrainTypes());
 		displayOptions.put(ADD_TILEMAP, initNewTileMap());
 		displayOptions.put(CLEAR, initClearButton());
-		displayOptions.put(SAVE_MAP, initSaveButton());
 		displayOptions.put(UPDATE_CANVAS, initNewCanvas());
 
 		JPanel optionDisplayPanel = new JPanel();
@@ -158,16 +156,6 @@ public class TerrainEditorTab extends EditorTab {
 		JButton createTileMap = new JButton(ADD_TILEMAP);
 		createTileMap.addActionListener(actionListener(this, "importTileMap"));
 		return createTileMap;
-	}
-
-	/**
-	 * Constructs a JButton that allows the user to save the current
-	 * state of the terrain map
-	 */
-	private JButton initSaveButton() {
-		JButton saveButton = new JButton(SAVE_MAP);
-		saveButton.addActionListener(actionListener(this, "saveMap"));
-		return saveButton;
 	}
 
 	/**

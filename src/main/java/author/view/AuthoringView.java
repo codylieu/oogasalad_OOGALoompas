@@ -19,6 +19,7 @@ import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.controller.tabbed_controllers.TowerController;
 import main.java.author.controller.tabbed_controllers.WaveController;
 import main.java.author.view.menubar.BasicMenuBar;
+import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
@@ -116,6 +117,12 @@ public class AuthoringView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int editorTabCount = tabbedPane.getTabCount();
+				for (int count = 0; count < editorTabCount; count++) {
+					EditorTab tab = (EditorTab) tabbedPane.getComponentAt(count);
+					tab.saveTabData();
+				}
+				
 				if (myController.isGameValid()) {
 					try {
 						myController.saveBlueprint();
