@@ -13,8 +13,8 @@ public class TowerController extends TabController {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void addTower(TowerSchema towerSchema) {
-		mySuperController.addTowerToModel(towerSchema);
+	public void addTowers(List<TowerSchema> towerSchemas) {
+		mySuperController.addTowersToModel(towerSchemas);
 
 	}
 

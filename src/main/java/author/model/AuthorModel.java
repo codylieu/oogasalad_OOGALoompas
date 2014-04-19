@@ -18,8 +18,8 @@ public class AuthorModel {
 		myGameBlueprint = new GameBlueprint();
 	}
 
-	public void addTower(TowerSchema towerSchema) {
-
+	public void addTowers(List<TowerSchema> towerSchemas) {
+		
 	}
 
 	public void addEnemies(List<SimpleMonsterSchema> enemySchema) {

@@ -60,8 +60,8 @@ public class MainController {
 	 * @param towerSchema
 	 */
 
-	public void addTowerToModel(TowerSchema towerSchema) {
-		myModel.addTower(towerSchema);
+	public void addTowersToModel(List<TowerSchema> towerSchemas) {
+		myModel.addTowers(towerSchemas);
 	}
 
 	/**

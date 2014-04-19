@@ -32,6 +32,7 @@ import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
@@ -52,7 +53,18 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	@Override
 	public void saveTabData() {
 		EnemyController controller = (EnemyController) myController;
-
+		
+		List<SimpleMonsterSchema> monsterSchemas = new ArrayList<SimpleMonsterSchema>();
+		for (TDObjectSchema monster : objectMap.values()) {
+			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
+			Map<String, Serializable> monsterAttributes = monster.getAttributesMap();
+			
+			for (String attribute : monsterAttributes.keySet()) {
+				monsterSchema.addAttribute(attribute, monsterAttributes.get(attribute));
+			}
+			monsterSchemas.add(monsterSchema);
+		}
+		controller.addEnemies(monsterSchemas);
 	}
 
 	public String[] getEnemyNamesArray() {

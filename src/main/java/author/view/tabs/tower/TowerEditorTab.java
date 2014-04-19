@@ -56,7 +56,18 @@ public class TowerEditorTab extends ObjectEditorTab {
 	@Override
 	public void saveTabData() {
 		TowerController controller = (TowerController) myController;
-
+		
+		List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
+		for (TDObjectSchema tower : objectMap.values()) {
+			TowerSchema towerSchema = new TowerSchema();
+			Map<String, Serializable> towerAttributes = tower.getAttributesMap();
+			
+			for (String attribute : towerAttributes.keySet()) {
+				towerSchema.addAttribute(attribute, towerAttributes.get(attribute));
+			}
+			towerSchemas.add(towerSchema);
+		}
+		controller.addTowers(towerSchemas);
 	}
 
 	@Override
