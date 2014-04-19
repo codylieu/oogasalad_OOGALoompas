@@ -29,7 +29,9 @@ import main.java.author.util.ArrayUtil;
 import main.java.author.util.JTableUtil;
 import main.java.author.view.components.ColumnRemovableTableModel;
 import main.java.author.view.tabs.EditorTab;
+import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.WaveSpawnSchema;
+import main.java.schema.tdobjects.MonsterSchema;
 
 /**
  * Used in the authoring environment to specify attributes of the wave
@@ -102,8 +104,32 @@ public class WaveEditorTab extends EditorTab {
 
 	@Override
 	public void saveTabData() {
-		// TODO CODY
-
+		WaveController waveController = (WaveController) myController;
+		int numWaves = tableModel.getRowCount();
+		
+		List<WaveSpawnSchema> allWaveSpawnSchemas = new ArrayList<WaveSpawnSchema>();
+		for (int waveRow = 0; waveRow < numWaves; waveRow++) {
+			
+			WaveSpawnSchema waveSpawnSchema = new WaveSpawnSchema();
+			for (MonsterSchema monsterSchema : waveController.getMonsterSchemas()) {
+				String monsterName = (String) monsterSchema.getAttributesMap().get(MonsterSchema.NAME);
+				int columnOfEnemy = getColumnOfEnemy(monsterName);
+				int numEnemies = (Integer) table.getModel().getValueAt(waveRow, columnOfEnemy);
+				waveSpawnSchema.addMonsterSchema(new MonsterSpawnSchema(monsterSchema, numEnemies));
+				
+			}
+			allWaveSpawnSchemas.add(waveSpawnSchema);
+		}
+		waveController.addWaves(allWaveSpawnSchemas);
+	}
+	
+	private int getColumnOfEnemy(String enemyName) {
+		for (int index = 0; index < columnNames.length; index++) {
+			if(columnNames[index].equals(enemyName)) {
+				return index;
+			}
+		}
+		return -1;
 	}
 
 	/**

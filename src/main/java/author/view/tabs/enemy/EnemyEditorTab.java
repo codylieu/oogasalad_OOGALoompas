@@ -49,12 +49,13 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			flyingButton, groundButton;
 	private List<JRadioButton> allButtons;
 	private ButtonGroup tileSizeGroup, flyingOrGroundGroup;
+	private List<MonsterSchema> monsterSchemas;
 
 	@Override
 	public void saveTabData() {
 		EnemyController controller = (EnemyController) myController;
 		
-		List<MonsterSchema> monsterSchemas = new ArrayList<MonsterSchema>();
+		monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
 			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
 			Map<String, Serializable> monsterAttributes = monster.getAttributesMap();
@@ -65,6 +66,10 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			monsterSchemas.add(monsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
+	}
+	
+	public List<MonsterSchema> getMonsterSchemas() {
+		return monsterSchemas;
 	}
 
 	public String[] getEnemyNamesArray() {
