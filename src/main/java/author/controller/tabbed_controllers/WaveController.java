@@ -20,19 +20,19 @@ public class WaveController extends TabController {
 		mySuperController.addWaveToModel(waves);
 	}
 
-	public List<String> getEnemyList() {
+	public String[] getEnemyNames() {
 		
-		return mySuperController.getEnemyList();
-		// hardcoded shit
-		/*List<String> enemies = new ArrayList<String>();
-		enemies.add("Dog");
-		enemies.add("Cat");
-		return enemies;*/
+		return mySuperController.getEnemyNames();
+		
 	}
 	
 	public void updateEnemyList(){
 		WaveEditorTab waveEditorTab = (WaveEditorTab) myEditorTab;
 		waveEditorTab.updateEnemyList();
+	}
+
+	public void shiftToEnemyTab() {
+		mySuperController.shiftToEnemyTab();
 	}
 	
 }

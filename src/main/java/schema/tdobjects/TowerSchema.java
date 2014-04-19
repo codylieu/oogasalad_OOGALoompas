@@ -90,8 +90,7 @@ public class TowerSchema extends TDObjectSchema {
 		addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "");
 		addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
 		addAttribute(TowerSchema.UPGRADE_PATH, "");
-		List<TowerBehaviors> defaultBehaviors = Arrays.asList(TowerBehaviors.values());
-		addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) defaultBehaviors);
+		addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) Arrays.asList(TowerBehaviors.values()));
 	}
 
 	@Override
