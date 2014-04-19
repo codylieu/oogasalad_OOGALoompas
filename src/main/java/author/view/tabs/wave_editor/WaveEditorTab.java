@@ -225,6 +225,8 @@ public class WaveEditorTab extends EditorTab {
 										+ newWaveNum);
 						}
 						model.addRow(zeroesRowList.toArray());
+						
+						clearAllWavesButton.setEnabled(true);
 
 					}
 				});
@@ -259,6 +261,7 @@ public class WaveEditorTab extends EditorTab {
 			private JComponent makeClearAllWavesButton() {
 
 				clearAllWavesButton = new JButton("Clear All Waves");
+				clearAllWavesButton.setEnabled(false);
 
 				clearAllWavesButton.addActionListener(new ActionListener() {
 
@@ -271,6 +274,8 @@ public class WaveEditorTab extends EditorTab {
 							numberOfWaves--;
 							tableModel.removeRow(numberOfWaves);
 						}
+						
+						clearAllWavesButton.setEnabled(false);
 
 					}
 				});
