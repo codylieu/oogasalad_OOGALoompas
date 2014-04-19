@@ -9,6 +9,7 @@ import jgame.JGPoint;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.jgpathfinder.*;
+import main.java.schema.MonsterSpawnSchema;
 
 
 public abstract class Monster extends TDObject {
@@ -29,6 +30,7 @@ public abstract class Monster extends TDObject {
 	protected Exit myExit;
 	protected JGPath myPath;
 	protected String originalImage;
+	private MonsterSpawnSchema resurrectMonsterSchema;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
 	 */
@@ -49,7 +51,8 @@ public abstract class Monster extends TDObject {
 			double health,
 			double moveSpeed,
 			double rewardAmount,
-			String graphic) {
+			String graphic,
+			MonsterSpawnSchema resurrectSchema) {
 		//TODO make factory add the spread between monsters in the same wave, and remove random from initial x,y
 		super("monster", entrance.getX() + Math.random() * 100, entrance.getY() + Math.random() * 100, MONSTER_CID, graphic);
 		myHealth = health;
@@ -62,6 +65,7 @@ public abstract class Monster extends TDObject {
 		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
 		this.setSpeed(myMoveSpeed);
 		originalImage = graphic;
+		this.resurrectMonsterSchema = resurrectSchema;
 		try {
 			myPath = myPathFinder.getPath(pathEntrance, pathExit);
 		} catch (NoPossiblePathException e) {
@@ -145,5 +149,14 @@ public abstract class Monster extends TDObject {
 		if (myPath != null) {
 			myPath.paint(5, JGColor.pink);
 		}
+	}
+
+	/**
+	 * Get the schema that should be spawned upon the death of this monster.
+	 * Will be null if the monster has no resurrect schema to spawn upon death.
+	 * @return
+	 */
+	public MonsterSpawnSchema getResurrrectMonsterSpawnSchema() {
+		return resurrectMonsterSchema;
 	}
 }

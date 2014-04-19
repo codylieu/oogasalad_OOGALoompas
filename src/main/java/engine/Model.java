@@ -225,44 +225,48 @@ public class Model {
 	 */
 
 	public void loadGameBlueprint (String filePath) throws ClassNotFoundException, IOException {
-		// GameBlueprint bp = null;
-		// try {
-		// bp = dataHandler.loadBlueprint(filePath,true);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// return;
-		// }
-
-		// TODO: use the actual game blueprint (aka bp)
-		// GameBlueprint testBP = bp;
-		GameBlueprint testBP = createTestBlueprint();
-
-		initializeBlueprintContents(testBP);
-	}
-
-	public void initializeBlueprintContents(GameBlueprint blueprint) {
-		// init player
+		GameBlueprint blueprint = null;
+		if (filePath == null) {
+			blueprint = createTestBlueprint();
+		}
+		else {
+			try {
+				blueprint = dataHandler.loadBlueprint(filePath,true);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
+		}
+		
+		//Initialize from game settings from game schema
 		GameSchema gameSchema = blueprint.getMyGameScenario();
 		Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
 		this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
-
 				(Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));
 
-		// init factory objects
+		// Initialize factory objects
+		if (blueprint.getMyTowerSchemas() != null) {
+			factory.loadTowerSchemas(blueprint.getMyTowerSchemas());
+		}
+		if (blueprint.getMyMonsterSchemas() != null) {
+			factory.loadMonsterSchemas(blueprint.getMyMonsterSchemas());
+		}
+		if (blueprint.getMyItemSchemas() != null) {
+			factory.loadItemSchemas(blueprint.getMyItemSchemas());
+		}
 
-		factory.loadTowerSchemas(blueprint.getMyTowerSchemas());
-		factory.loadMonsterSchemas(blueprint.getMyMonsterSchemas());
-		factory.loadItemSchemas(blueprint.getMyItemSchemas());
+		// Initialize waves
+		if (blueprint.getMyLevelSchemas() != null) {
+			for (WaveSpawnSchema wave : blueprint.getMyLevelSchemas()) {
+				levelManager.addNewWave(wave);
+			}
+		}
 
-		// init levels
-		for (WaveSpawnSchema wave : blueprint.getMyLevelSchemas()) {
-			levelManager.addNewWave(wave);
+		// Initialize map if necessary
+		if (blueprint.getMyGameMapSchemas() != null) {
+			TDMap map = new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load each map
 		}
 	}
-
-	// init map
-	// TDMap map = new TDMap(engine, testBP.getMyGameMapSchemas().get(0)); // TODO: load each
-	// map
 
 	/**
 	 * Reset the game clock
@@ -406,14 +410,27 @@ public class Model {
 	 */
 	private void removeDeadMonsters () {
 		Iterator<Monster> monsterIter = monsters.iterator();
+		List<Monster> newlyAdded = new ArrayList<Monster>();
 		while (monsterIter.hasNext()) {
 			Monster currentMonster = monsterIter.next();
 			if (currentMonster.isDead()) {
+				MonsterSpawnSchema resurrectSchema = currentMonster.getResurrrectMonsterSpawnSchema();
+				if(resurrectSchema != null) {
+					try {
+						//monsters.addAll( ... )
+						System.out.println("resurrect spawned " + resurrectSchema.getSwarmSize());
+						newlyAdded = levelManager.spawnMonsterSpawnSchema(resurrectSchema, currentMonster.getCurrentCoor());
+					} catch (MonsterCreationFailureException e) {
+						// resurrection schema could not be spawned, so ignore it.
+						e.printStackTrace();
+					}
+				}
 				monsterIter.remove();
 				addMoney(currentMonster.getMoneyValue());
 				currentMonster.remove();
 			}
 		}
+		monsters.addAll(newlyAdded);
 	}
 
 	private void addMoney (double moneyValue) {
@@ -514,25 +531,25 @@ public class Model {
 		testAnnihilatorItem.addAttribute(ItemSchema.COST, (double) 1);
 		testAnnihilatorItem.addAttribute(ItemSchema.DAMAGE, (double) 999);
 		testItemSchema.add(testAnnihilatorItem);
-		
+
 		AreaBombItemSchema testAreaBombItem = new AreaBombItemSchema();
 		testAreaBombItem.addAttribute(ItemSchema.NAME, "AreaBomb");
 		testAreaBombItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
 		testAreaBombItem.addAttribute(AreaBombItemSchema.RANGE, (double) 100);
 		testItemSchema.add(testAreaBombItem);
-		
+
 		RowBombItemSchema testRowBombItem = new RowBombItemSchema();
 		testRowBombItem.addAttribute(ItemSchema.NAME, "RowBomb");
 		testRowBombItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
 		testRowBombItem.addAttribute(ItemSchema.COST, (double) 1);
 		testItemSchema.add(testRowBombItem);
-		
+
 		InstantFreezeItemSchema testInstantFreezeItem = new InstantFreezeItemSchema();
 		testInstantFreezeItem.addAttribute(ItemSchema.NAME, "InstantFreeze");
 		testInstantFreezeItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
 		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 5);
 		testItemSchema.add(testInstantFreezeItem);
-		
+
 		LifeSaverItemSchema testLifeSaverItem = new LifeSaverItemSchema();
 		testLifeSaverItem.addAttribute(ItemSchema.NAME, "LifeSaver");
 		testLifeSaverItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
@@ -601,6 +618,17 @@ public class Model {
 		testMonsterOne.addAttribute(MonsterSchema.REWARD, (double) 200);
 		testMonsterSchema.add(testMonsterOne);
 
+		SimpleMonsterSchema testMonsterResurrects = new SimpleMonsterSchema();
+		testMonsterResurrects.addAttribute(MonsterSchema.NAME, "test-monster-2");
+		testMonsterResurrects.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+		//resurrect spawn schema is 2 testMonsterOnes
+		MonsterSpawnSchema resurrect = new MonsterSpawnSchema(testMonsterOne, 2);
+		testMonsterResurrects.addAttribute(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, resurrect);
+		testMonsterResurrects.addAttribute(MonsterSchema.SPEED, (double) 1);
+		testMonsterResurrects.addAttribute(MonsterSchema.REWARD, (double) 200);
+		testMonsterSchema.add(testMonsterResurrects);
+
+
 		testBlueprint.setMyTowerSchemas(testTowerSchema);
 		testBlueprint.setMyMonsterSchemas(testMonsterSchema);
 		testBlueprint.setMyItemSchemas(testItemSchema);
@@ -614,12 +642,12 @@ public class Model {
 
 		// Create wave schemas
 		List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
-		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterOne, 5);
+		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterResurrects, 1);
 		WaveSpawnSchema testWaveSpawnSchemaOne = new WaveSpawnSchema();
 		testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
 		testWaves.add(testWaveSpawnSchemaOne);
 
-		MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 2);
+		MonsterSpawnSchema testMonsterSpawnSchemaTwo = new MonsterSpawnSchema(testMonsterOne, 3);
 		WaveSpawnSchema testWaveSpawnSchemaTwo = new WaveSpawnSchema();
 		testWaveSpawnSchemaTwo.addMonsterSchema(testMonsterSpawnSchemaTwo);
 		testWaves.add(testWaveSpawnSchemaTwo);
