@@ -20,7 +20,7 @@ public class MonsterClosestToExitDetector extends TDDetector {
 	@Override
 	public List<Object> findTarget(double x, double y,
 			double range, EnvironmentKnowledge environmentKnowledge) {
-		List<Object> targetMonster = new ArrayList<Object>();
+		List<Object> targetMonsterLocation = new ArrayList<Object>();
 		Point2D towerCoordinate = new Point2D.Double(x, y);
 		Point2D exitCoordinate = environmentKnowledge.getExit().getLocation();
 		double minDistance = Double.MAX_VALUE;
@@ -29,13 +29,12 @@ public class MonsterClosestToExitDetector extends TDDetector {
 			if (isWithinDistance(m.getCurrentCoor(), exitCoordinate, minDistance) &&
 					isWithinDistance(m.getCurrentCoor(), towerCoordinate, range)) {
 				minDistance = m.getCurrentCoor().distance(exitCoordinate);
-				// a tower should only target one monster at a time
-				targetMonster.clear();
-				targetMonster.add(centerCoordinate(m));
+				targetMonsterLocation.clear();
+				targetMonsterLocation.add(centerCoordinate(m));
 			}
 		}
 
-		return targetMonster;
+		return targetMonsterLocation;
 	}
 	
 }
