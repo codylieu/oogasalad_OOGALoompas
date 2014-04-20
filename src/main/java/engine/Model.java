@@ -544,7 +544,7 @@ public class Model {
         InstantFreezeItemSchema testInstantFreezeItem = new InstantFreezeItemSchema();
         testInstantFreezeItem.addAttribute(ItemSchema.NAME, "InstantFreeze");
         testInstantFreezeItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
-        testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 5);
+        testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 999999);
         testItemSchema.add(testInstantFreezeItem);
 
         LifeSaverItemSchema testLifeSaverItem = new LifeSaverItemSchema();
@@ -554,18 +554,18 @@ public class Model {
 
         // Create test towers
         TowerSchema testTowerOne = new TowerSchema();
-        testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
+        testTowerOne.addAttribute(TowerSchema.NAME, "MoneyTower");
         testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
         testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
         towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
-        testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "test-tower-3");
+        testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "BombingTower");
         testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
         testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
         testTowerSchema.add(testTowerOne);
 
         TowerSchema testTowerTwo = new TowerSchema();
-        testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
+        testTowerTwo.addAttribute(TowerSchema.NAME, "ShootingTower");
         testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
         testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
@@ -575,7 +575,7 @@ public class Model {
         testTowerSchema.add(testTowerTwo);
 
         TowerSchema testTowerThree = new TowerSchema();
-        testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
+        testTowerThree.addAttribute(TowerSchema.NAME, "BombingTower");
         testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
         testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet");
         testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
@@ -586,7 +586,7 @@ public class Model {
         testTowerSchema.add(testTowerThree);
 
         TowerSchema testTowerFour = new TowerSchema();
-        testTowerFour.addAttribute(TowerSchema.NAME, "test-tower-4");
+        testTowerFour.addAttribute(TowerSchema.NAME, "FreezingTower");
         testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
         testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
@@ -597,7 +597,7 @@ public class Model {
         testTowerSchema.add(testTowerFour);
 
         TowerSchema testTowerFive = new TowerSchema();
-        testTowerFive.addAttribute(TowerSchema.NAME, "test-tower-5");
+        testTowerFive.addAttribute(TowerSchema.NAME, "SplashingTower");
         testTowerFive.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
         testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
         Collection<TowerBehaviors> towerBehaviors5 = new ArrayList<TowerBehaviors>();
