@@ -1,5 +1,11 @@
 package main.java.schema;
 
+import main.java.schema.map.GameMapSchema;
+import main.java.schema.tdobjects.ItemSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -12,11 +18,12 @@ import java.util.List;
  * This class does not relate to something that gets explicitly instantiated in the engine.
  */
 public class GameBlueprint implements Serializable {
-
 	private GameSchema myGameScenario;
-	private List<TDObjectSchema> myTDObjectSchemas;
+	private List<MonsterSchema> myMonsterSchemas;
+	private List<TowerSchema> myTowerSchemas;
 	private List<WaveSpawnSchema> myLevelSchemas;
-	private List<GameMap> myGameMaps;
+	private List<GameMapSchema> myGameMapSchemas;
+	private List<ItemSchema> myItemSchema;
 
 	public GameSchema getMyGameScenario() {
 		return myGameScenario;
@@ -26,28 +33,43 @@ public class GameBlueprint implements Serializable {
 		this.myGameScenario = myGameScenario;
 	}
 
-    public List<TDObjectSchema> getMyTDObjectSchemas() {
-        return myTDObjectSchemas;
-    }
+	public List<TowerSchema> getMyTowerSchemas() {
+		return myTowerSchemas;
+	}
 
-    public void setMyTDObjectSchemas(List<TDObjectSchema> myTDObjectSchemas) {
-        this.myTDObjectSchemas = myTDObjectSchemas;
-    }
+	public void setMyTowerSchemas(List<TowerSchema> myTowerSchemas) {
+		this.myTowerSchemas = myTowerSchemas;
+	}
+	
+	public List<MonsterSchema> getMyMonsterSchemas() {
+		return myMonsterSchemas;
+	}
 
-	public List<WaveSpawnSchema> getMyLevelSchemas() {
+	public void setMyMonsterSchemas(List<MonsterSchema> myMonsterSchemas) {
+		this.myMonsterSchemas = myMonsterSchemas;
+	}
+
+	public List<WaveSpawnSchema> getMyWaveSchemas() {
 		return myLevelSchemas;
 	}
 
-	public void setMyLevelSchemas(List<WaveSpawnSchema> myLevelSchemas) {
+	public void setMyWaveSchemas(List<WaveSpawnSchema> myLevelSchemas) {
 		this.myLevelSchemas = myLevelSchemas;
 	}
 
-	public List<GameMap> getMyGameMaps() {
-		return myGameMaps;
+	public List<GameMapSchema> getMyGameMapSchemas() {
+		return myGameMapSchemas;
 	}
 
-	public void setMyGameMaps(List<GameMap> myGameMaps) {
-		this.myGameMaps = myGameMaps;
+	public void setMyGameMapSchemas(List<GameMapSchema> myGameMapSchemas) {
+		this.myGameMapSchemas = myGameMapSchemas;
+	}
+
+	public void setMyItemSchemas(List<ItemSchema> myItemSchema) {
+		this.myItemSchema = myItemSchema;		
 	}
 	
+	public List<ItemSchema> getMyItemSchemas() {
+		return myItemSchema;
+	}
 }

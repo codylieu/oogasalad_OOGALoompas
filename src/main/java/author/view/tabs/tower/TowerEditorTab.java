@@ -1,98 +1,130 @@
 package main.java.author.view.tabs.tower;
 
-import java.awt.Component;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 
-import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
-import main.java.author.util.GroupButtonUtil;
+import main.java.author.controller.tabbed_controllers.TowerController;
+import main.java.author.util.ComboBoxUtil;
+import main.java.author.view.components.ImageCanvas;
+import main.java.author.view.components.BehaviorTogglingRadioButton;
+import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.schema.MonsterSchema;
-import main.java.schema.TowerSchema;
-import main.java.schema.SimpleTowerSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.engine.objects.TDObject;
+import main.java.engine.objects.tower.TowerBehaviors;
+import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
+import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 
 public class TowerEditorTab extends ObjectEditorTab {
 
-	private JSpinner healthSpinner;
-	private JSpinner costSpinner;
-	private JSpinner damageSpinner;
-	private JSpinner buildUpSpinner;
+	private JSpinner healthSpinner, costSpinner, damageSpinner, rangeSpinner,
+			buildUpSpinner, firingSpeedSpinner, shrapnelDamageSpinner,
+			moneyFarmAmountSpinner, moneyFarmIntervalSpinner,
+			freezeRatioSpinner;
 
-	private JRadioButton smallRangeButton;
-	private JRadioButton mediumRangeButton;
-	private JRadioButton largeRangeButton;
-	private JRadioButton smallSizeButton;
-	private JRadioButton largeSizeButton;
+	private BehaviorTogglingRadioButton freezeToggleButton, shootsToggleButton,
+			moneyFarmingToggleButton, bombingToggleButton;
 
-	private ButtonGroup rangeButtonGroup;
-	private ButtonGroup sizeButtonGroup;
+	private JComboBox<String> upgradeDropDown;
 
-	public TowerEditorTab(TabController towerController) {
-		super(towerController);
+	protected ImageCanvas bulletImageCanvas, towerImageCanvas,
+			shrapnelImageCanvas;
+	protected JButton collisionImageButton, shrapnelImageButton;
+
+	public TowerEditorTab(TabController towerController, String objectName) {
+		super(towerController, objectName);
 	}
 
+	@Override
+	public void saveTabData() {
+		TowerController controller = (TowerController) myController;
+		
+		List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
+		for (TDObjectSchema tower : objectMap.values()) {
+			TowerSchema towerSchema = new TowerSchema();
+			Map<String, Serializable> towerAttributes = tower.getAttributesMap();
+			
+			for (String attribute : towerAttributes.keySet()) {
+				towerSchema.addAttribute(attribute, towerAttributes.get(attribute));
+			}
+			towerSchemas.add(towerSchema);
+		}
+		controller.addTowers(towerSchemas);
+	}
+
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+		shootsToggleButton.setFieldsToToggle(damageSpinner, firingSpeedSpinner,
+				shrapnelDamageSpinner, rangeSpinner, freezeToggleButton,
+				bombingToggleButton);
+		bombingToggleButton.setFieldsToToggle(shrapnelDamageSpinner);
+		moneyFarmingToggleButton.setFieldsToToggle(moneyFarmAmountSpinner,
+				moneyFarmIntervalSpinner);
+		freezeToggleButton.setFieldsToToggle(freezeRatioSpinner);
+		upgradeDropDown.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateSchemaDataFromView();
+			}
+		});
+
+		shrapnelImageButton.addActionListener(new FileChooserListener(
+				shrapnelImageCanvas));
+		collisionImageButton.addActionListener(new FileChooserListener(
+				bulletImageCanvas));
+		towerImageButton.addActionListener(new FileChooserListener(
+				towerImageCanvas));
+	}
+
+	@Override
 	protected TDObjectSchema createSpecificNewObject(String objectName) {
-		return new SimpleTowerSchema(objectName);
+		return new TowerSchema(objectName);
+
 	}
 
-	protected TabViewBuilder createSpecificTabViewBuilder() {
+	@Override
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new TowerTabViewBuilder(this);
 	}
 
-	protected void initDataFields() {
-		spinnerFields = new ArrayList<JSpinner>();
-		spinnerFields.add(healthSpinner);
-		spinnerFields.add(costSpinner);
-		spinnerFields.add(damageSpinner);
-		spinnerFields.add(buildUpSpinner);
-		radioButtons = new ArrayList<JRadioButton>();
-		radioButtons.add(smallRangeButton);
-		radioButtons.add(mediumRangeButton);
-		radioButtons.add(largeRangeButton);
-		radioButtons.add(smallSizeButton);
-		radioButtons.add(largeSizeButton);
-
-	}
-
-	protected void setDefaultObjectName() {
-		defaultObjectName = "Tower A";
-	}
-
-	/**
-	 * puts the view fields' data into the schema data
-	 */
+	@Override
 	protected void updateSchemaDataFromView() {
-		// update schema with fields
-		String name = getSelectedObjectName();
-		TDObjectSchema myCurrentTower = objectMap.get(name);
-		Integer health = (Integer) healthSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.HEALTH, health);
-		Integer cost = (Integer) costSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.COST, cost);
-		Integer damage = (Integer) damageSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.DAMAGE, damage);
-		Integer buildUp = (Integer) buildUpSpinner.getValue();
-		myCurrentTower.addAttribute(TowerSchema.BUILDUP, buildUp);
-		// update schema with buttons
-		myCurrentTower.addAttribute(TowerSchema.TILE_SIZE,
-				GroupButtonUtil.getSelectedButtonText(sizeButtonGroup));
-		myCurrentTower.addAttribute(TowerSchema.RANGE,
-				GroupButtonUtil.getSelectedButtonText(rangeButtonGroup));
-		// update schema with images
+		super.updateSchemaDataFromView();
+
+		TDObjectSchema myCurrentObject = getSelectedObject();
+		List<TowerBehaviors> behaviorsToggled = new ArrayList<TowerBehaviors>();
+		for (BehaviorTogglingRadioButton button : behaviorTogglingButtons) {
+			if (button.isSelected()) {
+				behaviorsToggled.add(button.getBehavior());
+			}
+
+		}
+		myCurrentObject.addAttribute(TowerSchema.TOWER_BEHAVIORS,
+				(Serializable) behaviorsToggled);
+
+		myCurrentObject.addAttribute(upgradeDropDown.getName(),
+				(String) upgradeDropDown.getSelectedItem());
+
 	}
 
 	/**
@@ -100,113 +132,168 @@ public class TowerEditorTab extends ObjectEditorTab {
 	 * puts the schema data into the view field
 	 * 
 	 * @param map
-	 *            the monster's schema attributes
+	 *            the object's schema attributes
 	 * 
 	 */
+	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
-		// fields (spinners)
+		super.updateViewWithSchemaData(map);
 
-		healthSpinner.setValue(map.get(TowerSchema.HEALTH));
-		costSpinner.setValue(map.get(TowerSchema.COST));
-		damageSpinner.setValue(map.get(TowerSchema.DAMAGE));
-		buildUpSpinner.setValue(map.get(TowerSchema.BUILDUP));
-
-		// buttons
-		ButtonModel selectedRangeButtonModel = null;
-		ButtonModel selectedSizeButtonModel = null;
-		String rangeValue = (String) map.get(TowerSchema.RANGE);
-		String sizeValue = (String) map.get(TowerSchema.TILE_SIZE);
-
-		for (JRadioButton radioButton : radioButtons) {
-			ButtonModel theModel = radioButton.getModel();
-			String theButtonText = radioButton.getText();
-			if (theButtonText.equals(rangeValue))
-				selectedRangeButtonModel = theModel;
-			if (theButtonText.equals(sizeValue))
-				selectedSizeButtonModel = theModel;
+		upgradeDropDown.removeAllItems();
+		for (String tower : objectMap.keySet()) {
+			if (!tower.equals(getSelectedObjectName()))
+				upgradeDropDown.addItem(tower);
 		}
-		rangeButtonGroup.setSelected(selectedRangeButtonModel, true);
-		sizeButtonGroup.setSelected(selectedSizeButtonModel, true);
+
+		if (ComboBoxUtil.containsValue(upgradeDropDown,
+				(String) map.get(upgradeDropDown.getName()))) {
+			upgradeDropDown.setSelectedItem(map.get(upgradeDropDown.getName()));
+		} else {
+			upgradeDropDown.addItem(TowerSchema.UPGRADE_PATH_NONE);
+			upgradeDropDown.setSelectedItem(TowerSchema.UPGRADE_PATH_NONE);
+		}
+
+		List<TowerBehaviors> behaviorsToToggle = (List<TowerBehaviors>) map.get(TowerSchema.TOWER_BEHAVIORS);
+		for (BehaviorTogglingRadioButton radioButton : behaviorTogglingButtons) {
+			if (behaviorsToToggle.contains(radioButton.getBehavior())) {
+				radioButton.setSelected(true);
+			} else {
+				radioButton.setSelected(false);
+			}
+		}
 
 	}
 
-	private class TowerTabViewBuilder extends TabViewBuilder {
+	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
 
 		public TowerTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
-			// TODO Auto-generated constructor stub
 		}
 
-		private Component makeRangePane() {
+		private JComponent makeBulletGraphicPane() {
 			JPanel result = new JPanel();
-			result.setLayout(new GridLayout(1, 0));
-
-			result.setBorder(BorderFactory.createEmptyBorder(0, // top
-					20, // left
-					0, // bottom
-					0)); // right
-
-			smallRangeButton = new JRadioButton(TowerSchema.RANGE_SMALL);
-			mediumRangeButton = new JRadioButton(TowerSchema.RANGE_MEDIUM);
-			largeRangeButton = new JRadioButton(TowerSchema.RANGE_LARGE);
-			rangeButtonGroup = new ButtonGroup();
-			rangeButtonGroup.add(smallRangeButton);
-			rangeButtonGroup.add(mediumRangeButton);
-			rangeButtonGroup.add(largeRangeButton);
-			result.add(smallRangeButton);
-			result.add(mediumRangeButton);
-			result.add(largeRangeButton);
+			result.setLayout(new BorderLayout());
+			bulletImageCanvas.setSize(new Dimension(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2));
+			bulletImageCanvas.setBackground(Color.BLACK);
+			result.add(bulletImageCanvas, BorderLayout.CENTER);
+			collisionImageButton = makeChooseGraphicsButton("Set Bullet Image");
+			result.add(collisionImageButton, BorderLayout.SOUTH);
 			return result;
 		}
 
-		private JComponent makeSizePane() {
+		private JComponent makeShrapnelGraphicPane() {
 			JPanel result = new JPanel();
-			result.setLayout(new GridLayout(1, 0));
-
-			result.setBorder(BorderFactory.createEmptyBorder(0, // top
-					20, // left
-					0, // bottom
-					0)); // right
-
-			largeSizeButton = new JRadioButton(TowerSchema.TILE_SIZE_LARGE);
-			smallSizeButton = new JRadioButton(TowerSchema.TILE_SIZE_SMALL);
-			sizeButtonGroup = new ButtonGroup();
-			sizeButtonGroup.add(largeSizeButton);
-			sizeButtonGroup.add(smallSizeButton);
-			result.add(largeSizeButton);
-			result.add(smallSizeButton);
+			result.setLayout(new BorderLayout());
+			shrapnelImageCanvas.setSize(new Dimension(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE / 2));
+			shrapnelImageCanvas.setBackground(Color.BLACK);
+			result.add(shrapnelImageCanvas, BorderLayout.CENTER);
+			shrapnelImageButton = makeChooseGraphicsButton("Set Shrapnel Image");
+			result.add(shrapnelImageButton, BorderLayout.SOUTH);
 			return result;
+		}
+
+		private JComboBox<String> makeUpgradeDropdown() {
+
+			JComboBox<String> result = new JComboBox<String>();
+			result.setName(TowerSchema.UPGRADE_PATH);
+			return result;
+		}
+
+
+		@Override
+		protected void instantiateAndClumpFields() {
+			// spinners
+			healthSpinner = makeAttributeSpinner(TowerSchema.HEALTH);
+			costSpinner = makeAttributeSpinner(TowerSchema.COST);
+			damageSpinner = makeAttributeSpinner(TowerSchema.DAMAGE);
+			rangeSpinner = makeAttributeSpinner(TowerSchema.RANGE);
+			buildUpSpinner = makeAttributeSpinner(TowerSchema.BUILDUP);
+			firingSpeedSpinner = makeAttributeSpinner(TowerSchema.FIRING_SPEED);
+			shrapnelDamageSpinner = makeAttributeSpinner(TowerSchema.SHRAPNEL_DAMAGE);
+			moneyFarmAmountSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANTED);
+			moneyFarmIntervalSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANT_INTERVAL);
+			freezeRatioSpinner = makeAttributeSpinner(
+					TowerSchema.FREEZE_SLOWDOWN_PROPORTION, true);
+			// radio buttons
+			shootsToggleButton = new BehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_SHOOTS, TowerBehaviors.SHOOTING,
+					true);
+			freezeToggleButton = new BehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_FREEZES,
+					TowerBehaviors.FREEZING, true);
+			bombingToggleButton = new BehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_BOMBS, TowerBehaviors.BOMBING,
+					true);
+			moneyFarmingToggleButton = new BehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_FARMS_MONEY,
+					TowerBehaviors.MONEY_FARMING, true);
+			// other
+			upgradeDropDown = makeUpgradeDropdown();
+			// canvases
+			bulletImageCanvas = new ImageCanvas(true,
+					TowerSchema.BULLET_IMAGE_NAME);
+			shrapnelImageCanvas = new ImageCanvas(true,
+					TowerSchema.SHRAPNEL_IMAGE_NAME);
+			towerImageCanvas = new ImageCanvas(false,
+					TowerSchema.TOWER_IMAGE_NAME);
+			// clump data types
+			clumpFieldsIntoGroups();
+
+		}
+
+		private void clumpFieldsIntoGroups() {
+			JSpinner[] spinners = { healthSpinner, costSpinner, buildUpSpinner,
+					damageSpinner, rangeSpinner, firingSpeedSpinner,
+					shrapnelDamageSpinner, moneyFarmAmountSpinner,
+					moneyFarmIntervalSpinner, freezeRatioSpinner };
+			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
+			BehaviorTogglingRadioButton[] buttons = { shootsToggleButton,
+					freezeToggleButton, moneyFarmingToggleButton,
+					bombingToggleButton };
+			behaviorTogglingButtons = new ArrayList<BehaviorTogglingRadioButton>(
+					Arrays.asList(buttons));
+			ImageCanvas[] canvases = { bulletImageCanvas, shrapnelImageCanvas,
+					towerImageCanvas };
+			imageCanvases = new ArrayList<ImageCanvas>(Arrays.asList(canvases));
 		}
 
 		@Override
 		protected JComponent makeFieldPane() {
-
-			JPanel result = new JPanel(new GridLayout(0, 1));
-
-			healthSpinner = makeAttributeSpinner();
-			costSpinner = makeAttributeSpinner();
-			damageSpinner = makeAttributeSpinner();
-			buildUpSpinner = makeAttributeSpinner();
-			result.add(healthSpinner);
-			result.add(costSpinner);
-			result.add(damageSpinner);
-			result.add(buildUpSpinner);
-			result.add(makeSizePane());
-			result.add(makeRangePane());
+			JPanel result = new JPanel(new GridLayout(0, 3));
+			for (JSpinner spinner : spinnerFields) {
+				result.add(makeFieldTile(spinner));
+			}
+			result.add(makeFieldTile(upgradeDropDown));
 			return result;
 		}
 
 		@Override
-		protected JComponent makeLabelPane() {
+		protected JComponent makePrimaryObjectGraphicPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
 
-			JPanel labels = new JPanel(new GridLayout(0, 1));
-			labels.add(new JLabel(TowerViewConstants.HEALTH_STRING));
-			labels.add(new JLabel(TowerViewConstants.COST_STRING));
-			labels.add(new JLabel(TowerViewConstants.DAMAGE_STRING));
-			labels.add(new JLabel(TowerViewConstants.BUILDUP_STRING));
-			labels.add(new JLabel(TowerViewConstants.RANGE_STRING));
-			labels.add(new JLabel(TowerViewConstants.TILE_SIZE_STRING));
-			return labels;
+			towerImageCanvas.setSize(new Dimension(
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+					ObjectEditorConstants.IMAGE_CANVAS_SIZE));
+			towerImageCanvas.setBackground(Color.BLACK);
+			result.add(towerImageCanvas, BorderLayout.CENTER);
+			towerImageButton = makeChooseGraphicsButton("Set " + objectName
+					+ " Image");
+			result.add(towerImageButton, BorderLayout.SOUTH);
+			return result;
+		}
+
+		@Override
+		protected JComponent makeSecondaryImagesGraphicPane() {
+			JPanel result = new JPanel();
+			result.setLayout(new BorderLayout());
+			result.add(makeBulletGraphicPane(), BorderLayout.WEST);
+			result.add(makeShrapnelGraphicPane(), BorderLayout.CENTER);
+			return result;
 		}
 
 	}

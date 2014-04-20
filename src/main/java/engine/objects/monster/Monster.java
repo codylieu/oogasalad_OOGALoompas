@@ -1,27 +1,36 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
+import java.util.HashSet;
+import java.util.List;
 
+import jgame.JGColor;
+import jgame.JGPoint;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
+import main.java.engine.objects.monster.jgpathfinder.*;
+import main.java.schema.MonsterSpawnSchema;
 
 
 public abstract class Monster extends TDObject {
 
 	public static final int MONSTER_CID = 1;
-	
+
 	/*public static final String HEALTH = "health";
 	public static final String SPEED = "speed";
 	public static final String MONEY_VALUE = "moneyValue";
 	public static final String ENTRANCE_LOCATION = "entrance";
 	public static final String EXIT_LOCATION = "exit";*/
-	
+
 	protected double myHealth;
 	protected double myMoveSpeed;
 	protected double myMoneyValue;
-	protected IMonsterPath myPathFinder;
+	protected JGPathfinderInterface myPathFinder;
 	protected Point2D myEntrance;
 	protected Exit myExit;
+	protected JGPath myPath;
+	protected String originalImage;
+	private MonsterSpawnSchema resurrectMonsterSchema;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
 	 */
@@ -38,21 +47,51 @@ public abstract class Monster extends TDObject {
 			//double y,
 			Point2D entrance,
 			Exit exit,
+			List<Integer> blocked,
 			double health,
 			double moveSpeed,
 			double rewardAmount,
-			String graphic) {
-	    //TODO make factory add the spread between monsters in the same wave, and remove random from initial x,y
+			String graphic,
+			MonsterSpawnSchema resurrectSchema) {
+		//TODO make factory add the spread between monsters in the same wave, and remove random from initial x,y
 		super("monster", entrance.getX() + Math.random() * 100, entrance.getY() + Math.random() * 100, MONSTER_CID, graphic);
 		myHealth = health;
 		myMoveSpeed = moveSpeed;
 		myMoneyValue = rewardAmount;
-		myPathFinder = new StraightLinePath(this, exit.getLocation());
+		myEntrance = entrance;
+		myExit = exit;
+		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic(), eng); // TODO: clean up
+		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
+		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
+		this.setSpeed(myMoveSpeed);
+		originalImage = graphic;
+		this.resurrectMonsterSchema = resurrectSchema;
+		try {
+			myPath = myPathFinder.getPath(pathEntrance, pathExit);
+		} catch (NoPossiblePathException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void move () {
-		myPathFinder.navigateMonster();
+		if (this.xspeed != 0) {
+			if (myPath.peek() != null) {
+				JGPoint waypoint = eng.getTileCoord(myPath.peek());
+
+				// TODO: refactor, quick implementation to test - jordan
+				if (((int) (x + 10) >= waypoint.x && (int) (x - 10) <= waypoint.x) &&
+						((int) (y + 10) >= waypoint.y && (int) (y - 10) <= waypoint.y)) {
+					waypoint = myPath.getNext();
+				}
+
+				xdir = Double.compare(waypoint.x, x);
+				ydir = Double.compare(waypoint.y, y);
+				setDirSpeed(xdir, ydir, myMoveSpeed);
+			} else {
+				setSpeed(0);
+			}
+		}
 	}
 
 	/**
@@ -70,13 +109,23 @@ public abstract class Monster extends TDObject {
 		myHealth -= damage;
 	}
 
-	/**
-	 * Get current coordinate in a Point2D
-	 * @return Current coordinate
-	 */
-	public Point2D getCurrentCoor() {
-		return new Point2D.Double(this.x, this.y);
+	public double getOriginalSpeed() {
+		return myMoveSpeed;
 	}
+
+	public void reduceSpeed (double speed) {
+		myMoveSpeed *= speed;
+	}
+
+	/**
+	 * Set the monster to be dead immediately, 
+	 * effectively removing it from the game
+	 */
+	public void setDead() {
+		myHealth = 0;
+		myMoneyValue = 0;
+	}
+
 
 	/**
 	 * Get money value received upon death of this monster
@@ -84,5 +133,30 @@ public abstract class Monster extends TDObject {
 	 */
 	public double getMoneyValue() {
 		return myMoneyValue;
+	}
+	
+	/**
+	 * Get the original image of this monster
+	 * 
+	 * @return original image of the monster
+	 */
+	public String getOriginalImage() {
+		return originalImage;
+	}
+
+	@Override
+	public void paint() {
+		if (myPath != null) {
+			myPath.paint(5, JGColor.pink);
+		}
+	}
+
+	/**
+	 * Get the schema that should be spawned upon the death of this monster.
+	 * Will be null if the monster has no resurrect schema to spawn upon death.
+	 * @return
+	 */
+	public MonsterSpawnSchema getResurrrectMonsterSpawnSchema() {
+		return resurrectMonsterSchema;
 	}
 }

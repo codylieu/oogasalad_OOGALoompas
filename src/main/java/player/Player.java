@@ -10,10 +10,9 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -22,23 +21,42 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 
-public class Player {
+import main.java.player.dlc.RepositoryViewer;
+import main.java.player.panels.DifficultyPanel;
+import main.java.player.panels.GameInfoPanel;
+import main.java.player.panels.HelpTextPanel;
+import main.java.player.panels.HighScoreCard;
+import main.java.player.panels.InfoPanel;
+import main.java.player.panels.TowerChooser;
+import main.java.player.panels.UnitInfoPanel;
+import main.java.player.panels.WelcomeButtonPanelListener;
+import main.java.player.util.Sound;
+import main.java.reflection.MethodAction;
+import net.lingala.zip4j.exception.ZipException;
 
-	public static final String LOAD_GAME_DATA = "Load Game Data";
-	public static final String LOAD_LIBRARY = "Browse library";
-	public static final String FILELABEL = "File";
-	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \nAdding towers uses up money. Right click on towers to sell. \nA proportion of the tower's original cost will be added to money";
+public class Player implements Serializable {
+
+	public static final int BUTTON_PADDING = 10;
+	public static final String USER_DIR = "user.dir";
+	public static final String DEFAULT_MUSIC_PATH = "src/main/resources/backgroundmusic.wav";
+
+	public static final String WELCOME_CARD = "welcomeCard";
+	public static final String GAME_CARD = "gameCard";
+	public static final String OPTION_CARD = "optionCard";
+	public static final String HELP_CARD = "helpCard";	
+	public static final String CREDITS_CARD = "creditsCard";
+	public static final String HIGH_SCORE_CARD = "highScoreCard";
+
 	public static final String DIFFICULTY = "Difficulty";
 	public static final String EASY = "Easy Mode";
 	public static final String MEDIUM = "Medium Mode";
@@ -46,9 +64,32 @@ public class Player {
 	public static final String SOUND = "Sound";
 	public static final String ON = "On";
 	public static final String OFF = "Off";
-	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\nDianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
-	public static final int BUTTON_PADDING = 10;
-	public static final String USER_DIR = "user.dir";	
+	public static final String WELCOME_LABEL_TEXT = "Ooga Loompas Tower Defense";
+	public static final String LOAD_GAME_TEXT = "Load Game Data";
+	public static final String LOAD_LIBRARY_TEXT = "Browse library";
+	public static final String FILE_LABEL = "File";
+	public static final String PLAY_PAUSE_TEXT = "Play/Pause";
+	public static final String SAVE_TEXT = "Save game state";
+	public static final String SPEED_UP_TEXT = "Speed up";
+	public static final String SLOW_DOWN_TEXT = "Slow down";
+	public static final String ADD_TOWER_TEXT = "Add Tower";
+	public static final String SOUND_ONOFF_TEXT = "Sound On/Off";
+	public static final String MUSIC_TEXT = "Music";
+	public static final String MAIN_MENU_TEXT = "Main Menu";
+	public static final String QUIT_TEXT = "Quit";
+
+	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \n"
+			+ "Adding towers uses up money. Right click on towers to sell. \n"
+			+ "A proportion of the tower's original cost will be added to money\n"
+			+ "N-click: Annihilator\n"
+			+ "I-click: InstantFreeze\n"
+			+ "L-click: LifeSaver\n"
+			+ "shift-click: Upgrade towers\n"
+			+ "R-click: Row-bomb";
+	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park"
+			+ "\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\n"
+			+ "Dianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
+
 
 	private JFrame frame;
 	private JPanel cards;
@@ -56,8 +97,13 @@ public class Player {
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
 	private TDPlayerEngine engine;
+	private Sound song;
+	private boolean soundOn;
+	private TowerChooser towerChooser;
 
-	public Player() {
+	public Player(){
+		makeGamePanel();
+		initSong();
 		makeFrame();
 		makeCards();
 		addWelcomeCard();
@@ -65,12 +111,21 @@ public class Player {
 		addHelpCard();
 		addOptionsCard();
 		addCreditsCard();
+		addHighScoreCard();
 		show();
 	}
 
-	public void initGraphics(){
+	private void initSong(){
+		try {
+			song = new Sound(DEFAULT_MUSIC_PATH);
+		} catch (LineUnavailableException | IOException
+				| UnsupportedAudioFileException e) {
+			//tell user song not found
+		}
 
+		soundOn = false;
 	}
+
 	public void showCard(String cardName){
 		cardLayout.show(cards,  cardName);
 	}
@@ -78,7 +133,7 @@ public class Player {
 	private void makeFrame() {
 		frame = new JFrame();
 
-		frame.setTitle("OOGA Loompas Tower Defense");
+		frame.setTitle(WELCOME_LABEL_TEXT);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setJMenuBar(makeMenuBar());
@@ -86,17 +141,22 @@ public class Player {
 
 	@SuppressWarnings("serial")
 	private JMenu makeFileMenu(){
-		JMenu files = new JMenu(FILELABEL);
-		files.add(new AbstractAction(LOAD_GAME_DATA){
+		JMenu files = new JMenu(FILE_LABEL);
+		files.add(new AbstractAction(LOAD_GAME_TEXT){
 			public void actionPerformed(ActionEvent e){
 				int response = fileChooser.showOpenDialog(null);
 				if(response == JFileChooser.APPROVE_OPTION){
 					File file = fileChooser.getSelectedFile();
-					System.out.println("FILE CHOSEN: " + file.getName());
+
+					try {
+						engine.loadBlueprintFile(file.getAbsolutePath());
+					} catch (ClassNotFoundException | IOException | ZipException e1) {
+						e1.printStackTrace();
+					}
 				}
 			}
 		});
-		files.add(new RepositoryViewer(LOAD_LIBRARY));
+		files.add(new RepositoryViewer(LOAD_LIBRARY_TEXT, engine));
 		return files;
 	}
 
@@ -115,11 +175,11 @@ public class Player {
 		welcomeCard.setLayout(new BoxLayout(welcomeCard, BoxLayout.Y_AXIS));
 		welcomeCard.add(makeWelcomeLabel());
 		welcomeCard.add(makeWelcomeButtonPanel());
-		cards.add(welcomeCard, "welcomeCard");
+		cards.add(welcomeCard, WELCOME_CARD);
 	}
 
 	private JLabel makeWelcomeLabel() {
-		JLabel welcomeLabel = new JLabel("Ooga Loompas Tower Defense");
+		JLabel welcomeLabel = new JLabel(WELCOME_LABEL_TEXT);
 		welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		welcomeLabel.setFont(new Font("SansSerif", Font.PLAIN, 32));
 		return welcomeLabel;
@@ -153,40 +213,33 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		gameCard.add(makeGamePanel(), constraints);
+		gameCard.add(engine, constraints);
 
-		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		gameCard.add(makeGameButtonPanel(), constraints);
 
-		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		gameCard.add(makeGameInfoPanel(), constraints);
 
-		constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		gameCard.add(makeUnitInfoPanel(), constraints);
 
-		cards.add(gameCard, "gameCard");
+
+		cards.add(gameCard, GAME_CARD);
 	}
 
 	private TDPlayerEngine makeGamePanel() {
-		/*JPanel gamePanel = new JPanel();
-		gamePanel.setPreferredSize(new Dimension(600, 400));
-		gamePanel.setBorder(BorderFactory.createLineBorder(Color.black));
-		return gamePanel;*/
-
 		engine = new TDPlayerEngine();
+		engine.setSubject(towerChooser);
 		engine.stop();
 		return engine;
 	}
-
 
 	private JPanel makeGameButtonPanel() {
 		JPanel gameButtonPanel = new JPanel();
@@ -194,76 +247,86 @@ public class Player {
 
 		JButton mainMenuButton = makeMainMenuButton();
 
-		JButton playResumeButton = new JButton("Play/Pause");
-		//playResumeButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		playResumeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				engine.toggleRunning();
-				frame.pack();
-			}
-		});
-		JButton saveButton = new JButton("Save");
-		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JButton playResumeButton = new JButton(PLAY_PAUSE_TEXT);
+		playResumeButton.addActionListener(new MethodAction (this, "populateTowerChooserAndToggleRunning"));
+
+		JButton saveButton = new JButton(SAVE_TEXT);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("save");
 				frame.pack();
 			}
 		});
-		JButton speedUpButton = new JButton("Speed Up");
-		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		speedUpButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//This should work but it doesn't
-				//System.out.println(engine.getGameSpeed());
-				//	engine.setGameSpeed(5.0);
-				System.out.println(engine.getFramePerSecond());
-				engine.setFramePerSecond(engine.getFramePerSecond()+5);
-				//System.out.println(engine.getGameSpeed());
-			}
-		});
-		JButton slowDownButton = new JButton("Slow Down");
-		//saveButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		slowDownButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//System.out.println(engine.getGameSpeed());
-				System.out.println(engine.getFramePerSecond());
-				engine.setFramePerSecond(engine.getFramePerSecond()-5);
-				//System.out.println(engine.getGameSpeed());
-			}
-		});
+
+		JButton speedUpButton = new JButton(SPEED_UP_TEXT);
+		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
+
+		JButton slowDownButton = new JButton(SLOW_DOWN_TEXT);
+		slowDownButton.addActionListener(new MethodAction (engine, "slowDown"));
+
 		JButton quitButton = makeQuitButton();
-		JButton addTowerButton = new JButton("Add Tower");
-		//addTowerButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		addTowerButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				engine.toggleAddTower();
-			}
-		});
+
+		JButton addTowerButton = new JButton(ADD_TOWER_TEXT);
+		addTowerButton.addActionListener(new MethodAction (engine, "toggleAddTower"));
+
+		JButton soundButton = new JButton(SOUND_ONOFF_TEXT);
+		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
+
+		towerChooser = new TowerChooser(engine);
+		engine.setSubject(towerChooser);//This probably does not belong here
+
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
 		gameButtonPanel.add(speedUpButton);
 		gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
+		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
+		gameButtonPanel.add(towerChooser);
 		return gameButtonPanel;
+	}
+
+
+
+	public void toggleSound(){
+		soundOn = !soundOn;
+
+		if(soundOn) {
+			song.loop();
+		}
+		else {
+			song.stop();
+		}
+	}
+
+	public void populateTowerChooserAndToggleRunning() {
+		towerChooser.getTowerNames();
+		engine.toggleRunning();
 	}
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubjectState(engine);
+		gameInfoPanel.setSubject(engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubjectState(engine);
+		unitInfoPanel.setSubject(engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
 
+	//need to add when game ends to route to here, also need to work on saving the scores 
+	private void addHighScoreCard(){
+		HighScoreCard highScoreCard = new HighScoreCard();
+		highScoreCard.setSubject(engine);
+		engine.register(highScoreCard);
+		cards.add(highScoreCard, HIGH_SCORE_CARD);
+	}
+	
 	private void addOptionsCard() {
 		JPanel optionCard = new JPanel();
 		optionCard.setLayout(new GridBagLayout());
@@ -278,222 +341,107 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		optionCard.add(makeDifficultyInfoPanel(), constraints);
+		optionCard.add(new InfoPanel(DIFFICULTY), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		optionCard.add(makeDifficultyRadioButtonPanel(), constraints);
+		optionCard.add(new DifficultyPanel(engine), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		optionCard.add(makeSoundInfoPanel(), constraints);
+		optionCard.add(new InfoPanel(SOUND), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 4;
 		optionCard.add(makeSoundRadioButtonPanel(), constraints);
 
-		cards.add(optionCard, "optionCard");
-	}
-
-	private JPanel makeDifficultyInfoPanel(){
-		JPanel difficultyInfoPanel = new JPanel();
-		JLabel difficultyInfoLabel = new JLabel(DIFFICULTY);
-		difficultyInfoPanel.add(difficultyInfoLabel);
-		return difficultyInfoPanel;
-	}
-
-	private JPanel makeDifficultyRadioButtonPanel(){
-		JPanel difficultyRadioButtonPanel = new JPanel();
-
-		//need gameengine to agree that default is easy mode
-		JRadioButton easyButton = new JRadioButton(EASY);
-		easyButton.setActionCommand(EASY);
-		easyButton.setMnemonic(KeyEvent.VK_E);
-		easyButton.setSelected(true);
-
-		JRadioButton mediumButton = new JRadioButton(MEDIUM);
-		mediumButton.setActionCommand(MEDIUM);
-		mediumButton.setMnemonic(KeyEvent.VK_M);
-
-		JRadioButton hardButton = new JRadioButton(HARD);
-		hardButton.setActionCommand(HARD);
-		hardButton.setMnemonic(KeyEvent.VK_H);
-
-		ButtonGroup difficultyRadioButtonGroup = new ButtonGroup();
-		difficultyRadioButtonGroup.add(easyButton);
-		difficultyRadioButtonGroup.add(mediumButton);
-		difficultyRadioButtonGroup.add(hardButton);
-
-		easyButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("easy");
-				frame.pack();
-			}
-		});
-
-		mediumButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("medium");
-				frame.pack();
-			}
-		});
-
-		hardButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("hard");
-				frame.pack();
-			}
-		});
-
-		difficultyRadioButtonPanel.add(easyButton);
-		difficultyRadioButtonPanel.add(mediumButton);
-		difficultyRadioButtonPanel.add(hardButton);
-		return difficultyRadioButtonPanel;
-	}
-
-	private JPanel makeSoundInfoPanel(){
-		JPanel soundInfoPanel = new JPanel();
-		JLabel soundInfoLabel = new JLabel(SOUND);
-		soundInfoPanel.add(soundInfoLabel);
-		return soundInfoPanel;
-	}
-
-
-	private void playMusic() throws LineUnavailableException, IOException, UnsupportedAudioFileException{
-		Sound song = new Sound("src/main/resources/fox.wav");
-		song.loop();
+		cards.add(optionCard, OPTION_CARD);
 	}
 
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
 
-		JRadioButton onButton = new JRadioButton(ON);
-		onButton.setActionCommand(ON);
-		onButton.setMnemonic(KeyEvent.VK_O);
+		JCheckBox soundCheckBox = new JCheckBox(MUSIC_TEXT);
+		soundCheckBox.addActionListener(new MethodAction(this, "toggleSound"));
+
+		soundRadioButtonPanel.add(soundCheckBox);
+
+		return soundRadioButtonPanel;
+	}
 
 
-		JRadioButton offButton = new JRadioButton(OFF);
-		offButton.setActionCommand(OFF);
-		offButton.setMnemonic(KeyEvent.VK_F);
-		offButton.setSelected(true);
+	private void addHelpCard() {
+		JPanel helpCard = new JPanel();
+		helpCard.setLayout(new GridBagLayout());
 
-		ButtonGroup soundRadioButtonGroup = new ButtonGroup();
-		soundRadioButtonGroup.add(onButton);
-		soundRadioButtonGroup.add(offButton);
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		helpCard.add(makeMainMenuButton(), constraints);
 
-		onButton.addActionListener(new ActionListener() {
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		helpCard.add(new HelpTextPanel(), constraints);
+
+		cards.add(helpCard, HELP_CARD);
+	}
+
+	private void addCreditsCard() {
+		JTextArea creditsArea = new JTextArea(10,40);
+		creditsArea.setEditable(false);
+		creditsArea.append(CREDITS);
+
+		JPanel creditsCard = new JPanel();
+		creditsCard.setLayout(new GridBagLayout());
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 1;
+		creditsCard.add(makeMainMenuButton(), constraints);
+
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		creditsCard.add(creditsArea, constraints);
+
+		cards.add(creditsCard, CREDITS_CARD);
+	}
+
+	private JButton makeMainMenuButton() {
+		JButton mainMenuButton = new JButton(MAIN_MENU_TEXT);
+		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					playMusic();
-				} catch (LineUnavailableException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				} catch (UnsupportedAudioFileException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				frame.pack();
-			}});
-
-		offButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				engine.stopSound();
+				engine.toggleRunning();
+				cardLayout.show(cards, WELCOME_CARD);
 				frame.pack();
 			}
 		});
 
-		soundRadioButtonPanel.add(onButton);
-		soundRadioButtonPanel.add(offButton);
-		return soundRadioButtonPanel;
-		}
-
-		private void addHelpCard() {
-			JPanel helpCard = new JPanel();
-			helpCard.setLayout(new GridBagLayout());
-
-			GridBagConstraints constraints = new GridBagConstraints();
-			constraints.fill = GridBagConstraints.HORIZONTAL;
-			constraints.gridx = 0;
-			constraints.gridy = 1;
-			helpCard.add(makeMainMenuButton(), constraints);
-
-			constraints.fill = GridBagConstraints.HORIZONTAL;
-			constraints.gridx = 0;
-			constraints.gridy = 0;
-			helpCard.add(makeHelpInfoPanel(), constraints);
-
-			cards.add(helpCard, "helpCard");
-		}
-
-		private JPanel makeHelpInfoPanel(){
-			JPanel helpInfoPanel = new JPanel();
-			JTextArea helpArea = new JTextArea(10,40);
-			helpArea.setEditable(false);
-			helpArea.append(HELP);
-			helpInfoPanel.add(helpArea, BorderLayout.CENTER);
-			return helpInfoPanel;
-		}
-		private void addCreditsCard() {
-			JTextArea creditsArea = new JTextArea(10,40);
-			creditsArea.setEditable(false);
-			creditsArea.append(CREDITS);
-
-			JPanel creditsCard = new JPanel();
-			creditsCard.setLayout(new GridBagLayout());
-
-			GridBagConstraints constraints = new GridBagConstraints();
-			constraints.fill = GridBagConstraints.HORIZONTAL;
-			constraints.gridx = 0;
-			constraints.gridy = 1;
-			creditsCard.add(makeMainMenuButton(), constraints);
-
-			constraints.fill = GridBagConstraints.HORIZONTAL;
-			constraints.gridx = 0;
-			constraints.gridy = 0;
-			creditsCard.add(creditsArea, constraints);
-
-			cards.add(creditsCard, "creditsCard");
-		}
-
-		private JButton makeMainMenuButton() {
-			JButton mainMenuButton = new JButton("Main Menu");
-			//mainMenuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-			mainMenuButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					cardLayout.show(cards, "welcomeCard");
-					frame.pack();
-				}
-			});
-
-			return mainMenuButton;
-		}
-
-		private JButton makeQuitButton(){
-			JButton exitButton = new JButton("Quit");
-			exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-			exitButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
-					frame.pack();
-				}
-			});
-			return exitButton;
-		}
-
-		private void show() {
-			cardLayout.show(cards, "welcomeCard");
-			frame.getContentPane().add(cards, BorderLayout.CENTER);
-			frame.pack();
-			frame.setVisible(true);
-		}
-
-		public static void main(String[] args) {
-			new Player();
-		}
+		return mainMenuButton;
 	}
+
+	private JButton makeQuitButton(){
+		JButton exitButton = new JButton(QUIT_TEXT);
+		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		exitButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+				frame.pack();
+			}
+		});
+		return exitButton;
+	}
+
+	private void show() {
+		cardLayout.show(cards, WELCOME_CARD);
+		frame.getContentPane().add(cards, BorderLayout.CENTER);
+		frame.pack();
+		frame.setVisible(true);
+	}
+}

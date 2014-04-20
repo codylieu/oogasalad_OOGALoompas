@@ -10,8 +10,9 @@ import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.schema.GameBlueprint;
 import main.java.schema.MonsterSpawnSchema;
-import main.java.schema.TDObjectSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.WaveSpawnSchema;
 
 
@@ -21,7 +22,7 @@ public class LevelManager {
     private List<WaveSpawnSchema> myAllWaves;
     private TDObjectFactory myFactory;
     private Point2D entrance;
-    private Point2D exit;
+    private Exit exit;
     private Player myPlayer;
 
     /**
@@ -52,20 +53,43 @@ public class LevelManager {
         Collection<Monster> spawnedMonsters = new ArrayList<Monster>();
         for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave)
                 .getMonsterSpawnSchemas()) {
-            for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-                Exit monsterExit = new Exit(exit.getX(), exit.getY(), this);
-                Monster newlyAdded =
-                        myFactory.placeMonster(entrance, monsterExit,
-                                               (String) spawnSchema.getMonsterSchema()
-                                                       .getAttributesMap().get(TDObjectSchema.NAME));
-                spawnedMonsters.add(newlyAdded);
-            }
+            spawnedMonsters.addAll(spawnMonsterSpawnSchema(spawnSchema));
             if (++myCurrentWave >= myAllWaves.size()) {
                 myCurrentWave = 0;
             }
         }
         return spawnedMonsters;
     }
+
+    public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema)
+			throws MonsterCreationFailureException {
+		return spawnMonsterSpawnSchema(spawnSchema, entrance);
+	}
+    
+    
+	/**
+	 * Spawn a particular spawn schema. This can be called to spawn a monsters
+	 * schema out of sync with wave spawns.
+	 *
+	 * Return list of newly spawned monsters.
+	 * 
+	 * @param spawnSchema
+	 * @return
+	 * @throws MonsterCreationFailureException
+	 */
+	public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema, Point2D newEntrance)
+			throws MonsterCreationFailureException {
+		List<Monster> spawnedMonsters = new ArrayList<Monster>();
+		for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
+
+		    Monster newlyAdded =
+		            myFactory.placeMonster(newEntrance, exit,
+		                                   (String) spawnSchema.getMonsterSchema()
+		                                           .getAttributesMap().get(TDObjectSchema.NAME));
+		    spawnedMonsters.add(newlyAdded);
+		}
+		return spawnedMonsters;
+	}
 
     /**
      * Returns whether or not all waves completed.
@@ -93,7 +117,8 @@ public class LevelManager {
      * @param y
      */
     public void setExit (double x, double y) {
-        this.exit = new Point2D.Double(x, y);
+//        this.exit = new Point2D.Double(x, y);
+    	this.exit = new Exit(x, y, this);
     }
 
     /**
@@ -131,6 +156,32 @@ public class LevelManager {
     public void registerPlayer (Player player) {
         myPlayer = player;
 
+    }
+    
+    /**
+     * Get the exit for the current level
+     * 
+     * @return exit object of the current level
+     */
+    public Exit getExit() {
+    	return exit;
+    }
+
+    /**
+     * Do a clean load of the waves for the game, and reset the initial wave to start at in the new
+     * list (indexed from 0).
+     * Note: this will remove all current waves queued in the level manager.
+     * 
+     * @param waveSchemas list of wave spawn schemas
+     * @param initialWave
+     */
+    public void cleanLoadWaveSchemas (List<WaveSpawnSchema> waveSchemas,
+                                      int initialWave) {
+        myAllWaves.clear();
+        for (WaveSpawnSchema wave : waveSchemas) {
+            addNewWave(wave);
+        }
+        myCurrentWave = initialWave;
     }
 
 }

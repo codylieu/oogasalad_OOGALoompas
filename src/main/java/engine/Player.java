@@ -20,7 +20,7 @@ public class Player {
 	}
 	
 	/**
-	 * Constructor to be used in the loadGameSchemas method in Model
+	 * Constructor to be used in the loadGameBlueprint method in Model
 	 * @param money
 	 * @param lives
 	 */
@@ -52,7 +52,12 @@ public class Player {
 		return this.money;
 	}
 	
-	public void addMoney(double value) {
+	/**
+	 * Change player's money by this value.
+	 * Positive for increasing, negative for decreasing.
+	 * @param value
+	 */
+	public void changeMoney(double value) {
 		this.money+=value;
 	}
 	
@@ -63,6 +68,10 @@ public class Player {
 	
 	public void decrementLives(){
 	    lives--;
+	}
+	
+	public void incrementLives() {
+		lives++;
 	}
 
 	public double getScore() {

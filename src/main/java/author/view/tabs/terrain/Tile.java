@@ -1,68 +1,119 @@
 package main.java.author.view.tabs.terrain;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.File;
-import java.io.IOException;
+import java.io.Serializable;
 
-import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+public class Tile implements Serializable {
+	private int myRow;          // 0 - NUM_ROWS
+	private int myColumn;       // 0 - NUM_COLS
+	private int myMapXIndex;    // image x (column) index in tilemap
+	private int myMapYIndex;    // image y (row) index in tilemap
+	private String myTileMapFileName; // tilemap name
+	private int myPassIndex; // passability index to specify what can traverse the Tile
 
-public class Tile {
-	
-	private int myRow;    // 0 - NUM_ROWS
-	private int myColumn; // 0 - NUM_COLS
-	private Color myColor;
-	private int myPassIndex;
-	private boolean isSelected;
-	private Image myImg;
-	
-	static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
+	public static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
-	public Tile(int row, int column, Color color) {
-	    myRow = row;
-	    myColumn = column;
-	    myColor = color;
+	private transient Image myImg;
+
+	public Tile(int row, int column) {
+		myRow = row;
+		myColumn = column;
 	}
-	
-	public Color getColor() {
-		return myColor;
-	}
-	
-	public void setColor(Color color) {
-		myColor = color;
-	}
-	
+
+	/**
+	 * Specifies the image of the tile on the canvas
+	 * @return the image representing the tile
+	 */
 	public Image getImage() {
 		return myImg;
 	}
-	
+
+	/**
+	 * Sets the image of the current tile
+	 */
+	public void setImage(Image img) {
+		myImg = img;
+	}
+
+	/**
+	 * Specifies the row of the the tile on the canvas
+	 * @return the row of the tile on the canvas
+	 */
 	public int getRow() {
 		return myRow;
 	}
-	
+
+	/**
+	 * Specifies the column of the tile on the canvas
+	 * @return the column of the tile on the canvas
+	 */
 	public int getCol() {
 		return myColumn;
 	}
-	
+
+	/**
+	 * Specifies the passability index of the tile, different
+	 * options are specified in TerrainAttribute.java
+	 * @return an index representing the method of available travel
+	 *         on the tile
+	 */
 	public int getPassIndex() {
 		return myPassIndex;
 	}
-	
+
+	/**
+	 * Sets the passability index of the tile, different options are
+	 * specified in TerrainAttribute.java
+	 */
 	public void setPassIndex(int index) {
 		myPassIndex = index;
 	}
-	
-	protected void setImage(Image img) {
-		myImg = img;
+
+	/**
+	 * Obtains the column index of the image that is being used
+	 * to represent this Tile within the map of the TileDisplay
+	 */
+	public int getMyMapXIndex() {
+		return myMapXIndex;
 	}
-	
+
+	/**
+	 * Sets the column index of the image that is being used
+	 * to represent this Tile within the map of the TileDisplay
+	 */
+	public void setMyMapXIndex(int myMapXIndex) {
+		this.myMapXIndex = myMapXIndex;
+	}
+
+	/**
+	 * Obtains the row index of the image that is being used
+	 * to represent this Tile within the map of the TileDisplay
+	 */
+	public int getMyMapYIndex() {
+		return myMapYIndex;
+	}
+
+	/**
+	 * Sets the row index of the image that is being used
+	 * to represent this Tile within the map of the TileDisplay
+	 */
+	public void setMyMapYIndex(int myMapYIndex) {
+		this.myMapYIndex = myMapYIndex;
+	}
+
+	/**
+	 * Obtains the resource that holds the image being used to represent
+	 * the Tile
+	 */
+	public String getMyTileMapFileName() {
+		return myTileMapFileName;
+	}
+
+	/**
+	 * Sets the resource that holds the image being used to represent the
+	 * Tile
+	 */
+	public void setMyTileMapFileName(String myTileMapFileName) {
+		this.myTileMapFileName = myTileMapFileName;
+	}
 }

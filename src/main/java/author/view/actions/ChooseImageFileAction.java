@@ -9,7 +9,7 @@ import javax.swing.JFileChooser;
 public class ChooseImageFileAction extends AbstractAction{
 	private JFileChooser fc;
 	
-	public ChooseImageFileAction(String id,) {
+	public ChooseImageFileAction(String id) {
 		fc = new JFileChooser();
 	}
 	
@@ -18,12 +18,10 @@ public class ChooseImageFileAction extends AbstractAction{
 		System.out.println("Action [" + e.getActionCommand()
 				+ "] performed!");
 		fc.setDialogTitle("Choose your file");
-		int returnVal = fc.showOpenDialog(this);
+		int returnVal = fc.showDialog(null, "Open file");
 		fc.showOpenDialog(null);
 		File file = fc.getSelectedFile();
-		try {
-			
-		}
+		
 	}
 	
 	

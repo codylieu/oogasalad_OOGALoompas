@@ -1,31 +1,21 @@
 package main.java.author.controller.tabbed_controllers;
 
+import java.util.List;
+
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
-import main.java.schema.SimpleTowerSchema;
+import main.java.schema.tdobjects.TowerSchema;
 
 public class TowerController extends TabController {
-	
 
 	public TowerController(MainController superController) {
 		super(superController);
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public boolean isTabValid() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-	
+	public void addTowers(List<TowerSchema> towerSchemas) {
+		mySuperController.addTowersToModel(towerSchemas);
 
-	public void addTower(SimpleTowerSchema towerSchema) {
-		mySuperController.addTowerToModel(towerSchema);
 	}
 
-	@Override
-	public void fireErrorPopUp() {
-		// TODO Auto-generated method stub
-		
-	}
 }

@@ -1,9 +1,8 @@
 package main.java.author.view.tabs.terrain;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JTabbedPane;
 
@@ -13,60 +12,40 @@ import javax.swing.JTabbedPane;
  *
  */
 public class TileSelectionManager {
-
 	private Canvas myCanvas;
-	private ResourceBundle myBitmapBundle;
-	private TileEditingPanel myTileEditPanel;
 	private List<TileDisplay> myTileDisplays;
-	private JTabbedPane tileDisplayTab;
+	private JTabbedPane myTileDisplayTab;
 	
 	public TileSelectionManager(Canvas canvas) {
 		myCanvas = canvas;
-		initTileDisplays();
-		myTileEditPanel = new TileEditingPanel(this);
+        myTileDisplays = new ArrayList<TileDisplay>();
+        myTileDisplayTab = new JTabbedPane();
 	}
 	
-	private void initTileDisplays() {
-		myTileDisplays = new ArrayList<TileDisplay>();
-		tileDisplayTab = new JTabbedPane();
-		myBitmapBundle = ResourceBundle.getBundle("main.resources.author.images.BitmapImages");
-		Enumeration <String> bitmaps = myBitmapBundle.getKeys();
-		
-		while (bitmaps.hasMoreElements()) {
-			String bmp = bitmaps.nextElement();
-			String value = myBitmapBundle.getString(bmp);
-			try {
-				Integer i = Integer.parseInt(value);
-				TileDisplay currTileDisp = new TileDisplay(this, bmp, i);
-				myTileDisplays.add(currTileDisp);
-				tileDisplayTab.addTab(trimBitmapString(bmp), currTileDisp.getTileScrollPane());
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
-		}	
-	}
-	
-	private String trimBitmapString(String bitmapStr) {
-		int index = bitmapStr.indexOf(".bmp");
-		return (index != -1) ? bitmapStr.substring(0, index) : bitmapStr;
-		
+	protected void addTileDisplay(File mapFile) {
+		TileDisplay currTileDisp = new TileDisplay(this, mapFile);
+		myTileDisplays.add(currTileDisp);
+		myTileDisplayTab.addTab(mapFile.getName(), currTileDisp.getTileScrollPane());
 	}
 	
 	public JTabbedPane getTileDisplayTabs() {
-		return tileDisplayTab;
+		return myTileDisplayTab;
 	}
 	
-	public TileDisplay getTileDisplay() {
-		int index = tileDisplayTab.getSelectedIndex();
+	public TileDisplay getCurrentTileDisplay() {
+		int index = myTileDisplayTab.getSelectedIndex();
 		return myTileDisplays.get(index);
 	}
+
+    public List<TileDisplay> getAllTileDisplays() {
+        return myTileDisplays; // TODO: make unmodifiable?
+    }
 	
-	public TileEditingPanel getTileEditPanel() {
-		return myTileEditPanel;
-	}
-	
+    public void setCanvas(Canvas canvas) {
+    	myCanvas = canvas;
+    }
+    
 	public Canvas getCanvas() {
 		return myCanvas;
 	}
-
 }

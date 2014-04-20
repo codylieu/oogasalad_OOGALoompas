@@ -1,63 +1,85 @@
 package main.java.engine.map;
 
 import jgame.impl.JGEngineInterface;
+import main.java.schema.map.GameMapSchema;
+import main.java.schema.map.TileMapSchema;
+import main.java.schema.map.TileSchema;
+
+import java.io.Serializable;
+import java.util.*;
 
 public class TDMap {
-    private static final int xOffset = 0;
-    private static final int yOffset = 0;
-    private static final int tileXSize = 32;
-    private static final int tileYSize = 32;
-    private static final int skipX = 1;
-    private static final int skipY = 1;
+    private static final int X_OFFSET = 0;
+    private static final int Y_OFFSET = 0;
+    private static final int X_SKIP = 0;
+    private static final int Y_SKIP = 0;
 
     private static final String tileImageName = "tile";
     private static final String tileImagePrefix = "t";
     private static final int TILE_CID = 0;
     private static final String IMG_OP = "-";
 
-    private String tileMapName;
-    private String tileMapFile;
-    private int numXTiles;
-    private int numYTiles;
-    private String[][] tileMap;
+    private List<TileSchema> tileSchemas;
+    private List<TileMapSchema> tileMapSchemas;
+    private Map<String, TileMap> tileMaps;
+    private Set<String> definedTiles;
 
-    /**
-     * Create a TDMap object which holds the information needed to initialize the tiles of the engine.
-     *
-     * @param tileMapName   Name of the tile map
-     * @param tileMapFile   Name of the file that contains the tile map
-     * @param numXTiles     Number of X tiles across the tile map
-     * @param numYTiles     Number of y tiles down the tile map
-     * @param tileMap       2D string array the size of the map with each element containing the id of the tile
-     *                      that is mapped there
-     */
-    public TDMap(String tileMapName, String tileMapFile, int numXTiles, int numYTiles, String[][] tileMap) {
-        this.tileMapName = tileMapName;
-        this.tileMapFile = tileMapFile;
-        this.numXTiles = numXTiles;
-        this.numYTiles = numYTiles;
-        this.tileMap = tileMap;
-    }
+    public TDMap(JGEngineInterface engine, GameMapSchema gameMapSchema) {
+        Map<String, Serializable> gameMapAttributes = gameMapSchema.getAttributesMap();
+        tileSchemas = (List<TileSchema>) gameMapAttributes.get(GameMapSchema.MY_TILES);
+        tileMapSchemas = (List<TileMapSchema>) gameMapAttributes.get(GameMapSchema.MY_TILEMAPS);
+        tileMaps = new HashMap<>();
+        definedTiles = new HashSet<>();
 
-    /**
-     * Loads the map into the specified engine.
-     *
-     * @param engine The engine for the map to be loaded into
-     */
-    public void loadIntoGame(JGEngineInterface engine) {
-        engine.defineImageMap(tileMapName, tileMapFile, xOffset, yOffset, tileXSize, tileYSize, skipX, skipY);
+        // Load tilemaps used for this map
+        for (TileMapSchema tms : tileMapSchemas) {
+            TileMap tileMap = new TileMap(tms);
+            tileMaps.put(tileMap.name, tileMap);
 
-        for (int i = 0; i < numXTiles; i++) {
-            for (int j = 0; j < numYTiles; j++) {
-                int num = i * numXTiles + j;
-                engine.defineImage(tileImageName + num, tileImagePrefix + num, TILE_CID, tileMapName, num, IMG_OP);
-            }
+            String fixedName = tileMap.name.replace("\\", "//");
+            engine.defineImageMap(tileMap.name, fixedName, X_OFFSET, Y_OFFSET,
+                    tileMap.pixelSize, tileMap.pixelSize, X_SKIP, Y_SKIP);
         }
 
-        for (int i = 0; i < engine.pfTilesX(); i++) {
-            for (int j = 0; j < engine.pfTilesY(); j++) {
-                engine.setTile(i, j, tileMap[i][j]);
+        // Load in tiles to engine
+        for (TileSchema ts : tileSchemas) {
+            Map<String, Serializable> tsAttributeMap = ts.getAttributesMap();
+            String tileMapFileName = (String) tsAttributeMap.get(TileSchema.TILEMAP_FILE_NAME);
+
+            if (tileMaps.get(tileMapFileName) == null) {
+                continue; // TODO: fix
             }
+
+            int tileRow = (Integer) tsAttributeMap.get(TileSchema.CANVAS_ROW);
+            int tileCol = (Integer) tsAttributeMap.get(TileSchema.CANVAS_COL);
+            int tileMapRow = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_ROW);
+            int tileMapCol = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_COL);
+            int tileCID = (Integer) tsAttributeMap.get(TileSchema.TILE_CID);
+            int tileIndex = tileMapRow * tileMaps.get(tileMapFileName).numCols + tileMapCol;
+
+            String tileName = tileMapFileName + tileMapCol + tileMapRow;
+
+            if (!definedTiles.contains(tileName)) {
+                engine.defineImage(tileName, tileMapRow + tileMapCol + "", tileCID, tileMapFileName, tileIndex, "-");
+                definedTiles.add(tileName);
+            }
+
+            engine.setTile(tileCol, tileRow, tileMapRow + tileMapCol + "");
+        }
+    }
+
+    private class TileMap {
+        private String name;
+        private int pixelSize;
+        private int numRows;
+        private int numCols;
+
+        public TileMap(TileMapSchema tileMapSchema) {
+            Map<String, Serializable> tmsAttributesMap = tileMapSchema.getAttributesMap();
+            name = (String) tmsAttributesMap.get(TileMapSchema.TILEMAP_FILE_NAME);
+            pixelSize = (Integer) tmsAttributesMap.get(TileMapSchema.PIXEL_SIZE);
+            numRows = (Integer) tmsAttributesMap.get(TileMapSchema.NUM_ROWS);
+            numCols = (Integer) tmsAttributesMap.get(TileMapSchema.NUM_COLS);
         }
     }
 }
