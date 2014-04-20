@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -43,7 +44,7 @@ import main.java.player.util.Sound;
 import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
-public class Player {
+public class Player implements Serializable {
 
 	public static final int BUTTON_PADDING = 10;
 	public static final String USER_DIR = "user.dir";
