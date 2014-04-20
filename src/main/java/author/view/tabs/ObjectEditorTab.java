@@ -60,6 +60,7 @@ import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.components.BehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.author.view.global_constants.ObjectEditorConstants;
+import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 

@@ -1,4 +1,4 @@
-package main.java.author.view;
+package main.java.author.view.tabs.item;
 
 import java.util.List;
 
@@ -11,12 +11,10 @@ public class ItemController extends TabController{
 
 	public ItemController(MainController superController) {
 		super(superController);
-
 	}
 
 	public void addItems(List<ItemSchema> itemSchemas) {
 		mySuperController.addItemsToModel(itemSchemas);
-
 	}
 	
 }

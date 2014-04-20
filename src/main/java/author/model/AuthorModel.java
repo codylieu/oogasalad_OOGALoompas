@@ -27,6 +27,11 @@ public class AuthorModel {
 		myGameBlueprint.setMyMonsterSchemas(enemySchema);
 	}
 
+	public void addItems(List<ItemSchema> itemSchemas) {
+		myGameBlueprint.setMyItemSchemas(itemSchemas);
+		
+	}
+	
 	public void addGameSettings(GameSchema gameSchema) {
 		myGameBlueprint.setMyGameScenario(gameSchema);
 	}
@@ -51,11 +56,6 @@ public class AuthorModel {
 	
 	public GameBlueprint getBlueprint() {
 		return myGameBlueprint;
-	}
-
-	public void addItems(List<ItemSchema> itemSchemas) {
-		myGameBlueprint.setMyItemSchemas(itemSchemas);
-		
 	}
 
 }
