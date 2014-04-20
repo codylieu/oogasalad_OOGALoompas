@@ -109,6 +109,19 @@ public abstract class ObjectEditorTab extends EditorTab {
 			showInvalidObjectNameDialog();
 		}
 	}
+	
+	protected Serializable addCastToAttribute(Serializable attribute) {
+		boolean shouldCast = false;
+		if (attribute instanceof Integer) {
+			shouldCast = true;
+		}
+		
+		Double doubleAttr = null;
+		if (shouldCast) {
+			doubleAttr = Double.valueOf(((Integer) attribute).intValue());
+		}
+		return shouldCast ? doubleAttr : attribute;	
+	}
 
 	protected void addListeners() {
 

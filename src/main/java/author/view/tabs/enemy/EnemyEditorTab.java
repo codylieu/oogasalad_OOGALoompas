@@ -60,17 +60,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
 			Map<String, Serializable> monsterAttributes = monster.getAttributesMap();
 			
-			monsterSchema.addAttribute(SimpleMonsterSchema.HEALTH, (double) healthSpinner.getValue());
-			monsterSchema.addAttribute(SimpleMonsterSchema.SPEED, (double) speedSpinner.getValue());
-			monsterSchema.addAttribute(SimpleMonsterSchema.DAMAGE, (double) damageSpinner.getValue());
-			monsterSchema.addAttribute(SimpleMonsterSchema.REWARD, (double) rewardSpinner.getValue());
-			monsterSchema.addAttribute(SimpleMonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);
-			monsterSchema.addAttribute(SimpleMonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
-			
-//			for (String attribute : monsterAttributes.keySet()) {
-//				monsterSchema.addAttribute(attribute, monsterAttributes.get(attribute));
-//			}
-			
+			for (String attribute : monsterAttributes.keySet()) {
+				Serializable castedAttribute = addCastToAttribute(monsterAttributes.get(attribute));	
+				monsterSchema.addAttribute(attribute, castedAttribute);
+			}
+			monsterSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
 			monsterSchemas.add(monsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
