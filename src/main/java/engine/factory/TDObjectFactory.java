@@ -1,7 +1,6 @@
 package main.java.engine.factory;
 
 import java.awt.geom.Point2D;
-import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -92,7 +91,7 @@ public class TDObjectFactory {
     	Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(itemName);
-            schema.addAttribute(ItemSchema.LOCATION, (Serializable) tileOrigin);
+            schema.addAttribute(ItemSchema.LOCATION, tileOrigin);
             Object[] itemParameters = { schema.getAttributesMap() };
             return (TDItem) placeObject(schema.getMyConcreteType(), itemParameters);
         }
@@ -114,7 +113,7 @@ public class TDObjectFactory {
         Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
-            schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
+            schema.addAttribute(TowerSchema.LOCATION, tileOrigin);
             Object[] towerParameters = { schema.getAttributesMap() };
 
             // return new MoneyTower(new ShootingTower((BaseTower)
@@ -156,12 +155,12 @@ public class TDObjectFactory {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
 
-            schema.addAttribute(MonsterSchema.ENTRANCE_LOCATION, (Serializable) entrance);
+            schema.addAttribute(MonsterSchema.ENTRANCE_LOCATION, entrance);
             schema.addAttribute(MonsterSchema.EXIT_LOCATION, exit);
 
             List<Integer> blocked = new ArrayList<Integer>();
             blocked.add(2); // TODO, change -- provided by factory
-            schema.addAttribute(MonsterSchema.BLOCKED_TILES, (Serializable) blocked);
+            schema.addAttribute(MonsterSchema.BLOCKED_TILES, blocked);
             Object[] monsterParameters = { schema.getAttributesMap() };
 
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);

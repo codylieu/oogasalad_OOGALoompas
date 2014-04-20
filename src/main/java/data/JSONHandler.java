@@ -75,11 +75,17 @@ public class JSONHandler {
 		TestObject t = new TestObject();
 		t.populateDefaultAttributes("testObjectName");
 		
+		TestObject2 t2 = new TestObject2("t2");
+		
 		JSONHandler j = new JSONHandler();
+		//Test for blueprint
 		j.serializeObjectToJSON("testobjectJSON",testBlueprint);
 		GameBlueprint g = (GameBlueprint) (j.deserializeObjectFromJSON((FILE_PATH + "testobjectJSON.json"), testBlueprint));
 		j.serializeObjectToJSON("testobjectJSON2",g);
-		System.out.println((testBlueprint.getMyGameScenario().getAttributesMap()).equals(g.getMyGameScenario().getAttributesMap()));
+		System.out.println((testBlueprint.getMyGameScenario().getAttributesMap()).equals(testBlueprint.getMyGameScenario().getAttributesMap()));
+
+		//Test for JGObjects
+		j.serializeObjectToJSON("testJGObject", t2);
 	}
 	
 }
