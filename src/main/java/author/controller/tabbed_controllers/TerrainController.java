@@ -8,7 +8,6 @@ public class TerrainController extends TabController {
 
 	public TerrainController(MainController superController) {
 		super(superController);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void addMaps(GameMapSchema gameMap) {

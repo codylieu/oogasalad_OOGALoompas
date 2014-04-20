@@ -17,6 +17,7 @@ import java.util.Map;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
+import main.java.author.controller.tabbed_controllers.ItemController;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;

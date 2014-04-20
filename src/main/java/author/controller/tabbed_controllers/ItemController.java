@@ -1,4 +1,4 @@
-package main.java.author.view.tabs.item;
+package main.java.author.controller.tabbed_controllers;
 
 import java.util.List;
 

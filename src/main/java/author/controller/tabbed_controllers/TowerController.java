@@ -10,7 +10,6 @@ public class TowerController extends TabController {
 
 	public TowerController(MainController superController) {
 		super(superController);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void addTowers(List<TowerSchema> towerSchemas) {

@@ -14,7 +14,6 @@ public class WaveController extends TabController {
 
 	public WaveController(MainController superController) {
 		super(superController);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void addWaves(List<WaveSpawnSchema> waves) {

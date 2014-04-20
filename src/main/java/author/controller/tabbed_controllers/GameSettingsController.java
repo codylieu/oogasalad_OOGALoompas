@@ -9,7 +9,6 @@ public class GameSettingsController extends TabController {
 
 	public GameSettingsController(MainController superController) {
 		super(superController);
-		// TODO Auto-generated constructor stub
 	}
 
 	public void addGameSettings(GameSchema gameSchema) {
