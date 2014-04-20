@@ -41,6 +41,7 @@ public class AuthoringView extends JFrame {
 	private static final String GAME_SETTINGS_EDITOR_STRING = "Game Settings Editor";
 	private static final String TOWER_EDITOR_STRING = "Tower Editor";
 	private static final String ENEMY_EDITOR_STRING = "Enemy Editor";
+	private static final String ITEM_EDITOR_STRING = "Item Editor";
 	private static final String TERRAIN_EDITOR_STRING = "Terrain Editor";
 	private static final String WAVE_EDITOR_STRING = "Wave Editor";
 
@@ -60,11 +61,14 @@ public class AuthoringView extends JFrame {
 		final GameSettingsController gameSettingsController = new GameSettingsController(
 				myController);
 		final TerrainController terrainController = new TerrainController(myController);
+		final ItemController itemController = new ItemController(myController);
+		
 		myController.addTabController(enemyController);
 		myController.addTabController(towerController);
 		myController.addTabController(waveController);
 		myController.addTabController(gameSettingsController);
 		myController.addTabController(terrainController);
+		myController.addTabController(itemController);
 
 		tabbedPane
 				.add(GAME_SETTINGS_EDITOR_STRING,
@@ -76,6 +80,9 @@ public class AuthoringView extends JFrame {
 		tabbedPane
 				.add(ENEMY_EDITOR_STRING, enemyEditorTab
 						);
+//		tabbedPane
+//				.add(ITEM_EDITOR_STRING, new ItemEditorTab(itemController, "Item")
+//						);
 		tabbedPane
 				.add(TERRAIN_EDITOR_STRING,
 						new TerrainEditorTab(terrainController));
