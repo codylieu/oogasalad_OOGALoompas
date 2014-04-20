@@ -13,18 +13,14 @@ import main.java.schema.WaveSpawnSchema;
  * 
  */
 public class GameState implements Serializable {
-    // model specific
+
     private ITower[][] towers;
     private Point2D entrance;
     private Point2D exit;
     private int currentWave;
     private List<WaveSpawnSchema> allWaves;
     private double gameClock;
-
-    // player specific
-    private int money;
-    private int lives;
-    private double score;
+    private Player player;
 
     /**
      * Update the current game states.
@@ -36,24 +32,18 @@ public class GameState implements Serializable {
      * @param currentWaveNumber
      * @param allCurrentWaves
      * @param currentGameClock
-     * @param playerMoney
-     * @param playerLives
-     * @param playerScore
+     * @param currentPlayer the Player object with state to be saved
      */
     public void updateGameStates (ITower[][] currentTowers,
                                   int currentWaveNumber,
                                   List<WaveSpawnSchema> allCurrentWaves,
                                   double currentGameClock,
-                                  int playerMoney,
-                                  int playerLives,
-                                  double playerScore) {
+                                  Player currentPlayer) {
         towers = currentTowers;
         currentWave = currentWaveNumber;
         allWaves = allCurrentWaves;
         gameClock = currentGameClock;
-        money = playerMoney;
-        lives = playerLives;
-        score = playerScore;
+        player = currentPlayer;
     }
 
     public ITower[][] getTowers () {
@@ -80,16 +70,7 @@ public class GameState implements Serializable {
         return gameClock;
     }
 
-    public int getMoney () {
-        return money;
+    public Player getPlayer () {
+        return player;
     }
-
-    public int getLives () {
-        return lives;
-    }
-
-    public double getScore () {
-        return score;
-    }
-
 }
