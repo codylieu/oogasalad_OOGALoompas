@@ -65,7 +65,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 			for (String attribute : towerAttributes.keySet()) {
 				towerSchema.addAttribute(attribute, towerAttributes.get(attribute));				
 			}
-			towerSchema.addAttribute("IMAGE_NAME", "tower.gif");
+			towerSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
 			towerSchemas.add(towerSchema);
 		}
 		controller.addTowers(towerSchemas);
