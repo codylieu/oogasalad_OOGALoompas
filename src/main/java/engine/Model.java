@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -662,8 +663,14 @@ public class Model {
 		return testBlueprint;
 	}
 
+	/**
+	 * A list of names of possible towers to create
+	 * @return
+	 */
 	public List<String> getPossibleTowers () {
-		return factory.getPossibleTowersNames();
+		return Collections.unmodifiableList(factory.getPossibleTowersNames());
 	}
+	
+	
 
 }
