@@ -81,8 +81,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected HashMap<String, TDObjectSchema> objectMap;
 	protected String objectName = "Default Object Name";
 
-	public ObjectEditorTab(TabController towerController, String objectName) {
-		super(towerController);
+	public ObjectEditorTab(TabController controller, String objectName) {
+		super(controller);
 		this.objectName = objectName;
 		init();
 	}

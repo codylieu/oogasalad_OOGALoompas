@@ -8,7 +8,6 @@ import main.java.schema.map.GameMapSchema;
 import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.WaveSpawnSchema;
 
 public class AuthorModel {

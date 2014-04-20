@@ -100,7 +100,6 @@ public class WaveEditorTab extends EditorTab {
 			tableModel.removeColumnAndData(table, JTableUtil
 					.getColumnIndexFromName(tableModel, columnToRemove));
 		}
-
 	}
 
 	@Override
