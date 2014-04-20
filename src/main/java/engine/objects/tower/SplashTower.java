@@ -19,7 +19,7 @@ import main.java.schema.tdobjects.TowerSchema;
  */
 public class SplashTower extends ShootingTower {
 	
-	public SplashTower(ITower baseTower, Map<String, Serializable> attributes) {
+	public SplashTower(ITower baseTower, Map<String, Object> attributes) {
 		super(baseTower, attributes);
 	}
 	

@@ -1,7 +1,6 @@
 package main.java.engine.objects;
 
 import java.awt.geom.Point2D;
-import java.io.Serializable;
 import java.util.Map;
 
 import main.java.engine.objects.tower.SimpleTower;
@@ -11,7 +10,7 @@ import jgame.JGObject;
 /**
  * Abstract extension of JGObject. Represents monsters, towers, etc.
  */
-public abstract class TDObject extends JGObject implements Serializable {
+public abstract class TDObject extends JGObject{
 
     // TODO: abstract methods?
 
@@ -43,7 +42,7 @@ public abstract class TDObject extends JGObject implements Serializable {
      * @param defaultValue default value of attribute if not in attributes map
      * @return
      */
-    public static Object getValueOrDefault (Map<String, Serializable> attributes,
+    public static Object getValueOrDefault (Map<String, Object> attributes,
                                             String attributeName,
                                             Object defaultValue) {
         return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;

@@ -61,7 +61,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
      * @param baseTower
      * @param attributes
      */
-    public ShootingTower (ITower baseTower, Map<String, Serializable> attributes) {
+    public ShootingTower (ITower baseTower, Map<String, Object> attributes) {
         this(
              baseTower,
              (double) TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),

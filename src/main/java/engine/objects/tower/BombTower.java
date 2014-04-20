@@ -24,7 +24,7 @@ public class BombTower extends ShootingTower {
      * @param baseTower
      * @param attributes
      */
-    public BombTower (ITower baseTower, Map<String, Serializable> attributes) {
+    public BombTower (ITower baseTower, Map<String, Object> attributes) {
         super(baseTower, attributes);
         myShrapnelImage =
                 (String) TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_IMAGE_NAME,

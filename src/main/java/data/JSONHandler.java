@@ -35,13 +35,14 @@ public class JSONHandler {
 	 * @param d
 	 * @throws FileNotFoundException
 	 */
-	public void serializeObjectToJSON(String filename, Object obj) throws FileNotFoundException	{
+	public String serializeObjectToJSON(String filename, Object obj) throws FileNotFoundException	{
 		File outputFile = new File(FILE_PATH + filename + ".json");
 		PrintWriter output = new PrintWriter(outputFile);
 		String json = myGson.toJson(obj);
 		System.out.println(json);
 		output.println(json);
 		output.close();
+		return json;
 	}
 	
 	/**
@@ -66,7 +67,7 @@ public class JSONHandler {
 
 	public static void main(String[] args) throws IOException	{
 		GameSchema testSchema = new GameSchema();
-		testSchema.addAttribute("Lives",10);
+		testSchema.addAttribute("Lives",10.0);
 		GameBlueprint testBlueprint = new GameBlueprint();
 		testBlueprint.setMyGameScenario(testSchema);
 		
@@ -78,6 +79,7 @@ public class JSONHandler {
 		j.serializeObjectToJSON("testobjectJSON",testBlueprint);
 		GameBlueprint g = (GameBlueprint) (j.deserializeObjectFromJSON((FILE_PATH + "testobjectJSON.json"), testBlueprint));
 		j.serializeObjectToJSON("testobjectJSON2",g);
+		System.out.println((testBlueprint.getMyGameScenario().getAttributesMap()).equals(g.getMyGameScenario().getAttributesMap()));
 	}
 	
 }

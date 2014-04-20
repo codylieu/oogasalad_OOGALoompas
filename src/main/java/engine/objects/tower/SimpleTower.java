@@ -65,7 +65,7 @@ public class SimpleTower extends TDObject implements ITower {
         myUpgradeTower = upgradeTower;
     }
     
-    public SimpleTower (Map<String, Serializable> attributes) {
+    public SimpleTower (Map<String, Object> attributes) {
         this(
              (Point2D) getValueOrDefault(attributes, TowerSchema.LOCATION, new Point2D.Double(0, 0)),
              (double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),

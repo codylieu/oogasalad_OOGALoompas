@@ -26,7 +26,7 @@ public class FreezeTower extends ShootingTower {
      * @param baseTower tower to be expanded with shooting behavior
      * @param attributes a map of attributes associated with this type of tower
      */
-    public FreezeTower (ITower baseTower, Map<String, Serializable> attributes) {
+    public FreezeTower (ITower baseTower, Map<String, Object> attributes) {
         super(baseTower, attributes);
         myFreezeSlowdownProportion =
                 (double) TDObject.getValueOrDefault(attributes,
