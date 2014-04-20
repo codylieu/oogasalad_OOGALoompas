@@ -10,7 +10,7 @@ public abstract class TabController {
 		mySuperController = superController;
 	}
 
-	public void setControlledTab(EditorTab tab) {
+	public void setTabToControl(EditorTab tab) {
 		myEditorTab = tab;
 	}
 

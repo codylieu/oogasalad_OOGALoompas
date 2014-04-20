@@ -35,6 +35,7 @@ public class MainController {
 
 	public MainController() {
 		myModel = new AuthorModel();
+		myTabControllers = new ArrayList<TabController>();
 	}
 
 	public void setView(AuthoringView view) {
@@ -226,16 +227,20 @@ public class MainController {
 		
 	}
 
-	public List<String> getEnemyList() {
+	public String[] getEnemyNames() {
 		for (TabController controller : myTabControllers) {
 			if (controller instanceof EnemyController) {
 				EnemyController enemyController = (EnemyController) controller;
-				return enemyController.getEnemyList();
+				return enemyController.getEnemyNames();
 			}
 		}
 		
-		return new ArrayList<String>();
+		return new String[0];
 		
+	}
+
+	public void shiftToEnemyTab() {
+		myAuthoringView.shiftToEnemyTab();
 	}
 	
 }

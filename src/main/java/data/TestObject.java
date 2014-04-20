@@ -9,12 +9,10 @@ import java.io.Serializable;
 public class TestObject extends AbstractObjectTest {
 	public static final String DAMAGE = "Damage";
 	public static final String NAME = "name";
-	public TestObject2 myObj;
 	
 	public TestObject(){
 		myAttributeSet.add(DAMAGE);
 		myAttributeSet.add(NAME);
-		myObj = new TestObject2("butters");
 	}
 	
 	public void populateDefaultAttributes(String name){

@@ -8,8 +8,8 @@ import java.util.Set;
 
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
-public abstract class AbstractSchema {
-	protected Map<String, Object> myAttributesMap;
+public abstract class AbstractSchema implements Serializable {
+	protected Map<String, Serializable> myAttributesMap;
 	protected Set<String> myAttributeSet;
 	// TODO: Ensure that types of values of myAttributesMap match.
 	// Perhaps make myAttributesSet into a map that maps name of attribute with type?
@@ -34,7 +34,7 @@ public abstract class AbstractSchema {
 	 * @param attributeValue
 	 * @throws InvalidParameterForConcreteTypeException 
 	 */
-	public void addAttribute(String attributeName, Object attributeValue) {
+	public void addAttribute(String attributeName, Serializable attributeValue) {
         if (myAttributeSet.contains(attributeName)) {
             myAttributesMap.put(attributeName, attributeValue);
         } else {
@@ -51,7 +51,7 @@ public abstract class AbstractSchema {
 	 * 
 	 * @return copy of the attributes map
 	 */
-	public Map<String, Object> getAttributesMap() {
+	public Map<String, Serializable> getAttributesMap() {
         return new HashMap<>(myAttributesMap);
 	}
 }

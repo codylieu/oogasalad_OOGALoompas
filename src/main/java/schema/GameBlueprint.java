@@ -17,7 +17,7 @@ import java.util.List;
  * important key like isSurvivalMode, which will define a game as never ending.
  * This class does not relate to something that gets explicitly instantiated in the engine.
  */
-public class GameBlueprint {
+public class GameBlueprint implements Serializable {
 	private GameSchema myGameScenario;
 	private List<MonsterSchema> myMonsterSchemas;
 	private List<TowerSchema> myTowerSchemas;

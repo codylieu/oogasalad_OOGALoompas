@@ -21,7 +21,7 @@ public class TestBlueprintLoading {
 		Model model = new Model(new TestEngine());
 		blueprint = dataHandler.loadBlueprint("src/test/java/engine/TestBlueprint.zipZippedResources.zip",true);
 		// TODO: Eventually call the loadBlueprint method with the file path (actually load the blueprint rather than using test in Model)
-		model.initializeBlueprintContents(blueprint);
+		//model.initializeBlueprintContents(blueprint);
 	}
 
 	@org.junit.Test

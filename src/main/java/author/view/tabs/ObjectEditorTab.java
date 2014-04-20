@@ -67,7 +67,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected JSplitPane splitPane;
 	protected List<JSpinner> spinnerFields;
 	protected JButton createObjectButton;
-	protected List<BehaviorTogglingRadioButton> radioButtons;
+	protected List<BehaviorTogglingRadioButton> behaviorTogglingButtons;
 	protected List<ImageCanvas> imageCanvases;
 	protected JTextField createObjectField;
 
@@ -138,20 +138,21 @@ public abstract class ObjectEditorTab extends EditorTab {
 				}
 			});
 		}
+		if (behaviorTogglingButtons != null) {
+			for (BehaviorTogglingRadioButton button : behaviorTogglingButtons) {
+				button.addItemListener(new ItemListener() {
 
-		for (BehaviorTogglingRadioButton button : radioButtons) {
-			button.addItemListener(new ItemListener() {
+					@Override
+					public void itemStateChanged(ItemEvent e) {
+						BehaviorTogglingRadioButton button = (BehaviorTogglingRadioButton) e
+								.getSource();
+						button.toggle();
+						updateSchemaDataFromView();
 
-				@Override
-				public void itemStateChanged(ItemEvent e) {
-					BehaviorTogglingRadioButton button = (BehaviorTogglingRadioButton) e
-							.getSource();
-					button.toggle();
-					updateSchemaDataFromView();
+					}
 
-				}
-
-			});
+				});
+			}
 		}
 
 		createObjectButton.addActionListener(new ActionListener() {
@@ -176,8 +177,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 				}
 			}
 		});
-
-		
 
 	}
 
@@ -231,7 +230,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 		} else {
 			myCurrentObject = objectMap.get(name);
 		}
-		// updateFieldToggling();
 		updateViewWithSchemaData(myCurrentObject.getAttributesMap());
 	}
 
@@ -255,14 +253,13 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
-	protected void updateViewWithSchemaData(Map<String, Object> map) {
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
 
 		for (JSpinner spinner : spinnerFields) {
 			spinner.setValue(map.get(spinner.getName()));
 		}
 
-		
 		for (ImageCanvas canvas : imageCanvases) {
 			canvas.clearImagePath();
 			if (map.get(canvas.getName()) != "") {
@@ -295,7 +292,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 				File file = fileChooser.getSelectedFile();
 				try {
 					System.out.println("Opening: " + file.getName() + ".\n");
-					
+
 					myCanvas.setImageFromPath(file.getAbsolutePath());
 					updateSchemaDataFromView();
 					myCanvas.repaint();
@@ -320,7 +317,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 			result.add(makeFieldPane(), BorderLayout.CENTER);
-			result.add(makeTypeTogglePane(), BorderLayout.NORTH);
+			if (behaviorTogglingButtons != null) {
+				result.add(makeTypeTogglePane(), BorderLayout.NORTH);
+			}
 			return result;
 		}
 
@@ -353,12 +352,11 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 		protected abstract JComponent makePrimaryObjectGraphicPane();
 
-		protected abstract String getObjectGraphicKey();
-
 		private JComponent makeImagesPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
-			result.add(myBuilder.makePrimaryObjectGraphicPane(), BorderLayout.CENTER);
+			result.add(myBuilder.makePrimaryObjectGraphicPane(),
+					BorderLayout.CENTER);
 			result.add(myBuilder.makeSecondaryImagesGraphicPane(),
 					BorderLayout.SOUTH);
 			return result;
@@ -453,7 +451,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 		protected Component makeTypeTogglePane() {
 			JPanel result = new JPanel();
 			result.setLayout(new GridLayout(1, 0));
-			for (BehaviorTogglingRadioButton button : radioButtons) {
+			for (BehaviorTogglingRadioButton button : behaviorTogglingButtons) {
 				result.add(button);
 			}
 

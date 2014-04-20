@@ -93,27 +93,30 @@ public class DataHandler {
 
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException, FileNotFoundException {
 		//		if (checkGameBlueprint(blueprint)){
-		// create a temp folder to put the serialized blueprint and zipped resources in
+		
+		// Create temp folder for serialized blueprint and zipped resources
 		String tempDirLocation = filePath + "TempBlueprintHolder/";
 		Boolean tempDirCreated = new File(tempDirLocation).mkdir();
-		// zip the resources first
+		
 		if (tempDirCreated){
+			//Set up container zip file
+			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+			
+			// Zip resources
 			String zipResourcesLocation = tempDirLocation + "ZippedResources.zip";
 			File myResources = new File(FILE_PATH);
 			List<File> myFilesToZip = new ArrayList<File>();
-			//			myFilesToZip.add(myResources);
 			compressResources(myResources,zipResourcesLocation);
-			// zip to ZipResourcesLocation
-			myFilesToZip.add(new File(zipResourcesLocation));
-
-			String zipAuthoringLocation = filePath + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
-			// serialize the blueprint to temp folder so we can zip it
+			
+			// Serialize blueprint
 			saveObjectToFile(blueprint,tempDirLocation + "MyBlueprint.ser"); 
-			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser")); // right now hardcoded, can easily change when authoring implements user choosing filePath
-			//				myFilesToZip.add(new File(zipResourcesLocation)); // resources folder
-			// compress it!
+			
+			// Prepare to zip: 1) zipped resources and 2) serialized blueprint
+			myFilesToZip.add(new File(zipResourcesLocation));
+			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser"));
+			
+			// Compress container file
 			if (compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation)){
-				// delete the temp directory
 				deleteDirectory(new File(tempDirLocation)); 
 			}
 		} else {
@@ -221,26 +224,23 @@ public class DataHandler {
 
 		// if authoring is loading, no need to check for exceptions
 		
-		if (!isEngine){
-
-			// delete resources folder
-			File myDir = new File(FILE_PATH);
-			deleteDirectory(myDir);
-
-			// load saved resources folder into resources folder location and delete the temp directory
-			decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
-			deleteDirectory(new File(TEMP_FOLDER_PATH));
-			
-		} else {
-			// engine is loading the gameBlueprint for first iteration of game, must be complete
+		// Delete resources and reload from container file
+		File myDir = new File(FILE_PATH);
+		deleteDirectory(myDir);
+		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
+		
+		// Delete temp folder
+		deleteDirectory(new File(TEMP_FOLDER_PATH));
+		
+		if (isEngine) {
+			// Validate game blueprint for engine, but not author
 			deleteDirectory(new File(TEMP_FOLDER_PATH));
 			// throw stuff if it isn't complete
 			System.out.println(checkGameBlueprint(toReturn));
 		}
 		
 		// return the blueprint in case of (Author - any) (Engine - complete blueprint)
-		return toReturn;
-		
+		return toReturn;	
 	}
 
 	/**

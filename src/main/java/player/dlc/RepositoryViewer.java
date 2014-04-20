@@ -19,26 +19,32 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.player.TDPlayerEngine;
+import net.lingala.zip4j.exception.ZipException;
+
 public class RepositoryViewer extends AbstractAction {
 
 	public final static String BASE_URL = "http://people.duke.edu/~kkd10/td/";
 	public final static String LIST_URL = BASE_URL + "list.txt";
+	public final static String DOWNLOADS_PATH = "downloads/";
 	public final static String DELIMITER = "\\|";
 	
-	
+	private JPanel mainPanel;
 	private JList<String> list;
 	private Map<String, DLCData> dlc;
 	private JTextArea descriptionArea;
+	private TDPlayerEngine engine;
 	
-	
-	public RepositoryViewer(String s) {
+	public RepositoryViewer(String s, TDPlayerEngine engineInit) {
 		super(s);
+		engine = engineInit;
 		dlc = new HashMap<String, DLCData>();
 	}
 
@@ -58,7 +64,7 @@ public class RepositoryViewer extends AbstractAction {
 	}
 	
 	private JPanel makeMainPanel() {
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		mainPanel.add(new JLabel("Please pick a game to download and play"));
 		mainPanel.add(makeList());
 		mainPanel.add(makeSubmitButton());
@@ -78,8 +84,17 @@ public class RepositoryViewer extends AbstractAction {
 			public void actionPerformed(ActionEvent e) {
 				String fileName = dlc.get(list.getSelectedValue()).getFileName();
 				try {
-					downloadFromUrl(new URL(BASE_URL + fileName), "downloads/" + fileName);
+					if (JOptionPane.showConfirmDialog(null, "Click OK to start download (may take a while).", "Download", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+						downloadFromUrl(new URL(BASE_URL + fileName), DOWNLOADS_PATH + fileName);
+						engine.loadBlueprintFile(DOWNLOADS_PATH + fileName);
+						JOptionPane.showMessageDialog(null, "Game loaded. Go play it now!");
+						mainPanel.setVisible(false);
+					}					
 				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (ZipException e1) {
 					e1.printStackTrace();
 				}
 			}

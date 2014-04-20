@@ -31,6 +31,7 @@ import main.java.engine.objects.TDObject;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
+import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 
 public class TowerEditorTab extends ObjectEditorTab {
 
@@ -46,8 +47,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	protected ImageCanvas bulletImageCanvas, towerImageCanvas,
 			shrapnelImageCanvas;
-	protected JButton collisionImageButton;
-	protected JButton shrapnelImageButton;
+	protected JButton collisionImageButton, shrapnelImageButton;
 
 	public TowerEditorTab(TabController towerController, String objectName) {
 		super(towerController, objectName);
@@ -102,7 +102,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 		TDObjectSchema myCurrentObject = getSelectedObject();
 		List<TowerBehaviors> behaviorsToggled = new ArrayList<TowerBehaviors>();
-		for (BehaviorTogglingRadioButton button : radioButtons) {
+		for (BehaviorTogglingRadioButton button : behaviorTogglingButtons) {
 			if (button.isSelected()) {
 				behaviorsToggled.add(button.getBehavior());
 			}
@@ -125,7 +125,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	 * 
 	 */
 	@Override
-	protected void updateViewWithSchemaData(Map<String, Object> map) {
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 
 		upgradeDropDown.removeAllItems();
@@ -143,7 +143,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 		}
 
 		List<TowerBehaviors> behaviorsToToggle = (List<TowerBehaviors>) map.get(TowerSchema.TOWER_BEHAVIORS);
-		for (BehaviorTogglingRadioButton radioButton : radioButtons) {
+		for (BehaviorTogglingRadioButton radioButton : behaviorTogglingButtons) {
 			if (behaviorsToToggle.contains(radioButton.getBehavior())) {
 				radioButton.setSelected(true);
 			} else {
@@ -157,7 +157,6 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 		public TowerTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
-			// TODO Auto-generated constructor stub
 		}
 
 		private JComponent makeBulletGraphicPane() {
@@ -193,10 +192,6 @@ public class TowerEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
-		@Override
-		protected String getObjectGraphicKey() {
-			return TowerSchema.TOWER_IMAGE_NAME;
-		}
 
 		@Override
 		protected void instantiateAndClumpFields() {
@@ -248,7 +243,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 			BehaviorTogglingRadioButton[] buttons = { shootsToggleButton,
 					freezeToggleButton, moneyFarmingToggleButton,
 					bombingToggleButton };
-			radioButtons = new ArrayList<BehaviorTogglingRadioButton>(
+			behaviorTogglingButtons = new ArrayList<BehaviorTogglingRadioButton>(
 					Arrays.asList(buttons));
 			ImageCanvas[] canvases = { bulletImageCanvas, shrapnelImageCanvas,
 					towerImageCanvas };
