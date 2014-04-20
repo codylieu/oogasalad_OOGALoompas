@@ -222,26 +222,23 @@ public class DataHandler {
 
 		// if authoring is loading, no need to check for exceptions
 		
-		if (!isEngine){
-
-			// delete resources folder
-			File myDir = new File(FILE_PATH);
-			deleteDirectory(myDir);
-
-			// load saved resources folder into resources folder location and delete the temp directory
-			decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
-			deleteDirectory(new File(TEMP_FOLDER_PATH));
-			
-		} else {
-			// engine is loading the gameBlueprint for first iteration of game, must be complete
+		// Delete resources and reload from container file
+		File myDir = new File(FILE_PATH);
+		deleteDirectory(myDir);
+		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
+		
+		// Delete temp folder
+		deleteDirectory(new File(TEMP_FOLDER_PATH));
+		
+		if (isEngine) {
+			// Validate game blueprint for engine, but not author
 			deleteDirectory(new File(TEMP_FOLDER_PATH));
 			// throw stuff if it isn't complete
 			System.out.println(checkGameBlueprint(toReturn));
 		}
 		
 		// return the blueprint in case of (Author - any) (Engine - complete blueprint)
-		return toReturn;
-		
+		return toReturn;	
 	}
 
 	/**

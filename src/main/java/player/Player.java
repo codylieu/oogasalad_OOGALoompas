@@ -101,6 +101,7 @@ public class Player {
 	private TowerChooser towerChooser;
 
 	public Player(){
+		makeGamePanel();
 		initSong();
 		makeFrame();
 		makeCards();
@@ -154,7 +155,7 @@ public class Player {
 				}
 			}
 		});
-		files.add(new RepositoryViewer(LOAD_LIBRARY_TEXT));
+		files.add(new RepositoryViewer(LOAD_LIBRARY_TEXT, engine));
 		return files;
 	}
 
@@ -211,7 +212,7 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		gameCard.add(makeGamePanel(), constraints);
+		gameCard.add(engine, constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
