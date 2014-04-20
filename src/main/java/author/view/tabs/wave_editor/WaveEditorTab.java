@@ -48,6 +48,7 @@ public class WaveEditorTab extends EditorTab {
 	private JButton clearAllWavesButton;
 	
 	private String[] columnNames = {};
+	private String[] columnNamesAndWave;
 	private Object[][] data = {};
 
 	private JTable table;
@@ -116,7 +117,6 @@ public class WaveEditorTab extends EditorTab {
 				int columnOfEnemy = getColumnOfEnemy(monsterName);
 				int numEnemies = (Integer) table.getModel().getValueAt(waveRow, columnOfEnemy);
 				waveSpawnSchema.addMonsterSchema(new MonsterSpawnSchema(monsterSchema, numEnemies));
-				
 			}
 			allWaveSpawnSchemas.add(waveSpawnSchema);
 		}
@@ -124,9 +124,13 @@ public class WaveEditorTab extends EditorTab {
 	}
 	
 	private int getColumnOfEnemy(String enemyName) {
-		for (int index = 0; index < columnNames.length; index++) {
-			if(columnNames[index].equals(enemyName)) {
-				return index;
+		WaveController waveController = (WaveController) myController;
+		String[] currentColumnNames = waveController.getEnemyNames();
+		
+		
+		for (int index = 0; index < currentColumnNames.length; index++) {
+			if(currentColumnNames[index].equals(enemyName)) {
+				return index + 1; // because Wave # is not included in currentColumnNames
 			}
 		}
 		return -1;
@@ -161,7 +165,7 @@ public class WaveEditorTab extends EditorTab {
 			WaveController waveController = (WaveController) myController;
 
 			columnNames = waveController.getEnemyNames();
-			String[] columnNamesAndWave = new String[columnNames.length + 1];
+			columnNamesAndWave = new String[columnNames.length + 1];
 			columnNamesAndWave[0] = WAVE_COLUMN_STRING;
 			for (int i = 0; i < columnNames.length; i++) {
 				columnNamesAndWave[i + 1] = columnNames[i];
