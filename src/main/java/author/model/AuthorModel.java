@@ -38,8 +38,7 @@ public class AuthorModel {
 	}
 
 	public void addWaves(List<WaveSpawnSchema> waves) {
-		// TODO Auto-generated method stub
-
+		myGameBlueprint.setMyWaveSchemas(waves);
 	}
 
 	/**
