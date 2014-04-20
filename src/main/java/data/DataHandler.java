@@ -428,7 +428,7 @@ public class DataHandler {
 		else if(b.getMyMonsterSchemas() == null){
 			throw new InvalidGameBlueprintException("myMonsterSchemas");
 		}
-		else if(b.getMyLevelSchemas() == null){
+		else if(b.getMyWaveSchemas() == null){
 			throw new InvalidGameBlueprintException("myLevelSchemas");
 		}
 		else if(b.getMyGameMapSchemas() == null){

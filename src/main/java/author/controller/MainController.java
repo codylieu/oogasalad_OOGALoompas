@@ -201,7 +201,7 @@ public class MainController {
         testWaveSpawnSchemaThree.addMonsterSchema(testMonsterSpawnSchemaThree);
         testWaves.add(testWaveSpawnSchemaThree);
 
-        testBlueprint.setMyLevelSchemas(testWaves);
+        testBlueprint.setMyWaveSchemas(testWaves);
         
         // create real map functionality
         List<GameMapSchema> mapSchema = myModel.getBlueprint().getMyGameMapSchemas();

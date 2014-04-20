@@ -49,11 +49,11 @@ public class GameBlueprint implements Serializable {
 		this.myMonsterSchemas = myMonsterSchemas;
 	}
 
-	public List<WaveSpawnSchema> getMyLevelSchemas() {
+	public List<WaveSpawnSchema> getMyWaveSchemas() {
 		return myLevelSchemas;
 	}
 
-	public void setMyLevelSchemas(List<WaveSpawnSchema> myLevelSchemas) {
+	public void setMyWaveSchemas(List<WaveSpawnSchema> myLevelSchemas) {
 		this.myLevelSchemas = myLevelSchemas;
 	}
 

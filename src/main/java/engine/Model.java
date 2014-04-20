@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -258,10 +259,8 @@ public class Model {
         }
 
         // Initialize waves
-        if (blueprint.getMyLevelSchemas() != null) {
-            for (WaveSpawnSchema wave : blueprint.getMyLevelSchemas()) {
-                levelManager.addNewWave(wave);
-            }
+        if (blueprint.getMyWaveSchemas() != null) {
+            levelManager.cleanLoadWaveSchemas(blueprint.getMyWaveSchemas(), 0);     
         }
 
         // Initialize map if necessary
@@ -361,10 +360,6 @@ public class Model {
         doTowerBehaviors();
         doItemActions();
         removeDeadMonsters();
-        gameState
-                .updateGameStates(monsters, towers, levelManager.getCurrentWave(),
-                                  levelManager.getAllWaves(), gameClock,
-                                  player.getMoney(), player.getLivesRemaining(), player.getScore());
     }
 
     private void doItemActions () {
@@ -660,7 +655,7 @@ public class Model {
         testWaveSpawnSchemaThree.addMonsterSchema(testMonsterSpawnSchemaThree);
         testWaves.add(testWaveSpawnSchemaThree);
 
-        testBlueprint.setMyLevelSchemas(testWaves);
+        testBlueprint.setMyWaveSchemas(testWaves);
 
         return testBlueprint;
     }
@@ -683,13 +678,11 @@ public class Model {
      */
     public void saveGame (String gameName) throws InvalidSavedGameException {
         GameState currentGame = new GameState();
-        currentGame.updateGameStates(monsters, towers,
-                                    levelManager.getCurrentWave(),
-                                    levelManager.getAllWaves(),
-                                    gameClock,
-                                    player.getMoney(),
-                                    player.getLivesRemaining(),
-                                    player.getScore());
+        currentGame.updateGameStates(towers,
+                                     levelManager.getCurrentWave(),
+                                     levelManager.getAllWaves(),
+                                     gameClock,
+                                     player);
         try {
             dataHandler.saveState(currentGame, RESOURCE_PATH + gameName);
         }
@@ -705,16 +698,45 @@ public class Model {
      * 
      * @param filename The full filename only.
      * @throws InvalidSavedGameException issue loading the game,
-     * (please pause and notify the player, then continue the present game).
+     *         (please pause and notify the player, then continue the present game).
      */
     public void loadSavedGame (String filename) throws InvalidSavedGameException {
         try {
+            //TODO: check for proper game blueprint loaded prior?
+            
             GameState newGameState = dataHandler.loadState(RESOURCE_PATH + filename);
+            
+            //replace towers, player, clock with new  state
+            clearAllTowers();
+            towers = newGameState.getTowers();
+            player = newGameState.getPlayer();
+            gameClock = newGameState.getGameClock();
+            
+            //cleanly reload waves in the level manager, and reset wave # to start at.
+            levelManager.cleanLoadWaveSchemas(newGameState.getAllWaveSchemas(),
+                                              newGameState.getCurrentWaveNumber());
+            
         }
         catch (ClassNotFoundException | IOException e) {
             throw new InvalidSavedGameException(e);
         }
 
+    }
+
+    /**
+     * Clear all of the current towers.
+     * Used internally to replace current tower state with with a new loaded saved game state.
+     */
+    private void clearAllTowers () {
+        for (ITower[] row : towers) {
+            for (ITower t : row) {
+                if (t != null) {
+                    t.remove();
+                }
+            }
+            // null out tower matrix row by row after jgobject removal called.
+            Arrays.fill(row, null);
+        }
     }
 
 }

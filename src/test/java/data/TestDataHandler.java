@@ -126,7 +126,7 @@ public class TestDataHandler {
 		testWaveSpawnSchemaThree.addMonsterSchema(testMonsterSpawnSchemaThree);
 		testWaves.add(testWaveSpawnSchemaThree);
 
-		testBlueprint.setMyLevelSchemas(testWaves);
+		testBlueprint.setMyWaveSchemas(testWaves);
 		return testBlueprint;
 	}
 

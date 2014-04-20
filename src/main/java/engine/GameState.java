@@ -16,19 +16,16 @@ public class GameState implements Serializable {
 
     private ITower[][] towers;
     private Point2D entrance;
-    private Point2D exit;
-    private int currentWave;
     private List<WaveSpawnSchema> allWaves;
     private double gameClock;
     private Player player;
+    private int currentWave;
 
     /**
      * Update the current game states.
      * This method is called before saving the game state to file.
      * 
      * @param currentTowers
-     * @param currentEntrance
-     * @param currentExit
      * @param currentWaveNumber
      * @param allCurrentWaves
      * @param currentGameClock
@@ -49,15 +46,7 @@ public class GameState implements Serializable {
     public ITower[][] getTowers () {
         return towers;
     }
-
-    public Point2D getEntrance () {
-        return entrance;
-    }
-
-    public Point2D getExit () {
-        return exit;
-    }
-
+    
     public int getCurrentWaveNumber () {
         return currentWave;
     }
