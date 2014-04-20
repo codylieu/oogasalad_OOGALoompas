@@ -44,7 +44,12 @@ public abstract class TDNetwork {
 	
 	protected void write(Socket s, Object obj) throws IOException {
         ObjectOutputStream out = new ObjectOutputStream(s.getOutputStream());
+//        String[] send = new String[2];
+//        send[0] = (String) obj;
+//        send[1] = "EOF";
+//        out.writeObject(send);
         out.writeObject(obj);
+//        out.writeObject("EOF");
         out.flush();
 	}
 	
