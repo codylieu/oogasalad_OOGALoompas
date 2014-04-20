@@ -63,6 +63,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			for (String attribute : monsterAttributes.keySet()) {
 				monsterSchema.addAttribute(attribute, monsterAttributes.get(attribute));
 			}
+			monsterSchema.addAttribute("IMAGE_NAME", "monster.png");
 			monsterSchemas.add(monsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
