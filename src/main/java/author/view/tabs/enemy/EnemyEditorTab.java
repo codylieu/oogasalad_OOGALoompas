@@ -61,7 +61,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			Map<String, Serializable> monsterAttributes = monster.getAttributesMap();
 			
 			for (String attribute : monsterAttributes.keySet()) {
-				monsterSchema.addAttribute(attribute, monsterAttributes.get(attribute));
+				Serializable castedAttribute = addCastToAttribute(monsterAttributes.get(attribute));	
+				monsterSchema.addAttribute(attribute, castedAttribute);
 			}
 			monsterSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
 			monsterSchemas.add(monsterSchema);
