@@ -25,7 +25,7 @@ public class GameState implements Serializable {
 	
 	// player specific
 	private int money;
-	private int life;
+	private int lives;
 	private double score;
 
 	/**
@@ -39,18 +39,18 @@ public class GameState implements Serializable {
 	 * @param allCurrentWaves
 	 * @param currentGameClock
 	 * @param playerMoney
-	 * @param playerLife
+	 * @param playerLives
 	 * @param playerScore
 	 */
 	public void updateGameStates(List<Monster> currentMonsters, ITower[][] currentTowers, int currentWaveNumber, List<WaveSpawnSchema> allCurrentWaves, double currentGameClock, 
-			int playerMoney, int playerLife, double playerScore) {
+			int playerMoney, int playerLives, double playerScore) {
 		monsters = currentMonsters;
 		towers = currentTowers;
 		currentWave = currentWaveNumber;
 		allWaves = allCurrentWaves;
 		gameClock = currentGameClock;
 		money = playerMoney;
-		life = playerLife;
+		lives = playerLives;
 		score = playerScore;
 	}
 
