@@ -202,28 +202,9 @@ public class GameSettingsEditorTab extends EditorTab{
 
 			gameModeList = new JComboBox(GAME_MODE_STRINGS); 
 			gameModeList.setSelectedIndex(1);
-			gameModeList.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					// Would probably switch between the specific attributes to display or just make unique panels for each as classes.
-					// and then do some more logic outside of this action listener to decide what to display.
-				}
-
-			});
 
 			gameDifficultyList = new JComboBox(GAME_DIFFICULTY_STRINGS);
 			gameDifficultyList.setSelectedIndex(1);
-			gameDifficultyList.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-			});
 
 			dropDownMenus.add(gameModeList, BorderLayout.NORTH);
 			dropDownMenus.add(gameDifficultyList, BorderLayout.SOUTH);
