@@ -20,6 +20,7 @@ import main.java.exceptions.data.InvalidGameBlueprintException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
@@ -94,6 +95,15 @@ public class MainController {
 	 */
 	public void addWaveToModel(List<WaveSpawnSchema> waves) {
 		myModel.addWaves(waves);
+	}
+	
+	/**
+	 * @param itemSchemas
+	 * Adds a schema representing a TD item to the game blueprint
+	 */
+	public void addItemsToModel(List<ItemSchema> itemSchemas) {
+		myModel.addItems(itemSchemas);
+		
 	}
 
 	/**
