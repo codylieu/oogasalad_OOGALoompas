@@ -99,7 +99,6 @@ public class WaveEditorTab extends EditorTab {
 			tableModel.removeColumnAndData(table, JTableUtil
 					.getColumnIndexFromName(tableModel, columnToRemove));
 		}
-
 	}
 
 	@Override
@@ -166,7 +165,7 @@ public class WaveEditorTab extends EditorTab {
 			for (int i = 0; i < columnNames.length; i++) {
 				columnNamesAndWave[i + 1] = columnNames[i];
 			}
-			tableModel = new ColumnRemovableTableModel(data, columnNamesAndWave){
+			tableModel = new ColumnRemovableTableModel(data, columnNamesAndWave) {
 				
 				public boolean isCellEditable(int row, int col){
 					
