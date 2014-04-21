@@ -29,7 +29,7 @@ public class JSONHandler {
 	 * @param d
 	 * @throws FileNotFoundException
 	 */
-	public void serializeObjectToJSON(String filename, Object obj) throws FileNotFoundException	{
+	public void serializeObjectToJSON(Object obj, String filename) throws FileNotFoundException	{
 		File outputFile = new File(FILE_PATH + filename + ".json");
 		PrintWriter output = new PrintWriter(outputFile);
 		String json = myGson.toJson(obj);
@@ -48,7 +48,7 @@ public class JSONHandler {
 	 * @return
 	 * @throws IOException
 	 */
-	public Object deserializeObjectFromJSON(String filepath, Object obj) throws IOException	{
+	public Object deserializeObjectFromJSON(Object obj, String filepath) throws IOException	{
 		BufferedReader reader = new BufferedReader(new FileReader(filepath));
 		String json = "";
 		String line = null;
@@ -74,9 +74,10 @@ public class JSONHandler {
 		t.populateDefaultAttributes("testObjectName");
 		
 		JSONHandler j = new JSONHandler();
-		j.serializeObjectToJSON("testobjectJSON",t);
-		TestObject g = (TestObject) (j.deserializeObjectFromJSON((FILE_PATH + "testobjectJSON.json"), t));
-		j.serializeObjectToJSON("testobjectJSON2",g);
+		j.serializeObjectToJSON(t, "testobjectJSON");
+		GameBlueprint g = (GameBlueprint) (j.deserializeObjectFromJSON(t, (FILE_PATH + "testobjectJSON.json")));
+		j.serializeObjectToJSON(g,"testobjectJSON2");
+
 	}
 	
 }

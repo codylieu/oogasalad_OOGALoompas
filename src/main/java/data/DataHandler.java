@@ -1,6 +1,7 @@
 package main.java.data;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -87,9 +88,10 @@ public class DataHandler {
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
 	 * @throws InvalidGameBlueprintException 
+	 * @throws FileNotFoundException 
 	 */
 
-	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
+	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException, FileNotFoundException {
 		//		if (checkGameBlueprint(blueprint)){
 		
 		// Create temp folder for serialized blueprint and zipped resources
@@ -372,8 +374,11 @@ public class DataHandler {
 	 * @param object Object to serialize
 	 * @param fileName File to save serialized object to
 	 * @return whether the object was successfully saved
+	 * @throws FileNotFoundException 
 	 */
-	public boolean saveObjectToFile(Object object, String fileName) { // change back to private after testing
+	public boolean saveObjectToFile(Object object, String fileName) throws FileNotFoundException { // change back to private after testing
+		//Using OutputStream
+		/**
 		FileOutputStream fileOut;
 		try {
 			fileOut = new FileOutputStream(fileName);
@@ -386,6 +391,13 @@ public class DataHandler {
 			e.printStackTrace();
 			return false;
 		}
+		*/
+		
+		//Using JSON
+		JSONHandler j = new JSONHandler();
+		j.serializeObjectToJSON(object, fileName);
+		return true;
+		
 	}
 
 	/**
