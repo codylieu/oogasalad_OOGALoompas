@@ -57,7 +57,7 @@ public class RepositoryViewer extends AbstractAction {
 		JFrame frame = new JFrame();
 		frame.setTitle("Repository Viewer");
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(makeMainPanel());
 		frame.pack();
 		frame.setVisible(true);
