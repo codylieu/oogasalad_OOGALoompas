@@ -44,8 +44,6 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JSpinner livesSpinner;
 	private JSpinner beginningMoneySpinner;
 
-	private List<JSpinner> spinnerFields;
-
 	private static final String LIVES_STRING = "Lives: ";
 	private static final String MONEY_STRING = "Beginning Money: ";
 	
@@ -62,9 +60,6 @@ public class GameSettingsEditorTab extends EditorTab{
 	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
 	String[] GAME_DIFFICULTY_STRINGS = {"Easy", "Medium", "Hard"};
 
-	private NumberFormat numberFormat;
-
-	private JButton submitButton;
 	private JButton musicButton;
 
 	private JFileChooser fileChooser;
@@ -79,6 +74,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	 */
 	public GameSettingsEditorTab(TabController gameSettingsController){
 		super(gameSettingsController);
+		
 		contentCreator = new GameSettingsTabContentCreator();
 		add(contentCreator.createSettingsPanel(), BorderLayout.CENTER);
 	}
@@ -230,7 +226,7 @@ public class GameSettingsEditorTab extends EditorTab{
 
 		/**
 		 * @return
-		 * Makes various JButtons
+		 * Makes various JButtons, currently only makes a music button
 		 */
 		private JComponent makeButtons(){
 
@@ -241,9 +237,6 @@ public class GameSettingsEditorTab extends EditorTab{
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-
-					// Get it to open up on the right file menu
 					fileChooser = new JFileChooser("main/resources");
 					FileNameExtensionFilter filter = new FileNameExtensionFilter("WAV files", "wav");
 					fileChooser.setFileFilter(filter);

@@ -1,8 +1,6 @@
 package main.java.author.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -13,7 +11,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import main.java.author.controller.MainController;
-import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.controller.tabbed_controllers.GameSettingsController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
@@ -83,7 +80,9 @@ public class AuthoringView extends JFrame {
 		tabbedPane
 				.add(TOWER_EDITOR_STRING,
 						new TowerEditorTab(towerController, "Tower"));
+		
 		enemyEditorTab = new EnemyEditorTab(enemyController, "Monster");
+		
 		tabbedPane
 				.add(ENEMY_EDITOR_STRING, enemyEditorTab
 						);
@@ -110,6 +109,9 @@ public class AuthoringView extends JFrame {
 		});
 	}
 
+	/**
+	 * Creates the GUI and sets initial constraints
+	 */
 	public void createAndShowGUI() {
 		createEditorTabs();
 		add(tabbedPane, BorderLayout.CENTER);
@@ -160,6 +162,9 @@ public class AuthoringView extends JFrame {
 		return finalizeGameButton;
 	}
 
+	/**
+	 * Shifts to the Enemy Tab
+	 */
 	public void shiftToEnemyTab() {
 		tabbedPane.setSelectedComponent(enemyEditorTab);
 	}
