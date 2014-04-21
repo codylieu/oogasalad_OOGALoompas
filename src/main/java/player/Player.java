@@ -37,6 +37,8 @@ import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.InfoPanel;
+import main.java.player.panels.ItemChooser;
+import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
@@ -100,6 +102,7 @@ public class Player implements Serializable {
 	private Sound song;
 	private boolean soundOn;
 	private TowerChooser towerChooser;
+	private ObjectChooser itemChooser;
 
 	public Player(){
 		makeGamePanel();
@@ -218,7 +221,7 @@ public class Player implements Serializable {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		gameCard.add(makeGameButtonPanel(), constraints);
+		gameCard.add(makeGameActionPanel(), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -241,7 +244,7 @@ public class Player implements Serializable {
 		return engine;
 	}
 
-	private JPanel makeGameButtonPanel() {
+	private JPanel makeGameActionPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
 
@@ -274,7 +277,10 @@ public class Player implements Serializable {
 
 		towerChooser = new TowerChooser(engine);
 		engine.setSubject(towerChooser);//This probably does not belong here
-
+		
+		itemChooser = new ItemChooser(engine);
+		
+		
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
@@ -284,6 +290,7 @@ public class Player implements Serializable {
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
+		gameButtonPanel.add(itemChooser);
 		return gameButtonPanel;
 	}
 
