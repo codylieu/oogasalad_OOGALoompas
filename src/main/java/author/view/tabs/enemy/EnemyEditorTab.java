@@ -64,11 +64,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 				Serializable castedAttribute = addCastToAttribute(monsterAttributes.get(attribute));	
 				monsterSchema.addAttribute(attribute, castedAttribute);
 			}
-			monsterSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
 			monsterSchemas.add(monsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
 	}
+	
 	
 	public List<MonsterSchema> getMonsterSchemas() {
 		return monsterSchemas;
@@ -164,7 +164,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					largeTileButton, flyingButton, groundButton };
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
-					MonsterSchema.ENEMY_IMAGE_NAME);
+					TDObjectSchema.IMAGE_NAME);
 			collisionImageCanvas = new ImageCanvas(true,
 					MonsterSchema.COLLISION_IMAGE_NAME);
 

@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -274,9 +275,13 @@ public abstract class ObjectEditorTab extends EditorTab {
 		}
 
 		for (ImageCanvas canvas : imageCanvases) {
+			
+			String relativePath = new File((String) canvas.getImagePath()).getName();
 			myCurrentObject.addAttribute(canvas.getName(),
-					(String) canvas.getImagePath());
+					(relativePath));
+			
 		}
+		
 
 	}
 
@@ -318,7 +323,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				try {
-					System.out.println("Opening: " + file.getName() + ".\n");
 
 					myCanvas.setImageFromPath(file.getAbsolutePath());
 					updateSchemaDataFromView();
