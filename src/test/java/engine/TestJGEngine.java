@@ -3,7 +3,7 @@ package test.java.engine;
 import jgame.JGColor;
 import jgame.platform.JGEngine;
 
-public class FakeJGEngine extends JGEngine {
+public class TestJGEngine extends JGEngine {
 
 	@Override
 	public void initCanvas() {

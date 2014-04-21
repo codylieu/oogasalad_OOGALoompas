@@ -63,7 +63,7 @@ public class Model {
     private LevelManager levelManager;
     private EnvironmentKnowledge environ;
     private List<TDItem> items;
-
+    
     public Model (JGEngine engine) {
         this.engine = engine;
         defineAllStaticImages();
@@ -330,13 +330,24 @@ public class Model {
         return player.getMoney();
     }
 
-    /**
-     * Check whether the game has been won (in survival mode)
-     * @return game is won or not
-     */
-    public boolean isGameWon () {
-        return levelManager.checkAllWavesFinished();
-    }
+	/**
+	 * Returns whether or not the player has complete all waves and thus has won
+	 * the game. This will always return false on survival mode.
+	 * 
+	 * @return boolean of whether game is won (all waves completed)
+	 */
+	public boolean isGameWon() {
+		return levelManager.isGameWon();
+	}
+	
+	/**
+	 * Set whether or not the game is played on survival mode.
+	 * @param survivalMode
+	 * @return
+	 */
+	public void setSurvivalMode(boolean survivalMode){
+		levelManager.setSurvivalMode(survivalMode);
+	}
 
     /**
      * Spawns a new wave
