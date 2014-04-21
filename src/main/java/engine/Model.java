@@ -49,7 +49,7 @@ import main.java.schema.WaveSpawnSchema;
 public class Model {
 
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
-    public static final String RESOURCE_PATH = "/src/main/resources/";
+    public static final String RESOURCE_PATH = "/main/resources/";
 
     private JGEngine engine;
     private TDObjectFactory factory;
