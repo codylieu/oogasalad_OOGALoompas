@@ -441,6 +441,10 @@ public class Player implements Serializable {
 
 	private JButton makeMainMenuButton() {
 		JButton mainMenuButton = new JButton(MAIN_MENU_TEXT);
+		mainMenuButton.addActionListener(new MethodAction(engine, "toggleRunning"));
+		mainMenuButton.addActionListener(new MethodAction(this, "showCard", WELCOME_CARD));
+		//mainMenuButton.addActionListener(new MethodAction(frame, "pack"));
+		/*
 		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				engine.toggleRunning();
@@ -448,7 +452,7 @@ public class Player implements Serializable {
 				frame.pack();
 			}
 		});
-
+		 */
 		return mainMenuButton;
 	}
 

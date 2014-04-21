@@ -14,6 +14,11 @@ import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 
+/**
+ * Card to keep track of, display, and save high scores
+ * @author Michael Han
+ *
+ */
 @SuppressWarnings("serial")
 public class HighScoreCard extends JPanel implements Observing, ActionListener {
 
