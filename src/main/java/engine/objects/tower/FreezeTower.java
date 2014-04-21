@@ -29,9 +29,9 @@ public class FreezeTower extends ShootingTower {
     public FreezeTower (ITower baseTower, Map<String, Serializable> attributes) {
         super(baseTower, attributes);
         myFreezeSlowdownProportion =
-                (double) TDObject.getValueOrDefault(attributes,
+                Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes,
                                                     TowerSchema.FREEZE_SLOWDOWN_PROPORTION,
-                                                    DEFAULT_FREEZE_SLOWDOWN_PROPORTION);
+                                                    DEFAULT_FREEZE_SLOWDOWN_PROPORTION)));
     }
 
     @Override
