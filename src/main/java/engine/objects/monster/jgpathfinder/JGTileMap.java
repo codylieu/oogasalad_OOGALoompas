@@ -3,10 +3,15 @@ package main.java.engine.objects.monster.jgpathfinder;
 import jgame.JGPoint;
 import jgame.impl.JGEngineInterface;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-public class JGTileMap {
-    private JGEngineInterface engine;
+public class JGTileMap implements JGTileMapInterface {
+	public static final int DEFAULT_COST = 1;
+
+	private JGEngineInterface engine;
     private JGPoint[][] tileMap;
     private Map<Integer, Integer> costMap;
     private Set<Integer> blockedCIDs;
@@ -17,7 +22,7 @@ public class JGTileMap {
      * @param engine The JGEngine used in the game
      */
     public JGTileMap(JGEngineInterface engine) {
-        this(engine, new HashMap<Integer, Integer>(), new HashSet<Integer>());
+        this(engine, null, null);
     }
 
     /**
@@ -51,13 +56,24 @@ public class JGTileMap {
         }
     }
 
-    /**
-     * Get the indexes of the direct neighbors (no diagonals) of the given tile.
-     *
-     * @param tile The tile index you want the neighbors of
-     * @return A list of indexes of the neighboring tiles
-     */
-    public List<JGPoint> getNeighbors(JGPoint tile) {
+	@Override
+	public int getNumXTiles() {
+		return engine.pfTilesX();
+	}
+
+	@Override
+	public int getNumYTiles() {
+		return engine.pfTilesY();
+	}
+
+	/**
+	 * Get the indexes of the direct neighbors (no diagonals) of the given tile.
+	 *
+	 * @param tile The tile index you want the neighbors of
+	 * @return A list of indexes of the neighboring tiles
+	 */
+    @Override
+	public List<JGPoint> getNeighbors(JGPoint tile) {
         List<JGPoint> neighbors = new ArrayList<JGPoint>();
 
         int[] xDirs = new int[]{0, 1, 0, -1};
@@ -68,7 +84,7 @@ public class JGTileMap {
 
             if ((neighborX < tileMap.length && neighborX >= 0) &&
                     (neighborY < tileMap[0].length && neighborY >= 0) &&
-                    !isBlocked(tileMap[neighborX][neighborY])) {
+                    !isTileBlocked(tileMap[neighborX][neighborY])) {
                 neighbors.add(tileMap[neighborX][neighborY]);
             }
         }
@@ -76,33 +92,33 @@ public class JGTileMap {
         return neighbors;
     }
 
-    /**
-     * Check if the given tile index is blocked from allowing movement.
-     *
-     * @param tile Tile to be checked if it is blocked
-     * @return Whether the tile is blocked
-     */
-    private boolean isBlocked(JGPoint tile) {
-        return blockedCIDs.contains(engine.getTileCid(tile.x, tile.y));
-    }
-
-    /**
-     * Get the cost of moving on a given tile (for example a grass tile can have a cost of
-     * 1 while a mud tile can have a cost of 4).
-     *
-     * @param source The tile that you are moving on
-     * @return The cost to move on that tile
-     */
-    public int getCostToMove(JGPoint source) {
-        // If no cost specified for a given tile, return 1
+    @Override
+	public int getCostToMove(JGPoint source) {
+        // If no cost map specified, return a default value
         if (costMap == null) {
-            return 1;
+            return DEFAULT_COST;
         }
 
+		// If no cost specified for a given tile, return a default value
         if (!costMap.containsKey(engine.getTileCid(source.x, source.y))) {
-            return 1;
+            return DEFAULT_COST;
         }
 
         return costMap.get(engine.getTileCid(source.x, source.y));
     }
+
+	/**
+	 * Check if the given tile index is blocked from allowing movement.
+	 *
+	 * @param tile Tile to be checked if it is blocked
+	 * @return Whether the tile is blocked
+	 */
+	private boolean isTileBlocked(JGPoint tile) {
+		// If no blocked list, return false
+		if (blockedCIDs == null) {
+			return false;
+		}
+
+		return blockedCIDs.contains(engine.getTileCid(tile.x, tile.y));
+	}
 }

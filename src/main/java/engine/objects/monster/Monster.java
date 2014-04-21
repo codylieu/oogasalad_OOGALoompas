@@ -60,7 +60,7 @@ public abstract class Monster extends TDObject {
 		myMoneyValue = rewardAmount;
 		myEntrance = entrance;
 		myExit = exit;
-		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic(), eng); // TODO: clean up
+		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic()); // TODO: clean up
 		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
 		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
 		this.setSpeed(myMoveSpeed);
@@ -147,7 +147,11 @@ public abstract class Monster extends TDObject {
 	@Override
 	public void paint() {
 		if (myPath != null) {
-			myPath.paint(5, JGColor.pink);
+			for (JGPoint p : myPath) {
+				JGPoint coord = eng.getTileCoord(p);
+				eng.drawOval(coord.x + eng.tileWidth()/2, coord.y + eng.tileHeight()/2,
+						10, 10, true, true, 10, JGColor.yellow);
+			}
 		}
 	}
 
