@@ -1,5 +1,7 @@
 package main.java.player.panels;
 
+import java.util.List;
+
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -30,6 +32,12 @@ public class UnitInfoPanel extends JPanel implements Observing {
 	@Override
 	public void setSubject(Subject s) {
 		engine = (TDPlayerEngine) s;
+	}
+
+	@Override
+	public void setSubject(List<Subject> s) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -280,6 +280,7 @@ public class Player implements Serializable {
 
 		towerChooser = new TowerChooser(engine);
 		itemChooser = new ItemChooser(engine);
+		
 		List<Subject> engineSubjectList = new ArrayList<Subject>();
 		engineSubjectList.add(towerChooser);
 		engineSubjectList.add(itemChooser);
@@ -315,6 +316,10 @@ public class Player implements Serializable {
 	public void populateTowerChooserAndToggleRunning() {
 		towerChooser.getTowerNames();
 		engine.toggleRunning();
+	}
+	
+	public void populateItemChooser(){
+		
 	}
 
 	private JPanel makeGameInfoPanel() {

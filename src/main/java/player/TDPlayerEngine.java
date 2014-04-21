@@ -318,5 +318,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		towerChooser = (ITowerChooser) s.get(0);
 		itemChooser = (ItemChooser) s.get(1);
 	}
+
+	@Override
+	public void setSubject(Subject s) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	}

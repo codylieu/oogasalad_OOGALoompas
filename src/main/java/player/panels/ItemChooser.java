@@ -9,6 +9,7 @@ public class ItemChooser extends ObjectChooser{
 
 	public ItemChooser(TDPlayerEngine myEngine){
 		super(myEngine);
+		//register(engine);
 	}
 	
 	@Override

@@ -13,12 +13,12 @@ import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 
-public abstract class ObjectChooser extends SubjectPanel implements ActionListener, Subject{
+public abstract class ObjectChooser extends SubjectPanel implements ActionListener{
 	protected JComboBox<String> objectComboBox;
 	protected TDPlayerEngine engine;
 	protected String currentObjectName;
-	protected List<Observing> observers;
-	protected boolean hasChanged;
+	//protected List<Observing> observers;
+	//protected boolean hasChanged;
 	protected Vector<String> comboBoxItems;
 	protected DefaultComboBoxModel<String> comboBoxModel;
 	
