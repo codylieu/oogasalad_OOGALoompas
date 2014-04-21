@@ -8,7 +8,11 @@ import javax.swing.JPanel;
 
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
-
+/**
+ * A JPanel that can be extended to create panels that will be observed
+ * 
+ * @author Michael Han
+ */
 public abstract class SubjectPanel extends JPanel implements Subject {
 
 	protected List<Observing> observers;
@@ -17,18 +21,29 @@ public abstract class SubjectPanel extends JPanel implements Subject {
 	public SubjectPanel(){
 		super(new BorderLayout());
 	}
-
+	/**
+	 * Will vary depending on what you want the update to do
+	 * @param objectName
+	 */
 	protected abstract void update(String objectName);
-	
+
+	/**
+	 * registers Observing objects
+	 */
 	public void register(Observing o) {
 		if(!observers.contains(o)) observers.add(o);
-
 	}
 
+	/**
+	 * unregisters Observing objects
+	 */
 	public void unregister(Observing o) {
 		if(observers.contains(o)) observers.remove(o);
 	}
-
+	
+	/**
+	 * notify all observers if something has changed
+	 */
 	public void notifyObservers() {
 		List<Observing> localObservers = null;
 		if(!hasChanged) return;

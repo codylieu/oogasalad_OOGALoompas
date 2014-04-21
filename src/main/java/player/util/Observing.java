@@ -3,7 +3,7 @@ package main.java.player.util;
 import java.util.List;
 /**
  * Interface to be implemented by classes that are going to be observing a Subject
- *  
+ * Note: when implementing this, you must call the setSubject method
  * @author Michael Han 
  */
 public interface Observing {

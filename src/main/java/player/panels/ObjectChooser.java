@@ -3,7 +3,6 @@ package main.java.player.panels;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -11,14 +10,16 @@ import javax.swing.JComboBox;
 
 import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
-import main.java.player.util.Subject;
-
+/**
+ * An abstract class that acts as a JComboBox that is also a Subject(observable).
+ * Can easily be altered to be a different type(button, textfield, etc) that notifies other Observing objects.
+ *  
+ * @author Michael Han
+ */
 public abstract class ObjectChooser extends SubjectPanel implements ActionListener{
 	protected JComboBox<String> objectComboBox;
 	protected TDPlayerEngine engine;
 	protected String currentObjectName;
-	//protected List<Observing> observers;
-	//protected boolean hasChanged;
 	protected Vector<String> comboBoxItems;
 	protected DefaultComboBoxModel<String> comboBoxModel;
 	
@@ -31,7 +32,10 @@ public abstract class ObjectChooser extends SubjectPanel implements ActionListen
 		currentObjectName = "";
 		initComboBox();
 	}
-
+	
+	/**
+	 * initializes components relevant to JComboBox
+	 */
 	private void initComboBox(){
 		comboBoxItems = new Vector<String>();
 		comboBoxModel = new DefaultComboBoxModel<String>(comboBoxItems);		
@@ -39,9 +43,16 @@ public abstract class ObjectChooser extends SubjectPanel implements ActionListen
 		objectComboBox.addActionListener(this);
 		add(objectComboBox);
 	}
-
+	
+	/**
+	 * Left abstract because implementation will differ based on where you are getting the names from.
+	 * Main purpose is to populate the JComboBox
+	 */
 	public abstract void getObjectNames();
 
+	/**
+	 * pulls the String that was clicked on in the combo box
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JComboBox<String> myBox = (JComboBox<String>) e.getSource();
@@ -49,13 +60,20 @@ public abstract class ObjectChooser extends SubjectPanel implements ActionListen
 		update(objectName);
 	}
 
+	/**
+	 * Changes currentObjectName to new name that user has just clicked on.
+	 * Notifies observers
+	 */
 	@Override
-	protected void update(String itemName){
-		currentObjectName = itemName;
+	protected void update(String objectName){
+		currentObjectName = objectName;
 		hasChanged = true;
 		notifyObservers();
 	}
-		
+	
+	/**
+	 * @return currentObjectName
+	 */
 	public String getObjectName(){
 		return currentObjectName;
 	}
