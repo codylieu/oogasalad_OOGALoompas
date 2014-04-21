@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+@SuppressWarnings("serial")
 public class HelpTextPanel extends JPanel {
 	public static final String HELP = "random help instructions";
 	private JTextArea helpText;

@@ -41,6 +41,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public static int RIGHT_CLICK = 3;
 
 	private ObjectChooser towerChooser;
+	@SuppressWarnings("unused")
 	private ObjectChooser itemChooser;
 	private Model model;
 	private List<Observing> observers;

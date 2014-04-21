@@ -5,17 +5,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import main.java.player.TDPlayerEngine;
 
+@SuppressWarnings("serial")
 public class DifficultyPanel extends JPanel{
 	public static final String EASY = "easy";
 	public static final String MEDIUM = "medium";
 	public static final String HARD = "hard";
 	
+	@SuppressWarnings("unused")
 	private TDPlayerEngine engine;
 	private ButtonGroup difficultyRadioButtonGroup;
 	

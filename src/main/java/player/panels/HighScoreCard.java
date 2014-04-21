@@ -14,6 +14,7 @@ import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 
+@SuppressWarnings("serial")
 public class HighScoreCard extends JPanel implements Observing, ActionListener {
 
 	public static final String INITIAL_PLAYER_NAME = "enter name after deleting this message";
@@ -21,6 +22,7 @@ public class HighScoreCard extends JPanel implements Observing, ActionListener {
 	public static final String SPACER_FOR_HIGH_SCORE = ": ";
 	public static final String NEWLINE = "\n";
 	private JTextField playerName;
+	@SuppressWarnings("unused")
 	private TDPlayerEngine engine;
 	private JTextArea highScoreDisplay;
 	private int highScore;

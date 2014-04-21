@@ -56,6 +56,7 @@ import net.lingala.zip4j.exception.ZipException;
  *
  */
 
+@SuppressWarnings("serial")
 public class Player implements Serializable {
 
 	public static final int BUTTON_PADDING = 10;
@@ -156,7 +157,6 @@ public class Player implements Serializable {
 		frame.setJMenuBar(makeMenuBar());
 	}
 
-	@SuppressWarnings("serial")
 	private JMenu makeFileMenu(){
 		JMenu files = new JMenu(FILE_LABEL);
 		files.add(new AbstractAction(LOAD_GAME_TEXT){
