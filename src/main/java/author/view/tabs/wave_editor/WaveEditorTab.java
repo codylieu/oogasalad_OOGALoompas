@@ -40,8 +40,6 @@ public class WaveEditorTab extends EditorTab {
 
 	private static final String WAVE_COLUMN_STRING = "Waves";
 	private static final String WAVE_STRING = "Wave";
-
-	private List<WaveSpawnSchema> myWaves;
 	
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
@@ -65,6 +63,10 @@ public class WaveEditorTab extends EditorTab {
 		add(tabCreator.createWaveEditorContent(), BorderLayout.CENTER);
 	}
 
+	/**
+	 * @param columnName
+	 * Called when the enemy list is added to in the Enemy Editor Tab
+	 */
 	private void addNewEnemyColumn(String columnName) {
 		List<String> zeroesColumnList = new ArrayList<String>();
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -73,6 +75,9 @@ public class WaveEditorTab extends EditorTab {
 		tableModel.addColumn(columnName, zeroesColumnList.toArray());
 	}
 
+	/**
+	 * Updates the wave column with the wave strings
+	 */
 	private void updateWaveColumn() {
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 			int rowNum = i + 1;
@@ -123,10 +128,14 @@ public class WaveEditorTab extends EditorTab {
 		waveController.addWaves(allWaveSpawnSchemas);
 	}
 	
+	/**
+	 * @param enemyName
+	 * @return
+	 * Gets the column index of the enemy represented by the input string
+	 */
 	private int getColumnOfEnemy(String enemyName) {
 		WaveController waveController = (WaveController) myController;
 		String[] currentColumnNames = waveController.getEnemyNames();
-		
 		
 		for (int index = 0; index < currentColumnNames.length; index++) {
 			if(currentColumnNames[index].equals(enemyName)) {
@@ -214,6 +223,9 @@ public class WaveEditorTab extends EditorTab {
 			return sp;
 		}
 
+		/**
+		 * Inner inner class to make buttons
+		 */
 		private class ButtonMaker {
 
 			/**
