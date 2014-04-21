@@ -63,7 +63,8 @@ public class TowerEditorTab extends ObjectEditorTab {
 			Map<String, Serializable> towerAttributes = tower.getAttributesMap();
 			
 			for (String attribute : towerAttributes.keySet()) {
-				towerSchema.addAttribute(attribute, towerAttributes.get(attribute));
+				Serializable castedAttribute = addCastToAttribute(towerAttributes.get(attribute));
+				towerSchema.addAttribute(attribute, castedAttribute);				
 			}
 			towerSchemas.add(towerSchema);
 		}
@@ -239,7 +240,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 			shrapnelImageCanvas = new ImageCanvas(true,
 					TowerSchema.SHRAPNEL_IMAGE_NAME);
 			towerImageCanvas = new ImageCanvas(false,
-					TowerSchema.TOWER_IMAGE_NAME);
+					TDObjectSchema.IMAGE_NAME);
 			// clump data types
 			clumpFieldsIntoGroups();
 
