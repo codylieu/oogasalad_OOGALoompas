@@ -10,6 +10,11 @@ import javax.swing.JRadioButton;
 
 import main.java.player.TDPlayerEngine;
 
+/**
+ * Panel to allow user to choose difficulty
+ * @author Michael Han
+ *
+ */
 @SuppressWarnings("serial")
 public class DifficultyPanel extends JPanel{
 	public static final String EASY = "easy";
