@@ -21,7 +21,9 @@ public class ItemChooser extends ObjectChooser{
 		for (String s: itemNameList) {
 			comboBoxModel.addElement(s);
 		}
+		
 		objectComboBox.setSelectedIndex(0);
 	}
+	
 
 }
