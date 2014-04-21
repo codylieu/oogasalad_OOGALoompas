@@ -153,7 +153,9 @@ public class TestEngine extends JGEngine {
 		//System.out.println(cursorState);
 		if (cursorState == CursorState.AddTower) {
 			//	System.out.println("displaytower");
-			new TowerGhost(getMouseX(), getMouseY());
+			
+			// This constructor has been deprecated
+			// new TowerGhost(getMouseX(), getMouseY());
 		}
 	}
 

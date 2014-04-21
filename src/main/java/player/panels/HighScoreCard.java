@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -65,6 +66,12 @@ public class HighScoreCard extends JPanel implements Observing, ActionListener {
 		String name = playerName.getText();
 		playerName.setText(INITIAL_PLAYER_NAME);
 		highScoreDisplay.append(name + SPACER_FOR_HIGH_SCORE + highScore +  NEWLINE);
+	}
+
+	@Override
+	public void setSubject(List<Subject> s) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
