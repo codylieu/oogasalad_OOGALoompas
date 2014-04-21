@@ -208,7 +208,6 @@ public class TestDataHandler {
 		GameBlueprint testBlueprint = new GameBlueprint();
 		testBlueprint.setMyGameScenario(testSchema);
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
-		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
 		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprint.zip",false);
 		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
