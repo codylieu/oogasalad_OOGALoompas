@@ -34,7 +34,7 @@ public class TestDataHandler {
 
 	public final static String FILE_PATH = "src/test/resources/";
 	public final static String BLUEPRINT_PATH = "TestBlueprint.ser";
-	public final static String SAVEBLUEPRINT_PATH = "SavedBlueprint";
+	public final static String SAVEBLUEPRINT_PATH = "SavedBlueprint.zip";
 	public final static String ZIPPED_RESOURCES = "ZippedResources.zip";
 	public final static String STATE_PATH = "TestState.ser";
 	public final static String TEST_ATTRIBUTE_1 = "testAttribute1";
@@ -209,21 +209,17 @@ public class TestDataHandler {
 		testBlueprint.setMyGameScenario(testSchema);
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
 		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
-		System.out.println(testBlueprintFile.length());
-		GameBlueprint testLoadedBlueprint = ((GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH));
-		File testBlueprintFileTwo = new File(FILE_PATH + BLUEPRINT_PATH);
-		System.out.println(testBlueprintFileTwo.length());
-//		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
-//		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip",false);
-//		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
-//		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
-//		File serializedTestBlueprint = new File(savedBlueprintLocation);
-//		File testBlueprintFile = new File(savedBlueprintLocation);
-//		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
-//		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
-//				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
+		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprint.zip",false);
+		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
+		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
+		File serializedTestBlueprint = new File(savedBlueprintLocation);
+		File testBlueprintFile = new File(savedBlueprintLocation);
+		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
+		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
+				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
 
-		//		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
+				System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 	}
 
 
