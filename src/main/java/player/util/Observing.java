@@ -1,6 +1,8 @@
 package main.java.player.util;
 
+import java.util.List;
+
 public interface Observing {
 	public void update();
-	public void setSubject(Subject s);
+	public void setSubject(List<Subject> s);
 }

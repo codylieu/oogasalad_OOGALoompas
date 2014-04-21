@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -43,6 +45,7 @@ import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.Sound;
+import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -239,7 +242,7 @@ public class Player implements Serializable {
 
 	private TDPlayerEngine makeGamePanel() {
 		engine = new TDPlayerEngine();
-		engine.setSubject(towerChooser);
+		//engine.setSubject(towerChooser);
 		engine.stop();
 		return engine;
 	}
@@ -276,9 +279,11 @@ public class Player implements Serializable {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
-		engine.setSubject(towerChooser);//This probably does not belong here
-		
 		itemChooser = new ItemChooser(engine);
+		List<Subject> engineSubjectList = new ArrayList<Subject>();
+		engineSubjectList.add(towerChooser);
+		engineSubjectList.add(itemChooser);
+		engine.setSubject(engineSubjectList);//This probably does not belong here
 		
 		
 		gameButtonPanel.add(mainMenuButton);

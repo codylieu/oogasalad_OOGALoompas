@@ -14,7 +14,7 @@ import main.java.engine.Model;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.player.panels.ITowerChooser;
-import main.java.player.panels.TowerChooser;
+import main.java.player.panels.ItemChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
@@ -35,6 +35,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public static int RIGHT_CLICK = 3;
 
 	private ITowerChooser towerChooser;
+	private ItemChooser itemChooser;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
@@ -313,7 +314,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	}
 
 	@Override
-	public void setSubject(Subject s) {
-		towerChooser = (ITowerChooser) s;
+	public void setSubject(List<Subject> s) {
+		towerChooser = (ITowerChooser) s.get(0);
+		itemChooser = (ItemChooser) s.get(1);
 	}
-}
+	
+	}
