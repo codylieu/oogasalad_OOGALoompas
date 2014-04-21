@@ -49,7 +49,7 @@ import main.java.schema.WaveSpawnSchema;
 public class Model {
 
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
-    public static final String RESOURCE_PATH = "/main/resources/";
+    public static final String RESOURCE_PATH = "/src/main/resources/";
 
     private JGEngine engine;
     private TDObjectFactory factory;
@@ -330,7 +330,11 @@ public class Model {
         return player.getMoney();
     }
 
-    private boolean isGameWon () {
+    /**
+     * Check whether the game has been won (in survival mode)
+     * @return game is won or not
+     */
+    public boolean isGameWon () {
         return levelManager.checkAllWavesFinished();
     }
 
