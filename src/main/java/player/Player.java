@@ -108,7 +108,7 @@ public class Player implements Serializable {
 	private ObjectChooser itemChooser;
 
 	public Player(){
-		makeGamePanel();
+		initializeEngine();
 		initSong();
 		makeFrame();
 		makeCards();
@@ -240,7 +240,7 @@ public class Player implements Serializable {
 		cards.add(gameCard, GAME_CARD);
 	}
 
-	private TDPlayerEngine makeGamePanel() {
+	private TDPlayerEngine initializeEngine() {
 		engine = new TDPlayerEngine();
 		//engine.setSubject(towerChooser);
 		engine.stop();
