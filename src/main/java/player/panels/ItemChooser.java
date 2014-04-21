@@ -14,10 +14,10 @@ public class ItemChooser extends ObjectChooser{
 	
 	@Override
 	public void getObjectNames() {
-		//List<String> itemNameList = engine.getPossibleTowers();
-		List<String> itemNameList = new ArrayList<String>(); // need list of items from engine
+		List<String> itemNameList = engine.getPossibleTowers();
+		//List<String> itemNameList = new ArrayList<String>(); // need list of items from engine
 		//System.out.println(engine.getPossibleTowers().size());
-		itemNameList.add("temp");
+		//itemNameList.add("temp");
 		comboBoxModel.removeAllElements();
 		for (String s: itemNameList) {
 			comboBoxModel.addElement(s);

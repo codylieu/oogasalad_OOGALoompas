@@ -314,13 +314,11 @@ public class Player implements Serializable {
 	}
 
 	public void populateTowerChooserAndToggleRunning() {
-		towerChooser.getTowerNames();
+		towerChooser.getObjectNames();
+		itemChooser.getObjectNames();
 		engine.toggleRunning();
 	}
 	
-	public void populateItemChooser(){
-		
-	}
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();

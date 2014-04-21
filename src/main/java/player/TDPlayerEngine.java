@@ -13,8 +13,9 @@ import jgame.platform.JGEngine;
 import main.java.engine.Model;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.player.panels.ITowerChooser;
 import main.java.player.panels.ItemChooser;
+import main.java.player.panels.ObjectChooser;
+import main.java.player.panels.TowerChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
@@ -34,8 +35,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public static int LEFT_CLICK = 1;
 	public static int RIGHT_CLICK = 3;
 
-	private ITowerChooser towerChooser;
-	private ItemChooser itemChooser;
+	private ObjectChooser towerChooser;
+	private ObjectChooser itemChooser;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
@@ -218,8 +219,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	@Override
 	public void update(){
 		System.out.println(towerChooser);
-		System.out.println(towerChooser.getTowerName());
-		towerName = towerChooser.getTowerName();
+		System.out.println(towerChooser.getObjectName());
+		towerName = towerChooser.getObjectName();
 	}
 
 	public void toggleAddTower() {
@@ -315,7 +316,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	@Override
 	public void setSubject(List<Subject> s) {
-		towerChooser = (ITowerChooser) s.get(0);
+		towerChooser = (TowerChooser) s.get(0);
 		itemChooser = (ItemChooser) s.get(1);
 	}
 
