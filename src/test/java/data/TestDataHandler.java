@@ -202,28 +202,43 @@ public class TestDataHandler {
 	public void loadDifferentResourcesFiles() throws ClassNotFoundException, IOException, ZipException{
 		DataHandler testDataHandler = new DataHandler();
 		GameBlueprint testBlueprint = this.createTestBlueprint();
-		// save this with current resources folder
-		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
-		// add stuff to resources
 		String testPath = "src/main/resources/newStuffTest/";
 		String resourcePath = "src/main/resources/";
-		Boolean tempDirCreated = new File(testPath).mkdir();
-		testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
+		
+		// save this with current resources folder
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
+		File myResourcesOne = new File(resourcePath);
+		long myResourcesOneSize = myResourcesOne.length();
+		System.out.println(myResourcesOneSize + "should be less than");
+		// add stuff to resources
+
+		System.out.println(new File(testPath).mkdir());
+		System.out.println(testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser"));
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
-		File myDir = new File(testPath);
+		
+		File myResourcesTwo = new File(resourcePath);
+		long myResourcesTwoSize = myResourcesOne.length();
+		System.out.println(myResourcesTwoSize + "should be more");
+		
+//		File myDir = new File(testPath);
 		// delete it so it doesn't interfere later
-		DataHandler.deleteDirectory(myDir);
+//		DataHandler.deleteDirectory(myDir);
 		
 		// loading them should cause the first to be bigger than the second,
 		// and cause the second is the original, won't interfere with code
-		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
-		File myResourcesTwo = new File(resourcePath);
-		long myResourcesTwoSize = myResourcesTwo.length();
-		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
-		File myResourcesOne = new File(resourcePath);
-		long myResourcesOneSize = myResourcesTwo.length();
 		
+//		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
+//		File myResourcesTwo = new File(resourcePath);
+//		long myResourcesTwoSize = myResourcesTwo.length();
+		System.out.println(myResourcesTwoSize);
 		
+		// loads back the original
+		
+//		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
+//		File myResourcesOne = new File(resourcePath);
+//		long myResourcesOneSize = myResourcesTwo.length();
+//		System.out.println(myResourcesTwoSize + "   " + myResourcesOneSize);
+		assertTrue("The second resources folder should be greater than the first", myResourcesTwoSize > myResourcesOneSize);
 
 	}
 	
