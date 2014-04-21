@@ -296,7 +296,7 @@ public class Player implements Serializable {
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
-		gameButtonPanel.add(itemChooser);
+		//gameButtonPanel.add(itemChooser);
 		return gameButtonPanel;
 	}
 
