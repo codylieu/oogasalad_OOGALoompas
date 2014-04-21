@@ -37,6 +37,9 @@ public class TerrainEditorTab extends EditorTab {
 	private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
 	private static final String MAP_SAVED = "Map Saved";
 	private static final String UPDATE_CANVAS = "Change Canvas Size";
+	private static final int DEFAULT_ROW_COUNT = 20;
+	private static final int DEFAULT_COLUMN_COUNT = 25;
+	
 
 	private int selectedPassabilityIndex;
 
@@ -53,14 +56,9 @@ public class TerrainEditorTab extends EditorTab {
 		setPreferredSize(new Dimension(1200, 500));
 	}
 
-	/**
-	 * ACTION LISTENER METHOD
-	 * Initializes the terrain tab if the user has entered proper row/column 
-	 * information. If the user enters poor information, nothing happens.
-	 */
 	private void initializeTerrain() {
 		myCanvasPanel = new JPanel();
-		myCanvasPanel.add(myCanvas = new Canvas(20, 25, this));
+		myCanvasPanel.add(myCanvas = new Canvas(DEFAULT_ROW_COUNT, DEFAULT_COLUMN_COUNT, this));
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
 		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.WEST);
 		add(myCanvasPanel, BorderLayout.CENTER);
