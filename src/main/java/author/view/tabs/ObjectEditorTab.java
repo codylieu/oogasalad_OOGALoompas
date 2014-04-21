@@ -278,7 +278,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 			
 			String relativePath = new File((String) canvas.getImagePath()).getName();
 			myCurrentObject.addAttribute(canvas.getName(),
-					(relativePath));
+					relativePath);
 			
 		}
 		
