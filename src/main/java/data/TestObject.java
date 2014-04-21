@@ -1,21 +1,28 @@
 package main.java.data;
 
-public class TestObject {
-	public int x;
-	public int y;
-	public String myName;
-	public ExtendedTestObject myExtended;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.io.Serializable;
+
+public class TestObject extends AbstractObjectTest {
+	public static final String DAMAGE = "Damage";
+	public static final String NAME = "name";
 	
-	public TestObject()	{}
-	
-	public TestObject(String n, int xCoor, int yCoor)	{
-		x = xCoor;
-		y = yCoor;
-		myName = n;
-		myExtended = new ExtendedTestObject("wee");
+	public TestObject(){
+		myAttributeSet.add(DAMAGE);
+		myAttributeSet.add(NAME);
 	}
 	
-	public String toString()	{
-		return "name: " + myName + " x: " + x + " y: " + y;
+	public void populateDefaultAttributes(String name){
+		addAttribute(TestObject.DAMAGE, 10);
+		addAttribute(TestObject.NAME, name);
+	}
+	
+	@Override
+	protected Set<String> populateAdditionalAttributes() {
+		// TODO Auto-generated method stub
+		return new HashSet<>();
 	}
 }

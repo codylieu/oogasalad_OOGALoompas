@@ -17,36 +17,17 @@ import javax.swing.JButton;
  *
  */
 public class TileObject extends JButton {
-	private Image myImage; // an edited version of the TileObject's original image
-	private Image myUneditedImage; // original image associated with the TileObject
-	private int myPassabilityIndex;
+	private Image myImage; 
     private int myXIndex;
     private int myYIndex;
     private String myTileMapFileName;
 	
 	public TileObject(Image img) {
 		myImage = img;
-		myUneditedImage = img;
-	}
-	
-	public int getPassabilityIndex() {
-		return myPassabilityIndex;
-	}
-	
-	public void setPassabilityIndex(int index) {
-		myPassabilityIndex = index;
-	}
-	
-	public Color getBGColor() {
-		return null;
 	}
 	
 	public Image getImage() {
 		return myImage;
-	}
-	
-	public Image getUneditedImage() {
-		return myUneditedImage;
 	}
 	
 	public void setImage(Image img) {

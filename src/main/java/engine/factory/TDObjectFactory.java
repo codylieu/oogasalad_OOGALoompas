@@ -24,8 +24,10 @@ import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.engine.util.Reflection;
+import main.java.exceptions.engine.ItemCreationFailureException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
+import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
@@ -66,6 +68,37 @@ public class TDObjectFactory {
     @SuppressWarnings("unchecked")
 	public void loadMonsterSchemas (List<MonsterSchema> schemas) {
     	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
+    }
+    
+    // TODO: Refactor and get rid of repetition with loadMonsterSchemas method
+	@SuppressWarnings("unchecked")
+	public void loadItemSchemas(List<ItemSchema> schemas) {
+    	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);		
+	}
+    /**
+     * Places an item at the given location. 
+     * @param location
+     * @param itemName
+     * @return The new TDItem object
+     * @throws ItemCreationFailureException 
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     */
+    public TDItem placeItem (Point2D location, String itemName) throws ItemCreationFailureException {
+    	
+    	Point2D tileOrigin = findTileOrigin(location);
+        try {
+            TDObjectSchema schema = tdObjectSchemaMap.get(itemName);
+            schema.addAttribute(ItemSchema.LOCATION, (Serializable) tileOrigin);
+            Object[] itemParameters = { schema.getAttributesMap() };
+            return (TDItem) placeObject(schema.getMyConcreteType(), itemParameters);
+        }
+        catch (Exception e) {
+            throw new ItemCreationFailureException(e);
+        }
     }
 
     /**
@@ -137,21 +170,6 @@ public class TDObjectFactory {
             throw new MonsterCreationFailureException(e);
         }
     }
-    
-    public TDItem placeItem (Point2D location, String itemName) throws 
-    	ClassNotFoundException, 
-    	InstantiationException, 
-    	IllegalAccessException, 
-    	IllegalArgumentException, 
-    	InvocationTargetException {
-    	
-    	// TODO: use schema to create item objects!!
-    	Point2D tileOrigin = findTileOrigin(location);
-    	Class c = Class.forName(ITEM_PATH + itemName);
-		Constructor[] con = c.getConstructors();
-		TDItem newItem = (TDItem) con[0].newInstance(tileOrigin.getX(), tileOrigin.getY());
-    	return newItem;
-    }
 
     /**
      * Uses the Reflection utility class to create the appropriate object with parameters
@@ -185,4 +203,6 @@ public class TDObjectFactory {
     public List<String> getPossibleTowersNames(){
         return Collections.unmodifiableList(possibleTowersNames);
     }
+
+
 }

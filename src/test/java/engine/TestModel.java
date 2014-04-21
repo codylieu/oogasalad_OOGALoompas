@@ -10,7 +10,7 @@ public class TestModel {
 
 	@Test
 	public void checkTowerIsPlaced() {
-		Model model = new Model(new TestEngine());
+		Model model = new Model(new FakeJGEngine());
 		
 		final int testx = 200, testy = 200;
 //		System.out.println("ha");

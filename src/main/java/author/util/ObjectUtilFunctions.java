@@ -17,7 +17,7 @@ import main.java.schema.tdobjects.TDObjectSchema;
  *         has a few straightforward utility functions that help with IO in
  *         relation to tables and maps
  */
-public class EnemyUtilFunctions {
+public class ObjectUtilFunctions {
 	public static boolean isInteger(String s) {
 		return isInteger(s, 10);
 	}
@@ -90,7 +90,7 @@ public class EnemyUtilFunctions {
 				if (enemyName.length() <= 20) {
 					if (enemyName.length() >= 2) {
 						for (String part : enemyName.split(" ")) {
-							if (EnemyUtilFunctions.isAlphaNumeric(part)) {
+							if (ObjectUtilFunctions.isAlphaNumeric(part)) {
 								return true;
 							}
 						}

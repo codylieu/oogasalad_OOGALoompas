@@ -12,14 +12,15 @@ import java.util.*;
 import java.util.List;
 
 public class Canvas extends JPanel {
+	
+	private static final int TILE_SIZE = 25; // in pixels
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
 	private int numRows;
 	private int numCols;
-	private static final int TILE_SIZE = 25; // in pixels
 
-	private final Tile[][] myTiles;
+	private Tile[][] myTiles;
 	private TileObject selectedTileObj;
 	private TerrainEditorTab myTerrainTab;
 
@@ -30,7 +31,7 @@ public class Canvas extends JPanel {
 		myTiles = new Tile[numRows][numCols];
 		for (int row = 0; row < numRows; row++) {
 			for (int col = 0; col < numCols; col++) {
-				myTiles[row][col] = new Tile(row, col, DEFAULT_TILE_COLOR);
+				myTiles[row][col] = new Tile(row, col);
 			}
 		}
 		setPreferredSize(new Dimension(numCols*TILE_SIZE, numRows*TILE_SIZE)); // important for maintaining size of JPanel
@@ -65,25 +66,20 @@ public class Canvas extends JPanel {
 		super.paintComponent(g); // Call to super class is necessary
 		g.clearRect(0, 0, getWidth(), getHeight());
 
-		int rectWidth = getWidth() / numCols;
-		int rectHeight = getHeight() / numRows;
-
-		int index = 0;
 		for (Tile tile : getTiles()) {
 			// Upper left corner of the tile
-			int x = tile.getCol() * rectWidth;
-			int y = tile.getRow() * rectHeight;
-			Color tileColor = tile.getColor();
+			int x = tile.getCol() * TILE_SIZE;
+			int y = tile.getRow() * TILE_SIZE;
 			Image tileImage = tile.getImage();
 
 			if (tileImage == null) {
-				g.setColor(tileColor);
-				g.fillRect(x, y, rectWidth, rectHeight); // filling appropriate Tile background colors
+				g.setColor(DEFAULT_TILE_COLOR);
+				g.fillRect(x, y, TILE_SIZE, TILE_SIZE); // filling appropriate Tile background colors
 			} else {
-				g.drawImage(tileImage,x,y, rectWidth, rectHeight, tileColor, null);
+				g.drawImage(tileImage,x,y, TILE_SIZE, TILE_SIZE, DEFAULT_TILE_COLOR, null);
 			}
 			g.setColor(DEFAULT_BORDER_COLOR);
-			g.drawRect(x, y, rectWidth, rectHeight); // drawing appropriate Tile borders
+			g.drawRect(x, y, TILE_SIZE, TILE_SIZE); // drawing appropriate Tile borders
 		}
 	}
 
@@ -104,6 +100,15 @@ public class Canvas extends JPanel {
 		return null;
 	}
 
+	protected void updateTile(Tile newTile) {
+		int newTileRow = newTile.getRow();
+		int newTileCol = newTile.getCol();
+	
+		if (newTileRow < numRows && newTileCol < numCols) {
+			myTiles[newTileRow][newTileCol] = newTile;
+		}
+	}
+	
 	/**
 	 * Obtains a list of tiles within the JPanel
 	 * @return all tiles within the JPanel
@@ -129,7 +134,6 @@ public class Canvas extends JPanel {
 			return;
 		}
 		tile.setImage(selectedTileObj.getImage());
-		tile.setColor(selectedTileObj.getBGColor());
 		tile.setPassIndex(myTerrainTab.getPassabilityIndex());
         tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
         tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
@@ -143,16 +147,22 @@ public class Canvas extends JPanel {
 	protected void clearTiles() {
 		for (Tile tile : getTiles()) {
 			tile.setImage(null);
-			tile.setColor(DEFAULT_TILE_COLOR);
 			tile.setPassIndex(0);
 			repaint();
 		}
 	}
 
+	/**
+	 * Updates the 'selected' TileObject so that on a mouse press,
+	 * we can update the underlying Tile on the Canvas accordingly
+	 */
 	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
 	}
 	
+	/**
+	 * Obtains the 'selected' TileObject
+	 */
 	public TileObject getSelectedTileObj() {
 		return selectedTileObj;
 	}

@@ -3,6 +3,7 @@ package main.java.engine.objects.tower;
 import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.Map;
+
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 import main.java.schema.tdobjects.TowerSchema;
@@ -34,6 +35,12 @@ public class SimpleTower extends TDObject implements ITower {
     protected String myImage; 
     protected double myHealth;
     
+    
+    /**
+     * Name of tower to be upgraded into
+     */
+    protected String myUpgradeTower;
+    
     /**
      * Internal timer shooting at intervals and timing build up phase.
      */
@@ -49,12 +56,13 @@ public class SimpleTower extends TDObject implements ITower {
      * @param cost money cost of creating tower
      * @param buildup time for this tower's construction
      */
-    public SimpleTower (Point2D location, double health, double cost, double buildup, String name) {
+    public SimpleTower (Point2D location, double health, double cost, double buildup, String upgradeTower, String name) {
         super("tower", location.getX(), location.getY(), TOWER_CID, name);
         myHealth = health;
         myImage = name;
         myCost = cost;
         myBuildUpTime = buildup;
+        myUpgradeTower = upgradeTower;
     }
     
     public SimpleTower (Map<String, Serializable> attributes) {
@@ -63,6 +71,7 @@ public class SimpleTower extends TDObject implements ITower {
              (double) getValueOrDefault(attributes, TowerSchema.HEALTH, DEFAULT_HEALTH),
              (double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
              (double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
+             (String) getValueOrDefault(attributes, TowerSchema.UPGRADE_PATH, ""),
              (String) attributes.get(TowerSchema.NAME));     
 }
 
@@ -122,6 +131,11 @@ public class SimpleTower extends TDObject implements ITower {
     public void remove() {
         setImage(null);
         super.remove();
+    }
+
+    @Override
+    public String getUpgradeTowerName () {
+        return myUpgradeTower;
     }
 
 }

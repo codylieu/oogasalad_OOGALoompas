@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
+
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.detector.TargetDetectorInterface;
@@ -74,9 +75,10 @@ public class ShootingTower extends TowerBehaviorDecorator {
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
 //        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
-    	List<Object> target = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
-    	if (target.size() < 1) return;
-    	fire((Point2D) target.get(0));
+    	List<Object> targetLocation = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
+    	if (targetLocation.size() < 1) return;
+		// a tower should only target one monster at a time
+    	fire((Point2D) targetLocation.get(0));
     }
 
     private void fire (Point2D target) {

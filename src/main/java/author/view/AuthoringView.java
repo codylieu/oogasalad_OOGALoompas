@@ -19,11 +19,12 @@ import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.controller.tabbed_controllers.TowerController;
 import main.java.author.controller.tabbed_controllers.WaveController;
 import main.java.author.view.menubar.BasicMenuBar;
+import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
-import main.java.author.view.tabs.wave.WaveEditorTab;
+import main.java.author.view.tabs.wave_editor.WaveEditorTab;
 import main.java.exceptions.data.InvalidGameBlueprintException;
 
 /**
@@ -33,6 +34,7 @@ import main.java.exceptions.data.InvalidGameBlueprintException;
 public class AuthoringView extends JFrame {
 	private MainController myController;
 	private JButton finalizeGameButton;
+	private EnemyEditorTab enemyEditorTab;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -58,16 +60,22 @@ public class AuthoringView extends JFrame {
 		final GameSettingsController gameSettingsController = new GameSettingsController(
 				myController);
 		final TerrainController terrainController = new TerrainController(myController);
+		myController.addTabController(enemyController);
+		myController.addTabController(towerController);
+		myController.addTabController(waveController);
+		myController.addTabController(gameSettingsController);
+		myController.addTabController(terrainController);
 
 		tabbedPane
 				.add(GAME_SETTINGS_EDITOR_STRING,
 						new GameSettingsEditorTab(gameSettingsController));
 		tabbedPane
 				.add(TOWER_EDITOR_STRING,
-						new TowerEditorTab(towerController));
+						new TowerEditorTab(towerController, "Tower"));
+		enemyEditorTab = new EnemyEditorTab(enemyController, "Monster");
 		tabbedPane
-				.add(ENEMY_EDITOR_STRING,
-						new EnemyEditorTab(enemyController));
+				.add(ENEMY_EDITOR_STRING, enemyEditorTab
+						);
 		tabbedPane
 				.add(TERRAIN_EDITOR_STRING,
 						new TerrainEditorTab(terrainController));
@@ -81,7 +89,7 @@ public class AuthoringView extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				if(tabbedPane.getSelectedComponent() instanceof WaveEditorTab){
-					waveController.updateTable();
+					waveController.updateEnemyList();
 				}
 			}
 			
@@ -109,6 +117,12 @@ public class AuthoringView extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				int editorTabCount = tabbedPane.getTabCount();
+				for (int count = 0; count < editorTabCount; count++) {
+					EditorTab tab = (EditorTab) tabbedPane.getComponentAt(count);
+					tab.saveTabData();
+				}
+				
 				if (myController.isGameValid()) {
 					try {
 						myController.saveBlueprint();
@@ -130,6 +144,10 @@ public class AuthoringView extends JFrame {
 	private JButton createFinalizeGameButton() {
 		finalizeGameButton = new JButton("Finalize Game");
 		return finalizeGameButton;
+	}
+
+	public void shiftToEnemyTab() {
+		tabbedPane.setSelectedComponent(enemyEditorTab);
 	}
 
 }

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
@@ -29,24 +30,23 @@ import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {
 	private static final String CLEAR = "Clear Tiles";
-	private static final String EDIT_TILE = "Edit Tile";
-	private static final String SAVE_MAP = "Save Map";
 	private static final String ADD_TILEMAP = "Import Image File";
 	private static final String TERRAIN_CHOOSER = "Choose Terrain Type";
-	private static final String PIXEL_QUERY = "How many pixels are in the bitmap?";
 	private static final String ROW_QUERY = "Enter Row Count";
 	private static final String COL_QUERY = "Enter Column Count";
-	private static final String PIXEL_RANGE = "Pixel size must be between 10 and 40";
 	private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
 	private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
 	private static final String MAP_SAVED = "Map Saved";
+	private static final String UPDATE_CANVAS = "Change Canvas Size";
 
 	private int selectedPassabilityIndex;
 
 	private JFileChooser fileChooser;
 	private TileSelectionManager myTileSelectionManager;
 	private Map<String, JComponent> displayOptions;
+
 	private Canvas myCanvas;
+	private JPanel myCanvasPanel;
 
 	public TerrainEditorTab(TabController controller){
 		super(controller);
@@ -62,14 +62,15 @@ public class TerrainEditorTab extends EditorTab {
 	 * information. If the user enters poor information, nothing happens.
 	 */
 	public void initTerrainTab(ActionEvent e) {
+		myCanvasPanel = new JPanel();
 		boolean isCanvasInitialized = initCanvas();
 		if (!isCanvasInitialized) {
 			return;
 		}
 		remove((JButton) e.getSource());
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
-		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.EAST);
-		add(myCanvas, BorderLayout.CENTER);
+		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.WEST);
+		add(myCanvasPanel, BorderLayout.CENTER);
 		constructButtonDisplay();
 	}
 
@@ -88,6 +89,7 @@ public class TerrainEditorTab extends EditorTab {
 			int rowCount = Integer.parseInt(numRows);
 			int colCount = Integer.parseInt(numCols);
 			myCanvas = new Canvas(rowCount, colCount, this);
+			myCanvasPanel.add(myCanvas);
 			isInitialized = true;
 		} catch (NumberFormatException e) {}
 		return isInitialized;
@@ -124,10 +126,9 @@ public class TerrainEditorTab extends EditorTab {
 	private void constructButtonDisplay() {
 		displayOptions = new LinkedHashMap<String, JComponent>();
 		displayOptions.put(TERRAIN_CHOOSER, constructTerrainTypes());
-		displayOptions.put(EDIT_TILE, initEditorButton());
 		displayOptions.put(ADD_TILEMAP, initNewTileMap());
 		displayOptions.put(CLEAR, initClearButton());
-		displayOptions.put(SAVE_MAP, initSaveButton());
+		displayOptions.put(UPDATE_CANVAS, initNewCanvas());
 
 		JPanel optionDisplayPanel = new JPanel();
 		optionDisplayPanel.setBackground(new Color(50, 50, 50));
@@ -141,7 +142,7 @@ public class TerrainEditorTab extends EditorTab {
 			c.gridy++;
 		}
 
-		add(optionDisplayPanel, BorderLayout.WEST);
+		add(optionDisplayPanel, BorderLayout.EAST);
 		revalidate();
 		repaint();
 	}
@@ -158,16 +159,6 @@ public class TerrainEditorTab extends EditorTab {
 	}
 
 	/**
-	 * Constructs a JButton that allows the user to save the current
-	 * state of the terrain map
-	 */
-	private JButton initSaveButton() {
-		JButton saveButton = new JButton(SAVE_MAP);
-		saveButton.addActionListener(actionListener(this, "saveMap"));
-		return saveButton;
-	}
-
-	/**
 	 * Constructs a JButton that allows the user to clear the terrain map
 	 */
 	private JButton initClearButton() {
@@ -176,14 +167,29 @@ public class TerrainEditorTab extends EditorTab {
 		return clearButton;
 	}
 
-	/**
-	 * Constructs a JButton that allows the user to edit the features of an image
-	 */
-	private JButton initEditorButton() {
-		JButton openBGTiles = new JButton(EDIT_TILE);
-		openBGTiles.addActionListener(actionListener(this, "openEditorWindow"));
-		openBGTiles.setEnabled(false);
-		return openBGTiles;
+	private JButton initNewCanvas() {
+		JButton createNewCanvas = new JButton(UPDATE_CANVAS);
+		createNewCanvas.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				List<Tile> oldTiles = myCanvas.getTiles();
+				myCanvasPanel.remove(myCanvas);
+				initCanvas();
+				updateCanvas(oldTiles);
+				myTileSelectionManager.setCanvas(myCanvas);
+				revalidate();
+				repaint();
+			}
+
+		});
+		return createNewCanvas;
+	}
+	
+	private void updateCanvas(List<Tile> oldTiles) {
+		for (Tile t : oldTiles) {
+			myCanvas.updateTile(t);;
+		}
 	}
 
 	/**
@@ -202,7 +208,6 @@ public class TerrainEditorTab extends EditorTab {
 		int fileReturn = fileChooser.showOpenDialog(this);
 		if (fileReturn == JFileChooser.APPROVE_OPTION) {
 			importTileDisplay(fileChooser.getSelectedFile());
-			displayOptions.get(EDIT_TILE).setEnabled(true);
 			displayOptions.get(TERRAIN_CHOOSER).setEnabled(true);
 			revalidate();
 			repaint();
@@ -283,7 +288,6 @@ public class TerrainEditorTab extends EditorTab {
 		myCanvas.clearTiles();
 	}
 
-
 	/**
 	 * Asks the user for information that can help parse the provided image, then
 	 * calls upon myTileSelectionManager to add the tile display
@@ -296,15 +300,4 @@ public class TerrainEditorTab extends EditorTab {
 		return JOptionPane.showInputDialog(query);
 	}
 
-	/**
-	 * Opens a window that allows the user to edit information about
-	 * the selected Tile
-	 */
-	public void openEditorWindow(ActionEvent e) {
-		JFrame selectionFrame = new JFrame();
-		selectionFrame.add(myTileSelectionManager.getTileEditPanel(), BorderLayout.CENTER);
-		selectionFrame.setLocation(this.getWidth() + 25, 0);
-		selectionFrame.pack();
-		selectionFrame.setVisible(true);
-	}
 }

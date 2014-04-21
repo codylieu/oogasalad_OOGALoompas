@@ -34,6 +34,7 @@ public class MainController {
 
 	public MainController() {
 		myModel = new AuthorModel();
+		myTabControllers = new ArrayList<TabController>();
 	}
 
 	public void setView(AuthoringView view) {
@@ -59,15 +60,15 @@ public class MainController {
 	 * @param towerSchema
 	 */
 
-	public void addTowerToModel(TowerSchema towerSchema) {
-		myModel.addTower(towerSchema);
+	public void addTowersToModel(List<TowerSchema> towerSchemas) {
+		myModel.addTowers(towerSchemas);
 	}
 
 	/**
 	 * Adds a schema representing an enemy object to the game blueprint
 	 * @param enemySchema
 	 */
-	public void addEnemiesToModel(List<SimpleMonsterSchema> enemySchema) {
+	public void addEnemiesToModel(List<MonsterSchema> enemySchema) {
 		myModel.addEnemies(enemySchema);
 	}
 
@@ -110,8 +111,8 @@ public class MainController {
 			filePath = saveFileChooser.getSelectedFile().getAbsolutePath() + ".zip";
 		}
 		//fake one
-		handler.saveBlueprint(createTestBlueprint(), filePath);
-		//handler.saveBlueprint(myModel.getBlueprint(), filePath);
+		//handler.saveBlueprint(createTestBlueprint(), filePath);
+		handler.saveBlueprint(myModel.getBlueprint(), filePath);
 	}
 
 	private GameBlueprint createTestBlueprint() {
@@ -199,7 +200,7 @@ public class MainController {
         testWaveSpawnSchemaThree.addMonsterSchema(testMonsterSpawnSchemaThree);
         testWaves.add(testWaveSpawnSchemaThree);
 
-        testBlueprint.setMyLevelSchemas(testWaves);
+        testBlueprint.setMyWaveSchemas(testWaves);
         
         // create real map functionality
         List<GameMapSchema> mapSchema = myModel.getBlueprint().getMyGameMapSchemas();
@@ -220,28 +221,33 @@ public class MainController {
 			}
 		});
 
+		
 	}
 
-	public int getNumLevels() {
-		for (TabController controller : myTabControllers) {
-			if (controller instanceof GameSettingsController) {
-				GameSettingsController gameSettingsController = (GameSettingsController) controller;
-				return gameSettingsController.getNumLevels();
-			}
-		}
-		return 0;
-	}
-
-	public List<String> getEnemyList() {
+	public List<MonsterSchema> getMonsterSchemas() {
 		for (TabController controller : myTabControllers) {
 			if (controller instanceof EnemyController) {
 				EnemyController enemyController = (EnemyController) controller;
-				return enemyController.getEnemyList();
+				return enemyController.getMonsterSchemas();
+			}
+		}
+		return null;	
+	}
+	
+	public String[] getEnemyNames() {
+		for (TabController controller : myTabControllers) {
+			if (controller instanceof EnemyController) {
+				EnemyController enemyController = (EnemyController) controller;
+				return enemyController.getEnemyNames();
 			}
 		}
 		
-		return new ArrayList<String>();
+		return new String[0];
 		
+	}
+
+	public void shiftToEnemyTab() {
+		myAuthoringView.shiftToEnemyTab();
 	}
 	
 }

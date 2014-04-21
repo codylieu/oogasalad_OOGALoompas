@@ -15,7 +15,7 @@ import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 
-public class TowerChooser extends JPanel implements ActionListener, Subject{
+public class TowerChooser extends JPanel implements ActionListener, Subject, ITowerChooser{
 	private JComboBox<String> towerComboBox;
 	private TDPlayerEngine engine;
 	private String currentTowerName;

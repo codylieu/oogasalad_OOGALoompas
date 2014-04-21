@@ -16,6 +16,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/**
+ * Originally written to allow author to alter look of images. However, class is currently
+ * not used.
+ *
+ */
 public class TileEditingPanel extends JPanel {
 
 	private TileSelectionManager myTileManager;
@@ -38,7 +43,7 @@ public class TileEditingPanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		TileObject selectedTile = myTileManager.getCanvas().getSelectedTileObj();
 		int pixelSize = myTileManager.getCurrentTileDisplay().getMyPixelSize();
-		Image img = (selectedTile == null) ? null : selectedTile.getUneditedImage();
+		Image img = (selectedTile == null) ? null : selectedTile.getImage();
 
 		if (img != null) {
 			img = rotate((BufferedImage) img, myImgAngle);

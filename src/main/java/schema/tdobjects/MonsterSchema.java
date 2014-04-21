@@ -3,16 +3,17 @@ package main.java.schema.tdobjects;
 import main.java.engine.objects.monster.Monster;
 
 public abstract class MonsterSchema extends TDObjectSchema {
-    public static final String HEALTH = "health";
-	public static final String SPEED = "speed";
-	public static final String REWARD = "moneyValue";
-	public static final String ENTRANCE_LOCATION = "entrance";
-	public static final String EXIT_LOCATION = "exit";
-    public static final String BLOCKED_TILES = "blocked";
-	public static final String ENEMY_IMAGE_NAME = "enemyImageName";
-	public static final String COLLISION_IMAGE_NAME = "collisonImageName";
-	public static final String FLYING_OR_GROUND = "flyingOrGround";
-	public static final String TILE_SIZE = "tileSize";
+    public static final String HEALTH = "Health";
+	public static final String SPEED = "Speed";
+	public static final String REWARD = "Bounty Reward";
+	public static final String DAMAGE = "Attack Damage";
+	public static final String ENTRANCE_LOCATION = "Entrance Location";
+	public static final String EXIT_LOCATION = "Exit";
+    public static final String BLOCKED_TILES = "Blocked Tiles";
+	public static final String ENEMY_IMAGE_NAME = "Enemy Image Name";
+	public static final String COLLISION_IMAGE_NAME = "Collision Image Name";
+	public static final String FLYING_OR_GROUND = "Flying or Ground";
+	public static final String TILE_SIZE = "Tile Size";
 	
 	public static final String FLYING = "Flying";
 	public static final String GROUND = "Ground";
@@ -21,7 +22,8 @@ public abstract class MonsterSchema extends TDObjectSchema {
 	public static final String TILE_SIZE_MEDIUM = "Medium";
 	public static final String TILE_SIZE_LARGE = "Large";
 	
-	public static final String DAMAGE = "attackDamage";
+
+	public static final String RESURRECT_MONSTERSPAWNSCHEMA = "Monster schema to spawn upon this monster's death.";
 
 	protected MonsterSchema(Class<? extends Monster> myConcreteType) {
         super(myConcreteType);
@@ -38,5 +40,6 @@ public abstract class MonsterSchema extends TDObjectSchema {
 		myAttributeSet.add(MonsterSchema.TILE_SIZE);
 		myAttributeSet.add(MonsterSchema.ENEMY_IMAGE_NAME);
 		myAttributeSet.add(MonsterSchema.COLLISION_IMAGE_NAME);
+		myAttributeSet.add(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
     }
 }

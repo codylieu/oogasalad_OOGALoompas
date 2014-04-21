@@ -6,6 +6,7 @@ import java.util.List;
 import main.java.schema.GameBlueprint;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.GameSchema;
+import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.WaveSpawnSchema;
@@ -18,12 +19,12 @@ public class AuthorModel {
 		myGameBlueprint = new GameBlueprint();
 	}
 
-	public void addTower(TowerSchema towerSchema) {
-
+	public void addTowers(List<TowerSchema> towerSchemas) {
+		myGameBlueprint.setMyTowerSchemas(towerSchemas);
 	}
 
-	public void addEnemies(List<SimpleMonsterSchema> enemySchema) {
-
+	public void addEnemies(List<MonsterSchema> enemySchema) {
+		myGameBlueprint.setMyMonsterSchemas(enemySchema);
 	}
 
 	public void addGameSettings(GameSchema gameSchema) {

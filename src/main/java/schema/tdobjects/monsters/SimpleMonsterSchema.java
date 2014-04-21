@@ -9,11 +9,7 @@ import java.util.Set;
 
 /**
  * 
- * This is a settings object for a specific type of Enemy and at a high level is
- * a wrapper for a bunch of key value pairs that the Engine will need to
- * reference to create TDObjects. This class is not a specific instance of a
- * Enemy. Please refer to the Game Engine's TDObjects for the objects related to
- * ones you will see onscreen.
+ * This is a settings object for a specific type of Monster.
  */
 public class SimpleMonsterSchema extends MonsterSchema {
 	public static final Class<SimpleMonster> MY_CONCRETE_TYPE = SimpleMonster.class;
@@ -36,8 +32,8 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(MonsterSchema.SPEED, EnemyViewConstants.SPEED_DEFAULT);
 		addAttribute(MonsterSchema.DAMAGE, EnemyViewConstants.DAMAGE_DEFAULT);
 		addAttribute(MonsterSchema.REWARD, EnemyViewConstants.REWARD_DEFAULT);    
-		addAttribute(MonsterSchema.FLYING_OR_GROUND, EnemyViewConstants.FLYING_OR_GROUND_DEFAULT);    
-		addAttribute(MonsterSchema.TILE_SIZE, EnemyViewConstants.TILE_SIZE_DEFAULT);
+		addAttribute(MonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);    
+		addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
 		addAttribute(MonsterSchema.ENEMY_IMAGE_NAME, "");
 		addAttribute(MonsterSchema.COLLISION_IMAGE_NAME, "");
 	}

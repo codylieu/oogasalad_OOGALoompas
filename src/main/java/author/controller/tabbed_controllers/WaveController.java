@@ -8,6 +8,7 @@ import main.java.author.controller.TabController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.wave_editor.WaveEditorTab;
 import main.java.schema.WaveSpawnSchema;
+import main.java.schema.tdobjects.MonsterSchema;
 
 public class WaveController extends TabController {
 
@@ -20,23 +21,23 @@ public class WaveController extends TabController {
 		mySuperController.addWaveToModel(waves);
 	}
 
-	public int getNumLevels() {
-		return mySuperController.getNumLevels();
-	}
-
-	public List<String> getEnemyList() {
+	public String[] getEnemyNames() {
 		
-		return mySuperController.getEnemyList();
-		// hardcoded shit
-		/*List<String> enemies = new ArrayList<String>();
-		enemies.add("Dog");
-		enemies.add("Cat");
-		return enemies;*/
+		return mySuperController.getEnemyNames();
+		
 	}
 	
-	public void updateTable(){
+	public List<MonsterSchema> getMonsterSchemas() {
+		return mySuperController.getMonsterSchemas();
+	}
+	
+	public void updateEnemyList(){
 		WaveEditorTab waveEditorTab = (WaveEditorTab) myEditorTab;
-		waveEditorTab.updateTable();
+		waveEditorTab.updateEnemyList();
+	}
+
+	public void shiftToEnemyTab() {
+		mySuperController.shiftToEnemyTab();
 	}
 	
 }
