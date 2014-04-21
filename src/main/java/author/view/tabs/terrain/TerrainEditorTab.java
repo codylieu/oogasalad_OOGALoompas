@@ -35,7 +35,6 @@ public class TerrainEditorTab extends EditorTab {
 	private static final String ROW_QUERY = "Enter Row Count";
 	private static final String COL_QUERY = "Enter Column Count";
 	private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
-	private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
 	private static final String MAP_SAVED = "Map Saved";
 	private static final String UPDATE_CANVAS = "Change Canvas Size";
 
@@ -50,9 +49,7 @@ public class TerrainEditorTab extends EditorTab {
 
 	public TerrainEditorTab(TabController controller){
 		super(controller);
-		JButton initTerrainButton = new JButton(USER_INIT_MESSAGE);
-		initTerrainButton.addActionListener(actionListener(this, "initTerrainTab"));
-		add(initTerrainButton);
+		initializeTerrain();
 		setPreferredSize(new Dimension(1200, 500));
 	}
 
@@ -61,13 +58,9 @@ public class TerrainEditorTab extends EditorTab {
 	 * Initializes the terrain tab if the user has entered proper row/column 
 	 * information. If the user enters poor information, nothing happens.
 	 */
-	public void initTerrainTab(ActionEvent e) {
+	private void initializeTerrain() {
 		myCanvasPanel = new JPanel();
-		boolean isCanvasInitialized = initCanvas();
-		if (!isCanvasInitialized) {
-			return;
-		}
-		remove((JButton) e.getSource());
+		myCanvasPanel.add(myCanvas = new Canvas(20, 25, this));
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
 		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.WEST);
 		add(myCanvasPanel, BorderLayout.CENTER);
@@ -81,7 +74,7 @@ public class TerrainEditorTab extends EditorTab {
 	 * @return true if the row and column entries contain valid information, 
 	 * otherwise false
 	 */
-	private boolean initCanvas() {
+	private boolean updateCanvasSize() {
 		boolean isInitialized = false;
 		String numRows = queryUser(ROW_QUERY);
 		String numCols = queryUser(COL_QUERY);
@@ -175,7 +168,7 @@ public class TerrainEditorTab extends EditorTab {
 			public void actionPerformed(ActionEvent e) {
 				List<Tile> oldTiles = myCanvas.getTiles();
 				myCanvasPanel.remove(myCanvas);
-				initCanvas();
+				updateCanvasSize();
 				updateCanvas(oldTiles);
 				myTileSelectionManager.setCanvas(myCanvas);
 				revalidate();
