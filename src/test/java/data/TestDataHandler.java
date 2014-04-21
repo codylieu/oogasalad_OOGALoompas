@@ -189,16 +189,48 @@ public class TestDataHandler {
 //		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip",true);
 //	}
 
+
+	
+	/**
+	 * Tests loading of resources from two different
+	 * saved blueprints
+	 * @throws InvalidGameBlueprintException
+	 */
+	@Test
+	public void loadDifferentResourcesFiles() throws InvalidGameBlueprintException{
+		DataHandler testDataHandler = new DataHandler();
+		GameBlueprint testBlueprint = this.createTestBlueprint();
+		// save this with current resources folder
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
+		// add stuff to resources
+		String testPath = "src/main/resources/newStuffTest/";
+		Boolean tempDirCreated = new File(testPath).mkdir();
+		testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
+		File myDir = new File(testPath);
+		// delete it so it doesn't interfere later
+		DataHandler.deleteDirectory(myDir);
+		
+		// loading them should cause the first to be bigger than the second,
+		// and cause the second is the original, won't interfere with code
+		
+		
+		
+
+	}
+	
 	/**
 	 * Tests compression and decompression
 	 * only works if saveObjectFromFile
 	 * and loadObjectFromFile are public
 	 * so we can test pre-compressed size
 	 * and post-compressed size
+	 * @throws InvalidGameBlueprintException 
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 * @throws ZipException
 	 */
+	
 	@Test
 	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
 		DataHandler testDataHandler = new DataHandler();
