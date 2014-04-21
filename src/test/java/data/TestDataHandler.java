@@ -194,16 +194,19 @@ public class TestDataHandler {
 	/**
 	 * Tests loading of resources from two different
 	 * saved blueprints
-	 * @throws InvalidGameBlueprintException
+	 * @throws ZipException 
+	 * @throws IOException 
+	 * @throws ClassNotFoundException 
 	 */
 	@Test
-	public void loadDifferentResourcesFiles() throws InvalidGameBlueprintException{
+	public void loadDifferentResourcesFiles() throws ClassNotFoundException, IOException, ZipException{
 		DataHandler testDataHandler = new DataHandler();
 		GameBlueprint testBlueprint = this.createTestBlueprint();
 		// save this with current resources folder
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
 		// add stuff to resources
 		String testPath = "src/main/resources/newStuffTest/";
+		String resourcePath = "src/main/resources/";
 		Boolean tempDirCreated = new File(testPath).mkdir();
 		testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
@@ -213,45 +216,50 @@ public class TestDataHandler {
 		
 		// loading them should cause the first to be bigger than the second,
 		// and cause the second is the original, won't interfere with code
-		
+		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
+		File myResourcesTwo = new File(resourcePath);
+		long myResourcesTwoSize = myResourcesTwo.length();
+		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
+		File myResourcesOne = new File(resourcePath);
+		long myResourcesOneSize = myResourcesTwo.length();
 		
 		
 
 	}
 	
-	/**
-	 * Tests compression and decompression
-	 * only works if saveObjectFromFile
-	 * and loadObjectFromFile are public
-	 * so we can test pre-compressed size
-	 * and post-compressed size
-	 * @throws InvalidGameBlueprintException 
-	 * @throws ClassNotFoundException
-	 * @throws IOException
-	 * @throws ZipException
-	 */
-	
-	@Test
-	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
-		DataHandler testDataHandler = new DataHandler();
-		//set up gameblueprint, testing by just adding a gameschema
-		GameSchema testSchema = new GameSchema();
-		testSchema.addAttribute("Lives",10);
-		GameBlueprint testBlueprint = new GameBlueprint();
-		testBlueprint.setMyGameScenario(testSchema);
-		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
-		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
-		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprint.zip",false);
-		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
-		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
-		File serializedTestBlueprint = new File(savedBlueprintLocation);
-		File testBlueprintFile = new File(savedBlueprintLocation);
-		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
-		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
-				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
-
-				System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
-	}
+//	/**
+//	 * Tests compression and decompression
+//	 * only works if saveObjectFromFile
+//	 * and loadObjectFromFile are public
+//	 * so we can test pre-compressed size
+//	 * and post-compressed size
+//	 * @throws InvalidGameBlueprintException 
+//	 * @throws ClassNotFoundException
+//	 * @throws IOException
+//	 * @throws ZipException
+//	 */
+//	
+//	@Test
+//	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
+//		DataHandler testDataHandler = new DataHandler();
+//		//set up gameblueprint, testing by just adding a gameschema
+//		GameSchema testSchema = new GameSchema();
+//		testSchema.addAttribute("Lives",10);
+//		GameBlueprint testBlueprint = new GameBlueprint();
+//		testBlueprint.setMyGameScenario(testSchema);
+//		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
+//		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
+//		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprint.zip",false);
+//		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
+//		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
+//		File serializedTestBlueprint = new File(savedBlueprintLocation);
+//		File testBlueprintFile = new File(savedBlueprintLocation);
+//		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
+//		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
+//				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
+//
+//				System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
+//	}
 
 
 }
