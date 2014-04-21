@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -37,10 +39,13 @@ import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.InfoPanel;
+import main.java.player.panels.ItemChooser;
+import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.Sound;
+import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -100,9 +105,10 @@ public class Player implements Serializable {
 	private Sound song;
 	private boolean soundOn;
 	private TowerChooser towerChooser;
+	private ObjectChooser itemChooser;
 
 	public Player(){
-		makeGamePanel();
+		initializeEngine();
 		initSong();
 		makeFrame();
 		makeCards();
@@ -218,7 +224,7 @@ public class Player implements Serializable {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		gameCard.add(makeGameButtonPanel(), constraints);
+		gameCard.add(makeGameActionPanel(), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -234,14 +240,14 @@ public class Player implements Serializable {
 		cards.add(gameCard, GAME_CARD);
 	}
 
-	private TDPlayerEngine makeGamePanel() {
+	private TDPlayerEngine initializeEngine() {
 		engine = new TDPlayerEngine();
-		engine.setSubject(towerChooser);
+		//engine.setSubject(towerChooser);
 		engine.stop();
 		return engine;
 	}
 
-	private JPanel makeGameButtonPanel() {
+	private JPanel makeGameActionPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
 
@@ -273,8 +279,14 @@ public class Player implements Serializable {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
-		engine.setSubject(towerChooser);//This probably does not belong here
-
+		itemChooser = new ItemChooser(engine);
+		
+		List<Subject> engineSubjectList = new ArrayList<Subject>();
+		engineSubjectList.add(towerChooser);
+		engineSubjectList.add(itemChooser);
+		engine.setSubject(engineSubjectList);//This probably does not belong here
+		
+		
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
@@ -284,6 +296,7 @@ public class Player implements Serializable {
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
+		//gameButtonPanel.add(itemChooser);
 		return gameButtonPanel;
 	}
 
@@ -301,9 +314,11 @@ public class Player implements Serializable {
 	}
 
 	public void populateTowerChooserAndToggleRunning() {
-		towerChooser.getTowerNames();
+		towerChooser.getObjectNames();
+		itemChooser.getObjectNames();
 		engine.toggleRunning();
 	}
+	
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();

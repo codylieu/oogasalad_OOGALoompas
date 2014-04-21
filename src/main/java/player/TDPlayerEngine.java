@@ -13,7 +13,8 @@ import jgame.platform.JGEngine;
 import main.java.engine.Model;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.player.panels.ITowerChooser;
+import main.java.player.panels.ItemChooser;
+import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.TowerChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
@@ -34,7 +35,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public static int LEFT_CLICK = 1;
 	public static int RIGHT_CLICK = 3;
 
-	private ITowerChooser towerChooser;
+	private ObjectChooser towerChooser;
+	private ObjectChooser itemChooser;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
@@ -42,7 +44,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	private boolean isFullScreen;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
-	private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
+	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 	
 	public TDPlayerEngine() {
 		super();
@@ -162,8 +164,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(LEFT_CLICK);
 			}
-			else
-				drawTowerGhost();
+			else{
+				drawTowerGhost(towerName);
+			}
 		}
 		else if (cursorState == CursorState.None) {
 			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))) {
@@ -177,7 +180,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 			}
 			
-			setAllItems();
+			//setAllItems();
 			
 		}
 
@@ -197,11 +200,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		moveObjects();
 		model.checkCollisions();
 	}
-	private void setAllItems(){
+	/*private void setAllItems(){
 		for(String s: items.keySet()){
 			setItem(LEFT_CLICK, items.getString(s));
 		}	
-	}
+	}*/
 	private void setItem(int clickName ,String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
@@ -212,11 +215,12 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
 		}
 	}
-
+	
+	@Override
 	public void update(){
 		System.out.println(towerChooser);
-		System.out.println(towerChooser.getTowerName());
-		towerName = towerChooser.getTowerName();
+		System.out.println(towerChooser.getObjectName());
+		towerName = towerChooser.getObjectName();
 	}
 
 	public void toggleAddTower() {
@@ -265,9 +269,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			start();
 	}
 
-	private void drawTowerGhost() {
+	private void drawTowerGhost(String imageName) {
 		JGPoint mousePos = getMousePos();
-		new TowerGhost(mousePos.x/tileWidth() * tileWidth(), mousePos.y/tileHeight() * tileHeight());
+		new TowerGhost(mousePos.x/tileWidth() * tileWidth(), mousePos.y/tileHeight() * tileHeight(), imageName);
 	}
 
 	@Override
@@ -311,7 +315,15 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	}
 
 	@Override
-	public void setSubject(Subject s) {
-		towerChooser = (ITowerChooser) s;
+	public void setSubject(List<Subject> s) {
+		towerChooser = (TowerChooser) s.get(0);
+		itemChooser = (ItemChooser) s.get(1);
 	}
-}
+
+	@Override
+	public void setSubject(Subject s) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	}

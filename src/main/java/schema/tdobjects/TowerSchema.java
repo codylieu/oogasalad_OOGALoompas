@@ -24,7 +24,6 @@ public class TowerSchema extends TDObjectSchema {
 	public static final String SPLASH_AMOUNT = "Splash Amount (%)";
 	public static final String TILE_SIZE = "Size";
 	public static final String BUILDUP = "Build Up Time (sec)";
-	public static final String TOWER_IMAGE_NAME = "Tower Image Name";
 	public static final String BULLET_IMAGE_NAME = "Bullet Image Name";
 	public static final String SHRAPNEL_IMAGE_NAME = "Bomb's Shrapnel Image Name";
 
@@ -47,7 +46,6 @@ public class TowerSchema extends TDObjectSchema {
 		myAttributeSet.add(LOCATION);
 		//things author handles
 		myAttributeSet.add(BUILDUP);
-		myAttributeSet.add(TOWER_IMAGE_NAME);
 		myAttributeSet.add(BULLET_IMAGE_NAME);
 		myAttributeSet.add(COST);
 		myAttributeSet.add(DAMAGE);
@@ -86,7 +84,7 @@ public class TowerSchema extends TDObjectSchema {
 				TowerViewConstants.FREEZE_SLOWDOWN_DEFAULT);
 		addAttribute(TowerSchema.SHRAPNEL_DAMAGE,
 				TowerViewConstants.BUILDUP_DEFAULT);
-		addAttribute(TowerSchema.TOWER_IMAGE_NAME, "");
+		addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
 		addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "");
 		addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
 		addAttribute(TowerSchema.UPGRADE_PATH, "");

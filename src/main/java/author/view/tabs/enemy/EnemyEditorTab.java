@@ -61,12 +61,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			Map<String, Serializable> monsterAttributes = monster.getAttributesMap();
 			
 			for (String attribute : monsterAttributes.keySet()) {
-				monsterSchema.addAttribute(attribute, monsterAttributes.get(attribute));
+				Serializable castedAttribute = addCastToAttribute(monsterAttributes.get(attribute));	
+				monsterSchema.addAttribute(attribute, castedAttribute);
 			}
 			monsterSchemas.add(monsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
 	}
+	
 	
 	public List<MonsterSchema> getMonsterSchemas() {
 		return monsterSchemas;
@@ -162,7 +164,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					largeTileButton, flyingButton, groundButton };
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
-					MonsterSchema.ENEMY_IMAGE_NAME);
+					TDObjectSchema.IMAGE_NAME);
 			collisionImageCanvas = new ImageCanvas(true,
 					MonsterSchema.COLLISION_IMAGE_NAME);
 
