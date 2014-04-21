@@ -38,11 +38,13 @@ public class TDObjectFactory {
 	private JGEngineInterface engine;
     private Map<String, TDObjectSchema> tdObjectSchemaMap;
     private List<String> possibleTowersNames;
+    private List<String> possibleItemNames;
 
     public TDObjectFactory (JGEngineInterface engine) {
         this.engine = engine;
         tdObjectSchemaMap = new HashMap<>();
         possibleTowersNames = new ArrayList<String>();
+        possibleItemNames = new ArrayList<String>();
     }
 
     public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
@@ -73,8 +75,12 @@ public class TDObjectFactory {
     // TODO: Refactor and get rid of repetition with loadMonsterSchemas method
 	@SuppressWarnings("unchecked")
 	public void loadItemSchemas(List<ItemSchema> schemas) {
+    	for (ItemSchema i: schemas) {
+    		possibleItemNames.add((String) i.getAttributesMap().get(TDObjectSchema.NAME));
+    	}
     	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);		
 	}
+	
     /**
      * Places an item at the given location. 
      * @param location
@@ -202,6 +208,15 @@ public class TDObjectFactory {
      */
     public List<String> getPossibleTowersNames(){
         return Collections.unmodifiableList(possibleTowersNames);
+    }
+    
+    /**
+     * Returns the names of items that have loaded schemas, and can possibly be created/
+     * 
+     * @return an unmodifiable list
+     */
+    public List<String> getPossibleItemNames() {
+    	return Collections.unmodifiableList(possibleItemNames);
     }
 
 

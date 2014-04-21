@@ -66,7 +66,6 @@ public class TowerEditorTab extends ObjectEditorTab {
 				Serializable castedAttribute = addCastToAttribute(towerAttributes.get(attribute));
 				towerSchema.addAttribute(attribute, castedAttribute);				
 			}
-			towerSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
 			towerSchemas.add(towerSchema);
 		}
 		controller.addTowers(towerSchemas);
@@ -241,7 +240,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 			shrapnelImageCanvas = new ImageCanvas(true,
 					TowerSchema.SHRAPNEL_IMAGE_NAME);
 			towerImageCanvas = new ImageCanvas(false,
-					TowerSchema.TOWER_IMAGE_NAME);
+					TDObjectSchema.IMAGE_NAME);
 			// clump data types
 			clumpFieldsIntoGroups();
 
