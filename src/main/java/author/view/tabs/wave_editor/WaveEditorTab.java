@@ -145,6 +145,10 @@ public class WaveEditorTab extends EditorTab {
 		return -1;
 	}
 	
+	/**
+	 * @param fieldValue
+	 * Adds a new wave and populates the row based off of the input fieldValue String
+	 */
 	private void addNewWaveRow(String fieldValue){
 		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
 				.getModel();
@@ -307,7 +311,6 @@ public class WaveEditorTab extends EditorTab {
 			private JComponent makeClearAllWavesButton() {
 
 				clearAllWavesButton = new JButton("Clear All Waves");
-				clearAllWavesButton.setEnabled(false);
 
 				clearAllWavesButton.addActionListener(new ActionListener() {
 
