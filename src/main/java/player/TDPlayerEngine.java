@@ -162,8 +162,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(LEFT_CLICK);
 			}
-			else
-				drawTowerGhost();
+			else{
+				drawTowerGhost(towerName);
+			}
 		}
 		else if (cursorState == CursorState.None) {
 			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))) {
@@ -212,7 +213,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
 		}
 	}
-
+	
+	@Override
 	public void update(){
 		System.out.println(towerChooser);
 		System.out.println(towerChooser.getTowerName());
@@ -265,9 +267,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			start();
 	}
 
-	private void drawTowerGhost() {
+	private void drawTowerGhost(String imageName) {
 		JGPoint mousePos = getMousePos();
-		new TowerGhost(mousePos.x/tileWidth() * tileWidth(), mousePos.y/tileHeight() * tileHeight());
+		new TowerGhost(mousePos.x/tileWidth() * tileWidth(), mousePos.y/tileHeight() * tileHeight(), imageName);
 	}
 
 	@Override
