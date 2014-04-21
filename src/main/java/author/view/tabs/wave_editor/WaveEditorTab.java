@@ -115,7 +115,6 @@ public class WaveEditorTab extends EditorTab {
 			for (MonsterSchema monsterSchema : waveController.getMonsterSchemas()) {
 				String monsterName = (String) monsterSchema.getAttributesMap().get(MonsterSchema.NAME);
 				int columnOfEnemy = getColumnOfEnemy(monsterName);
-				System.out.println((String) table.getModel().getValueAt(waveRow, columnOfEnemy));
 				int numEnemies = Integer.parseInt((String) table.getModel().getValueAt(waveRow, columnOfEnemy));
 				waveSpawnSchema.addMonsterSchema(new MonsterSpawnSchema(monsterSchema, numEnemies));
 			}
