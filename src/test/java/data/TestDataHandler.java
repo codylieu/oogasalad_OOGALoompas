@@ -200,6 +200,10 @@ public class TestDataHandler {
 	 */
 	@Test
 	public void loadDifferentResourcesFiles() throws ClassNotFoundException, IOException, ZipException{
+		File myResourcesBefore = new File("src/main/resources");
+		long myResourcesBeforeSize = myResourcesBefore.listFiles().length;
+		System.out.println(myResourcesBeforeSize + "should be less than");
+
 		DataHandler testDataHandler = new DataHandler();
 		GameBlueprint testBlueprint = this.createTestBlueprint();
 		String testPath = "src/main/resources/newStuffTest/";
@@ -208,7 +212,7 @@ public class TestDataHandler {
 		// save this with current resources folder
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
 		File myResourcesOne = new File(resourcePath);
-		long myResourcesOneSize = myResourcesOne.length();
+		long myResourcesOneSize = myResourcesOne.listFiles().length;
 		System.out.println(myResourcesOneSize + "should be less than");
 		// add stuff to resources
 
@@ -217,7 +221,7 @@ public class TestDataHandler {
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
 		
 		File myResourcesTwo = new File(resourcePath);
-		long myResourcesTwoSize = myResourcesOne.length();
+		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
 		System.out.println(myResourcesTwoSize + "should be more");
 		
 //		File myDir = new File(testPath);
