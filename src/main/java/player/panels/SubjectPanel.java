@@ -13,6 +13,7 @@ import main.java.player.util.Subject;
  * 
  * @author Michael Han
  */
+@SuppressWarnings("serial")
 public abstract class SubjectPanel extends JPanel implements Subject {
 
 	protected List<Observing> observers;

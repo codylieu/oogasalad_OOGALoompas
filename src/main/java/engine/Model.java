@@ -681,6 +681,15 @@ public class Model {
     public List<String> getPossibleTowers () {
         return Collections.unmodifiableList(factory.getPossibleTowersNames());
     }
+    
+    /**
+     * A list of names of possible items to create
+     * 
+     * @return
+     */
+    public List<String> getPossibleItems () {
+        return Collections.unmodifiableList(factory.getPossibleItemNames());
+    }
 
     /**
      * Save the present game state to a loadable file.

@@ -20,7 +20,7 @@ public class JGPathfinderHeuristic implements JGPathfinderHeuristicInterface {
         double dx = Math.abs(source.x - target.x);
         double dy = Math.abs(source.y - target.y);
 
-        final double D = 1; // TODO: find wtf d should be
+        final double D = 5;
 
         return D * (dx + dy);
     }
