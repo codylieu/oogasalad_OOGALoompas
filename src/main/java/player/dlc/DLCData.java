@@ -1,5 +1,12 @@
 package main.java.player.dlc;
 
+/**
+ * A bundle for the different entries
+ * that could be downloaded from the Web
+ * @author Kevin
+ *
+ */
+
 public class DLCData {
 	private String description;
 	private String fileName;

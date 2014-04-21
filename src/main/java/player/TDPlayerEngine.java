@@ -22,6 +22,11 @@ import main.java.player.util.Subject;
 import main.java.player.util.TowerGhost;
 import net.lingala.zip4j.exception.ZipException;
 
+/**
+ * Subclass of JGEngine
+ * @author Kevin
+ *
+ */
 
 public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
@@ -45,7 +50,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
-	
+
 	public TDPlayerEngine() {
 		super();
 		initEngineComponent(960, 640);
@@ -71,8 +76,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		System.out.println(getFrameRate());
 	}
 
-	/*
-	 * Returns whether the game was slowed down or not
+	/**
+	 * 
+	 * @return whether the game was slowed down or not
 	 */
 	public boolean slowDown() {
 		if (getFrameRate() - FRAME_RATE_DELTA > 0) {
@@ -96,6 +102,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		return cursorState;
 	}
 
+	/**
+	 * Draws a rectangle around the tile
+	 * below the current mouse position
+	 * according to certain rules
+	 */
 	private void highlightMouseoverTile() {
 		JGPoint mousePos = getMousePos();
 		int curXTilePos = mousePos.x/tileWidth() * tileWidth();
@@ -179,9 +190,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				clearMouseButton(LEFT_CLICK);
 				clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 			}
-			
+
 			setAllItems();
-			
+
 		}
 
 		notifyObservers();
@@ -200,12 +211,14 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		moveObjects();
 		model.checkCollisions();
 	}
+
 	private void setAllItems(){
 		for(String s: items.keySet()){
 			setItem(LEFT_CLICK, items.getString(s));
 		}	
 	}
-	private void setItem(int clickName ,String itemName){
+
+	private void setItem(int clickName, String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
 				model.placeItem(itemName, getMouseX(), getMouseY());
@@ -215,7 +228,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
 		}
 	}
-	
+
 	@Override
 	public void update(){
 		System.out.println(towerChooser);
@@ -223,8 +236,12 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		towerName = towerChooser.getObjectName();
 	}
 
+	/**
+	 * Toggle the cursor status from AddTower to None 
+	 * or vice-versa
+	 */
 	public void toggleAddTower() {
-		if (getCursorState() == CursorState.AddTower){
+		if (getCursorState() == CursorState.AddTower) {
 			setCursorState(CursorState.None);
 			removeObjects("TowerGhost", 0);
 		}
@@ -260,8 +277,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			initEngineComponent(960, 640);
 			isFullScreen = false;
 		}
-
 	}
+
 	public void toggleRunning() {
 		if (isRunning())
 			stop();
@@ -301,7 +318,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {
 		model.loadGameBlueprint(fileName);
-		//model.loadMapTest(fileName);
 	}
 
 	public Map<String, String> getGameAttributes() {
@@ -323,7 +339,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	@Override
 	public void setSubject(Subject s) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	}
+
+}

@@ -23,7 +23,6 @@ public class DifficultyPanel extends JPanel{
 		engine = myEngine;
 		difficultyRadioButtonGroup = new ButtonGroup();
 		addRadioButtons();
-		
 	}
 
 	private void addRadioButtons(){
