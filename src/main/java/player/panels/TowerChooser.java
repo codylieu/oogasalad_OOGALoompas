@@ -8,7 +8,6 @@ public class TowerChooser extends ObjectChooser{
 
 	public TowerChooser(TDPlayerEngine myEngine){
 		super(myEngine);
-		//register(engine);
 	}
 	
 	@Override
