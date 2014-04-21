@@ -3,6 +3,7 @@ package main.java.schema.tdobjects.monsters;
 import main.java.author.view.tabs.enemy.EnemyViewConstants;
 import main.java.engine.objects.monster.SimpleMonster;
 import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -34,7 +35,7 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(MonsterSchema.REWARD, EnemyViewConstants.REWARD_DEFAULT);    
 		addAttribute(MonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);    
 		addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
-		addAttribute(MonsterSchema.ENEMY_IMAGE_NAME, "");
+		addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
 		addAttribute(MonsterSchema.COLLISION_IMAGE_NAME, "");
 	}
 

@@ -1,20 +1,17 @@
 package main.java.engine.objects.monster.jgpathfinder;
 
-import jgame.JGColor;
 import jgame.JGPoint;
-import jgame.impl.JGEngineInterface;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
-public class JGPath {
-    private JGEngineInterface engine; // TODO: bad design?
+public class JGPath implements Iterable<JGPoint> {
     private LinkedList<JGPoint> path;
 
     /**
      * Create a new, empty JGPath.
      */
-    public JGPath(JGEngineInterface engine) {
-        this.engine = engine;
+    public JGPath() {
         path = new LinkedList<JGPoint>();
     }
 
@@ -33,9 +30,9 @@ public class JGPath {
      * @param point The point (tile index) to be added
      */
     public void add(JGPoint point) {
-        if (point == null) {
-            return; // TODO: throw exception
-        }
+		if (point == null) {
+			throw new NullPointerException("Cannot add null point to path");
+		}
 
         path.add(point);
     }
@@ -46,9 +43,9 @@ public class JGPath {
      * @param point Tile index to be added
      */
     public void addFirst(JGPoint point) {
-        if (point == null) {
-            return; // TODO: throw exception
-        }
+		if (point == null) {
+			throw new NullPointerException("Cannot add null point to path");
+		}
 
         path.addFirst(point);
     }
@@ -68,10 +65,6 @@ public class JGPath {
      * @return The tile index of the next point in the path
      */
     public JGPoint getNext() {
-        if (!hasNext()) {
-            return null; // TODO: throw exception
-        }
-
         return path.poll();
     }
 
@@ -85,17 +78,13 @@ public class JGPath {
         return path.peek();
     }
 
-    /**
-     * Paint the path by placing a circle in the center of each one.
-     *
-     * @param radius Radius of the circle
-     * @param color Color of the circle
-     */
-    public void paint(int radius, JGColor color) {
-        for (JGPoint p : path) {
-            JGPoint coord = engine.getTileCoord(p);
-            engine.drawOval(coord.x + engine.tileWidth()/2, coord.y + engine.tileHeight()/2,
-                    radius, radius, true, true, radius, color);
-        }
-    }
+	/**
+	 * Iterates through each JGPoint in the JGPath.
+	 *
+	 * @return An iterator for JGPath
+	 */
+	@Override
+	public Iterator<JGPoint> iterator() {
+		return path.iterator();
+	}
 }

@@ -213,26 +213,22 @@ public class DataHandler {
 	public GameBlueprint loadBlueprint(String filePath, boolean isEngine) throws ClassNotFoundException, IOException, ZipException { // create another parameter isEngine that determine where it comes from
 		//	If method is being used by Engine, throw exceptions of unfinished state
 		//  If method is being used by Author (isEngine is false), allow them to load an unfinished state
-
+		Boolean tempDirCreated = new File(TEMP_FOLDER_PATH).mkdir();
 		// load the zipped blueprint + resources
 		decompress(filePath, TEMP_FOLDER_PATH);
 
-		// check the blueprint, if it is incomplete and isEngine is true, then throw exceptions
 		GameBlueprint toReturn = ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
-
-		// if authoring is loading, no need to check for exceptions
-		
+				
 		// Delete resources and reload from container file
-		File myDir = new File(FILE_PATH);
+		/*File myDir = new File(FILE_PATH);
 		deleteDirectory(myDir);
-		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
+		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);*/
 		
 		// Delete temp folder
 		deleteDirectory(new File(TEMP_FOLDER_PATH));
 		
 		if (isEngine) {
 			// Validate game blueprint for engine, but not author
-			deleteDirectory(new File(TEMP_FOLDER_PATH));
 			// throw stuff if it isn't complete
 			System.out.println(checkGameBlueprint(toReturn));
 		}

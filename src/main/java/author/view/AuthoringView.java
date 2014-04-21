@@ -2,6 +2,7 @@ package main.java.author.view;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -32,8 +33,11 @@ import main.java.exceptions.data.InvalidGameBlueprintException;
  * 
  */
 public class AuthoringView extends JFrame {
+	
 	private MainController myController;
+	
 	private JButton finalizeGameButton;
+	
 	private EnemyEditorTab enemyEditorTab;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -46,6 +50,9 @@ public class AuthoringView extends JFrame {
 	private static final String WAVE_EDITOR_STRING = "Wave Editor";
 
 	public AuthoringView(MainController mainController) {
+		
+		super("OOGASalad Authoring Environment");
+		
 		myController = mainController;
 		myController.setView(this);
 
