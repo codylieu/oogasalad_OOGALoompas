@@ -472,6 +472,7 @@ public class Player implements Serializable {
 		cardLayout.show(cards, WELCOME_CARD);
 		frame.getContentPane().add(cards, BorderLayout.CENTER);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 }
