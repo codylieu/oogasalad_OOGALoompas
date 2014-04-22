@@ -7,7 +7,7 @@ import main.java.engine.TestEngine;
 import org.junit.Test;
 
 public class TestModel {
-
+/*
 	@Test
 	public void checkTowerIsPlaced() {
 		Model model = new Model(new TestJGEngine());
@@ -39,5 +39,5 @@ public class TestModel {
 		assert(model.getPlayerLives() > 0);
 		assertEquals(0, model.getScore(), .0001);
 		
-	}
+	} */
 }

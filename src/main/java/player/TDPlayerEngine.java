@@ -52,7 +52,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 	public TDPlayerEngine() {
-		super();
+//		super();
+		model = new Model();
 		initEngineComponent(960, 640);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
@@ -62,13 +63,14 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	@Override
 	public void initCanvas() {
-		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
+//		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
+		setCanvasSettings(model.getCanvasSize()[0], model.getCanvasSize()[1], 32, 32, null, JGColor.black, null);
 	}
 
 	@Override
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
-		this.model = new Model(this);
+		model.initializeModel(this);
 	}
 
 	public void speedUp() {

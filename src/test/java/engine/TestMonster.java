@@ -15,7 +15,7 @@ public class TestMonster {
 	public void testIsDead() {
 		//THIS TEST DOES NOT WORK
 		//there are no graphics so a nullpointerexception is thrown
-		Model model = new Model(new TestJGEngine());
+//		Model model = new Model(new TestJGEngine());
 		Point2D entrance = new Point2D.Double(200,100);
 		//Exit exit = new Exit(500, 300, model);
 		//Monster monster = new SimpleMonster(entrance, exit);
