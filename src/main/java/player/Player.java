@@ -49,6 +49,14 @@ import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
+/**
+ * The Swing wrapper that contains all the buttons,
+ * and the TDPlayerEngine
+ * @author Kevin
+ *
+ */
+
+@SuppressWarnings("serial")
 public class Player implements Serializable {
 
 	public static final int BUTTON_PADDING = 10;
@@ -107,6 +115,10 @@ public class Player implements Serializable {
 	private TowerChooser towerChooser;
 	private ObjectChooser itemChooser;
 
+	/**
+	 * initializeEngine() must be called first
+	 * Many other modules require the engine reference to exist
+	 */
 	public Player(){
 		initializeEngine();
 		initSong();
@@ -145,7 +157,6 @@ public class Player implements Serializable {
 		frame.setJMenuBar(makeMenuBar());
 	}
 
-	@SuppressWarnings("serial")
 	private JMenu makeFileMenu(){
 		JMenu files = new JMenu(FILE_LABEL);
 		files.add(new AbstractAction(LOAD_GAME_TEXT){
@@ -280,13 +291,13 @@ public class Player implements Serializable {
 
 		towerChooser = new TowerChooser(engine);
 		itemChooser = new ItemChooser(engine);
-		
+
 		List<Subject> engineSubjectList = new ArrayList<Subject>();
 		engineSubjectList.add(towerChooser);
 		engineSubjectList.add(itemChooser);
 		engine.setSubject(engineSubjectList);//This probably does not belong here
-		
-		
+
+
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
@@ -318,7 +329,7 @@ public class Player implements Serializable {
 		itemChooser.getObjectNames();
 		engine.toggleRunning();
 	}
-	
+
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
@@ -334,14 +345,14 @@ public class Player implements Serializable {
 		return unitInfoPanel;
 	}
 
-	//need to add when game ends to route to here, also need to work on saving the scores 
+	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
 		highScoreCard.setSubject(engine);
 		engine.register(highScoreCard);
 		cards.add(highScoreCard, HIGH_SCORE_CARD);
 	}
-	
+
 	private void addOptionsCard() {
 		JPanel optionCard = new JPanel();
 		optionCard.setLayout(new GridBagLayout());
@@ -430,6 +441,10 @@ public class Player implements Serializable {
 
 	private JButton makeMainMenuButton() {
 		JButton mainMenuButton = new JButton(MAIN_MENU_TEXT);
+		mainMenuButton.addActionListener(new MethodAction(engine, "toggleRunning"));
+		mainMenuButton.addActionListener(new MethodAction(this, "showCard", WELCOME_CARD));
+		//mainMenuButton.addActionListener(new MethodAction(frame, "pack"));
+		/*
 		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				engine.toggleRunning();
@@ -437,7 +452,7 @@ public class Player implements Serializable {
 				frame.pack();
 			}
 		});
-
+		 */
 		return mainMenuButton;
 	}
 

@@ -27,6 +27,9 @@ public class MoneyTower extends TowerBehaviorDecorator {
      */
     public static final int DEFAULT_MONEY_GRANT_INTERVAL = 100;
 
+    private double myMoneyGranted;
+    private double myMoneyGrantInterval;
+    
     /**
      * Create a new money farming tower by decorating a base tower.
      * 
@@ -37,8 +40,10 @@ public class MoneyTower extends TowerBehaviorDecorator {
      * @param moneyGrantInterval at what interval should money be granted to player
      * 
      */
-    public MoneyTower (ITower baseTower, int moneyGranted, int moneyGrantInterval) {
+    public MoneyTower (ITower baseTower, double moneyGranted, double moneyGrantInterval) {
         super(baseTower);
+        myMoneyGranted = moneyGranted;
+        myMoneyGrantInterval = moneyGrantInterval;
     }
 
     
@@ -50,9 +55,9 @@ public class MoneyTower extends TowerBehaviorDecorator {
     public MoneyTower (ITower baseTower, Map<String, Serializable> attributes) {
         this(
              baseTower,
-             (int) TDObject.getValueOrDefault(attributes, TowerSchema.MONEY_GRANTED, DEFAULT_MONEY_GRANTED),
-             (int) TDObject.getValueOrDefault(attributes, TowerSchema.MONEY_GRANT_INTERVAL,
-                                                 DEFAULT_MONEY_GRANT_INTERVAL));
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.MONEY_GRANTED, DEFAULT_MONEY_GRANTED))),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.MONEY_GRANT_INTERVAL,
+                                                 DEFAULT_MONEY_GRANT_INTERVAL))));
     }
     
     
@@ -66,8 +71,8 @@ public class MoneyTower extends TowerBehaviorDecorator {
     }
 
     private void grantPlayerMoney (EnvironmentKnowledge environ) {
-        if (baseTower.atInterval(DEFAULT_MONEY_GRANT_INTERVAL)) {
-            environ.grantPlayerMoney(DEFAULT_MONEY_GRANTED);
+        if (baseTower.atInterval((int)myMoneyGrantInterval)) {
+            environ.grantPlayerMoney((int)myMoneyGranted);
         }
     }
 

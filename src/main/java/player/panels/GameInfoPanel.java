@@ -11,6 +11,11 @@ import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 
+/**
+ * Allows User to display Game info as Observing object
+ * @author Michael
+ *
+ */
 @SuppressWarnings("serial")
 public class GameInfoPanel extends JPanel implements Observing {
 

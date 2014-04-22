@@ -16,6 +16,7 @@ import main.java.player.util.Observing;
  *  
  * @author Michael Han
  */
+@SuppressWarnings("serial")
 public abstract class ObjectChooser extends SubjectPanel implements ActionListener{
 	protected JComboBox<String> objectComboBox;
 	protected TDPlayerEngine engine;
@@ -53,6 +54,7 @@ public abstract class ObjectChooser extends SubjectPanel implements ActionListen
 	/**
 	 * pulls the String that was clicked on in the combo box
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JComboBox<String> myBox = (JComboBox<String>) e.getSource();

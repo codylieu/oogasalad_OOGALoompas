@@ -1,10 +1,10 @@
 package main.java.player.panels;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import main.java.player.TDPlayerEngine;
 
+@SuppressWarnings("serial")
 public class ItemChooser extends ObjectChooser{
 
 	public ItemChooser(TDPlayerEngine myEngine){
