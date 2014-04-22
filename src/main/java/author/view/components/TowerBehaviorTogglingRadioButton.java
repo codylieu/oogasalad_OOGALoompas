@@ -16,21 +16,30 @@ import javax.swing.JSpinner.DefaultEditor;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.engine.objects.tower.TowerBehaviors;
 
-public class BehaviorTogglingRadioButton extends JRadioButton {
+/**
+ * @author garysheng custom radio button that can toggle JSpinners and other
+ *         radio buttons. Corresponds to the toggling of an Tower Behavior
+ */
+public class TowerBehaviorTogglingRadioButton extends JRadioButton {
 
 	private JComponent[] fieldsToToggle;
 	private Font regularFont;
 	private TowerBehaviors towerBehavior;
 
-	public BehaviorTogglingRadioButton() {
-
-	}
-
-	public BehaviorTogglingRadioButton(String towerBehaviorName, TowerBehaviors towerBehavior, boolean b) {
-		super(towerBehaviorName, b);
+	/**
+	 * @param towerBehaviorName
+	 *            the name of the behavior
+	 * @param towerBehavior
+	 *            the corresponding behavior object
+	 * @param isSelected
+	 *            whether or not the button is selected or not
+	 */
+	public TowerBehaviorTogglingRadioButton(String towerBehaviorName,
+			TowerBehaviors towerBehavior, boolean isSelected) {
+		super(towerBehaviorName, isSelected);
 		this.towerBehavior = towerBehavior;
 	}
-	
+
 	public TowerBehaviors getBehavior() {
 		return towerBehavior;
 	}
@@ -39,6 +48,9 @@ public class BehaviorTogglingRadioButton extends JRadioButton {
 		this.fieldsToToggle = fieldsToToggle;
 	}
 
+	/**
+	 * Toggles references fields to toggle
+	 */
 	public void toggle() {
 
 		if (!this.isSelected()) {
@@ -53,6 +65,11 @@ public class BehaviorTogglingRadioButton extends JRadioButton {
 		}
 	}
 
+	/**
+	 * Depending on the component type, disables in a particular fashion
+	 * 
+	 * @param component
+	 */
 	private void disableField(JComponent component) {
 		if (component instanceof JSpinner) {
 			JSpinner spinner = (JSpinner) component;
@@ -87,6 +104,11 @@ public class BehaviorTogglingRadioButton extends JRadioButton {
 
 	}
 
+	/**
+	 * Depending on the component type, enables in a particular fashion
+	 * 
+	 * @param component
+	 */
 	private void enableField(JComponent component) {
 		if (component instanceof JSpinner) {
 			JSpinner spinner = (JSpinner) component;

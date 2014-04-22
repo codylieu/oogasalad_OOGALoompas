@@ -12,21 +12,40 @@ import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+/**
+ * @author garysheng Custom subclass of AWT Canvas that holds a reference to the
+ *         path of the image it should paint on its canvas.
+ */
 public class ImageCanvas extends Canvas {
 	private Image myImage;
 	private boolean fillsUpCanvas;
 	private String imagePath;
 
+	/**
+	 * @return the path of the image that should be painted
+	 */
 	public String getImagePath() {
 		return imagePath;
 	}
 
+	/**
+	 * @param fillsUpCanvas
+	 *            boolean that sets whether the image edges should touch the
+	 *            shortest edge of the canvas
+	 * @param name
+	 *            the name of the image canvas
+	 */
 	public ImageCanvas(boolean fillsUpCanvas, String name) {
 		this.fillsUpCanvas = fillsUpCanvas;
 		setName(name);
 		this.imagePath = "";
 	}
 
+	/**
+	 * @param newImagePath
+	 *            sets a new image path to reference
+	 * @throws IOException
+	 */
 	public void setImageFromPath(String newImagePath) throws IOException {
 
 		imagePath = newImagePath;
@@ -34,6 +53,9 @@ public class ImageCanvas extends Canvas {
 		setImage(image);
 	}
 
+	/*
+	 * (non-Javadoc) draws a blank rectangle or the image needed to be painted
+	 */
 	public void paint(Graphics g) {
 		if (!imagePath.equals("")) {
 			if (fillsUpCanvas) {
@@ -52,16 +74,23 @@ public class ImageCanvas extends Canvas {
 						- getWidth() / 6, getWidth() / 3, getWidth() / 3, this);
 			}
 		} else {
-			
-			g.fillRect(0,0,getWidth(),getHeight());
+
+			g.fillRect(0, 0, getWidth(), getHeight());
 			g.setColor(Color.BLACK);
 		}
 	}
 
+	/**
+	 * @param img
+	 *            the image to set
+	 */
 	private void setImage(Image img) {
 		this.myImage = img;
 	}
 
+	/**
+	 * resets the image paths
+	 */
 	public void clearImagePath() {
 		imagePath = "";
 	}

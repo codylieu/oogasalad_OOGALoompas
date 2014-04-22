@@ -1,6 +1,6 @@
 package main.java.schema.tdobjects.items;
 
-import main.java.author.view.tabs.enemy.EnemyViewConstants;
+import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.objects.item.Annihilator;
 import main.java.engine.objects.item.LifeSaver;

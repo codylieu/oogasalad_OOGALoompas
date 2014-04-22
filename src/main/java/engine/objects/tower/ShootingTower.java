@@ -77,11 +77,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public ShootingTower (ITower baseTower, Map<String, Serializable> attributes) {
         this(
              baseTower,
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
-                                                 DEFAULT_FIRING_SPEED),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
-                                                 DEFAULT_RANGE),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE))),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
+                                                 DEFAULT_FIRING_SPEED))),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
+                                                 DEFAULT_RANGE))),
              (String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""));
     }
 

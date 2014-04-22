@@ -29,6 +29,14 @@ import javax.swing.event.ListSelectionListener;
 import main.java.player.TDPlayerEngine;
 import net.lingala.zip4j.exception.ZipException;
 
+/**
+ * AbstractAction that can create a panel to
+ * view and download pre-created games from a
+ * pre-determined repository
+ * @author Kevin
+ *
+ */
+
 public class RepositoryViewer extends AbstractAction {
 
 	public final static String BASE_URL = "http://people.duke.edu/~kkd10/td/";
