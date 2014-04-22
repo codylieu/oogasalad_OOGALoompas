@@ -33,7 +33,8 @@ public class BombTower extends ShootingTower {
         myShrapnelDamage =
                 (double) TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_DAMAGE,
                                                     DEFAULT_SHRAPNEL_DAMAGE);
-        setTowerType(TOWER_TYPE);
+        myInfo.clear();
+        addInfo();
     }
 
     @Override

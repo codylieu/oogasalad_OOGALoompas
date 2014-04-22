@@ -1,5 +1,7 @@
 package main.java.engine.objects.tower;
 
+import java.util.List;
+
 import main.java.engine.EnvironmentKnowledge;
 
 
@@ -14,7 +16,7 @@ abstract class TowerBehaviorDecorator implements ITower {
      * The base tower that will have behaviors added to it ("decorations")
      */
     protected ITower baseTower;
-    protected String myType;
+    protected List<String> myInfo;
 
     public TowerBehaviorDecorator (ITower baseTower) {
         this.baseTower = baseTower;
@@ -58,16 +60,6 @@ abstract class TowerBehaviorDecorator implements ITower {
     @Override
     public String getUpgradeTowerName () {
         return baseTower.getUpgradeTowerName();
-    }
-    
-    @Override
-    public void setTowerType(String type) {
-    	myType = type;
-    }
-    
-    @Override
-    public String getTowerType() {
-    	return myType;
     }
     
     /**

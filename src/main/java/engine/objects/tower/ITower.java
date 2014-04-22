@@ -1,5 +1,7 @@
 package main.java.engine.objects.tower;
 
+import java.util.List;
+
 import main.java.engine.EnvironmentKnowledge;
 
 public interface ITower {
@@ -52,15 +54,10 @@ public interface ITower {
     public String getUpgradeTowerName();
     
     /**
-     * Set the type of the tower 
+     * Get the information about the tower.
      * 
-     * @param type
+     * @return a list of string representing the info of the tower
      */
-    public void setTowerType(String type);
-    
-    /**
-     * Get the type of the tower
-     */
-    public String getTowerType();
+    public List<String> getInfo();
     
 }

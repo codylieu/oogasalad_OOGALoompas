@@ -33,7 +33,8 @@ public class FreezeTower extends ShootingTower {
                 (double) TDObject.getValueOrDefault(attributes,
                                                     TowerSchema.FREEZE_SLOWDOWN_PROPORTION,
                                                     DEFAULT_FREEZE_SLOWDOWN_PROPORTION);
-        setTowerType(TOWER_TYPE);
+        myInfo.clear();
+        addInfo();
     }
 
     @Override

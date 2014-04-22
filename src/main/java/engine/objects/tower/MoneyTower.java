@@ -1,6 +1,8 @@
 package main.java.engine.objects.tower;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import main.java.engine.EnvironmentKnowledge;
@@ -28,6 +30,8 @@ public class MoneyTower extends TowerBehaviorDecorator {
     public static final int DEFAULT_MONEY_GRANT_INTERVAL = 100;
     
     public static final String TOWER_TYPE = "Money Tower";
+    
+    private int moneyGranted;
 
     /**
      * Create a new money farming tower by decorating a base tower.
@@ -41,7 +45,7 @@ public class MoneyTower extends TowerBehaviorDecorator {
      */
     public MoneyTower (ITower baseTower, int moneyGranted, int moneyGrantInterval) {
         super(baseTower);
-        setTowerType(TOWER_TYPE);
+        this.moneyGranted = moneyGranted;
     }
 
     
@@ -73,5 +77,15 @@ public class MoneyTower extends TowerBehaviorDecorator {
             environ.grantPlayerMoney(DEFAULT_MONEY_GRANTED);
         }
     }
+
+
+	@Override
+	public List<String> getInfo() {
+		List<String> info = new ArrayList<String>();
+		info.add(this.getClass().getSimpleName());
+		info.addAll(baseTower.getInfo());
+		info.add(""+moneyGranted);
+		return info;
+	}
 
 }

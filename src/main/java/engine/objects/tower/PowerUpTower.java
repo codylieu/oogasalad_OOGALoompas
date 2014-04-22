@@ -1,5 +1,6 @@
 package main.java.engine.objects.tower;
 
+import java.util.ArrayList;
 import java.util.List;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.detector.TargetDetectorInterface;
@@ -15,7 +16,6 @@ public class PowerUpTower extends TowerBehaviorDecorator {
     public PowerUpTower (ITower baseTower, double range) {
         super(baseTower);
         myRange = range;
-        setTowerType(TOWER_TYPE);
     }
 
     public static final double DEFAULT_DAMAGE_POWER_UP_PROPORTION = 1.5;
@@ -31,5 +31,14 @@ public class PowerUpTower extends TowerBehaviorDecorator {
             // add another shooting tower wrapper instead
         }
     }
+
+	@Override
+	public List<String> getInfo() {
+		List<String> info = new ArrayList<String>();
+		info.add(this.getClass().getSimpleName());
+		info.addAll(baseTower.getInfo());
+		info.add(myRange+"");
+		return info;
+	}
 
 }

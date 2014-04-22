@@ -197,17 +197,12 @@ public class Model {
      */
     public List<String> getUnitInfo(double x, double y) {
     	List<String> info = new ArrayList<String>();
-    	// TODO: make tower info happen
     	if (isTowerPresent(x, y)) {
     		int[] currentTile = getTileCoordinates(new Point2D.Double(x, y));
     		ITower currTower = towers[currentTile[0]][currentTile[1]];
-    		info.add(currTower.getTowerType());
-    		info.add("" + currTower.getCost());
-    		info.add(currTower.getUpgradeTowerName());
-    		System.out.println(currTower.getCost());
+    		info.addAll(currTower.getInfo());
     	}
     	
-    	// TODO: add more monster info as appropriate
     	Monster m;
     	if ((m=monsterPresent(x, y)) != null) {
     		info.addAll(m.getInfo());

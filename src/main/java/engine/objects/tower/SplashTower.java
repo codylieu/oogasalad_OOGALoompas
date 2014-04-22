@@ -23,7 +23,8 @@ public class SplashTower extends ShootingTower {
 	
 	public SplashTower(ITower baseTower, Map<String, Serializable> attributes) {
 		super(baseTower, attributes);
-		setTowerType(TOWER_TYPE);
+        myInfo.clear();
+        addInfo();
 	}
 	
     @Override
