@@ -25,6 +25,7 @@ import main.java.engine.objects.item.RowBomb;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
+import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
@@ -179,6 +180,49 @@ public class Model {
      */
     public boolean isTowerPresent (double x, double y) {
         return isTowerPresent(getTileCoordinates(new Point2D.Double(x, y)));
+    }
+    
+    /**
+     * Get the information of the TDObject, if any, 
+     * at the specified coordinates
+     * 
+     * @param x
+     * @param y
+     * @return The information that we want to display to the player
+     */
+    public List<String> getUnitInfo(double x, double y) {
+    	List<String> info = new ArrayList<String>();
+    	if (isTowerPresent(x, y)) {
+    		int[] currentTile = getTileCoordinates(new Point2D.Double(x, y));
+    		ITower currTower = towers[currentTile[0]][currentTile[1]];
+    		info.addAll(currTower.getInfo());
+    	}
+    	
+    	Monster m;
+    	if ((m=monsterPresent(x, y)) != null) {
+    		info.addAll(m.getInfo());
+    	}
+    	return info;
+    }
+    
+    /**
+     * Return the monster at the specified coordinates. 
+     * If there's no monster at that location, null will be returned.
+     * 
+     * @param x
+     * @param y
+     * @return the monster present
+     */
+    private Monster monsterPresent(double x, double y) {
+    	Monster monster = null;
+    	for (Monster m : monsters) {
+    		double xUpper = m.x + m.getImageBBoxConst().width;
+    		double yUpper = m.y + m.getImageBBoxConst().height;
+    		if (m.x <= x && x <= xUpper && m.y <= y && y <= yUpper) {
+    			monster = m;
+    		}
+    	}
+    	return monster;
     }
 
     /**

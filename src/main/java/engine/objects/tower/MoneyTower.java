@@ -1,6 +1,8 @@
 package main.java.engine.objects.tower;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import main.java.engine.EnvironmentKnowledge;
@@ -26,6 +28,10 @@ public class MoneyTower extends TowerBehaviorDecorator {
      * Larger number is longer interval
      */
     public static final int DEFAULT_MONEY_GRANT_INTERVAL = 100;
+    
+    public static final String TOWER_TYPE = "Money Tower";
+    
+    private int moneyGranted;
 
     private double myMoneyGranted;
     private double myMoneyGrantInterval;
@@ -75,5 +81,15 @@ public class MoneyTower extends TowerBehaviorDecorator {
             environ.grantPlayerMoney((int)myMoneyGranted);
         }
     }
+
+
+	@Override
+	public List<String> getInfo() {
+		List<String> info = new ArrayList<String>();
+		info.add(this.getClass().getSimpleName());
+		info.addAll(baseTower.getInfo());
+		info.add(""+moneyGranted);
+		return info;
+	}
 
 }

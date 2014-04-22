@@ -1,5 +1,6 @@
 package main.java.engine.objects.tower;
 
+import java.util.ArrayList;
 import java.util.List;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.detector.TargetDetectorInterface;
@@ -7,7 +8,8 @@ import main.java.engine.objects.detector.towerdetector.NearbyTowersDetector;
 
 
 public class PowerUpTower extends TowerBehaviorDecorator {
-
+	
+	private static final String TOWER_TYPE = "Power-up Tower";
     private double myRange;
     private TargetDetectorInterface myDetector = new NearbyTowersDetector();
 
@@ -29,5 +31,14 @@ public class PowerUpTower extends TowerBehaviorDecorator {
             // add another shooting tower wrapper instead
         }
     }
+
+	@Override
+	public List<String> getInfo() {
+		List<String> info = new ArrayList<String>();
+		info.add(this.getClass().getSimpleName());
+		info.addAll(baseTower.getInfo());
+		info.add(myRange+"");
+		return info;
+	}
 
 }
