@@ -38,6 +38,7 @@ public class AuthoringView extends JFrame {
 	private JButton finalizeGameButton;
 
 	private EnemyEditorTab enemyEditorTab;
+	private TowerEditorTab towerEditorTab;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -169,6 +170,10 @@ public class AuthoringView extends JFrame {
 	 */
 	public void shiftToEnemyTab() {
 		tabbedPane.setSelectedComponent(enemyEditorTab);
+	}
+
+	public void shiftToTowerTab() {
+		tabbedPane.setSelectedComponent(towerEditorTab);
 	}
 
 }
