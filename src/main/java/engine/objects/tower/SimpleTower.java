@@ -21,6 +21,7 @@ public class SimpleTower extends TDObject implements ITower {
     public static final double DEFAULT_HEALTH = 100;
     public static final double DEFAULT_COST = 100;
     public static final double DEFAULT_BUILDUPTIME = 100;
+    private static final String TOWER_TYPE = "Simple Tower";
 
     public static final int TOWER_CID = 0;
 
@@ -45,6 +46,8 @@ public class SimpleTower extends TDObject implements ITower {
      * Internal timer shooting at intervals and timing build up phase.
      */
     protected double myTimingCounter;
+    
+    protected String myType;
 
     /**
      * Create a new tower
@@ -137,5 +140,16 @@ public class SimpleTower extends TDObject implements ITower {
     public String getUpgradeTowerName () {
         return myUpgradeTower;
     }
+
+	@Override
+	public void setTowerType(String type) {
+		myType = type;
+		
+	}
+
+	@Override
+	public String getTowerType() {
+		return myType;
+	}
 
 }

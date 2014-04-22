@@ -15,6 +15,7 @@ import main.java.schema.tdobjects.TowerSchema;
 public class BombTower extends ShootingTower {
 
     public static final double DEFAULT_SHRAPNEL_DAMAGE = 10;
+    private static final String TOWER_TYPE = "Bomb Tower";
     private String myShrapnelImage;
     private double myShrapnelDamage;
 
@@ -32,7 +33,7 @@ public class BombTower extends ShootingTower {
         myShrapnelDamage =
                 (double) TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_DAMAGE,
                                                     DEFAULT_SHRAPNEL_DAMAGE);
-
+        setTowerType(TOWER_TYPE);
     }
 
     @Override

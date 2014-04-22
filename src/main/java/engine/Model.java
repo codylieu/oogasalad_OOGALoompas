@@ -201,15 +201,16 @@ public class Model {
     	if (isTowerPresent(x, y)) {
     		int[] currentTile = getTileCoordinates(new Point2D.Double(x, y));
     		ITower currTower = towers[currentTile[0]][currentTile[1]];
-//    		info.add(((SimpleTower) currTower).);
+    		info.add(currTower.getTowerType());
+    		info.add("" + currTower.getCost());
+    		info.add(currTower.getUpgradeTowerName());
+    		System.out.println(currTower.getCost());
     	}
     	
     	// TODO: add more monster info as appropriate
     	Monster m;
     	if ((m=monsterPresent(x, y)) != null) {
-    		info.add("Monster");
-    		info.add(""+m.x);
-    		info.add(""+m.y);
+    		info.addAll(m.getInfo());
     	}
     	return info;
     }

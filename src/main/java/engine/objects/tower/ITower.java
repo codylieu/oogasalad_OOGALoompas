@@ -51,4 +51,16 @@ public interface ITower {
      */
     public String getUpgradeTowerName();
     
+    /**
+     * Set the type of the tower 
+     * 
+     * @param type
+     */
+    public void setTowerType(String type);
+    
+    /**
+     * Get the type of the tower
+     */
+    public String getTowerType();
+    
 }

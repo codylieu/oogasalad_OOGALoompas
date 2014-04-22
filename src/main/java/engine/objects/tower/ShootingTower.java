@@ -27,6 +27,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public static final double DEFAULT_FIRING_SPEED = 5;
     public static final int FIRING_INTERVAL_STEP = 2;
     public static final int MIN_FIRING_INTERVAL = 21;
+    private static final String TOWER_TYPE = "Shooting Tower";
 
     protected double myDamage;
     protected double myFiringSpeed;
@@ -53,6 +54,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
         myFiringSpeed = firingSpeed;
         myRange = range;
         myBulletImage = bulletImage;
+        setTowerType(TOWER_TYPE);
     }
 
     /**

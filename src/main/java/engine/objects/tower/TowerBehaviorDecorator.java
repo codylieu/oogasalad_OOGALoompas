@@ -14,6 +14,7 @@ abstract class TowerBehaviorDecorator implements ITower {
      * The base tower that will have behaviors added to it ("decorations")
      */
     protected ITower baseTower;
+    protected String myType;
 
     public TowerBehaviorDecorator (ITower baseTower) {
         this.baseTower = baseTower;
@@ -57,6 +58,16 @@ abstract class TowerBehaviorDecorator implements ITower {
     @Override
     public String getUpgradeTowerName () {
         return baseTower.getUpgradeTowerName();
+    }
+    
+    @Override
+    public void setTowerType(String type) {
+    	myType = type;
+    }
+    
+    @Override
+    public String getTowerType() {
+    	return myType;
     }
     
     /**

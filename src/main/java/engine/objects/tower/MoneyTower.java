@@ -26,6 +26,8 @@ public class MoneyTower extends TowerBehaviorDecorator {
      * Larger number is longer interval
      */
     public static final int DEFAULT_MONEY_GRANT_INTERVAL = 100;
+    
+    public static final String TOWER_TYPE = "Money Tower";
 
     /**
      * Create a new money farming tower by decorating a base tower.
@@ -39,6 +41,7 @@ public class MoneyTower extends TowerBehaviorDecorator {
      */
     public MoneyTower (ITower baseTower, int moneyGranted, int moneyGrantInterval) {
         super(baseTower);
+        setTowerType(TOWER_TYPE);
     }
 
     
