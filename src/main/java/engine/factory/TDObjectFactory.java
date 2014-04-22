@@ -62,6 +62,10 @@ public class TDObjectFactory {
 	public void loadTowerSchemas (List<TowerSchema> schemas) {
     	for (TowerSchema s: schemas) {
     		possibleTowersNames.add((String) s.getAttributesMap().get(TDObjectSchema.NAME));
+                String bulletImageName = (String) s.getAttributesMap().get(TowerSchema.BULLET_IMAGE_NAME);
+                String bulletImagePath =
+                        Model.RESOURCE_PATH + s.getAttributesMap().get(TowerSchema.BULLET_IMAGE_NAME);
+                engine.defineImage(bulletImageName, "-", 1, bulletImagePath, "-");
     	}
     	// Perhaps a better method of casting than using an intermediate wildcard type?
     	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
