@@ -1,6 +1,7 @@
 package main.java.engine.objects.tower;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 
 import main.java.engine.objects.TDObject;
@@ -15,6 +16,7 @@ import main.java.schema.tdobjects.TowerSchema;
 public class BombTower extends ShootingTower {
 
     public static final double DEFAULT_SHRAPNEL_DAMAGE = 10;
+    private static final String TOWER_TYPE = "Bomb Tower";
     private String myShrapnelImage;
     private double myShrapnelDamage;
 
@@ -30,9 +32,10 @@ public class BombTower extends ShootingTower {
                 (String) TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_IMAGE_NAME,
                                                     TowerSchema.BULLET_IMAGE_NAME);
         myShrapnelDamage =
-                (double) TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_DAMAGE,
-                                                    DEFAULT_SHRAPNEL_DAMAGE);
-
+        		Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_DAMAGE,
+                DEFAULT_SHRAPNEL_DAMAGE)));
+        myInfo.clear();
+        addInfo();
     }
 
     @Override

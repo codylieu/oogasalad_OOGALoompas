@@ -1,7 +1,6 @@
 package main.java.author.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -12,7 +11,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import main.java.author.controller.MainController;
-import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.controller.tabbed_controllers.GameSettingsController;
 import main.java.author.controller.tabbed_controllers.ItemController;
@@ -29,12 +27,16 @@ import main.java.author.view.tabs.wave_editor.WaveEditorTab;
 import main.java.exceptions.data.InvalidGameBlueprintException;
 
 /**
- * Frame that represents the GUI for the Authoring environment.
+ * Frame that represents the GUI for the Authoring environment. Holds references
+ * to the Main Controller and holds the tabs
  * 
  */
 public class AuthoringView extends JFrame {
+
 	private MainController myController;
+
 	private JButton finalizeGameButton;
+
 	private EnemyEditorTab enemyEditorTab;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
@@ -47,6 +49,9 @@ public class AuthoringView extends JFrame {
 	private static final String WAVE_EDITOR_STRING = "Wave Editor";
 
 	public AuthoringView(MainController mainController) {
+
+		super("OOGASalad Authoring Environment");
+
 		myController = mainController;
 		myController.setView(this);
 
@@ -56,14 +61,17 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs() {
-		final EnemyController enemyController = new EnemyController(myController);
-		final TowerController towerController = new TowerController(myController);
+		final EnemyController enemyController = new EnemyController(
+				myController);
+		final TowerController towerController = new TowerController(
+				myController);
 		final WaveController waveController = new WaveController(myController);
 		final GameSettingsController gameSettingsController = new GameSettingsController(
 				myController);
-		final TerrainController terrainController = new TerrainController(myController);
+		final TerrainController terrainController = new TerrainController(
+				myController);
 		final ItemController itemController = new ItemController(myController);
-		
+
 		myController.addTabController(enemyController);
 		myController.addTabController(towerController);
 		myController.addTabController(waveController);
@@ -71,13 +79,13 @@ public class AuthoringView extends JFrame {
 		myController.addTabController(terrainController);
 		myController.addTabController(itemController);
 
-		tabbedPane
-				.add(GAME_SETTINGS_EDITOR_STRING,
-						new GameSettingsEditorTab(gameSettingsController));
-		tabbedPane
-				.add(TOWER_EDITOR_STRING,
-						new TowerEditorTab(towerController, "Tower"));
+		tabbedPane.add(GAME_SETTINGS_EDITOR_STRING, new GameSettingsEditorTab(
+				gameSettingsController));
+		tabbedPane.add(TOWER_EDITOR_STRING, new TowerEditorTab(towerController,
+				"Tower"));
+
 		enemyEditorTab = new EnemyEditorTab(enemyController, "Monster");
+
 		tabbedPane
 				.add(ENEMY_EDITOR_STRING, enemyEditorTab);
 //		tabbedPane
@@ -95,14 +103,17 @@ public class AuthoringView extends JFrame {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
-				if(tabbedPane.getSelectedComponent() instanceof WaveEditorTab){
+				if (tabbedPane.getSelectedComponent() instanceof WaveEditorTab) {
 					waveController.updateEnemyList();
 				}
 			}
-			
+
 		});
 	}
 
+	/**
+	 * Creates the GUI and sets initial constraints
+	 */
 	public void createAndShowGUI() {
 		createEditorTabs();
 		add(tabbedPane, BorderLayout.CENTER);
@@ -117,7 +128,8 @@ public class AuthoringView extends JFrame {
 
 	/**
 	 * Adds an action listener to the finalize game button which, when clicked,
-	 * saves the game blueprint so the data team can begin serializing information
+	 * saves the game blueprint so the data team can begin serializing
+	 * information
 	 */
 	private void addActionListeners() {
 		finalizeGameButton.addActionListener(new ActionListener() {
@@ -126,10 +138,11 @@ public class AuthoringView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				int editorTabCount = tabbedPane.getTabCount();
 				for (int count = 0; count < editorTabCount; count++) {
-					EditorTab tab = (EditorTab) tabbedPane.getComponentAt(count);
+					EditorTab tab = (EditorTab) tabbedPane
+							.getComponentAt(count);
 					tab.saveTabData();
 				}
-				
+
 				if (myController.isGameValid()) {
 					try {
 						myController.saveBlueprint();
@@ -141,18 +154,19 @@ public class AuthoringView extends JFrame {
 			}
 		});
 	}
-	
-	
 
 	/**
-	 * Constructs a JButton which allows the user to finalize the game
-	 * that they made
+	 * Constructs a JButton which allows the user to finalize the game that they
+	 * made
 	 */
 	private JButton createFinalizeGameButton() {
 		finalizeGameButton = new JButton("Finalize Game");
 		return finalizeGameButton;
 	}
 
+	/**
+	 * Shifts to the Enemy Tab
+	 */
 	public void shiftToEnemyTab() {
 		tabbedPane.setSelectedComponent(enemyEditorTab);
 	}

@@ -41,12 +41,10 @@ public class WaveEditorTab extends EditorTab {
 	private static final String WAVE_COLUMN_STRING = "Waves";
 	private static final String WAVE_STRING = "Wave";
 
-	private List<WaveSpawnSchema> myWaves;
-	
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
 	private JButton clearAllWavesButton;
-	
+
 	private String[] columnNames = {};
 	private String[] columnNamesAndWave;
 	private Object[][] data = {};
@@ -65,6 +63,10 @@ public class WaveEditorTab extends EditorTab {
 		add(tabCreator.createWaveEditorContent(), BorderLayout.CENTER);
 	}
 
+	/**
+	 * @param columnName
+	 * Called when the enemy list is added to in the Enemy Editor Tab
+	 */
 	private void addNewEnemyColumn(String columnName) {
 		List<String> zeroesColumnList = new ArrayList<String>();
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
@@ -73,6 +75,9 @@ public class WaveEditorTab extends EditorTab {
 		tableModel.addColumn(columnName, zeroesColumnList.toArray());
 	}
 
+	/**
+	 * Updates the wave column with the wave strings
+	 */
 	private void updateWaveColumn() {
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
 			int rowNum = i + 1;
@@ -106,15 +111,14 @@ public class WaveEditorTab extends EditorTab {
 	public void saveTabData() {
 		WaveController waveController = (WaveController) myController;
 		int numWaves = tableModel.getRowCount();
-		
+
 		List<WaveSpawnSchema> allWaveSpawnSchemas = new ArrayList<WaveSpawnSchema>();
 		for (int waveRow = 0; waveRow < numWaves; waveRow++) {
-			
+
 			WaveSpawnSchema waveSpawnSchema = new WaveSpawnSchema();
 			for (MonsterSchema monsterSchema : waveController.getMonsterSchemas()) {
 				String monsterName = (String) monsterSchema.getAttributesMap().get(MonsterSchema.NAME);
 				int columnOfEnemy = getColumnOfEnemy(monsterName);
-				System.out.println((String) table.getModel().getValueAt(waveRow, columnOfEnemy));
 				int numEnemies = Integer.parseInt((String) table.getModel().getValueAt(waveRow, columnOfEnemy));
 				waveSpawnSchema.addMonsterSchema(new MonsterSpawnSchema(monsterSchema, numEnemies));
 			}
@@ -122,18 +126,41 @@ public class WaveEditorTab extends EditorTab {
 		}
 		waveController.addWaves(allWaveSpawnSchemas);
 	}
-	
+
+	/**
+	 * @param enemyName
+	 * @return
+	 * Gets the column index of the enemy represented by the input string
+	 */
 	private int getColumnOfEnemy(String enemyName) {
 		WaveController waveController = (WaveController) myController;
 		String[] currentColumnNames = waveController.getEnemyNames();
-		
-		
+
 		for (int index = 0; index < currentColumnNames.length; index++) {
 			if(currentColumnNames[index].equals(enemyName)) {
 				return index + 1; // because Wave # is not included in currentColumnNames
 			}
 		}
 		return -1;
+	}
+	
+	/**
+	 * @param fieldValue
+	 * Adds a new wave and populates the row based off of the input fieldValue String
+	 */
+	private void addNewWaveRow(String fieldValue){
+		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+				.getModel();
+		int newWaveNum = tableModel.getRowCount() + 1;
+		List<String> zeroesRowList = new ArrayList<String>();
+		zeroesRowList.add(WAVE_STRING + " " + newWaveNum);
+		for (int i = 1; i < tableModel.getColumnCount(); i++) {
+			zeroesRowList.add(fieldValue);
+
+		}
+		model.addRow(zeroesRowList.toArray());
+
+		clearAllWavesButton.setEnabled(true);
 	}
 
 	/**
@@ -154,6 +181,8 @@ public class WaveEditorTab extends EditorTab {
 
 			content.add(createTable(), BorderLayout.WEST);
 			content.add(buttonMaker.makeButtons(), BorderLayout.EAST);
+			
+			addNewWaveRow("1"); // Setting default value
 
 			return content;
 		}
@@ -171,16 +200,16 @@ public class WaveEditorTab extends EditorTab {
 				columnNamesAndWave[i + 1] = columnNames[i];
 			}
 			tableModel = new ColumnRemovableTableModel(data, columnNamesAndWave){
-				
+
 				public boolean isCellEditable(int row, int col){
-					
+
 					if(col == 0){
 						return false;
 					}
 					return true;
-					
+
 				}
-				
+
 			};
 			table = new JTable(tableModel);
 
@@ -205,7 +234,7 @@ public class WaveEditorTab extends EditorTab {
 					removeWaveButton.setEnabled(true);
 				}
 			});
-			
+
 			JScrollPane sp = new JScrollPane(table,
 					JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 					JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -214,6 +243,9 @@ public class WaveEditorTab extends EditorTab {
 			return sp;
 		}
 
+		/**
+		 * Inner inner class to make buttons
+		 */
 		private class ButtonMaker {
 
 			/**
@@ -243,20 +275,7 @@ public class WaveEditorTab extends EditorTab {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
-								.getModel();
-						int newWaveNum = tableModel.getRowCount() + 1;
-						List<String> zeroesRowList = new ArrayList<String>();
-						for (int i = 0; i < tableModel.getColumnCount(); i++) {
-							if (i != 0) {
-								zeroesRowList.add("0");
-							} else
-								zeroesRowList.add(WAVE_STRING + " "
-										+ newWaveNum);
-						}
-						model.addRow(zeroesRowList.toArray());
-						
-						clearAllWavesButton.setEnabled(true);
+						addNewWaveRow("0");
 
 					}
 				});
@@ -291,7 +310,6 @@ public class WaveEditorTab extends EditorTab {
 			private JComponent makeClearAllWavesButton() {
 
 				clearAllWavesButton = new JButton("Clear All Waves");
-				clearAllWavesButton.setEnabled(false);
 
 				clearAllWavesButton.addActionListener(new ActionListener() {
 
@@ -304,7 +322,7 @@ public class WaveEditorTab extends EditorTab {
 							numberOfWaves--;
 							tableModel.removeRow(numberOfWaves);
 						}
-						
+
 						clearAllWavesButton.setEnabled(false);
 
 					}

@@ -1,5 +1,7 @@
 package main.java.engine.objects.tower;
 
+import java.util.List;
+
 import main.java.engine.EnvironmentKnowledge;
 
 
@@ -14,6 +16,7 @@ abstract class TowerBehaviorDecorator implements ITower {
      * The base tower that will have behaviors added to it ("decorations")
      */
     protected ITower baseTower;
+    protected List<String> myInfo;
 
     public TowerBehaviorDecorator (ITower baseTower) {
         this.baseTower = baseTower;

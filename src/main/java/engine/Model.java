@@ -25,6 +25,7 @@ import main.java.engine.objects.item.RowBomb;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
+import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
@@ -63,7 +64,7 @@ public class Model {
     private LevelManager levelManager;
     private EnvironmentKnowledge environ;
     private List<TDItem> items;
-
+    
     public Model (JGEngine engine) {
         this.engine = engine;
         defineAllStaticImages();
@@ -95,14 +96,9 @@ public class Model {
     }
 
     private void defineAllStaticImages () {
-        // TODO: remove this method, make this a part of schemas
+        // TODO: remove this method, make exit a part of wavespawnschemas
+        //and define its image dynamically
         engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
-        // make bullet image dynamic
-        engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
-        engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
-        engine.defineImage("row_bomb", "-", TDItem.ITEM_CID, RESOURCE_PATH + "Big_Ben.png", "-");
-        engine.defineImage("fire", "-", 0, RESOURCE_PATH + "fire.png", "-");
-        engine.defineImage("ice", "-", 0, RESOURCE_PATH + "ice.png", "-");
     }
 
     /**
@@ -184,6 +180,49 @@ public class Model {
      */
     public boolean isTowerPresent (double x, double y) {
         return isTowerPresent(getTileCoordinates(new Point2D.Double(x, y)));
+    }
+    
+    /**
+     * Get the information of the TDObject, if any, 
+     * at the specified coordinates
+     * 
+     * @param x
+     * @param y
+     * @return The information that we want to display to the player
+     */
+    public List<String> getUnitInfo(double x, double y) {
+    	List<String> info = new ArrayList<String>();
+    	if (isTowerPresent(x, y)) {
+    		int[] currentTile = getTileCoordinates(new Point2D.Double(x, y));
+    		ITower currTower = towers[currentTile[0]][currentTile[1]];
+    		info.addAll(currTower.getInfo());
+    	}
+    	
+    	Monster m;
+    	if ((m=monsterPresent(x, y)) != null) {
+    		info.addAll(m.getInfo());
+    	}
+    	return info;
+    }
+    
+    /**
+     * Return the monster at the specified coordinates. 
+     * If there's no monster at that location, null will be returned.
+     * 
+     * @param x
+     * @param y
+     * @return the monster present
+     */
+    private Monster monsterPresent(double x, double y) {
+    	Monster monster = null;
+    	for (Monster m : monsters) {
+    		double xUpper = m.x + m.getImageBBoxConst().width;
+    		double yUpper = m.y + m.getImageBBoxConst().height;
+    		if (m.x <= x && x <= xUpper && m.y <= y && y <= yUpper) {
+    			monster = m;
+    		}
+    	}
+    	return monster;
     }
 
     /**
@@ -330,9 +369,24 @@ public class Model {
         return player.getMoney();
     }
 
-    private boolean isGameWon () {
-        return levelManager.checkAllWavesFinished();
-    }
+	/**
+	 * Returns whether or not the player has complete all waves and thus has won
+	 * the game. This will always return false on survival mode.
+	 * 
+	 * @return boolean of whether game is won (all waves completed)
+	 */
+	public boolean isGameWon() {
+		return levelManager.isGameWon();
+	}
+	
+	/**
+	 * Set whether or not the game is played on survival mode.
+	 * @param survivalMode
+	 * @return
+	 */
+	public void setSurvivalMode(boolean survivalMode){
+		levelManager.setSurvivalMode(survivalMode);
+	}
 
     /**
      * Spawns a new wave
@@ -556,7 +610,7 @@ public class Model {
         TowerSchema testTowerOne = new TowerSchema();
         testTowerOne.addAttribute(TowerSchema.NAME, "MoneyTower");
         testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-        testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
         Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
         towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
         testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "BombingTower");
@@ -567,7 +621,7 @@ public class Model {
         TowerSchema testTowerTwo = new TowerSchema();
         testTowerTwo.addAttribute(TowerSchema.NAME, "ShootingTower");
         testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-        testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
         Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
         towerBehaviors2.add(TowerBehaviors.SHOOTING);
         testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
@@ -577,8 +631,8 @@ public class Model {
         TowerSchema testTowerThree = new TowerSchema();
         testTowerThree.addAttribute(TowerSchema.NAME, "BombingTower");
         testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet");
-        testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
+        testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet.png");
+        testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
         Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
         towerBehaviors3.add(TowerBehaviors.BOMBING);
         testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
@@ -588,7 +642,7 @@ public class Model {
         TowerSchema testTowerFour = new TowerSchema();
         testTowerFour.addAttribute(TowerSchema.NAME, "FreezingTower");
         testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-        testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
         testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
         Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
         towerBehaviors4.add(TowerBehaviors.FREEZING);
@@ -599,7 +653,7 @@ public class Model {
         TowerSchema testTowerFive = new TowerSchema();
         testTowerFive.addAttribute(TowerSchema.NAME, "SplashingTower");
         testTowerFive.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-        testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+        testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
         Collection<TowerBehaviors> towerBehaviors5 = new ArrayList<TowerBehaviors>();
         towerBehaviors5.add(TowerBehaviors.SPLASHING);
         testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors5);
@@ -665,6 +719,15 @@ public class Model {
      */
     public List<String> getPossibleTowers () {
         return Collections.unmodifiableList(factory.getPossibleTowersNames());
+    }
+    
+    /**
+     * A list of names of possible items to create
+     * 
+     * @return
+     */
+    public List<String> getPossibleItems () {
+        return Collections.unmodifiableList(factory.getPossibleItemNames());
     }
 
     /**

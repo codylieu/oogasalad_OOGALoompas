@@ -32,6 +32,10 @@ import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
+/**
+ * @author garysheng The tab that corresponds to the creation of enemies. Talks
+ *         to a tab controller to pass information to the model
+ */
 public class EnemyEditorTab extends ObjectEditorTab {
 
 	public EnemyEditorTab(TabController towerController, String objectName) {
@@ -50,31 +54,39 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	@Override
 	public void saveTabData() {
 		EnemyController controller = (EnemyController) myController;
-		
+
 		monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
 			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
-			Map<String, Serializable> monsterAttributes = monster.getAttributesMap();
-			
+			Map<String, Serializable> monsterAttributes = monster
+					.getAttributesMap();
+
 			for (String attribute : monsterAttributes.keySet()) {
-				Serializable castedAttribute = addCastToAttribute(monsterAttributes.get(attribute));	
+				Serializable castedAttribute = addCastToAttribute(monsterAttributes
+						.get(attribute));
 				monsterSchema.addAttribute(attribute, castedAttribute);
 			}
-			monsterSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
 			monsterSchemas.add(monsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
 	}
-	
+
+	/**
+	 * @return the list of monster schemas created so far in this tab
+	 */
 	public List<MonsterSchema> getMonsterSchemas() {
 		return monsterSchemas;
 	}
 
+	/**
+	 * @return the list of
+	 */
 	public String[] getEnemyNamesArray() {
 		int size = objectMap.keySet().size();
 		return objectMap.keySet().toArray(new String[size]);
 	}
 
+	@Override
 	protected void updateSchemaDataFromView() {
 		super.updateSchemaDataFromView();
 		TDObjectSchema myCurrentObject = getSelectedObject();
@@ -85,6 +97,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 	}
 
+	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 		for (JRadioButton button : allButtons) {
@@ -108,7 +121,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 				collisionImageCanvas));
 		for (JRadioButton button : allButtons) {
 			button.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					updateSchemaDataFromView();
@@ -127,11 +140,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new EnemyTabViewBuilder(this);
 	}
 
+	/**
+	 * @author garysheng Concrete subclass of ObjectTabViewBuilder that creates
+	 *         specific view parts for the EnemyEditorTab
+	 */
 	private class EnemyTabViewBuilder extends ObjectTabViewBuilder {
 
 		public EnemyTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -159,7 +175,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					largeTileButton, flyingButton, groundButton };
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
-					MonsterSchema.ENEMY_IMAGE_NAME);
+					TDObjectSchema.IMAGE_NAME);
 			collisionImageCanvas = new ImageCanvas(true,
 					MonsterSchema.COLLISION_IMAGE_NAME);
 
@@ -186,6 +202,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
+		/**
+		 * @param buttonGroup
+		 * @param name
+		 * @return a buttonGroup panel.
+		 */
 		private JComponent makeButtonGroupPanel(ButtonGroup buttonGroup,
 				String name) {
 			JPanel result = new JPanel(new GridLayout(0, 1));

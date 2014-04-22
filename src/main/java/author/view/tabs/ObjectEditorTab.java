@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,13 +58,20 @@ import javax.swing.table.DefaultTableModel;
 import main.java.author.controller.TabController;
 import main.java.author.util.ObjectUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
-import main.java.author.view.components.BehaviorTogglingRadioButton;
+import main.java.author.view.components.TowerBehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 
+/**
+ * @author garysheng An abstract editor tab that allows for easy creation of
+ *         concrete object editor tabs. Allows for a dynamic range of properties
+ *         to edit, and provides a framework for updating information to
+ *         AbstractSchemas and updating the view with information retrieved from
+ *         these AbstractSchemas
+ */
 public abstract class ObjectEditorTab extends EditorTab {
 
 	protected DefaultTableModel listModel;
@@ -71,7 +79,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected JSplitPane splitPane;
 	protected List<JSpinner> spinnerFields;
 	protected JButton createObjectButton;
-	protected List<BehaviorTogglingRadioButton> behaviorTogglingButtons;
+	protected List<TowerBehaviorTogglingRadioButton> behaviorTogglingButtons;
 	protected List<ImageCanvas> imageCanvases;
 	protected JTextField createObjectField;
 
@@ -88,12 +96,23 @@ public abstract class ObjectEditorTab extends EditorTab {
 		init();
 	}
 
+	/**
+	 * 
+	 * Called when you want to keep an object value in an object map but simply
+	 * replace the keys.
+	 * 
+	 * @param originalKey
+	 * @param newKey
+	 */
 	private void replaceKeysInObjectMap(String originalKey, String newKey) {
 		TDObjectSchema objectSchema = objectMap.get(originalKey);
 		objectMap.remove(originalKey);
 		objectMap.put(newKey, objectSchema);
 	}
 
+	/**
+	 * Everything that needs to happen to add an object and start editing it
+	 */
 	private void createObject() {
 		String objectName = createObjectField.getText();
 
@@ -110,20 +129,30 @@ public abstract class ObjectEditorTab extends EditorTab {
 			showInvalidObjectNameDialog();
 		}
 	}
-	
+
+	/**
+	 * Casts a serializable attribute into a Serializable object
+	 * 
+	 * @param attribute
+	 * @return Serializable version of the attributes
+	 */
 	protected Serializable addCastToAttribute(Serializable attribute) {
 		boolean shouldCast = false;
 		if (attribute instanceof Integer) {
 			shouldCast = true;
 		}
-		
+
 		Double doubleAttr = null;
 		if (shouldCast) {
 			doubleAttr = Double.valueOf(((Integer) attribute).intValue());
 		}
-		return shouldCast ? doubleAttr : attribute;	
+		return shouldCast ? doubleAttr : attribute;
 	}
 
+	/**
+	 * Adds listeners to view components. Allows users to create and delete
+	 * objects, and adds important list selection functionality.
+	 */
 	protected void addListeners() {
 
 		createObjectField.addKeyListener(new KeyAdapter() {
@@ -181,12 +210,12 @@ public abstract class ObjectEditorTab extends EditorTab {
 			});
 		}
 		if (behaviorTogglingButtons != null) {
-			for (BehaviorTogglingRadioButton button : behaviorTogglingButtons) {
+			for (TowerBehaviorTogglingRadioButton button : behaviorTogglingButtons) {
 				button.addItemListener(new ItemListener() {
 
 					@Override
 					public void itemStateChanged(ItemEvent e) {
-						BehaviorTogglingRadioButton button = (BehaviorTogglingRadioButton) e
+						TowerBehaviorTogglingRadioButton button = (TowerBehaviorTogglingRadioButton) e
 								.getSource();
 						button.toggle();
 						updateSchemaDataFromView();
@@ -208,6 +237,11 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
+	/**
+	 * Adds an object name to the listModel
+	 * 
+	 * @param objectName
+	 */
 	protected void addObjectNameToList(String objectName) {
 		int indexToPlace = listModel.getRowCount();
 		listModel.addRow(new String[] { objectName });
@@ -215,18 +249,34 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
+	/**
+	 * @param name
+	 * @return a new Schema with a specific name
+	 */
 	protected abstract TDObjectSchema createSpecificNewObject(String name);
 
+	/**
+	 * @return a specific tab view builder
+	 */
 	protected abstract ObjectTabViewBuilder createSpecificTabViewBuilder();
 
+	/**
+	 * @return the object name selected in the list
+	 */
 	protected String getSelectedObjectName() {
 		return (String) listModel.getValueAt(list.getSelectedRow(), 0);
 	}
 
+	/**
+	 * @return the schema corresponding to the selected list item
+	 */
 	protected TDObjectSchema getSelectedObject() {
 		return objectMap.get(getSelectedObjectName());
 	}
 
+	/**
+	 * creates all view components, creates a default object, and adds listeners
+	 */
 	protected void init() {
 		setLayout(new BorderLayout());
 		objectMap = new HashMap<String, TDObjectSchema>();
@@ -240,6 +290,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
+	/**
+	 * Error message to display if you enter a bad object name
+	 */
 	protected void showInvalidObjectNameDialog() {
 		JOptionPane
 				.showMessageDialog(
@@ -248,6 +301,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 						"Alert!", JOptionPane.ERROR_MESSAGE);
 	}
 
+	/**
+	 * updates the view field data based on a new list selection
+	 */
 	protected void updateFieldDataUponNewSelection() {
 		String name = getSelectedObjectName();
 		TDObjectSchema myCurrentObject;
@@ -262,7 +318,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	}
 
 	/**
-	 * puts the view fields' data into the schema data
+	 * puts the view fields' data into the selected schema
 	 */
 	protected void updateSchemaDataFromView() {
 		// update schema with fields
@@ -275,12 +331,22 @@ public abstract class ObjectEditorTab extends EditorTab {
 		}
 
 		for (ImageCanvas canvas : imageCanvases) {
-			myCurrentObject.addAttribute(canvas.getName(),
-					(String) canvas.getImagePath());
+
+			String relativePath = new File((String) canvas.getImagePath())
+					.getName();
+			myCurrentObject.addAttribute(canvas.getName(), relativePath);
+
 		}
 
 	}
 
+	/**
+	 * Updates the view with schema attribute values from the current selected
+	 * object
+	 * 
+	 * @param map
+	 *            of attributes to populate the view with
+	 */
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
 
@@ -303,6 +369,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 		}
 	}
 
+	/**
+	 * @author garysheng Listener that allows you to add an image through a file
+	 *         chooser
+	 */
 	protected class FileChooserListener implements ActionListener {
 
 		private ImageCanvas myCanvas;
@@ -319,7 +389,6 @@ public abstract class ObjectEditorTab extends EditorTab {
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
 				File file = fileChooser.getSelectedFile();
 				try {
-					System.out.println("Opening: " + file.getName() + ".\n");
 
 					myCanvas.setImageFromPath(file.getAbsolutePath());
 					updateSchemaDataFromView();
@@ -333,6 +402,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 		}
 	}
 
+	/**
+	 * @author garysheng Abstracts the view creation from the business logic
+	 */
 	protected abstract class ObjectTabViewBuilder {
 
 		EditorTab myTab;
@@ -378,6 +450,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return result;
 		}
 
+		/**
+		 * @return the object graphic pane that is top right of the object
+		 *         editor tab
+		 */
 		protected abstract JComponent makePrimaryObjectGraphicPane();
 
 		private JComponent makeImagesPane() {
@@ -452,6 +528,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return result;
 		}
 
+		/**
+		 * @return the main attributes pane comprised of tiles, where each tile
+		 *         corresponds to an attribute
+		 */
 		protected abstract JComponent makeFieldPane();
 
 		protected Component makeFieldTile(JComponent component) {
@@ -474,12 +554,16 @@ public abstract class ObjectEditorTab extends EditorTab {
 			return splitPane;
 		}
 
+		/**
+		 * @return the image graphic pane that is displayed on the bottom right
+		 *         of the object editor tab
+		 */
 		protected abstract JComponent makeSecondaryImagesGraphicPane();
 
 		protected Component makeTypeTogglePane() {
 			JPanel result = new JPanel();
 			result.setLayout(new GridLayout(1, 0));
-			for (BehaviorTogglingRadioButton button : behaviorTogglingButtons) {
+			for (TowerBehaviorTogglingRadioButton button : behaviorTogglingButtons) {
 				result.add(button);
 			}
 
@@ -494,6 +578,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 	}
 
+	/**
+	 * @author garysheng The subclass of DefaultCellEditor that allows for error
+	 *         checking of name input
+	 */
 	protected class TDObjectCellEditor extends DefaultCellEditor {
 		public TDObjectCellEditor() {
 			super(new JTextField());

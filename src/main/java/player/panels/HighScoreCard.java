@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -13,6 +14,12 @@ import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 
+/**
+ * Card to keep track of, display, and save high scores
+ * @author Michael Han
+ *
+ */
+@SuppressWarnings("serial")
 public class HighScoreCard extends JPanel implements Observing, ActionListener {
 
 	public static final String INITIAL_PLAYER_NAME = "enter name after deleting this message";
@@ -20,6 +27,7 @@ public class HighScoreCard extends JPanel implements Observing, ActionListener {
 	public static final String SPACER_FOR_HIGH_SCORE = ": ";
 	public static final String NEWLINE = "\n";
 	private JTextField playerName;
+	@SuppressWarnings("unused")
 	private TDPlayerEngine engine;
 	private JTextArea highScoreDisplay;
 	private int highScore;
@@ -65,6 +73,12 @@ public class HighScoreCard extends JPanel implements Observing, ActionListener {
 		String name = playerName.getText();
 		playerName.setText(INITIAL_PLAYER_NAME);
 		highScoreDisplay.append(name + SPACER_FOR_HIGH_SCORE + highScore +  NEWLINE);
+	}
+
+	@Override
+	public void setSubject(List<Subject> s) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
