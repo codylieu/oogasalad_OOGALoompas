@@ -53,6 +53,7 @@ public abstract class AbstractItemEditorTab extends ObjectEditorTab {
 		ItemController controller = (ItemController) myController;
 		itemSchemas = new ArrayList<ItemSchema>();
 		
+		//implement better reflection here (proper polymorphism)
 		for (TDObjectSchema item : objectMap.values()) {
 			ItemSchema itemSchema = null;
 			if (item instanceof AnnihilatorItemSchema) {
