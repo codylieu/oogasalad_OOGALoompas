@@ -53,7 +53,6 @@ public abstract class ItemEditorTab extends ObjectEditorTab {
 		ItemController controller = (ItemController) myController;
 		itemSchemas = new ArrayList<ItemSchema>();
 		
-		
 		for (TDObjectSchema item : objectMap.values()) {
 			ItemSchema itemSchema = null;
 			if (item instanceof AnnihilatorItemSchema) {
@@ -91,14 +90,13 @@ public abstract class ItemEditorTab extends ObjectEditorTab {
 	@Override
 	protected void updateSchemaDataFromView() {
 		super.updateSchemaDataFromView();
-		
-		TDObjectSchema obj = getSelectedObject();
+		//TDObjectSchema myCurrentObject = getSelectedObject();
 	}
 	
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
-		//update TowerEditor upgrade dropdown
+		//update upgradeDropDown in TowerEditorTab
 	}
 	
 	@Override
