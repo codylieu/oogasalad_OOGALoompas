@@ -3,7 +3,7 @@ package main.java.author.view.tabs.item;
 import main.java.author.controller.TabController;
 import main.java.schema.tdobjects.TDObjectSchema;
 
-public class InstantFreezeItemEditorTab extends ItemEditorTab{
+public class InstantFreezeItemEditorTab extends AbstractItemEditorTab{
 
 	public InstantFreezeItemEditorTab(TabController itemController,
 			String objectName) {

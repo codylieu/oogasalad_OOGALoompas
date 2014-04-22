@@ -3,7 +3,7 @@ package main.java.author.view.tabs.item;
 import main.java.author.controller.TabController;
 import main.java.schema.tdobjects.TDObjectSchema;
 
-public class AnnihilatorItemEditorTab extends ItemEditorTab{
+public class AnnihilatorItemEditorTab extends AbstractItemEditorTab{
 
 	public AnnihilatorItemEditorTab(TabController itemController,
 			String objectName) {

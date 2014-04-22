@@ -3,7 +3,7 @@ package main.java.author.view.tabs.item;
 import main.java.author.controller.TabController;
 import main.java.schema.tdobjects.TDObjectSchema;
 
-public class LifeSaverItemEditorTab extends ItemEditorTab{
+public class LifeSaverItemEditorTab extends AbstractItemEditorTab{
 
 	public LifeSaverItemEditorTab(TabController itemController,
 			String objectName) {
