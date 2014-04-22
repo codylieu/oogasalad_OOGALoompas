@@ -62,17 +62,19 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs() {
-		final EnemyController enemyController = new EnemyController(
-				myController);
-		final TowerController towerController = new TowerController(
-				myController);
-		final WaveController waveController = new WaveController(myController);
-		final GameSettingsController gameSettingsController = new GameSettingsController(
-				myController);
-		final TerrainController terrainController = new TerrainController(
-				myController);
-		final ItemController itemController = new ItemController(myController);
-
+		final EnemyController enemyController =
+				new EnemyController(myController);
+		final TowerController towerController = 
+				new TowerController(myController);
+		final WaveController waveController = 
+				new WaveController(myController);
+		final GameSettingsController gameSettingsController = 
+				new GameSettingsController(myController);
+		final TerrainController terrainController = 
+				new TerrainController(myController);
+		final ItemController itemController = 
+				new ItemController(myController);
+		
 		myController.addTabController(enemyController);
 		myController.addTabController(towerController);
 		myController.addTabController(waveController);
