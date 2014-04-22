@@ -150,7 +150,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			super(editorTab);
 		}
 
-		@Override
+	
 		protected void instantiateAndClumpFields() {
 			healthSpinner = makeAttributeSpinner(MonsterSchema.HEALTH);
 			speedSpinner = makeAttributeSpinner(MonsterSchema.SPEED);
@@ -234,7 +234,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
-		@Override
+
 		protected JComponent makePrimaryObjectGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
