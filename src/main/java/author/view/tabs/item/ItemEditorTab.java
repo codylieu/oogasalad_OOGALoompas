@@ -32,7 +32,7 @@ import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 
-public class ItemEditorTab extends ObjectEditorTab {
+public abstract class ItemEditorTab extends ObjectEditorTab {
 	private JSpinner timeSpinner, costSpinner, damageSpinner, flashSpinner;
 	private List<ItemSchema> itemSchemas;
 	private List<JRadioButton> allButtons;
@@ -43,12 +43,6 @@ public class ItemEditorTab extends ObjectEditorTab {
 		super(itemController, objectName);
 	}
 	
-	@Override
-	protected TDObjectSchema createSpecificNewObject(String name) {
-		//testing for one specific powerup
-		return new AreaBombItemSchema(name);
-	}
-
 	@Override
 	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new ItemTabViewBuilder(this);
@@ -99,7 +93,6 @@ public class ItemEditorTab extends ObjectEditorTab {
 		super.updateSchemaDataFromView();
 		
 		TDObjectSchema obj = getSelectedObject();
-		
 	}
 	
 	@Override
