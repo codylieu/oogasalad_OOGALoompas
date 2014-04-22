@@ -11,11 +11,10 @@ import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.engine.Model;
+import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.player.panels.ItemChooser;
 import main.java.player.panels.ObjectChooser;
-import main.java.player.panels.TowerChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
@@ -41,7 +40,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public static int RIGHT_CLICK = 3;
 
 	private ObjectChooser towerChooser;
-	@SuppressWarnings("unused")
 	private ObjectChooser itemChooser;
 	private Model model;
 	private List<Observing> observers;
@@ -215,7 +213,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			setItem(LEFT_CLICK, items.getString(s));
 		}	
 	}*/
-	
+
 	private void setItem(int clickName ,String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
@@ -314,8 +312,29 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		return model.getPossibleTowers();
 	}
 
+	public List<String> getPossibleItems(){
+		return model.getPossibleItems();
+	}
+
 	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {
 		model.loadGameBlueprint(fileName);
+	}
+
+	public void saveGameState(String gameName){
+		try {
+			model.saveGame(gameName);
+		} catch (InvalidSavedGameException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadGameState(String gameName){
+		try {
+			model.loadSavedGame(gameName);
+		} catch (InvalidSavedGameException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public Map<String, String> getGameAttributes() {
@@ -330,8 +349,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	@Override
 	public void setSubject(List<Subject> s) {
-		towerChooser = (TowerChooser) s.get(0);
-		itemChooser = (ItemChooser) s.get(1);
+		towerChooser = (ObjectChooser) s.get(0);
+		//itemChooser = (ObjectChooser) s.get(1);
 	}
 
 	@Override
