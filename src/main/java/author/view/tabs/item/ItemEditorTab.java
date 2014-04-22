@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -21,13 +20,11 @@ import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.ItemController;
-import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
