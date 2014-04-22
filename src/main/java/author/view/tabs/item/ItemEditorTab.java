@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,6 +21,7 @@ import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.ItemController;
+import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
@@ -33,27 +36,15 @@ import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 
 public class ItemEditorTab extends ObjectEditorTab {
-	private JSpinner costSpinner, damageSpinner, flashSpinner, rangeSpinner;
+	private JSpinner timeSpinner, costSpinner, damageSpinner, flashSpinner;
 	private List<ItemSchema> itemSchemas;
 	private List<JRadioButton> allButtons;
 	private JButton itemImageButton;
 	private ImageCanvas itemImageCanvas;
-	private JComboBox<String> typeDropDown;
-	
-	//protected ImageCanvas 
 	
 	public ItemEditorTab(TabController itemController, String objectName) {
 		super(itemController, objectName);
 	}
-	
-//	myAttributeSet.add(ItemSchema.BUILDUP_TIME);
-//	myAttributeSet.add(ItemSchema.COST);
-//	myAttributeSet.add(ItemSchema.DAMAGE);
-//	myAttributeSet.add(ItemSchema.FLASH_INTERVAL);
-//	myAttributeSet.add(ItemSchema.IMAGE_NAME);
-//	myAttributeSet.add(ItemSchema.NAME);
-//	myAttributeSet.add(ItemSchema.LOCATION);
-
 	
 	@Override
 	protected TDObjectSchema createSpecificNewObject(String name) {
@@ -102,6 +93,38 @@ public class ItemEditorTab extends ObjectEditorTab {
 		controller.addItems(itemSchemas);
 	}
 	
+	public List<ItemSchema> getItemSchemas() {
+		return itemSchemas;
+	}
+	
+	@Override
+	protected void updateSchemaDataFromView() {
+		super.updateSchemaDataFromView();
+		
+		TDObjectSchema obj = getSelectedObject();
+		
+	}
+	
+	@Override
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+		super.updateViewWithSchemaData(map);
+		//update TowerEditor upgrade dropdown
+	}
+	
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+		itemImageButton.addActionListener(new FileChooserListener(itemImageCanvas));
+		for (JRadioButton button : allButtons) {
+			button.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					updateSchemaDataFromView();
+				}
+			});
+		}
+	}
+	
 	private class ItemTabViewBuilder extends ObjectTabViewBuilder {
 
 		public ItemTabViewBuilder(EditorTab editorTab) {
@@ -132,17 +155,13 @@ public class ItemEditorTab extends ObjectEditorTab {
 		@Override
 		protected void instantiateAndClumpFields() {
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
+			timeSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
-			rangeSpinner = makeAttributeSpinner(AreaBombItemSchema.RANGE);
 			
-			JSpinner[] spinners = {costSpinner, damageSpinner, flashSpinner, rangeSpinner};
+			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-			
 			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
-			
-			//radio buttons
-			//dropdown
 		}
 
 		@Override
