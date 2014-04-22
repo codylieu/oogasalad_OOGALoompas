@@ -1,5 +1,7 @@
 package main.java.engine.objects.tower;
 
+import java.util.List;
+
 import main.java.engine.EnvironmentKnowledge;
 
 public interface ITower {
@@ -50,5 +52,12 @@ public interface ITower {
      * @return String name of upgraded tower to replace the current one
      */
     public String getUpgradeTowerName();
+    
+    /**
+     * Get the information about the tower.
+     * 
+     * @return a list of string representing the info of the tower
+     */
+    public List<String> getInfo();
     
 }

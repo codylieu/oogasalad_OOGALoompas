@@ -2,6 +2,7 @@ package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,11 +28,14 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public static final double DEFAULT_FIRING_SPEED = 5;
     public static final int FIRING_INTERVAL_STEP = 2;
     public static final int MIN_FIRING_INTERVAL = 21;
+    private static final String TOWER_TYPE = "Shooting Tower";
 
     protected double myDamage;
     protected double myFiringSpeed;
     protected double myRange;
     protected String myBulletImage;
+    protected List<String> myInfo = new ArrayList<String>();
+    protected String myType;
     
     private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
 
@@ -53,6 +57,15 @@ public class ShootingTower extends TowerBehaviorDecorator {
         myFiringSpeed = firingSpeed;
         myRange = range;
         myBulletImage = bulletImage;
+        myType = TOWER_TYPE;
+        addInfo();
+    }
+    
+    protected void addInfo() {
+        myInfo.add(this.getClass().getSimpleName());
+		myInfo.addAll(baseTower.getInfo());
+		myInfo.add(""+myDamage);
+		myInfo.add(""+myRange);
     }
 
     /**
@@ -64,11 +77,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public ShootingTower (ITower baseTower, Map<String, Serializable> attributes) {
         this(
              baseTower,
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
-                                                 DEFAULT_FIRING_SPEED),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
-                                                 DEFAULT_RANGE),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE))),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
+                                                 DEFAULT_FIRING_SPEED))),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
+                                                 DEFAULT_RANGE))),
              (String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""));
     }
 
@@ -126,8 +139,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
         		((SimpleTower) baseTower).centerCoordinate().getY(), 
         		xspeed, yspeed, myDamage, myBulletImage);
     }
-    
 
+	@Override
+	public List<String> getInfo() {
+		return myInfo;
+	}
     
     
 }

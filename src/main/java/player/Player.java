@@ -13,6 +13,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -37,13 +39,24 @@ import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.InfoPanel;
+import main.java.player.panels.ItemChooser;
+import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.Sound;
+import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
+/**
+ * The Swing wrapper that contains all the buttons,
+ * and the TDPlayerEngine
+ * @author Kevin
+ *
+ */
+
+@SuppressWarnings("serial")
 public class Player implements Serializable {
 
 	public static final int BUTTON_PADDING = 10;
@@ -100,9 +113,14 @@ public class Player implements Serializable {
 	private Sound song;
 	private boolean soundOn;
 	private TowerChooser towerChooser;
+	private ObjectChooser itemChooser;
 
+	/**
+	 * initializeEngine() must be called first
+	 * Many other modules require the engine reference to exist
+	 */
 	public Player(){
-		makeGamePanel();
+		initializeEngine();
 		initSong();
 		makeFrame();
 		makeCards();
@@ -139,7 +157,6 @@ public class Player implements Serializable {
 		frame.setJMenuBar(makeMenuBar());
 	}
 
-	@SuppressWarnings("serial")
 	private JMenu makeFileMenu(){
 		JMenu files = new JMenu(FILE_LABEL);
 		files.add(new AbstractAction(LOAD_GAME_TEXT){
@@ -218,7 +235,7 @@ public class Player implements Serializable {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		gameCard.add(makeGameButtonPanel(), constraints);
+		gameCard.add(makeGameActionPanel(), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -234,14 +251,14 @@ public class Player implements Serializable {
 		cards.add(gameCard, GAME_CARD);
 	}
 
-	private TDPlayerEngine makeGamePanel() {
+	private TDPlayerEngine initializeEngine() {
 		engine = new TDPlayerEngine();
-		engine.setSubject(towerChooser);
+		//engine.setSubject(towerChooser);
 		engine.stop();
 		return engine;
 	}
 
-	private JPanel makeGameButtonPanel() {
+	private JPanel makeGameActionPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
 
@@ -273,7 +290,13 @@ public class Player implements Serializable {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
-		engine.setSubject(towerChooser);//This probably does not belong here
+		itemChooser = new ItemChooser(engine);
+
+		List<Subject> engineSubjectList = new ArrayList<Subject>();
+		engineSubjectList.add(towerChooser);
+		engineSubjectList.add(itemChooser);
+		engine.setSubject(engineSubjectList);//This probably does not belong here
+
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
@@ -284,6 +307,7 @@ public class Player implements Serializable {
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
+		//gameButtonPanel.add(itemChooser);
 		return gameButtonPanel;
 	}
 
@@ -301,9 +325,11 @@ public class Player implements Serializable {
 	}
 
 	public void populateTowerChooserAndToggleRunning() {
-		towerChooser.getTowerNames();
+		towerChooser.getObjectNames();
+		itemChooser.getObjectNames();
 		engine.toggleRunning();
 	}
+
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
@@ -319,14 +345,14 @@ public class Player implements Serializable {
 		return unitInfoPanel;
 	}
 
-	//need to add when game ends to route to here, also need to work on saving the scores 
+	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
 		highScoreCard.setSubject(engine);
 		engine.register(highScoreCard);
 		cards.add(highScoreCard, HIGH_SCORE_CARD);
 	}
-	
+
 	private void addOptionsCard() {
 		JPanel optionCard = new JPanel();
 		optionCard.setLayout(new GridBagLayout());
@@ -415,6 +441,10 @@ public class Player implements Serializable {
 
 	private JButton makeMainMenuButton() {
 		JButton mainMenuButton = new JButton(MAIN_MENU_TEXT);
+		mainMenuButton.addActionListener(new MethodAction(engine, "toggleRunning"));
+		mainMenuButton.addActionListener(new MethodAction(this, "showCard", WELCOME_CARD));
+		//mainMenuButton.addActionListener(new MethodAction(frame, "pack"));
+		/*
 		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				engine.toggleRunning();
@@ -422,7 +452,7 @@ public class Player implements Serializable {
 				frame.pack();
 			}
 		});
-
+		 */
 		return mainMenuButton;
 	}
 

@@ -1,1 +1,1 @@
-{"myAttributesMap":{},"myAttributeSet":["Damage","name"]}
+{"x":2,"y":3,"myName":"t1"}
