@@ -1,5 +1,7 @@
 package main.java.author.view.tabs.terrain;
 
+import static main.java.author.util.ActionListenerUtil.actionListener;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,25 +10,30 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
+import main.java.schema.CanvasSchema;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.map.TileMapSchema;
 import main.java.schema.map.TileSchema;
-import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {
 	private static final String CLEAR = "Clear Tiles";
@@ -237,9 +244,14 @@ public class TerrainEditorTab extends EditorTab {
 			populateTileMapSchema(tileMapSchema, tileDisp);
 			gameTileMapSchemas.add(tileMapSchema);
 		}
+		
+		CanvasSchema canvasSchema = new CanvasSchema();
+		canvasSchema.addAttribute(CanvasSchema.Y_TILES, myCanvas.getRows());
+		canvasSchema.addAttribute(CanvasSchema.X_TILES, myCanvas.getCols());
 
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable) gameTileMapSchemas);
+		myCompletedMap.addAttribute(GameMapSchema.MY_CANVAS_ATTRIBUTES, (Serializable) canvasSchema);
 
 		TerrainController myTerrainController = (TerrainController) myController;
 		myTerrainController.addMaps(myCompletedMap);
