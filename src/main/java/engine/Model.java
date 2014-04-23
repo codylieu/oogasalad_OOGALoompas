@@ -65,8 +65,9 @@ public class Model {
     private EnvironmentKnowledge environ;
     private List<TDItem> items;
     
-    public Model (JGEngine engine) {
+    public Model (JGEngine engine, String pathToBlueprint) {
         this.engine = engine;
+        dataHandler = new DataHandler();
         defineAllStaticImages();
         this.factory = new TDObjectFactory(engine);
         collisionManager = new CollisionManager(engine);
@@ -83,13 +84,11 @@ public class Model {
         items = new ArrayList<TDItem>();
 
         try {
-            loadGameBlueprint(null);// TODO: REPLACE
+            loadGameBlueprint(pathToBlueprint);// TODO: REPLACE
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-
-        dataHandler = new DataHandler();
 
         addNewPlayer();
 

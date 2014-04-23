@@ -120,7 +120,7 @@ public class Player implements Serializable {
 	 * Many other modules require the engine reference to exist
 	 */
 	public Player(){
-		initializeEngine();
+		initializeEngine(showBlueprintPrompt());
 		initSong();
 		makeFrame();
 		makeCards();
@@ -131,6 +131,18 @@ public class Player implements Serializable {
 		addCreditsCard();
 		addHighScoreCard();
 		show();
+	}
+
+	private String showBlueprintPrompt() {
+		int response = fileChooser.showOpenDialog(null);
+		if(response == JFileChooser.APPROVE_OPTION){
+			File file = fileChooser.getSelectedFile();
+			return file.getAbsolutePath();
+		}
+		else {
+			System.exit(0);
+			return "";
+		}
 	}
 
 	private void initSong(){
@@ -251,8 +263,8 @@ public class Player implements Serializable {
 		cards.add(gameCard, GAME_CARD);
 	}
 
-	private TDPlayerEngine initializeEngine() {
-		engine = new TDPlayerEngine();
+	private TDPlayerEngine initializeEngine(String pathToBlueprint) {
+		engine = new TDPlayerEngine(pathToBlueprint);
 		//engine.setSubject(towerChooser);
 		engine.stop();
 		return engine;

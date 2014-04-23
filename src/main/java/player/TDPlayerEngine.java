@@ -39,6 +39,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public static int DEFAULT_FRAME_RATE = 45;
 	public static int LEFT_CLICK = 1;
 	public static int RIGHT_CLICK = 3;
+	
 
 	private ObjectChooser towerChooser;
 	@SuppressWarnings("unused")
@@ -48,11 +49,13 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	private CursorState cursorState;
 	private boolean hasChanged;
 	private boolean isFullScreen;
+	private String pathToBlueprint;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
-	public TDPlayerEngine() {
-		super();
+	public TDPlayerEngine(String pathToBlueprintInit) {
+//		super();
+		pathToBlueprint = pathToBlueprintInit;
 		initEngineComponent(960, 640);
 		observers = new ArrayList<Observing>();
 		hasChanged = true;
@@ -68,7 +71,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	@Override
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
-		this.model = new Model(this);
+		model = new Model(this, pathToBlueprint);
 	}
 
 	public void speedUp() {
