@@ -113,7 +113,7 @@ public class Player implements Serializable {
 	private TDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
-	private TowerChooser towerChooser;
+	private ObjectChooser towerChooser;
 	private ObjectChooser itemChooser;
 
 	/**
@@ -316,7 +316,8 @@ public class Player implements Serializable {
 		JButton soundButton = new JButton(SOUND_ONOFF_TEXT);
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
-		towerChooser = new TowerChooser(engine);
+		towerChooser = new ObjectChooser(engine.getPossibleTowers());
+		towerChooser.register(engine);
 		//itemChooser = new ItemChooser(engine);
 
 		List<Subject> engineSubjectList = new ArrayList<Subject>();
@@ -353,7 +354,7 @@ public class Player implements Serializable {
 	}
 
 	public void populateTowerChooserAndToggleRunning() {
-		towerChooser.getObjectNames();
+		//towerChooser.getObjectNames();
 	//	itemChooser.getObjectNames();
 		engine.toggleRunning();
 	}
