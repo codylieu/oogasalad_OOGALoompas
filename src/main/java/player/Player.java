@@ -267,6 +267,7 @@ public class Player implements Serializable {
 	private TDPlayerEngine initializeEngine(String pathToBlueprint) {
 		engine = new TDPlayerEngine(pathToBlueprint);
 		//engine.setSubject(towerChooser);
+		engine.initGame();
 		engine.stop();
 		return engine;
 	}
