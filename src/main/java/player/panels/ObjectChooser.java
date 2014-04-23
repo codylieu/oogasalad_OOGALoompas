@@ -3,6 +3,7 @@ package main.java.player.panels;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
@@ -11,29 +12,28 @@ import javax.swing.JComboBox;
 import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
 /**
- * An abstract class that acts as a JComboBox that is also a Subject(observable).
- * Can easily be altered to be a different type(button, textfield, etc) that notifies other Observing objects.
+ * A JComboBox that is also a Subject(observable).
+ * Notifies observers if user clicks on a different item in drop down box
  *  
  * @author Michael Han
  */
 @SuppressWarnings("serial")
-public abstract class ObjectChooser extends SubjectPanel implements ActionListener{
+public class ObjectChooser extends SubjectPanel implements ActionListener{
 	protected JComboBox<String> objectComboBox;
-	protected TDPlayerEngine engine;
+	private List<String> objectNames;
 	protected String currentObjectName;
 	protected Vector<String> comboBoxItems;
 	protected DefaultComboBoxModel<String> comboBoxModel;
-	
-	public ObjectChooser(TDPlayerEngine myEngine){
+
+	public ObjectChooser(List<String> objectNamesList){
 		super();
 		observers = new ArrayList<Observing>();
 		hasChanged = false;
-		engine = myEngine;
-		register(engine);
 		currentObjectName = "";
+		objectNames = objectNamesList;
 		initComboBox();
 	}
-	
+
 	/**
 	 * initializes components relevant to JComboBox
 	 */
@@ -42,14 +42,20 @@ public abstract class ObjectChooser extends SubjectPanel implements ActionListen
 		comboBoxModel = new DefaultComboBoxModel<String>(comboBoxItems);		
 		objectComboBox = new JComboBox<String>(comboBoxModel);
 		objectComboBox.addActionListener(this);
+		populateComboBox();
 		add(objectComboBox);
 	}
-	
+
 	/**
-	 * Left abstract because implementation will differ based on where you are getting the names from.
-	 * Main purpose is to populate the JComboBox
+	 * Populate the JComboBox using list from parameter
 	 */
-	public abstract void getObjectNames();
+	public void populateComboBox(){
+		comboBoxModel.removeAllElements();
+		for (String s: objectNames) {
+			comboBoxModel.addElement(s);
+		}		
+		objectComboBox.setSelectedIndex(0);
+	}
 
 	/**
 	 * pulls the String that was clicked on in the combo box
@@ -72,7 +78,7 @@ public abstract class ObjectChooser extends SubjectPanel implements ActionListen
 		hasChanged = true;
 		notifyObservers();
 	}
-	
+
 	/**
 	 * @return currentObjectName
 	 */
