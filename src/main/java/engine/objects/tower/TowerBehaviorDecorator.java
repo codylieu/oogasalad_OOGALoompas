@@ -13,6 +13,7 @@ import main.java.engine.EnvironmentKnowledge;
 abstract class TowerBehaviorDecorator implements ITower {
     /**
      * The base tower that will have behaviors added to it ("decorations")
+     * This is not necessarily a SimpleTower/TDObject, but could be another TowerBehaviorDecorator!
      */
     protected ITower baseTower;
 
