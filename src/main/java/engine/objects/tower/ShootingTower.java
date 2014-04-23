@@ -5,12 +5,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.detector.TargetDetectorInterface;
-import main.java.engine.objects.detector.monsterdetector.*;
-import main.java.engine.objects.projectile.DamageProjectile;
+import main.java.engine.objects.detector.monsterdetector.MonsterClosestToExitDetector;
 import main.java.engine.objects.projectile.PiercingProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 
@@ -89,8 +87,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
 //        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
     	List<Object> targetLocation = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
-    	if (targetLocation.size() < 1) return;
-		// a tower should only target one monster at a time
+    	if (targetLocation.size() < 1) {
+    	    // a tower should only target one monster at a time
+    	    return;
+    	}
+		
     	fire((Point2D) targetLocation.get(0));
     }
 
@@ -124,8 +125,8 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public void fireProjectile (double angle) {
 
         new PiercingProjectile(
-        		((SimpleTower) baseTower).centerCoordinate().getX(),
-        		((SimpleTower) baseTower).centerCoordinate().getY(),
+        		baseTower.centerCoordinate().getX(),
+        		baseTower.centerCoordinate().getY(),
         		angle, myDamage, myBulletImage);
 
     }
@@ -135,8 +136,8 @@ public class ShootingTower extends TowerBehaviorDecorator {
      */
     public void fireProjectile (double xspeed, double yspeed) {
         new PiercingProjectile(
-        		((SimpleTower) baseTower).centerCoordinate().getX(),
-        		((SimpleTower) baseTower).centerCoordinate().getY(), 
+        		baseTower.centerCoordinate().getX(),
+        		baseTower.centerCoordinate().getY(), 
         		xspeed, yspeed, myDamage, myBulletImage);
     }
 
