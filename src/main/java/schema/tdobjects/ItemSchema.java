@@ -2,7 +2,7 @@ package main.java.schema.tdobjects;
 
 import java.awt.geom.Point2D;
 
-import main.java.engine.objects.item.TDItem;
+import main.java.engine.objects.powerup.TDItem;
 
 public abstract class ItemSchema extends TDObjectSchema{
 	public static final String COST = "Cost";

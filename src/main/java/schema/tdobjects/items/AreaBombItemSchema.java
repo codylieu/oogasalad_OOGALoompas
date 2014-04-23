@@ -1,8 +1,8 @@
 package main.java.schema.tdobjects.items;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
-import main.java.engine.objects.item.AreaBomb;
+import main.java.engine.objects.powerup.Annihilator;
+import main.java.engine.objects.powerup.AreaBomb;
 import main.java.schema.tdobjects.ItemSchema;
 
 import java.util.Set;

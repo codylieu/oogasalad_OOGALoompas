@@ -2,8 +2,8 @@ package main.java.schema.tdobjects.items;
 
 import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
 import main.java.engine.objects.monster.SimpleMonster;
+import main.java.engine.objects.powerup.Annihilator;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 

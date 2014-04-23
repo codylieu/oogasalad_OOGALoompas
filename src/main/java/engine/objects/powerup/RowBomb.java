@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -7,8 +7,8 @@ import java.util.Map;
 import jgame.JGObject;
 import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.EnvironmentKnowledge;
-import main.java.engine.objects.item.decorations.Fire;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.powerup.decorations.Fire;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 

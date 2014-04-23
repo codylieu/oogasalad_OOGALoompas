@@ -15,15 +15,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.item.RowBomb;
-import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.powerup.RowBomb;
+import main.java.engine.objects.powerup.TDItem;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;

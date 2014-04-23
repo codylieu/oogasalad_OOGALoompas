@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;

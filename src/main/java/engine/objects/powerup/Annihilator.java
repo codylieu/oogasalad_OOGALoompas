@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.io.Serializable;
 import java.util.Map;

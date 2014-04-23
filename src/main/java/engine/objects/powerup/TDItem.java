@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
