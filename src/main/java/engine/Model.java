@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,40 +12,38 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.item.RowBomb;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
-import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
-import main.java.schema.map.GameMapSchema;
-import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.WaveSpawnSchema;
+import main.java.schema.map.GameMapSchema;
+import main.java.schema.tdobjects.ItemSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.TDObjectSchema;
-import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.WaveSpawnSchema;
 
 
-public class Model {
+public class Model implements IModel{
 
 	private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
 	public static final String RESOURCE_PATH = "/main/resources/";

@@ -12,6 +12,7 @@ import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.data.DataHandler;
+import main.java.engine.IModel;
 import main.java.engine.Model;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
@@ -49,7 +50,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	private int xtiles, ytiles;
 	private ObjectChooser towerChooser;
 	private ObjectChooser itemChooser;
-	private Model model;
+	private IModel model;
 	private List<Observing> observers;
 	private CursorState cursorState;
 	private boolean hasChanged;
