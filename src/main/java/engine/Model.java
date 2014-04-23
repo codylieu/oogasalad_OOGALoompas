@@ -744,7 +744,8 @@ public class Model {
 				gameClock,
 				player);
 		try {
-			dataHandler.saveState(currentGame, RESOURCE_PATH + gameName);
+			//Michael- i removed the resource_path because it was giving me an error since the method should take the straight file name not the resource path
+			dataHandler.saveState(currentGame, gameName);
 		}
 		catch (IOException ioe) {
 			throw new InvalidSavedGameException(ioe);
@@ -763,8 +764,8 @@ public class Model {
 	public void loadSavedGame (String filename) throws InvalidSavedGameException {
 		try {
 			// TODO: check for proper game blueprint loaded prior?
-
-			GameState newGameState = dataHandler.loadState(RESOURCE_PATH + filename);
+			//removed the RESOURCE_PATH variable as i think thats causing issues with actually saving
+			GameState newGameState = dataHandler.loadState(filename);
 
 			// replace towers, player, clock with new state
 			clearAllTowers();
