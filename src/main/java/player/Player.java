@@ -23,7 +23,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -41,7 +40,6 @@ import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.InfoPanel;
 import main.java.player.panels.ObjectChooser;
-import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.Sound;
@@ -114,7 +112,7 @@ public class Player implements Serializable {
 	private Sound song;
 	private boolean soundOn;
 	private ObjectChooser towerChooser;
-	private ObjectChooser itemChooser;
+	private ObjectChooser powerUpChooser;
 
 	/**
 	 * initializeEngine() must be called first
@@ -266,7 +264,6 @@ public class Player implements Serializable {
 
 	private TDPlayerEngine initializeEngine(String pathToBlueprint) {
 		engine = new TDPlayerEngine(pathToBlueprint);
-		//engine.setSubject(towerChooser);
 		engine.initGame();
 		engine.stop();
 		return engine;
@@ -279,7 +276,7 @@ public class Player implements Serializable {
 		JButton mainMenuButton = makeMainMenuButton();
 
 		JButton playResumeButton = new JButton(PLAY_PAUSE_TEXT);
-		playResumeButton.addActionListener(new MethodAction (this, "populateTowerChooserAndToggleRunning"));
+		playResumeButton.addActionListener(new MethodAction (engine, "toggleRunning"));
 
 		JButton saveButton = new JButton(SAVE_TEXT);
 		saveButton.addActionListener(new ActionListener() {
@@ -319,11 +316,11 @@ public class Player implements Serializable {
 
 		towerChooser = new ObjectChooser(engine.getPossibleTowers());
 		towerChooser.register(engine);
-		//itemChooser = new ItemChooser(engine);
+		//powerUpChooser = new ObjectChooser(engine.getPossibleItems());
 
 		List<Subject> engineSubjectList = new ArrayList<Subject>();
 		engineSubjectList.add(towerChooser);
-		//engineSubjectList.add(itemChooser);
+		//engineSubjectList.add(powerUpChooser);
 		engine.setSubject(engineSubjectList);//This probably does not belong here
 
 
@@ -352,12 +349,6 @@ public class Player implements Serializable {
 		else {
 			song.stop();
 		}
-	}
-
-	public void populateTowerChooserAndToggleRunning() {
-		//towerChooser.getObjectNames();
-	//	itemChooser.getObjectNames();
-		engine.toggleRunning();
 	}
 
 
