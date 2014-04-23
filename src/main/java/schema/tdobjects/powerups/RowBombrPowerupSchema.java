@@ -1,4 +1,4 @@
-package main.java.schema.tdobjects.items;
+package main.java.schema.tdobjects.powerups;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.objects.powerup.Annihilator;
@@ -13,18 +13,18 @@ import java.util.Set;
  * 
  * This is a settings object for a specific type of RowBomb.
  */
-public class RowBombItemSchema extends ItemSchema {
+public class RowBombrPowerupSchema extends ItemSchema {
 	public static final Class<RowBomb> MY_CONCRETE_TYPE = RowBomb.class;
 	public static final String RANGE = "Range";
 
-	public RowBombItemSchema() {
+	public RowBombrPowerupSchema() {
 		super(MY_CONCRETE_TYPE);
 	}
 
 	/**
 	 * @param name name of monster
 	 */
-	public RowBombItemSchema(String name) {
+	public RowBombrPowerupSchema(String name) {
 		this();
 		populateDefaultAttributes(name);
 	}

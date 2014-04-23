@@ -36,12 +36,12 @@ import main.java.schema.GameSchema;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
-import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
-import main.java.schema.tdobjects.items.AreaBombItemSchema;
-import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
-import main.java.schema.tdobjects.items.LifeSaverItemSchema;
-import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
+import main.java.schema.tdobjects.powerups.AnnihilatorPowerupSchema;
+import main.java.schema.tdobjects.powerups.AreaBombPowerupSchema;
+import main.java.schema.tdobjects.powerups.InstantFreezerPowerupSchema;
+import main.java.schema.tdobjects.powerups.LifeSaverPowerupSchema;
+import main.java.schema.tdobjects.powerups.RowBombrPowerupSchema;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
@@ -577,32 +577,32 @@ public class Model {
         List<ItemSchema> testItemSchema = new ArrayList<>();
 
         // Create test items
-        AnnihilatorItemSchema testAnnihilatorItem = new AnnihilatorItemSchema();
+        AnnihilatorPowerupSchema testAnnihilatorItem = new AnnihilatorPowerupSchema();
         testAnnihilatorItem.addAttribute(ItemSchema.NAME, "Annihilator");
         testAnnihilatorItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
         testAnnihilatorItem.addAttribute(ItemSchema.COST, (double) 1);
         testAnnihilatorItem.addAttribute(ItemSchema.DAMAGE, (double) 999);
         testItemSchema.add(testAnnihilatorItem);
 
-        AreaBombItemSchema testAreaBombItem = new AreaBombItemSchema();
+        AreaBombPowerupSchema testAreaBombItem = new AreaBombPowerupSchema();
         testAreaBombItem.addAttribute(ItemSchema.NAME, "AreaBomb");
         testAreaBombItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
-        testAreaBombItem.addAttribute(AreaBombItemSchema.RANGE, (double) 100);
+        testAreaBombItem.addAttribute(AreaBombPowerupSchema.RANGE, (double) 100);
         testItemSchema.add(testAreaBombItem);
 
-        RowBombItemSchema testRowBombItem = new RowBombItemSchema();
+        RowBombrPowerupSchema testRowBombItem = new RowBombrPowerupSchema();
         testRowBombItem.addAttribute(ItemSchema.NAME, "RowBomb");
         testRowBombItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
         testRowBombItem.addAttribute(ItemSchema.COST, (double) 1);
         testItemSchema.add(testRowBombItem);
 
-        InstantFreezeItemSchema testInstantFreezeItem = new InstantFreezeItemSchema();
+        InstantFreezerPowerupSchema testInstantFreezeItem = new InstantFreezerPowerupSchema();
         testInstantFreezeItem.addAttribute(ItemSchema.NAME, "InstantFreeze");
         testInstantFreezeItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
-        testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 999999);
+        testInstantFreezeItem.addAttribute(InstantFreezerPowerupSchema.FREEZE_DURATION, (double) 999999);
         testItemSchema.add(testInstantFreezeItem);
 
-        LifeSaverItemSchema testLifeSaverItem = new LifeSaverItemSchema();
+        LifeSaverPowerupSchema testLifeSaverItem = new LifeSaverPowerupSchema();
         testLifeSaverItem.addAttribute(ItemSchema.NAME, "LifeSaver");
         testLifeSaverItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
         testItemSchema.add(testLifeSaverItem);

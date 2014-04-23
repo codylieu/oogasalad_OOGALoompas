@@ -1,4 +1,4 @@
-package main.java.schema.tdobjects.items;
+package main.java.schema.tdobjects.powerups;
 
 import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.author.view.tabs.item.ItemViewConstants;
@@ -14,17 +14,17 @@ import java.util.Set;
  * 
  * This is a settings object for a specific type of Annihilator.
  */
-public class AnnihilatorItemSchema extends ItemSchema {
+public class AnnihilatorPowerupSchema extends ItemSchema {
 	public static final Class<Annihilator> MY_CONCRETE_TYPE = Annihilator.class;
 
-	public AnnihilatorItemSchema() {
+	public AnnihilatorPowerupSchema() {
 		super(MY_CONCRETE_TYPE);
 	}
 
 	/**
 	 * @param name name of monster
 	 */
-	public AnnihilatorItemSchema(String name) {
+	public AnnihilatorPowerupSchema(String name) {
 		this();
 		populateDefaultAttributes(name);
 	}
@@ -36,7 +36,7 @@ public class AnnihilatorItemSchema extends ItemSchema {
 		addAttribute(ItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT);
 		addAttribute(ItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT);
 		addAttribute(ItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT);
-		addAttribute(AreaBombItemSchema.RANGE, ItemViewConstants.RANGE_DEFAULT);
+		addAttribute(AreaBombPowerupSchema.RANGE, ItemViewConstants.RANGE_DEFAULT);
 	}
 
 	@Override

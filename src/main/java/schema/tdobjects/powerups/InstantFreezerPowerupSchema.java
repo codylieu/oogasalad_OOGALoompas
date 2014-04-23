@@ -1,28 +1,30 @@
-package main.java.schema.tdobjects.items;
+package main.java.schema.tdobjects.powerups;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.objects.powerup.Annihilator;
 import main.java.engine.objects.powerup.AreaBomb;
+import main.java.engine.objects.powerup.InstantFreeze;
 import main.java.schema.tdobjects.ItemSchema;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * 
- * This is a settings object for a specific type of AreaBomb.
+ * This is a settings object for a specific type of InstantFreeze.
  */
-public class AreaBombItemSchema extends ItemSchema {
-	public static final Class<AreaBomb> MY_CONCRETE_TYPE = AreaBomb.class;
-	public static final String RANGE = "Range";
+public class InstantFreezerPowerupSchema extends ItemSchema {
+	public static final Class<InstantFreeze> MY_CONCRETE_TYPE = InstantFreeze.class;
+	public static final String FREEZE_DURATION = "Range";
 
-	public AreaBombItemSchema() {
+	public InstantFreezerPowerupSchema() {
 		super(MY_CONCRETE_TYPE);
 	}
 
 	/**
 	 * @param name name of monster
 	 */
-	public AreaBombItemSchema(String name) {
+	public InstantFreezerPowerupSchema(String name) {
 		this();
 		populateDefaultAttributes(name);
 	}
@@ -34,12 +36,13 @@ public class AreaBombItemSchema extends ItemSchema {
 		addAttribute(ItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT);
 		addAttribute(ItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT);
 		addAttribute(ItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT);
-		addAttribute(AreaBombItemSchema.RANGE, ItemViewConstants.RANGE_DEFAULT);
+		addAttribute(InstantFreezerPowerupSchema.FREEZE_DURATION, ItemViewConstants.FREEZE_DURATION_DEFAULT);
+
 	}
 
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		myAttributeSet.add(AreaBombItemSchema.RANGE);
+		myAttributeSet.add(InstantFreezerPowerupSchema.FREEZE_DURATION);
 		return myAttributeSet;
 	}
 }

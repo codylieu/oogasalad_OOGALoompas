@@ -10,7 +10,7 @@ import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.powerup.decorations.Fire;
 import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.items.AreaBombItemSchema;
+import main.java.schema.tdobjects.powerups.AreaBombPowerupSchema;
 
 /**
  * 
@@ -28,11 +28,11 @@ public class RowBomb extends TDItem{
 	public RowBomb(Map<String, Serializable> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
-				(String) getValueOrDefault(attributes, AreaBombItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombItemSchema.COST, ItemViewConstants.COST_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombItemSchema.BUILDUP_TIME, ItemViewConstants.BUILDUP_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
-				(Integer) getValueOrDefault(attributes, AreaBombItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
+				(String) getValueOrDefault(attributes, AreaBombPowerupSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
+				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.COST, ItemViewConstants.COST_DEFAULT),
+				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.BUILDUP_TIME, ItemViewConstants.BUILDUP_DEFAULT),
+				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
+				(Integer) getValueOrDefault(attributes, AreaBombPowerupSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
 				);
 	}
 
