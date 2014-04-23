@@ -2,6 +2,7 @@ package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import main.java.engine.EnvironmentKnowledge;
@@ -25,11 +26,14 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public static final double DEFAULT_FIRING_SPEED = 5;
     public static final int FIRING_INTERVAL_STEP = 2;
     public static final int MIN_FIRING_INTERVAL = 21;
+    private static final String TOWER_TYPE = "Shooting Tower";
 
     protected double myDamage;
     protected double myFiringSpeed;
     protected double myRange;
     protected String myBulletImage;
+    protected List<String> myInfo = new ArrayList<String>();
+    protected String myType;
     
     private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
 
@@ -51,6 +55,15 @@ public class ShootingTower extends TowerBehaviorDecorator {
         myFiringSpeed = firingSpeed;
         myRange = range;
         myBulletImage = bulletImage;
+        myType = TOWER_TYPE;
+        addInfo();
+    }
+    
+    protected void addInfo() {
+        myInfo.add(this.getClass().getSimpleName());
+		myInfo.addAll(baseTower.getInfo());
+		myInfo.add(""+myDamage);
+		myInfo.add(""+myRange);
     }
 
     /**
@@ -127,8 +140,11 @@ public class ShootingTower extends TowerBehaviorDecorator {
         		baseTower.centerCoordinate().getY(), 
         		xspeed, yspeed, myDamage, myBulletImage);
     }
-    
 
+	@Override
+	public List<String> getInfo() {
+		return myInfo;
+	}
     
     
 }

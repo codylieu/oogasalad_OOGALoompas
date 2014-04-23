@@ -1,6 +1,7 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -162,5 +163,20 @@ public abstract class Monster extends TDObject {
 	 */
 	public MonsterSpawnSchema getResurrrectMonsterSpawnSchema() {
 		return resurrectMonsterSchema;
+	}
+	
+	/**
+	 * Get dynamic information about the monster
+	 * 
+	 * @return
+	 */
+	public List<String> getInfo() {
+		List<String> info = new ArrayList<String>();
+		info.add(""+x);
+		info.add(""+y);
+		info.add(""+myMoneyValue);
+		info.add(""+myHealth);
+		info.add(""+myMoveSpeed);
+		return info;
 	}
 }
