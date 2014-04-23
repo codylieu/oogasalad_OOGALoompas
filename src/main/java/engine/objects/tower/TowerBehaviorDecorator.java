@@ -1,5 +1,6 @@
 package main.java.engine.objects.tower;
 
+import java.awt.geom.Point2D;
 import main.java.engine.EnvironmentKnowledge;
 
 
@@ -58,6 +59,13 @@ abstract class TowerBehaviorDecorator implements ITower {
     public String getUpgradeTowerName () {
         return baseTower.getUpgradeTowerName();
     }
+    
+    @Override
+    public Point2D centerCoordinate () {
+        return baseTower.centerCoordinate();
+    }
+    
+    
     
     /**
      * Do the additional behavior granted by this behavior decoration.
