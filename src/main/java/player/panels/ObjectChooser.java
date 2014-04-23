@@ -8,7 +8,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
-import main.java.player.TDPlayerEngine;
+import main.java.player.ITDPlayerEngine;
 import main.java.player.util.Observing;
 /**
  * An abstract class that acts as a JComboBox that is also a Subject(observable).
@@ -19,17 +19,17 @@ import main.java.player.util.Observing;
 @SuppressWarnings("serial")
 public abstract class ObjectChooser extends SubjectPanel implements ActionListener{
 	protected JComboBox<String> objectComboBox;
-	protected TDPlayerEngine engine;
+	protected ITDPlayerEngine engine;
 	protected String currentObjectName;
 	protected Vector<String> comboBoxItems;
 	protected DefaultComboBoxModel<String> comboBoxModel;
 	
-	public ObjectChooser(TDPlayerEngine myEngine){
+	public ObjectChooser(ITDPlayerEngine myEngine){
 		super();
 		observers = new ArrayList<Observing>();
 		hasChanged = false;
 		engine = myEngine;
-		register(engine);
+		register((Observing) engine);
 		currentObjectName = "";
 		initComboBox();
 	}

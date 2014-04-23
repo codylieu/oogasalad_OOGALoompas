@@ -33,7 +33,7 @@ import net.lingala.zip4j.exception.ZipException;
  *
  */
 
-public class TDPlayerEngine extends JGEngine implements Subject, Observing{
+public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDPlayerEngine{
 
 	public static final String LIFE_SAVER = "LifeSaver";
 	public static final String INSTANT_FREEZE = "InstantFreeze";

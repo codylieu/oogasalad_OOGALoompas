@@ -23,7 +23,6 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -110,7 +109,7 @@ public class Player implements Serializable {
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
-	private TDPlayerEngine engine;
+	private ITDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
 	private TowerChooser towerChooser;
@@ -243,13 +242,12 @@ public class Player implements Serializable {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		gameCard.add(engine, constraints);
+		gameCard.add((Component) engine, constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		gameCard.add(makeGameActionPanel(), constraints);
-
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -264,10 +262,10 @@ public class Player implements Serializable {
 		cards.add(gameCard, GAME_CARD);
 	}
 
-	private TDPlayerEngine initializeEngine(String pathToBlueprint) {
+	private ITDPlayerEngine initializeEngine(String pathToBlueprint) {
 		engine = new TDPlayerEngine(pathToBlueprint);
 		//engine.setSubject(towerChooser);
-		engine.stop();
+		engine.toggleRunning();
 		return engine;
 	}
 
@@ -361,14 +359,14 @@ public class Player implements Serializable {
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubject(engine);
+		gameInfoPanel.setSubject((Subject) engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubject(engine);
+		unitInfoPanel.setSubject((Subject) engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
@@ -376,7 +374,7 @@ public class Player implements Serializable {
 	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
-		highScoreCard.setSubject(engine);
+		highScoreCard.setSubject((Subject) engine);
 		engine.register(highScoreCard);
 		cards.add(highScoreCard, HIGH_SCORE_CARD);
 	}
