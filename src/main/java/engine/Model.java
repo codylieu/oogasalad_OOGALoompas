@@ -83,13 +83,11 @@ public class Model {
 		gameState = new GameState();
 		items = new ArrayList<TDItem>();
 
-		if (pathToBlueprint != null) {
-			try {
-				loadGameBlueprint(pathToBlueprint);// TODO: REPLACE
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			loadGameBlueprint(pathToBlueprint);// TODO: REPLACE
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		addNewPlayer();
