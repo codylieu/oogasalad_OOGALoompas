@@ -246,8 +246,8 @@ public class TerrainEditorTab extends EditorTab {
 		}
 		
 		CanvasSchema canvasSchema = new CanvasSchema();
-		canvasSchema.addAttribute(CanvasSchema.X_TILES, myCanvas.getRows());
-		canvasSchema.addAttribute(CanvasSchema.Y_TILES, myCanvas.getCols());
+		canvasSchema.addAttribute(CanvasSchema.Y_TILES, myCanvas.getRows());
+		canvasSchema.addAttribute(CanvasSchema.X_TILES, myCanvas.getCols());
 
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable) gameTileMapSchemas);
