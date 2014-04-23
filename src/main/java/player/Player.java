@@ -23,6 +23,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
@@ -39,7 +40,6 @@ import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.InfoPanel;
-import main.java.player.panels.ItemChooser;
 import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
@@ -83,6 +83,7 @@ public class Player implements Serializable {
 	public static final String FILE_LABEL = "File";
 	public static final String PLAY_PAUSE_TEXT = "Play/Pause";
 	public static final String SAVE_TEXT = "Save game state";
+	public static final String LOAD_TEXT = "Load game state";
 	public static final String SPEED_UP_TEXT = "Speed up";
 	public static final String SLOW_DOWN_TEXT = "Slow down";
 	public static final String ADD_TOWER_TEXT = "Add Tower";
@@ -282,11 +283,25 @@ public class Player implements Serializable {
 		JButton saveButton = new JButton(SAVE_TEXT);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("save");
+				int response = fileChooser.showOpenDialog(null);
+				if(response == JFileChooser.APPROVE_OPTION){
+					File file = fileChooser.getSelectedFile();
+					engine.saveGameState(file.getAbsolutePath());
+				}
 				frame.pack();
 			}
 		});
-
+		JButton loadButton = new JButton(LOAD_TEXT);
+		loadButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int response = fileChooser.showOpenDialog(null);
+				if(response == JFileChooser.APPROVE_OPTION){
+					File file = fileChooser.getSelectedFile();
+					engine.loadGameState(file.getAbsolutePath());
+				}
+				frame.pack();
+			}
+		});
 		JButton speedUpButton = new JButton(SPEED_UP_TEXT);
 		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
 
@@ -302,17 +317,18 @@ public class Player implements Serializable {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
-		itemChooser = new ItemChooser(engine);
+		//itemChooser = new ItemChooser(engine);
 
 		List<Subject> engineSubjectList = new ArrayList<Subject>();
 		engineSubjectList.add(towerChooser);
-		engineSubjectList.add(itemChooser);
+		//engineSubjectList.add(itemChooser);
 		engine.setSubject(engineSubjectList);//This probably does not belong here
 
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
+		gameButtonPanel.add(loadButton);
 		gameButtonPanel.add(speedUpButton);
 		gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
@@ -338,7 +354,7 @@ public class Player implements Serializable {
 
 	public void populateTowerChooserAndToggleRunning() {
 		towerChooser.getObjectNames();
-		itemChooser.getObjectNames();
+	//	itemChooser.getObjectNames();
 		engine.toggleRunning();
 	}
 
