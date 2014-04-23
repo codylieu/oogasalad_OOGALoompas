@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.List;
 
 public class Canvas extends JPanel {
-	
+
 	private static final int TILE_SIZE = 25; // in pixels
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
@@ -37,7 +37,7 @@ public class Canvas extends JPanel {
 		setPreferredSize(new Dimension(numCols*TILE_SIZE, numRows*TILE_SIZE)); // important for maintaining size of JPanel
 		initCanvasListeners();
 	}
-	
+
 	/**
 	 * Initializes listeners for both clicking and dragging on tiles
 	 */
@@ -103,12 +103,12 @@ public class Canvas extends JPanel {
 	protected void updateTile(Tile newTile) {
 		int newTileRow = newTile.getRow();
 		int newTileCol = newTile.getCol();
-	
+
 		if (newTileRow < numRows && newTileCol < numCols) {
 			myTiles[newTileRow][newTileCol] = newTile;
 		}
 	}
-	
+
 	/**
 	 * Obtains a list of tiles within the JPanel
 	 * @return all tiles within the JPanel
@@ -135,12 +135,12 @@ public class Canvas extends JPanel {
 		}
 		tile.setImage(selectedTileObj.getImage());
 		tile.setPassIndex(myTerrainTab.getPassabilityIndex());
-        tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
-        tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
-        tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
+		tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
+		tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
+		tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
 		repaint(); // we want to keep this repaint, if we use update, it messes up on macs
 	}
-	
+
 	/**
 	 * Clears all tiles on the grid
 	 */
@@ -152,6 +152,14 @@ public class Canvas extends JPanel {
 		}
 	}
 
+	protected int getRows() {
+		return numRows;
+	}
+
+	protected int getCols() {
+		return numCols;
+	}
+
 	/**
 	 * Updates the 'selected' TileObject so that on a mouse press,
 	 * we can update the underlying Tile on the Canvas accordingly
@@ -159,7 +167,7 @@ public class Canvas extends JPanel {
 	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
 	}
-	
+
 	/**
 	 * Obtains the 'selected' TileObject
 	 */
