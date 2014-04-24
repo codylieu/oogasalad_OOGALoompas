@@ -7,12 +7,15 @@ import java.util.Map;
 
 public enum TerrainAttribute {
 
-	Walkable      { Color getColor() { return Color.GREEN; }},
-	Flyable       { Color getColor() { return Color.BLUE; }},
-	Untraversable { Color getColor() { return Color.RED; }},
-	Entry         { Color getColor() { return Color.MAGENTA; }},
-	Exit          { Color getColor() { return Color.ORANGE; }};
+	Walkable (10)      { Color getColor() { return Color.GREEN; }},
+	Flyable  (11)      { Color getColor() { return Color.BLUE; }},
+	Untraversable (12) { Color getColor() { return Color.RED; }},
+	Entry (13)         { Color getColor() { return Color.MAGENTA; }},
+	Exit (14)          { Color getColor() { return Color.ORANGE; }};
 
+	private final int index;
+	TerrainAttribute(int index) { this.index = index; }
+	
 	@Override
 	public String toString() {
 		return this.name();
@@ -22,8 +25,8 @@ public enum TerrainAttribute {
 		return values()[i]; 
 	} 
 	
-	public static int getIndex (TerrainAttribute attr) {
-		return attr.ordinal();
+	public int getIndex () {
+		return index;
 	}
 	
 	abstract Color getColor();
