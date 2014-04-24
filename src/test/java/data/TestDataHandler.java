@@ -290,8 +290,6 @@ public class TestDataHandler {
 		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
 		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
 				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
-
-				System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 	}
 
 
