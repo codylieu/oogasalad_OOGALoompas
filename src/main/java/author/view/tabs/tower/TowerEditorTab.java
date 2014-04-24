@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -23,15 +22,19 @@ import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TowerController;
 import main.java.author.util.ComboBoxUtil;
 import main.java.author.view.components.ImageCanvas;
-import main.java.author.view.components.BehaviorTogglingRadioButton;
+import main.java.author.view.components.TowerBehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.engine.objects.TDObject;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 
+/**
+ * @author garysheng The tab that corresponds to the creation of towers. Talks
+ *         to a tab controller to pass information to the model
+ * 
+ */
 public class TowerEditorTab extends ObjectEditorTab {
 
 	private JSpinner healthSpinner, costSpinner, damageSpinner, rangeSpinner,
@@ -39,15 +42,14 @@ public class TowerEditorTab extends ObjectEditorTab {
 			moneyFarmAmountSpinner, moneyFarmIntervalSpinner,
 			freezeRatioSpinner;
 
-	private BehaviorTogglingRadioButton freezeToggleButton, shootsToggleButton,
-			moneyFarmingToggleButton, bombingToggleButton;
+	private TowerBehaviorTogglingRadioButton freezeToggleButton,
+			shootsToggleButton, moneyFarmingToggleButton, bombingToggleButton;
 
 	private JComboBox<String> upgradeDropDown;
 
 	protected ImageCanvas bulletImageCanvas, towerImageCanvas,
 			shrapnelImageCanvas;
-	protected JButton collisionImageButton;
-	protected JButton shrapnelImageButton;
+	protected JButton collisionImageButton, shrapnelImageButton;
 
 	public TowerEditorTab(TabController towerController, String objectName) {
 		super(towerController, objectName);
@@ -57,6 +59,23 @@ public class TowerEditorTab extends ObjectEditorTab {
 	public void saveTabData() {
 		TowerController controller = (TowerController) myController;
 
+		List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
+		for (TDObjectSchema tower : objectMap.values()) {
+			TowerSchema towerSchema = new TowerSchema();
+			Map<String, Object> towerAttributes = tower
+					.getAttributesMap();
+
+			for (String attribute : towerAttributes.keySet()) {
+//				Serializable castedAttribute = addCastToAttribute(towerAttributes
+//						.get(attribute));
+//				towerSchema.addAttribute(attribute, castedAttribute);
+				towerSchema.addAttribute(attribute, towerAttributes
+						.get(attribute));
+
+			}
+			towerSchemas.add(towerSchema);
+		}
+		controller.addTowers(towerSchemas);
 	}
 
 	@Override
@@ -102,7 +121,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 		TDObjectSchema myCurrentObject = getSelectedObject();
 		List<TowerBehaviors> behaviorsToggled = new ArrayList<TowerBehaviors>();
-		for (BehaviorTogglingRadioButton button : radioButtons) {
+		for (TowerBehaviorTogglingRadioButton button : behaviorTogglingButtons) {
 			if (button.isSelected()) {
 				behaviorsToggled.add(button.getBehavior());
 			}
@@ -142,8 +161,9 @@ public class TowerEditorTab extends ObjectEditorTab {
 			upgradeDropDown.setSelectedItem(TowerSchema.UPGRADE_PATH_NONE);
 		}
 
-		List<TowerBehaviors> behaviorsToToggle = (List<TowerBehaviors>) map.get(TowerSchema.TOWER_BEHAVIORS);
-		for (BehaviorTogglingRadioButton radioButton : radioButtons) {
+		List<TowerBehaviors> behaviorsToToggle = (List<TowerBehaviors>) map
+				.get(TowerSchema.TOWER_BEHAVIORS);
+		for (TowerBehaviorTogglingRadioButton radioButton : behaviorTogglingButtons) {
 			if (behaviorsToToggle.contains(radioButton.getBehavior())) {
 				radioButton.setSelected(true);
 			} else {
@@ -153,13 +173,20 @@ public class TowerEditorTab extends ObjectEditorTab {
 
 	}
 
+	/**
+	 * @author garysheng Concrete subclass of ObjectTabViewBuilder that creates
+	 *         specific view parts for the TowerEditorTab
+	 * 
+	 */
 	private class TowerTabViewBuilder extends ObjectTabViewBuilder {
 
 		public TowerTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
-			// TODO Auto-generated constructor stub
 		}
 
+		/**
+		 * @return the graphic pane related to the bullet graphic
+		 */
 		private JComponent makeBulletGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
@@ -173,6 +200,9 @@ public class TowerEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
+		/**
+		 * @return the graphic pane related to the shrapnel graphic
+		 */
 		private JComponent makeShrapnelGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
@@ -186,16 +216,14 @@ public class TowerEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
+		/**
+		 * @return the dropdown related to which tower upgrades to what
+		 */
 		private JComboBox<String> makeUpgradeDropdown() {
 
 			JComboBox<String> result = new JComboBox<String>();
 			result.setName(TowerSchema.UPGRADE_PATH);
 			return result;
-		}
-
-		@Override
-		protected String getObjectGraphicKey() {
-			return TowerSchema.TOWER_IMAGE_NAME;
 		}
 
 		@Override
@@ -213,16 +241,16 @@ public class TowerEditorTab extends ObjectEditorTab {
 			freezeRatioSpinner = makeAttributeSpinner(
 					TowerSchema.FREEZE_SLOWDOWN_PROPORTION, true);
 			// radio buttons
-			shootsToggleButton = new BehaviorTogglingRadioButton(
-					TowerViewConstants.TOWER_BEHAVIOR_SHOOTS, TowerBehaviors.SHOOTING,
-					true);
-			freezeToggleButton = new BehaviorTogglingRadioButton(
+			shootsToggleButton = new TowerBehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_SHOOTS,
+					TowerBehaviors.SHOOTING, true);
+			freezeToggleButton = new TowerBehaviorTogglingRadioButton(
 					TowerViewConstants.TOWER_BEHAVIOR_FREEZES,
 					TowerBehaviors.FREEZING, true);
-			bombingToggleButton = new BehaviorTogglingRadioButton(
-					TowerViewConstants.TOWER_BEHAVIOR_BOMBS, TowerBehaviors.BOMBING,
-					true);
-			moneyFarmingToggleButton = new BehaviorTogglingRadioButton(
+			bombingToggleButton = new TowerBehaviorTogglingRadioButton(
+					TowerViewConstants.TOWER_BEHAVIOR_BOMBS,
+					TowerBehaviors.BOMBING, true);
+			moneyFarmingToggleButton = new TowerBehaviorTogglingRadioButton(
 					TowerViewConstants.TOWER_BEHAVIOR_FARMS_MONEY,
 					TowerBehaviors.MONEY_FARMING, true);
 			// other
@@ -232,23 +260,25 @@ public class TowerEditorTab extends ObjectEditorTab {
 					TowerSchema.BULLET_IMAGE_NAME);
 			shrapnelImageCanvas = new ImageCanvas(true,
 					TowerSchema.SHRAPNEL_IMAGE_NAME);
-			towerImageCanvas = new ImageCanvas(false,
-					TowerSchema.TOWER_IMAGE_NAME);
+			towerImageCanvas = new ImageCanvas(false, TDObjectSchema.IMAGE_NAME);
 			// clump data types
 			clumpFieldsIntoGroups();
 
 		}
 
+		/**
+		 * groups fields into subgroups
+		 */
 		private void clumpFieldsIntoGroups() {
 			JSpinner[] spinners = { healthSpinner, costSpinner, buildUpSpinner,
 					damageSpinner, rangeSpinner, firingSpeedSpinner,
 					shrapnelDamageSpinner, moneyFarmAmountSpinner,
 					moneyFarmIntervalSpinner, freezeRatioSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-			BehaviorTogglingRadioButton[] buttons = { shootsToggleButton,
+			TowerBehaviorTogglingRadioButton[] buttons = { shootsToggleButton,
 					freezeToggleButton, moneyFarmingToggleButton,
 					bombingToggleButton };
-			radioButtons = new ArrayList<BehaviorTogglingRadioButton>(
+			behaviorTogglingButtons = new ArrayList<TowerBehaviorTogglingRadioButton>(
 					Arrays.asList(buttons));
 			ImageCanvas[] canvases = { bulletImageCanvas, shrapnelImageCanvas,
 					towerImageCanvas };

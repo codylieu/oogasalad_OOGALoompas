@@ -16,6 +16,9 @@ downloads/*.zip
 downloads/*.ser
 downloads/*.out
 
+#Game blueprint files
+*.zip
+
 # idea files
 .idea/
 *.iml

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import main.java.engine.objects.Exit;
+import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 
 public class SimpleMonster extends Monster {
@@ -27,7 +28,8 @@ public class SimpleMonster extends Monster {
 				(double) getValueOrDefault(attributes, MonsterSchema.HEALTH, DEFAULT_HEALTH),
 				(double) getValueOrDefault(attributes, MonsterSchema.SPEED, DEFAULT_MOVE_SPEED),
 				(double) getValueOrDefault(attributes, MonsterSchema.REWARD, DEFAULT_REWARD_AMOUNT),
-				(String) attributes.get(MonsterSchema.NAME));
+				(String) attributes.get(MonsterSchema.NAME),
+				(MonsterSpawnSchema) getValueOrDefault(attributes, MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, null));
 	}
 
 	    /**
@@ -49,10 +51,11 @@ public class SimpleMonster extends Monster {
                           double health,
                           double speed,
                           double moneyValue,
-                          String imageName) {
+                          String imageName,
+                          MonsterSpawnSchema resurrectionSpawnSchema) {
 
         super(entrance, exit, blocked,
-              health, speed, moneyValue, imageName);
+              health, speed, moneyValue, imageName, resurrectionSpawnSchema);
 
     }
 }

@@ -14,8 +14,9 @@ import main.java.schema.tdobjects.TDObjectSchema;
 /**
  * @author garysheng
  * 
- *         has a few straightforward utility functions that help with IO in
- *         relation to tables and maps
+ *         Some straightforward utility functions that help with IO in
+ *         relation to tables and maps. All used in relation to ObjectEditor
+ *         submodules
  */
 public class ObjectUtilFunctions {
 	public static boolean isInteger(String s) {

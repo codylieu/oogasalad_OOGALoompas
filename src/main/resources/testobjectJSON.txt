@@ -1,1 +1,0 @@
-{"myAttributesMap":{"Damage":10,"name":"testObjectName"},"myAttributeSet":["Damage","name"]}

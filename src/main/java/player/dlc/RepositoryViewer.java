@@ -19,26 +19,41 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.player.ITDPlayerEngine;
+import main.java.player.TDPlayerEngine;
+import net.lingala.zip4j.exception.ZipException;
+
+/**
+ * AbstractAction that can create a panel to
+ * view and download pre-created games from a
+ * pre-determined repository
+ * @author Kevin
+ *
+ */
+
 public class RepositoryViewer extends AbstractAction {
 
 	public final static String BASE_URL = "http://people.duke.edu/~kkd10/td/";
 	public final static String LIST_URL = BASE_URL + "list.txt";
+	public final static String DOWNLOADS_PATH = "downloads/";
 	public final static String DELIMITER = "\\|";
 	
-	
+	private JPanel mainPanel;
 	private JList<String> list;
 	private Map<String, DLCData> dlc;
 	private JTextArea descriptionArea;
+	private TDPlayerEngine engine;
 	
-	
-	public RepositoryViewer(String s) {
+	public RepositoryViewer(String s, ITDPlayerEngine engine) {
 		super(s);
+		engine = engine;
 		dlc = new HashMap<String, DLCData>();
 	}
 
@@ -51,14 +66,14 @@ public class RepositoryViewer extends AbstractAction {
 		JFrame frame = new JFrame();
 		frame.setTitle("Repository Viewer");
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(makeMainPanel());
 		frame.pack();
 		frame.setVisible(true);
 	}
 	
 	private JPanel makeMainPanel() {
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		mainPanel.add(new JLabel("Please pick a game to download and play"));
 		mainPanel.add(makeList());
 		mainPanel.add(makeSubmitButton());
@@ -78,8 +93,17 @@ public class RepositoryViewer extends AbstractAction {
 			public void actionPerformed(ActionEvent e) {
 				String fileName = dlc.get(list.getSelectedValue()).getFileName();
 				try {
-					downloadFromUrl(new URL(BASE_URL + fileName), "downloads/" + fileName);
+					if (JOptionPane.showConfirmDialog(null, "Click OK to start download (may take a while).", "Download", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+						downloadFromUrl(new URL(BASE_URL + fileName), DOWNLOADS_PATH + fileName);
+						engine.loadBlueprintFile(DOWNLOADS_PATH + fileName);
+						JOptionPane.showMessageDialog(null, "Game loaded. Go play it now!");
+						mainPanel.setVisible(false);
+					}					
 				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					e1.printStackTrace();
+				} catch (ZipException e1) {
 					e1.printStackTrace();
 				}
 			}

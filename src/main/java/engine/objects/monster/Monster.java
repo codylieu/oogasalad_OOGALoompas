@@ -1,6 +1,7 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import jgame.JGPoint;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.jgpathfinder.*;
+import main.java.schema.MonsterSpawnSchema;
 
 
 public abstract class Monster extends TDObject {
@@ -29,6 +31,7 @@ public abstract class Monster extends TDObject {
 	protected Exit myExit;
 	protected JGPath myPath;
 	protected String originalImage;
+	private MonsterSpawnSchema resurrectMonsterSchema;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
 	 */
@@ -49,7 +52,8 @@ public abstract class Monster extends TDObject {
 			double health,
 			double moveSpeed,
 			double rewardAmount,
-			String graphic) {
+			String graphic,
+			MonsterSpawnSchema resurrectSchema) {
 		//TODO make factory add the spread between monsters in the same wave, and remove random from initial x,y
 		super("monster", entrance.getX() + Math.random() * 100, entrance.getY() + Math.random() * 100, MONSTER_CID, graphic);
 		myHealth = health;
@@ -57,11 +61,12 @@ public abstract class Monster extends TDObject {
 		myMoneyValue = rewardAmount;
 		myEntrance = entrance;
 		myExit = exit;
-		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic(), eng); // TODO: clean up
+		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic()); // TODO: clean up
 		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
 		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
 		this.setSpeed(myMoveSpeed);
 		originalImage = graphic;
+		this.resurrectMonsterSchema = resurrectSchema;
 		try {
 			myPath = myPathFinder.getPath(pathEntrance, pathExit);
 		} catch (NoPossiblePathException e) {
@@ -143,7 +148,35 @@ public abstract class Monster extends TDObject {
 	@Override
 	public void paint() {
 		if (myPath != null) {
-			myPath.paint(5, JGColor.pink);
+			for (JGPoint p : myPath) {
+				JGPoint coord = eng.getTileCoord(p);
+				eng.drawOval(coord.x + eng.tileWidth()/2, coord.y + eng.tileHeight()/2,
+						10, 10, true, true, 10, JGColor.yellow);
+			}
 		}
+	}
+
+	/**
+	 * Get the schema that should be spawned upon the death of this monster.
+	 * Will be null if the monster has no resurrect schema to spawn upon death.
+	 * @return
+	 */
+	public MonsterSpawnSchema getResurrrectMonsterSpawnSchema() {
+		return resurrectMonsterSchema;
+	}
+	
+	/**
+	 * Get dynamic information about the monster
+	 * 
+	 * @return
+	 */
+	public List<String> getInfo() {
+		List<String> info = new ArrayList<String>();
+		info.add(""+x);
+		info.add(""+y);
+		info.add(""+myMoneyValue);
+		info.add(""+myHealth);
+		info.add(""+myMoveSpeed);
+		return info;
 	}
 }

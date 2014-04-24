@@ -14,12 +14,6 @@ import main.java.schema.GameSchema;
 
 import com.google.gson.Gson;
 
-/**
- * Deals with serializing objects to json
- * and deserializing json to objects
- * @author Inyoung Jo
- *
- */
 public class JSONHandler {
 
 	private static String FILE_PATH = "src/main/resources/";
@@ -35,7 +29,8 @@ public class JSONHandler {
 	 * @param d
 	 * @throws FileNotFoundException
 	 */
-	public String serializeObjectToJSON(String filename, Object obj) throws FileNotFoundException	{
+	public String serializeObjectToJSON(Object obj, String filename) throws FileNotFoundException	{
+
 		File outputFile = new File(FILE_PATH + filename + ".json");
 		PrintWriter output = new PrintWriter(outputFile);
 		String json = myGson.toJson(obj);
@@ -43,6 +38,7 @@ public class JSONHandler {
 		output.println(json);
 		output.close();
 		return json;
+		
 	}
 	
 	/**
@@ -55,11 +51,12 @@ public class JSONHandler {
 	 * @return
 	 * @throws IOException
 	 */
-	public Object deserializeObjectFromJSON(String filepath, Object obj) throws IOException	{
+	public Object deserializeObjectFromJSON(Object obj, String filepath) throws IOException	{
 		BufferedReader reader = new BufferedReader(new FileReader(filepath));
 		String json = "";
 		String line = null;
 		while ((line = reader.readLine()) != null) {
+//			System.out.println(line);
 		    json += line;
 		}
 		return new Gson().fromJson(json, obj.getClass());
@@ -70,6 +67,7 @@ public class JSONHandler {
 		testSchema.addAttribute("Lives",10.0);
 		GameBlueprint testBlueprint = new GameBlueprint();
 		testBlueprint.setMyGameScenario(testSchema);
+
 		
 		// creates a test object with a map and set, mirrors actual gameblueprint design hierarchy to test JSON
 		TestObject t = new TestObject();
@@ -78,14 +76,10 @@ public class JSONHandler {
 		TestObject2 t2 = new TestObject2("t2");
 		
 		JSONHandler j = new JSONHandler();
-		//Test for blueprint
-		j.serializeObjectToJSON("testobjectJSON",testBlueprint);
-		GameBlueprint g = (GameBlueprint) (j.deserializeObjectFromJSON((FILE_PATH + "testobjectJSON.json"), testBlueprint));
-		j.serializeObjectToJSON("testobjectJSON2",g);
-		System.out.println((testBlueprint.getMyGameScenario().getAttributesMap()).equals(testBlueprint.getMyGameScenario().getAttributesMap()));
-
-		//Test for JGObjects
-		j.serializeObjectToJSON("testJGObject", t2);
+		
+		j.serializeObjectToJSON(t, "testobjectJSON");
+		GameBlueprint g = (GameBlueprint) (j.deserializeObjectFromJSON(t, (FILE_PATH + "testobjectJSON.json")));
+		j.serializeObjectToJSON(g,"testobjectJSON2");
 	}
 	
 }

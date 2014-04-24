@@ -2,14 +2,13 @@ package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.detector.TargetDetectorInterface;
-import main.java.engine.objects.detector.monsterdetector.*;
-import main.java.engine.objects.projectile.DamageProjectile;
+import main.java.engine.objects.detector.monsterdetector.MonsterClosestToExitDetector;
 import main.java.engine.objects.projectile.PiercingProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 
@@ -27,11 +26,14 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public static final double DEFAULT_FIRING_SPEED = 5;
     public static final int FIRING_INTERVAL_STEP = 2;
     public static final int MIN_FIRING_INTERVAL = 21;
+    private static final String TOWER_TYPE = "Shooting Tower";
 
     protected double myDamage;
     protected double myFiringSpeed;
     protected double myRange;
     protected String myBulletImage;
+    protected List<String> myInfo = new ArrayList<String>();
+    protected String myType;
     
     private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
 
@@ -53,6 +55,15 @@ public class ShootingTower extends TowerBehaviorDecorator {
         myFiringSpeed = firingSpeed;
         myRange = range;
         myBulletImage = bulletImage;
+        myType = TOWER_TYPE;
+        addInfo();
+    }
+    
+    protected void addInfo() {
+        myInfo.add(this.getClass().getSimpleName());
+		myInfo.addAll(baseTower.getInfo());
+		myInfo.add(""+myDamage);
+		myInfo.add(""+myRange);
     }
 
     /**
@@ -64,20 +75,24 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public ShootingTower (ITower baseTower, Map<String, Object> attributes) {
         this(
              baseTower,
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
-                                                 DEFAULT_FIRING_SPEED),
-             (double) TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
-                                                 DEFAULT_RANGE),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE))),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
+                                                 DEFAULT_FIRING_SPEED))),
+             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
+                                                 DEFAULT_RANGE))),
              (String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""));
     }
 
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
 //        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
-    	List<Object> target = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
-    	if (target.size() < 1) return;
-    	fire((Point2D) target.get(0));
+    	List<Object> targetLocation = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
+    	if (targetLocation.size() < 1) {
+    	    // a tower should only target one monster at a time
+    	    return;
+    	}
+		
+    	fire((Point2D) targetLocation.get(0));
     }
 
     private void fire (Point2D target) {
@@ -110,8 +125,8 @@ public class ShootingTower extends TowerBehaviorDecorator {
     public void fireProjectile (double angle) {
 
         new PiercingProjectile(
-        		((SimpleTower) baseTower).centerCoordinate().getX(),
-        		((SimpleTower) baseTower).centerCoordinate().getY(),
+        		baseTower.centerCoordinate().getX(),
+        		baseTower.centerCoordinate().getY(),
         		angle, myDamage, myBulletImage);
 
     }
@@ -121,12 +136,15 @@ public class ShootingTower extends TowerBehaviorDecorator {
      */
     public void fireProjectile (double xspeed, double yspeed) {
         new PiercingProjectile(
-        		((SimpleTower) baseTower).centerCoordinate().getX(),
-        		((SimpleTower) baseTower).centerCoordinate().getY(), 
+        		baseTower.centerCoordinate().getX(),
+        		baseTower.centerCoordinate().getY(), 
         		xspeed, yspeed, myDamage, myBulletImage);
     }
-    
 
+	@Override
+	public List<String> getInfo() {
+		return myInfo;
+	}
     
     
 }
