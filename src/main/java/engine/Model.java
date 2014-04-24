@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import jgame.platform.JGEngine;
+import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
@@ -660,6 +661,25 @@ public class Model implements IModel{
 		testTowerFive.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerFive);
 
+		
+		
+		//test defaults:
+/*        SimpleMonsterSchema testMonsterOneX = new SimpleMonsterSchema();
+        testMonsterOneX.addAttribute(MonsterSchema.NAME, "");
+        testMonsterOneX.addAttribute(MonsterSchema.HEALTH, EnemyViewDefaults.HEALTH_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.SPEED, EnemyViewDefaults.SPEED_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.DAMAGE, EnemyViewDefaults.DAMAGE_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.REWARD, EnemyViewDefaults.REWARD_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);
+        testMonsterOneX.addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
+        testMonsterOneX.addAttribute(TDObjectSchema.IMAGE_NAME,
+                                    EnemyViewDefaults.ENEMY_DEFAULT_IMAGE);
+        testMonsterSchema.add(testMonsterOneX);*/
+
+		//
+		
+		
+		
 		// Create test monsters
 		SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
 		testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
