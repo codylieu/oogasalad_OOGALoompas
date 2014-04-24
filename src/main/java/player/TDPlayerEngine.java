@@ -67,6 +67,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		hasChanged = true;
 		isFullScreen = false;
 		cursorState = CursorState.None;
+		stop();
 	}
 
 	private void loadCanvasSize(String pathToBlueprint) {
@@ -82,8 +83,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
 		xtiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
 		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
-		System.out.println(xtiles + " " + ytiles);
-	}
+		}
 	
 	@Override
 	public void initCanvas() {
@@ -94,12 +94,16 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	@Override
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
-		model = new Model(this, pathToBlueprint);
+		
 	}
 
+	public void initModel(){
+		model = new Model(this, pathToBlueprint);
+		towerName = model.getPossibleTowers().get(0);
+	}
 	public void speedUp() {
 		setFrameRate(getFrameRate() + FRAME_RATE_DELTA, 1);
-		System.out.println(getFrameRate());
+		
 	}
 
 	/**
@@ -196,6 +200,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		super.doFrame();
 		if (cursorState == CursorState.AddTower) {
 			if (getMouseButton(LEFT_CLICK)) {
+				
 				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
@@ -228,6 +233,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			clearMouseButton(3);
 		}
 		try {
+		
 			model.updateGame();
 		} catch (MonsterCreationFailureException e) {
 			e.printStackTrace();
@@ -255,9 +261,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	@Override
 	public void update(){
-		System.out.println(towerChooser);
-		System.out.println(towerChooser.getObjectName());
-		towerName = towerChooser.getObjectName();
+				towerName = towerChooser.getObjectName();
 	}
 
 	/**

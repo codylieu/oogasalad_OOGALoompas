@@ -55,7 +55,7 @@ import net.lingala.zip4j.exception.ZipException;
  */
 
 @SuppressWarnings("serial")
-public class Player implements Serializable {
+public class ViewController implements Serializable {
 
 	public static final int BUTTON_PADDING = 10;
 	public static final String USER_DIR = "user.dir";
@@ -118,7 +118,7 @@ public class Player implements Serializable {
 	 * initializeEngine() must be called first
 	 * Many other modules require the engine reference to exist
 	 */
-	public Player(){
+	public ViewController(){
 		initializeEngine(showBlueprintPrompt());
 		initSong();
 		makeFrame();
@@ -264,7 +264,7 @@ public class Player implements Serializable {
 
 	private TDPlayerEngine initializeEngine(String pathToBlueprint) {
 		engine = new TDPlayerEngine(pathToBlueprint);
-		engine.initGame();
+		engine.initModel();
 		engine.stop();
 		return engine;
 	}
