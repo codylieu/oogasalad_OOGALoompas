@@ -38,11 +38,13 @@ public class TDObjectFactory {
 	private JGEngineInterface engine;
     private Map<String, TDObjectSchema> tdObjectSchemaMap;
     private List<String> possibleTowersNames;
+    private List<String> possibleItemNames;
 
     public TDObjectFactory (JGEngineInterface engine) {
         this.engine = engine;
         tdObjectSchemaMap = new HashMap<>();
         possibleTowersNames = new ArrayList<String>();
+        possibleItemNames = new ArrayList<String>();
     }
 
     public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
@@ -58,11 +60,24 @@ public class TDObjectFactory {
     
     @SuppressWarnings("unchecked")
 	public void loadTowerSchemas (List<TowerSchema> schemas) {
-    	for (TowerSchema s: schemas) {
-    		possibleTowersNames.add((String) s.getAttributesMap().get(TDObjectSchema.NAME));
+    	for (TowerSchema towerschema: schemas) {
+    		possibleTowersNames.add((String) towerschema.getAttributesMap().get(TDObjectSchema.NAME));
+                defineBulletImage(towerschema, TowerSchema.BULLET_IMAGE_NAME);
+                defineBulletImage(towerschema, TowerSchema.SHRAPNEL_IMAGE_NAME);
     	}
     	// Perhaps a better method of casting than using an intermediate wildcard type?
     	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
+    }
+    
+    /**
+     * Define the image of a bullet/shrapnel attribute in jgame engine.
+     * @param towerschema the tower schema
+     * @param imageNameConstant a constant of TowerSchema that is an image name attribute
+     */
+    private void defineBulletImage (TowerSchema towerschema, String imageNameConstant) {
+        String bulletImageName = (String) towerschema.getAttributesMap().get(imageNameConstant);
+        String bulletImagePath = Model.RESOURCE_PATH + towerschema.getAttributesMap().get(imageNameConstant);
+        engine.defineImage(bulletImageName, "-", 1, bulletImagePath, "-");
     }
     
     @SuppressWarnings("unchecked")
@@ -73,8 +88,12 @@ public class TDObjectFactory {
     // TODO: Refactor and get rid of repetition with loadMonsterSchemas method
 	@SuppressWarnings("unchecked")
 	public void loadItemSchemas(List<ItemSchema> schemas) {
+    	for (ItemSchema i: schemas) {
+    		possibleItemNames.add((String) i.getAttributesMap().get(TDObjectSchema.NAME));
+    	}
     	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);		
 	}
+	
     /**
      * Places an item at the given location. 
      * @param location
@@ -202,6 +221,15 @@ public class TDObjectFactory {
      */
     public List<String> getPossibleTowersNames(){
         return Collections.unmodifiableList(possibleTowersNames);
+    }
+    
+    /**
+     * Returns the names of items that have loaded schemas, and can possibly be created/
+     * 
+     * @return an unmodifiable list
+     */
+    public List<String> getPossibleItemNames() {
+    	return Collections.unmodifiableList(possibleItemNames);
     }
 
 

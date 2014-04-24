@@ -1,5 +1,7 @@
 package main.java.author.view.tabs.terrain;
 
+import static main.java.author.util.ActionListenerUtil.actionListener;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,37 +10,46 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import jgame.JGColor;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
+import main.java.schema.CanvasSchema;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.map.TileMapSchema;
 import main.java.schema.map.TileSchema;
-import static main.java.author.util.ActionListenerUtil.actionListener;
 
 public class TerrainEditorTab extends EditorTab {
 	private static final String CLEAR = "Clear Tiles";
-	private static final String SAVE_MAP = "Save Map";
 	private static final String ADD_TILEMAP = "Import Image File";
 	private static final String TERRAIN_CHOOSER = "Choose Terrain Type";
 	private static final String ROW_QUERY = "Enter Row Count";
 	private static final String COL_QUERY = "Enter Column Count";
 	private static final String IMAGE_FILTER_DIALOGUE = ".GIF,.PNG,.BMP Images";
-	private static final String USER_INIT_MESSAGE = "Begin Terrain Editing";
 	private static final String MAP_SAVED = "Map Saved";
 	private static final String UPDATE_CANVAS = "Change Canvas Size";
+	private static final int DEFAULT_ROW_COUNT = 20;
+	private static final int DEFAULT_COLUMN_COUNT = 25;
+	
 
 	private int selectedPassabilityIndex;
 
@@ -51,24 +62,12 @@ public class TerrainEditorTab extends EditorTab {
 
 	public TerrainEditorTab(TabController controller){
 		super(controller);
-		JButton initTerrainButton = new JButton(USER_INIT_MESSAGE);
-		initTerrainButton.addActionListener(actionListener(this, "initTerrainTab"));
-		add(initTerrainButton);
-		setPreferredSize(new Dimension(1200, 500));
+		initializeTerrain();
 	}
 
-	/**
-	 * ACTION LISTENER METHOD
-	 * Initializes the terrain tab if the user has entered proper row/column 
-	 * information. If the user enters poor information, nothing happens.
-	 */
-	public void initTerrainTab(ActionEvent e) {
+	private void initializeTerrain() {
 		myCanvasPanel = new JPanel();
-		boolean isCanvasInitialized = initCanvas();
-		if (!isCanvasInitialized) {
-			return;
-		}
-		remove((JButton) e.getSource());
+		myCanvasPanel.add(myCanvas = new Canvas(DEFAULT_ROW_COUNT, DEFAULT_COLUMN_COUNT, this));
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
 		add(myTileSelectionManager.getTileDisplayTabs(), BorderLayout.WEST);
 		add(myCanvasPanel, BorderLayout.CENTER);
@@ -82,7 +81,7 @@ public class TerrainEditorTab extends EditorTab {
 	 * @return true if the row and column entries contain valid information, 
 	 * otherwise false
 	 */
-	private boolean initCanvas() {
+	private boolean updateCanvasSize() {
 		boolean isInitialized = false;
 		String numRows = queryUser(ROW_QUERY);
 		String numCols = queryUser(COL_QUERY);
@@ -100,7 +99,14 @@ public class TerrainEditorTab extends EditorTab {
 		TerrainAttribute [] terrainAttributeTypes = TerrainAttribute.values();
 		String [] terrainAttributeInfo = new String [terrainAttributeTypes.length];
 		for (int index = 0; index < terrainAttributeInfo.length; index++) {
-			terrainAttributeInfo[index] = terrainAttributeTypes[index].toString();
+			Color tileBorderColor = TerrainAttribute.getAttribute(index).getColor();
+			int r = tileBorderColor.getRed();
+			int g = tileBorderColor.getGreen();
+			int b = tileBorderColor.getBlue();
+			String colorHex = String.format("%02x%02x%02x", r, g, b);
+			String terrainInfo = terrainAttributeTypes[index].toString();
+			String coloredTerrainInfo = "<html><font color=#" + colorHex + ">" + terrainInfo + "</font>";
+			terrainAttributeInfo[index] = coloredTerrainInfo;
 		}
 
 		JComboBox scrollableTerrainTypes = new JComboBox(terrainAttributeInfo);
@@ -129,7 +135,6 @@ public class TerrainEditorTab extends EditorTab {
 		displayOptions.put(TERRAIN_CHOOSER, constructTerrainTypes());
 		displayOptions.put(ADD_TILEMAP, initNewTileMap());
 		displayOptions.put(CLEAR, initClearButton());
-		displayOptions.put(SAVE_MAP, initSaveButton());
 		displayOptions.put(UPDATE_CANVAS, initNewCanvas());
 
 		JPanel optionDisplayPanel = new JPanel();
@@ -161,16 +166,6 @@ public class TerrainEditorTab extends EditorTab {
 	}
 
 	/**
-	 * Constructs a JButton that allows the user to save the current
-	 * state of the terrain map
-	 */
-	private JButton initSaveButton() {
-		JButton saveButton = new JButton(SAVE_MAP);
-		saveButton.addActionListener(actionListener(this, "saveMap"));
-		return saveButton;
-	}
-
-	/**
 	 * Constructs a JButton that allows the user to clear the terrain map
 	 */
 	private JButton initClearButton() {
@@ -185,16 +180,24 @@ public class TerrainEditorTab extends EditorTab {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				List<Tile> oldTiles = myCanvas.getTiles();
 				myCanvasPanel.remove(myCanvas);
-
-				initCanvas();
+				updateCanvasSize();
+				updateCanvas(oldTiles);
 				myTileSelectionManager.setCanvas(myCanvas);
-				revalidate();
-				repaint();
+				TerrainEditorTab.this.revalidate();
+				TerrainEditorTab.this.repaint();
+				SwingUtilities.getWindowAncestor(TerrainEditorTab.this).pack();
 			}
 
 		});
 		return createNewCanvas;
+	}
+	
+	private void updateCanvas(List<Tile> oldTiles) {
+		for (Tile t : oldTiles) {
+			myCanvas.updateTile(t);;
+		}
 	}
 
 	/**
@@ -251,9 +254,14 @@ public class TerrainEditorTab extends EditorTab {
 			populateTileMapSchema(tileMapSchema, tileDisp);
 			gameTileMapSchemas.add(tileMapSchema);
 		}
+		
+		CanvasSchema canvasSchema = new CanvasSchema();
+		canvasSchema.addAttribute(CanvasSchema.Y_TILES, myCanvas.getRows());
+		canvasSchema.addAttribute(CanvasSchema.X_TILES, myCanvas.getCols());
 
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable) gameTileMapSchemas);
+		myCompletedMap.addAttribute(GameMapSchema.MY_CANVAS_ATTRIBUTES, (Serializable) canvasSchema);
 
 		TerrainController myTerrainController = (TerrainController) myController;
 		myTerrainController.addMaps(myCompletedMap);

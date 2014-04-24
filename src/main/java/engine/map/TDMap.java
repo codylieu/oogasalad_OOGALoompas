@@ -1,6 +1,7 @@
 package main.java.engine.map;
 
 import jgame.impl.JGEngineInterface;
+import main.java.engine.Model;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.map.TileMapSchema;
 import main.java.schema.map.TileSchema;
@@ -13,10 +14,6 @@ public class TDMap {
     private static final int Y_OFFSET = 0;
     private static final int X_SKIP = 0;
     private static final int Y_SKIP = 0;
-
-    private static final String tileImageName = "tile";
-    private static final String tileImagePrefix = "t";
-    private static final int TILE_CID = 0;
     private static final String IMG_OP = "-";
 
     private List<TileSchema> tileSchemas;
@@ -36,9 +33,9 @@ public class TDMap {
             TileMap tileMap = new TileMap(tms);
             tileMaps.put(tileMap.name, tileMap);
 
-            String fixedName = tileMap.name.replace("\\", "//");
-            engine.defineImageMap(tileMap.name, fixedName, X_OFFSET, Y_OFFSET,
-                    tileMap.pixelSize, tileMap.pixelSize, X_SKIP, Y_SKIP);
+            engine.defineImageMap(tileMap.name, Model.RESOURCE_PATH + tileMap.name,
+					X_OFFSET, Y_OFFSET, tileMap.pixelSize, tileMap.pixelSize,
+					X_SKIP, Y_SKIP);
         }
 
         // Load in tiles to engine
@@ -60,7 +57,8 @@ public class TDMap {
             String tileName = tileMapFileName + tileMapCol + tileMapRow;
 
             if (!definedTiles.contains(tileName)) {
-                engine.defineImage(tileName, tileMapRow + tileMapCol + "", tileCID, tileMapFileName, tileIndex, "-");
+                engine.defineImage(tileName, tileMapRow + tileMapCol + "", tileCID,
+						tileMapFileName, tileIndex, IMG_OP);
                 definedTiles.add(tileName);
             }
 

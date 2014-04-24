@@ -2,6 +2,10 @@ package main.java.author.view.tabs.tower;
 
 import java.io.Serializable;
 
+/**
+ * @author garysheng Some default constants for the TowerEditorTab
+ * 
+ */
 public class TowerViewConstants {
 
 	public static final int HEALTH_DEFAULT = 100;
@@ -17,6 +21,8 @@ public class TowerViewConstants {
 	public static final String TOWER_BEHAVIOR_SHOOTS = "Can Shoot";
 	public static final String TOWER_BEHAVIOR_FARMS_MONEY = "Farms Money";
 	public static final String TOWER_BEHAVIOR_BOMBS = "Creates Shrapnel";
-
+	public static final String TOWER_DEFAULT_IMAGE = "tower.gif";
+	public static final String BULLET_DEFAULT_IMAGE = "red_bullet.png";
+	public static final String SHRAPNEL_DEFAULT_IMAGE = "blue_bullet.png";
 
 }

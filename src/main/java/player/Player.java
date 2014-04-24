@@ -12,6 +12,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 
@@ -36,14 +39,24 @@ import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.InfoPanel;
+import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.Sound;
+import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
 import net.lingala.zip4j.exception.ZipException;
 
-public class Player {
+/**
+ * The Swing wrapper that contains all the buttons,
+ * and the TDPlayerEngine
+ * @author Kevin
+ *
+ */
+
+@SuppressWarnings("serial")
+public class Player implements Serializable {
 
 	public static final int BUTTON_PADDING = 10;
 	public static final String USER_DIR = "user.dir";
@@ -69,6 +82,7 @@ public class Player {
 	public static final String FILE_LABEL = "File";
 	public static final String PLAY_PAUSE_TEXT = "Play/Pause";
 	public static final String SAVE_TEXT = "Save game state";
+	public static final String LOAD_TEXT = "Load game state";
 	public static final String SPEED_UP_TEXT = "Speed up";
 	public static final String SLOW_DOWN_TEXT = "Slow down";
 	public static final String ADD_TOWER_TEXT = "Add Tower";
@@ -95,13 +109,18 @@ public class Player {
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
-	private TDPlayerEngine engine;
+	private ITDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
 	private TowerChooser towerChooser;
+	private ObjectChooser itemChooser;
 
+	/**
+	 * initializeEngine() must be called first
+	 * Many other modules require the engine reference to exist
+	 */
 	public Player(){
-		makeGamePanel();
+		initializeEngine(showBlueprintPrompt());
 		initSong();
 		makeFrame();
 		makeCards();
@@ -112,6 +131,18 @@ public class Player {
 		addCreditsCard();
 		addHighScoreCard();
 		show();
+	}
+
+	private String showBlueprintPrompt() {
+		int response = fileChooser.showOpenDialog(null);
+		if(response == JFileChooser.APPROVE_OPTION){
+			File file = fileChooser.getSelectedFile();
+			return file.getAbsolutePath();
+		}
+		else {
+			System.exit(0);
+			return "";
+		}
 	}
 
 	private void initSong(){
@@ -138,7 +169,6 @@ public class Player {
 		frame.setJMenuBar(makeMenuBar());
 	}
 
-	@SuppressWarnings("serial")
 	private JMenu makeFileMenu(){
 		JMenu files = new JMenu(FILE_LABEL);
 		files.add(new AbstractAction(LOAD_GAME_TEXT){
@@ -212,13 +242,12 @@ public class Player {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		gameCard.add(engine, constraints);
+		gameCard.add((Component) engine, constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
-		gameCard.add(makeGameButtonPanel(), constraints);
-
+		gameCard.add(makeGameActionPanel(), constraints);
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -233,14 +262,14 @@ public class Player {
 		cards.add(gameCard, GAME_CARD);
 	}
 
-	private TDPlayerEngine makeGamePanel() {
-		engine = new TDPlayerEngine();
-		engine.setSubject(towerChooser);
-		engine.stop();
+	private ITDPlayerEngine initializeEngine(String pathToBlueprint) {
+		engine = new TDPlayerEngine(pathToBlueprint);
+		//engine.setSubject(towerChooser);
+		engine.toggleRunning();
 		return engine;
 	}
 
-	private JPanel makeGameButtonPanel() {
+	private JPanel makeGameActionPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
 
@@ -252,11 +281,25 @@ public class Player {
 		JButton saveButton = new JButton(SAVE_TEXT);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("save");
+				int response = fileChooser.showOpenDialog(null);
+				if(response == JFileChooser.APPROVE_OPTION){
+					File file = fileChooser.getSelectedFile();
+					engine.saveGameState(file.getAbsolutePath());
+				}
 				frame.pack();
 			}
 		});
-
+		JButton loadButton = new JButton(LOAD_TEXT);
+		loadButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int response = fileChooser.showOpenDialog(null);
+				if(response == JFileChooser.APPROVE_OPTION){
+					File file = fileChooser.getSelectedFile();
+					engine.loadGameState(file.getAbsolutePath());
+				}
+				frame.pack();
+			}
+		});
 		JButton speedUpButton = new JButton(SPEED_UP_TEXT);
 		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
 
@@ -272,17 +315,25 @@ public class Player {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
-		engine.setSubject(towerChooser);//This probably does not belong here
+		//itemChooser = new ItemChooser(engine);
+
+		List<Subject> engineSubjectList = new ArrayList<Subject>();
+		engineSubjectList.add(towerChooser);
+		//engineSubjectList.add(itemChooser);
+		engine.setSubject(engineSubjectList);//This probably does not belong here
+
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
+		gameButtonPanel.add(loadButton);
 		gameButtonPanel.add(speedUpButton);
 		gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
+		//gameButtonPanel.add(itemChooser);
 		return gameButtonPanel;
 	}
 
@@ -300,32 +351,34 @@ public class Player {
 	}
 
 	public void populateTowerChooserAndToggleRunning() {
-		towerChooser.getTowerNames();
+		towerChooser.getObjectNames();
+	//	itemChooser.getObjectNames();
 		engine.toggleRunning();
 	}
 
+
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubject(engine);
+		gameInfoPanel.setSubject((Subject) engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubject(engine);
+		unitInfoPanel.setSubject((Subject) engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
 
-	//need to add when game ends to route to here, also need to work on saving the scores 
+	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
-		highScoreCard.setSubject(engine);
+		highScoreCard.setSubject((Subject) engine);
 		engine.register(highScoreCard);
 		cards.add(highScoreCard, HIGH_SCORE_CARD);
 	}
-	
+
 	private void addOptionsCard() {
 		JPanel optionCard = new JPanel();
 		optionCard.setLayout(new GridBagLayout());
@@ -414,6 +467,10 @@ public class Player {
 
 	private JButton makeMainMenuButton() {
 		JButton mainMenuButton = new JButton(MAIN_MENU_TEXT);
+		mainMenuButton.addActionListener(new MethodAction(engine, "toggleRunning"));
+		mainMenuButton.addActionListener(new MethodAction(this, "showCard", WELCOME_CARD));
+		//mainMenuButton.addActionListener(new MethodAction(frame, "pack"));
+		/*
 		mainMenuButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				engine.toggleRunning();
@@ -421,7 +478,7 @@ public class Player {
 				frame.pack();
 			}
 		});
-
+		 */
 		return mainMenuButton;
 	}
 
@@ -441,6 +498,7 @@ public class Player {
 		cardLayout.show(cards, WELCOME_CARD);
 		frame.getContentPane().add(cards, BorderLayout.CENTER);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 	}
 }

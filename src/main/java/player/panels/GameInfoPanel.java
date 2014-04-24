@@ -1,5 +1,6 @@
 package main.java.player.panels;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.BoxLayout;
@@ -10,6 +11,11 @@ import main.java.player.TDPlayerEngine;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 
+/**
+ * Allows User to display Game info as Observing object
+ * @author Michael
+ *
+ */
 @SuppressWarnings("serial")
 public class GameInfoPanel extends JPanel implements Observing {
 
@@ -47,6 +53,12 @@ public class GameInfoPanel extends JPanel implements Observing {
 	@Override
 	public void setSubject(Subject s) {
 		engine = (TDPlayerEngine) s;
+	}
+
+	@Override
+	public void setSubject(List<Subject> s) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

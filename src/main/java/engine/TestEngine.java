@@ -46,7 +46,7 @@ public class TestEngine extends JGEngine {
 	@Override
 	public void initGame() {
 		setFrameRate(45, 1);
-		this.model = new Model(this);
+		this.model = new Model(this, null);
 		towers = model.getPossibleTowers();
 	}
 
@@ -64,7 +64,7 @@ public class TestEngine extends JGEngine {
 		}
 		if (getMouseButton(3)) { // right click
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
-		//        	model.upgradeTower(getMouseX(), getMouseY());
+			//        	model.upgradeTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
 		}
 
@@ -86,14 +86,14 @@ public class TestEngine extends JGEngine {
 			}
 			clearKey(KeyEvent.VK_R);
 		}
-        if (getKey(KeyEvent.VK_B)) {
-        	try {
+		if (getKey(KeyEvent.VK_B)) {
+			try {
 				model.placeItem("AreaBomb", getMouseX(), getMouseY());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}	
-        	clearKey(KeyEvent.VK_B);
-        }
+			clearKey(KeyEvent.VK_B);
+		}
 		if (getKey(KeyEvent.VK_A)) {
 			try {
 				model.placeItem("Annihilator", getMouseX(), getMouseY());
@@ -124,7 +124,7 @@ public class TestEngine extends JGEngine {
 			if(response == JFileChooser.APPROVE_OPTION){
 				File file = fileChooser.getSelectedFile();
 				try {
-					model.loadMapTest(file.getAbsolutePath());
+					model.loadGameBlueprint(file.getAbsolutePath());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -139,7 +139,9 @@ public class TestEngine extends JGEngine {
 			e.printStackTrace();
 		}
 		moveObjects();
-		model.checkCollisions();}
+		model.checkCollisions();
+		model.getUnitInfo(getMouseX(), getMouseY());
+	}
 	//        model.spawnMonster(100, 150);
 
 	@Override
@@ -153,7 +155,9 @@ public class TestEngine extends JGEngine {
 		//System.out.println(cursorState);
 		if (cursorState == CursorState.AddTower) {
 			//	System.out.println("displaytower");
-			new TowerGhost(getMouseX(), getMouseY());
+
+			// This constructor has been deprecated
+			// new TowerGhost(getMouseX(), getMouseY());
 		}
 	}
 

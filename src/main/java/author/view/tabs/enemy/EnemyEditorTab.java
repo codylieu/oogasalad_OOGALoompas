@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,8 +15,6 @@ import java.util.Map;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.DefaultButtonModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -35,6 +32,10 @@ import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
+/**
+ * @author garysheng The tab that corresponds to the creation of enemies. Talks
+ *         to a tab controller to pass information to the model
+ */
 public class EnemyEditorTab extends ObjectEditorTab {
 
 	public EnemyEditorTab(TabController towerController, String objectName) {
@@ -48,19 +49,44 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			flyingButton, groundButton;
 	private List<JRadioButton> allButtons;
 	private ButtonGroup tileSizeGroup, flyingOrGroundGroup;
+	private List<MonsterSchema> monsterSchemas;
 
 	@Override
 	public void saveTabData() {
 		EnemyController controller = (EnemyController) myController;
 
+		monsterSchemas = new ArrayList<MonsterSchema>();
+		for (TDObjectSchema monster : objectMap.values()) {
+			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
+			Map<String, Serializable> monsterAttributes = monster
+					.getAttributesMap();
+
+			for (String attribute : monsterAttributes.keySet()) {
+				Serializable castedAttribute = addCastToAttribute(monsterAttributes
+						.get(attribute));
+				monsterSchema.addAttribute(attribute, castedAttribute);
+			}
+			monsterSchemas.add(monsterSchema);
+		}
+		controller.addEnemies(monsterSchemas);
 	}
 
+	/**
+	 * @return the list of monster schemas created so far in this tab
+	 */
+	public List<MonsterSchema> getMonsterSchemas() {
+		return monsterSchemas;
+	}
+
+	/**
+	 * @return the list of
+	 */
 	public String[] getEnemyNamesArray() {
-		
 		int size = objectMap.keySet().size();
 		return objectMap.keySet().toArray(new String[size]);
 	}
 
+	@Override
 	protected void updateSchemaDataFromView() {
 		super.updateSchemaDataFromView();
 		TDObjectSchema myCurrentObject = getSelectedObject();
@@ -71,6 +97,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 	}
 
+	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 		for (JRadioButton button : allButtons) {
@@ -90,11 +117,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		super.addListeners();
 		monsterImageButton.addActionListener(new FileChooserListener(
 				monsterImageCanvas));
-		collisionImageButton.addActionListener(new FileChooserListener(
-				collisionImageCanvas));
+		/*collisionImageButton.addActionListener(new FileChooserListener(
+				collisionImageCanvas));*/
 		for (JRadioButton button : allButtons) {
 			button.addActionListener(new ActionListener() {
-				
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					updateSchemaDataFromView();
@@ -113,14 +140,17 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return new EnemyTabViewBuilder(this);
 	}
 
+	/**
+	 * @author garysheng Concrete subclass of ObjectTabViewBuilder that creates
+	 *         specific view parts for the EnemyEditorTab
+	 */
 	private class EnemyTabViewBuilder extends ObjectTabViewBuilder {
 
 		public EnemyTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
-			// TODO Auto-generated constructor stub
 		}
 
-		@Override
+	
 		protected void instantiateAndClumpFields() {
 			healthSpinner = makeAttributeSpinner(MonsterSchema.HEALTH);
 			speedSpinner = makeAttributeSpinner(MonsterSchema.SPEED);
@@ -145,15 +175,15 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					largeTileButton, flyingButton, groundButton };
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
-					MonsterSchema.ENEMY_IMAGE_NAME);
-			collisionImageCanvas = new ImageCanvas(true,
-					MonsterSchema.COLLISION_IMAGE_NAME);
+					TDObjectSchema.IMAGE_NAME);
+		/*	collisionImageCanvas = new ImageCanvas(true,
+					MonsterSchema.COLLISION_IMAGE_NAME);*/
 
 			JSpinner[] spinners = { healthSpinner, speedSpinner, damageSpinner,
 					rewardSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 
-			ImageCanvas[] canvases = { monsterImageCanvas, collisionImageCanvas };
+			ImageCanvas[] canvases = { monsterImageCanvas };
 			imageCanvases = new ArrayList<ImageCanvas>(Arrays.asList(canvases));
 
 		}
@@ -172,6 +202,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
+		/**
+		 * @param buttonGroup
+		 * @param name
+		 * @return a buttonGroup panel.
+		 */
 		private JComponent makeButtonGroupPanel(ButtonGroup buttonGroup,
 				String name) {
 			JPanel result = new JPanel(new GridLayout(0, 1));
@@ -185,7 +220,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		@Override
 		protected JComponent makeSecondaryImagesGraphicPane() {
-			JPanel result = new JPanel();
+			/*JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 
 			collisionImageCanvas.setSize(new Dimension(
@@ -196,10 +231,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			collisionImageButton = makeChooseGraphicsButton("Set " + objectName
 					+ " Collision Image");
 			result.add(collisionImageButton, BorderLayout.SOUTH);
-			return result;
+			//return result;
+*/			return null;
 		}
 
-		@Override
+
 		protected JComponent makePrimaryObjectGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());

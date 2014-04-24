@@ -11,19 +11,6 @@ public class FreezeProjectile extends TDObject {
     public static final double DEFAULT_SPEED = 20;
 
     private double mySlowdownSpeed;
-    
-    /**
-     * Create projectile with specific src coordinates, xspeed, and yspeed
-     * @param x src x-coor
-     * @param y src y-coor
-     * @param xspeed
-     * @param yspeed
-     */
-    public FreezeProjectile (double x, double y, double xspeed, double yspeed, double mySlowdownSpeed) {
-        super("projectile", x, y, TOWER_PROJECTILE_CID, "red_bullet", xspeed, yspeed,
-              JGObject.expire_off_view);
-        this.mySlowdownSpeed = mySlowdownSpeed;
-    }
 
     /**
      * Creates projectile heading in given angle with default speed.

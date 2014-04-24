@@ -1,7 +1,6 @@
 package main.java.data;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -88,10 +87,11 @@ public class DataHandler {
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
 	 * @throws InvalidGameBlueprintException 
-	 * @throws FileNotFoundException 
 	 */
 
-	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException, FileNotFoundException {
+	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
+		//		if (checkGameBlueprint(blueprint)){
+
 		// Create temp folder for serialized blueprint and zipped resources
 		String tempDirLocation = filePath + "TempBlueprintHolder/";
 		Boolean tempDirCreated = new File(tempDirLocation).mkdir();
@@ -213,26 +213,22 @@ public class DataHandler {
 	public GameBlueprint loadBlueprint(String filePath, boolean isEngine) throws ClassNotFoundException, IOException, ZipException { // create another parameter isEngine that determine where it comes from
 		//	If method is being used by Engine, throw exceptions of unfinished state
 		//  If method is being used by Author (isEngine is false), allow them to load an unfinished state
-
+		Boolean tempDirCreated = new File(TEMP_FOLDER_PATH).mkdir();
 		// load the zipped blueprint + resources
 		decompress(filePath, TEMP_FOLDER_PATH);
 
-		// check the blueprint, if it is incomplete and isEngine is true, then throw exceptions
 		GameBlueprint toReturn = ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
 
-		// if authoring is loading, no need to check for exceptions
-
 		// Delete resources and reload from container file
-		File myDir = new File(FILE_PATH);
+		/*File myDir = new File(FILE_PATH);
 		deleteDirectory(myDir);
-		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
+		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);*/
 
 		// Delete temp folder
 		deleteDirectory(new File(TEMP_FOLDER_PATH));
 
 		if (isEngine) {
 			// Validate game blueprint for engine, but not author
-			deleteDirectory(new File(TEMP_FOLDER_PATH));
 			// throw stuff if it isn't complete
 			System.out.println(checkGameBlueprint(toReturn));
 		}
@@ -376,10 +372,8 @@ public class DataHandler {
 	 * @param object Object to serialize
 	 * @param fileName File to save serialized object to
 	 * @return whether the object was successfully saved
-	 * @throws FileNotFoundException 
 	 */
-	public boolean saveObjectToFile(Object object, String fileName) throws FileNotFoundException { // change back to private after testing
-		//Using OutputStream
+	public boolean saveObjectToFile(Object object, String fileName) { // change back to private after testing
 		FileOutputStream fileOut;
 		try {
 			fileOut = new FileOutputStream(fileName);
@@ -392,14 +386,6 @@ public class DataHandler {
 			e.printStackTrace();
 			return false;
 		}
-
-		/**
-		//Using JSON
-		JSONHandler j = new JSONHandler();
-		j.serializeObjectToJSON(object, fileName);
-		return true;
-		 */
-
 	}
 
 	/**
@@ -438,11 +424,11 @@ public class DataHandler {
 		else if(b.getMyMonsterSchemas() == null){
 			throw new InvalidGameBlueprintException("myMonsterSchemas");
 		}
-		else if(b.getMyLevelSchemas() == null){
-			throw new InvalidGameBlueprintException("myLevelSchemas");
-		}
 		else if(b.getMyGameMapSchemas() == null){
 			throw new InvalidGameBlueprintException("myGameMaps");
+		}
+		else if(b.getMyWaveSchemas() == null){
+			throw new InvalidGameBlueprintException("myWaveSchemas");
 		}
 		return true;
 	}

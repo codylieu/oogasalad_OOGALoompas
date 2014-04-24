@@ -26,8 +26,17 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.player.ITDPlayerEngine;
 import main.java.player.TDPlayerEngine;
 import net.lingala.zip4j.exception.ZipException;
+
+/**
+ * AbstractAction that can create a panel to
+ * view and download pre-created games from a
+ * pre-determined repository
+ * @author Kevin
+ *
+ */
 
 public class RepositoryViewer extends AbstractAction {
 
@@ -42,9 +51,9 @@ public class RepositoryViewer extends AbstractAction {
 	private JTextArea descriptionArea;
 	private TDPlayerEngine engine;
 	
-	public RepositoryViewer(String s, TDPlayerEngine engineInit) {
+	public RepositoryViewer(String s, ITDPlayerEngine engine) {
 		super(s);
-		engine = engineInit;
+		engine = engine;
 		dlc = new HashMap<String, DLCData>();
 	}
 
@@ -57,7 +66,7 @@ public class RepositoryViewer extends AbstractAction {
 		JFrame frame = new JFrame();
 		frame.setTitle("Repository Viewer");
 		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(makeMainPanel());
 		frame.pack();
 		frame.setVisible(true);

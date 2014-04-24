@@ -10,6 +10,7 @@ import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.exceptions.engine.MonsterCreationFailureException;
+import main.java.schema.GameBlueprint;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.WaveSpawnSchema;
@@ -23,7 +24,7 @@ public class LevelManager {
     private Point2D entrance;
     private Exit exit;
     private Player myPlayer;
-    private boolean currentWaveOver;
+    private boolean survivalMode;
 
     /**
      * Tasked with managing state for levels/waves/lives and spawning waves of monsters.
@@ -32,6 +33,7 @@ public class LevelManager {
         myFactory = factory;
         myCurrentWave = 0;
         myAllWaves = new ArrayList<WaveSpawnSchema>();
+        survivalMode = true;
     }
 
     /**
@@ -55,12 +57,21 @@ public class LevelManager {
                 .getMonsterSpawnSchemas()) {
             spawnedMonsters.addAll(spawnMonsterSpawnSchema(spawnSchema));
             if (++myCurrentWave >= myAllWaves.size()) {
-                myCurrentWave = 0;
+            	if(survivalMode) {
+            		//reset current wave back to beginning
+            		myCurrentWave = 0;
+            	}
             }
         }
         return spawnedMonsters;
     }
-
+    
+    /**
+     * Spawn a particular monster spawn schema with the level manager's set entrance.
+     * @param spawnSchema
+     * @return
+     * @throws MonsterCreationFailureException
+     */
     public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema)
 			throws MonsterCreationFailureException {
 		return spawnMonsterSpawnSchema(spawnSchema, entrance);
@@ -91,12 +102,14 @@ public class LevelManager {
 		return spawnedMonsters;
 	}
 
+
     /**
-     * Returns whether or not all waves completed.
-     * 
-     * @return
+     * Returns whether or not the game is won,
+     * i.e. all waves are completed
+     * This will always return false on survival mode.
+     * @return whether or not game is over 
      */
-    public boolean checkAllWavesFinished () {
+    public boolean isGameWon () {
         return myCurrentWave >= myAllWaves.size();
     }
 
@@ -166,5 +179,30 @@ public class LevelManager {
     public Exit getExit() {
     	return exit;
     }
+
+    /**
+     * Do a clean load of the waves for the game, and reset the initial wave to start at in the new
+     * list (indexed from 0).
+     * Note: this will remove all current waves queued in the level manager.
+     * 
+     * @param waveSchemas list of wave spawn schemas
+     * @param initialWave
+     */
+    public void cleanLoadWaveSchemas (List<WaveSpawnSchema> waveSchemas,
+                                      int initialWave) {
+        myAllWaves.clear();
+        for (WaveSpawnSchema wave : waveSchemas) {
+            addNewWave(wave);
+        }
+        myCurrentWave = initialWave;
+    }
+    
+	/**
+	 * Set the survival mode.
+	 * @param survivalMode
+	 */
+	public void setSurvivalMode(boolean survivalMode){
+		this.survivalMode = survivalMode;
+	}
 
 }
