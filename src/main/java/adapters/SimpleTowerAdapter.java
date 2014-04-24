@@ -9,15 +9,16 @@ import java.util.Map;
 import jgame.JGObject;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.SimpleMonster;
+import main.java.engine.objects.tower.SimpleTower;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
-public class SimpleMonsterAdapter extends TypeAdapter<SimpleMonster>{
+public class SimpleTowerAdapter extends TypeAdapter<SimpleTower>{
 	@Override
-	public SimpleMonster read(JsonReader reader) throws IOException {
+	public SimpleTower read(JsonReader reader) throws IOException {
 		if (reader.peek() == JsonToken.NULL) {
 			reader.nextNull();
 			return null;
@@ -34,11 +35,11 @@ public class SimpleMonsterAdapter extends TypeAdapter<SimpleMonster>{
 		int expiry = Integer.parseInt(parts[7]);
 		
 		Map<String, Serializable> map = new HashMap<String, Serializable>();
-		return new SimpleMonster(map);
+		return new SimpleTower(map);
 	}
 
 	@Override
-	public void write(JsonWriter writer, SimpleMonster obj) throws IOException {
+	public void write(JsonWriter writer, SimpleTower obj) throws IOException {
 		if (obj == null) {
 			writer.nullValue();
 			return;

@@ -58,22 +58,5 @@ public class JSONHandler {
 		}
 		return new Gson().fromJson(json, obj.getClass());
 	}
-
-	public static void main(String[] args) throws IOException	{
-//		GameSchema testSchema = new GameSchema();
-//		testSchema.addAttribute("Lives",10);
-//		GameBlueprint testBlueprint = new GameBlueprint();
-//		testBlueprint.setMyGameScenario(testSchema);
-		
-		// creates a test object with a map and set, mirrors actual gameblueprint design hierarchy to test JSON
-		TestObject t = new TestObject();
-		t.populateDefaultAttributes("testObjectName");
-		
-		JSONHandler j = new JSONHandler();
-		j.serializeObjectToJSON(t, "testobjectJSON");
-		GameBlueprint g = (GameBlueprint) (j.deserializeObjectFromJSON(t, (FILE_PATH + "testobjectJSON.json")));
-		j.serializeObjectToJSON(g,"testobjectJSON2");
-
-	}
 	
 }
