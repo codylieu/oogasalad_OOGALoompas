@@ -45,26 +45,28 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public static int RIGHT_CLICK = 3;
 	public static int TILE_WIDTH = 32;
 	public static int TILE_HEIGHT = 32;
-	
+
 	private int xtiles, ytiles;
 	private ObjectChooser towerChooser;
 	private ObjectChooser itemChooser;
 	private Model model;
 	private List<Observing> observers;
 	private CursorState cursorState;
-	private boolean hasChanged;
+	private boolean hasGameInfoChanged;
+	private boolean hasUnitInfoChanged;
 	private boolean isFullScreen;
 	private String pathToBlueprint;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 	public TDPlayerEngine(String pathToBlueprintInit) {
-//		super();
+		//		super();
 		loadCanvasSize(pathToBlueprintInit);
 		pathToBlueprint = pathToBlueprintInit;
 		initEngineComponent(xtiles * TILE_WIDTH, ytiles * TILE_HEIGHT);
 		observers = new ArrayList<Observing>();
-		hasChanged = true;
+		hasGameInfoChanged = true;
+		hasUnitInfoChanged = false;
 		isFullScreen = false;
 		cursorState = CursorState.None;
 		stop();
@@ -83,8 +85,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
 		xtiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
 		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
-		}
-	
+	}
+
 	@Override
 	public void initCanvas() {
 
@@ -94,7 +96,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	@Override
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
-		
+
 	}
 
 	public void initModel(){
@@ -103,7 +105,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	}
 	public void speedUp() {
 		setFrameRate(getFrameRate() + FRAME_RATE_DELTA, 1);
-		
+
 	}
 
 	/**
@@ -179,28 +181,28 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 				return ;
 	}*/
 
-	public String getCurrentDescription() {
-		/*JGPoint mousePos = getMousePos();
+	public List<String> getCurrentDescription() {
+		JGPoint mousePos = getMousePos();
 		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0) {
-			if (model.isTowerPresent(mousePos.x, mousePos.y)){
-				System.out.println(getObjects("tower", 0, true, null).size());
-				return getObjects("tower", 0, true, null).get(1).toString();//remove null to bounding box
-			}
-			else
-				return "";
+			//hasUnitInfoChanged = false;
+			//if (model.isTowerPresent(mousePos.x, mousePos.y)){
+			//System.out.println(getObjects("tower", 0, true, null).size());
+			//return getObjects("tower", 0, true, null).get(1).toString();//remove null to bounding box
+			return model.getUnitInfo(mousePos.x, mousePos.y);
+			//}
+			//else
+			//return "";
 		}
-		else*/
-		return "";
-
+		//	else
+		return new ArrayList<String>();
 	}
-
 
 	@Override
 	public void doFrame() {
 		super.doFrame();
 		if (cursorState == CursorState.AddTower) {
 			if (getMouseButton(LEFT_CLICK)) {
-				
+
 				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
@@ -211,15 +213,21 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			}
 		}
 		else if (cursorState == CursorState.None) {
-			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))) {
-				try {
-					model.upgradeTower(getMouseX(), getMouseY());
-				} catch (TowerCreationFailureException e) {
-					e.printStackTrace();
+			if (getMouseButton(LEFT_CLICK)) {
+				if(!model.getUnitInfo(getMousePos().x, getMousePos().y).isEmpty()){
+					hasUnitInfoChanged = true;
 				}
+				if(getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))){
+					try {
+						model.upgradeTower(getMouseX(), getMouseY());
+					} catch (TowerCreationFailureException e) {
+						e.printStackTrace();
+					}
 
+					
+					clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
+				}
 				clearMouseButton(LEFT_CLICK);
-				clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 			}
 			//setAllItems();
 		}
@@ -233,7 +241,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			clearMouseButton(3);
 		}
 		try {
-		
+
 			model.updateGame();
 		} catch (MonsterCreationFailureException e) {
 			e.printStackTrace();
@@ -261,7 +269,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	@Override
 	public void update(){
-				towerName = towerChooser.getObjectName();
+		towerName = towerChooser.getObjectName();
 	}
 
 	/**
@@ -332,9 +340,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	@Override
 	public void notifyObservers() {
 		List<Observing> localObservers = null;
-		if(!hasChanged) return;
+		if(!hasGameInfoChanged && !hasUnitInfoChanged) return;
 		localObservers = new ArrayList<Observing>(observers);
-		hasChanged = false;
+		hasGameInfoChanged = false;
+		hasUnitInfoChanged = false;
 		for(Observing o: localObservers){
 			o.update();
 		}
@@ -359,7 +368,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void loadGameState(String gameName){
 		try {
 			model.loadSavedGame(gameName);
@@ -370,7 +379,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	}
 
 	public Map<String, String> getGameAttributes() {
-		hasChanged = true;
+		hasGameInfoChanged = true;
 		Map<String, String> gameStats = new HashMap<String, String>();
 		gameStats.put("Score", "Score: " + model.getScore());
 		gameStats.put("Lives", "Lives left: " + model.getPlayerLives());

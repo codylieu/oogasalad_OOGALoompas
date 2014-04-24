@@ -18,7 +18,7 @@ public class UnitInfoPanel extends JPanel implements Observing {
 	private JTextArea unitInfoArea;
 
 	public UnitInfoPanel() {
-		unitInfoArea = new JTextArea(5, 15);
+		unitInfoArea = new JTextArea(5, 10);
 		unitInfoArea.setEditable(false);
 		add(unitInfoArea);
 	}
@@ -26,7 +26,13 @@ public class UnitInfoPanel extends JPanel implements Observing {
 	@Override
 	public void update() {		
 		//unitInfoArea.setText(engine.getSelectedObject().toString());
-		unitInfoArea.setText(engine.getCurrentDescription());
+		//unitInfoArea.setText(engine.getCurrentDescription());
+		List<String> unitInfoList = engine.getCurrentDescription();
+		String unitInfo = "";
+		for(String s: unitInfoList){
+			unitInfo += s + "\n";
+		}
+		unitInfoArea.setText(unitInfo);
 	}
 
 	@Override
