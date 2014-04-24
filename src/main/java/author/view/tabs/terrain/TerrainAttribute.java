@@ -18,9 +18,13 @@ public enum TerrainAttribute {
 		return this.name();
 	}
 	
-	protected static TerrainAttribute getAttribute(int i){ 
+	public static TerrainAttribute getAttribute(int i){ 
 		return values()[i]; 
 	} 
+	
+	public static int getIndex (TerrainAttribute attr) {
+		return attr.ordinal();
+	}
 	
 	abstract Color getColor();
 	
