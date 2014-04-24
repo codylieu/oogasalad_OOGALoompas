@@ -9,10 +9,15 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import jgame.JGObject;
+import main.java.adapters.JGObjectAdapter;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import main.java.adapters.JGObjectAdapter;
 
 public class JSONHandler {
 
@@ -20,7 +25,11 @@ public class JSONHandler {
 	private Gson myGson;
 	
 	public JSONHandler(){
-  		myGson = new Gson();
+		GsonBuilder gsonBuilder = new GsonBuilder();
+	    gsonBuilder.registerTypeAdapter(JGObject.class, new JGObjectAdapter());
+	    gsonBuilder.setPrettyPrinting();
+	    myGson = gsonBuilder.create();
+  		
   	}
 	/**
 	 * Method to write the information of an object into a text file
