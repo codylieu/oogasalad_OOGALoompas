@@ -152,32 +152,32 @@ public class TestDataHandler {
 
 	}
 	
-	//	@Test
-	//	public void testBlueprintSavingAndLoading() {
-	//		//Set up blueprint
-	//		GameSchema scenario = new GameSchema();
-	//		scenario.addAttribute(TEST_ATTRIBUTE_1, TEST_VALUE_1);
-	//		GameBlueprint savedBlueprint = new GameBlueprint();
-	//		savedBlueprint.setMyGameScenario(scenario);
-	//		
-	//		//Try to save blueprint
-	//		DataHandler dataHandler = new DataHandler();
-	//		if (!dataHandler.saveBlueprint(savedBlueprint, FILE_PATH + BLUEPRINT_PATH))
-	//			fail();
-	//		
-	//		//Load blueprint
-	//		GameSchema loadedSchema = null;
-	//		try {
-	//			GameBlueprint loadedBlueprint = dataHandler.loadBlueprint(FILE_PATH + BLUEPRINT_PATH);
-	//			loadedSchema = loadedBlueprint.getMyGameScenario();
-	//		} catch (ClassNotFoundException | IOException e) {
-	//			fail();
-	//		}
-	//		
-	//		//Check if the variable values are the same
-	//		assertTrue(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals(TEST_VALUE_1));
-	//		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
-	//	}
+	@Test
+	public void testBlueprintSavingAndLoading() throws ZipException, InvalidGameBlueprintException {
+		//Set up blueprint
+		GameSchema scenario = new GameSchema();
+		scenario.addAttribute(TEST_ATTRIBUTE_1, TEST_VALUE_1);
+		GameBlueprint savedBlueprint = new GameBlueprint();
+		savedBlueprint.setMyGameScenario(scenario);
+
+		//Try to save blueprint
+		DataHandler dataHandler = new DataHandler();
+		if (!dataHandler.saveBlueprint(savedBlueprint, FILE_PATH + BLUEPRINT_PATH))
+			fail();
+
+		//Load blueprint
+		GameSchema loadedSchema = null;
+		try {
+			GameBlueprint loadedBlueprint = dataHandler.loadBlueprint(FILE_PATH + BLUEPRINT_PATH,false);
+			loadedSchema = loadedBlueprint.getMyGameScenario();
+		} catch (ClassNotFoundException | IOException e) {
+			fail();
+		}
+
+		//Check if the variable values are the same
+		assertTrue(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals(TEST_VALUE_1));
+		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
+	}
 
 	//Not working! Branch data-json has updates on JSON, had to switch to Objects from Serializable
 //	@Test
@@ -200,16 +200,16 @@ public class TestDataHandler {
 	 * @throws IOException
 	 * @throws ZipException
 	 */
-//	@Test(expected=InvalidGameBlueprintException.class)
-//	public void testEngineLoadingBlueprint() throws ClassNotFoundException, IOException, ZipException {
-//		DataHandler testDataHandler = new DataHandler();
-//		GameSchema testSchema = new GameSchema();
-//		testSchema.addAttribute("Lives",10);
-//		GameBlueprint testBlueprint = new GameBlueprint();
-//		testBlueprint.setMyGameScenario(testSchema);
-//		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
-//		testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip",true);
-//	}
+	@Test(expected=InvalidGameBlueprintException.class)
+	public void testEngineLoadingBlueprint() throws ClassNotFoundException, IOException, ZipException {
+		DataHandler testDataHandler = new DataHandler();
+		GameSchema testSchema = new GameSchema();
+		testSchema.addAttribute("Lives",10);
+		GameBlueprint testBlueprint = new GameBlueprint();
+		testBlueprint.setMyGameScenario(testSchema);
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
+		testDataHandler.loadBlueprint(FILE_PATH + SAVEBLUEPRINT_PATH,true);
+	}
 
 
 
@@ -287,7 +287,7 @@ public class TestDataHandler {
 		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
 		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
 		File serializedTestBlueprint = new File(savedBlueprintLocation);
-		File testBlueprintFile = new File(savedBlueprintLocation);
+		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
 		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
 		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
 				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
