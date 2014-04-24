@@ -20,10 +20,12 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -61,7 +63,6 @@ public class TerrainEditorTab extends EditorTab {
 	public TerrainEditorTab(TabController controller){
 		super(controller);
 		initializeTerrain();
-		setPreferredSize(new Dimension(1200, 500));
 	}
 
 	private void initializeTerrain() {
@@ -184,8 +185,9 @@ public class TerrainEditorTab extends EditorTab {
 				updateCanvasSize();
 				updateCanvas(oldTiles);
 				myTileSelectionManager.setCanvas(myCanvas);
-				revalidate();
-				repaint();
+				TerrainEditorTab.this.revalidate();
+				TerrainEditorTab.this.repaint();
+				SwingUtilities.getWindowAncestor(TerrainEditorTab.this).pack();
 			}
 
 		});
