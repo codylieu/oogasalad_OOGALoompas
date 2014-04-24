@@ -9,8 +9,7 @@ public abstract class MonsterSchema extends TDObjectSchema {
 	public static final String DAMAGE = "Attack Damage";
 	public static final String ENTRANCE_LOCATION = "Entrance Location";
 	public static final String EXIT_LOCATION = "Exit";
-    public static final String BLOCKED_TILES = "Blocked Tiles";
-	public static final String COLLISION_IMAGE_NAME = "Collision Image Name";
+        public static final String BLOCKED_TILES = "Blocked Tiles";
 	public static final String FLYING_OR_GROUND = "Flying or Ground";
 	public static final String TILE_SIZE = "Tile Size";
 	
@@ -37,7 +36,6 @@ public abstract class MonsterSchema extends TDObjectSchema {
 		myAttributeSet.add(MonsterSchema.NAME);
 		myAttributeSet.add(MonsterSchema.FLYING_OR_GROUND);
 		myAttributeSet.add(MonsterSchema.TILE_SIZE);
-		myAttributeSet.add(MonsterSchema.COLLISION_IMAGE_NAME);
 		myAttributeSet.add(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
     }
 }
