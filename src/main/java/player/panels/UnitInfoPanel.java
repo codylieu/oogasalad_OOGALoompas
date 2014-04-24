@@ -3,6 +3,7 @@ package main.java.player.panels;
 import java.util.List;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import main.java.player.TDPlayerEngine;
@@ -16,11 +17,14 @@ public class UnitInfoPanel extends JPanel implements Observing {
 	
 	private TDPlayerEngine engine;
 	private JTextArea unitInfoArea;
-
+	//private JScrollPane scrollPane;
 	public UnitInfoPanel() {
-		unitInfoArea = new JTextArea(5, 10);
+		unitInfoArea = new JTextArea(5, 5);
 		unitInfoArea.setEditable(false);
+		unitInfoArea.setWrapStyleWord(true);
 		add(unitInfoArea);
+		//scrollPane = new JScrollPane(unitInfoArea);
+		//add(scrollPane);
 	}
 
 	@Override
