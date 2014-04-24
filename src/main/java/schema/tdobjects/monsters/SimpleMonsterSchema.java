@@ -36,7 +36,8 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(MonsterSchema.REWARD, EnemyViewDefaults.REWARD_DEFAULT);    
 		addAttribute(MonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);    
 		addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
-		addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
+		addAttribute(TDObjectSchema.IMAGE_NAME, EnemyViewDefaults.ENEMY_DEFAULT_IMAGE);
+		addAttribute(MonsterSchema.COLLISION_IMAGE_NAME, "");
 
 	}
 
