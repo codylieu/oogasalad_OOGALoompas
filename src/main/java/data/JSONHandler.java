@@ -51,8 +51,8 @@ public class JSONHandler {
 	 * @return
 	 * @throws IOException
 	 */
-	public Object deserializeObjectFromJSON(Object obj, String filepath) throws IOException	{
-		BufferedReader reader = new BufferedReader(new FileReader(filepath));
+	public Object deserializeObjectFromJSON(Object obj, String filename) throws IOException	{
+		BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH + filename + ".json"));
 		String json = "";
 		String line = null;
 		while ((line = reader.readLine()) != null) {
@@ -60,26 +60,6 @@ public class JSONHandler {
 		    json += line;
 		}
 		return new Gson().fromJson(json, obj.getClass());
-	}
-
-	public static void main(String[] args) throws IOException	{
-		GameSchema testSchema = new GameSchema();
-		testSchema.addAttribute("Lives",10.0);
-		GameBlueprint testBlueprint = new GameBlueprint();
-		testBlueprint.setMyGameScenario(testSchema);
-
-		
-		// creates a test object with a map and set, mirrors actual gameblueprint design hierarchy to test JSON
-		TestObject t = new TestObject();
-		t.populateDefaultAttributes("testObjectName");
-		
-		TestObject2 t2 = new TestObject2("t2");
-		
-		JSONHandler j = new JSONHandler();
-		
-		j.serializeObjectToJSON(t, "testobjectJSON");
-		GameBlueprint g = (GameBlueprint) (j.deserializeObjectFromJSON(t, (FILE_PATH + "testobjectJSON.json")));
-		j.serializeObjectToJSON(g,"testobjectJSON2");
 	}
 	
 }
