@@ -87,7 +87,8 @@ public class TowerSchema extends TDObjectSchema {
 				TowerViewConstants.BUILDUP_DEFAULT);
 		addAttribute(TDObjectSchema.IMAGE_NAME, 
 				TowerViewConstants.TOWER_DEFAULT_IMAGE);
-		addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "");
+		addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME,
+				TowerViewConstants.SHRAPNEL_DEFAULT_IMAGE);
 		addAttribute(TowerSchema.BULLET_IMAGE_NAME, 
 				TowerViewConstants.BULLET_DEFAULT_IMAGE);
 		addAttribute(TowerSchema.UPGRADE_PATH, "");
