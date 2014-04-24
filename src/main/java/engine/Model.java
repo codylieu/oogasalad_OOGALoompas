@@ -607,6 +607,7 @@ public class Model implements IModel{
 		testTowerOne.addAttribute(TowerSchema.NAME, "MoneyTower");
 		testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerOne.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
 		towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
 		testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "BombingTower");
@@ -618,6 +619,7 @@ public class Model implements IModel{
 		testTowerTwo.addAttribute(TowerSchema.NAME, "ShootingTower");
 		testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerTwo.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
 		towerBehaviors2.add(TowerBehaviors.SHOOTING);
 		testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
@@ -639,6 +641,7 @@ public class Model implements IModel{
 		testTowerFour.addAttribute(TowerSchema.NAME, "FreezingTower");
 		testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerFour.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
 		Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
 		towerBehaviors4.add(TowerBehaviors.FREEZING);
@@ -650,6 +653,7 @@ public class Model implements IModel{
 		testTowerFive.addAttribute(TowerSchema.NAME, "SplashingTower");
 		testTowerFive.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerFive.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors5 = new ArrayList<TowerBehaviors>();
 		towerBehaviors5.add(TowerBehaviors.SPLASHING);
 		testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors5);
