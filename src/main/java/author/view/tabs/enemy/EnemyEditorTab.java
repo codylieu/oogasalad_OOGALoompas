@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,8 +15,6 @@ import java.util.Map;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.DefaultButtonModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -32,7 +29,6 @@ import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.MonsterSchema;
-import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
@@ -86,7 +82,6 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	 * @return the list of
 	 */
 	public String[] getEnemyNamesArray() {
-
 		int size = objectMap.keySet().size();
 		return objectMap.keySet().toArray(new String[size]);
 	}
@@ -122,8 +117,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		super.addListeners();
 		monsterImageButton.addActionListener(new FileChooserListener(
 				monsterImageCanvas));
-		collisionImageButton.addActionListener(new FileChooserListener(
-				collisionImageCanvas));
+		/*collisionImageButton.addActionListener(new FileChooserListener(
+				collisionImageCanvas));*/
 		for (JRadioButton button : allButtons) {
 			button.addActionListener(new ActionListener() {
 
@@ -155,7 +150,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			super(editorTab);
 		}
 
-		@Override
+	
 		protected void instantiateAndClumpFields() {
 			healthSpinner = makeAttributeSpinner(MonsterSchema.HEALTH);
 			speedSpinner = makeAttributeSpinner(MonsterSchema.SPEED);
@@ -181,14 +176,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
 					TDObjectSchema.IMAGE_NAME);
-			collisionImageCanvas = new ImageCanvas(true,
-					MonsterSchema.COLLISION_IMAGE_NAME);
+		/*	collisionImageCanvas = new ImageCanvas(true,
+					MonsterSchema.COLLISION_IMAGE_NAME);*/
 
 			JSpinner[] spinners = { healthSpinner, speedSpinner, damageSpinner,
 					rewardSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 
-			ImageCanvas[] canvases = { monsterImageCanvas, collisionImageCanvas };
+			ImageCanvas[] canvases = { monsterImageCanvas };
 			imageCanvases = new ArrayList<ImageCanvas>(Arrays.asList(canvases));
 
 		}
@@ -225,7 +220,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		@Override
 		protected JComponent makeSecondaryImagesGraphicPane() {
-			JPanel result = new JPanel();
+			/*JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 
 			collisionImageCanvas.setSize(new Dimension(
@@ -236,10 +231,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			collisionImageButton = makeChooseGraphicsButton("Set " + objectName
 					+ " Collision Image");
 			result.add(collisionImageButton, BorderLayout.SOUTH);
-			return result;
+			//return result;
+*/			return null;
 		}
 
-		@Override
+
 		protected JComponent makePrimaryObjectGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
