@@ -21,5 +21,7 @@ public class TowerViewConstants {
 	public static final String TOWER_BEHAVIOR_SHOOTS = "Can Shoot";
 	public static final String TOWER_BEHAVIOR_FARMS_MONEY = "Farms Money";
 	public static final String TOWER_BEHAVIOR_BOMBS = "Creates Shrapnel";
+	public static final String TOWER_DEFAULT_IMAGE = "tower.gif";
+	public static final String BULLET_DEFAULT_IMAGE = "red_bullet.png";
 
 }
