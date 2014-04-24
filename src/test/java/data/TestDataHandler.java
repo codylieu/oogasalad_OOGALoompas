@@ -201,24 +201,28 @@ public class TestDataHandler {
 	@Test
 	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
 		DataHandler testDataHandler = new DataHandler();
-		//set up gameblueprint, testing by just adding a gameschema
+		//set up a test gameblueprint, testing by just adding a gameschema
 		GameSchema testSchema = new GameSchema();
 		testSchema.addAttribute("Lives",10);
 		GameBlueprint testBlueprint = new GameBlueprint();
 		testBlueprint.setMyGameScenario(testSchema);
+		
+		//Test saving and loading blueprints using the output stream
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
+		//See if the original lives is equal to the loaded lives
+		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
+				((GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH)).getMyGameScenario().getAttributesMap().get("Lives"));
+		
+		//testing zipping
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
 		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprintZippedAuthoringEnvironment.zip",false);
 		String savedBlueprintLocation =  FILE_PATH + "testSerialzedBlueprint.ser";
 		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
 		File serializedTestBlueprint = new File(savedBlueprintLocation);
 		File testBlueprintFile = new File(savedBlueprintLocation);
+		//See if the lengths of the testBlueprintFile and serializedBlueprintFile are the same
 		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
 		System.out.println(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"));
-		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
-				((GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH)).getMyGameScenario().getAttributesMap().get("Lives"));
-
-		//		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 	}
 
 
