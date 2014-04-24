@@ -1,5 +1,6 @@
 package main.java.author.view.tabs.terrain;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.io.Serializable;
 
@@ -10,6 +11,7 @@ public class Tile implements Serializable {
 	private int myMapYIndex;    // image y (row) index in tilemap
 	private String myTileMapFileName; // tilemap name
 	private int myPassIndex; // passability index to specify what can traverse the Tile
+	private Color myBorderColor;
 
 	public static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
@@ -18,6 +20,7 @@ public class Tile implements Serializable {
 	public Tile(int row, int column) {
 		myRow = row;
 		myColumn = column;
+		myBorderColor = Canvas.DEFAULT_BORDER_COLOR;
 	}
 
 	/**
@@ -65,8 +68,16 @@ public class Tile implements Serializable {
 	 * Sets the passability index of the tile, different options are
 	 * specified in TerrainAttribute.java
 	 */
-	public void setPassIndex(int index) {
+	protected  void setPassIndex(int index) {
 		myPassIndex = index;
+	}
+	
+	protected void setBorderColor(Color color) {
+		myBorderColor = color;
+	}
+	
+	protected Color getBorderColor() {
+		return myBorderColor;
 	}
 
 	/**

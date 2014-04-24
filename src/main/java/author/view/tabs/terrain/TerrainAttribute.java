@@ -1,27 +1,25 @@
 package main.java.author.view.tabs.terrain;
 
+import java.awt.Color;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
 public enum TerrainAttribute {
 
-	WalkableTerrain, FlyableTerrain, UntraversableTerrain;
-	
-	private Map<String, Integer> terrainAttributes = new HashMap<String, Integer>();
-	private int index;
-	
-	TerrainAttribute() {
-		terrainAttributes.put(this.toString(), (Integer) index++);
-	}
-	
+	WalkableTerrain      { Color getColor() { return Color.GREEN; }},
+	FlyableTerrain       { Color getColor() { return Color.BLUE; }},
+	UntraversableTerrain { Color getColor() { return Color.RED; }};
+
 	@Override
 	public String toString() {
 		return this.name();
 	}
 	
-	public int getIndex() {
-		return terrainAttributes.get(this.toString());
-	}
+	protected static TerrainAttribute getAttribute(int i){ 
+		return values()[i]; 
+	} 
+	
+	abstract Color getColor();
 	
 }

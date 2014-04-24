@@ -78,7 +78,7 @@ public class Canvas extends JPanel {
 			} else {
 				g.drawImage(tileImage,x,y, TILE_SIZE, TILE_SIZE, DEFAULT_TILE_COLOR, null);
 			}
-			g.setColor(DEFAULT_BORDER_COLOR);
+			g.setColor(tile.getBorderColor());
 			g.drawRect(x, y, TILE_SIZE, TILE_SIZE); // drawing appropriate Tile borders
 		}
 	}
@@ -134,7 +134,11 @@ public class Canvas extends JPanel {
 			return;
 		}
 		tile.setImage(selectedTileObj.getImage());
-		tile.setPassIndex(myTerrainTab.getPassabilityIndex());
+		
+		int passIndex = myTerrainTab.getPassabilityIndex();
+		
+		tile.setPassIndex(passIndex);
+		tile.setBorderColor(TerrainAttribute.getAttribute(passIndex).getColor());
 		tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
 		tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
 		tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
@@ -148,6 +152,7 @@ public class Canvas extends JPanel {
 		for (Tile tile : getTiles()) {
 			tile.setImage(null);
 			tile.setPassIndex(0);
+			tile.setBorderColor(Canvas.DEFAULT_BORDER_COLOR);
 			repaint();
 		}
 	}

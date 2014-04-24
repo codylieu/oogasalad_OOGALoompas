@@ -27,6 +27,7 @@ import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import jgame.JGColor;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.view.tabs.EditorTab;
@@ -97,7 +98,14 @@ public class TerrainEditorTab extends EditorTab {
 		TerrainAttribute [] terrainAttributeTypes = TerrainAttribute.values();
 		String [] terrainAttributeInfo = new String [terrainAttributeTypes.length];
 		for (int index = 0; index < terrainAttributeInfo.length; index++) {
-			terrainAttributeInfo[index] = terrainAttributeTypes[index].toString();
+			Color tileBorderColor = TerrainAttribute.getAttribute(index).getColor();
+			int r = tileBorderColor.getRed();
+			int g = tileBorderColor.getGreen();
+			int b = tileBorderColor.getBlue();
+			String colorHex = String.format("%02x%02x%02x", r, g, b);
+			String terrainInfo = terrainAttributeTypes[index].toString();
+			String coloredTerrainInfo = "<html><font color=#" + colorHex + ">" + terrainInfo + "</font>";
+			terrainAttributeInfo[index] = coloredTerrainInfo;
 		}
 
 		JComboBox scrollableTerrainTypes = new JComboBox(terrainAttributeInfo);
