@@ -92,29 +92,27 @@ public class DataHandler {
 	 */
 
 	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException, FileNotFoundException {
-		//		if (checkGameBlueprint(blueprint)){
-		
 		// Create temp folder for serialized blueprint and zipped resources
 		String tempDirLocation = filePath + "TempBlueprintHolder/";
 		Boolean tempDirCreated = new File(tempDirLocation).mkdir();
-		
+
 		if (tempDirCreated){
 			//Set up container zip file
 			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
-			
+
 			// Zip resources
 			String zipResourcesLocation = tempDirLocation + "ZippedResources.zip";
 			File myResources = new File(FILE_PATH);
 			List<File> myFilesToZip = new ArrayList<File>();
 			compressResources(myResources,zipResourcesLocation);
-			
+
 			// Serialize blueprint
 			saveObjectToFile(blueprint,tempDirLocation + "MyBlueprint.ser"); 
-			
+
 			// Prepare to zip: 1) zipped resources and 2) serialized blueprint
 			myFilesToZip.add(new File(zipResourcesLocation));
 			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser"));
-			
+
 			// Compress container file
 			if (compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation)){
 				deleteDirectory(new File(tempDirLocation)); 
@@ -223,22 +221,22 @@ public class DataHandler {
 		GameBlueprint toReturn = ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
 
 		// if authoring is loading, no need to check for exceptions
-		
+
 		// Delete resources and reload from container file
 		File myDir = new File(FILE_PATH);
 		deleteDirectory(myDir);
 		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
-		
+
 		// Delete temp folder
 		deleteDirectory(new File(TEMP_FOLDER_PATH));
-		
+
 		if (isEngine) {
 			// Validate game blueprint for engine, but not author
 			deleteDirectory(new File(TEMP_FOLDER_PATH));
 			// throw stuff if it isn't complete
 			System.out.println(checkGameBlueprint(toReturn));
 		}
-		
+
 		// return the blueprint in case of (Author - any) (Engine - complete blueprint)
 		return toReturn;	
 	}
@@ -394,14 +392,14 @@ public class DataHandler {
 			e.printStackTrace();
 			return false;
 		}
-		
+
 		/**
 		//Using JSON
 		JSONHandler j = new JSONHandler();
 		j.serializeObjectToJSON(object, fileName);
 		return true;
-		*/
-		
+		 */
+
 	}
 
 	/**

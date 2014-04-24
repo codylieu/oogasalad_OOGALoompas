@@ -1,1 +1,0 @@
-{"class main.java.data.jsonhandler.TestGameObject":[{"myID":3,"myHealth":4},{"myID":1,"myHealth":2}]}

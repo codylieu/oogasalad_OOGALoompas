@@ -64,10 +64,6 @@ public class JSONHandler {
 //		testSchema.addAttribute("Lives",10);
 //		GameBlueprint testBlueprint = new GameBlueprint();
 //		testBlueprint.setMyGameScenario(testSchema);
-		//Game maps no longer exist
-		/*List<GameMap> maps = new ArrayList<GameMap>();
-		maps.add(new GameMap());
-		testBlueprint.setMyGameMaps(maps);*/
 		
 		// creates a test object with a map and set, mirrors actual gameblueprint design hierarchy to test JSON
 		TestObject t = new TestObject();
