@@ -14,12 +14,6 @@ public abstract class MonsterSchema extends TDObjectSchema {
     public static final String FLYING_OR_GROUND = "Flying or Ground";
     public static final String TILE_SIZE = "Tile Size";
 
-    /**
-     * Remove unused constant.
-     */
-    @Deprecated
-    public static final String COLLISION_IMAGE_NAME = "Not implemented";
-
     public static final String FLYING = "Flying";
     public static final String GROUND = "Ground";
 
@@ -44,6 +38,5 @@ public abstract class MonsterSchema extends TDObjectSchema {
         myAttributeSet.add(MonsterSchema.FLYING_OR_GROUND);
         myAttributeSet.add(MonsterSchema.TILE_SIZE);
         myAttributeSet.add(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
-        myAttributeSet.add(MonsterSchema.COLLISION_IMAGE_NAME);
     }
 }
