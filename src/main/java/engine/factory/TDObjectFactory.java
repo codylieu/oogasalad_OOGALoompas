@@ -178,9 +178,6 @@ public class TDObjectFactory {
             schema.addAttribute(MonsterSchema.ENTRANCE_LOCATION, (Serializable) entrance);
             schema.addAttribute(MonsterSchema.EXIT_LOCATION, exit);
 
-            List<Integer> blocked = new ArrayList<Integer>();
-            blocked.add(2); // TODO, change -- provided by factory
-            schema.addAttribute(MonsterSchema.BLOCKED_TILES, (Serializable) blocked);
             Object[] monsterParameters = { schema.getAttributesMap() };
 
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);

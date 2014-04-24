@@ -10,7 +10,7 @@ public class TestModel {
 
 	@Test
 	public void checkTowerIsPlaced() {
-		Model model = new Model(new TestJGEngine(), null);
+		Model model = new Model(new TestJGEngine(), null); // TODO: Replace with actual path
 		
 		final int testx = 200, testy = 200;
 //		System.out.println("ha");
@@ -25,14 +25,14 @@ public class TestModel {
 	
 	@Test
 	public void checkModelGetters() {
-		Model model = new Model(new TestEngine(), null);
+		Model model = new Model(new TestEngine(), null); // TODO: Replace with actual blueprint
 		
 		assertEquals(0, model.getGameClock(), .0001);
 	}
 	
 	@Test
 	public void checkPlayerGetters() {
-		Model model = new Model(new TestEngine(), null);
+		Model model = new Model(new TestEngine(), null); // TOOD: Replace with actual blueprint
 		model.addNewPlayer();
 		
 		assert(model.getMoney() >= 0);
