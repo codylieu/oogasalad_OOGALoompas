@@ -71,7 +71,8 @@ public class Model implements IModel{
 		levelManager = new LevelManager(factory);
 		// TODO: Code entrance/exit logic into wave or monster spawn schema
 		levelManager.setEntrance(0, engine.pfHeight() / 2);
-		levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
+		//levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
+		levelManager.setExit(12 * engine.tileWidth(), 9 * engine.tileHeight());
 
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
