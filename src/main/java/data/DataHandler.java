@@ -382,7 +382,6 @@ public class DataHandler {
 	 */
 	public boolean saveObjectToFile(Object object, String fileName) throws FileNotFoundException { // change back to private after testing
 		//Using OutputStream
-		/**
 		FileOutputStream fileOut;
 		try {
 			fileOut = new FileOutputStream(fileName);
@@ -395,12 +394,13 @@ public class DataHandler {
 			e.printStackTrace();
 			return false;
 		}
-		*/
 		
+		/**
 		//Using JSON
 		JSONHandler j = new JSONHandler();
 		j.serializeObjectToJSON(object, fileName);
 		return true;
+		*/
 		
 	}
 

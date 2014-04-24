@@ -214,8 +214,9 @@ public class TestDataHandler {
 		File serializedTestBlueprint = new File(savedBlueprintLocation);
 		File testBlueprintFile = new File(savedBlueprintLocation);
 		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
+		System.out.println(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"));
 		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
-				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
+				((GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH)).getMyGameScenario().getAttributesMap().get("Lives"));
 
 		//		System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
 	}
