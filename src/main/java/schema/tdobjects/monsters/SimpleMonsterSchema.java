@@ -27,6 +27,7 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		populateDefaultAttributes(name);
 	}
 
+	@Override
 	public void populateDefaultAttributes(String name) {
 		addAttribute(MonsterSchema.NAME, name);
 		addAttribute(MonsterSchema.HEALTH, EnemyViewDefaults.HEALTH_DEFAULT);
@@ -36,7 +37,7 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(MonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);    
 		addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
 		addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
-		addAttribute(MonsterSchema.COLLISION_IMAGE_NAME, "");
+
 	}
 
 	@Override

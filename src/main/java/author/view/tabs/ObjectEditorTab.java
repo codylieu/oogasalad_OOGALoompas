@@ -55,6 +55,8 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.SpinnerUI;
 import javax.swing.table.DefaultTableModel;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import main.java.author.controller.TabController;
 import main.java.author.util.ObjectUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
@@ -333,7 +335,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 			String relativePath = new File((String) canvas.getImagePath())
 					.getName();
-			myCurrentObject.addAttribute(canvas.getName(), relativePath);
+			
+			if (relativePath != null && !relativePath.isEmpty()) {
+				myCurrentObject.addAttribute(canvas.getName(), relativePath);
+			}
 
 		}
 
