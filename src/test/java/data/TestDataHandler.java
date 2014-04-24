@@ -180,17 +180,16 @@ public class TestDataHandler {
 	}
 
 	//Not working! Branch data-json has updates on JSON, had to switch to Objects from Serializable
-//	@Test
-//	public void testJsonSerializationAndDeserialization() throws IOException{
-//		JSONHandler testDataHandler = new JSONHandler();
-//		GameBlueprint testBlueprint = this.createTestBlueprint();
-//		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
-//		String savedBlueprintLocation = "src/main/java/resources/testBlueprintJSON.json";
-//		testDataHandler.serializeObjectToJSON("testBlueprintJSON",testBlueprint);
-//		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(savedBlueprintLocation, testBlueprint));
-//		testDataHandler.serializeObjectToJSON("testBlueprintAfterJSONSerialized",loadedBlueprint);
-//
-//	}
+	@Test
+	public void testJsonSerializationAndDeserialization() throws IOException{
+		JSONHandler testDataHandler = new JSONHandler();
+		GameBlueprint testBlueprint = this.createTestBlueprint();
+		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
+		testDataHandler.serializeObjectToJSON(testBlueprint,"testBlueprintJSON");
+		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint, "testBlueprintJSON"));
+		testDataHandler.serializeObjectToJSON(loadedBlueprint, "testBlueprintAfterJSONSerialized");
+
+	}
 
 	/**
 	 * test to see if an incomplete blueprint
