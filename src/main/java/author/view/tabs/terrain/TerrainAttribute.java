@@ -7,9 +7,11 @@ import java.util.Map;
 
 public enum TerrainAttribute {
 
-	WalkableTerrain      { Color getColor() { return Color.GREEN; }},
-	FlyableTerrain       { Color getColor() { return Color.BLUE; }},
-	UntraversableTerrain { Color getColor() { return Color.RED; }};
+	Walkable      { Color getColor() { return Color.GREEN; }},
+	Flyable       { Color getColor() { return Color.BLUE; }},
+	Untraversable { Color getColor() { return Color.RED; }},
+	Entry         { Color getColor() { return Color.MAGENTA; }},
+	Exit          { Color getColor() { return Color.ORANGE; }};
 
 	@Override
 	public String toString() {

@@ -258,6 +258,11 @@ public class TerrainEditorTab extends EditorTab {
 		CanvasSchema canvasSchema = new CanvasSchema();
 		canvasSchema.addAttribute(CanvasSchema.Y_TILES, myCanvas.getRows());
 		canvasSchema.addAttribute(CanvasSchema.X_TILES, myCanvas.getCols());
+		canvasSchema.addAttribute(CanvasSchema.ENTRY_ROW, myCanvas.getEntryRow());
+		canvasSchema.addAttribute(CanvasSchema.ENTRY_COL, myCanvas.getEntryCol());
+		canvasSchema.addAttribute(CanvasSchema.EXIT_ROW, myCanvas.getExitRow());
+		canvasSchema.addAttribute(CanvasSchema.EXIT_COL, myCanvas.getExitCol());
+		
 
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable) gameTileMapSchemas);
