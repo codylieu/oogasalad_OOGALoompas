@@ -28,11 +28,21 @@ public class TDObjectAdapter extends TypeAdapter<TDObject> {
 
 	@Override
 	public void write(JsonWriter writer, TDObject obj) throws IOException {
-		// TODO Auto-generated method stub
 		if (obj == null) {
 			writer.nullValue();
 			return;
 		}
+		String objInfo = obj.getName() + "," + 
+				obj.x + "," + 
+				obj.y + "," +
+				obj.colid + "," +
+				obj.getGraphic();
+		if(obj.xspeed != 0 && obj.yspeed != 0 && obj.expiry != -1)	{
+			objInfo += obj.xspeed + "," +
+					obj.yspeed + "," + 
+					obj.expiry;
+		}
+		writer.value(objInfo);
 	}
 
 
