@@ -461,8 +461,11 @@ public abstract class ObjectEditorTab extends EditorTab {
 			result.setLayout(new BorderLayout());
 			result.add(myBuilder.makePrimaryObjectGraphicPane(),
 					BorderLayout.CENTER);
-			result.add(myBuilder.makeSecondaryImagesGraphicPane(),
-					BorderLayout.SOUTH);
+			JComponent secondaryImagesGraphicsPane = myBuilder.makeSecondaryImagesGraphicPane();
+			if (secondaryImagesGraphicsPane != null) {
+				result.add(myBuilder.makeSecondaryImagesGraphicPane(),
+						BorderLayout.SOUTH);
+			}
 			return result;
 		}
 

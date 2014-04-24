@@ -117,8 +117,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		super.addListeners();
 		monsterImageButton.addActionListener(new FileChooserListener(
 				monsterImageCanvas));
-		collisionImageButton.addActionListener(new FileChooserListener(
-				collisionImageCanvas));
+		/*collisionImageButton.addActionListener(new FileChooserListener(
+				collisionImageCanvas));*/
 		for (JRadioButton button : allButtons) {
 			button.addActionListener(new ActionListener() {
 
@@ -176,14 +176,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
 					TDObjectSchema.IMAGE_NAME);
-			collisionImageCanvas = new ImageCanvas(true,
-					MonsterSchema.COLLISION_IMAGE_NAME);
+		/*	collisionImageCanvas = new ImageCanvas(true,
+					MonsterSchema.COLLISION_IMAGE_NAME);*/
 
 			JSpinner[] spinners = { healthSpinner, speedSpinner, damageSpinner,
 					rewardSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 
-			ImageCanvas[] canvases = { monsterImageCanvas, collisionImageCanvas };
+			ImageCanvas[] canvases = { monsterImageCanvas };
 			imageCanvases = new ArrayList<ImageCanvas>(Arrays.asList(canvases));
 
 		}
@@ -220,7 +220,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		@Override
 		protected JComponent makeSecondaryImagesGraphicPane() {
-			JPanel result = new JPanel();
+			/*JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
 
 			collisionImageCanvas.setSize(new Dimension(
@@ -231,7 +231,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			collisionImageButton = makeChooseGraphicsButton("Set " + objectName
 					+ " Collision Image");
 			result.add(collisionImageButton, BorderLayout.SOUTH);
-			return result;
+			//return result;
+*/			return null;
 		}
 
 
