@@ -23,5 +23,6 @@ public class TowerViewConstants {
 	public static final String TOWER_BEHAVIOR_BOMBS = "Creates Shrapnel";
 	public static final String TOWER_DEFAULT_IMAGE = "tower.gif";
 	public static final String BULLET_DEFAULT_IMAGE = "red_bullet.png";
+	public static final String SHRAPNEL_DEFAULT_IMAGE = "blue_bullet.png";
 
 }
