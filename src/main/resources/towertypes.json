@@ -1,0 +1,16 @@
+[
+  {
+    "type": "SimpleTower",
+    "name": "test-tower",
+    "damage": 10.0,
+    "range": 10.0,
+    "graphics": "SimpleTower"
+  },
+  {
+    "type": "SimpleTower",
+    "name": "test-tower-two",
+    "damage": 20.0,
+    "range": 20.0,
+    "graphics": "tower-two"
+  }
+]
