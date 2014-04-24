@@ -2,6 +2,7 @@ package main.java.engine.factory;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +16,11 @@ import main.java.engine.Model;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.tower.BombTower;
+import main.java.engine.objects.tower.FreezeTower;
 import main.java.engine.objects.tower.ITower;
+import main.java.engine.objects.tower.MoneyTower;
+import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.engine.util.Reflection;
@@ -214,4 +219,6 @@ public class TDObjectFactory {
     public List<String> getPossibleItemNames() {
     	return Collections.unmodifiableList(possibleItemNames);
     }
+
+
 }

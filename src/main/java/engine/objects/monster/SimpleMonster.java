@@ -2,8 +2,8 @@ package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import main.java.engine.objects.Exit;
 import main.java.schema.MonsterSpawnSchema;
@@ -23,7 +23,7 @@ public class SimpleMonster extends Monster {
 		this(
 				(Point2D) getValueOrDefault(attributes, MonsterSchema.ENTRANCE_LOCATION, new Point2D.Double(0,0)),
 				(Exit) getValueOrDefault(attributes, MonsterSchema.EXIT_LOCATION, null),
-                (List<Integer>) getValueOrDefault(attributes, MonsterSchema.BLOCKED_TILES, null),
+                (Set<Integer>) getValueOrDefault(attributes, MonsterSchema.BLOCKED_TILES, null),
 				(double) getValueOrDefault(attributes, MonsterSchema.HEALTH, DEFAULT_HEALTH),
 				(double) getValueOrDefault(attributes, MonsterSchema.SPEED, DEFAULT_MOVE_SPEED),
 				(double) getValueOrDefault(attributes, MonsterSchema.REWARD, DEFAULT_REWARD_AMOUNT),
@@ -31,22 +31,9 @@ public class SimpleMonster extends Monster {
 				(MonsterSpawnSchema) getValueOrDefault(attributes, MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, null));
 	}
 
-	    /**
-     * 
-     * The normal constructor. Should not be called directly by factory.
-     * 
-     * @param entranceX
-     * @param entranceY
-     * @param exitX
-     * @param exitY
-     * @param health
-     * @param speed
-     * @param moneyValue
-     * @param imageName
-     */
     private SimpleMonster (Point2D entrance,
                           Exit exit,
-                          List<Integer> blocked,
+                          Set<Integer> blocked,
                           double health,
                           double speed,
                           double moneyValue,
