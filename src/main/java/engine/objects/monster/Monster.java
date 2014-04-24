@@ -12,16 +12,8 @@ import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.jgpathfinder.*;
 import main.java.schema.MonsterSpawnSchema;
 
-
 public abstract class Monster extends TDObject {
-
 	public static final int MONSTER_CID = 1;
-
-	/*public static final String HEALTH = "health";
-	public static final String SPEED = "speed";
-	public static final String MONEY_VALUE = "moneyValue";
-	public static final String ENTRANCE_LOCATION = "entrance";
-	public static final String EXIT_LOCATION = "exit";*/
 
 	protected double myHealth;
 	protected double myMoveSpeed;
@@ -34,15 +26,6 @@ public abstract class Monster extends TDObject {
 	private MonsterSpawnSchema resurrectMonsterSchema;
 
 	/* TODO: Clean up/move instance variables to appropriate concrete classes
-	 */
-	/**
-	 * 
-	 * @param name
-	 * @param unique_id
-	 * @param x
-	 * @param y
-	 * @param collisionid
-	 * @param gfxname
 	 */
 	public Monster (//double x,
 			//double y,
@@ -61,7 +44,7 @@ public abstract class Monster extends TDObject {
 		myMoneyValue = rewardAmount;
 		myEntrance = entrance;
 		myExit = exit;
-		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic()); // TODO: clean up
+		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<>(blocked)), new JGPathfinderHeuristic()); // TODO: clean up
 		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
 		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
 		this.setSpeed(myMoveSpeed);
@@ -126,7 +109,6 @@ public abstract class Monster extends TDObject {
 		myHealth = 0;
 		myMoneyValue = 0;
 	}
-
 
 	/**
 	 * Get money value received upon death of this monster

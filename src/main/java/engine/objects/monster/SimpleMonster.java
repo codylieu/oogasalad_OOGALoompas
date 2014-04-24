@@ -10,7 +10,6 @@ import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 
 public class SimpleMonster extends Monster {
-
 	public static final double DEFAULT_HEALTH = 100;
 	public static final double DEFAULT_MOVE_SPEED = 1;
 	public static final double DEFAULT_REWARD_AMOUNT = 10;
@@ -45,7 +44,7 @@ public class SimpleMonster extends Monster {
      * @param moneyValue
      * @param imageName
      */
-    public SimpleMonster (Point2D entrance,
+    private SimpleMonster (Point2D entrance,
                           Exit exit,
                           List<Integer> blocked,
                           double health,
