@@ -9,15 +9,15 @@ public abstract class TDObjectSchema extends AbstractSchema implements Serializa
     public static String NAME = "name";
 	public static String IMAGE_NAME = "imageName";
 
-	private Class<? extends TDObject> myConcreteType;
+	private String myConcreteType;
 
 	protected TDObjectSchema(Class<? extends TDObject> concreteType) {
 		super();
-		myConcreteType = concreteType;
+		myConcreteType = concreteType.getName();
 		myAttributeSet.add(IMAGE_NAME);
 	}
 
-	public Class<? extends TDObject> getMyConcreteType() {
+	public String getMyConcreteType() {
 		return myConcreteType;
 	}
 }

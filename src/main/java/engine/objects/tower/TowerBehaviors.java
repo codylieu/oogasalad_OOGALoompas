@@ -8,13 +8,13 @@ public enum TowerBehaviors {
     FREEZING(FreezeTower.class),
     SPLASHING(SplashTower.class);
 
-    private Class<? extends ITower> concreteClass;
+    private String concreteClass;
 
     private TowerBehaviors (Class<? extends ITower> concreteClass) {
-        this.concreteClass = concreteClass;
+        this.concreteClass = concreteClass.getName();
     }
 
-    public Class<? extends ITower> getConcreteClass () {
+    public String getConcreteClass () {
         return concreteClass;
     }
 

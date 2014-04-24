@@ -1,6 +1,5 @@
 package main.java.schema;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -11,7 +10,7 @@ import java.util.Collections;
  * 
  * @author Austin
  */
-public class WaveSpawnSchema implements Serializable {
+public class WaveSpawnSchema	{
     Collection<MonsterSpawnSchema> myMonsterSchemas = new ArrayList<MonsterSpawnSchema>();
 
     /**

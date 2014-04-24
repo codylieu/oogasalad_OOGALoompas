@@ -152,7 +152,7 @@ public class TDObjectFactory {
         Collection<TowerBehaviors> towerBehaviors =
                 (Collection<TowerBehaviors>) attributes.get(TowerSchema.TOWER_BEHAVIORS);
         for (TowerBehaviors towerBehavior : towerBehaviors) {
-            Class<? extends ITower> concreteType = towerBehavior.getConcreteClass();
+            String concreteType = towerBehavior.getConcreteClass();
             Object[] towerParameters = { finalTower, attributes };
             finalTower = (ITower) placeObject(concreteType, towerParameters);
         }
@@ -196,8 +196,8 @@ public class TDObjectFactory {
      * @param parameters
      * @return
      */
-    private Object placeObject (Class<?> objectType, Object[] parameters) {
-        return Reflection.createInstance(objectType.getName(), parameters);
+    private Object placeObject (String objectType, Object[] parameters) {
+        return Reflection.createInstance(objectType, parameters);
     }
 
     /**

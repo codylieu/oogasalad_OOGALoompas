@@ -65,7 +65,6 @@ public class JSONHandler {
 		String json = "";
 		String line = null;
 		while ((line = reader.readLine()) != null) {
-//			System.out.println(line);
 		    json += line;
 		}
 		return new Gson().fromJson(json, obj.getClass());

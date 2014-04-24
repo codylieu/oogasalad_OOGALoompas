@@ -1,0 +1,10 @@
+{
+  "myGameScenario": {
+    "myAttributesMap": {
+      "money": 503.0,
+      "lives": 3.0
+    },
+    "myAttributeSet": []
+  },
+  "myMonsterSchemas": []
+}

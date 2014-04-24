@@ -1,0 +1,34 @@
+{
+  "myGameScenario": {
+    "myAttributesMap": {
+      "money": 503,
+      "lives": 3
+    },
+    "myAttributeSet": []
+  },
+  "myMonsterSchemas": [
+    {
+      "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+      "myAttributesMap": {
+        "Speed": 1.0,
+        "imageName": "monster.png",
+        "name": "test-monster-1",
+        "Bounty Reward": 200.0
+      },
+      "myAttributeSet": [
+        "Speed",
+        "Exit",
+        "Monster schema to spawn upon this monster\u0027s death.",
+        "imageName",
+        "name",
+        "Bounty Reward",
+        "Blocked Tiles",
+        "Attack Damage",
+        "Health",
+        "Tile Size",
+        "Flying or Ground",
+        "Entrance Location"
+      ]
+    }
+  ]
+}
