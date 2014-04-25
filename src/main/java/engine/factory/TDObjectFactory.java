@@ -13,6 +13,7 @@ import java.util.Map;
 
 import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
+import main.java.engine.map.TDMap;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
@@ -133,7 +134,7 @@ public class TDObjectFactory {
      */
     public TDItem placeItem (Point2D location, String itemName) throws ItemCreationFailureException {
     	
-    	Point2D tileOrigin = findTileOrigin(location);
+    	Point2D tileOrigin = TDMap.findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(itemName);
             schema.addAttribute(ItemSchema.LOCATION, (Serializable) tileOrigin);
@@ -155,7 +156,7 @@ public class TDObjectFactory {
      */
     public ITower placeTower (Point2D location, String towerName)
                                                                  throws TowerCreationFailureException {
-        Point2D tileOrigin = findTileOrigin(location);
+        Point2D tileOrigin = TDMap.findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
             schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
@@ -223,17 +224,7 @@ public class TDObjectFactory {
         return Reflection.createInstance(objectType.getName(), parameters);
     }
 
-    /**
-     * Find the top-left corner associated with the tile associated with the given location.
-     * 
-     * @param location Coordinate of the map used to find the associated file
-     * @return The top left corner of the tile at the given coordinate
-     */
-    private Point2D findTileOrigin (Point2D location) {
-        int curXTilePos = (int) location.getX() / engine.tileWidth() * engine.tileWidth();
-        int curYTilePos = (int) location.getY() / engine.tileHeight() * engine.tileHeight();
-        return new Point2D.Double(curXTilePos, curYTilePos);
-    }
+
     
     /**
      * Returns names of towers that have loaded schemas, and can possibly be created.
