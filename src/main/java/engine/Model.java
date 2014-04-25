@@ -51,6 +51,7 @@ import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
  * Its public methods are primarily called by the view.
  * 
  */
+
 public class Model implements IModel {
 
     private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
@@ -314,8 +315,14 @@ public class Model implements IModel {
                     (CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap()
                             .get(GameMapSchema.MY_CANVAS_ATTRIBUTES);
             // TODO: Code entrance/exit logic into wave or monster spawn schema
-            levelManager.setEntrance(0, engine.pfHeight() / 2);
-            levelManager.setExit(12 * engine.tileWidth(), 9 * engine.tileHeight());
+            levelManager.setEntrance((Integer) myCanvasSchema.getAttributesMap()
+                                             .get(CanvasSchema.ENTRY_COL) * engine.tileWidth(),
+                                     (Integer) myCanvasSchema.getAttributesMap()
+                                             .get(CanvasSchema.ENTRY_ROW) * engine.tileHeight());
+            levelManager.setExit((Integer) myCanvasSchema.getAttributesMap()
+                                         .get(CanvasSchema.EXIT_COL) * engine.tileWidth(),
+                                 (Integer) myCanvasSchema.getAttributesMap()
+                                         .get(CanvasSchema.EXIT_ROW) * engine.tileHeight());
         }
     }
 
