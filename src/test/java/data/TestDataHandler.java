@@ -229,6 +229,7 @@ public class TestDataHandler {
 		new File(testPath).mkdir();
 		boolean savedObject = testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
+		System.out.println(savedObject);
 
 		if (savedObject){
 			File myFileToTakeSpace = new File(testPath + "testBlueprint.ser");
@@ -242,26 +243,24 @@ public class TestDataHandler {
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
 		File myResourcesTwo = new File(testPath);
 		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
+		System.out.println(myResourcesTwoSize);
 
 		// should contain testBlueprint.ser
 
-		File dir = new File(testPath);
-		File[] filesList = dir.listFiles();
-		for (File file : filesList) {
-			if (file.isFile()) {
-				System.out.println(file.getName());
-			}
-		}
+//		File dir = new File(testPath);
+//		File[] filesList = dir.listFiles();
+//		for (File file : filesList) {
+//			if (file.isFile()) {
+//				System.out.println(file.getName());
+//			}
+//		}
 
-		System.out.println(myResourcesTwoSize);
-
-		// loads back the original
+		// loads back the original, should have 1 less file
 
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
 		File myResourcesOne = new File(testPath);
 		long myResourcesOneSize = myResourcesOne.listFiles().length;
 		System.out.println(myResourcesOneSize);
-				System.out.println(myResourcesOneSize);
 		//		System.out.println(myResourcesTwoSize + "   " + myResourcesOneSize);
 		assertTrue("The second resources folder should be greater than the first", myResourcesTwoSize > myResourcesOneSize);
 

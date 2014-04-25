@@ -220,9 +220,11 @@ public class DataHandler {
 		GameBlueprint toReturn = ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
 
 		// Delete resources and reload from container file
-
+		
+		File myDir = new File(FILE_PATH);
+		deleteDirectory(myDir);
 		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
-
+		
 		// Delete temp folder
 		deleteDirectory(new File(TEMP_FOLDER_PATH));
 
