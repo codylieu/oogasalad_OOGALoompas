@@ -15,9 +15,10 @@ public class TowerViewConstants {
 	public static final int RANGE_DEFAULT = 100;
 	public static final int MONEY_GRANTED_DEFAULT = 100;
 	/**
-	 * TODO: Change FREEZE_SLOWDOWN_DEFAULT to be a double. (it's a percentage)
+	 * A monster's speed becomes this percentage of it's previous speed once hit with freeze projectile.
+	 * Valid values are [0-100]
 	 */
-	public static final int FREEZE_SLOWDOWN_DEFAULT = 1;
+	public static final int FREEZE_SLOWDOWN_DEFAULT = 80;
 	public static final Serializable FIRING_SPEED_DEFAULT = 3;
 	public static final Serializable MONEY_GRANT_INTERVAL_DEFAULT = 100;
 	public static final String TOWER_BEHAVIOR_FREEZES = "Deals Frost Damage";
