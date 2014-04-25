@@ -285,6 +285,7 @@ public class Model implements IModel{
 		Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
 		this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
 				(Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));
+		levelManager.setSurvivalMode((Boolean) gameSchemaAttributeMap.get(GameSchema.ISSURVIVALMODE));
 
 		// Initialize factory objects
 		if (blueprint.getMyTowerSchemas() != null) {

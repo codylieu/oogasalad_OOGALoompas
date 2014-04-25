@@ -23,7 +23,7 @@ public class Tile implements Serializable {
 		myRow = row;
 		myColumn = column;
 		myBorderColor = Canvas.DEFAULT_BORDER_COLOR;
-		myPassIndex = TerrainAttribute.Walkable.getIndex(); // default pass index
+		myPassIndex = TerrainEditorTab.DEFAULT_PASSABILITY_INDEX;
 	}
 
 	/**
