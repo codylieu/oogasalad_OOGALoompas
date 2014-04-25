@@ -39,7 +39,7 @@ import main.java.player.panels.FileChooserActionListener;
 import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
-import main.java.player.panels.InfoPanel;
+import main.java.player.panels.ObservingPanel;
 import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
@@ -321,7 +321,6 @@ public class ViewController implements Serializable {
 
 	public void toggleSound(){
 		soundOn = !soundOn;
-
 		if(soundOn) {
 			song.loop();
 		}
@@ -331,19 +330,25 @@ public class ViewController implements Serializable {
 	}
 
 	private JPanel makeGameInfoPanel() {
-		GameInfoPanel gameInfoPanel = new GameInfoPanel();
+		ObservingPanel gameInfoPanel = new GameInfoPanel();
 		gameInfoPanel.setSubject((Subject) engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
-		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
+		ObservingPanel unitInfoPanel = new UnitInfoPanel();
 		unitInfoPanel.setSubject((Subject) engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
-
+	
+/*	private JPanel makeInfoPanel(String className){
+		Object infoPanel = Class.forName(className).newInstance();
+		
+		//return infoPanel;
+	}
+*/
 	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
@@ -356,13 +361,12 @@ public class ViewController implements Serializable {
 		JPanel optionCard = new JPanel();
 		optionCard.setLayout(new GridBagLayout());
 
-
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		optionCard.add(makeMainMenuButton(), constraints);
-
+/*
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -372,11 +376,11 @@ public class ViewController implements Serializable {
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		optionCard.add(new DifficultyPanel(engine), constraints);
-
+*/
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 3;
-		optionCard.add(new InfoPanel(SOUND), constraints);
+		optionCard.add(new JLabel(SOUND), constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
@@ -385,6 +389,7 @@ public class ViewController implements Serializable {
 
 		cards.add(optionCard, OPTION_CARD);
 	}
+
 
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
