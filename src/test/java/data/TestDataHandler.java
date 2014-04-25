@@ -141,22 +141,22 @@ public class TestDataHandler {
 	 * a GameBlueprint)
 	 * @throws FileNotFoundException
 	 */
-//	@Test
-//	public void testOutputStreamSavingAndLoading() throws FileNotFoundException	{
-//		DataHandler testDataHandler = new DataHandler();
-//		//set up a test gameblueprint, testing by just adding a gameschema
-//		GameSchema testSchema = new GameSchema();
-//		testSchema.addAttribute("Lives",10);
-//		GameBlueprint testBlueprint = new GameBlueprint();
-//		testBlueprint.setMyGameScenario(testSchema);
-//
-//		//Test saving and loading blueprints using the output stream
-//		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
-//		//See if the original lives is equal to the loaded lives
-//		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
-//				((GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH)).getMyGameScenario().getAttributesMap().get("Lives"));
-//
-//	}
+	@Test
+	public void testOutputStreamSavingAndLoading() throws FileNotFoundException	{
+		DataHandler testDataHandler = new DataHandler();
+		//set up a test gameblueprint, testing by just adding a gameschema
+		GameSchema testSchema = new GameSchema();
+		testSchema.addAttribute("Lives",10);
+		GameBlueprint testBlueprint = new GameBlueprint();
+		testBlueprint.setMyGameScenario(testSchema);
+
+		//Test saving and loading blueprints using the output stream
+		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
+		//See if the original lives is equal to the loaded lives
+		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
+				((GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH)).getMyGameScenario().getAttributesMap().get("Lives"));
+
+	}
 //
 //	@Test
 //	public void testBlueprintSavingAndLoading() throws ZipException, InvalidGameBlueprintException {
