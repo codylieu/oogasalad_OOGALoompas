@@ -33,6 +33,11 @@ import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 
 
+/**
+ * A factory in charge of creating objects based on schemas
+ * Objects created include towers, monsters, and items
+ *
+ */
 public class TDObjectFactory {
     private static final String ITEM_PATH = "main.java.engine.objects.item.";
 	private JGEngineInterface engine;
@@ -47,6 +52,11 @@ public class TDObjectFactory {
         possibleItemNames = new ArrayList<String>();
     }
 
+    /**
+     * Load tower defense object schemas into schema map
+     * 
+     * @param schemas
+     */
     public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
         // TODO: Get rid of repetition in loading schemas
         for (TDObjectSchema s : schemas) {
@@ -58,6 +68,11 @@ public class TDObjectFactory {
         }
     }
     
+    /**
+     * Load tower schemas
+     * 
+     * @param schemas
+     */
     @SuppressWarnings("unchecked")
 	public void loadTowerSchemas (List<TowerSchema> schemas) {
     	for (TowerSchema towerschema: schemas) {
@@ -80,12 +95,22 @@ public class TDObjectFactory {
         engine.defineImage(bulletImageName, "-", 1, bulletImagePath, "-");
     }
     
+    /**
+     * Load monster schemas
+     * 
+     * @param schemas
+     */
     @SuppressWarnings("unchecked")
 	public void loadMonsterSchemas (List<MonsterSchema> schemas) {
     	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
     }
     
     // TODO: Refactor and get rid of repetition with loadMonsterSchemas method
+	/**
+	 * Load item schemas
+	 * 
+	 * @param schemas
+	 */
 	@SuppressWarnings("unchecked")
 	public void loadItemSchemas(List<ItemSchema> schemas) {
     	for (ItemSchema i: schemas) {

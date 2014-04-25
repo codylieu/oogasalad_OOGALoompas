@@ -59,6 +59,7 @@ import com.sun.xml.internal.ws.util.StringUtils;
 
 import main.java.author.controller.TabController;
 import main.java.author.util.ObjectUtilFunctions;
+import main.java.author.view.AuthoringView;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.components.TowerBehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
@@ -388,7 +389,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser();
+			JFileChooser fileChooser = new JFileChooser(new File(AuthoringView.DEFAULT_RESOURCES_DIR));
 			int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {

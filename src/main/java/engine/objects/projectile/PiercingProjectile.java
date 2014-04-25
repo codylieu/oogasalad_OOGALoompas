@@ -8,7 +8,7 @@ import jgame.JGObject;
 
 /**
  * 
- * Projectiles that pierce through a certain number of enemies
+ * Projectiles that pierce through a certain number of enemies and deal damage
  * before being removed. 
  *
  */

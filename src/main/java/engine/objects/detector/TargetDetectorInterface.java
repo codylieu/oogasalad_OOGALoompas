@@ -1,5 +1,6 @@
 package main.java.engine.objects.detector;
 
+import java.awt.geom.Point2D;
 import java.util.List;
 
 import main.java.engine.EnvironmentKnowledge;
@@ -19,8 +20,8 @@ public interface TargetDetectorInterface {
 	 * @param y: y-coor
 	 * @param range: range of effect
 	 * @param environmentKnowledge
-	 * @returna list of targeted objects
+	 * @return list of target locations
 	 */
-	public List<Object> findTarget(double x, double y, double range, EnvironmentKnowledge environmentKnowledge);
+	public List<Point2D> findTarget(double x, double y, double range, EnvironmentKnowledge environmentKnowledge);
 	
 }

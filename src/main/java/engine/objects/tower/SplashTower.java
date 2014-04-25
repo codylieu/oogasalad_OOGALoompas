@@ -13,15 +13,13 @@ import main.java.engine.objects.projectile.DamageProjectile;
  * 
  */
 public class SplashTower extends ShootingTower {
-
-    public static final String TOWER_TYPE = "Splansh Tower";
-
-    public SplashTower (ITower baseTower, Map<String, Serializable> attributes) {
-        super(baseTower, attributes);
-        myInfo.clear();
-        addInfo();
-    }
-
+	
+	private static final String TOWER_TYPE = "Splansh Tower";
+	
+	public SplashTower(ITower baseTower, Map<String, Serializable> attributes) {
+		super(baseTower, attributes);
+	}
+	
     @Override
     public void fireProjectile (double angle) {
         for (int i = 0; i < Bomb.BOMB_SPRAY_X.length; i++) {

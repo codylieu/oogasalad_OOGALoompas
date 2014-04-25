@@ -17,7 +17,13 @@ import main.java.engine.objects.monster.jgpathfinder.NoPossiblePathException;
 import main.java.schema.MonsterSpawnSchema;
 
 
+/**
+ * Abstract monster class with default instance variables and methods
+ * shared by all monsters
+ *
+ */
 public abstract class Monster extends TDObject {
+
     private static final int PERCENT = 100;
 
     public static final int MONSTER_CID = 1;
@@ -170,13 +176,13 @@ public abstract class Monster extends TDObject {
      * 
      * @return
      */
-    public List<String> getInfo () {
-        List<String> info = new ArrayList<String>();
-        info.add("" + x);
-        info.add("" + y);
-        info.add("" + myMoneyValue);
-        info.add("" + myHealth);
-        info.add("" + myMoveSpeed);
-        return info;
-    }
+    public String getInfo() {
+		String info = "Monster" +
+				"\nX-coor: " + x + 
+				"\nY-coor: " + y + 
+				"\nMoney Value: " + myMoneyValue + 
+				"\nHealth: " + myHealth + 
+				"\nMove Speed: " + myMoveSpeed;
+		return info;
+	}
 }

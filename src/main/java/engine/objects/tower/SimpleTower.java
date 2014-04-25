@@ -48,8 +48,6 @@ public class SimpleTower extends TDObject implements ITower {
      */
     protected double myTimingCounter;
 
-    protected List<String> myInfo;
-
     /**
      * Create a new tower
      * 
@@ -72,7 +70,6 @@ public class SimpleTower extends TDObject implements ITower {
         myCost = cost;
         myBuildUpTime = buildup;
         myUpgradeTower = upgradeTower;
-        initializeInfo();
     }
 
     public SimpleTower (Map<String, Serializable> attributes) {
@@ -83,14 +80,6 @@ public class SimpleTower extends TDObject implements ITower {
              (double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
              (String) getValueOrDefault(attributes, TowerSchema.UPGRADE_PATH, ""),
              (String) attributes.get(TowerSchema.NAME));
-    }
-
-    private void initializeInfo () {
-        myInfo = new ArrayList<String>();
-        myInfo.add("" + myCost);
-        myInfo.add("" + myBuildUpTime);
-        myInfo.add("" + myHealth);
-        myInfo.add(myUpgradeTower);
     }
 
     @Override
@@ -106,18 +95,6 @@ public class SimpleTower extends TDObject implements ITower {
         return true;
 
     }
-
-    /**
-     * Flash by setting image to null based on FLASH_INTERVAL
-     */
-    // private void flash () {
-    // if (myTimingCounter % FLASH_INTERVAL == 0) {
-    // this.setImage(myImage);
-    // }
-    // else {
-    // this.setImage(null);
-    // }
-    // }
 
     @Override
     public double getCost () {
@@ -155,9 +132,13 @@ public class SimpleTower extends TDObject implements ITower {
         return myUpgradeTower;
     }
 
-    @Override
-    public List<String> getInfo () {
-        return myInfo;
+	@Override
+	public String getInfo() {
+		String info = "Cost: " + myCost +
+				"\nBuildup Time: " + myBuildUpTime +
+				"\nHealth: " + myHealth + 
+				"\nUpgrade Tower: " + myUpgradeTower;
+		return info;
     }
 
 }

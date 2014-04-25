@@ -23,8 +23,8 @@ public abstract class TDDetector implements TargetDetectorInterface{
 	 * @return the center of the objects image according to the imageBBox
 	 */
 	protected Point2D centerCoordinate (Monster m) {
-		//        return new Point2D.Double(m.getCurrentCoor().getX() + m.getImageBBoxConst().width / 2,
-		//                                  m.getCurrentCoor().getY() + m.getImageBBoxConst().height / 2);
+//		        return new Point2D.Double(m.getCurrentCoor().getX() + m.getImageBBoxConst().width / 2,
+//		                                  m.getCurrentCoor().getY() + m.getImageBBoxConst().height / 2);
 		return new Point2D.Double(m.getCurrentCoor().getX(),
 				m.getCurrentCoor().getY());
 	}
