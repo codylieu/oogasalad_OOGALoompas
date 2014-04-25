@@ -261,13 +261,13 @@ public class WaveEditorTab extends EditorTab {
 				panel.add(makeAddNewWaveButton(), BorderLayout.CENTER);
 				panel.add(makeRemoveWaveButton(), BorderLayout.CENTER);
 				panel.add(makeClearAllWavesButton(), BorderLayout.CENTER);
-				panel.add(makeAddEnemyColumnTestButton(), BorderLayout.CENTER);
+				panel.add(makeAddEnemyButton(), BorderLayout.CENTER);
 
 				return panel;
 
 			}
 
-			private Component makeAddEnemyColumnTestButton() {
+			private Component makeAddEnemyButton() {
 				JButton addEnemyColumn = new JButton("Add Enemy");
 
 				addEnemyColumn.addActionListener(new ActionListener() {
