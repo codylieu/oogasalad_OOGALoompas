@@ -1,7 +1,9 @@
 package main.java.engine.objects.tower;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.detector.TargetDetectorInterface;
 import main.java.engine.objects.detector.towerdetector.NearbyTowersDetector;
@@ -23,10 +25,9 @@ public class PowerUpTower extends TowerBehaviorDecorator {
     @Override
     void doDecoratedBehavior (EnvironmentKnowledge environ) {
       //  super.callTowerActions(environ);
-        List<Object> nearbyTowers = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
+        List<Point2D> nearbyTowers = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
 //                environ.getTowerCoordinatesInRange(getXCoordinate(), getYCoordinate(), myRange);
-        for (Object obj : nearbyTowers) {
-        	ITower t = (ITower) obj;
+        for (Point2D tower : nearbyTowers) {
             // t.setTowerDamageOffset(DEFAULT_DAMAGE_POWER_UP_PROPORTION);
             // add another shooting tower wrapper instead
         }
