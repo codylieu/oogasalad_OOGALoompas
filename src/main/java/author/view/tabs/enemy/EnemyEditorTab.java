@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -57,7 +58,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
 			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
-			Map<String, Object> monsterAttributes = monster
+			Map<String, Serializable> monsterAttributes = monster
 					.getAttributesMap();
 
 			for (String attribute : monsterAttributes.keySet()) {
@@ -99,7 +100,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	}
 
 	@Override
-	protected void updateViewWithSchemaData(Map<String, Object> map) {
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 		for (JRadioButton button : allButtons) {
 			if (button.getText()

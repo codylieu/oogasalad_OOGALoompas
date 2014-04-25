@@ -9,6 +9,7 @@ import static org.junit.Assert.fail;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,7 +57,7 @@ public class TestDataHandler {
 		testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
 		Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
 		towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
-		testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors);
+		testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
 		testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerOne);
 
@@ -66,7 +67,7 @@ public class TestDataHandler {
 		testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
 		Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
 		towerBehaviors2.add(TowerBehaviors.SHOOTING);
-		testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors2);
+		testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
 		testTowerTwo.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerTwo);
 
@@ -77,7 +78,7 @@ public class TestDataHandler {
 		testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
 		Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
 		towerBehaviors3.add(TowerBehaviors.BOMBING);
-		testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors3);
+		testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
 		testTowerThree.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerThree);
 
@@ -88,7 +89,7 @@ public class TestDataHandler {
 		testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
 		Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
 		towerBehaviors4.add(TowerBehaviors.FREEZING);
-		testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, towerBehaviors4);
+		testTowerFour.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors4);
 		testTowerFour.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerFour);
 
@@ -161,32 +162,32 @@ public class TestDataHandler {
 
 	}
 
-//	@Test
-//	public void testBlueprintSavingAndLoading() throws ZipException, InvalidGameBlueprintException {
-//		//Set up blueprint
-//		GameSchema scenario = new GameSchema();
-//		scenario.addAttribute(TEST_ATTRIBUTE_1, TEST_VALUE_1);
-//		GameBlueprint savedBlueprint = new GameBlueprint();
-//		savedBlueprint.setMyGameScenario(scenario);
-//
-//		//Try to save blueprint
-//		DataHandler dataHandler = new DataHandler();
-//		if (!dataHandler.saveBlueprint(savedBlueprint, FILE_PATH + BLUEPRINT_PATH))
-//			fail();
-//
-//		//Load blueprint
-//		GameSchema loadedSchema = null;
-//		try {
-//			GameBlueprint loadedBlueprint = dataHandler.loadBlueprint(FILE_PATH + BLUEPRINT_PATH,false);
-//			loadedSchema = loadedBlueprint.getMyGameScenario();
-//		} catch (ClassNotFoundException | IOException e) {
-//			fail();
-//		}
-//
-//		//Check if the variable values are the same
-//		assertTrue(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals(TEST_VALUE_1));
-//		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
-//	}
+	@Test
+	public void testBlueprintSavingAndLoading() throws ZipException, InvalidGameBlueprintException {
+		//Set up blueprint
+		GameSchema scenario = new GameSchema();
+		scenario.addAttribute(TEST_ATTRIBUTE_1, TEST_VALUE_1);
+		GameBlueprint savedBlueprint = new GameBlueprint();
+		savedBlueprint.setMyGameScenario(scenario);
+
+		//Try to save blueprint
+		DataHandler dataHandler = new DataHandler();
+		if (!dataHandler.saveBlueprint(savedBlueprint, FILE_PATH + BLUEPRINT_PATH))
+			fail();
+
+		//Load blueprint
+		GameSchema loadedSchema = null;
+		try {
+			GameBlueprint loadedBlueprint = dataHandler.loadBlueprint(FILE_PATH + BLUEPRINT_PATH,false);
+			loadedSchema = loadedBlueprint.getMyGameScenario();
+		} catch (ClassNotFoundException | IOException e) {
+			fail();
+		}
+
+		//Check if the variable values are the same
+		assertTrue(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals(TEST_VALUE_1));
+		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
+	}
 
 
 	@Test
@@ -209,16 +210,16 @@ public class TestDataHandler {
 	 * @throws IOException
 	 * @throws ZipException
 	 */
-//	@Test(expected=InvalidGameBlueprintException.class)
-//	public void testEngineLoadingBlueprint() throws ClassNotFoundException, IOException, ZipException {
-//		DataHandler testDataHandler = new DataHandler();
-//		GameSchema testSchema = new GameSchema();
-//		testSchema.addAttribute("Lives",10);
-//		GameBlueprint testBlueprint = new GameBlueprint();
-//		testBlueprint.setMyGameScenario(testSchema);
-//		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
-//		testDataHandler.loadBlueprint(FILE_PATH + SAVEBLUEPRINT_PATH,true);
-//	}
+	@Test(expected=InvalidGameBlueprintException.class)
+	public void testEngineLoadingBlueprint() throws ClassNotFoundException, IOException, ZipException {
+		DataHandler testDataHandler = new DataHandler();
+		GameSchema testSchema = new GameSchema();
+		testSchema.addAttribute("Lives",10);
+		GameBlueprint testBlueprint = new GameBlueprint();
+		testBlueprint.setMyGameScenario(testSchema);
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
+		testDataHandler.loadBlueprint(FILE_PATH + SAVEBLUEPRINT_PATH,true);
+	}
 
 
 
@@ -229,46 +230,46 @@ public class TestDataHandler {
 	 * @throws IOException 
 	 * @throws ClassNotFoundException 
 	 */
-//	@Test
-//	public void loadDifferentResourcesFiles() throws ClassNotFoundException, IOException, ZipException{
-//		DataHandler testDataHandler = new DataHandler();
-//		GameBlueprint testBlueprint = this.createTestBlueprint();
-//		String testPath = "src/main/resources/newStuffTest/";
-//		String resourcePath = "src/main/resources/";
-//
-//		// save this with current resources folder
-//		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
-//		// add stuff to resources
-//
-//		new File(testPath).mkdir();
-//		testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
-//		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
-//
-////		File myResourcesTwo = new File(resourcePath);
-////		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
-////		System.out.println(myResourcesTwoSize + "should be more");
-//
-//		File myDir = new File(testPath);
-//		// delete it so it doesn't interfere later
-//		DataHandler.deleteDirectory(myDir);
-//
-//		// loading them should cause the first to be bigger than the second,
-//		// and cause the second is the original, won't interfere with code
-//
-//		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
+	@Test
+	public void loadDifferentResourcesFiles() throws ClassNotFoundException, IOException, ZipException{
+		DataHandler testDataHandler = new DataHandler();
+		GameBlueprint testBlueprint = this.createTestBlueprint();
+		String testPath = "src/main/resources/newStuffTest/";
+		String resourcePath = "src/main/resources/";
+
+		// save this with current resources folder
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
+		// add stuff to resources
+
+		new File(testPath).mkdir();
+		testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
+
 //		File myResourcesTwo = new File(resourcePath);
 //		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
-////		System.out.println(myResourcesTwoSize);
-//
-//		// loads back the original
-//
-//		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
-//		File myResourcesOne = new File(resourcePath);
-//		long myResourcesOneSize = myResourcesTwo.listFiles().length;
-////		System.out.println(myResourcesTwoSize + "   " + myResourcesOneSize);
-//		assertTrue("The second resources folder should be greater than the first", myResourcesTwoSize > myResourcesOneSize);
-//
-//	}
+//		System.out.println(myResourcesTwoSize + "should be more");
+
+		File myDir = new File(testPath);
+		// delete it so it doesn't interfere later
+		DataHandler.deleteDirectory(myDir);
+
+		// loading them should cause the first to be bigger than the second,
+		// and cause the second is the original, won't interfere with code
+
+		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
+		File myResourcesTwo = new File(resourcePath);
+		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
+//		System.out.println(myResourcesTwoSize);
+
+		// loads back the original
+
+		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
+		File myResourcesOne = new File(resourcePath);
+		long myResourcesOneSize = myResourcesTwo.listFiles().length;
+//		System.out.println(myResourcesTwoSize + "   " + myResourcesOneSize);
+		assertTrue("The second resources folder should be greater than the first", myResourcesTwoSize > myResourcesOneSize);
+
+	}
 
 	/**
 	 * Tests compression and decompression
@@ -282,27 +283,27 @@ public class TestDataHandler {
 	 * @throws ZipException
 	 */
 
-//	@Test
-//	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
-//		DataHandler testDataHandler = new DataHandler();
-//		//set up gameblueprint, testing by just adding a gameschema
-//		GameSchema testSchema = new GameSchema();
-//		testSchema.addAttribute("Lives",10);
-//		GameBlueprint testBlueprint = new GameBlueprint();
-//		testBlueprint.setMyGameScenario(testSchema);
-//		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
-//		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
-//		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprint.zip",false);
-//		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
-//		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
-//		File serializedTestBlueprint = new File(savedBlueprintLocation);
-//		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
-//		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
-//		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
-//				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
-//
-//				System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
-//	}
+	@Test
+	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
+		DataHandler testDataHandler = new DataHandler();
+		//set up gameblueprint, testing by just adding a gameschema
+		GameSchema testSchema = new GameSchema();
+		testSchema.addAttribute("Lives",10);
+		GameBlueprint testBlueprint = new GameBlueprint();
+		testBlueprint.setMyGameScenario(testSchema);
+		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
+		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
+		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprint.zip",false);
+		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
+		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
+		File serializedTestBlueprint = new File(savedBlueprintLocation);
+		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
+		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
+		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
+				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
+
+				System.out.println(testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH));
+	}
 
 
 }

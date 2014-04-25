@@ -278,7 +278,7 @@ public class Model implements IModel{
 
 		// Initialize from game settings from game schema
 		GameSchema gameSchema = blueprint.getMyGameScenario();
-		Map<String, Object> gameSchemaAttributeMap = gameSchema.getAttributesMap();
+		Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
 		this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
 				(Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));
 

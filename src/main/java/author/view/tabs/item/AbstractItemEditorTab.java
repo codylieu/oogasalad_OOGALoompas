@@ -72,7 +72,7 @@ public abstract class AbstractItemEditorTab extends ObjectEditorTab {
 				itemSchema = new RowBombItemSchema();
 			}
 
-			Map<String, Object> itemAttributes = item.getAttributesMap();
+			Map<String, Serializable> itemAttributes = item.getAttributesMap();
 			
 			for (String attribute : itemAttributes.keySet()) {
 				itemSchema.addAttribute(attribute, itemAttributes.get(attribute));	
@@ -95,7 +95,7 @@ public abstract class AbstractItemEditorTab extends ObjectEditorTab {
 	}
 	
 	@Override
-	protected void updateViewWithSchemaData(Map<String, Object> map) {
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 		//update upgradeDropDown in TowerEditorTab
 	}

@@ -80,7 +80,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		}
 		CanvasSchema canvasSchema = (CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap().
 				get(GameMapSchema.MY_CANVAS_ATTRIBUTES);
-		Map<String, Object> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
+		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
 		xtiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
 		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
 		System.out.println(xtiles + " " + ytiles);

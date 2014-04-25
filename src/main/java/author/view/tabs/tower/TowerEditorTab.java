@@ -62,7 +62,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 		List<TowerSchema> towerSchemas = new ArrayList<TowerSchema>();
 		for (TDObjectSchema tower : objectMap.values()) {
 			TowerSchema towerSchema = new TowerSchema();
-			Map<String, Object> towerAttributes = tower
+			Map<String, Serializable> towerAttributes = tower
 					.getAttributesMap();
 
 			for (String attribute : towerAttributes.keySet()) {
@@ -144,7 +144,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	 * 
 	 */
 	@Override
-	protected void updateViewWithSchemaData(Map<String, Object> map) {
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 
 		upgradeDropDown.removeAllItems();

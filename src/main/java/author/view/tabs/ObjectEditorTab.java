@@ -352,7 +352,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	 * @param map
 	 *            of attributes to populate the view with
 	 */
-	protected void updateViewWithSchemaData(Map<String, Object> map) {
+	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		// fields (spinners)
 
 		for (JSpinner spinner : spinnerFields) {

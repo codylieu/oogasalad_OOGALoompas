@@ -1,5 +1,7 @@
 package main.java.schema;
 
+import java.io.Serializable;
+
 import main.java.schema.tdobjects.MonsterSchema;
 
 
@@ -9,7 +11,7 @@ import main.java.schema.tdobjects.MonsterSchema;
  * 
  * @author Austin
  */
-public class MonsterSpawnSchema {
+public class MonsterSpawnSchema implements Serializable {
     private MonsterSchema myMonsterSchema;
     private int mySwarmSize;
 
