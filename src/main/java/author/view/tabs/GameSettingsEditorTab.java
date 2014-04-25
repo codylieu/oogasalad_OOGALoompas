@@ -34,12 +34,8 @@ import main.java.schema.GameSchema;
 public class GameSettingsEditorTab extends EditorTab{
 
 	private JPanel settingsPanel = new JPanel(new BorderLayout());
-	
+
 	private JComboBox gameModeList;
-	
-	private static final String SURVIVAL_STRING = "Survival Mode";
-	private static final String BOSS_STRING = "Boss Mode";
-	
 	String[] GAME_MODE_STRINGS = {SURVIVAL_STRING, BOSS_STRING};
 
 	private JLabel livesLabel;
@@ -48,20 +44,26 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JSpinner livesSpinner;
 	private JSpinner beginningMoneySpinner;
 
+	private static final String SURVIVAL_STRING = "Survival Mode";
+	private static final String BOSS_STRING = "Boss Mode";
 	private static final String LIVES_STRING = "Lives: ";
 	private static final String MONEY_STRING = "Beginning Money: ";
-	
+	private static final String MUSIC_STRING = "Choose Music";
+
 	private static final int LIVES_DEFAULT = 5;
 	private static final int MONEY_DEFAULT = 500;
-	
+
 	private static final Boolean SURVIVAL_MODE_VALUE = true;
 	private static final Boolean BOSS_MODE_VALUE = false;
 
 	private GameSchema gameSchema;
 
 	private GameSettingsTabContentCreator contentCreator;
-	
+
 	private Font LABEL_FONT = new Font("Dialog", Font.PLAIN, 36);
+
+	private JButton musicButton;
+	private JFileChooser fileChooser;
 
 	/**
 	 * @param gameSettingsController
@@ -69,7 +71,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	 */
 	public GameSettingsEditorTab(TabController gameSettingsController){
 		super(gameSettingsController);
-		
+
 		contentCreator = new GameSettingsTabContentCreator();
 		add(contentCreator.createSettingsPanel(), BorderLayout.CENTER);
 	}
@@ -83,7 +85,7 @@ public class GameSettingsEditorTab extends EditorTab{
 
 		gameSchema.addAttribute(GameSchema.LIVES, (Integer) livesSpinner.getValue());
 		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
-		
+
 		if(gameModeList.getSelectedItem().equals(SURVIVAL_STRING)){
 			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, SURVIVAL_MODE_VALUE);
 		}
@@ -99,7 +101,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	 * Creates the contents of the Pane
 	 */
 	private class GameSettingsTabContentCreator{
-		
+
 		/**
 		 * Creates the main panel where all of the JComponents that deal with Game Settings attributes go
 		 * @return 
@@ -112,9 +114,9 @@ public class GameSettingsEditorTab extends EditorTab{
 			settingsPanel.add(makeAttributesPane(), BorderLayout.SOUTH);
 
 			settingsPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-			
+
 			return settingsPanel;
-			
+
 		}
 
 		/**
@@ -141,10 +143,10 @@ public class GameSettingsEditorTab extends EditorTab{
 		 * Makes the labels for the attributes that have corresponding JSpinners
 		 */
 		private JComponent makeLabelPane(){
-			
+
 			livesLabel = new JLabel(LIVES_STRING);
 			livesLabel.setFont(LABEL_FONT);
-			
+
 			beginningMoneyLabel = new JLabel(MONEY_STRING);
 			beginningMoneyLabel.setFont(LABEL_FONT);
 
@@ -186,9 +188,9 @@ public class GameSettingsEditorTab extends EditorTab{
 
 			gameModeList = new JComboBox(GAME_MODE_STRINGS); 
 			gameModeList.setSelectedIndex(1);
-			
+
 			gameModeList.setFont(LABEL_FONT);
-//			gameModeList.setPreferredSize(new Dimension(100, 100));
+			//			gameModeList.setPreferredSize(new Dimension(100, 100));
 
 			gameModeDropDownMenu.add(gameModeList, BorderLayout.NORTH);
 
@@ -204,8 +206,43 @@ public class GameSettingsEditorTab extends EditorTab{
 
 			attributes.add(makeLabelPane(), BorderLayout.WEST);
 			attributes.add(makeFieldPane(), BorderLayout.EAST);
+			attributes.add(makeMusicButton(), BorderLayout.SOUTH);
 
 			return attributes;
+		}
+
+		/**
+		 * @return
+		 * Makes a JButton to pick a wav file for music
+		 */
+		private JComponent makeMusicButton(){
+
+			musicButton = new JButton(MUSIC_STRING);
+			musicButton.addActionListener(new ActionListener(){
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					fileChooser = new JFileChooser();
+					FileNameExtensionFilter filter = new FileNameExtensionFilter("WAV files", "wav");
+					fileChooser.setFileFilter(filter);
+					int returnVal = fileChooser.showOpenDialog(GameSettingsEditorTab.this);
+
+					if(returnVal == JFileChooser.APPROVE_OPTION) {
+						File chosenFile = fileChooser.getSelectedFile();
+						String absolutePath = chosenFile.getAbsolutePath();
+						try {
+
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+					}
+
+				}
+
+			});
+
+			return musicButton;
+
 		}
 
 	}
