@@ -33,9 +33,10 @@ import main.java.schema.GameSchema;
  */
 public class GameSettingsEditorTab extends EditorTab{
 
-	private JPanel settingsPanel = new JPanel(new GridLayout(0, 1));
+	private JPanel settingsPanel = new JPanel(new BorderLayout());
 	
 	private JComboBox gameModeList;
+	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
 
 	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
@@ -49,18 +50,14 @@ public class GameSettingsEditorTab extends EditorTab{
 	private static final int LIVES_DEFAULT = 5;
 	private static final int MONEY_DEFAULT = 500;
 	
-	private static final int SURVIVAL_MODE_VALUE = 1;
-	private static final int BOSS_MODE_VALUE = 0;
-
-	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
-
-	private JButton musicButton;
-
-	private JFileChooser fileChooser;
+	private static final Boolean SURVIVAL_MODE_VALUE = true;
+	private static final Boolean BOSS_MODE_VALUE = false;
 
 	private GameSchema gameSchema;
 
 	private GameSettingsTabContentCreator contentCreator;
+	
+	private Font LABEL_FONT = new Font("Dialog", Font.PLAIN, 36);
 
 	/**
 	 * @param gameSettingsController
@@ -140,8 +137,12 @@ public class GameSettingsEditorTab extends EditorTab{
 		 * Makes the labels for the attributes that have corresponding JSpinners
 		 */
 		private JComponent makeLabelPane(){
+			
 			livesLabel = new JLabel(LIVES_STRING);
+			livesLabel.setFont(LABEL_FONT);
+			
 			beginningMoneyLabel = new JLabel(MONEY_STRING);
+			beginningMoneyLabel.setFont(LABEL_FONT);
 
 			JPanel labels = new JPanel(new GridLayout(0, 1));
 
@@ -177,11 +178,13 @@ public class GameSettingsEditorTab extends EditorTab{
 		 * Makes the drop down menus for game mode and game difficulty
 		 */
 		private JComponent makeGameModeDropDownMenu(){
-			JPanel gameModeDropDownMenu = new JPanel(new GridLayout(0, 1));
-			gameModeDropDownMenu.setLayout(new BorderLayout());
+			JPanel gameModeDropDownMenu = new JPanel(new BorderLayout());
 
 			gameModeList = new JComboBox(GAME_MODE_STRINGS); 
 			gameModeList.setSelectedIndex(1);
+			
+			gameModeList.setFont(LABEL_FONT);
+//			gameModeList.setPreferredSize(new Dimension(100, 100));
 
 			gameModeDropDownMenu.add(gameModeList, BorderLayout.NORTH);
 
@@ -193,53 +196,12 @@ public class GameSettingsEditorTab extends EditorTab{
 		 * Makes the attributes pane, which holds the labels and fields panes
 		 */
 		private JComponent makeAttributesPane(){
-			JPanel attributes = new JPanel(new GridLayout(0, 1));
+			JPanel attributes = new JPanel(new BorderLayout());
 
-			attributes.setLayout(new BorderLayout());
 			attributes.add(makeLabelPane(), BorderLayout.WEST);
 			attributes.add(makeFieldPane(), BorderLayout.EAST);
 
-			attributes.add(makeButtons(), BorderLayout.SOUTH);
-
 			return attributes;
-		}
-
-		/**
-		 * @return
-		 * Makes various JButtons, currently only makes a music button
-		 */
-		private JComponent makeButtons(){
-
-			JPanel buttons = new JPanel(new GridLayout(0, 1));
-
-			musicButton = new JButton("Choose Music");
-			musicButton.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					fileChooser = new JFileChooser("main/resources");
-					FileNameExtensionFilter filter = new FileNameExtensionFilter("WAV files", "wav");
-					fileChooser.setFileFilter(filter);
-					int returnVal = fileChooser.showOpenDialog(GameSettingsEditorTab.this);
-
-					if(returnVal == JFileChooser.APPROVE_OPTION) {
-						File chosenFile = fileChooser.getSelectedFile();
-						String absolutePath = chosenFile.getAbsolutePath();
-						try {
-
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
-					}
-
-				}
-
-			});
-
-			buttons.add(musicButton, BorderLayout.CENTER);
-
-			return buttons;
-
 		}
 
 	}
