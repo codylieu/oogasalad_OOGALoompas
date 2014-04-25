@@ -232,7 +232,11 @@ public class DataHandler {
 		if (isEngine) {
 			// Validate game blueprint for engine, but not author
 			// throw stuff if it isn't complete
-			System.out.println(checkGameBlueprint(toReturn));
+			try {
+				System.out.println(checkGameBlueprint(toReturn));
+			} catch(NullPointerException e) {
+				throw new InvalidGameBlueprintException();
+			}
 		}
 
 		// return the blueprint in case of (Author - any) (Engine - complete blueprint)

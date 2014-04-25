@@ -24,8 +24,8 @@ public class RowBomb extends TDItem{
 	public RowBomb(Point2D location, String image, double cost, double buildup_time, double damage, int flash_interval) {
 		super("row_bomb", location.getX(), location.getY(), image, cost, buildup_time, damage, flash_interval);
 	}
-	
-	public RowBomb(Map<String, Object> attributes) {
+
+	public RowBomb(Map<String, Serializable> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(String) getValueOrDefault(attributes, AreaBombItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),

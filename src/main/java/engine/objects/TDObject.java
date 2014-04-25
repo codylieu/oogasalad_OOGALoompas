@@ -1,9 +1,9 @@
 package main.java.engine.objects;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.Map;
 
-import main.java.engine.objects.tower.SimpleTower;
 import jgame.JGObject;
 
 
@@ -42,7 +42,7 @@ public abstract class TDObject extends JGObject{
      * @param defaultValue default value of attribute if not in attributes map
      * @return
      */
-    public static Object getValueOrDefault (Map<String, Object> attributes,
+    public static Object getValueOrDefault (Map<String, Serializable> attributes,
                                             String attributeName,
                                             Object defaultValue) {
         return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;

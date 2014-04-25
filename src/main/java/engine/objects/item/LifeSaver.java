@@ -15,12 +15,12 @@ import main.java.schema.tdobjects.items.AreaBombItemSchema;
  *
  */
 public class LifeSaver extends TDItem {
-	
+
 	public LifeSaver(Point2D location, String image, double cost, double buildup_time, int flash_interval) {
 		super("lifesaver", location.getX(), location.getY(), "row_bomb", cost, buildup_time, 0, flash_interval);
 	}
-	
-	public LifeSaver(Map<String, Object> attributes) {
+
+	public LifeSaver(Map<String, Serializable> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(String) getValueOrDefault(attributes, AreaBombItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
@@ -29,7 +29,7 @@ public class LifeSaver extends TDItem {
 				(Integer) getValueOrDefault(attributes, AreaBombItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
 				);
 	}
-	
+
 	@Override
 	public void doAction(EnvironmentKnowledge environmentKnowledge) {
 		timeCounter++;

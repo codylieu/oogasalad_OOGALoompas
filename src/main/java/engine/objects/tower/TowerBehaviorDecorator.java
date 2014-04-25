@@ -17,7 +17,6 @@ abstract class TowerBehaviorDecorator implements ITower {
      * This is not necessarily a SimpleTower/TDObject, but could be another TowerBehaviorDecorator!
      */
     protected ITower baseTower;
-    protected List<String> myInfo;
 
     public TowerBehaviorDecorator (ITower baseTower) {
         this.baseTower = baseTower;

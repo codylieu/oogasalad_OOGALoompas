@@ -35,7 +35,7 @@ public abstract class MonsterSchema extends TDObjectSchema {
         myAttributeSet.add(MonsterSchema.SPEED);
         myAttributeSet.add(MonsterSchema.DAMAGE);
         myAttributeSet.add(MonsterSchema.NAME);
-        myAttributeSet.add(MonsterSchema.FLYING_OR_GROUND);
+        myAttributeSet.add(MonsterSchema.BLOCKED_TILES);
         myAttributeSet.add(MonsterSchema.TILE_SIZE);
         myAttributeSet.add(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
     }

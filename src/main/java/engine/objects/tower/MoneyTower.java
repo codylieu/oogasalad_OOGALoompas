@@ -1,5 +1,6 @@
 package main.java.engine.objects.tower;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class MoneyTower extends TowerBehaviorDecorator {
      * @param baseTower
      * @param attributes
      */
-    public MoneyTower (ITower baseTower, Map<String, Object> attributes) {
+    public MoneyTower (ITower baseTower, Map<String, Serializable> attributes) {
         this(
              baseTower,
              Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.MONEY_GRANTED, DEFAULT_MONEY_GRANTED))),
@@ -83,11 +84,10 @@ public class MoneyTower extends TowerBehaviorDecorator {
 
 
 	@Override
-	public List<String> getInfo() {
-		List<String> info = new ArrayList<String>();
-		info.add(this.getClass().getSimpleName());
-		info.addAll(baseTower.getInfo());
-		info.add(""+moneyGranted);
+	public String getInfo() {
+		String info = this.getClass().getSimpleName() + "\n" +
+				baseTower.getInfo() + 
+				"\nMoney Granted: " + moneyGranted;
 		return info;
 	}
 

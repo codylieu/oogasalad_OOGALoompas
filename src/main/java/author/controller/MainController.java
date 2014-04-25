@@ -204,8 +204,4 @@ public class MainController {
 		myAuthoringView.shiftToEnemyTab();
 	}
 
-	public void shiftToTowerTab() {
-		myAuthoringView.shiftToTowerTab();
-	}
-
 }

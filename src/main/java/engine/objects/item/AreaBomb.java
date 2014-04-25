@@ -27,7 +27,7 @@ public class AreaBomb extends RowBomb{
 		this.range = range;
 	}
 
-	public AreaBomb (Map<String, Object> attributes) {
+	public AreaBomb (Map<String, Serializable> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(Double) getValueOrDefault(attributes, AreaBombItemSchema.RANGE, ItemViewConstants.RANGE_DEFAULT),

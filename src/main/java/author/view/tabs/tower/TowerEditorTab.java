@@ -37,6 +37,8 @@ import main.java.schema.tdobjects.TowerSchema;
  */
 public class TowerEditorTab extends ObjectEditorTab {
 
+	private static final String NO_UPGRADE_PATH = "No Upgrade Path";
+
 	private JSpinner healthSpinner, costSpinner, damageSpinner, rangeSpinner,
 			buildUpSpinner, firingSpeedSpinner, shrapnelDamageSpinner,
 			moneyFarmAmountSpinner, moneyFarmIntervalSpinner,
@@ -129,10 +131,14 @@ public class TowerEditorTab extends ObjectEditorTab {
 		}
 		myCurrentObject.addAttribute(TowerSchema.TOWER_BEHAVIORS,
 				(Serializable) behaviorsToggled);
-
-		myCurrentObject.addAttribute(upgradeDropDown.getName(),
-				(String) upgradeDropDown.getSelectedItem());
-
+		//upgrade dropdown
+		
+		if (upgradeDropDown.getSelectedItem() != null && upgradeDropDown.getSelectedItem().equals(NO_UPGRADE_PATH)) {
+			myCurrentObject.addAttribute(upgradeDropDown.getName(), "");
+		} else {
+			myCurrentObject.addAttribute(upgradeDropDown.getName(),
+					(String) upgradeDropDown.getSelectedItem());
+		}
 	}
 
 	/**
@@ -146,19 +152,18 @@ public class TowerEditorTab extends ObjectEditorTab {
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
-
+		//upgrade dropdown
 		upgradeDropDown.removeAllItems();
 		for (String tower : objectMap.keySet()) {
 			if (!tower.equals(getSelectedObjectName()))
 				upgradeDropDown.addItem(tower);
 		}
-
 		if (ComboBoxUtil.containsValue(upgradeDropDown,
 				(String) map.get(upgradeDropDown.getName()))) {
 			upgradeDropDown.setSelectedItem(map.get(upgradeDropDown.getName()));
 		} else {
-			upgradeDropDown.addItem(TowerSchema.UPGRADE_PATH_NONE);
-			upgradeDropDown.setSelectedItem(TowerSchema.UPGRADE_PATH_NONE);
+			upgradeDropDown.addItem(NO_UPGRADE_PATH);
+			upgradeDropDown.setSelectedItem(NO_UPGRADE_PATH);
 		}
 
 		List<TowerBehaviors> behaviorsToToggle = (List<TowerBehaviors>) map

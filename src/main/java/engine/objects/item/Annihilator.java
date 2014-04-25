@@ -19,7 +19,7 @@ public class Annihilator extends TDItem {
 		super("annihilator", 0, 0, image, cost, buildup_time, damage, flash_interval);
 	}
 
-	public Annihilator(Map<String, Object> attributes) {
+	public Annihilator(Map<String, Serializable> attributes) {
 		this(
 				(String) getValueOrDefault(attributes, AnnihilatorItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
 				(Double) getValueOrDefault(attributes, AnnihilatorItemSchema.COST, ItemViewConstants.COST_DEFAULT),

@@ -20,13 +20,13 @@ import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
  */
 public class InstantFreeze extends TDItem {
 	private double freeze_duration;
-	
+
 	public InstantFreeze(Point2D location, String image, double cost, double freeze_duration, double damage, int flash_interval) {
 		super("instance_freeze", location.getX(), location.getY(), null, cost, 0, damage, flash_interval);
 		this.freeze_duration = freeze_duration;
 	}
-	
-	public InstantFreeze(Map<String, Object> attributes) {
+
+	public InstantFreeze(Map<String, Serializable> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(String) getValueOrDefault(attributes, InstantFreezeItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
@@ -36,7 +36,7 @@ public class InstantFreeze extends TDItem {
 				(Integer) getValueOrDefault(attributes, InstantFreezeItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
 				);
 	}
-	
+
 	@Override
 	public void move() {
 		timeCounter++;
@@ -52,14 +52,14 @@ public class InstantFreeze extends TDItem {
 		}
 
 	}
-	
+
 	private void freezeMonsters(EnvironmentKnowledge environmentKnowledge) {
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
 			m.setSpeed(0, 0);
 			m.setImage("ice");
 		}
 	}
-	
+
 	private void recoverMonsterSpeed(EnvironmentKnowledge environmentKnowledge) {
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
 			m.setSpeed(m.getOriginalSpeed());

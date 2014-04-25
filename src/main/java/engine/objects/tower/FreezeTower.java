@@ -16,7 +16,7 @@ import main.java.schema.tdobjects.TowerSchema;
 public class FreezeTower extends ShootingTower {
 
     public static final double DEFAULT_FREEZE_SLOWDOWN_PROPORTION = 0.5;
-    private static final String TOWER_TYPE = "Freeze Tower";
+    public static final String TOWER_TYPE = "Freeze Tower";
 
     protected double myFreezeSlowdownProportion;
 
@@ -27,14 +27,12 @@ public class FreezeTower extends ShootingTower {
      * @param baseTower tower to be expanded with shooting behavior
      * @param attributes a map of attributes associated with this type of tower
      */
-    public FreezeTower (ITower baseTower, Map<String, Object> attributes) {
+    public FreezeTower (ITower baseTower, Map<String, Serializable> attributes) {
         super(baseTower, attributes);
         myFreezeSlowdownProportion =
                 Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes,
                                                     TowerSchema.FREEZE_SLOWDOWN_PROPORTION,
                                                     DEFAULT_FREEZE_SLOWDOWN_PROPORTION)));
-        myInfo.clear();
-        addInfo();
     }
 
     @Override
@@ -44,5 +42,11 @@ public class FreezeTower extends ShootingTower {
         		baseTower.centerCoordinate().getY(),
         		angle, myFreezeSlowdownProportion, myBulletImage);
     }
-
+    
+    @Override
+    public String getInfo() {
+    	String info = super.getInfo() +
+    			"\nSlowdown Proportion: " + myFreezeSlowdownProportion;
+    	return info;
+    }
 }
