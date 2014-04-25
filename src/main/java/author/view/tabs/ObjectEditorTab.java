@@ -55,12 +55,15 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.SpinnerUI;
 import javax.swing.table.DefaultTableModel;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import main.java.author.controller.TabController;
 import main.java.author.util.ObjectUtilFunctions;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.components.TowerBehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.author.view.global_constants.ObjectEditorConstants;
+import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 
@@ -89,8 +92,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected HashMap<String, TDObjectSchema> objectMap;
 	protected String objectName = "Default Object Name";
 
-	public ObjectEditorTab(TabController towerController, String objectName) {
-		super(towerController);
+	public ObjectEditorTab(TabController controller, String objectName) {
+		super(controller);
 		this.objectName = objectName;
 		init();
 	}
@@ -333,7 +336,10 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 			String relativePath = new File((String) canvas.getImagePath())
 					.getName();
-			myCurrentObject.addAttribute(canvas.getName(), relativePath);
+			
+			if (relativePath != null && !relativePath.isEmpty()) {
+				myCurrentObject.addAttribute(canvas.getName(), relativePath);
+			}
 
 		}
 
@@ -460,8 +466,11 @@ public abstract class ObjectEditorTab extends EditorTab {
 			result.setLayout(new BorderLayout());
 			result.add(myBuilder.makePrimaryObjectGraphicPane(),
 					BorderLayout.CENTER);
-			result.add(myBuilder.makeSecondaryImagesGraphicPane(),
-					BorderLayout.SOUTH);
+			JComponent secondaryImagesGraphicsPane = myBuilder.makeSecondaryImagesGraphicPane();
+			if (secondaryImagesGraphicsPane != null) {
+				result.add(myBuilder.makeSecondaryImagesGraphicPane(),
+						BorderLayout.SOUTH);
+			}
 			return result;
 		}
 

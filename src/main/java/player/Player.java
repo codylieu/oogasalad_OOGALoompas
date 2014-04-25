@@ -39,7 +39,6 @@ import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.InfoPanel;
-import main.java.player.panels.ItemChooser;
 import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.TowerChooser;
 import main.java.player.panels.UnitInfoPanel;
@@ -83,6 +82,7 @@ public class Player implements Serializable {
 	public static final String FILE_LABEL = "File";
 	public static final String PLAY_PAUSE_TEXT = "Play/Pause";
 	public static final String SAVE_TEXT = "Save game state";
+	public static final String LOAD_TEXT = "Load game state";
 	public static final String SPEED_UP_TEXT = "Speed up";
 	public static final String SLOW_DOWN_TEXT = "Slow down";
 	public static final String ADD_TOWER_TEXT = "Add Tower";
@@ -109,7 +109,7 @@ public class Player implements Serializable {
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
-	private TDPlayerEngine engine;
+	private ITDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
 	private TowerChooser towerChooser;
@@ -120,7 +120,7 @@ public class Player implements Serializable {
 	 * Many other modules require the engine reference to exist
 	 */
 	public Player(){
-		initializeEngine();
+		initializeEngine(showBlueprintPrompt());
 		initSong();
 		makeFrame();
 		makeCards();
@@ -131,6 +131,18 @@ public class Player implements Serializable {
 		addCreditsCard();
 		addHighScoreCard();
 		show();
+	}
+
+	private String showBlueprintPrompt() {
+		int response = fileChooser.showOpenDialog(null);
+		if(response == JFileChooser.APPROVE_OPTION){
+			File file = fileChooser.getSelectedFile();
+			return file.getAbsolutePath();
+		}
+		else {
+			System.exit(0);
+			return "";
+		}
 	}
 
 	private void initSong(){
@@ -230,13 +242,12 @@ public class Player implements Serializable {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		gameCard.add(engine, constraints);
+		gameCard.add((Component) engine, constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		gameCard.add(makeGameActionPanel(), constraints);
-
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -251,10 +262,10 @@ public class Player implements Serializable {
 		cards.add(gameCard, GAME_CARD);
 	}
 
-	private TDPlayerEngine initializeEngine() {
-		engine = new TDPlayerEngine();
+	private ITDPlayerEngine initializeEngine(String pathToBlueprint) {
+		engine = new TDPlayerEngine(pathToBlueprint);
 		//engine.setSubject(towerChooser);
-		engine.stop();
+		engine.toggleRunning();
 		return engine;
 	}
 
@@ -270,11 +281,25 @@ public class Player implements Serializable {
 		JButton saveButton = new JButton(SAVE_TEXT);
 		saveButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("save");
+				int response = fileChooser.showOpenDialog(null);
+				if(response == JFileChooser.APPROVE_OPTION){
+					File file = fileChooser.getSelectedFile();
+					engine.saveGameState(file.getAbsolutePath());
+				}
 				frame.pack();
 			}
 		});
-
+		JButton loadButton = new JButton(LOAD_TEXT);
+		loadButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int response = fileChooser.showOpenDialog(null);
+				if(response == JFileChooser.APPROVE_OPTION){
+					File file = fileChooser.getSelectedFile();
+					engine.loadGameState(file.getAbsolutePath());
+				}
+				frame.pack();
+			}
+		});
 		JButton speedUpButton = new JButton(SPEED_UP_TEXT);
 		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
 
@@ -290,17 +315,18 @@ public class Player implements Serializable {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new TowerChooser(engine);
-		itemChooser = new ItemChooser(engine);
+		//itemChooser = new ItemChooser(engine);
 
 		List<Subject> engineSubjectList = new ArrayList<Subject>();
 		engineSubjectList.add(towerChooser);
-		engineSubjectList.add(itemChooser);
+		//engineSubjectList.add(itemChooser);
 		engine.setSubject(engineSubjectList);//This probably does not belong here
 
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
+		gameButtonPanel.add(loadButton);
 		gameButtonPanel.add(speedUpButton);
 		gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
@@ -326,21 +352,21 @@ public class Player implements Serializable {
 
 	public void populateTowerChooserAndToggleRunning() {
 		towerChooser.getObjectNames();
-		itemChooser.getObjectNames();
+	//	itemChooser.getObjectNames();
 		engine.toggleRunning();
 	}
 
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubject(engine);
+		gameInfoPanel.setSubject((Subject) engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubject(engine);
+		unitInfoPanel.setSubject((Subject) engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
@@ -348,7 +374,7 @@ public class Player implements Serializable {
 	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
-		highScoreCard.setSubject(engine);
+		highScoreCard.setSubject((Subject) engine);
 		engine.register(highScoreCard);
 		cards.add(highScoreCard, HIGH_SCORE_CARD);
 	}

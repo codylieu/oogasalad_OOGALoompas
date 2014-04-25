@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,41 +12,39 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
+import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.item.RowBomb;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
-import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.schema.CanvasSchema;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
-import main.java.schema.map.GameMapSchema;
-import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.WaveSpawnSchema;
+import main.java.schema.map.GameMapSchema;
+import main.java.schema.tdobjects.ItemSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.TDObjectSchema;
-import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.WaveSpawnSchema;
 
 
-public class Model {
+public class Model implements IModel{
 
 	private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
 	public static final String RESOURCE_PATH = "/main/resources/";
@@ -60,52 +56,40 @@ public class Model {
 	private ITower[][] towers;
 	private List<Monster> monsters;
 	private CollisionManager collisionManager;
+	private GameState gameState;
 	private DataHandler dataHandler;
 	private LevelManager levelManager;
 	private EnvironmentKnowledge environ;
 	private List<TDItem> items;
-	private int[] canvasSize;
-	private GameBlueprint blueprint;
 
-	/**
-	 * Create an instance of Model.
-	 * Load blueprint and canvas schema immediately
-	 * so that engine can be created with specified size
-	 */
-	public Model() {
+	public Model (JGEngine engine, String pathToBlueprint) {
+		this.engine = engine;
+		dataHandler = new DataHandler();
+		defineAllStaticImages();
+		this.factory = new TDObjectFactory(engine);
+		collisionManager = new CollisionManager(engine);
+
+		levelManager = new LevelManager(factory);
+		// TODO: Code entrance/exit logic into wave or monster spawn schema
+		levelManager.setEntrance(0, engine.pfHeight() / 2);
+		//levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
+		levelManager.setExit(12 * engine.tileWidth(), 9 * engine.tileHeight());
+
+		this.gameClock = 0;
+		monsters = new ArrayList<Monster>();
+		towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
+		gameState = new GameState();
+		items = new ArrayList<TDItem>();
+
 		try {
-			loadGameBlueprint(null);// TODO: REPLACE
-			loadCanvasSchema();
+			loadGameBlueprint(pathToBlueprint);// TODO: REPLACE
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 
-	}
-
-	/**
-	 * Initialize instance variables of the model. 
-	 * Load schemas from blueprint
-	 * 
-	 * @param eng
-	 */
-	public void initializeModel(JGEngine eng) {
-		this.engine = eng;
-		defineAllStaticImages();
-		this.factory = new TDObjectFactory(engine);
-		collisionManager = new CollisionManager(engine);
-		this.gameClock = 0;
-		monsters = new ArrayList<Monster>();
-		towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
-		items = new ArrayList<TDItem>();
-
-		dataHandler = new DataHandler();
-		levelManager = new LevelManager(factory);
-		// TODO: Code entrance/exit logic into wave or monster spawn schema
-		levelManager.setEntrance(0, engine.pfHeight() / 2);
-		levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
 		addNewPlayer();
-		loadGameSchemas();
+
 	}
 
 	private void defineAllStaticImages () {
@@ -277,8 +261,9 @@ public class Model {
 	 * @throws IOException
 	 * @throws ClassNotFoundException
 	 */
+
 	public void loadGameBlueprint (String filePath) throws ClassNotFoundException, IOException {
-		//        blueprint = null;
+		GameBlueprint blueprint = null;
 		if (filePath == null) {
 			blueprint = createTestBlueprint();
 		}
@@ -291,24 +276,7 @@ public class Model {
 				return;
 			}
 		}
-	}
 
-	private void loadCanvasSchema() {
-		// Initialize from game settings from game schema
-		CanvasSchema canvasSchema = blueprint.getMyCanvasSchema();
-		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
-		// Initialize canvas/playfield
-		canvasSize = new int[2];
-		canvasSize[0] = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
-		canvasSize[1] = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
-	}
-
-	/**
-	 * Load a new set of game schemas. 
-	 * Called by player when a new blueprint is selected in the middle of a game. 
-	 * 
-	 */
-	public void loadGameSchemas() {
 		// Initialize from game settings from game schema
 		GameSchema gameSchema = blueprint.getMyGameScenario();
 		Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
@@ -336,17 +304,6 @@ public class Model {
 			TDMap map = new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
 			// each map
 		}
-
-	}
-
-	/**
-	 * Get the size of the canvas
-	 * i.e. how many tiles on the x and y axis
-	 * 
-	 * @return size of canvas
-	 */
-	public int[] getCanvasSize() {
-		return canvasSize;
 	}
 
 	/**
@@ -651,6 +608,7 @@ public class Model {
 		testTowerOne.addAttribute(TowerSchema.NAME, "MoneyTower");
 		testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerOne.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
 		towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
 		testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "BombingTower");
@@ -662,6 +620,7 @@ public class Model {
 		testTowerTwo.addAttribute(TowerSchema.NAME, "ShootingTower");
 		testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerTwo.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
 		towerBehaviors2.add(TowerBehaviors.SHOOTING);
 		testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
@@ -683,6 +642,7 @@ public class Model {
 		testTowerFour.addAttribute(TowerSchema.NAME, "FreezingTower");
 		testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerFour.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
 		Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
 		towerBehaviors4.add(TowerBehaviors.FREEZING);
@@ -694,12 +654,32 @@ public class Model {
 		testTowerFive.addAttribute(TowerSchema.NAME, "SplashingTower");
 		testTowerFive.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerFive.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors5 = new ArrayList<TowerBehaviors>();
 		towerBehaviors5.add(TowerBehaviors.SPLASHING);
 		testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors5);
 		testTowerFive.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerFive);
 
+		
+		
+		//test defaults:
+/*        SimpleMonsterSchema testMonsterOneX = new SimpleMonsterSchema();
+        testMonsterOneX.addAttribute(MonsterSchema.NAME, "");
+        testMonsterOneX.addAttribute(MonsterSchema.HEALTH, EnemyViewDefaults.HEALTH_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.SPEED, EnemyViewDefaults.SPEED_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.DAMAGE, EnemyViewDefaults.DAMAGE_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.REWARD, EnemyViewDefaults.REWARD_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);
+        testMonsterOneX.addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
+        testMonsterOneX.addAttribute(TDObjectSchema.IMAGE_NAME,
+                                    EnemyViewDefaults.ENEMY_DEFAULT_IMAGE);
+        testMonsterSchema.add(testMonsterOneX);*/
+
+		//
+		
+		
+		
 		// Create test monsters
 		SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
 		testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
@@ -726,14 +706,8 @@ public class Model {
 		GameSchema testGameSchema = new GameSchema();
 		testGameSchema.addAttribute(GameSchema.LIVES, 3);
 		testGameSchema.addAttribute(GameSchema.MONEY, 500);
+
 		testBlueprint.setMyGameScenario(testGameSchema);
-
-		// Create test canvas schema
-		CanvasSchema testCanvasSchema = new CanvasSchema();
-		testCanvasSchema.addAttribute(CanvasSchema.X_TILES, 35);
-		testCanvasSchema.addAttribute(CanvasSchema.Y_TILES, 20);
-		testBlueprint.setMyCanvasSchema(testCanvasSchema);
-
 
 		// Create wave schemas
 		List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
@@ -791,7 +765,8 @@ public class Model {
 				gameClock,
 				player);
 		try {
-			dataHandler.saveState(currentGame, RESOURCE_PATH + gameName);
+			//Michael- i removed the resource_path because it was giving me an error since the method should take the straight file name not the resource path
+			dataHandler.saveState(currentGame, gameName);
 		}
 		catch (IOException ioe) {
 			throw new InvalidSavedGameException(ioe);
@@ -810,8 +785,8 @@ public class Model {
 	public void loadSavedGame (String filename) throws InvalidSavedGameException {
 		try {
 			// TODO: check for proper game blueprint loaded prior?
-
-			GameState newGameState = dataHandler.loadState(RESOURCE_PATH + filename);
+			//removed the RESOURCE_PATH variable as i think thats causing issues with actually saving
+			GameState newGameState = dataHandler.loadState(filename);
 
 			// replace towers, player, clock with new state
 			clearAllTowers();

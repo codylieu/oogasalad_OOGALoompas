@@ -26,6 +26,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import main.java.player.ITDPlayerEngine;
 import main.java.player.TDPlayerEngine;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -50,9 +51,9 @@ public class RepositoryViewer extends AbstractAction {
 	private JTextArea descriptionArea;
 	private TDPlayerEngine engine;
 	
-	public RepositoryViewer(String s, TDPlayerEngine engineInit) {
+	public RepositoryViewer(String s, ITDPlayerEngine engine) {
 		super(s);
-		engine = engineInit;
+		engine = engine;
 		dlc = new HashMap<String, DLCData>();
 	}
 

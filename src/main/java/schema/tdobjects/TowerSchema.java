@@ -67,6 +67,7 @@ public class TowerSchema extends TDObjectSchema {
 		populateDefaultAttributes(name);
 	}
 
+	@Override
 	public void populateDefaultAttributes(String name) {
 		addAttribute(TowerSchema.NAME, name);
 		addAttribute(TowerSchema.HEALTH, TowerViewConstants.HEALTH_DEFAULT);
@@ -84,9 +85,12 @@ public class TowerSchema extends TDObjectSchema {
 				TowerViewConstants.FREEZE_SLOWDOWN_DEFAULT);
 		addAttribute(TowerSchema.SHRAPNEL_DAMAGE,
 				TowerViewConstants.BUILDUP_DEFAULT);
-		addAttribute(TDObjectSchema.IMAGE_NAME, "tower.gif");
-		addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "");
-		addAttribute(TowerSchema.BULLET_IMAGE_NAME, "");
+		addAttribute(TDObjectSchema.IMAGE_NAME, 
+				TowerViewConstants.TOWER_DEFAULT_IMAGE);
+		addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME,
+				TowerViewConstants.SHRAPNEL_DEFAULT_IMAGE);
+		addAttribute(TowerSchema.BULLET_IMAGE_NAME, 
+				TowerViewConstants.BULLET_DEFAULT_IMAGE);
 		addAttribute(TowerSchema.UPGRADE_PATH, "");
 		addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) Arrays.asList(TowerBehaviors.values()));
 	}
