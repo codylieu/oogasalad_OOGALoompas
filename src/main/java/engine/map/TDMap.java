@@ -21,7 +21,7 @@ public class TDMap {
     private List<TileMapSchema> tileMapSchemas;
     private Map<String, TileMap> tileMaps;
     private Set<String> definedTiles;
-    private JGEngineInterface engine;
+    private static JGEngineInterface engine;
 
     public TDMap(JGEngineInterface engine, GameMapSchema gameMapSchema) {
         this.engine = engine;
