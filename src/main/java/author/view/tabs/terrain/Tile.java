@@ -23,6 +23,7 @@ public class Tile implements Serializable {
 		myRow = row;
 		myColumn = column;
 		myBorderColor = Canvas.DEFAULT_BORDER_COLOR;
+		myPassIndex = TerrainAttribute.Walkable.getIndex(); // default pass index
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class Tile implements Serializable {
 	 * Sets the passability index of the tile, different options are
 	 * specified in TerrainAttribute.java
 	 */
-	protected  void setPassIndex(int index) {
+	protected void setPassIndex(int index) {
 		myPassIndex = index;
 	}
 	

@@ -7,14 +7,31 @@ import java.util.Map;
 
 public enum TerrainAttribute {
 
-	Walkable (10)      { Color getColor() { return Color.GREEN; }},
-	Flyable  (11)      { Color getColor() { return Color.BLUE; }},
-	Untraversable (12) { Color getColor() { return Color.RED; }},
-	Entry (13)         { Color getColor() { return Color.MAGENTA; }},
-	Exit (14)          { Color getColor() { return Color.ORANGE; }};
+	Walkable      { Color getColor() { return Color.GREEN;}
+	                     int getIndex()   { return 10; }},
+	                     
+	Flyable       { Color getColor() { return Color.BLUE; }
+	                     int getIndex()   { return 11; }},
+	 
+	Untraversable { Color getColor() { return Color.RED; }
+	                int getIndex() { return 12; }},
 
-	private final int index;
-	TerrainAttribute(int index) { this.index = index; }
+	Entry         { Color getColor() { return Color.MAGENTA; }
+	                int getIndex() {  return 13; }},
+	                
+	Exit          { Color getColor() { return Color.ORANGE; }
+	                int getIndex() { return 14;}};
+
+	
+	private static Map<Integer, TerrainAttribute> enumMap = 
+				new HashMap<Integer, TerrainAttribute>();
+	
+	static {
+		for (TerrainAttribute attr : values()) {
+			enumMap.put(attr.getIndex(), attr);
+		}
+	}
+			
 	
 	@Override
 	public String toString() {
@@ -22,13 +39,11 @@ public enum TerrainAttribute {
 	}
 	
 	public static TerrainAttribute getAttribute(int i){ 
-		return values()[i]; 
+		return enumMap.get(i);
 	} 
 	
-	public int getIndex () {
-		return index;
-	}
-	
 	abstract Color getColor();
+	
+	abstract int getIndex();
 	
 }
