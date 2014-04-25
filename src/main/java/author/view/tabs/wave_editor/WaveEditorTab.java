@@ -1,6 +1,7 @@
 package main.java.author.view.tabs.wave_editor;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -44,6 +45,7 @@ public class WaveEditorTab extends EditorTab {
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
 	private JButton clearAllWavesButton;
+
 
 	private String[] columnNames = {};
 	private String[] columnNamesAndWave;
@@ -143,7 +145,7 @@ public class WaveEditorTab extends EditorTab {
 		}
 		return -1;
 	}
-	
+
 	/**
 	 * @param fieldValue
 	 * Adds a new wave and populates the row based off of the input fieldValue String
@@ -181,7 +183,7 @@ public class WaveEditorTab extends EditorTab {
 
 			content.add(createTable(), BorderLayout.WEST);
 			content.add(buttonMaker.makeButtons(), BorderLayout.EAST);
-			
+
 			addNewWaveRow("1"); // Setting default value
 
 			return content;
@@ -259,9 +261,26 @@ public class WaveEditorTab extends EditorTab {
 				panel.add(makeAddNewWaveButton(), BorderLayout.CENTER);
 				panel.add(makeRemoveWaveButton(), BorderLayout.CENTER);
 				panel.add(makeClearAllWavesButton(), BorderLayout.CENTER);
+				panel.add(makeAddEnemyColumnTestButton(), BorderLayout.CENTER);
 
 				return panel;
 
+			}
+
+			private Component makeAddEnemyColumnTestButton() {
+				JButton addEnemyColumn = new JButton("Add Enemy");
+
+				addEnemyColumn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						WaveController controller = (WaveController) myController;
+						controller.shiftToEnemyTab();
+					}
+
+				});
+
+				return addEnemyColumn;
 			}
 
 			/**

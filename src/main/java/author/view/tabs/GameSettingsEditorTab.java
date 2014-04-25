@@ -36,7 +36,11 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JPanel settingsPanel = new JPanel(new BorderLayout());
 	
 	private JComboBox gameModeList;
-	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
+	
+	private static final String SURVIVAL_STRING = "Survival Mode";
+	private static final String BOSS_STRING = "Boss Mode";
+	
+	String[] GAME_MODE_STRINGS = {SURVIVAL_STRING, BOSS_STRING};
 
 	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
@@ -80,7 +84,7 @@ public class GameSettingsEditorTab extends EditorTab{
 		gameSchema.addAttribute(GameSchema.LIVES, (Integer) livesSpinner.getValue());
 		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
 		
-		if(gameModeList.getSelectedItem().equals("Survival Mode")){
+		if(gameModeList.getSelectedItem().equals(SURVIVAL_STRING)){
 			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, SURVIVAL_MODE_VALUE);
 		}
 		else{
