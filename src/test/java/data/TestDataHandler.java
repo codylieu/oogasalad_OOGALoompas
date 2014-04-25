@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.List;
 
 import main.java.data.DataHandler;
-import main.java.data.JSONHandler;
 import main.java.engine.GameState;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.data.InvalidGameBlueprintException;
@@ -185,18 +184,6 @@ public class TestDataHandler {
 		//Check if the variable values are the same
 		assertTrue(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals(TEST_VALUE_1));
 		assertFalse(loadedSchema.getAttributesMap().get(TEST_ATTRIBUTE_1).equals("THIS SHOULDNT MATCH WITH ANYTHING"));
-	}
-
-	//Not working! Branch data-json has updates on JSON, had to switch to Objects from Serializable
-	@Test
-	public void testJsonSerializationAndDeserialization() throws IOException{
-		JSONHandler testDataHandler = new JSONHandler();
-		GameBlueprint testBlueprint = this.createTestBlueprint();
-		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
-		testDataHandler.serializeObjectToJSON(testBlueprint,"testBlueprintJSON");
-		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint, "testBlueprintJSON"));
-		testDataHandler.serializeObjectToJSON(loadedBlueprint, "testBlueprintAfterJSONSerialized");
-
 	}
 
 	/**
