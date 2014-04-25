@@ -1,6 +1,7 @@
 package main.java.author.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -21,9 +22,7 @@ import main.java.author.view.menubar.BasicMenuBar;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
-import main.java.author.view.tabs.item.AbstractItemEditorSubTab;
 import main.java.author.view.tabs.item.ItemEditorTab;
-import main.java.author.view.tabs.item.subtabs.LifeSaverItemEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
 import main.java.author.view.tabs.wave_editor.WaveEditorTab;
@@ -91,10 +90,9 @@ public class AuthoringView extends JFrame {
 		tabbedPane.add(TOWER_EDITOR_STRING, new TowerEditorTab(towerController,
 				"Tower"));
 
-		enemyEditorTab = new EnemyEditorTab(enemyController, "Monster");
-
 		tabbedPane
-				.add(ENEMY_EDITOR_STRING, enemyEditorTab);
+				.add(ENEMY_EDITOR_STRING,
+						new EnemyEditorTab(enemyController, "Monster"));
 		tabbedPane
 				.add(ITEM_EDITOR_STRING,
 						new ItemEditorTab(itemController));
@@ -172,7 +170,11 @@ public class AuthoringView extends JFrame {
 	 * Shifts to the Enemy Tab
 	 */
 	public void shiftToEnemyTab() {
-		tabbedPane.setSelectedComponent(enemyEditorTab);
+		for(Component tab : tabbedPane.getComponents()) {
+			if (tab instanceof EnemyEditorTab) {
+				tabbedPane.setSelectedComponent(enemyEditorTab);
+			}
+		}	
 	}
 
 }

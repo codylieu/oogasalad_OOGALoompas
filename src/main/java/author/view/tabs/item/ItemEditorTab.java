@@ -43,14 +43,18 @@ public class ItemEditorTab extends EditorTab {
 	public ItemEditorTab(TabController tabController) {
 		super(tabController);
 		
-		tabbedPane.addTab("Annihilators", new AnnihilatorItemEditorTab(tabController, "Annihilators"));
-		tabbedPane.addTab("Area Bombs", new AreaBombItemEditorTab(tabController, "Area Bombs"));
-		tabbedPane.addTab("Instant Freezes", new InstantFreezeItemEditorTab(tabController, "Instant Freezes"));
-		tabbedPane.addTab("Life Savers", new LifeSaverItemEditorTab(tabController, "Life Savers"));
-		tabbedPane.addTab("Row Bombs", new RowBombItemEditorTab(tabController, "Row Bombs"));
+		tabbedPane.addTab(ItemViewConstants.ANNIHILATOR,
+				new AnnihilatorItemEditorTab(tabController, ItemViewConstants.ANNIHILATOR));
+		tabbedPane.addTab(ItemViewConstants.AREA_BOMB,
+				new AreaBombItemEditorTab(tabController, ItemViewConstants.AREA_BOMB));
+		tabbedPane.addTab(ItemViewConstants.INSTANT_FREEZE,
+				new InstantFreezeItemEditorTab(tabController, ItemViewConstants.INSTANT_FREEZE));
+		tabbedPane.addTab(ItemViewConstants.LIFE_SAVER,
+				new LifeSaverItemEditorTab(tabController, ItemViewConstants.LIFE_SAVER));
+		tabbedPane.addTab(ItemViewConstants.ROW_BOMB,
+				new RowBombItemEditorTab(tabController, ItemViewConstants.ROW_BOMB));
 		
 		add(tabbedPane, BorderLayout.CENTER);
-		
 		setVisible(true);
 		
 	}
