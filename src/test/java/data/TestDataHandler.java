@@ -229,10 +229,6 @@ public class TestDataHandler {
 		testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
 
-//		File myResourcesTwo = new File(resourcePath);
-//		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
-//		System.out.println(myResourcesTwoSize + "should be more");
-
 		File myDir = new File(testPath);
 		// delete it so it doesn't interfere later
 		DataHandler.deleteDirectory(myDir);
@@ -241,15 +237,19 @@ public class TestDataHandler {
 		// and cause the second is the original, won't interfere with code
 
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
-		File myResourcesTwo = new File(resourcePath);
-		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
+		File myResourcesTwo = new File(FILE_PATH + "testResourcesTwo.zip");
+		long myResourcesTwoSize = myResourcesTwo.length();
+//		File myResourcesTwo = new File(resourcePath);
+//		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
 //		System.out.println(myResourcesTwoSize);
 
 		// loads back the original
 
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
-		File myResourcesOne = new File(resourcePath);
-		long myResourcesOneSize = myResourcesTwo.listFiles().length;
+		File myResourcesOne = new File(FILE_PATH + "testResourcesOne.zip");
+		long myResourcesOneSize = myResourcesOne.length();
+//		File myResourcesOne = new File(resourcePath);
+//		long myResourcesOneSize = myResourcesOne.listFiles().length;
 //		System.out.println(myResourcesTwoSize + "   " + myResourcesOneSize);
 		assertTrue("The second resources folder should be greater than the first", myResourcesTwoSize > myResourcesOneSize);
 
