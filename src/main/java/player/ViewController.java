@@ -35,6 +35,7 @@ import javax.swing.JTextArea;
 
 import main.java.player.dlc.RepositoryViewer;
 import main.java.player.panels.DifficultyPanel;
+import main.java.player.panels.FileChooserActionListener;
 import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
@@ -270,6 +271,15 @@ public class ViewController implements Serializable {
 		return engine;
 	}
 
+	private void fileChooserUsage(String methodName){
+		int response = fileChooser.showOpenDialog(null);
+		if(response == JFileChooser.APPROVE_OPTION){
+			File file = fileChooser.getSelectedFile();
+			
+			engine.saveGameState(file.getAbsolutePath());
+		}
+		frame.pack();
+	}
 	private JPanel makeGameActionPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
@@ -280,27 +290,10 @@ public class ViewController implements Serializable {
 		playResumeButton.addActionListener(new MethodAction (engine, "toggleRunning"));
 
 		JButton saveButton = new JButton(SAVE_TEXT);
-		saveButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int response = fileChooser.showOpenDialog(null);
-				if(response == JFileChooser.APPROVE_OPTION){
-					File file = fileChooser.getSelectedFile();
-					engine.saveGameState(file.getAbsolutePath());
-				}
-				frame.pack();
-			}
-		});
+		saveButton.addActionListener(new FileChooserActionListener(engine, "saveGameState", fileChooser));
+		
 		JButton loadButton = new JButton(LOAD_TEXT);
-		loadButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int response = fileChooser.showOpenDialog(null);
-				if(response == JFileChooser.APPROVE_OPTION){
-					File file = fileChooser.getSelectedFile();
-					engine.loadGameState(file.getAbsolutePath());
-				}
-				frame.pack();
-			}
-		});
+		loadButton.addActionListener(new FileChooserActionListener(engine, "loadGameState", fileChooser));
 		JButton speedUpButton = new JButton(SPEED_UP_TEXT);
 		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
 
