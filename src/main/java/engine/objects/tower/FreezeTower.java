@@ -16,7 +16,7 @@ import main.java.schema.tdobjects.TowerSchema;
 public class FreezeTower extends ShootingTower {
 
     public static final double DEFAULT_FREEZE_SLOWDOWN_PROPORTION = 0.5;
-    private static final String TOWER_TYPE = "Freeze Tower";
+    public static final String TOWER_TYPE = "Freeze Tower";
 
     protected double myFreezeSlowdownProportion;
 
