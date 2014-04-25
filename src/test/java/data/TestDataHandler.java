@@ -34,6 +34,7 @@ public class TestDataHandler {
 
 	public final static String FILE_PATH = "src/test/resources/";
 	public final static String BLUEPRINT_PATH = "TestBlueprint.ser";
+	public final static String LOADED_BLUEPRINT_PATH = "LoadedBlueprint.ser";
 	public final static String SAVEBLUEPRINT_PATH = "SavedBlueprint.zip";
 	public final static String ZIPPED_RESOURCES = "ZippedResources.zip";
 	public final static String STATE_PATH = "TestState.ser";
@@ -153,11 +154,13 @@ public class TestDataHandler {
 		//Test saving and loading blueprints using the output stream
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
 		//See if the original lives is equal to the loaded lives
+		GameBlueprint loadedBlueprint = (GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH);
+		testDataHandler.saveObjectToFile(loadedBlueprint, FILE_PATH + LOADED_BLUEPRINT_PATH);
 		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
-				((GameBlueprint) testDataHandler.loadObjectFromFile(FILE_PATH + BLUEPRINT_PATH)).getMyGameScenario().getAttributesMap().get("Lives"));
+				loadedBlueprint.getMyGameScenario().getAttributesMap().get("Lives"));
 
 	}
-//
+
 //	@Test
 //	public void testBlueprintSavingAndLoading() throws ZipException, InvalidGameBlueprintException {
 //		//Set up blueprint
