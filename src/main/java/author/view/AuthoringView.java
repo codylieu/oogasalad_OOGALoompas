@@ -38,6 +38,7 @@ public class AuthoringView extends JFrame {
 	private JButton finalizeGameButton;
 
 	private EnemyEditorTab enemyEditorTab;
+	private TowerEditorTab towerEditorTab;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -47,6 +48,7 @@ public class AuthoringView extends JFrame {
 	private static final String ITEM_EDITOR_STRING = "Item Editor";
 	private static final String TERRAIN_EDITOR_STRING = "Terrain Editor";
 	private static final String WAVE_EDITOR_STRING = "Wave Editor";
+	public static final String DEFAULT_RESOURCES_DIR = "src/main/resources";
 
 	public AuthoringView(MainController mainController) {
 
@@ -61,17 +63,19 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs() {
-		final EnemyController enemyController = new EnemyController(
-				myController);
-		final TowerController towerController = new TowerController(
-				myController);
-		final WaveController waveController = new WaveController(myController);
-		final GameSettingsController gameSettingsController = new GameSettingsController(
-				myController);
-		final TerrainController terrainController = new TerrainController(
-				myController);
-		final ItemController itemController = new ItemController(myController);
-
+		final EnemyController enemyController =
+				new EnemyController(myController);
+		final TowerController towerController = 
+				new TowerController(myController);
+		final WaveController waveController = 
+				new WaveController(myController);
+		final GameSettingsController gameSettingsController = 
+				new GameSettingsController(myController);
+		final TerrainController terrainController = 
+				new TerrainController(myController);
+		final ItemController itemController = 
+				new ItemController(myController);
+		
 		myController.addTabController(enemyController);
 		myController.addTabController(towerController);
 		myController.addTabController(waveController);
@@ -86,15 +90,19 @@ public class AuthoringView extends JFrame {
 
 		enemyEditorTab = new EnemyEditorTab(enemyController, "Monster");
 
-		tabbedPane.add(ENEMY_EDITOR_STRING, enemyEditorTab);
-		// tabbedPane
-		// .add(ITEM_EDITOR_STRING, new ItemEditorTab(itemController, "Item")
-		// );
-		tabbedPane.add(TERRAIN_EDITOR_STRING, new TerrainEditorTab(
-				terrainController));
-		tabbedPane.add(WAVE_EDITOR_STRING, new WaveEditorTab(waveController));
-
-		tabbedPane.addChangeListener(new ChangeListener() {
+		tabbedPane
+				.add(ENEMY_EDITOR_STRING, enemyEditorTab);
+//		tabbedPane
+//				.add(ITEM_EDITOR_STRING,
+//						new ItemEditorTab(itemController, "Item"));
+		tabbedPane
+				.add(TERRAIN_EDITOR_STRING,
+						new TerrainEditorTab(terrainController));
+		tabbedPane
+				.add(WAVE_EDITOR_STRING,
+						new WaveEditorTab(waveController));
+		
+		tabbedPane.addChangeListener(new ChangeListener(){
 
 			@Override
 			public void stateChanged(ChangeEvent e) {
@@ -165,6 +173,10 @@ public class AuthoringView extends JFrame {
 	 */
 	public void shiftToEnemyTab() {
 		tabbedPane.setSelectedComponent(enemyEditorTab);
+	}
+
+	public void shiftToTowerTab() {
+		tabbedPane.setSelectedComponent(towerEditorTab);
 	}
 
 }

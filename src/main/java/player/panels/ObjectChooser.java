@@ -9,7 +9,7 @@ import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
-import main.java.player.TDPlayerEngine;
+import main.java.player.ITDPlayerEngine;
 import main.java.player.util.Observing;
 /**
  * A JComboBox that is also a Subject(observable).
@@ -24,7 +24,9 @@ public class ObjectChooser extends SubjectPanel implements ActionListener{
 	protected String currentObjectName;
 	protected Vector<String> comboBoxItems;
 	protected DefaultComboBoxModel<String> comboBoxModel;
-
+	protected ITDPlayerEngine engine;
+	
+	
 	public ObjectChooser(List<String> objectNamesList){
 		super();
 		observers = new ArrayList<Observing>();

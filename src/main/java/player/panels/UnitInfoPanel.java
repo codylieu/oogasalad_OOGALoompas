@@ -21,6 +21,7 @@ public class UnitInfoPanel extends JPanel implements Observing {
 	public UnitInfoPanel() {
 		unitInfoArea = new JTextArea(5, 5);
 		unitInfoArea.setEditable(false);
+		unitInfoArea.setLineWrap(true);
 		unitInfoArea.setWrapStyleWord(true);
 		add(unitInfoArea);
 		//scrollPane = new JScrollPane(unitInfoArea);

@@ -18,9 +18,9 @@ import main.java.engine.objects.monster.Monster;
 public class MonsterClosestToExitDetector extends TDDetector {
 	
 	@Override
-	public List<Object> findTarget(double x, double y,
+	public List<Point2D> findTarget(double x, double y,
 			double range, EnvironmentKnowledge environmentKnowledge) {
-		List<Object> targetMonsterLocation = new ArrayList<Object>();
+		List<Point2D> targetMonsterLocation = new ArrayList<Point2D>();
 		Point2D towerCoordinate = new Point2D.Double(x, y);
 		Point2D exitCoordinate = environmentKnowledge.getExit().getLocation();
 		double minDistance = Double.MAX_VALUE;

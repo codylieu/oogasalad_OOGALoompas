@@ -20,15 +20,19 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import jgame.JGColor;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
+import main.java.author.view.AuthoringView;
 import main.java.author.view.tabs.EditorTab;
 import main.java.schema.CanvasSchema;
 import main.java.schema.map.GameMapSchema;
@@ -46,8 +50,10 @@ public class TerrainEditorTab extends EditorTab {
 	private static final String UPDATE_CANVAS = "Change Canvas Size";
 	private static final int DEFAULT_ROW_COUNT = 20;
 	private static final int DEFAULT_COLUMN_COUNT = 25;
-	
+	public static final int DEFAULT_PASSABILITY_INDEX = TerrainAttribute.
+			Walkable.getIndex();
 
+	
 	private int selectedPassabilityIndex;
 
 	private JFileChooser fileChooser;
@@ -60,10 +66,10 @@ public class TerrainEditorTab extends EditorTab {
 	public TerrainEditorTab(TabController controller){
 		super(controller);
 		initializeTerrain();
-		setPreferredSize(new Dimension(1200, 500));
 	}
 
 	private void initializeTerrain() {
+		selectedPassabilityIndex = DEFAULT_PASSABILITY_INDEX;
 		myCanvasPanel = new JPanel();
 		myCanvasPanel.add(myCanvas = new Canvas(DEFAULT_ROW_COUNT, DEFAULT_COLUMN_COUNT, this));
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
@@ -95,12 +101,21 @@ public class TerrainEditorTab extends EditorTab {
 
 	private JComboBox constructTerrainTypes() {
 		TerrainAttribute [] terrainAttributeTypes = TerrainAttribute.values();
-		String [] terrainAttributeInfo = new String [terrainAttributeTypes.length];
-		for (int index = 0; index < terrainAttributeInfo.length; index++) {
-			terrainAttributeInfo[index] = terrainAttributeTypes[index].toString();
+		
+		List<String> terrainAttributeInfo = new ArrayList<String>();
+	
+		for (TerrainAttribute terrainAttr : terrainAttributeTypes) {
+			Color tileBorderColor = terrainAttr.getColor();
+			int r = tileBorderColor.getRed();
+			int g = tileBorderColor.getGreen();
+			int b = tileBorderColor.getBlue();
+			String colorHex = String.format("%02x%02x%02x", r, g, b);
+			String terrainInfo = terrainAttr.toString();
+			String coloredTerrainInfo = "<html><font color=#" + colorHex + ">" + terrainInfo + "</font>";
+			terrainAttributeInfo.add(coloredTerrainInfo);
 		}
 
-		JComboBox scrollableTerrainTypes = new JComboBox(terrainAttributeInfo);
+		JComboBox scrollableTerrainTypes = new JComboBox(terrainAttributeInfo.toArray());
 		((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 		scrollableTerrainTypes.addActionListener(actionListener(this, "updatePassabilityIndex"));
 		scrollableTerrainTypes.setEnabled(false);
@@ -108,7 +123,9 @@ public class TerrainEditorTab extends EditorTab {
 	}
 
 	public void updatePassabilityIndex(ActionEvent e) {
-		selectedPassabilityIndex = ((JComboBox) e.getSource()).getSelectedIndex();
+		String terrainTypeStr = String.valueOf(((JComboBox) e.getSource()).
+				getSelectedItem()).replaceAll("\\<[^>]*>","");
+		selectedPassabilityIndex = TerrainAttribute.valueOf(terrainTypeStr).getIndex();
 	}
 
 	public int getPassabilityIndex() {
@@ -176,8 +193,9 @@ public class TerrainEditorTab extends EditorTab {
 				updateCanvasSize();
 				updateCanvas(oldTiles);
 				myTileSelectionManager.setCanvas(myCanvas);
-				revalidate();
-				repaint();
+				TerrainEditorTab.this.revalidate();
+				TerrainEditorTab.this.repaint();
+				SwingUtilities.getWindowAncestor(TerrainEditorTab.this).pack();
 			}
 
 		});
@@ -198,7 +216,7 @@ public class TerrainEditorTab extends EditorTab {
 	 * @param e
 	 */
 	public void importTileMap(ActionEvent e) {
-		fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+		fileChooser = new JFileChooser(new File(AuthoringView.DEFAULT_RESOURCES_DIR));
 		FileFilter imageFilter = new FileNameExtensionFilter(IMAGE_FILTER_DIALOGUE,
 				"png", "gif", "bmp");
 		fileChooser.setFileFilter(imageFilter);
@@ -248,6 +266,11 @@ public class TerrainEditorTab extends EditorTab {
 		CanvasSchema canvasSchema = new CanvasSchema();
 		canvasSchema.addAttribute(CanvasSchema.Y_TILES, myCanvas.getRows());
 		canvasSchema.addAttribute(CanvasSchema.X_TILES, myCanvas.getCols());
+		canvasSchema.addAttribute(CanvasSchema.ENTRY_ROW, myCanvas.getEntryRow());
+		canvasSchema.addAttribute(CanvasSchema.ENTRY_COL, myCanvas.getEntryCol());
+		canvasSchema.addAttribute(CanvasSchema.EXIT_ROW, myCanvas.getExitRow());
+		canvasSchema.addAttribute(CanvasSchema.EXIT_COL, myCanvas.getExitCol());
+		
 
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable) gameTileMapSchemas);

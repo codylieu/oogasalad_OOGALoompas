@@ -5,8 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,40 +12,39 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipException;
+
 import jgame.platform.JGEngine;
+import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.item.RowBomb;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
-import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
-import main.java.schema.map.GameMapSchema;
-import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.WaveSpawnSchema;
+import main.java.schema.map.GameMapSchema;
+import main.java.schema.tdobjects.ItemSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.TDObjectSchema;
-import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.WaveSpawnSchema;
 
 
-public class Model {
+public class Model implements IModel{
 
 	private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
 	public static final String RESOURCE_PATH = "/main/resources/";
@@ -75,7 +72,8 @@ public class Model {
 		levelManager = new LevelManager(factory);
 		// TODO: Code entrance/exit logic into wave or monster spawn schema
 		levelManager.setEntrance(0, engine.pfHeight() / 2);
-		levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
+		//levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
+		levelManager.setExit(12 * engine.tileWidth(), 9 * engine.tileHeight());
 
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
@@ -182,7 +180,7 @@ public class Model {
 	}
 
 	/**
-	 * Get the information of the TDObject, if any, 
+	 * Get the information of the towers or monsters, if any, 
 	 * at the specified coordinates
 	 * 
 	 * @param x
@@ -194,12 +192,12 @@ public class Model {
 		if (isTowerPresent(x, y)) {
 			int[] currentTile = getTileCoordinates(new Point2D.Double(x, y));
 			ITower currTower = towers[currentTile[0]][currentTile[1]];
-			info.addAll(currTower.getInfo());
+			info.add(currTower.getInfo());
 		}
 
 		Monster m;
 		if ((m=monsterPresent(x, y)) != null) {
-			info.addAll(m.getInfo());
+			info.add(m.getInfo());
 		}
 		return info;
 	}
@@ -597,7 +595,7 @@ public class Model {
 		InstantFreezeItemSchema testInstantFreezeItem = new InstantFreezeItemSchema();
 		testInstantFreezeItem.addAttribute(ItemSchema.NAME, "InstantFreeze");
 		testInstantFreezeItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
-		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 999999);
+		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, Double.MAX_VALUE);
 		testItemSchema.add(testInstantFreezeItem);
 
 		LifeSaverItemSchema testLifeSaverItem = new LifeSaverItemSchema();
@@ -610,6 +608,7 @@ public class Model {
 		testTowerOne.addAttribute(TowerSchema.NAME, "MoneyTower");
 		testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerOne.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
 		towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
 		testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "BombingTower");
@@ -621,6 +620,7 @@ public class Model {
 		testTowerTwo.addAttribute(TowerSchema.NAME, "ShootingTower");
 		testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerTwo.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
 		towerBehaviors2.add(TowerBehaviors.SHOOTING);
 		testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
@@ -642,6 +642,7 @@ public class Model {
 		testTowerFour.addAttribute(TowerSchema.NAME, "FreezingTower");
 		testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerFour.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
 		Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
 		towerBehaviors4.add(TowerBehaviors.FREEZING);
@@ -653,12 +654,32 @@ public class Model {
 		testTowerFive.addAttribute(TowerSchema.NAME, "SplashingTower");
 		testTowerFive.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
 		testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerFive.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors5 = new ArrayList<TowerBehaviors>();
 		towerBehaviors5.add(TowerBehaviors.SPLASHING);
 		testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors5);
 		testTowerFive.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerFive);
 
+		
+		
+		//test defaults:
+/*        SimpleMonsterSchema testMonsterOneX = new SimpleMonsterSchema();
+        testMonsterOneX.addAttribute(MonsterSchema.NAME, "");
+        testMonsterOneX.addAttribute(MonsterSchema.HEALTH, EnemyViewDefaults.HEALTH_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.SPEED, EnemyViewDefaults.SPEED_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.DAMAGE, EnemyViewDefaults.DAMAGE_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.REWARD, EnemyViewDefaults.REWARD_DEFAULT);
+        testMonsterOneX.addAttribute(MonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);
+        testMonsterOneX.addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
+        testMonsterOneX.addAttribute(TDObjectSchema.IMAGE_NAME,
+                                    EnemyViewDefaults.ENEMY_DEFAULT_IMAGE);
+        testMonsterSchema.add(testMonsterOneX);*/
+
+		//
+		
+		
+		
 		// Create test monsters
 		SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
 		testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
@@ -744,7 +765,8 @@ public class Model {
 				gameClock,
 				player);
 		try {
-			dataHandler.saveState(currentGame, RESOURCE_PATH + gameName);
+			//Michael- i removed the resource_path because it was giving me an error since the method should take the straight file name not the resource path
+			dataHandler.saveState(currentGame, gameName);
 		}
 		catch (IOException ioe) {
 			throw new InvalidSavedGameException(ioe);
@@ -763,8 +785,8 @@ public class Model {
 	public void loadSavedGame (String filename) throws InvalidSavedGameException {
 		try {
 			// TODO: check for proper game blueprint loaded prior?
-
-			GameState newGameState = dataHandler.loadState(RESOURCE_PATH + filename);
+			//removed the RESOURCE_PATH variable as i think thats causing issues with actually saving
+			GameState newGameState = dataHandler.loadState(filename);
 
 			// replace towers, player, clock with new state
 			clearAllTowers();

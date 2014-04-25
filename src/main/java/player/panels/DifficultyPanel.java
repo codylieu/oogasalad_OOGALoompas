@@ -8,6 +8,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import main.java.player.ITDPlayerEngine;
 import main.java.player.TDPlayerEngine;
 
 /**
@@ -22,11 +23,11 @@ public class DifficultyPanel extends JPanel{
 	public static final String HARD = "hard";
 	
 	@SuppressWarnings("unused")
-	private TDPlayerEngine engine;
+	private ITDPlayerEngine engine;
 	private ButtonGroup difficultyRadioButtonGroup;
 	
-	public DifficultyPanel(TDPlayerEngine myEngine){
-		engine = myEngine;
+	public DifficultyPanel(ITDPlayerEngine engine){
+		engine = engine;
 		difficultyRadioButtonGroup = new ButtonGroup();
 		addRadioButtons();
 	}

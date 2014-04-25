@@ -42,6 +42,7 @@ import main.java.player.panels.InfoPanel;
 import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
+import main.java.player.util.Observing;
 import main.java.player.util.Sound;
 import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
@@ -108,7 +109,7 @@ public class ViewController implements Serializable {
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
-	private TDPlayerEngine engine;
+	private ITDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
 	private ObjectChooser towerChooser;
@@ -241,13 +242,12 @@ public class ViewController implements Serializable {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		gameCard.add(engine, constraints);
+		gameCard.add((Component) engine, constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		gameCard.add(makeGameActionPanel(), constraints);
-
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -262,10 +262,11 @@ public class ViewController implements Serializable {
 		cards.add(gameCard, GAME_CARD);
 	}
 
-	private TDPlayerEngine initializeEngine(String pathToBlueprint) {
+	private ITDPlayerEngine initializeEngine(String pathToBlueprint) {
 		engine = new TDPlayerEngine(pathToBlueprint);
 		engine.initModel();
 		engine.stop();
+		engine.toggleRunning();
 		return engine;
 	}
 
@@ -315,7 +316,7 @@ public class ViewController implements Serializable {
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new ObjectChooser(engine.getPossibleTowers());
-		towerChooser.register(engine);
+		towerChooser.register((Observing) engine);
 		//powerUpChooser = new ObjectChooser(engine.getPossibleItems());
 
 		List<Subject> engineSubjectList = new ArrayList<Subject>();
@@ -354,14 +355,14 @@ public class ViewController implements Serializable {
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubject(engine);
+		gameInfoPanel.setSubject((Subject) engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		UnitInfoPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubject(engine);
+		unitInfoPanel.setSubject((Subject) engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
@@ -369,7 +370,7 @@ public class ViewController implements Serializable {
 	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
-		highScoreCard.setSubject(engine);
+		highScoreCard.setSubject((Subject) engine);
 		engine.register(highScoreCard);
 		cards.add(highScoreCard, HIGH_SCORE_CARD);
 	}

@@ -84,11 +84,10 @@ public class MoneyTower extends TowerBehaviorDecorator {
 
 
 	@Override
-	public List<String> getInfo() {
-		List<String> info = new ArrayList<String>();
-		info.add(this.getClass().getSimpleName());
-		info.addAll(baseTower.getInfo());
-		info.add(""+moneyGranted);
+	public String getInfo() {
+		String info = this.getClass().getSimpleName() + "\n" +
+				baseTower.getInfo() + 
+				"\nMoney Granted: " + moneyGranted;
 		return info;
 	}
 

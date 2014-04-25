@@ -62,8 +62,8 @@ public interface ITower {
     /**
      * Get the information about the tower.
      * 
-     * @return a list of string representing the info of the tower
+     * @return a string representing the info of the tower
      */
-    public List<String> getInfo();
+    public String getInfo();
     
 }
