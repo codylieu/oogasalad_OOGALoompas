@@ -32,6 +32,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import jgame.JGColor;
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
+import main.java.author.view.AuthoringView;
 import main.java.author.view.tabs.EditorTab;
 import main.java.schema.CanvasSchema;
 import main.java.schema.map.GameMapSchema;
@@ -215,7 +216,7 @@ public class TerrainEditorTab extends EditorTab {
 	 * @param e
 	 */
 	public void importTileMap(ActionEvent e) {
-		fileChooser = new JFileChooser(new File(System.getProperty("user.dir")));
+		fileChooser = new JFileChooser(new File(AuthoringView.DEFAULT_RESOURCES_DIR));
 		FileFilter imageFilter = new FileNameExtensionFilter(IMAGE_FILTER_DIALOGUE,
 				"png", "gif", "bmp");
 		fileChooser.setFileFilter(imageFilter);
