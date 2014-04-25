@@ -17,4 +17,10 @@ public class LifeSaverItemEditorTab extends AbstractItemEditorTab{
 		return null;
 	}
 
+	@Override
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
