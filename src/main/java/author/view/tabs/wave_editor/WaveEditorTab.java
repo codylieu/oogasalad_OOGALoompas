@@ -108,27 +108,7 @@ public class WaveEditorTab extends EditorTab {
 					.getColumnIndexFromName(tableModel, columnToRemove));
 		}
 	}
-
-	@Override
-	public void saveTabData() {
-		WaveController waveController = (WaveController) myController;
-		int numWaves = tableModel.getRowCount();
-
-		List<WaveSpawnSchema> allWaveSpawnSchemas = new ArrayList<WaveSpawnSchema>();
-		for (int waveRow = 0; waveRow < numWaves; waveRow++) {
-
-			WaveSpawnSchema waveSpawnSchema = new WaveSpawnSchema();
-			for (MonsterSchema monsterSchema : waveController.getMonsterSchemas()) {
-				String monsterName = (String) monsterSchema.getAttributesMap().get(MonsterSchema.NAME);
-				int columnOfEnemy = getColumnOfEnemy(monsterName);
-				int numEnemies = Integer.parseInt((String) table.getModel().getValueAt(waveRow, columnOfEnemy));
-				waveSpawnSchema.addMonsterSchema(new MonsterSpawnSchema(monsterSchema, numEnemies));
-			}
-			allWaveSpawnSchemas.add(waveSpawnSchema);
-		}
-		waveController.addWaves(allWaveSpawnSchemas);
-	}
-
+	
 	/**
 	 * @param enemyName
 	 * @return
@@ -163,6 +143,26 @@ public class WaveEditorTab extends EditorTab {
 		model.addRow(zeroesRowList.toArray());
 
 		clearAllWavesButton.setEnabled(true);
+	}
+
+	@Override
+	public void saveTabData() {
+		WaveController waveController = (WaveController) myController;
+		int numWaves = tableModel.getRowCount();
+
+		List<WaveSpawnSchema> allWaveSpawnSchemas = new ArrayList<WaveSpawnSchema>();
+		for (int waveRow = 0; waveRow < numWaves; waveRow++) {
+
+			WaveSpawnSchema waveSpawnSchema = new WaveSpawnSchema();
+			for (MonsterSchema monsterSchema : waveController.getMonsterSchemas()) {
+				String monsterName = (String) monsterSchema.getAttributesMap().get(MonsterSchema.NAME);
+				int columnOfEnemy = getColumnOfEnemy(monsterName);
+				int numEnemies = Integer.parseInt((String) table.getModel().getValueAt(waveRow, columnOfEnemy));
+				waveSpawnSchema.addMonsterSchema(new MonsterSpawnSchema(monsterSchema, numEnemies));
+			}
+			allWaveSpawnSchemas.add(waveSpawnSchema);
+		}
+		waveController.addWaves(allWaveSpawnSchemas);
 	}
 
 	/**
