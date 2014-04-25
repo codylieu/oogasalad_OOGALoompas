@@ -137,18 +137,6 @@ public abstract class AbstractItemEditorTab extends ObjectEditorTab {
 		}
 	
 		@Override
-		protected void instantiateAndClumpFields() {
-			costSpinner = makeAttributeSpinner(ItemSchema.COST);
-			timeSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
-			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
-			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
-			
-			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner};
-			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
-		}
-
-		@Override
 		protected JComponent makeFieldPane() {
 			JPanel result = new JPanel(new GridLayout(0, 2));
 			for (JSpinner spinner : spinnerFields) {
