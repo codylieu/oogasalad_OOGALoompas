@@ -49,8 +49,10 @@ public class TerrainEditorTab extends EditorTab {
 	private static final String UPDATE_CANVAS = "Change Canvas Size";
 	private static final int DEFAULT_ROW_COUNT = 20;
 	private static final int DEFAULT_COLUMN_COUNT = 25;
-	
+	public static final int DEFAULT_PASSABILITY_INDEX = TerrainAttribute.
+			Walkable.getIndex();
 
+	
 	private int selectedPassabilityIndex;
 
 	private JFileChooser fileChooser;
@@ -66,6 +68,7 @@ public class TerrainEditorTab extends EditorTab {
 	}
 
 	private void initializeTerrain() {
+		selectedPassabilityIndex = DEFAULT_PASSABILITY_INDEX;
 		myCanvasPanel = new JPanel();
 		myCanvasPanel.add(myCanvas = new Canvas(DEFAULT_ROW_COUNT, DEFAULT_COLUMN_COUNT, this));
 		myTileSelectionManager = new TileSelectionManager(myCanvas);
@@ -97,19 +100,21 @@ public class TerrainEditorTab extends EditorTab {
 
 	private JComboBox constructTerrainTypes() {
 		TerrainAttribute [] terrainAttributeTypes = TerrainAttribute.values();
-		String [] terrainAttributeInfo = new String [terrainAttributeTypes.length];
-		for (int index = 0; index < terrainAttributeInfo.length; index++) {
-			Color tileBorderColor = TerrainAttribute.getAttribute(index).getColor();
+		
+		List<String> terrainAttributeInfo = new ArrayList<String>();
+	
+		for (TerrainAttribute terrainAttr : terrainAttributeTypes) {
+			Color tileBorderColor = terrainAttr.getColor();
 			int r = tileBorderColor.getRed();
 			int g = tileBorderColor.getGreen();
 			int b = tileBorderColor.getBlue();
 			String colorHex = String.format("%02x%02x%02x", r, g, b);
-			String terrainInfo = terrainAttributeTypes[index].toString();
+			String terrainInfo = terrainAttr.toString();
 			String coloredTerrainInfo = "<html><font color=#" + colorHex + ">" + terrainInfo + "</font>";
-			terrainAttributeInfo[index] = coloredTerrainInfo;
+			terrainAttributeInfo.add(coloredTerrainInfo);
 		}
 
-		JComboBox scrollableTerrainTypes = new JComboBox(terrainAttributeInfo);
+		JComboBox scrollableTerrainTypes = new JComboBox(terrainAttributeInfo.toArray());
 		((JLabel) scrollableTerrainTypes.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 		scrollableTerrainTypes.addActionListener(actionListener(this, "updatePassabilityIndex"));
 		scrollableTerrainTypes.setEnabled(false);
@@ -117,7 +122,9 @@ public class TerrainEditorTab extends EditorTab {
 	}
 
 	public void updatePassabilityIndex(ActionEvent e) {
-		selectedPassabilityIndex = ((JComboBox) e.getSource()).getSelectedIndex();
+		String terrainTypeStr = String.valueOf(((JComboBox) e.getSource()).
+				getSelectedItem()).replaceAll("\\<[^>]*>","");
+		selectedPassabilityIndex = TerrainAttribute.valueOf(terrainTypeStr).getIndex();
 	}
 
 	public int getPassabilityIndex() {

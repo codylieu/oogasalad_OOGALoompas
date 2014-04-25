@@ -7,28 +7,49 @@ import java.util.Map;
 
 public enum TerrainAttribute {
 
-	Walkable (10)      { Color getColor() { return Color.GREEN; }},
-	Flyable  (11)      { Color getColor() { return Color.BLUE; }},
-	Untraversable (12) { Color getColor() { return Color.RED; }},
-	Entry (13)         { Color getColor() { return Color.MAGENTA; }},
-	Exit (14)          { Color getColor() { return Color.ORANGE; }};
+	Walkable      { @Override Color getColor() { return Color.GREEN;}
+					@Override int getIndex() { return 10; }},
 
-	private final int index;
-	TerrainAttribute(int index) { this.index = index; }
-	
+	Flyable       { @Override Color getColor() { return Color.BLUE; }
+					@Override int getIndex() { return 11; }},
+
+	Untraversable { @Override Color getColor() { return Color.RED; }
+					@Override int getIndex() { return 12; }},
+
+	Entry         { @Override Color getColor() { return Color.MAGENTA; }
+					@Override int getIndex() {  return 13; }},
+
+	Exit          { @Override Color getColor() { return Color.ORANGE; }
+					@Override int getIndex() { return 14; }};
+
+					
+	private static Map<Integer, TerrainAttribute> enumMap = 
+			new HashMap<Integer, TerrainAttribute>();
+
+	static {
+		for (TerrainAttribute attr : values()) {
+			enumMap.put(attr.getIndex(), attr);
+		}
+	}
+
 	@Override
 	public String toString() {
 		return this.name();
 	}
-	
+
 	public static TerrainAttribute getAttribute(int i){ 
-		return values()[i]; 
+		return enumMap.get(i);
 	} 
-	
-	public int getIndex () {
-		return index;
-	}
-	
+
+	/**
+	 * Specifies the color that will be displayed in the Terrain View
+	 * when the specific attribute is added to a Tile
+	 */
 	abstract Color getColor();
-	
+
+	/**
+	 * Specifies the collision ID of a TerrainAttribute
+	 */
+	abstract int getIndex();
+
 }
