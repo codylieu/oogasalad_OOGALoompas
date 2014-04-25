@@ -595,7 +595,7 @@ public class Model implements IModel{
 		InstantFreezeItemSchema testInstantFreezeItem = new InstantFreezeItemSchema();
 		testInstantFreezeItem.addAttribute(ItemSchema.NAME, "InstantFreeze");
 		testInstantFreezeItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
-		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 999999);
+		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, Double.MAX_VALUE);
 		testItemSchema.add(testInstantFreezeItem);
 
 		LifeSaverItemSchema testLifeSaverItem = new LifeSaverItemSchema();

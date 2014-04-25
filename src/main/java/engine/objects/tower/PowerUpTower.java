@@ -35,8 +35,7 @@ public class PowerUpTower extends TowerBehaviorDecorator {
 
 	@Override
 	public String getInfo() {
-		String info = "";
-		info+=this.getClass().getSimpleName() + "\n" +
+		String info = this.getClass().getSimpleName() + "\n" +
 				baseTower.getInfo() + 
 				"\nRange: " + myRange;
 		return info;

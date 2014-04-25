@@ -22,126 +22,128 @@ import main.java.schema.tdobjects.TowerSchema;
  */
 public class ShootingTower extends TowerBehaviorDecorator {
 
-    public static final double DEFAULT_DAMAGE = 10;
-    public static final double DEFAULT_RANGE = 200;
-    public static final double DEFAULT_FIRING_SPEED = 5;
-    public static final int FIRING_INTERVAL_STEP = 2;
-    public static final int MIN_FIRING_INTERVAL = 21;
-    private static final String TOWER_TYPE = "Shooting Tower";
+	public static final double DEFAULT_DAMAGE = 10;
+	public static final double DEFAULT_RANGE = 200;
+	public static final double DEFAULT_FIRING_SPEED = 5;
+	public static final int FIRING_INTERVAL_STEP = 2;
+	public static final int MIN_FIRING_INTERVAL = 21;
+	public static final String TOWER_TYPE = "Shooting Tower";
 
-    protected double myDamage;
-    protected double myFiringSpeed;
-    protected double myRange;
-    protected String myBulletImage;
-    protected String myType;
-    
-    private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
+	protected double myDamage;
+	protected double myFiringSpeed;
+	protected double myRange;
+	protected String myBulletImage;
+	protected String myType;
 
-    /**
-     * Create a new tower by adding shooting behavior to an existing tower
-     * 
-     * @param baseTower tower to be expanded with shooting behavior
-     * @param damage
-     * @param firingSpeed a value from 0.0 - 10.0, where 10 is the fastest firing speed.
-     * @param range how far away tower can find targets to shoot at
-     */
-    public ShootingTower (ITower baseTower,
-                          double damage,
-                          double firingSpeed,
-                          double range,
-                          String bulletImage) {
-        super(baseTower);
-        myDamage = damage;
-        myFiringSpeed = firingSpeed;
-        myRange = range;
-        myBulletImage = bulletImage;
-        myType = TOWER_TYPE;
-    }
+	private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
 
-    /**
-     * Constructor used by the factory in decorating a final tower.
-     * 
-     * @param baseTower
-     * @param attributes
-     */
-    public ShootingTower (ITower baseTower, Map<String, Serializable> attributes) {
-        this(
-             baseTower,
-             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.DAMAGE, DEFAULT_DAMAGE))),
-             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.FIRING_SPEED,
-                                                 DEFAULT_FIRING_SPEED))),
-             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.RANGE,
-                                                 DEFAULT_RANGE))),
-             (String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""));
-    }
+	/**
+	 * Create a new tower by adding shooting behavior to an existing tower
+	 * 
+	 * @param baseTower tower to be expanded with shooting behavior
+	 * @param damage
+	 * @param firingSpeed a value from 0.0 - 10.0, where 10 is the fastest firing speed.
+	 * @param range how far away tower can find targets to shoot at
+	 */
+	public ShootingTower (ITower baseTower,
+			double damage,
+			double firingSpeed,
+			double range,
+			String bulletImage) {
+		super(baseTower);
+		myDamage = damage;
+		myFiringSpeed = firingSpeed;
+		myRange = range;
+		myBulletImage = bulletImage;
+		myType = TOWER_TYPE;
+	}
 
-    @Override
-    void doDecoratedBehavior (EnvironmentKnowledge environ) {
-//        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
-    	List<Point2D> targetLocation = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
-    	if (targetLocation.size() < 1) {
-    	    // a tower should only target one monster at a time
-    	    return;
-    	}
-		
-    	fire(targetLocation.get(0));
-    }
+	/**
+	 * Constructor used by the factory in decorating a final tower.
+	 * 
+	 * @param baseTower
+	 * @param attributes
+	 */
+	public ShootingTower (ITower baseTower, Map<String, Serializable> attributes) {
+		this(
+				baseTower,
+				Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes,
+						TowerSchema.DAMAGE,
+						DEFAULT_DAMAGE))),
+						Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes,
+								TowerSchema.FIRING_SPEED,
+								DEFAULT_FIRING_SPEED))),
+								Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes,
+										TowerSchema.RANGE,
+										DEFAULT_RANGE))),
+										(String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""));
+	}
 
-    private void fire (Point2D target) {
-        if (target == null) { return; }
-//        Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
-//        if (inFiringInterval() && target.distance(currCoor) < myRange) {
-        if (inFiringInterval()) {
-            /* trigonometry from Guardian JGame example */
-            double angle =
-                    Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
-            fireProjectile(angle);
-        }
-    }
+	@Override
+	void doDecoratedBehavior (EnvironmentKnowledge environ) {
+		//        fire(environ.getNearestMonsterCoordinate(getXCoordinate(), getYCoordinate()));
+		List<Point2D> targetLocation = myDetector.findTarget(getXCoordinate(), getYCoordinate(), myRange, environ);
+		if (targetLocation.size() < 1) {
+			// a tower should only target one monster at a time
+			return;
+		}
 
-    /**
-     * Returns whether or not it is time for the tower to fire, based on its
-     * firing speed
-     * 
-     * @return
-     */
-    private boolean inFiringInterval () {
-        return baseTower.atInterval(MIN_FIRING_INTERVAL - FIRING_INTERVAL_STEP *
-                                    (int) Math.min(myFiringSpeed, 10));
-    }
+		fire(targetLocation.get(0));
+	}
 
-    /**
-     * Fires projected at a target angle with the tower's damage factor
-     */
+	private void fire (Point2D target) {
+		if (target == null) { return; }
+		// Point2D currCoor = new Point2D.Double(getXCoordinate(), getYCoordinate());
+		// if (inFiringInterval() && target.distance(currCoor) < myRange) {
+		if (inFiringInterval()) {
+			/* trigonometry from Guardian JGame example */
+			double angle =
+					Math.atan2(target.getX() - getXCoordinate(), target.getY() - getYCoordinate());
+			fireProjectile(angle);
+		}
+	}
 
-    public void fireProjectile (double angle) {
+	/**
+	 * Returns whether or not it is time for the tower to fire, based on its
+	 * firing speed
+	 * 
+	 * @return
+	 */
+	private boolean inFiringInterval () {
+		return baseTower.atInterval(MIN_FIRING_INTERVAL - FIRING_INTERVAL_STEP *
+				(int) Math.min(myFiringSpeed, 10));
+	}
 
-        new PiercingProjectile(
-        		baseTower.centerCoordinate().getX(),
-        		baseTower.centerCoordinate().getY(),
-        		angle, myDamage, myBulletImage);
+	/**
+	 * Fires projected at a target angle with the tower's damage factor
+	 */
 
-    }
+	public void fireProjectile (double angle) {
 
-    /**
-     * Fires projected at a target x and y speed with the tower's damage factor
-     */
-    public void fireProjectile (double xspeed, double yspeed) {
-        new PiercingProjectile(
-        		baseTower.centerCoordinate().getX(),
-        		baseTower.centerCoordinate().getY(), 
-        		xspeed, yspeed, myDamage, myBulletImage);
-    }
+		new PiercingProjectile(
+				baseTower.centerCoordinate().getX(),
+				baseTower.centerCoordinate().getY(),
+				angle, myDamage, myBulletImage);
+
+	}
+
+	/**
+	 * Fires projected at a target x and y speed with the tower's damage factor
+	 */
+	public void fireProjectile (double xspeed, double yspeed) {
+		new PiercingProjectile(
+				baseTower.centerCoordinate().getX(),
+				baseTower.centerCoordinate().getY(),
+				xspeed, yspeed, myDamage, myBulletImage);
+	}
 
 	@Override
 	public String getInfo() {
-    	String info = "";
-    	info += this.getClass().getSimpleName() + "\n" +
+		String info = this.getClass().getSimpleName() + "\n" +
 				baseTower.getInfo() + 
 				"\nDamage: " + myDamage +
 				"\nRange: " + myRange;
 		return info;
 	}
-    
-    
+
 }
