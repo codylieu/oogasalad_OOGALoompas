@@ -3,7 +3,6 @@ package main.java.author.view.tabs.item;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -17,13 +16,15 @@ import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
+import main.java.schema.tdobjects.items.AreaBombItemSchema;
 
 public class AnnihilatorItemEditorTab extends AbstractItemEditorTab{
-
+	private JSpinner rangeSpinner;
+	
 	public AnnihilatorItemEditorTab(TabController itemController,
 			String objectName) {
 		super(itemController, objectName);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -33,15 +34,13 @@ public class AnnihilatorItemEditorTab extends AbstractItemEditorTab{
 	
 	@Override
 	protected TDObjectSchema createSpecificNewObject(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return new AnnihilatorItemSchema(name);
 	}
 	
 	private class AnnihilatorItemTabViewBuilder extends AbstractItemTabViewBuilder {
 
 		public AnnihilatorItemTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
-			// TODO Auto-generated constructor stub
 		}
 
 		@Override
@@ -59,11 +58,6 @@ public class AnnihilatorItemEditorTab extends AbstractItemEditorTab{
 			result.add(itemImageButton, BorderLayout.SOUTH);
 			return result;
 		}
-
-		@Override
-		protected JComponent makeSecondaryImagesGraphicPane() {
-			return null;
-		}
 	
 		@Override
 		protected void instantiateAndClumpFields() {
@@ -71,19 +65,11 @@ public class AnnihilatorItemEditorTab extends AbstractItemEditorTab{
 			timeSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
+			rangeSpinner = makeAttributeSpinner(AreaBombItemSchema.RANGE);
 			
-			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner};
+			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner, rangeSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
-		}
-
-		@Override
-		protected JComponent makeFieldPane() {
-			JPanel result = new JPanel(new GridLayout(0, 2));
-			for (JSpinner spinner : spinnerFields) {
-				result.add(makeFieldTile(spinner));
-			}
-			return result;
 		}
 	}
 }
