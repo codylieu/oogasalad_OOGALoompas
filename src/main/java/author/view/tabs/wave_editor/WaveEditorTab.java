@@ -1,6 +1,7 @@
 package main.java.author.view.tabs.wave_editor;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -44,6 +45,7 @@ public class WaveEditorTab extends EditorTab {
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
 	private JButton clearAllWavesButton;
+
 
 	private String[] columnNames = {};
 	private String[] columnNamesAndWave;
@@ -106,6 +108,42 @@ public class WaveEditorTab extends EditorTab {
 					.getColumnIndexFromName(tableModel, columnToRemove));
 		}
 	}
+	
+	/**
+	 * @param enemyName
+	 * @return
+	 * Gets the column index of the enemy represented by the input string
+	 */
+	private int getColumnOfEnemy(String enemyName) {
+		WaveController waveController = (WaveController) myController;
+		String[] currentColumnNames = waveController.getEnemyNames();
+
+		for (int index = 0; index < currentColumnNames.length; index++) {
+			if(currentColumnNames[index].equals(enemyName)) {
+				return index + 1; // because Wave # is not included in currentColumnNames
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * @param fieldValue
+	 * Adds a new wave and populates the row based off of the input fieldValue String
+	 */
+	private void addNewWaveRow(String fieldValue){
+		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+				.getModel();
+		int newWaveNum = tableModel.getRowCount() + 1;
+		List<String> zeroesRowList = new ArrayList<String>();
+		zeroesRowList.add(WAVE_STRING + " " + newWaveNum);
+		for (int i = 1; i < tableModel.getColumnCount(); i++) {
+			zeroesRowList.add(fieldValue);
+
+		}
+		model.addRow(zeroesRowList.toArray());
+
+		clearAllWavesButton.setEnabled(true);
+	}
 
 	@Override
 	public void saveTabData() {
@@ -128,42 +166,6 @@ public class WaveEditorTab extends EditorTab {
 	}
 
 	/**
-	 * @param enemyName
-	 * @return
-	 * Gets the column index of the enemy represented by the input string
-	 */
-	private int getColumnOfEnemy(String enemyName) {
-		WaveController waveController = (WaveController) myController;
-		String[] currentColumnNames = waveController.getEnemyNames();
-
-		for (int index = 0; index < currentColumnNames.length; index++) {
-			if(currentColumnNames[index].equals(enemyName)) {
-				return index + 1; // because Wave # is not included in currentColumnNames
-			}
-		}
-		return -1;
-	}
-	
-	/**
-	 * @param fieldValue
-	 * Adds a new wave and populates the row based off of the input fieldValue String
-	 */
-	private void addNewWaveRow(String fieldValue){
-		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
-				.getModel();
-		int newWaveNum = tableModel.getRowCount() + 1;
-		List<String> zeroesRowList = new ArrayList<String>();
-		zeroesRowList.add(WAVE_STRING + " " + newWaveNum);
-		for (int i = 1; i < tableModel.getColumnCount(); i++) {
-			zeroesRowList.add(fieldValue);
-
-		}
-		model.addRow(zeroesRowList.toArray());
-
-		clearAllWavesButton.setEnabled(true);
-	}
-
-	/**
 	 * Creates the content of the Wave Editor Tab
 	 */
 	private class WaveTabContentCreator {
@@ -181,7 +183,7 @@ public class WaveEditorTab extends EditorTab {
 
 			content.add(createTable(), BorderLayout.WEST);
 			content.add(buttonMaker.makeButtons(), BorderLayout.EAST);
-			
+
 			addNewWaveRow("1"); // Setting default value
 
 			return content;
@@ -259,9 +261,26 @@ public class WaveEditorTab extends EditorTab {
 				panel.add(makeAddNewWaveButton(), BorderLayout.CENTER);
 				panel.add(makeRemoveWaveButton(), BorderLayout.CENTER);
 				panel.add(makeClearAllWavesButton(), BorderLayout.CENTER);
+				panel.add(makeAddEnemyButton(), BorderLayout.CENTER);
 
 				return panel;
 
+			}
+
+			private Component makeAddEnemyButton() {
+				JButton addEnemyColumn = new JButton("Add Enemy");
+
+				addEnemyColumn.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						WaveController controller = (WaveController) myController;
+						controller.shiftToEnemyTab();
+					}
+
+				});
+
+				return addEnemyColumn;
 			}
 
 			/**
