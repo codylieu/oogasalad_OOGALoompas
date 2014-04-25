@@ -54,8 +54,8 @@ public class GameSettingsEditorTab extends EditorTab{
 	private static final int MEDIUM_DIFFICULTY_VALUE = 2;
 	private static final int HARD_DIFFICULTY_VALUE = 3;
 	
-	private static final int SURVIVAL_MODE_VALUE = 1;
-	private static final int BOSS_MODE_VALUE = 0;
+	private static final Boolean SURVIVAL_MODE_VALUE = true;
+	private static final Boolean BOSS_MODE_VALUE = false;
 
 	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
 	String[] GAME_DIFFICULTY_STRINGS = {"Easy", "Medium", "Hard"};
