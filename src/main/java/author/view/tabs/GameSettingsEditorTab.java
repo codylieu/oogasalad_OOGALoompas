@@ -33,10 +33,14 @@ import main.java.schema.GameSchema;
  */
 public class GameSettingsEditorTab extends EditorTab{
 
+	private GameSchema gameSchema;
+	
+	private GameSettingsTabContentCreator contentCreator;
+	
 	private JPanel settingsPanel = new JPanel(new BorderLayout());
 
 	private JComboBox gameModeList;
-	String[] GAME_MODE_STRINGS = {SURVIVAL_STRING, BOSS_STRING};
+	String[] GAME_MODE_STRINGS = {BOSS_STRING, SURVIVAL_STRING};
 
 	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
@@ -56,14 +60,12 @@ public class GameSettingsEditorTab extends EditorTab{
 	private static final Boolean SURVIVAL_MODE_VALUE = true;
 	private static final Boolean BOSS_MODE_VALUE = false;
 
-	private GameSchema gameSchema;
-
-	private GameSettingsTabContentCreator contentCreator;
-
 	private Font LABEL_FONT = new Font("Dialog", Font.PLAIN, 36);
 
 	private JButton musicButton;
 	private JFileChooser fileChooser;
+	
+	private String musicFile = "fox.wav";
 
 	/**
 	 * @param gameSettingsController
@@ -85,6 +87,7 @@ public class GameSettingsEditorTab extends EditorTab{
 
 		gameSchema.addAttribute(GameSchema.LIVES, (Integer) livesSpinner.getValue());
 		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
+		gameSchema.addAttribute(GameSchema.MUSIC, musicFile);
 
 		if(gameModeList.getSelectedItem().equals(SURVIVAL_STRING)){
 			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, SURVIVAL_MODE_VALUE);
@@ -186,10 +189,10 @@ public class GameSettingsEditorTab extends EditorTab{
 		private JComponent makeGameModeDropDownMenu(){
 			JPanel gameModeDropDownMenu = new JPanel(new BorderLayout());
 
-			gameModeList = new JComboBox(GAME_MODE_STRINGS); 
+			gameModeList = new JComboBox(GAME_MODE_STRINGS);
 			gameModeList.setSelectedIndex(1);
 
-			gameModeList.setFont(LABEL_FONT);
+//			gameModeList.setFont(LABEL_FONT);
 			//			gameModeList.setPreferredSize(new Dimension(100, 100));
 
 			gameModeDropDownMenu.add(gameModeList, BorderLayout.NORTH);
@@ -230,6 +233,7 @@ public class GameSettingsEditorTab extends EditorTab{
 					if(returnVal == JFileChooser.APPROVE_OPTION) {
 						File chosenFile = fileChooser.getSelectedFile();
 						String absolutePath = chosenFile.getAbsolutePath();
+						String musicFile = "";
 						try {
 
 						} catch (Exception e1) {
