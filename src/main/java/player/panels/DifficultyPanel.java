@@ -5,25 +5,31 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
+import main.java.player.ITDPlayerEngine;
 import main.java.player.TDPlayerEngine;
 
+/**
+ * Panel to allow user to choose difficulty
+ * @author Michael Han
+ *
+ */
+@SuppressWarnings("serial")
 public class DifficultyPanel extends JPanel{
 	public static final String EASY = "easy";
 	public static final String MEDIUM = "medium";
 	public static final String HARD = "hard";
 	
-	private TDPlayerEngine engine;
+	@SuppressWarnings("unused")
+	private ITDPlayerEngine engine;
 	private ButtonGroup difficultyRadioButtonGroup;
 	
-	public DifficultyPanel(TDPlayerEngine myEngine){
-		engine = myEngine;
+	public DifficultyPanel(ITDPlayerEngine engine){
+		engine = engine;
 		difficultyRadioButtonGroup = new ButtonGroup();
 		addRadioButtons();
-		
 	}
 
 	private void addRadioButtons(){

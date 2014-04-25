@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.List;
 
 public class Canvas extends JPanel {
-	
+
 	private static final int TILE_SIZE = 25; // in pixels
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
@@ -37,7 +37,7 @@ public class Canvas extends JPanel {
 		setPreferredSize(new Dimension(numCols*TILE_SIZE, numRows*TILE_SIZE)); // important for maintaining size of JPanel
 		initCanvasListeners();
 	}
-	
+
 	/**
 	 * Initializes listeners for both clicking and dragging on tiles
 	 */
@@ -78,7 +78,7 @@ public class Canvas extends JPanel {
 			} else {
 				g.drawImage(tileImage,x,y, TILE_SIZE, TILE_SIZE, DEFAULT_TILE_COLOR, null);
 			}
-			g.setColor(DEFAULT_BORDER_COLOR);
+			g.setColor(tile.getBorderColor());
 			g.drawRect(x, y, TILE_SIZE, TILE_SIZE); // drawing appropriate Tile borders
 		}
 	}
@@ -98,6 +98,15 @@ public class Canvas extends JPanel {
 			return myTiles[row][col];
 		}
 		return null;
+	}
+
+	protected void updateTile(Tile newTile) {
+		int newTileRow = newTile.getRow();
+		int newTileCol = newTile.getCol();
+
+		if (newTileRow < numRows && newTileCol < numCols) {
+			myTiles[newTileRow][newTileCol] = newTile;
+		}
 	}
 
 	/**
@@ -125,13 +134,17 @@ public class Canvas extends JPanel {
 			return;
 		}
 		tile.setImage(selectedTileObj.getImage());
-		tile.setPassIndex(myTerrainTab.getPassabilityIndex());
-        tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
-        tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
-        tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
+		
+		int passIndex = myTerrainTab.getPassabilityIndex();
+		
+		tile.setPassIndex(passIndex);
+		tile.setBorderColor(TerrainAttribute.getAttribute(passIndex).getColor());
+		tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
+		tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
+		tile.setMyTileMapFileName(selectedTileObj.getMyTileMapFileName());
 		repaint(); // we want to keep this repaint, if we use update, it messes up on macs
 	}
-	
+
 	/**
 	 * Clears all tiles on the grid
 	 */
@@ -139,8 +152,17 @@ public class Canvas extends JPanel {
 		for (Tile tile : getTiles()) {
 			tile.setImage(null);
 			tile.setPassIndex(0);
+			tile.setBorderColor(Canvas.DEFAULT_BORDER_COLOR);
 			repaint();
 		}
+	}
+
+	protected int getRows() {
+		return numRows;
+	}
+
+	protected int getCols() {
+		return numCols;
 	}
 
 	/**
@@ -150,7 +172,7 @@ public class Canvas extends JPanel {
 	public void setSelectedTileObj(TileObject tObj) {
 		selectedTileObj = tObj;
 	}
-	
+
 	/**
 	 * Obtains the 'selected' TileObject
 	 */

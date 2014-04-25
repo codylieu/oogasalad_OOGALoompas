@@ -44,19 +44,22 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JSpinner livesSpinner;
 	private JSpinner beginningMoneySpinner;
 
-	private List<JSpinner> spinnerFields;
-
 	private static final String LIVES_STRING = "Lives: ";
-	private static final String WAVES_STRING = "Waves Per Level: ";
-	private static final String ENEMIES_STRING = "Enemies Per Wave: ";
 	private static final String MONEY_STRING = "Beginning Money: ";
+	
+	private static final int LIVES_DEFAULT = 5;
+	private static final int MONEY_DEFAULT = 500;
+	
+	private static final int EASY_DIFFICULTY_VALUE = 1;
+	private static final int MEDIUM_DIFFICULTY_VALUE = 2;
+	private static final int HARD_DIFFICULTY_VALUE = 3;
+	
+	private static final int SURVIVAL_MODE_VALUE = 1;
+	private static final int BOSS_MODE_VALUE = 0;
 
 	String[] GAME_MODE_STRINGS = {"Survival Mode", "Boss Mode"};
 	String[] GAME_DIFFICULTY_STRINGS = {"Easy", "Medium", "Hard"};
 
-	private NumberFormat numberFormat;
-
-	private JButton submitButton;
 	private JButton musicButton;
 
 	private JFileChooser fileChooser;
@@ -71,6 +74,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	 */
 	public GameSettingsEditorTab(TabController gameSettingsController){
 		super(gameSettingsController);
+		
 		contentCreator = new GameSettingsTabContentCreator();
 		add(contentCreator.createSettingsPanel(), BorderLayout.CENTER);
 	}
@@ -86,20 +90,20 @@ public class GameSettingsEditorTab extends EditorTab{
 		gameSchema.addAttribute(GameSchema.MONEY, (Integer) beginningMoneySpinner.getValue());
 
 		if(gameDifficultyList.getSelectedItem().equals("Easy")){
-			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 1);
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, EASY_DIFFICULTY_VALUE);
 		}
 		else if(gameDifficultyList.getSelectedItem().equals("Medium")){
-			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 2);
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, MEDIUM_DIFFICULTY_VALUE);
 		}
 		else{
-			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, 3);
+			gameSchema.addAttribute(GameSchema.LEVELDIFFICULTY, HARD_DIFFICULTY_VALUE);
 		}
 		
 		if(gameModeList.getSelectedItem().equals("Survival Mode")){
-			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, 1);
+			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, SURVIVAL_MODE_VALUE);
 		}
 		else{
-			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, 0);
+			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, BOSS_MODE_VALUE);
 		}
 
 		controller.addGameSettings(gameSchema);
@@ -174,8 +178,8 @@ public class GameSettingsEditorTab extends EditorTab{
 			livesSpinner = makeAttributeSpinner();
 			beginningMoneySpinner = makeAttributeSpinner();
 
-			livesSpinner.setValue(5);
-			beginningMoneySpinner.setValue(500);
+			livesSpinner.setValue(LIVES_DEFAULT);
+			beginningMoneySpinner.setValue(MONEY_DEFAULT);
 
 			fields.add(livesSpinner);
 			fields.add(beginningMoneySpinner);
@@ -194,28 +198,9 @@ public class GameSettingsEditorTab extends EditorTab{
 
 			gameModeList = new JComboBox(GAME_MODE_STRINGS); 
 			gameModeList.setSelectedIndex(1);
-			gameModeList.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent arg0) {
-					// TODO Auto-generated method stub
-					// Would probably switch between the specific attributes to display or just make unique panels for each as classes.
-					// and then do some more logic outside of this action listener to decide what to display.
-				}
-
-			});
 
 			gameDifficultyList = new JComboBox(GAME_DIFFICULTY_STRINGS);
 			gameDifficultyList.setSelectedIndex(1);
-			gameDifficultyList.addActionListener(new ActionListener(){
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-
-				}
-
-			});
 
 			dropDownMenus.add(gameModeList, BorderLayout.NORTH);
 			dropDownMenus.add(gameDifficultyList, BorderLayout.SOUTH);
@@ -241,7 +226,7 @@ public class GameSettingsEditorTab extends EditorTab{
 
 		/**
 		 * @return
-		 * Makes various JButtons
+		 * Makes various JButtons, currently only makes a music button
 		 */
 		private JComponent makeButtons(){
 
@@ -252,9 +237,6 @@ public class GameSettingsEditorTab extends EditorTab{
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// TODO Auto-generated method stub
-
-					// Get it to open up on the right file menu
 					fileChooser = new JFileChooser("main/resources");
 					FileNameExtensionFilter filter = new FileNameExtensionFilter("WAV files", "wav");
 					fileChooser.setFileFilter(filter);

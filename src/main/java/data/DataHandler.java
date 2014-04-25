@@ -1,7 +1,6 @@
 package main.java.data;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -88,33 +87,32 @@ public class DataHandler {
 	 * @param blueprint to save
 	 * @param filePath to save blueprint to
 	 * @throws InvalidGameBlueprintException 
-	 * @throws FileNotFoundException 
 	 */
 
-	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException, FileNotFoundException {
+	public boolean saveBlueprint(GameBlueprint blueprint, String filePath) throws InvalidGameBlueprintException {
 		//		if (checkGameBlueprint(blueprint)){
-		
+
 		// Create temp folder for serialized blueprint and zipped resources
 		String tempDirLocation = filePath + "TempBlueprintHolder/";
 		Boolean tempDirCreated = new File(tempDirLocation).mkdir();
-		
+
 		if (tempDirCreated){
 			//Set up container zip file
 			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
-			
+
 			// Zip resources
 			String zipResourcesLocation = tempDirLocation + "ZippedResources.zip";
 			File myResources = new File(FILE_PATH);
 			List<File> myFilesToZip = new ArrayList<File>();
 			compressResources(myResources,zipResourcesLocation);
-			
+
 			// Serialize blueprint
 			saveObjectToFile(blueprint,tempDirLocation + "MyBlueprint.ser"); 
-			
+
 			// Prepare to zip: 1) zipped resources and 2) serialized blueprint
 			myFilesToZip.add(new File(zipResourcesLocation));
 			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser"));
-			
+
 			// Compress container file
 			if (compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation)){
 				deleteDirectory(new File(tempDirLocation)); 
@@ -220,21 +218,21 @@ public class DataHandler {
 		decompress(filePath, TEMP_FOLDER_PATH);
 
 		GameBlueprint toReturn = ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
-				
+
 		// Delete resources and reload from container file
-		File myDir = new File(FILE_PATH);
+		/*File myDir = new File(FILE_PATH);
 		deleteDirectory(myDir);
-		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
-		
+		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);*/
+
 		// Delete temp folder
 		deleteDirectory(new File(TEMP_FOLDER_PATH));
-		
+
 		if (isEngine) {
 			// Validate game blueprint for engine, but not author
 			// throw stuff if it isn't complete
 			System.out.println(checkGameBlueprint(toReturn));
 		}
-		
+
 		// return the blueprint in case of (Author - any) (Engine - complete blueprint)
 		return toReturn;	
 	}
@@ -374,11 +372,8 @@ public class DataHandler {
 	 * @param object Object to serialize
 	 * @param fileName File to save serialized object to
 	 * @return whether the object was successfully saved
-	 * @throws FileNotFoundException 
 	 */
-	public boolean saveObjectToFile(Object object, String fileName) throws FileNotFoundException { // change back to private after testing
-		//Using OutputStream
-		/**
+	public boolean saveObjectToFile(Object object, String fileName) { // change back to private after testing
 		FileOutputStream fileOut;
 		try {
 			fileOut = new FileOutputStream(fileName);
@@ -391,13 +386,6 @@ public class DataHandler {
 			e.printStackTrace();
 			return false;
 		}
-		*/
-		
-		//Using JSON
-		JSONHandler j = new JSONHandler();
-		j.serializeObjectToJSON(object, fileName);
-		return true;
-		
 	}
 
 	/**
@@ -436,11 +424,11 @@ public class DataHandler {
 		else if(b.getMyMonsterSchemas() == null){
 			throw new InvalidGameBlueprintException("myMonsterSchemas");
 		}
-		else if(b.getMyLevelSchemas() == null){
-			throw new InvalidGameBlueprintException("myLevelSchemas");
-		}
 		else if(b.getMyGameMapSchemas() == null){
 			throw new InvalidGameBlueprintException("myGameMaps");
+		}
+		else if(b.getMyWaveSchemas() == null){
+			throw new InvalidGameBlueprintException("myWaveSchemas");
 		}
 		return true;
 	}
@@ -483,13 +471,4 @@ public class DataHandler {
 		return count == obj.getClass().getDeclaredFields().length;
 	}
 
-	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvalidDataException, InvalidGameBlueprintException	{
-		DataHandler d = new DataHandler();
-		TestObject t2 = new TestObject();
-		t2.populateDefaultAttributes("testTestObject");
-		System.out.println(d.checkPublicData(t2));
-		GameBlueprint b = new GameBlueprint();
-		System.out.println(d.checkGameBlueprint(b));
-
-	}
 }

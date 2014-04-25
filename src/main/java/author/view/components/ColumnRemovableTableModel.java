@@ -7,6 +7,10 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
+/**
+ * @author garysheng
+ * A concerete subclass of the DefaultTableModel which allows someone to easily remove a column from a table
+ */
 public class ColumnRemovableTableModel extends DefaultTableModel {
 
 	public ColumnRemovableTableModel(Object[][] data, String[] columnNames) {
@@ -18,6 +22,11 @@ public class ColumnRemovableTableModel extends DefaultTableModel {
 
 	}
 
+	/**
+	 * removes a column and the corresponding data
+	 * @param table
+	 * @param vColIndex
+	 */
 	public void removeColumnAndData(JTable table, int vColIndex) {
 		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
 				.getModel();

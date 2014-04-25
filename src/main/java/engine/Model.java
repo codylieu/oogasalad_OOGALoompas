@@ -5,14 +5,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.ZipException;
 
 import jgame.platform.JGEngine;
 import main.java.data.DataHandler;
@@ -20,31 +19,31 @@ import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.item.RowBomb;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.TowerBehaviors;
+import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
-import main.java.schema.map.GameMapSchema;
-import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.MonsterSpawnSchema;
+import main.java.schema.WaveSpawnSchema;
+import main.java.schema.map.GameMapSchema;
+import main.java.schema.tdobjects.ItemSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
-import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.TDObjectSchema;
-import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.WaveSpawnSchema;
 
 
-public class Model {
+public class Model implements IModel{
 
 	private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
 	public static final String RESOURCE_PATH = "/main/resources/";
@@ -62,8 +61,9 @@ public class Model {
 	private EnvironmentKnowledge environ;
 	private List<TDItem> items;
 
-	public Model (JGEngine engine) {
+	public Model (JGEngine engine, String pathToBlueprint) {
 		this.engine = engine;
+		dataHandler = new DataHandler();
 		defineAllStaticImages();
 		this.factory = new TDObjectFactory(engine);
 		collisionManager = new CollisionManager(engine);
@@ -71,7 +71,8 @@ public class Model {
 		levelManager = new LevelManager(factory);
 		// TODO: Code entrance/exit logic into wave or monster spawn schema
 		levelManager.setEntrance(0, engine.pfHeight() / 2);
-		levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
+		//levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
+		levelManager.setExit(12 * engine.tileWidth(), 9 * engine.tileHeight());
 
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
@@ -80,27 +81,20 @@ public class Model {
 		items = new ArrayList<TDItem>();
 
 		try {
-			loadGameBlueprint(null);// TODO: REPLACE
+			loadGameBlueprint(pathToBlueprint);// TODO: REPLACE
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		dataHandler = new DataHandler();
 
 		addNewPlayer();
 
 	}
 
 	private void defineAllStaticImages () {
-		// TODO: remove this method, make this a part of schemas
+		// TODO: remove this method, make exit a part of wavespawnschemas
+		//and define its image dynamically
 		engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
-		// make bullet image dynamic
-		engine.defineImage("red_bullet", "-", 1, RESOURCE_PATH + "red_bullet.png", "-");
-		engine.defineImage("blue_bullet", "-", 1, RESOURCE_PATH + "blue_bullet.png", "-");
-		engine.defineImage("row_bomb", "-", TDItem.ITEM_CID, RESOURCE_PATH + "Big_Ben.png", "-");
-		engine.defineImage("fire", "-", 0, RESOURCE_PATH + "fire.png", "-");
-		engine.defineImage("ice", "-", 0, RESOURCE_PATH + "ice.png", "-");
 	}
 
 	/**
@@ -185,6 +179,49 @@ public class Model {
 	}
 
 	/**
+	 * Get the information of the TDObject, if any, 
+	 * at the specified coordinates
+	 * 
+	 * @param x
+	 * @param y
+	 * @return The information that we want to display to the player
+	 */
+	public List<String> getUnitInfo(double x, double y) {
+		List<String> info = new ArrayList<String>();
+		if (isTowerPresent(x, y)) {
+			int[] currentTile = getTileCoordinates(new Point2D.Double(x, y));
+			ITower currTower = towers[currentTile[0]][currentTile[1]];
+			info.addAll(currTower.getInfo());
+		}
+
+		Monster m;
+		if ((m=monsterPresent(x, y)) != null) {
+			info.addAll(m.getInfo());
+		}
+		return info;
+	}
+
+	/**
+	 * Return the monster at the specified coordinates. 
+	 * If there's no monster at that location, null will be returned.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return the monster present
+	 */
+	private Monster monsterPresent(double x, double y) {
+		Monster monster = null;
+		for (Monster m : monsters) {
+			double xUpper = m.x + m.getImageBBoxConst().width;
+			double yUpper = m.y + m.getImageBBoxConst().height;
+			if (m.x <= x && x <= xUpper && m.y <= y && y <= yUpper) {
+				monster = m;
+			}
+		}
+		return monster;
+	}
+
+	/**
 	 * Check if the current location contains any tower. If yes, remove it. If no, do nothing
 	 * 
 	 * @param x
@@ -231,14 +268,15 @@ public class Model {
 		}
 		else {
 			try {
-				blueprint = dataHandler.loadBlueprint(filePath,true);
-			} catch (Exception e) {
+				blueprint = dataHandler.loadBlueprint(filePath, true);
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 				return;
 			}
 		}
-		
-		//Initialize from game settings from game schema
+
+		// Initialize from game settings from game schema
 		GameSchema gameSchema = blueprint.getMyGameScenario();
 		Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
 		this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
@@ -256,15 +294,14 @@ public class Model {
 		}
 
 		// Initialize waves
-		if (blueprint.getMyLevelSchemas() != null) {
-			for (WaveSpawnSchema wave : blueprint.getMyLevelSchemas()) {
-				levelManager.addNewWave(wave);
-			}
+		if (blueprint.getMyWaveSchemas() != null) {
+			levelManager.cleanLoadWaveSchemas(blueprint.getMyWaveSchemas(), 0);
 		}
 
 		// Initialize map if necessary
 		if (blueprint.getMyGameMapSchemas() != null) {
-			TDMap map = new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load each map
+			TDMap map = new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
+			// each map
 		}
 	}
 
@@ -328,8 +365,23 @@ public class Model {
 		return player.getMoney();
 	}
 
-	private boolean isGameWon () {
-		return levelManager.checkAllWavesFinished();
+	/**
+	 * Returns whether or not the player has complete all waves and thus has won
+	 * the game. This will always return false on survival mode.
+	 * 
+	 * @return boolean of whether game is won (all waves completed)
+	 */
+	public boolean isGameWon() {
+		return levelManager.isGameWon();
+	}
+
+	/**
+	 * Set whether or not the game is played on survival mode.
+	 * @param survivalMode
+	 * @return
+	 */
+	public void setSurvivalMode(boolean survivalMode){
+		levelManager.setSurvivalMode(survivalMode);
 	}
 
 	/**
@@ -358,10 +410,6 @@ public class Model {
 		doTowerBehaviors();
 		doItemActions();
 		removeDeadMonsters();
-		gameState
-		.updateGameStates(monsters, towers, levelManager.getCurrentWave(),
-				levelManager.getAllWaves(), gameClock,
-				player.getMoney(), player.getLivesRemaining(), player.getScore());
 	}
 
 	private void doItemActions () {
@@ -414,13 +462,16 @@ public class Model {
 		while (monsterIter.hasNext()) {
 			Monster currentMonster = monsterIter.next();
 			if (currentMonster.isDead()) {
-				MonsterSpawnSchema resurrectSchema = currentMonster.getResurrrectMonsterSpawnSchema();
-				if(resurrectSchema != null) {
+				MonsterSpawnSchema resurrectSchema =
+						currentMonster.getResurrrectMonsterSpawnSchema();
+				if (resurrectSchema != null) {
 					try {
-						//monsters.addAll( ... )
-						System.out.println("resurrect spawned " + resurrectSchema.getSwarmSize());
-						newlyAdded = levelManager.spawnMonsterSpawnSchema(resurrectSchema, currentMonster.getCurrentCoor());
-					} catch (MonsterCreationFailureException e) {
+						newlyAdded =
+								levelManager.spawnMonsterSpawnSchema(resurrectSchema,
+										currentMonster
+										.getCurrentCoor());
+					}
+					catch (MonsterCreationFailureException e) {
 						// resurrection schema could not be spawned, so ignore it.
 						e.printStackTrace();
 					}
@@ -470,18 +521,14 @@ public class Model {
 	public boolean upgradeTower (double x, double y) throws TowerCreationFailureException {
 		int[] coordinates = getTileCoordinates(new Point2D.Double(x, y));
 
-		if (!isTowerPresent(coordinates)) {
-			return false;
-		}
+		if (!isTowerPresent(coordinates)) { return false; }
 
 		int xtile = coordinates[0];
 		int ytile = coordinates[1];
 		ITower existingTower = towers[xtile][ytile];
 		String newTowerName = existingTower.getUpgradeTowerName();
 
-		if (!isValidUpgradeTower(newTowerName)) {
-			return false;
-		}
+		if (!isValidUpgradeTower(newTowerName)) { return false; }
 
 		ITower newTower = factory.placeTower(new Point2D.Double(x, y), newTowerName);
 		player.changeMoney(-newTower.getCost());
@@ -547,7 +594,7 @@ public class Model {
 		InstantFreezeItemSchema testInstantFreezeItem = new InstantFreezeItemSchema();
 		testInstantFreezeItem.addAttribute(ItemSchema.NAME, "InstantFreeze");
 		testInstantFreezeItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
-		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 5);
+		testInstantFreezeItem.addAttribute(InstantFreezeItemSchema.FREEZE_DURATION, (double) 999999);
 		testItemSchema.add(testInstantFreezeItem);
 
 		LifeSaverItemSchema testLifeSaverItem = new LifeSaverItemSchema();
@@ -555,23 +602,24 @@ public class Model {
 		testLifeSaverItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
 		testItemSchema.add(testLifeSaverItem);
 
-
 		// Create test towers
 		TowerSchema testTowerOne = new TowerSchema();
-		testTowerOne.addAttribute(TowerSchema.NAME, "test-tower-1");
+		testTowerOne.addAttribute(TowerSchema.NAME, "MoneyTower");
 		testTowerOne.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-		testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+		testTowerOne.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerOne.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors = new ArrayList<TowerBehaviors>();
 		towerBehaviors.add(TowerBehaviors.MONEY_FARMING);
-		testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "test-tower-3");
+		testTowerOne.addAttribute(TowerSchema.UPGRADE_PATH, "BombingTower");
 		testTowerOne.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors);
 		testTowerOne.addAttribute(TowerSchema.COST, (double) 10);
 		testTowerSchema.add(testTowerOne);
 
 		TowerSchema testTowerTwo = new TowerSchema();
-		testTowerTwo.addAttribute(TowerSchema.NAME, "test-tower-2");
+		testTowerTwo.addAttribute(TowerSchema.NAME, "ShootingTower");
 		testTowerTwo.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-		testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+		testTowerTwo.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerTwo.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors2 = new ArrayList<TowerBehaviors>();
 		towerBehaviors2.add(TowerBehaviors.SHOOTING);
 		testTowerTwo.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors2);
@@ -579,10 +627,10 @@ public class Model {
 		testTowerSchema.add(testTowerTwo);
 
 		TowerSchema testTowerThree = new TowerSchema();
-		testTowerThree.addAttribute(TowerSchema.NAME, "test-tower-3");
+		testTowerThree.addAttribute(TowerSchema.NAME, "BombingTower");
 		testTowerThree.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-		testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet");
-		testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet");
+		testTowerThree.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "blue_bullet.png");
+		testTowerThree.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors3 = new ArrayList<TowerBehaviors>();
 		towerBehaviors3.add(TowerBehaviors.BOMBING);
 		testTowerThree.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors3);
@@ -590,9 +638,10 @@ public class Model {
 		testTowerSchema.add(testTowerThree);
 
 		TowerSchema testTowerFour = new TowerSchema();
-		testTowerFour.addAttribute(TowerSchema.NAME, "test-tower-4");
+		testTowerFour.addAttribute(TowerSchema.NAME, "FreezingTower");
 		testTowerFour.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-		testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+		testTowerFour.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerFour.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		testTowerFour.addAttribute(TowerSchema.FREEZE_SLOWDOWN_PROPORTION, (double) 0.8);
 		Collection<TowerBehaviors> towerBehaviors4 = new ArrayList<TowerBehaviors>();
 		towerBehaviors4.add(TowerBehaviors.FREEZING);
@@ -601,9 +650,10 @@ public class Model {
 		testTowerSchema.add(testTowerFour);
 
 		TowerSchema testTowerFive = new TowerSchema();
-		testTowerFive.addAttribute(TowerSchema.NAME, "test-tower-5");
+		testTowerFive.addAttribute(TowerSchema.NAME, "SplashingTower");
 		testTowerFive.addAttribute(TowerSchema.IMAGE_NAME, "tower.gif");
-		testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet");
+		testTowerFive.addAttribute(TowerSchema.BULLET_IMAGE_NAME, "red_bullet.png");
+		testTowerFive.addAttribute(TowerSchema.SHRAPNEL_IMAGE_NAME, "red_bullet.png");
 		Collection<TowerBehaviors> towerBehaviors5 = new ArrayList<TowerBehaviors>();
 		towerBehaviors5.add(TowerBehaviors.SPLASHING);
 		testTowerFive.addAttribute(TowerSchema.TOWER_BEHAVIORS, (Serializable) towerBehaviors5);
@@ -621,13 +671,12 @@ public class Model {
 		SimpleMonsterSchema testMonsterResurrects = new SimpleMonsterSchema();
 		testMonsterResurrects.addAttribute(MonsterSchema.NAME, "test-monster-2");
 		testMonsterResurrects.addAttribute(TDObjectSchema.IMAGE_NAME, "monster.png");
-		//resurrect spawn schema is 2 testMonsterOnes
+		// resurrect spawn schema is 2 testMonsterOnes
 		MonsterSpawnSchema resurrect = new MonsterSpawnSchema(testMonsterOne, 2);
 		testMonsterResurrects.addAttribute(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, resurrect);
 		testMonsterResurrects.addAttribute(MonsterSchema.SPEED, (double) 1);
 		testMonsterResurrects.addAttribute(MonsterSchema.REWARD, (double) 200);
 		testMonsterSchema.add(testMonsterResurrects);
-
 
 		testBlueprint.setMyTowerSchemas(testTowerSchema);
 		testBlueprint.setMyMonsterSchemas(testMonsterSchema);
@@ -642,7 +691,8 @@ public class Model {
 
 		// Create wave schemas
 		List<WaveSpawnSchema> testWaves = new ArrayList<WaveSpawnSchema>();
-		MonsterSpawnSchema testMonsterSpawnSchemaOne = new MonsterSpawnSchema(testMonsterResurrects, 1);
+		MonsterSpawnSchema testMonsterSpawnSchemaOne =
+				new MonsterSpawnSchema(testMonsterResurrects, 1);
 		WaveSpawnSchema testWaveSpawnSchemaOne = new WaveSpawnSchema();
 		testWaveSpawnSchemaOne.addMonsterSchema(testMonsterSpawnSchemaOne);
 		testWaves.add(testWaveSpawnSchemaOne);
@@ -657,13 +707,98 @@ public class Model {
 		testWaveSpawnSchemaThree.addMonsterSchema(testMonsterSpawnSchemaThree);
 		testWaves.add(testWaveSpawnSchemaThree);
 
-		testBlueprint.setMyLevelSchemas(testWaves);
+		testBlueprint.setMyWaveSchemas(testWaves);
 
 		return testBlueprint;
 	}
 
+	/**
+	 * A list of names of possible towers to create
+	 * 
+	 * @return
+	 */
 	public List<String> getPossibleTowers () {
-		return factory.getPossibleTowersNames();
+		return Collections.unmodifiableList(factory.getPossibleTowersNames());
+	}
+
+	/**
+	 * A list of names of possible items to create
+	 * 
+	 * @return
+	 */
+	public List<String> getPossibleItems () {
+		return Collections.unmodifiableList(factory.getPossibleItemNames());
+	}
+
+	/**
+	 * Save the present game state to a loadable file.
+	 * Note: all saved game files saved to under resources folder.
+	 * 
+	 * @param gameName the file name to save the current game under.
+	 * @throws InvalidSavedGameException Problem saving the game
+	 */
+	public void saveGame (String gameName) throws InvalidSavedGameException {
+		GameState currentGame = new GameState();
+		currentGame.updateGameStates(towers,
+				levelManager.getCurrentWave(),
+				levelManager.getAllWaves(),
+				gameClock,
+				player);
+		try {
+			//Michael- i removed the resource_path because it was giving me an error since the method should take the straight file name not the resource path
+			dataHandler.saveState(currentGame, gameName);
+		}
+		catch (IOException ioe) {
+			throw new InvalidSavedGameException(ioe);
+		}
+	}
+
+	/**
+	 * Clears current game and restarts a new game based on loaded saved game.
+	 * Only valid saved game files in the resources folder can be loaded.
+	 * Pass in the file's name only (e.g. which can be chosen through JFileChooser)
+	 * 
+	 * @param filename The full filename only.
+	 * @throws InvalidSavedGameException issue loading the game,
+	 *         (please pause and notify the player, then continue the present game).
+	 */
+	public void loadSavedGame (String filename) throws InvalidSavedGameException {
+		try {
+			// TODO: check for proper game blueprint loaded prior?
+			//removed the RESOURCE_PATH variable as i think thats causing issues with actually saving
+			GameState newGameState = dataHandler.loadState(filename);
+
+			// replace towers, player, clock with new state
+			clearAllTowers();
+			towers = newGameState.getTowers();
+			player = newGameState.getPlayer();
+			gameClock = newGameState.getGameClock();
+
+			// cleanly reload waves in the level manager, and reset wave # to start at.
+			levelManager.cleanLoadWaveSchemas(newGameState.getAllWaveSchemas(),
+					newGameState.getCurrentWaveNumber());
+
+		}
+		catch (ClassNotFoundException | IOException e) {
+			throw new InvalidSavedGameException(e);
+		}
+
+	}
+
+	/**
+	 * Clear all of the current towers.
+	 * Used internally to replace current tower state with with a new loaded saved game state.
+	 */
+	private void clearAllTowers () {
+		for (ITower[] row : towers) {
+			for (ITower t : row) {
+				if (t != null) {
+					t.remove();
+				}
+			}
+			// null out tower matrix row by row after jgobject removal called.
+			Arrays.fill(row, null);
+		}
 	}
 
 }

@@ -1,6 +1,7 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -60,7 +61,7 @@ public abstract class Monster extends TDObject {
 		myMoneyValue = rewardAmount;
 		myEntrance = entrance;
 		myExit = exit;
-		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic(), eng); // TODO: clean up
+		myPathFinder = new JGPathfinder(new JGTileMap(eng, null, new HashSet<Integer>(blocked)), new JGPathfinderHeuristic()); // TODO: clean up
 		JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
 		JGPoint pathExit = new JGPoint(myExit.getCenterTile());
 		this.setSpeed(myMoveSpeed);
@@ -147,7 +148,11 @@ public abstract class Monster extends TDObject {
 	@Override
 	public void paint() {
 		if (myPath != null) {
-			myPath.paint(5, JGColor.pink);
+			for (JGPoint p : myPath) {
+				JGPoint coord = eng.getTileCoord(p);
+				eng.drawOval(coord.x + eng.tileWidth()/2, coord.y + eng.tileHeight()/2,
+						10, 10, true, true, 10, JGColor.yellow);
+			}
 		}
 	}
 
@@ -158,5 +163,20 @@ public abstract class Monster extends TDObject {
 	 */
 	public MonsterSpawnSchema getResurrrectMonsterSpawnSchema() {
 		return resurrectMonsterSchema;
+	}
+	
+	/**
+	 * Get dynamic information about the monster
+	 * 
+	 * @return
+	 */
+	public List<String> getInfo() {
+		List<String> info = new ArrayList<String>();
+		info.add(""+x);
+		info.add(""+y);
+		info.add(""+myMoneyValue);
+		info.add(""+myHealth);
+		info.add(""+myMoveSpeed);
+		return info;
 	}
 }
