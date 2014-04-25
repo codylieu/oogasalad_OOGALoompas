@@ -59,6 +59,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 	private String pathToBlueprint;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
+	private JGPoint lastClickedObject;
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 	public TDPlayerEngine(String pathToBlueprintInit) {
 		//		super();
@@ -70,6 +71,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		hasUnitInfoChanged = false;
 		isFullScreen = false;
 		cursorState = CursorState.None;
+		lastClickedObject = new JGPoint();
 		stop();
 	}
 
@@ -189,7 +191,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 			//if (model.isTowerPresent(mousePos.x, mousePos.y)){
 			//System.out.println(getObjects("tower", 0, true, null).size());
 			//return getObjects("tower", 0, true, null).get(1).toString();//remove null to bounding box
-			return model.getUnitInfo(mousePos.x, mousePos.y);
+			return model.getUnitInfo(lastClickedObject.x, lastClickedObject.y);
 			//}
 			//else
 			//return "";
@@ -215,7 +217,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		}
 		else if (cursorState == CursorState.None) {
 			if (getMouseButton(LEFT_CLICK)) {
-				if(!model.getUnitInfo(getMousePos().x, getMousePos().y).isEmpty()){
+				lastClickedObject.x = getMousePos().x;
+				lastClickedObject.y = getMousePos().y;
+				if(!model.getUnitInfo(lastClickedObject.x, lastClickedObject.y).isEmpty()){
 					hasUnitInfoChanged = true;
 				}
 				if(getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))){
@@ -225,7 +229,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 						e.printStackTrace();
 					}
 
-					
+
 					clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 				}
 				clearMouseButton(LEFT_CLICK);
