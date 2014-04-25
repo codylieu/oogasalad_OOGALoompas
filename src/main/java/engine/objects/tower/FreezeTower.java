@@ -33,8 +33,6 @@ public class FreezeTower extends ShootingTower {
                 Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes,
                                                     TowerSchema.FREEZE_SLOWDOWN_PROPORTION,
                                                     DEFAULT_FREEZE_SLOWDOWN_PROPORTION)));
-        myInfo.clear();
-        addInfo();
     }
 
     @Override
@@ -44,5 +42,12 @@ public class FreezeTower extends ShootingTower {
         		baseTower.centerCoordinate().getY(),
         		angle, myFreezeSlowdownProportion, myBulletImage);
     }
-
+    
+    @Override
+    public String getInfo() {
+    	String info = "";
+    	info += super.getInfo() +
+    			"\nSlowdown Proportion: " + myFreezeSlowdownProportion;
+    	return info;
+    }
 }

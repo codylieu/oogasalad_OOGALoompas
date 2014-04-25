@@ -180,7 +180,7 @@ public class Model implements IModel{
 	}
 
 	/**
-	 * Get the information of the TDObject, if any, 
+	 * Get the information of the towers or monsters, if any, 
 	 * at the specified coordinates
 	 * 
 	 * @param x
@@ -192,12 +192,12 @@ public class Model implements IModel{
 		if (isTowerPresent(x, y)) {
 			int[] currentTile = getTileCoordinates(new Point2D.Double(x, y));
 			ITower currTower = towers[currentTile[0]][currentTile[1]];
-			info.addAll(currTower.getInfo());
+			info.add(currTower.getInfo());
 		}
 
 		Monster m;
 		if ((m=monsterPresent(x, y)) != null) {
-			info.addAll(m.getInfo());
+			info.add(m.getInfo());
 		}
 		return info;
 	}

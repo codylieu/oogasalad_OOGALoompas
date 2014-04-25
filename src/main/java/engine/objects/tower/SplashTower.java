@@ -18,8 +18,6 @@ public class SplashTower extends ShootingTower {
 	
 	public SplashTower(ITower baseTower, Map<String, Serializable> attributes) {
 		super(baseTower, attributes);
-        myInfo.clear();
-        addInfo();
 	}
 	
     @Override

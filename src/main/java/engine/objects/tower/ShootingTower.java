@@ -33,7 +33,6 @@ public class ShootingTower extends TowerBehaviorDecorator {
     protected double myFiringSpeed;
     protected double myRange;
     protected String myBulletImage;
-    protected List<String> myInfo = new ArrayList<String>();
     protected String myType;
     
     private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
@@ -57,14 +56,6 @@ public class ShootingTower extends TowerBehaviorDecorator {
         myRange = range;
         myBulletImage = bulletImage;
         myType = TOWER_TYPE;
-        addInfo();
-    }
-    
-    protected void addInfo() {
-        myInfo.add(this.getClass().getSimpleName());
-		myInfo.addAll(baseTower.getInfo());
-		myInfo.add(""+myDamage);
-		myInfo.add(""+myRange);
     }
 
     /**
@@ -143,8 +134,13 @@ public class ShootingTower extends TowerBehaviorDecorator {
     }
 
 	@Override
-	public List<String> getInfo() {
-		return myInfo;
+	public String getInfo() {
+    	String info = "";
+    	info += this.getClass().getSimpleName() + "\n" +
+				baseTower.getInfo() + 
+				"\nDamage: " + myDamage +
+				"\nRange: " + myRange;
+		return info;
 	}
     
     

@@ -32,8 +32,6 @@ public class BombTower extends ShootingTower {
         myShrapnelDamage =
         		Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_DAMAGE,
                 DEFAULT_SHRAPNEL_DAMAGE)));
-        myInfo.clear();
-        addInfo();
     }
 
     @Override
@@ -43,6 +41,14 @@ public class BombTower extends ShootingTower {
         		baseTower.centerCoordinate().getY(), 
         		angle, myDamage, myShrapnelDamage,
                  myBulletImage, myShrapnelImage);
+    }
+    
+    @Override
+    public String getInfo() {
+    	String info = "";
+    	info += super.getInfo() +
+    			"\nShrapnelDamage: " + myShrapnelDamage;
+    	return info;
     }
 
 }

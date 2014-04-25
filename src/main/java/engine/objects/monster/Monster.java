@@ -153,13 +153,13 @@ public abstract class Monster extends TDObject {
 	 * 
 	 * @return
 	 */
-	public List<String> getInfo() {
-		List<String> info = new ArrayList<String>();
-		info.add(""+x);
-		info.add(""+y);
-		info.add(""+myMoneyValue);
-		info.add(""+myHealth);
-		info.add(""+myMoveSpeed);
+	public String getInfo() {
+		String info = "";
+		info+="X-coor: " + x + 
+				"\nY-coor: " + y + 
+				"\nMoney Value: " + myMoneyValue + 
+				"\nHealth: " + myHealth + 
+				"\nMove Speed: " + myMoveSpeed;
 		return info;
 	}
 }
