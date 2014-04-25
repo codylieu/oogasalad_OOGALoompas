@@ -46,9 +46,6 @@ public class TowerSchema extends TDObjectSchema {
      * upgrade if UPGRADE_PATH is not put into the map, or if its value is the
      * empty string.
      */
-    @Deprecated
-    public static final String UPGRADE_PATH_NONE = "No Upgrade";
-
     public TowerSchema () {
         super(SimpleTower.class);
         // things author doesnt touch
