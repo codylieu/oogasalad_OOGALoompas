@@ -43,7 +43,11 @@ public class WaveEditorTab extends EditorTab {
 	private static final String WAVE_STRING = "Wave";
 	private static final String ZERO_STRING = "0";
 	private static final String ONE_STRING = "1";
-
+	private static final String ADD_WAVE_STRING = "Add Wave";
+	private static final String REMOVE_WAVE_STRING = "Remove Wave";
+	private static final String CLEAR_ALL_WAVES_STRING = "Clear All Waves";
+	private static final String ADD_ENEMY_STRING = "Add Enemy";
+	
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
 	private JButton clearAllWavesButton;
@@ -269,28 +273,12 @@ public class WaveEditorTab extends EditorTab {
 
 			}
 
-			private Component makeAddEnemyButton() {
-				addEnemyButton = new JButton("Add Enemy");
-
-				addEnemyButton.addActionListener(new ActionListener() {
-
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						WaveController controller = (WaveController) myController;
-						controller.shiftToEnemyTab();
-					}
-
-				});
-
-				return addEnemyButton;
-			}
-
 			/**
 			 * @return Makes a button that adds a new wave to the table
 			 */
 			private JComponent makeAddNewWaveButton() {
 
-				addNewWaveButton = new JButton("Add New Wave");
+				addNewWaveButton = new JButton(ADD_WAVE_STRING);
 
 				addNewWaveButton.addActionListener(new ActionListener() {
 
@@ -309,7 +297,7 @@ public class WaveEditorTab extends EditorTab {
 			 */
 			private JComponent makeRemoveWaveButton() {
 
-				removeWaveButton = new JButton("Remove Wave");
+				removeWaveButton = new JButton(REMOVE_WAVE_STRING);
 
 				removeWaveButton.addActionListener(new ActionListener() {
 
@@ -330,7 +318,7 @@ public class WaveEditorTab extends EditorTab {
 			 */
 			private JComponent makeClearAllWavesButton() {
 
-				clearAllWavesButton = new JButton("Clear All Waves");
+				clearAllWavesButton = new JButton(CLEAR_ALL_WAVES_STRING);
 
 				clearAllWavesButton.addActionListener(new ActionListener() {
 
@@ -351,6 +339,27 @@ public class WaveEditorTab extends EditorTab {
 
 				return clearAllWavesButton;
 			}
+			
+			/**
+			 * @return
+			 * Changes tab to the Enemy Tab so the user can add new enemy information
+			 */
+			private Component makeAddEnemyButton() {
+				addEnemyButton = new JButton(ADD_ENEMY_STRING);
+
+				addEnemyButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						WaveController controller = (WaveController) myController;
+						controller.shiftToEnemyTab();
+					}
+
+				});
+
+				return addEnemyButton;
+			}
+			
 		}
 
 	}

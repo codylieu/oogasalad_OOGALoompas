@@ -66,7 +66,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JButton musicButton;
 	private JFileChooser fileChooser;
 	
-	private String musicFile = "fox.wav";
+	private String musicFile = "fox.wav"; // Default music path
 
 	/**
 	 * @param gameSettingsController
