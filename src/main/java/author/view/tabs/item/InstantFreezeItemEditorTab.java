@@ -28,8 +28,7 @@ public class InstantFreezeItemEditorTab extends AbstractItemEditorTab{
 
 	@Override
 	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
-		// TODO Auto-generated method stub
-		return null;
+		return new InstantFreezeItemTabViewBuilder(this);
 	}
 
 	private class InstantFreezeItemTabViewBuilder extends AbstractItemTabViewBuilder {

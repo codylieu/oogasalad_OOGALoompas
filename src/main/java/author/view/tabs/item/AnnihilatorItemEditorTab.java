@@ -1,18 +1,12 @@
 package main.java.author.view.tabs.item;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
 import main.java.author.view.components.ImageCanvas;
-import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
