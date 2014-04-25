@@ -59,6 +59,34 @@ import main.java.reflection.MethodAction;
 @SuppressWarnings("serial")
 public class ViewController implements Serializable {
 
+	public static final String LOAD_BLUEPRINT_FILE_METHOD_NAME = "loadBlueprintFile";
+	public static final int WELCOME_LABEL_FONT = 32;
+	public static final String SANS_SERIF_FONT = "SansSerif";
+	public static final String SAVE_GAME_STATE_METHOD_NAME = "saveGameState";
+	public static final String LOAD_GAME_STATE_METHOD_NAME = "loadGameState";
+	public static final String SPEED_UP_METHOD_NAME = "speedUp";
+	public static final String SLOW_DOWN_METHOD_NAME = "slowDown";
+	public static final String TOGGLE_ADD_TOWER_METHOD_NAME = "toggleAddTower";
+	public static final String TOGGLE_SOUND_METHOD_NAME = "toggleSound";
+	public static final String TOGGLE_RUNNING_METHOD_NAME = "toggleRunning";
+	public static final String SHOW_CARD_VARIABLE = "showCard";
+	public static final String QUIT_METHOD_NAME = "quit";
+	public static final String QUIT_TEXT = "QUIT_TEXT";
+	public static final String MAIN_MENU_TEXT = "MAIN_MENU_TEXT";
+	public static final String CREDITS = "CREDITS";
+	public static final String HELP = "HELP";
+	public static final String MUSIC_TEXT = "MUSIC_TEXT";
+	public static final String SOUND = "SOUND";
+	public static final String SOUND_ONOFF_TEXT = "SOUND_ONOFF_TEXT";
+	public static final String ADD_TOWER_TEXT = "ADD_TOWER_TEXT";
+	public static final String SLOW_DOWN_TEXT = "SLOW_DOWN_TEXT";
+	public static final String SPEED_UP_TEXT = "SPEED_UP_TEXT";
+	public static final String LOAD_TEXT = "LOAD_TEXT";
+	public static final String SAVE_TEXT = "SAVE_TEXT";
+	public static final String PLAY_PAUSE_TEXT = "PLAY_PAUSE_TEXT";
+	public static final String WELCOME_LABEL_TEXT = "WELCOME_LABEL_TEXT";
+	public static final String LOAD_GAME_TEXT = "LOAD_GAME_TEXT";
+	public static final String FILE_LABEL = "FILE_LABEL";
 	public static final String LANGUAGES_LIST = "LanguageList";
 	public static final String DEFAULT_RESOURCE_PACKAGE = "main.resources.";
 	public static final String ENGLISH = "English";
@@ -66,48 +94,12 @@ public class ViewController implements Serializable {
 	public static final int BUTTON_PADDING = 10;
 	public static final String USER_DIR = "user.dir";
 	public static final String DEFAULT_MUSIC_PATH = "src/main/resources/backgroundmusic.wav";
-
 	public static final String WELCOME_CARD = "welcomeCard";
 	public static final String GAME_CARD = "gameCard";
 	public static final String OPTION_CARD = "optionCard";
 	public static final String HELP_CARD = "helpCard";	
 	public static final String CREDITS_CARD = "creditsCard";
 	public static final String HIGH_SCORE_CARD = "highScoreCard";
-
-	//public static final String DIFFICULTY = "Difficulty";
-	//	public static final String EASY = "Easy Mode";
-	//	public static final String MEDIUM = "Medium Mode";
-	//	public static final String HARD = "Hard Mode";
-	/*public static final String SOUND = "Sound";
-	public static final String ON = "On";
-	public static final String OFF = "Off";
-	public static final String WELCOME_LABEL_TEXT = "Ooga Loompas Tower Defense";
-	public static final String LOAD_GAME_TEXT = "Load Game Data";
-	public static final String LOAD_LIBRARY_TEXT = "Browse library";
-	public static final String FILE_LABEL = "File";
-	public static final String PLAY_PAUSE_TEXT = "Play/Pause";
-	public static final String SAVE_TEXT = "Save game state";
-	public static final String LOAD_TEXT = "Load game state";
-	public static final String SPEED_UP_TEXT = "Speed up";
-	public static final String SLOW_DOWN_TEXT = "Slow down";
-	public static final String ADD_TOWER_TEXT = "Add Tower";
-	public static final String SOUND_ONOFF_TEXT = "Sound On/Off";
-	public static final String MUSIC_TEXT = "Music";
-	public static final String MAIN_MENU_TEXT = "Main Menu";
-	public static final String QUIT_TEXT = "Quit";
-
-	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \n"
-			+ "Adding towers uses up money. Right click on towers to sell. \n"
-			+ "A proportion of the tower's original cost will be added to money\n"
-			+ "N-click: Annihilator\n"
-			+ "I-click: InstantFreeze\n"
-			+ "L-click: LifeSaver\n"
-			+ "shift-click: Upgrade towers\n"
-			+ "R-click: Row-bomb";
-	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park"
-			+ "\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\n"
-			+ "Dianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
-*/
 
 	private JFrame frame;
 	private JPanel cards;
@@ -151,7 +143,7 @@ public class ViewController implements Serializable {
 		addCreditsCard();
 		addHighScoreCard();
 	}
-	
+
 	private String showBlueprintPrompt() {
 		int response = fileChooser.showOpenDialog(null);
 		if(response == JFileChooser.APPROVE_OPTION){
@@ -180,14 +172,14 @@ public class ViewController implements Serializable {
 				makeAndAddCards();
 				show();
 				languageFrame.dispose();
-		
+
 			}			
 		});
 		languageFrame.add(languageComboBox);
 		languageFrame.pack();
 		languageFrame.setLocationRelativeTo(null);
 		languageFrame.setVisible(true);
-		
+
 	}
 
 	private void initSong(){
@@ -212,8 +204,8 @@ public class ViewController implements Serializable {
 	}
 
 	private JMenu makeFileMenu(){
-		JMenu files = new JMenu(myLanguageResources.getString("FILE_LABEL"));
-		files.add(new FileChooserActionListener(engine, "loadBlueprintFile", fileChooser, myLanguageResources.getString("LOAD_GAME_TEXT")));
+		JMenu files = new JMenu(myLanguageResources.getString(FILE_LABEL));
+		files.add(new FileChooserActionListener(engine, LOAD_BLUEPRINT_FILE_METHOD_NAME, fileChooser, myLanguageResources.getString(LOAD_GAME_TEXT)));
 		files.add(new RepositoryViewer(myLanguageResources.getString("LOAD_LIBRARY_TEXT"), engine));
 		return files;
 	}
@@ -238,9 +230,9 @@ public class ViewController implements Serializable {
 	}
 
 	private JLabel makeWelcomeLabel() {
-		JLabel welcomeLabel = new JLabel(myLanguageResources.getString("WELCOME_LABEL_TEXT"));
+		JLabel welcomeLabel = new JLabel(myLanguageResources.getString(WELCOME_LABEL_TEXT));
 		welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		welcomeLabel.setFont(new Font("SansSerif", Font.PLAIN, 32));
+		welcomeLabel.setFont(new Font(SANS_SERIF_FONT, Font.PLAIN, WELCOME_LABEL_FONT));
 		return welcomeLabel;
 	}
 
@@ -306,27 +298,27 @@ public class ViewController implements Serializable {
 
 		JButton mainMenuButton = makeMainMenuButton();
 
-		JButton playResumeButton = new JButton(myLanguageResources.getString("PLAY_PAUSE_TEXT"));
-		playResumeButton.addActionListener(new MethodAction (engine, "toggleRunning"));
+		JButton playResumeButton = new JButton(myLanguageResources.getString(PLAY_PAUSE_TEXT));
+		playResumeButton.addActionListener(new MethodAction (engine, TOGGLE_RUNNING_METHOD_NAME));
 
-		JButton saveButton = new JButton(myLanguageResources.getString("SAVE_TEXT"));
-		saveButton.addActionListener(new FileChooserActionListener(engine, "saveGameState", fileChooser, null));
+		JButton saveButton = new JButton(myLanguageResources.getString(SAVE_TEXT));
+		saveButton.addActionListener(new FileChooserActionListener(engine, SAVE_GAME_STATE_METHOD_NAME, fileChooser, null));
 
-		JButton loadButton = new JButton(myLanguageResources.getString("LOAD_TEXT"));
-		loadButton.addActionListener(new FileChooserActionListener(engine, "loadGameState", fileChooser, null));
-		JButton speedUpButton = new JButton(myLanguageResources.getString("SPEED_UP_TEXT"));
-		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
+		JButton loadButton = new JButton(myLanguageResources.getString(LOAD_TEXT));
+		loadButton.addActionListener(new FileChooserActionListener(engine, LOAD_GAME_STATE_METHOD_NAME, fileChooser, null));
+		JButton speedUpButton = new JButton(myLanguageResources.getString(SPEED_UP_TEXT));
+		speedUpButton.addActionListener(new MethodAction (engine, SPEED_UP_METHOD_NAME));
 
-		JButton slowDownButton = new JButton(myLanguageResources.getString("SLOW_DOWN_TEXT"));
-		slowDownButton.addActionListener(new MethodAction (engine, "slowDown"));
+		JButton slowDownButton = new JButton(myLanguageResources.getString(SLOW_DOWN_TEXT));
+		slowDownButton.addActionListener(new MethodAction (engine, SLOW_DOWN_METHOD_NAME));
 
 		JButton quitButton = makeQuitButton();
 
-		JButton addTowerButton = new JButton(myLanguageResources.getString("ADD_TOWER_TEXT"));
-		addTowerButton.addActionListener(new MethodAction (engine, "toggleAddTower"));
+		JButton addTowerButton = new JButton(myLanguageResources.getString(ADD_TOWER_TEXT));
+		addTowerButton.addActionListener(new MethodAction (engine, TOGGLE_ADD_TOWER_METHOD_NAME));
 
-		JButton soundButton = new JButton(myLanguageResources.getString("SOUND_ONOFF_TEXT"));
-		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
+		JButton soundButton = new JButton(myLanguageResources.getString(SOUND_ONOFF_TEXT));
+		soundButton.addActionListener(new MethodAction (this, TOGGLE_SOUND_METHOD_NAME));
 
 		towerChooser = new ObjectChooser(engine.getPossibleTowers());
 		towerChooser.register((Observing) engine);
@@ -414,7 +406,7 @@ public class ViewController implements Serializable {
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		// need to make sound label be centered
-		JLabel soundLabel = new JLabel(myLanguageResources.getString("SOUND"));
+		JLabel soundLabel = new JLabel(myLanguageResources.getString(SOUND));
 		soundLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		optionCard.add(soundLabel, constraints);
 
@@ -429,8 +421,8 @@ public class ViewController implements Serializable {
 
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
-		JCheckBox soundCheckBox = new JCheckBox(myLanguageResources.getString("MUSIC_TEXT"));
-		soundCheckBox.addActionListener(new MethodAction(this, "toggleSound"));
+		JCheckBox soundCheckBox = new JCheckBox(myLanguageResources.getString(MUSIC_TEXT));
+		soundCheckBox.addActionListener(new MethodAction(this, TOGGLE_SOUND_METHOD_NAME));
 		soundRadioButtonPanel.add(soundCheckBox);
 
 		return soundRadioButtonPanel;
@@ -450,7 +442,7 @@ public class ViewController implements Serializable {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		helpCard.add(new HelpTextPanel(myLanguageResources.getString("HELP")), constraints);
+		helpCard.add(new HelpTextPanel(myLanguageResources.getString(HELP)), constraints);
 
 		cards.add(helpCard, HELP_CARD);
 	}
@@ -458,7 +450,7 @@ public class ViewController implements Serializable {
 	private void addCreditsCard() {
 		JTextArea creditsArea = new JTextArea(10,40);
 		creditsArea.setEditable(false);
-		creditsArea.append(myLanguageResources.getString("CREDITS"));
+		creditsArea.append(myLanguageResources.getString(CREDITS));
 
 		JPanel creditsCard = new JPanel();
 		creditsCard.setLayout(new GridBagLayout());
@@ -478,15 +470,15 @@ public class ViewController implements Serializable {
 	}
 
 	private JButton makeMainMenuButton() {
-		JButton mainMenuButton = new JButton(myLanguageResources.getString("MAIN_MENU_TEXT"));
-		mainMenuButton.addActionListener(new MethodAction(engine, "toggleRunning"));
-		mainMenuButton.addActionListener(new MethodAction(this, "showCard", WELCOME_CARD));
+		JButton mainMenuButton = new JButton(myLanguageResources.getString(MAIN_MENU_TEXT));
+		mainMenuButton.addActionListener(new MethodAction(engine, TOGGLE_RUNNING_METHOD_NAME));
+		mainMenuButton.addActionListener(new MethodAction(this, SHOW_CARD_VARIABLE, WELCOME_CARD));
 		return mainMenuButton;
 	}
 
 	private JButton makeQuitButton(){
-		JButton exitButton = new JButton(myLanguageResources.getString("QUIT_TEXT"));
-		exitButton.addActionListener(new MethodAction(this,"quit"));
+		JButton exitButton = new JButton(myLanguageResources.getString(QUIT_TEXT));
+		exitButton.addActionListener(new MethodAction(this,QUIT_METHOD_NAME));
 		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		return exitButton;
 	}
