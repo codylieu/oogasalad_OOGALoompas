@@ -218,8 +218,9 @@ public class TestDataHandler {
 	public void loadDifferentResourcesFiles() throws ClassNotFoundException, IOException, ZipException{
 		DataHandler testDataHandler = new DataHandler();
 		GameBlueprint testBlueprint = this.createTestBlueprint();
+//		testDataHandler.saveBlueprint(testBlueprint,"src/test/newFolder/myResources.zip");
 		String testPath = "src/main/resources/";
-		String resourcePath = "src/main/resources/";
+//		String resourcePath = "src/main/resources/";
 
 		// save this with current resources folder
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
