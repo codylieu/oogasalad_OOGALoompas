@@ -21,10 +21,12 @@ public class TDMap {
     private List<TileMapSchema> tileMapSchemas;
     private Map<String, TileMap> tileMaps;
     private Set<String> definedTiles;
-    private static JGEngineInterface engine;
+    private static int tileHeight;
+    private static int tileWidth;
 
     public TDMap(JGEngineInterface engine, GameMapSchema gameMapSchema) {
-        this.engine = engine;
+        tileHeight = engine.tileHeight();
+        tileWidth = engine.tileWidth();
         Map<String, Serializable> gameMapAttributes = gameMapSchema.getAttributesMap();
         tileSchemas = (List<TileSchema>) gameMapAttributes.get(GameMapSchema.MY_TILES);
         tileMapSchemas = (List<TileMapSchema>) gameMapAttributes.get(GameMapSchema.MY_TILEMAPS);
@@ -91,8 +93,8 @@ public class TDMap {
      * @return The top left corner of the tile at the given coordinate
      */
     public static Point2D findTileOrigin (Point2D location) {
-        int curXTilePos = (int) location.getX() / engine.tileWidth() * engine.tileWidth();
-        int curYTilePos = (int) location.getY() / engine.tileHeight() * engine.tileHeight();
+        int curXTilePos = (int) location.getX() / tileWidth * tileWidth;
+        int curYTilePos = (int) location.getY() / tileHeight * tileHeight;
         return new Point2D.Double(curXTilePos, curYTilePos);
     }
 }
