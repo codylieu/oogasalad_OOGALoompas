@@ -27,6 +27,7 @@ import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
+import main.java.schema.CanvasSchema;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import main.java.schema.MonsterSpawnSchema;
@@ -76,10 +77,6 @@ public class Model implements IModel{
 		collisionManager = new CollisionManager(engine);
 
 		levelManager = new LevelManager(factory);
-		// TODO: Code entrance/exit logic into wave or monster spawn schema
-		levelManager.setEntrance(0, engine.pfHeight() / 2);
-		//levelManager.setExit(engine.pfWidth() / 2, engine.pfHeight() / 2);
-		levelManager.setExit(12 * engine.tileWidth(), 9 * engine.tileHeight());
 
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
@@ -305,10 +302,14 @@ public class Model implements IModel{
 			levelManager.cleanLoadWaveSchemas(blueprint.getMyWaveSchemas(), 0);
 		}
 
-		// Initialize map if necessary
+		// Initialize map settings
 		if (blueprint.getMyGameMapSchemas() != null) {
 			TDMap map = new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
 			// each map
+			CanvasSchema myCanvasSchema = (CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap().get(GameMapSchema.MY_CANVAS_ATTRIBUTES);
+			// TODO: Code entrance/exit logic into wave or monster spawn schema
+			levelManager.setEntrance(0, engine.pfHeight() / 2);
+			levelManager.setExit(12 * engine.tileWidth(), 9 * engine.tileHeight());
 		}
 	}
 

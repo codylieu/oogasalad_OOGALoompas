@@ -224,9 +224,7 @@ public class TDObjectFactory {
     }
 
     /**
-     * Find the top-left corner associated with the tile associated with the given location. Used to
-     * place
-     * new objects and images.
+     * Find the top-left corner associated with the tile associated with the given location.
      * 
      * @param location Coordinate of the map used to find the associated file
      * @return The top left corner of the tile at the given coordinate
