@@ -25,6 +25,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.GameSettingsController;
+import main.java.author.view.AuthoringView;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.schema.GameSchema;
 
@@ -225,15 +226,14 @@ public class GameSettingsEditorTab extends EditorTab{
 
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					fileChooser = new JFileChooser();
+					fileChooser = new JFileChooser(new File(AuthoringView.DEFAULT_RESOURCES_DIR));
 					FileNameExtensionFilter filter = new FileNameExtensionFilter("WAV files", "wav");
 					fileChooser.setFileFilter(filter);
 					int returnVal = fileChooser.showOpenDialog(GameSettingsEditorTab.this);
 
 					if(returnVal == JFileChooser.APPROVE_OPTION) {
 						File chosenFile = fileChooser.getSelectedFile();
-						String absolutePath = chosenFile.getAbsolutePath();
-						String musicFile = "";
+						String musicFile = chosenFile.getName();
 						try {
 
 						} catch (Exception e1) {
