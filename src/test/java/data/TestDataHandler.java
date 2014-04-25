@@ -15,6 +15,7 @@ import java.util.List;
 
 import main.java.data.DataHandler;
 import main.java.data.JSONHandler;
+import main.java.engine.GameState;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.exceptions.data.InvalidGameBlueprintException;
 import main.java.schema.GameBlueprint;
@@ -128,6 +129,11 @@ public class TestDataHandler {
 
 		testBlueprint.setMyWaveSchemas(testWaves);
 		return testBlueprint;
+	}
+	
+	private GameState createTestGameState()	{
+		GameState testState = new GameState();
+		return testState;
 	}
 
 	/**
