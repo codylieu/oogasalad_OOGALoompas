@@ -7,24 +7,67 @@ import java.util.Map;
 
 public enum TerrainAttribute {
 
-	Walkable      { @Override Color getColor() { return Color.GREEN;}
-					@Override int getIndex() { return 10; }},
+	Walkable {
+		@Override
+		Color getColor() {
+			return Color.GREEN;
+		}
 
-	Flyable       { @Override Color getColor() { return Color.BLUE; }
-					@Override int getIndex() { return 11; }},
+		@Override
+		public int getIndex() {
+			return 10;
+		}
+	},
 
-	Untraversable { @Override Color getColor() { return Color.RED; }
-					@Override int getIndex() { return 12; }},
+	Flyable {
+		@Override
+		Color getColor() {
+			return Color.BLUE;
+		}
 
-	Entry         { @Override Color getColor() { return Color.MAGENTA; }
-					@Override int getIndex() {  return 13; }},
+		@Override
+		public int getIndex() {
+			return 11;
+		}
+	},
 
-	Exit          { @Override Color getColor() { return Color.ORANGE; }
-					@Override int getIndex() { return 14; }};
+	Untraversable {
+		@Override
+		Color getColor() {
+			return Color.RED;
+		}
 
-					
-	private static Map<Integer, TerrainAttribute> enumMap = 
-			new HashMap<Integer, TerrainAttribute>();
+		@Override
+		public int getIndex() {
+			return 12;
+		}
+	},
+
+	Entry {
+		@Override
+		Color getColor() {
+			return Color.MAGENTA;
+		}
+
+		@Override
+		public int getIndex() {
+			return 13;
+		}
+	},
+
+	Exit {
+		@Override
+		Color getColor() {
+			return Color.ORANGE;
+		}
+
+		@Override
+		public int getIndex() {
+			return 14;
+		}
+	};
+
+	private static Map<Integer, TerrainAttribute> enumMap = new HashMap<Integer, TerrainAttribute>();
 
 	static {
 		for (TerrainAttribute attr : values()) {
@@ -37,19 +80,19 @@ public enum TerrainAttribute {
 		return this.name();
 	}
 
-	public static TerrainAttribute getAttribute(int i){ 
+	public static TerrainAttribute getAttribute(int i) {
 		return enumMap.get(i);
-	} 
+	}
 
 	/**
-	 * Specifies the color that will be displayed in the Terrain View
-	 * when the specific attribute is added to a Tile
+	 * Specifies the color that will be displayed in the Terrain View when the
+	 * specific attribute is added to a Tile
 	 */
 	abstract Color getColor();
 
 	/**
 	 * Specifies the collision ID of a TerrainAttribute
 	 */
-	abstract int getIndex();
+	public abstract int getIndex();
 
 }
