@@ -42,8 +42,7 @@ public class LifeSaverItemEditorTab extends AbstractItemEditorTab{
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 			
-			
-			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner, freezeSpinner};
+			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
 		}
