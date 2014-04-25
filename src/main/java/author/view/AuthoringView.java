@@ -108,12 +108,8 @@ public class AuthoringView extends JFrame {
 		tabbedPane.addChangeListener(new ChangeListener(){
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				// TODO Auto-generated method stub
 				if (tabbedPane.getSelectedComponent() instanceof WaveEditorTab) {
 					waveController.updateEnemyList();
-				}
-				if (tabbedPane.getSelectedComponent() instanceof AbstractItemEditorSubTab) {
-					//towerController.addItems();
 				}
 			}
 		});
@@ -177,10 +173,6 @@ public class AuthoringView extends JFrame {
 	 */
 	public void shiftToEnemyTab() {
 		tabbedPane.setSelectedComponent(enemyEditorTab);
-	}
-
-	public void shiftToTowerTab() {
-		tabbedPane.setSelectedComponent(towerEditorTab);
 	}
 
 }
