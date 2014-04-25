@@ -32,6 +32,7 @@ public class UnitInfoPanel extends ObservingPanel{
 		for(String s: unitInfoList){
 			unitInfo += s + "\n";
 		}
+		System.out.println(unitInfo);
 		unitInfoArea.setText(unitInfo);
 	}
 

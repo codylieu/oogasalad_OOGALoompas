@@ -16,7 +16,8 @@ public class FileChooserActionListener extends AbstractAction implements ActionL
 	private JFileChooser fileChooser;
 	private Object target;
 	private Object[] args;
-	public FileChooserActionListener(ITDPlayerEngine myEngine, String myMethodName, JFileChooser myFileChooser){
+	public FileChooserActionListener(ITDPlayerEngine myEngine, String myMethodName, JFileChooser myFileChooser, String dropDownName){
+		super(dropDownName);
 		methodName = myMethodName;
 		fileChooser = myFileChooser;
 		target = myEngine;

@@ -17,14 +17,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-import javax.swing.AbstractAction;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,20 +36,18 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import main.java.player.dlc.RepositoryViewer;
-import main.java.player.panels.DifficultyPanel;
 import main.java.player.panels.FileChooserActionListener;
 import main.java.player.panels.GameInfoPanel;
 import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
-import main.java.player.panels.ObservingPanel;
 import main.java.player.panels.ObjectChooser;
+import main.java.player.panels.ObservingPanel;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.Observing;
 import main.java.player.util.Sound;
 import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
-import net.lingala.zip4j.exception.ZipException;
 
 /**
  * The Swing wrapper that contains all the buttons,
@@ -59,6 +59,9 @@ import net.lingala.zip4j.exception.ZipException;
 @SuppressWarnings("serial")
 public class ViewController implements Serializable {
 
+	public static final String DEFAULT_RESOURCE_PACKAGE = "main.resources.";
+	public static final String ENGLISH = "English";
+	public static final String LANGUAGES = "Languages";
 	public static final int BUTTON_PADDING = 10;
 	public static final String USER_DIR = "user.dir";
 	public static final String DEFAULT_MUSIC_PATH = "src/main/resources/backgroundmusic.wav";
@@ -70,11 +73,11 @@ public class ViewController implements Serializable {
 	public static final String CREDITS_CARD = "creditsCard";
 	public static final String HIGH_SCORE_CARD = "highScoreCard";
 
-	public static final String DIFFICULTY = "Difficulty";
-	public static final String EASY = "Easy Mode";
-	public static final String MEDIUM = "Medium Mode";
-	public static final String HARD = "Hard Mode";
-	public static final String SOUND = "Sound";
+	//public static final String DIFFICULTY = "Difficulty";
+	//	public static final String EASY = "Easy Mode";
+	//	public static final String MEDIUM = "Medium Mode";
+	//	public static final String HARD = "Hard Mode";
+	/*public static final String SOUND = "Sound";
 	public static final String ON = "On";
 	public static final String OFF = "Off";
 	public static final String WELCOME_LABEL_TEXT = "Ooga Loompas Tower Defense";
@@ -90,7 +93,7 @@ public class ViewController implements Serializable {
 	public static final String SOUND_ONOFF_TEXT = "Sound On/Off";
 	public static final String MUSIC_TEXT = "Music";
 	public static final String MAIN_MENU_TEXT = "Main Menu";
-	public static final String QUIT_TEXT = "Quit";
+	public static final String QUIT_TEXT = "Quit";*/
 
 	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \n"
 			+ "Adding towers uses up money. Right click on towers to sell. \n"
@@ -106,6 +109,7 @@ public class ViewController implements Serializable {
 
 
 	private JFrame frame;
+	private ResourceBundle myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + ENGLISH);
 	private JPanel cards;
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
@@ -114,7 +118,10 @@ public class ViewController implements Serializable {
 	private Sound song;
 	private boolean soundOn;
 	private ObjectChooser towerChooser;
-	private ObjectChooser powerUpChooser;
+	private List<String> languageList;
+	private String chosenLanguage;
+	private JFrame languageFrame;
+	//private ObjectChooser powerUpChooser;
 
 	/**
 	 * initializeEngine() must be called first
@@ -122,8 +129,9 @@ public class ViewController implements Serializable {
 	 */
 	public ViewController(){
 		initializeEngine(showBlueprintPrompt());
+		showLanguagePrompt();
 		initSong();
-		makeFrame();
+		/*makeFrame();
 		makeCards();
 		addWelcomeCard();
 		addGameCard();
@@ -131,9 +139,19 @@ public class ViewController implements Serializable {
 		addOptionsCard();
 		addCreditsCard();
 		addHighScoreCard();
-		show();
+		show();*/
 	}
 
+	private void makeAndAddCards(){
+		makeCards();
+		addWelcomeCard();
+		addGameCard();
+		addHelpCard();
+		addOptionsCard();
+		addCreditsCard();
+		addHighScoreCard();
+	}
+	
 	private String showBlueprintPrompt() {
 		int response = fileChooser.showOpenDialog(null);
 		if(response == JFileChooser.APPROVE_OPTION){
@@ -144,6 +162,50 @@ public class ViewController implements Serializable {
 			System.exit(0);
 			return "";
 		}
+	}	
+
+	private void showLanguagePrompt(){
+		languageFrame = new JFrame();
+		languageFrame.setLocationRelativeTo(null);
+		chosenLanguage = "";
+		DefaultComboBoxModel<String> listOfLanguages = new DefaultComboBoxModel<String>(new Vector<String>());
+		final JComboBox<String> languageComboBox = new JComboBox<String>(listOfLanguages);
+		listOfLanguages.addElement("English");
+		listOfLanguages.addElement("Spanish");
+		languageComboBox.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + (String)languageComboBox.getSelectedItem());
+				makeFrame();
+				makeAndAddCards();
+				show();
+				languageFrame.dispose();
+		
+			}			
+		});
+		languageFrame.add(languageComboBox);
+		languageFrame.pack();
+		languageFrame.setLocationRelativeTo(null);
+		languageFrame.setVisible(true);
+		
+	}
+
+	private void setLanguage(String language){
+		myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);		
+		//move adding languges
+		/*languageList = new ArrayList<String>();
+		languageList.add("English");
+		languageList.add("Spanish");
+		//JMenu languages = new JMenu(myLanguageResources.getString("LANGUAGES"));
+		for(String s: languageList){
+			languages.add(new AbstractAction(s){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + e.getActionCommand());		
+				}			
+			});
+		}*/
+		//return languages;
 	}
 
 	private void initSong(){
@@ -153,7 +215,6 @@ public class ViewController implements Serializable {
 				| UnsupportedAudioFileException e) {
 			//tell user song not found
 		}
-
 		soundOn = false;
 	}
 
@@ -163,23 +224,22 @@ public class ViewController implements Serializable {
 
 	private void makeFrame() {
 		frame = new JFrame();
-
-		frame.setTitle(WELCOME_LABEL_TEXT);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setJMenuBar(makeMenuBar());
 	}
 
 	private JMenu makeFileMenu(){
-		JMenu files = new JMenu(FILE_LABEL);
-		files.add(new FileChooserActionListener(engine, "loadBlueprintFile", fileChooser));
-		files.add(new RepositoryViewer(LOAD_LIBRARY_TEXT, engine));
+		JMenu files = new JMenu(myLanguageResources.getString("FILE_LABEL"));
+		files.add(new FileChooserActionListener(engine, "loadBlueprintFile", fileChooser, myLanguageResources.getString("LOAD_GAME_TEXT")));
+		files.add(new RepositoryViewer(myLanguageResources.getString("LOAD_LIBRARY_TEXT"), engine));
 		return files;
 	}
 
 	private JMenuBar makeMenuBar(){
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(makeFileMenu());
+		//menuBar.add(makeLanguagesMenu());
 		return menuBar;
 	}
 
@@ -196,7 +256,7 @@ public class ViewController implements Serializable {
 	}
 
 	private JLabel makeWelcomeLabel() {
-		JLabel welcomeLabel = new JLabel(WELCOME_LABEL_TEXT);
+		JLabel welcomeLabel = new JLabel(myLanguageResources.getString("WELCOME_LABEL_TEXT"));
 		welcomeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		welcomeLabel.setFont(new Font("SansSerif", Font.PLAIN, 32));
 		return welcomeLabel;
@@ -206,10 +266,10 @@ public class ViewController implements Serializable {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));	
 
-		WelcomeButtonPanelListener listener = new WelcomeButtonPanelListener(myResources, this);
+		WelcomeButtonPanelListener listener = new WelcomeButtonPanelListener(myResources, this, myLanguageResources);
 		Set<String> keys = myResources.keySet();
 		for(String s: keys){
-			JButton temp = new JButton(s);
+			JButton temp = new JButton(myLanguageResources.getString(s));
 			temp.setAlignmentX(Component.CENTER_ALIGNMENT);
 			temp.addActionListener(listener);
 			buttonPanel.add(temp);
@@ -232,16 +292,16 @@ public class ViewController implements Serializable {
 		constraints.gridy = 0;
 		gameCard.add((Component) engine, constraints);
 
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		//constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		gameCard.add(makeGameActionPanel(), constraints);
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		//constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		gameCard.add(makeGameInfoPanel(), constraints);
 
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		//constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		gameCard.add(makeUnitInfoPanel(), constraints);
@@ -258,41 +318,32 @@ public class ViewController implements Serializable {
 		return engine;
 	}
 
-	private void fileChooserUsage(String methodName){
-		int response = fileChooser.showOpenDialog(null);
-		if(response == JFileChooser.APPROVE_OPTION){
-			File file = fileChooser.getSelectedFile();
-			
-			engine.saveGameState(file.getAbsolutePath());
-		}
-		frame.pack();
-	}
 	private JPanel makeGameActionPanel() {
 		JPanel gameButtonPanel = new JPanel();
 		gameButtonPanel.setLayout(new GridLayout(10, 1));
 
 		JButton mainMenuButton = makeMainMenuButton();
 
-		JButton playResumeButton = new JButton(PLAY_PAUSE_TEXT);
+		JButton playResumeButton = new JButton(myLanguageResources.getString("PLAY_PAUSE_TEXT"));
 		playResumeButton.addActionListener(new MethodAction (engine, "toggleRunning"));
 
-		JButton saveButton = new JButton(SAVE_TEXT);
-		saveButton.addActionListener(new FileChooserActionListener(engine, "saveGameState", fileChooser));
-		
-		JButton loadButton = new JButton(LOAD_TEXT);
-		loadButton.addActionListener(new FileChooserActionListener(engine, "loadGameState", fileChooser));
-		JButton speedUpButton = new JButton(SPEED_UP_TEXT);
+		JButton saveButton = new JButton(myLanguageResources.getString("SAVE_TEXT"));
+		saveButton.addActionListener(new FileChooserActionListener(engine, "saveGameState", fileChooser, null));
+
+		JButton loadButton = new JButton(myLanguageResources.getString("LOAD_TEXT"));
+		loadButton.addActionListener(new FileChooserActionListener(engine, "loadGameState", fileChooser, null));
+		JButton speedUpButton = new JButton(myLanguageResources.getString("SPEED_UP_TEXT"));
 		speedUpButton.addActionListener(new MethodAction (engine, "speedUp"));
 
-		JButton slowDownButton = new JButton(SLOW_DOWN_TEXT);
+		JButton slowDownButton = new JButton(myLanguageResources.getString("SLOW_DOWN_TEXT"));
 		slowDownButton.addActionListener(new MethodAction (engine, "slowDown"));
 
 		JButton quitButton = makeQuitButton();
 
-		JButton addTowerButton = new JButton(ADD_TOWER_TEXT);
+		JButton addTowerButton = new JButton(myLanguageResources.getString("ADD_TOWER_TEXT"));
 		addTowerButton.addActionListener(new MethodAction (engine, "toggleAddTower"));
 
-		JButton soundButton = new JButton(SOUND_ONOFF_TEXT);
+		JButton soundButton = new JButton(myLanguageResources.getString("SOUND_ONOFF_TEXT"));
 		soundButton.addActionListener(new MethodAction (this, "toggleSound"));
 
 		towerChooser = new ObjectChooser(engine.getPossibleTowers());
@@ -342,13 +393,13 @@ public class ViewController implements Serializable {
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
-	
-/*	private JPanel makeInfoPanel(String className){
+
+	/*	private JPanel makeInfoPanel(String className){
 		Object infoPanel = Class.forName(className).newInstance();
-		
+
 		//return infoPanel;
 	}
-*/
+	 */
 	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
@@ -366,7 +417,7 @@ public class ViewController implements Serializable {
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		optionCard.add(makeMainMenuButton(), constraints);
-/*
+		/*
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
@@ -376,15 +427,18 @@ public class ViewController implements Serializable {
 		constraints.gridx = 0;
 		constraints.gridy = 2;
 		optionCard.add(new DifficultyPanel(engine), constraints);
-*/
+		 */
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
-		constraints.gridy = 3;
-		optionCard.add(new JLabel(SOUND), constraints);
+		constraints.gridy = 1;
+		// need to make sound label be centered
+		JLabel soundLabel = new JLabel(myLanguageResources.getString("SOUND"));
+		soundLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		optionCard.add(soundLabel, constraints);
 
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
-		constraints.gridy = 4;
+		constraints.gridy = 2;
 		optionCard.add(makeSoundRadioButtonPanel(), constraints);
 
 		cards.add(optionCard, OPTION_CARD);
@@ -393,7 +447,7 @@ public class ViewController implements Serializable {
 
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
-		JCheckBox soundCheckBox = new JCheckBox(MUSIC_TEXT);
+		JCheckBox soundCheckBox = new JCheckBox(myLanguageResources.getString("MUSIC_TEXT"));
 		soundCheckBox.addActionListener(new MethodAction(this, "toggleSound"));
 		soundRadioButtonPanel.add(soundCheckBox);
 
@@ -442,19 +496,19 @@ public class ViewController implements Serializable {
 	}
 
 	private JButton makeMainMenuButton() {
-		JButton mainMenuButton = new JButton(MAIN_MENU_TEXT);
+		JButton mainMenuButton = new JButton(myLanguageResources.getString("MAIN_MENU_TEXT"));
 		mainMenuButton.addActionListener(new MethodAction(engine, "toggleRunning"));
 		mainMenuButton.addActionListener(new MethodAction(this, "showCard", WELCOME_CARD));
 		return mainMenuButton;
 	}
 
 	private JButton makeQuitButton(){
-		JButton exitButton = new JButton(QUIT_TEXT);
+		JButton exitButton = new JButton(myLanguageResources.getString("QUIT_TEXT"));
 		exitButton.addActionListener(new MethodAction(this,"quit"));
 		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		return exitButton;
 	}
-	
+
 	public void quit(){
 		System.exit(0);
 	}
