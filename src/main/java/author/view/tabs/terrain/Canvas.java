@@ -191,8 +191,11 @@ public class Canvas extends JPanel {
 	 */
 	protected void clearTiles() {
 		for (Tile tile : getTiles()) {
+			initEntryAndExitDefaults();
 			tile.setImage(null);
 			tile.setPassIndex(TerrainEditorTab.DEFAULT_PASSABILITY_INDEX);
+			tile.setEntryStatus(false);
+			tile.setExitStatus(false);
 			tile.setBorderColor(Canvas.DEFAULT_BORDER_COLOR);
 			repaint();
 		}
