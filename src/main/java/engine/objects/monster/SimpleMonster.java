@@ -9,6 +9,10 @@ import main.java.engine.objects.Exit;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 
+/**
+ * A simple monster that does nothing but move. 
+ *
+ */
 public class SimpleMonster extends Monster {
 	public static final double DEFAULT_HEALTH = 100;
 	public static final double DEFAULT_MOVE_SPEED = 1;

@@ -7,6 +7,10 @@ import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
 
+/**
+ * Model interface. 
+ *
+ */
 public interface IModel {
 	/**
 	 * Add a new player to the engine

@@ -44,6 +44,12 @@ import main.java.schema.tdobjects.items.RowBombItemSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 
 
+/**
+ * A class that handles all the game logic. 
+ * It's a direct point of contact of the view. 
+ * Its public methods are primarily called by the view. 
+ *
+ */
 public class Model implements IModel{
 
 	private static final double DEFAULT_MONEY_MULTIPLIER = 0.5;
