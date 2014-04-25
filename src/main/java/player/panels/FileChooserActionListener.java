@@ -4,13 +4,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
 
 import main.java.player.ITDPlayerEngine;
-import main.java.reflection.MethodAction;
 import main.java.reflection.Reflection;
 
-public class FileChooserActionListener implements ActionListener{
+public class FileChooserActionListener extends AbstractAction implements ActionListener{
 
 	private String methodName;
 	private JFileChooser fileChooser;

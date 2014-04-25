@@ -172,20 +172,7 @@ public class ViewController implements Serializable {
 
 	private JMenu makeFileMenu(){
 		JMenu files = new JMenu(FILE_LABEL);
-		files.add(new AbstractAction(LOAD_GAME_TEXT){
-			public void actionPerformed(ActionEvent e){
-				int response = fileChooser.showOpenDialog(null);
-				if(response == JFileChooser.APPROVE_OPTION){
-					File file = fileChooser.getSelectedFile();
-
-					try {
-						engine.loadBlueprintFile(file.getAbsolutePath());
-					} catch (ClassNotFoundException | IOException | ZipException e1) {
-						e1.printStackTrace();
-					}
-				}
-			}
-		});
+		files.add(new FileChooserActionListener(engine, "loadBlueprintFile", fileChooser));
 		files.add(new RepositoryViewer(LOAD_LIBRARY_TEXT, engine));
 		return files;
 	}
@@ -332,8 +319,6 @@ public class ViewController implements Serializable {
 		return gameButtonPanel;
 	}
 
-
-
 	public void toggleSound(){
 		soundOn = !soundOn;
 
@@ -344,7 +329,6 @@ public class ViewController implements Serializable {
 			song.stop();
 		}
 	}
-
 
 	private JPanel makeGameInfoPanel() {
 		GameInfoPanel gameInfoPanel = new GameInfoPanel();
@@ -404,10 +388,8 @@ public class ViewController implements Serializable {
 
 	private JPanel makeSoundRadioButtonPanel(){
 		JPanel soundRadioButtonPanel = new JPanel();
-
 		JCheckBox soundCheckBox = new JCheckBox(MUSIC_TEXT);
 		soundCheckBox.addActionListener(new MethodAction(this, "toggleSound"));
-
 		soundRadioButtonPanel.add(soundCheckBox);
 
 		return soundRadioButtonPanel;
@@ -458,29 +440,18 @@ public class ViewController implements Serializable {
 		JButton mainMenuButton = new JButton(MAIN_MENU_TEXT);
 		mainMenuButton.addActionListener(new MethodAction(engine, "toggleRunning"));
 		mainMenuButton.addActionListener(new MethodAction(this, "showCard", WELCOME_CARD));
-		//mainMenuButton.addActionListener(new MethodAction(frame, "pack"));
-		/*
-		mainMenuButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				engine.toggleRunning();
-				cardLayout.show(cards, WELCOME_CARD);
-				frame.pack();
-			}
-		});
-		 */
 		return mainMenuButton;
 	}
 
 	private JButton makeQuitButton(){
 		JButton exitButton = new JButton(QUIT_TEXT);
+		exitButton.addActionListener(new MethodAction(this,"quit"));
 		exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-		exitButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-				frame.pack();
-			}
-		});
 		return exitButton;
+	}
+	
+	public void quit(){
+		System.exit(0);
 	}
 
 	private void show() {
