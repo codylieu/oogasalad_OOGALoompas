@@ -59,6 +59,7 @@ import main.java.reflection.MethodAction;
 @SuppressWarnings("serial")
 public class ViewController implements Serializable {
 
+	public static final String LANGUAGES_LIST = "LanguageList";
 	public static final String DEFAULT_RESOURCE_PACKAGE = "main.resources.";
 	public static final String ENGLISH = "English";
 	public static final String LANGUAGES = "Languages";
@@ -93,7 +94,7 @@ public class ViewController implements Serializable {
 	public static final String SOUND_ONOFF_TEXT = "Sound On/Off";
 	public static final String MUSIC_TEXT = "Music";
 	public static final String MAIN_MENU_TEXT = "Main Menu";
-	public static final String QUIT_TEXT = "Quit";*/
+	public static final String QUIT_TEXT = "Quit";
 
 	public static final String HELP = "Click on Play/Pause to begin game. Click to add towers. \n"
 			+ "Adding towers uses up money. Right click on towers to sell. \n"
@@ -106,20 +107,19 @@ public class ViewController implements Serializable {
 	public static final String CREDITS = "Game Authoring Environment\nGary Sheng, Cody Lieu, Stephen Hughes, Dennis Park"
 			+ "\n\nGame Data\nIn-Young Jo, Jimmy Fang\n\nGame Engine\n"
 			+ "Dianwen Li, Austin Lu, Lawrence Lin, Jordan Ly\n\nGame Player\nMichael Han, Kevin Do";
-
+*/
 
 	private JFrame frame;
-	private ResourceBundle myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + ENGLISH);
 	private JPanel cards;
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
 	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
+	private ResourceBundle myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + ENGLISH);
+	private ResourceBundle myLanguagesList = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGES_LIST);
 	private ITDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
 	private ObjectChooser towerChooser;
-	private List<String> languageList;
-	private String chosenLanguage;
 	private JFrame languageFrame;
 	//private ObjectChooser powerUpChooser;
 
@@ -167,11 +167,11 @@ public class ViewController implements Serializable {
 	private void showLanguagePrompt(){
 		languageFrame = new JFrame();
 		languageFrame.setLocationRelativeTo(null);
-		chosenLanguage = "";
 		DefaultComboBoxModel<String> listOfLanguages = new DefaultComboBoxModel<String>(new Vector<String>());
 		final JComboBox<String> languageComboBox = new JComboBox<String>(listOfLanguages);
-		listOfLanguages.addElement("English");
-		listOfLanguages.addElement("Spanish");
+		for(String s: myLanguagesList.keySet()){
+			listOfLanguages.addElement(s);
+		}
 		languageComboBox.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -188,24 +188,6 @@ public class ViewController implements Serializable {
 		languageFrame.setLocationRelativeTo(null);
 		languageFrame.setVisible(true);
 		
-	}
-
-	private void setLanguage(String language){
-		myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + language);		
-		//move adding languges
-		/*languageList = new ArrayList<String>();
-		languageList.add("English");
-		languageList.add("Spanish");
-		//JMenu languages = new JMenu(myLanguageResources.getString("LANGUAGES"));
-		for(String s: languageList){
-			languages.add(new AbstractAction(s){
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + e.getActionCommand());		
-				}			
-			});
-		}*/
-		//return languages;
 	}
 
 	private void initSong(){
@@ -468,7 +450,7 @@ public class ViewController implements Serializable {
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		helpCard.add(new HelpTextPanel(), constraints);
+		helpCard.add(new HelpTextPanel(myLanguageResources.getString("HELP")), constraints);
 
 		cards.add(helpCard, HELP_CARD);
 	}
@@ -476,7 +458,7 @@ public class ViewController implements Serializable {
 	private void addCreditsCard() {
 		JTextArea creditsArea = new JTextArea(10,40);
 		creditsArea.setEditable(false);
-		creditsArea.append(CREDITS);
+		creditsArea.append(myLanguageResources.getString("CREDITS"));
 
 		JPanel creditsCard = new JPanel();
 		creditsCard.setLayout(new GridBagLayout());
