@@ -17,6 +17,11 @@ import main.java.engine.objects.monster.jgpathfinder.NoPossiblePathException;
 import main.java.schema.MonsterSpawnSchema;
 
 
+/**
+ * Abstract monster class with default instance variables and methods
+ * shared by all monsters
+ *
+ */
 public abstract class Monster extends TDObject {
 
     private static final int PERCENT = 100;

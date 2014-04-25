@@ -4,6 +4,10 @@ import java.awt.geom.Point2D;
 import java.util.List;
 import main.java.engine.EnvironmentKnowledge;
 
+/**
+ * Tower interface. 
+ *
+ */
 public interface ITower {
 
     /**

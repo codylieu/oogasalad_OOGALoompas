@@ -16,6 +16,10 @@ import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.WaveSpawnSchema;
 
 
+/**
+ * Manages the state of the game for each level. 
+ *
+ */
 public class LevelManager {
 
     private int myCurrentWave;

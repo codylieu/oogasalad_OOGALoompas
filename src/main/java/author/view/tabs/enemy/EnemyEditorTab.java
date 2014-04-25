@@ -10,8 +10,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
@@ -28,6 +30,7 @@ import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
+import main.java.author.view.tabs.terrain.TerrainAttribute;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
@@ -42,6 +45,12 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		super(towerController, objectName);
 	}
 
+	public static final Set<Integer> flyingSet = new HashSet<Integer>(
+			Arrays.asList(TerrainAttribute.Untraversable.getIndex()));
+	public static final Set<Integer> groundSet = new HashSet<Integer>(
+			Arrays.asList(TerrainAttribute.Untraversable.getIndex(),
+					TerrainAttribute.Flyable.getIndex()));
+
 	private JSpinner healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
 	private ImageCanvas monsterImageCanvas, collisionImageCanvas;
 	private JButton monsterImageButton, collisionImageButton;
@@ -53,6 +62,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 	@Override
 	public void saveTabData() {
+
 		EnemyController controller = (EnemyController) myController;
 
 		monsterSchemas = new ArrayList<MonsterSchema>();
@@ -90,8 +100,19 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	protected void updateSchemaDataFromView() {
 		super.updateSchemaDataFromView();
 		TDObjectSchema myCurrentObject = getSelectedObject();
-		myCurrentObject.addAttribute(MonsterSchema.FLYING_OR_GROUND,
-				GroupButtonUtil.getSelectedButtonText(flyingOrGroundGroup));
+		Set blockedTilesSet;
+		// flying or ground
+		if (GroupButtonUtil.getSelectedButtonText(flyingOrGroundGroup) == null) {
+			blockedTilesSet = new HashSet<Integer>();
+		} else if (GroupButtonUtil.getSelectedButtonText(flyingOrGroundGroup)
+				.equals(MonsterSchema.FLYING)) {
+			blockedTilesSet = flyingSet;
+		} else {
+			blockedTilesSet = groundSet;
+		}
+		myCurrentObject.addAttribute(MonsterSchema.BLOCKED_TILES,
+				(Serializable) blockedTilesSet);
+		//tile size
 		myCurrentObject.addAttribute(MonsterSchema.TILE_SIZE,
 				GroupButtonUtil.getSelectedButtonText(tileSizeGroup));
 
@@ -101,11 +122,17 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 		for (JRadioButton button : allButtons) {
-			if (button.getText()
-					.equals(map.get(MonsterSchema.FLYING_OR_GROUND))
-					|| button.getText()
-							.equals(map.get(MonsterSchema.TILE_SIZE))) {
-				;
+			Set blockedTilesSet = (Set) map.get(MonsterSchema.BLOCKED_TILES);
+			if (button.getText().equals(MonsterSchema.FLYING)
+					&& blockedTilesSet.equals(flyingSet)) {
+				button.setSelected(true);
+			}
+			if (button.getText().equals(MonsterSchema.GROUND)
+					&& blockedTilesSet.equals(groundSet)) {
+				button.setSelected(true);
+			}
+			if (button.getText().equals(map.get(MonsterSchema.TILE_SIZE))) {
+
 				button.setSelected(true);
 			}
 		}
@@ -117,8 +144,10 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		super.addListeners();
 		monsterImageButton.addActionListener(new FileChooserListener(
 				monsterImageCanvas));
-		/*collisionImageButton.addActionListener(new FileChooserListener(
-				collisionImageCanvas));*/
+		/*
+		 * collisionImageButton.addActionListener(new FileChooserListener(
+		 * collisionImageCanvas));
+		 */
 		for (JRadioButton button : allButtons) {
 			button.addActionListener(new ActionListener() {
 
@@ -150,7 +179,6 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			super(editorTab);
 		}
 
-	
 		protected void instantiateAndClumpFields() {
 			healthSpinner = makeAttributeSpinner(MonsterSchema.HEALTH);
 			speedSpinner = makeAttributeSpinner(MonsterSchema.SPEED);
@@ -176,8 +204,10 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
 					TDObjectSchema.IMAGE_NAME);
-		/*	collisionImageCanvas = new ImageCanvas(true,
-					MonsterSchema.COLLISION_IMAGE_NAME);*/
+			/*
+			 * collisionImageCanvas = new ImageCanvas(true,
+			 * MonsterSchema.COLLISION_IMAGE_NAME);
+			 */
 
 			JSpinner[] spinners = { healthSpinner, speedSpinner, damageSpinner,
 					rewardSpinner };
@@ -220,21 +250,21 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		@Override
 		protected JComponent makeSecondaryImagesGraphicPane() {
-			/*JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-
-			collisionImageCanvas.setSize(new Dimension(
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE));
-			collisionImageCanvas.setBackground(Color.BLACK);
-			result.add(collisionImageCanvas, BorderLayout.CENTER);
-			collisionImageButton = makeChooseGraphicsButton("Set " + objectName
-					+ " Collision Image");
-			result.add(collisionImageButton, BorderLayout.SOUTH);
-			//return result;
-*/			return null;
+			/*
+			 * JPanel result = new JPanel(); result.setLayout(new
+			 * BorderLayout());
+			 * 
+			 * collisionImageCanvas.setSize(new Dimension(
+			 * ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+			 * ObjectEditorConstants.IMAGE_CANVAS_SIZE));
+			 * collisionImageCanvas.setBackground(Color.BLACK);
+			 * result.add(collisionImageCanvas, BorderLayout.CENTER);
+			 * collisionImageButton = makeChooseGraphicsButton("Set " +
+			 * objectName + " Collision Image");
+			 * result.add(collisionImageButton, BorderLayout.SOUTH); //return
+			 * result;
+			 */return null;
 		}
-
 
 		protected JComponent makePrimaryObjectGraphicPane() {
 			JPanel result = new JPanel();
