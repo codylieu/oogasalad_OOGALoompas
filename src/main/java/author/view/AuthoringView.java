@@ -21,7 +21,9 @@ import main.java.author.view.menubar.BasicMenuBar;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
-import main.java.author.view.tabs.item.AbstractItemEditorTab;
+import main.java.author.view.tabs.item.AbstractItemEditorSubTab;
+import main.java.author.view.tabs.item.ItemEditorTab;
+import main.java.author.view.tabs.item.subtabs.LifeSaverItemEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
 import main.java.author.view.tabs.wave_editor.WaveEditorTab;
@@ -93,9 +95,9 @@ public class AuthoringView extends JFrame {
 
 		tabbedPane
 				.add(ENEMY_EDITOR_STRING, enemyEditorTab);
-//		tabbedPane
-//				.add(ITEM_EDITOR_STRING,
-//						new ItemEditorTab(itemController, "Item"));
+		tabbedPane
+				.add(ITEM_EDITOR_STRING,
+						new ItemEditorTab(itemController));
 		tabbedPane
 				.add(TERRAIN_EDITOR_STRING,
 						new TerrainEditorTab(terrainController));
@@ -110,7 +112,7 @@ public class AuthoringView extends JFrame {
 				if (tabbedPane.getSelectedComponent() instanceof WaveEditorTab) {
 					waveController.updateEnemyList();
 				}
-				if (tabbedPane.getSelectedComponent() instanceof AbstractItemEditorTab) {
+				if (tabbedPane.getSelectedComponent() instanceof AbstractItemEditorSubTab) {
 					//towerController.addItems();
 				}
 			}

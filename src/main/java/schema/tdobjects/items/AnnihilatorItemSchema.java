@@ -19,6 +19,7 @@ public class AnnihilatorItemSchema extends ItemSchema {
 
 	public AnnihilatorItemSchema() {
 		super(MY_CONCRETE_TYPE);
+		myAttributeSet.add(AreaBombItemSchema.RANGE);
 	}
 
 	/**
