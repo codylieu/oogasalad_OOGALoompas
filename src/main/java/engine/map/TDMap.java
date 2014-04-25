@@ -6,6 +6,7 @@ import main.java.schema.map.GameMapSchema;
 import main.java.schema.map.TileMapSchema;
 import main.java.schema.map.TileSchema;
 
+import java.awt.geom.Point2D;
 import java.io.Serializable;
 import java.util.*;
 
@@ -20,8 +21,12 @@ public class TDMap {
     private List<TileMapSchema> tileMapSchemas;
     private Map<String, TileMap> tileMaps;
     private Set<String> definedTiles;
+    private static int tileHeight;
+    private static int tileWidth;
 
     public TDMap(JGEngineInterface engine, GameMapSchema gameMapSchema) {
+        tileHeight = engine.tileHeight();
+        tileWidth = engine.tileWidth();
         Map<String, Serializable> gameMapAttributes = gameMapSchema.getAttributesMap();
         tileSchemas = (List<TileSchema>) gameMapAttributes.get(GameMapSchema.MY_TILES);
         tileMapSchemas = (List<TileMapSchema>) gameMapAttributes.get(GameMapSchema.MY_TILEMAPS);
@@ -79,5 +84,17 @@ public class TDMap {
             numRows = (Integer) tmsAttributesMap.get(TileMapSchema.NUM_ROWS);
             numCols = (Integer) tmsAttributesMap.get(TileMapSchema.NUM_COLS);
         }
+    }
+    
+    /**
+     * Find the top-left corner associated with the tile associated with the given location.
+     * 
+     * @param location Coordinate of the map used to find the associated file
+     * @return The top left corner of the tile at the given coordinate
+     */
+    public static Point2D findTileOrigin (Point2D location) {
+        int curXTilePos = (int) location.getX() / tileWidth * tileWidth;
+        int curYTilePos = (int) location.getY() / tileHeight * tileHeight;
+        return new Point2D.Double(curXTilePos, curYTilePos);
     }
 }

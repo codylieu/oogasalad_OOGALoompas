@@ -35,9 +35,9 @@ import main.java.schema.GameSchema;
 public class GameSettingsEditorTab extends EditorTab{
 
 	private GameSchema gameSchema;
-	
+
 	private GameSettingsTabContentCreator contentCreator;
-	
+
 	private JPanel settingsPanel = new JPanel(new BorderLayout());
 
 	private JComboBox gameModeList;
@@ -65,7 +65,7 @@ public class GameSettingsEditorTab extends EditorTab{
 
 	private JButton musicButton;
 	private JFileChooser fileChooser;
-	
+
 	private String musicFile = "fox.wav"; // Default music path
 
 	/**
@@ -188,17 +188,14 @@ public class GameSettingsEditorTab extends EditorTab{
 		 * Makes the drop down menus for game mode and game difficulty
 		 */
 		private JComponent makeGameModeDropDownMenu(){
-			JPanel gameModeDropDownMenu = new JPanel(new BorderLayout());
 
 			gameModeList = new JComboBox(GAME_MODE_STRINGS);
 			gameModeList.setSelectedIndex(1);
 
-//			gameModeList.setFont(LABEL_FONT);
+			//			gameModeList.setFont(LABEL_FONT);
 			//			gameModeList.setPreferredSize(new Dimension(100, 100));
 
-			gameModeDropDownMenu.add(gameModeList, BorderLayout.NORTH);
-
-			return gameModeDropDownMenu;
+			return gameModeList;
 		}
 
 		/**
@@ -206,8 +203,9 @@ public class GameSettingsEditorTab extends EditorTab{
 		 * Makes the attributes pane, which holds the labels and fields panes
 		 */
 		private JComponent makeAttributesPane(){
-			JPanel attributes = new JPanel(new BorderLayout());
+			JPanel attributes = new JPanel(new GridLayout(0, 1));
 
+			attributes.setLayout(new BorderLayout());
 			attributes.add(makeLabelPane(), BorderLayout.WEST);
 			attributes.add(makeFieldPane(), BorderLayout.EAST);
 			attributes.add(makeMusicButton(), BorderLayout.SOUTH);
@@ -222,6 +220,7 @@ public class GameSettingsEditorTab extends EditorTab{
 		private JComponent makeMusicButton(){
 
 			musicButton = new JButton(MUSIC_STRING);
+
 			musicButton.addActionListener(new ActionListener(){
 
 				@Override

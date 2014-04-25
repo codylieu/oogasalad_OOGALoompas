@@ -12,8 +12,12 @@ import java.util.Set;
 public class GameSchema extends AbstractSchema {
 	public static final String LIVES = "lives";
 	public static final String MONEY = "money";
-	public static final String ISSURVIVALMODE = "issurvivalmode";
 	public static final String MUSIC = "music";
+	public static final String LEVELDIFFICULTY = "difficulty";
+	public static final String ISSURVIVALMODE = "survivalModeEnabled";
+	/**
+	 * The value should be of type Boolean
+	 */
 
 	public GameSchema()	{
 		super();
@@ -22,6 +26,7 @@ public class GameSchema extends AbstractSchema {
 	@Override
 	public void addAttribute(String attributeName, Serializable attributeValue) {
 		myAttributesMap.put(attributeName, attributeValue);
+		myAttributeSet.add(ISSURVIVALMODE);
 	}
 	
 	@Override
