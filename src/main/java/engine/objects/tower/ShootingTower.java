@@ -9,6 +9,7 @@ import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.detector.TargetDetectorInterface;
 import main.java.engine.objects.detector.monsterdetector.MonsterClosestToExitDetector;
+import main.java.engine.objects.detector.monsterdetector.NearestMonsterDetector;
 import main.java.engine.objects.projectile.PiercingProjectile;
 import main.java.schema.tdobjects.TowerSchema;
 

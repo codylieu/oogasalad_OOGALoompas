@@ -29,6 +29,7 @@ public class MonsterClosestToExitDetector extends TDDetector {
 			if (isWithinDistance(m.getCurrentCoor(), exitCoordinate, minDistance) &&
 					isWithinDistance(m.getCurrentCoor(), towerCoordinate, range)) {
 				minDistance = m.getCurrentCoor().distance(exitCoordinate);
+				targetMonsterLocation.clear();
 				targetMonsterLocation.add(centerCoordinate(m));
 			}
 		}
