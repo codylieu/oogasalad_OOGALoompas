@@ -41,6 +41,8 @@ public class WaveEditorTab extends EditorTab {
 
 	private static final String WAVE_COLUMN_STRING = "Waves";
 	private static final String WAVE_STRING = "Wave";
+	private static final String ZERO_STRING = "0";
+	private static final String ONE_STRING = "1";
 
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
@@ -72,7 +74,7 @@ public class WaveEditorTab extends EditorTab {
 	private void addNewEnemyColumn(String columnName) {
 		List<String> zeroesColumnList = new ArrayList<String>();
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			zeroesColumnList.add("0");
+			zeroesColumnList.add(ZERO_STRING);
 		}
 		tableModel.addColumn(columnName, zeroesColumnList.toArray());
 	}
@@ -184,7 +186,7 @@ public class WaveEditorTab extends EditorTab {
 			content.add(createTable(), BorderLayout.WEST);
 			content.add(buttonMaker.makeButtons(), BorderLayout.EAST);
 
-			addNewWaveRow("1"); // Setting default value
+			addNewWaveRow(ONE_STRING); // Setting default value
 
 			return content;
 		}
@@ -294,7 +296,7 @@ public class WaveEditorTab extends EditorTab {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						addNewWaveRow("0");
+						addNewWaveRow(ZERO_STRING);
 
 					}
 				});
