@@ -14,6 +14,7 @@ import jgame.platform.JGEngine;
 import main.java.data.DataHandler;
 import main.java.engine.IModel;
 import main.java.engine.Model;
+import main.java.engine.util.leapmotion.gamecontroller.LeapGameController;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
@@ -59,6 +60,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
+	//TODO: uncomment below.
+	//private LeapGameController leapController;
+	
 	public TDPlayerEngine(String pathToBlueprintInit) {
 //		super();
 		loadCanvasSize(pathToBlueprintInit);
@@ -68,6 +72,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		hasChanged = true;
 		isFullScreen = false;
 		cursorState = CursorState.None;
+		//TODO: uncomment below.
+		//leapController = new LeapGameController();
 	}
 
 	private void loadCanvasSize(String pathToBlueprint) {
@@ -195,6 +201,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 	@Override
 	public void doFrame() {
 		super.doFrame();
+		//TODO: uncomment below.
+		//leapController.doFrame();
 		if (cursorState == CursorState.AddTower) {
 			if (getMouseButton(LEFT_CLICK)) {
 				model.placeTower(getMouseX(), getMouseY(), towerName);
