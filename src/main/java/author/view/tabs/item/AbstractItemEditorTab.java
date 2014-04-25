@@ -33,7 +33,7 @@ import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 
 public abstract class AbstractItemEditorTab extends ObjectEditorTab {
-	JSpinner timeSpinner, costSpinner, damageSpinner, flashSpinner;
+	JSpinner timeSpinner, costSpinner, damageSpinner, flashSpinner, rangeSpinner, freezeSpinner;
 	List<ItemSchema> itemSchemas;
 	List<JRadioButton> allButtons;
 	JButton itemImageButton;

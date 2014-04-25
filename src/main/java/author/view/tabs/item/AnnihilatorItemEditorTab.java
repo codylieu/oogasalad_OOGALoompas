@@ -20,7 +20,6 @@ import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 
 public class AnnihilatorItemEditorTab extends AbstractItemEditorTab{
-	private JSpinner rangeSpinner;
 	
 	public AnnihilatorItemEditorTab(TabController itemController,
 			String objectName) {
@@ -43,22 +42,6 @@ public class AnnihilatorItemEditorTab extends AbstractItemEditorTab{
 			super(editorTab);
 		}
 
-		@Override
-		protected JComponent makePrimaryObjectGraphicPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-
-			itemImageCanvas.setSize(new Dimension(
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE));
-			itemImageCanvas.setBackground(Color.BLACK);
-			result.add(itemImageCanvas, BorderLayout.CENTER);
-			itemImageButton = makeChooseGraphicsButton("Set " + objectName
-					+ " Image");
-			result.add(itemImageButton, BorderLayout.SOUTH);
-			return result;
-		}
-	
 		@Override
 		protected void instantiateAndClumpFields() {
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
