@@ -45,7 +45,7 @@ public class WaveEditorTab extends EditorTab {
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
 	private JButton clearAllWavesButton;
-
+	private JButton addEnemyButton;
 
 	private String[] columnNames = {};
 	private String[] columnNamesAndWave;
@@ -268,9 +268,9 @@ public class WaveEditorTab extends EditorTab {
 			}
 
 			private Component makeAddEnemyButton() {
-				JButton addEnemyColumn = new JButton("Add Enemy");
+				addEnemyButton = new JButton("Add Enemy");
 
-				addEnemyColumn.addActionListener(new ActionListener() {
+				addEnemyButton.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
@@ -280,7 +280,7 @@ public class WaveEditorTab extends EditorTab {
 
 				});
 
-				return addEnemyColumn;
+				return addEnemyButton;
 			}
 
 			/**
