@@ -1,7 +1,7 @@
 package main.java.engine.objects.tower;
 
+import java.awt.geom.Point2D;
 import java.util.List;
-
 import main.java.engine.EnvironmentKnowledge;
 
 
@@ -14,9 +14,9 @@ import main.java.engine.EnvironmentKnowledge;
 abstract class TowerBehaviorDecorator implements ITower {
     /**
      * The base tower that will have behaviors added to it ("decorations")
+     * This is not necessarily a SimpleTower/TDObject, but could be another TowerBehaviorDecorator!
      */
     protected ITower baseTower;
-    protected List<String> myInfo;
 
     public TowerBehaviorDecorator (ITower baseTower) {
         this.baseTower = baseTower;
@@ -61,6 +61,13 @@ abstract class TowerBehaviorDecorator implements ITower {
     public String getUpgradeTowerName () {
         return baseTower.getUpgradeTowerName();
     }
+    
+    @Override
+    public Point2D centerCoordinate () {
+        return baseTower.centerCoordinate();
+    }
+    
+    
     
     /**
      * Do the additional behavior granted by this behavior decoration.

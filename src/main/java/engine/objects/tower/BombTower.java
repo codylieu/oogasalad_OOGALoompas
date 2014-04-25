@@ -1,22 +1,21 @@
 package main.java.engine.objects.tower;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
-
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.projectile.Bomb;
 import main.java.schema.tdobjects.TowerSchema;
 
 
 /**
- * A type of tower that has splash impact upon hitting a target
- *
+ * A type of tower that shoots a bomb which explodes into shrapnel upon hitting a target
+ * 
  */
 public class BombTower extends ShootingTower {
 
     public static final double DEFAULT_SHRAPNEL_DAMAGE = 10;
-    private static final String TOWER_TYPE = "Bomb Tower";
+    public static final String TOWER_TYPE = "Bomb Tower";
+
     private String myShrapnelImage;
     private double myShrapnelDamage;
 
@@ -32,19 +31,25 @@ public class BombTower extends ShootingTower {
                 (String) TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_IMAGE_NAME,
                                                     TowerSchema.BULLET_IMAGE_NAME);
         myShrapnelDamage =
-        		Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.SHRAPNEL_DAMAGE,
-                DEFAULT_SHRAPNEL_DAMAGE)));
-        myInfo.clear();
-        addInfo();
+                Double.parseDouble(String.valueOf(TDObject
+                        .getValueOrDefault(attributes, TowerSchema.SHRAPNEL_DAMAGE,
+                                           DEFAULT_SHRAPNEL_DAMAGE)));
     }
 
     @Override
     public void fireProjectile (double angle) {
         new Bomb(
-        		((SimpleTower) baseTower).centerCoordinate().getX(),
-        		((SimpleTower) baseTower).centerCoordinate().getY(), 
-        		angle, myDamage, myShrapnelDamage,
+                 baseTower.centerCoordinate().getX(),
+                 baseTower.centerCoordinate().getY(),
+                 angle, myDamage, myShrapnelDamage,
                  myBulletImage, myShrapnelImage);
+    }
+    
+    @Override
+    public String getInfo() {
+    	String info = super.getInfo() +
+    			"\nShrapnelDamage: " + myShrapnelDamage;
+    	return info;
     }
 
 }

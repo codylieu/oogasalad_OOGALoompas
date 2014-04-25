@@ -2,12 +2,13 @@ package main.java.player.panels;
 
 import java.util.List;
 
+import main.java.player.ITDPlayerEngine;
 import main.java.player.TDPlayerEngine;
 
 public class TowerChooser extends ObjectChooser{
 
-	public TowerChooser(TDPlayerEngine myEngine){
-		super(myEngine);
+	public TowerChooser(ITDPlayerEngine engine){
+		super(engine);
 	}
 	
 	@Override

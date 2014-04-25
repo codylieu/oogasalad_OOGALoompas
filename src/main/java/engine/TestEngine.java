@@ -46,7 +46,7 @@ public class TestEngine extends JGEngine {
 	@Override
 	public void initGame() {
 		setFrameRate(45, 1);
-		this.model = new Model(this);
+		this.model = new Model(this, null);
 		towers = model.getPossibleTowers();
 	}
 

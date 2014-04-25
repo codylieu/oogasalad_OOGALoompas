@@ -13,5 +13,6 @@ public class EnemyViewDefaults {
 	public static final int REWARD_DEFAULT = 50;
 	public static final String FLYING_OR_GROUND_DEFAULT = MonsterSchema.GROUND;
 	public static final String TILE_SIZE_DEFAULT = MonsterSchema.TILE_SIZE_SMALL;
+	public static final String ENEMY_DEFAULT_IMAGE = "monster.png";
 
 }
