@@ -434,12 +434,6 @@ public class Model implements IModel {
 		doTowerBehaviors();
 		doItemActions();
 		removeDeadMonsters();
-		try {
-			System.out.println(getRange("Monster"));
-		} catch (ObjectInfoException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	private void doItemActions () {
