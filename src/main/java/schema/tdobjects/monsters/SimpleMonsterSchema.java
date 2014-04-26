@@ -36,10 +36,10 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(MonsterSchema.SPEED, EnemyViewDefaults.SPEED_DEFAULT);
 		addAttribute(MonsterSchema.DAMAGE, EnemyViewDefaults.DAMAGE_DEFAULT);
 		addAttribute(MonsterSchema.REWARD, EnemyViewDefaults.REWARD_DEFAULT);    
-		//addAttribute(MonsterSchema.FLYING_OR_GROUND, MonsterSchema.GROUND);    
 		addAttribute(MonsterSchema.BLOCKED_TILES, (Serializable) EnemyEditorTab.groundSet);    
 		addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
 		addAttribute(TDObjectSchema.IMAGE_NAME, EnemyViewDefaults.ENEMY_DEFAULT_IMAGE);
+		addAttribute(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, "");
 
 	}
 

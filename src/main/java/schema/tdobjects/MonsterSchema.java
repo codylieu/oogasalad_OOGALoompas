@@ -22,7 +22,7 @@ public abstract class MonsterSchema extends TDObjectSchema {
     public static final String TILE_SIZE_LARGE = "Large";
 
     public static final String RESURRECT_MONSTERSPAWNSCHEMA =
-            "Monster schema to spawn upon this monster's death.";
+            "Monster to Spawn Upon Death";
 
     protected MonsterSchema (Class<? extends Monster> myConcreteType) {
         super(myConcreteType);
