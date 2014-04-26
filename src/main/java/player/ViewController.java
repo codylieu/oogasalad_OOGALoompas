@@ -350,12 +350,10 @@ public class ViewController implements Serializable {
 		JButton soundButton = new JButton(myLanguageResources.getString(SOUND_ONOFF_TEXT));
 		soundButton.addActionListener(new MethodAction (this, TOGGLE_SOUND_METHOD_NAME));
 
-		towerChooser = new ObjectChooser(engine.getPossibleTowers());
-		towerChooser.register((Observing) engine);
+		towerChooser = new ObjectChooser(engine.getPossibleTowers(), engine);
+		//towerChooser.register((Observing) engine);
+		// should leave as observing engine? or pass into contstructor?
 		//powerUpChooser = new ObjectChooser(engine.getPossibleItems());
-	
-		engine.addSubject(towerChooser);//This probably does not belong here
-		//engine.addSubject(powerUpChooser);
 
 
 		gameButtonPanel.add(mainMenuButton);

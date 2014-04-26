@@ -4,16 +4,12 @@ import java.util.List;
 
 import javax.swing.JTextArea;
 
-import main.java.player.TDPlayerEngine;
-
 @SuppressWarnings("serial")
 public class UnitInfoPanel extends ObservingPanel{
 	
 	public static final String TIME = "Time";
-	
-	//private TDPlayerEngine engine;
 	private JTextArea unitInfoArea;
-	//private JScrollPane scrollPane;
+	
 	public UnitInfoPanel() {
 
 		unitInfoArea = new JTextArea(5, 5);
@@ -21,8 +17,6 @@ public class UnitInfoPanel extends ObservingPanel{
 		unitInfoArea.setLineWrap(true);
 		unitInfoArea.setWrapStyleWord(true);
 		add(unitInfoArea);
-		//scrollPane = new JScrollPane(unitInfoArea);
-		//add(scrollPane);
 	}
 
 	@Override
@@ -32,9 +26,6 @@ public class UnitInfoPanel extends ObservingPanel{
 		for(String s: unitInfoList){
 			unitInfo += s + "\n";
 		}
-		System.out.println(unitInfo);
 		unitInfoArea.setText(unitInfo);
 	}
-
-
 }

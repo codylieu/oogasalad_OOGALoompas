@@ -33,7 +33,7 @@ import net.lingala.zip4j.exception.ZipException;
  *
  */
 
-public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDPlayerEngine{
+public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine{
 
 	public static final String LIFE_SAVER = "LifeSaver";
 	public static final String INSTANT_FREEZE = "InstantFreeze";
@@ -64,7 +64,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 	public TDPlayerEngine(String pathToBlueprintInit) {
-		//		super();
+		// super();
 		loadCanvasSize(pathToBlueprintInit);
 		pathToBlueprint = pathToBlueprintInit;
 		initEngineComponent(xtiles * TILE_WIDTH, ytiles * TILE_HEIGHT);
@@ -108,6 +108,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		model = new Model(this, pathToBlueprint);
 		towerName = model.getPossibleTowers().get(0);
 	}
+
 	public void speedUp() {
 		setFrameRate(getFrameRate() + FRAME_RATE_DELTA, 1);
 
@@ -128,7 +129,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 	@Override
 	public void paintFrame() {
 		highlightMouseoverTile();
-		//displayGameStats();
 	}
 
 	public void setCursorState(CursorState newCursorState) {
@@ -140,8 +140,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 	}
 
 	/**
-	 * Draws a rectangle around the tile
-	 * below the current mouse position
+	 * Draws a rectangle around the tile at the current mouse position
 	 * according to certain rules
 	 */
 	private void highlightMouseoverTile() {
@@ -170,35 +169,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
-	/*private void displayGameStats() {
-		this.drawString("Score: "+model.getScore(), 50, 25, -1);
-		this.drawString("Lives left: "+model.getPlayerLives(), 50, 50, -1);
-		this.drawString("Money: "+model.getMoney(), 50, 75, -1);
-		this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
-	}*/
-
-	/*public TDObject getSelectedObject() {
-		JGPoint mousePos = getMousePos();
-		int curXTilePos = mousePos.x/tileWidth() * tileWidth();
-		int curYTilePos = mousePos.y/tileHeight() * tileHeight();
-		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0)
-			if (model.isTowerPresent(mousePos.x, mousePos.y))
-				return ;
-	}*/
-
 	public List<String> getCurrentDescription() {
 		JGPoint mousePos = getMousePos();
 		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0) {
-			//hasUnitInfoChanged = false;
-			//if (model.isTowerPresent(mousePos.x, mousePos.y)){
-			//System.out.println(getObjects("tower", 0, true, null).size());
-			//return getObjects("tower", 0, true, null).get(1).toString();//remove null to bounding box
 			return model.getUnitInfo(lastClickedObject.x, lastClickedObject.y);
-			//}
-			//else
-			//return "";
 		}
-		//	else
 		return new ArrayList<String>();
 	}
 
@@ -263,7 +238,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		}	
 	}*/
 
-	private void setItem(int clickName ,String itemName){
+	private void setItem(int clickName, String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
 				model.placeItem(itemName, getMouseX(), getMouseY());
@@ -273,10 +248,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
 		}
 	}
-
-	@Override
-	public void update(){
-		towerName = towerChooser.getObjectName();
+	
+	public void setCurrentTowerType(String currentTowerName){
+		towerName = currentTowerName;
 	}
 
 	/**
@@ -288,8 +262,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 			setCursorState(CursorState.None);
 			removeObjects("TowerGhost", 0);
 		}
-		else
+		else {
 			setCursorState(CursorState.AddTower);
+		}
 	}
 
 	private void checkKeys() {
@@ -298,7 +273,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 			clearKey(Integer.parseInt(hotkeys.getString("AddTower")));
 		}
 
-		//THIS ONLY PAUSES FOR NOW
 		if (getKey(Integer.parseInt(hotkeys.getString("ToggleRunning")))){
 			toggleRunning();
 			clearKey(Integer.parseInt(hotkeys.getString("ToggleRunning")));
@@ -346,12 +320,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 
 	@Override
 	public void notifyObservers() {
-		List<Observing> localObservers = null;
 		if(!hasGameInfoChanged && !hasUnitInfoChanged) return;
-		localObservers = new ArrayList<Observing>(observerList);
 		hasGameInfoChanged = false;
 		hasUnitInfoChanged = false;
-		for(Observing o: localObservers){
+		for(Observing o: observerList){
 			o.update();
 		}
 	}
@@ -380,7 +352,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		try {
 			model.loadSavedGame(gameName);
 		} catch (InvalidSavedGameException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -395,11 +366,4 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		return gameStats;
 	}
 
-	@Override
-	public void addSubject(Subject s) {
-		subjectList.add(s);
-	}
-
-
-	
 }

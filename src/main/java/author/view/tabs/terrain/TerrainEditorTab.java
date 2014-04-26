@@ -190,7 +190,7 @@ public class TerrainEditorTab extends EditorTab {
 			public void actionPerformed(ActionEvent e) {
 				List<Tile> oldTiles = myCanvas.getTiles();
 				myCanvasPanel.remove(myCanvas);
-				updateCanvasSize();
+				while(updateCanvasSize() == false){};
 				updateCanvas(oldTiles);
 				myTileSelectionManager.setCanvas(myCanvas);
 				TerrainEditorTab.this.revalidate();
@@ -264,13 +264,12 @@ public class TerrainEditorTab extends EditorTab {
 		}
 		
 		CanvasSchema canvasSchema = new CanvasSchema();
-		canvasSchema.addAttribute(CanvasSchema.Y_TILES, myCanvas.getRows());
-		canvasSchema.addAttribute(CanvasSchema.X_TILES, myCanvas.getCols());
-		canvasSchema.addAttribute(CanvasSchema.ENTRY_ROW, myCanvas.getEntryRow());
-		canvasSchema.addAttribute(CanvasSchema.ENTRY_COL, myCanvas.getEntryCol());
-		canvasSchema.addAttribute(CanvasSchema.EXIT_ROW, myCanvas.getExitRow());
-		canvasSchema.addAttribute(CanvasSchema.EXIT_COL, myCanvas.getExitCol());
-		
+		canvasSchema.addAttribute(CanvasSchema.Y_TILES, (Serializable) myCanvas.getRows());
+		canvasSchema.addAttribute(CanvasSchema.X_TILES, (Serializable) myCanvas.getCols());
+		canvasSchema.addAttribute(CanvasSchema.ENTRY_ROW, (Serializable) myCanvas.getEntryRow());
+		canvasSchema.addAttribute(CanvasSchema.ENTRY_COL, (Serializable) myCanvas.getEntryCol());
+		canvasSchema.addAttribute(CanvasSchema.EXIT_ROW, (Serializable) myCanvas.getExitRow());
+		canvasSchema.addAttribute(CanvasSchema.EXIT_COL, (Serializable) myCanvas.getExitCol());
 
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILES, (Serializable) gameTileSchemas);
 		myCompletedMap.addAttribute(GameMapSchema.MY_TILEMAPS, (Serializable) gameTileMapSchemas);

@@ -21,6 +21,7 @@ import main.java.author.view.menubar.BasicMenuBar;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
+import main.java.author.view.tabs.item.AbstractItemEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
 import main.java.author.view.tabs.wave_editor.WaveEditorTab;
@@ -103,15 +104,16 @@ public class AuthoringView extends JFrame {
 						new WaveEditorTab(waveController));
 		
 		tabbedPane.addChangeListener(new ChangeListener(){
-
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				// TODO Auto-generated method stub
 				if (tabbedPane.getSelectedComponent() instanceof WaveEditorTab) {
 					waveController.updateEnemyList();
 				}
+				if (tabbedPane.getSelectedComponent() instanceof AbstractItemEditorTab) {
+					//towerController.addItems();
+				}
 			}
-
 		});
 	}
 
