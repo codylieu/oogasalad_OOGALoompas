@@ -10,7 +10,6 @@ public class UnitInfoPanel extends ObservingPanel{
 	public static final String TIME = "Time";
 	private JTextArea unitInfoArea;
 	
-	//private JScrollPane scrollPane;
 	public UnitInfoPanel() {
 
 		unitInfoArea = new JTextArea(5, 5);
@@ -18,8 +17,6 @@ public class UnitInfoPanel extends ObservingPanel{
 		unitInfoArea.setLineWrap(true);
 		unitInfoArea.setWrapStyleWord(true);
 		add(unitInfoArea);
-		//scrollPane = new JScrollPane(unitInfoArea);
-		//add(scrollPane);
 	}
 
 	@Override
