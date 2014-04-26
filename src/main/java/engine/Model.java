@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import jgame.platform.JGEngine;
-import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
@@ -64,7 +63,6 @@ public class Model implements IModel {
     private ITower[][] towers;
     private List<Monster> monsters;
     private CollisionManager collisionManager;
-    private GameState gameState;
     private DataHandler dataHandler;
     private LevelManager levelManager;
     private EnvironmentKnowledge environ;
@@ -82,7 +80,6 @@ public class Model implements IModel {
         this.gameClock = 0;
         monsters = new ArrayList<Monster>();
         towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
-        gameState = new GameState();
         items = new ArrayList<TDItem>();
 
         try {
@@ -251,7 +248,7 @@ public class Model implements IModel {
             GameMapSchema mapToLoad = (GameMapSchema) is.readObject();
             is.close();
 
-            TDMap tdMap = new TDMap(engine, mapToLoad);
+            new TDMap(engine, mapToLoad);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -309,7 +306,7 @@ public class Model implements IModel {
 
         // Initialize map settings
         if (blueprint.getMyGameMapSchemas() != null) {
-            TDMap map = new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
+            new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
             // each map
             CanvasSchema myCanvasSchema =
                     (CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap()
@@ -390,10 +387,12 @@ public class Model implements IModel {
      * Returns whether or not the player has complete all waves and thus has won
      * the game. This will always return false on survival mode.
      * 
-     * @return boolean of whether game is won (all waves completed)
+     * @return boolean of whether game is won (all waves spawned and completed)
      */
     public boolean isGameWon () {
-        return levelManager.isGameWon();
+        return !levelManager.isSurvivalMode()
+                && levelManager.zeroWavesRemaining()
+                && monsters.size() == 0;
     }
 
     /**

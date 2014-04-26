@@ -217,7 +217,6 @@ public class TestDataHandler {
 		testDataHandler.loadBlueprint(FILE_PATH + SAVEBLUEPRINT_PATH,true);
 	}
 
-
 	/**
 	 * Tests loading of resources from two different
 	 * saved blueprints
@@ -230,8 +229,9 @@ public class TestDataHandler {
 	public void loadDifferentResourcesFiles() throws ClassNotFoundException, IOException, ZipException{
 		DataHandler testDataHandler = new DataHandler();
 		GameBlueprint testBlueprint = this.createTestBlueprint();
+//		testDataHandler.saveBlueprint(testBlueprint,"src/test/newFolder/myResources.zip");
 		String testPath = "src/main/resources/";
-		String resourcePath = "src/main/resources/";
+//		String resourcePath = "src/main/resources/";
 
 		// save this with current resources folder
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
@@ -255,7 +255,7 @@ public class TestDataHandler {
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
 		File myResourcesTwo = new File(testPath);
 		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
-		System.out.println(myResourcesTwoSize);
+//		System.out.println(myResourcesTwoSize);
 
 		// should contain testBlueprint.ser
 
@@ -272,7 +272,7 @@ public class TestDataHandler {
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
 		File myResourcesOne = new File(testPath);
 		long myResourcesOneSize = myResourcesOne.listFiles().length;
-		System.out.println(myResourcesOneSize);
+//		System.out.println(myResourcesOneSize);
 		//		System.out.println(myResourcesTwoSize + "   " + myResourcesOneSize);
 		assertTrue("The second resources folder should be greater than the first", myResourcesTwoSize > myResourcesOneSize);
 
@@ -312,3 +312,4 @@ public class TestDataHandler {
 
 
 }
+

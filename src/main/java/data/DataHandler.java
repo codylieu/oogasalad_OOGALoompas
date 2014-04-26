@@ -1,6 +1,7 @@
 package main.java.data;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -99,7 +100,7 @@ public class DataHandler {
 
 		if (tempDirCreated){
 			//Set up container zip file
-			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+//			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
 
 			// Zip resources
 			String zipResourcesLocation = tempDirLocation + "ZippedResources.zip";
@@ -115,7 +116,7 @@ public class DataHandler {
 			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser"));
 
 			// Compress container file
-			if (compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation)){
+			if (compressAuthoringEnvironment(myFilesToZip,filePath)){
 				deleteDirectory(new File(tempDirLocation)); 
 			}
 		} else {
@@ -225,7 +226,6 @@ public class DataHandler {
 		File myDir = new File(FILE_PATH);
 		deleteDirectory(myDir);
 		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
-		
 		// Delete temp folder
 		deleteDirectory(new File(TEMP_FOLDER_PATH));
 
@@ -271,6 +271,8 @@ public class DataHandler {
 	 * using input stream.
 	 * @param compressedFile
 	 * @param destination
+	 * @throws ZipException 
+	 * @throws IOException 
 	 */
 
 	//	private static void decompress(ZipFile zippedResources,String destination) {
@@ -286,71 +288,67 @@ public class DataHandler {
 	//		System.out.println("File Decompressed");
 	//	}
 
-	private static void decompress(String zipFileLocation,String destinationPath) {
-		try {
-			// Initiate the ZipFile
-			ZipFile zipFile = new ZipFile(zipFileLocation);
+	private static void decompress(String zipFileLocation,String destinationPath) throws ZipException, IOException {
+		// Initiate the ZipFile
+		ZipFile zipFile = new ZipFile(zipFileLocation);
 
-			//Get a list of FileHeader. FileHeader is the header information for all the
-			//files in the ZipFile
-			List fileHeaderList = zipFile.getFileHeaders();
+		//Get a list of FileHeader. FileHeader is the header information for all the
+		//files in the ZipFile
+		List fileHeaderList = zipFile.getFileHeaders();
 
-			// Loop through all the fileHeaders
-			for (int i = 0; i < fileHeaderList.size(); i++) {
-				FileHeader fileHeader = (FileHeader)fileHeaderList.get(i);
-				if (fileHeader != null) {
-					String outFilePath;
-					if(fileHeader.getFileName().startsWith("resources/")){
+		// Loop through all the fileHeaders
+		for (int i = 0; i < fileHeaderList.size(); i++) {
+			FileHeader fileHeader = (FileHeader)fileHeaderList.get(i);
+			if (fileHeader != null) {
+				String outFilePath;
+				if(fileHeader.getFileName().startsWith("resources/")){
 
-						outFilePath = destinationPath + System.getProperty("file.separator") + fileHeader.getFileName().substring(10); // take the resources out of the filename
-					} else {
-						outFilePath = destinationPath + System.getProperty("file.separator") + fileHeader.getFileName();
-					}
-					File outFile = new File(outFilePath);
-
-					//Checks if the file is a directory
-					if (fileHeader.isDirectory()) {
-						//This functionality is up to your requirements
-						//For now I create the directory
-						outFile.mkdirs();
-						continue;
-					}
-
-					//Check if the directories(including parent directories)
-					//in the output file path exists
-					File parentDir = outFile.getParentFile();
-					if (!parentDir.exists()) {
-						parentDir.mkdirs();
-					}
-
-					//Get the InputStream from the ZipFile
-					ZipInputStream is = zipFile.getInputStream(fileHeader);
-					//Initialize the output stream
-					OutputStream os = new FileOutputStream(outFile);
-
-					int readLen = -1;
-					byte[] buff = new byte[BUFF_SIZE];
-
-					//Loop until End of File and write the contents to the output stream
-					while ((readLen = is.read(buff)) != -1) {
-						os.write(buff, 0, readLen);
-					}
-
-					//Please have a look into this method for some important comments
-					closeFileHandlers(is, os);
-
-					//To restore File attributes (ex: last modified file time, 
-					//read only flag, etc) of the extracted file, a utility class
-					//can be used as shown below
-					UnzipUtil.applyFileAttributes(fileHeader, outFile);
-
-					//					System.out.println("Done extracting: " + fileHeader.getFileName());
+					outFilePath = destinationPath + System.getProperty("file.separator") + fileHeader.getFileName().substring(10); // take the resources out of the filename
 				} else {
-					System.err.println("fileheader is null. Shouldn't be here");
+					outFilePath = destinationPath + System.getProperty("file.separator") + fileHeader.getFileName();
 				}
+				File outFile = new File(outFilePath);
+
+				//Checks if the file is a directory
+				if (fileHeader.isDirectory()) {
+					//This functionality is up to your requirements
+					//For now I create the directory
+					outFile.mkdirs();
+					continue;
+				}
+
+				//Check if the directories(including parent directories)
+				//in the output file path exists
+				File parentDir = outFile.getParentFile();
+				if (!parentDir.exists()) {
+					parentDir.mkdirs();
+				}
+
+				//Get the InputStream from the ZipFile
+				ZipInputStream is = zipFile.getInputStream(fileHeader);
+				//Initialize the output stream
+				OutputStream os = new FileOutputStream(outFile);
+
+				int readLen = -1;
+				byte[] buff = new byte[BUFF_SIZE];
+
+				//Loop until End of File and write the contents to the output stream
+				while ((readLen = is.read(buff)) != -1) {
+					os.write(buff, 0, readLen);
+				}
+
+				//Please have a look into this method for some important comments
+				closeFileHandlers(is, os);
+
+				//To restore File attributes (ex: last modified file time, 
+				//read only flag, etc) of the extracted file, a utility class
+				//can be used as shown below
+				UnzipUtil.applyFileAttributes(fileHeader, outFile);
+
+				//					System.out.println("Done extracting: " + fileHeader.getFileName());
+			} else {
+				System.err.println("fileheader is null. Shouldn't be here");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 

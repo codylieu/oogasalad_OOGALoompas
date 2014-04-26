@@ -12,11 +12,12 @@ import java.util.Set;
 public class GameSchema extends AbstractSchema {
 	public static final String LIVES = "lives";
 	public static final String MONEY = "money";
+	public static final String MUSIC = "music";
 	public static final String LEVELDIFFICULTY = "difficulty";
+	public static final String ISSURVIVALMODE = "survivalModeEnabled";
 	/**
 	 * The value should be of type Boolean
 	 */
-	public static final String ISSURVIVALMODE = "survivalmodeenabled";
 
 	public GameSchema()	{
 		super();

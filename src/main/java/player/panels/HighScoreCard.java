@@ -63,7 +63,7 @@ public class HighScoreCard extends JPanel implements Observing, ActionListener {
 
 
 	@Override
-	public void setSubject(Subject s) {
+	public void addSubject(Subject s) {
 		engine =  (TDPlayerEngine) s;
 	}
 
@@ -75,10 +75,5 @@ public class HighScoreCard extends JPanel implements Observing, ActionListener {
 		highScoreDisplay.append(name + SPACER_FOR_HIGH_SCORE + highScore +  NEWLINE);
 	}
 
-	@Override
-	public void setSubject(List<Subject> s) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

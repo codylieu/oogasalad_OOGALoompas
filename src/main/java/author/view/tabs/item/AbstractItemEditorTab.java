@@ -33,19 +33,14 @@ import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 
 public abstract class AbstractItemEditorTab extends ObjectEditorTab {
-	private JSpinner timeSpinner, costSpinner, damageSpinner, flashSpinner;
-	private List<ItemSchema> itemSchemas;
-	private List<JRadioButton> allButtons;
-	private JButton itemImageButton;
-	private ImageCanvas itemImageCanvas;
+	JSpinner timeSpinner, costSpinner, damageSpinner, flashSpinner, rangeSpinner, freezeSpinner;
+	List<ItemSchema> itemSchemas;
+	List<JRadioButton> allButtons;
+	JButton itemImageButton;
+	ImageCanvas itemImageCanvas;
 	
 	public AbstractItemEditorTab(TabController itemController, String objectName) {
 		super(itemController, objectName);
-	}
-	
-	@Override
-	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
-		return new ItemTabViewBuilder(this);
 	}
 
 	@Override
@@ -114,9 +109,9 @@ public abstract class AbstractItemEditorTab extends ObjectEditorTab {
 		}
 	}
 	
-	private class ItemTabViewBuilder extends ObjectTabViewBuilder {
+	public abstract class AbstractItemTabViewBuilder extends ObjectTabViewBuilder {
 
-		public ItemTabViewBuilder(EditorTab editorTab) {
+		public AbstractItemTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
 		}
 
@@ -141,18 +136,6 @@ public abstract class AbstractItemEditorTab extends ObjectEditorTab {
 			return null;
 		}
 	
-		@Override
-		protected void instantiateAndClumpFields() {
-			costSpinner = makeAttributeSpinner(ItemSchema.COST);
-			timeSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
-			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
-			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
-			
-			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner};
-			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
-		}
-
 		@Override
 		protected JComponent makeFieldPane() {
 			JPanel result = new JPanel(new GridLayout(0, 2));
