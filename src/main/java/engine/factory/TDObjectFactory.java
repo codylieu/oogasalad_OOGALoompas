@@ -223,8 +223,15 @@ public class TDObjectFactory {
     private Object placeObject (Class<?> objectType, Object[] parameters) {
         return Reflection.createInstance(objectType.getName(), parameters);
     }
-
-
+    
+    /**
+     * Returns the attributes of a TDobject from its schema
+     * @param objName
+     * @return unmodifiable map of attributes
+     */
+    public Map<String, Serializable> getTDObjectAttributes(String objName) {
+    	return Collections.unmodifiableMap(tdObjectSchemaMap.get(objName).getAttributesMap());
+    }
     
     /**
      * Returns names of towers that have loaded schemas, and can possibly be created.
