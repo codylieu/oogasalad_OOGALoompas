@@ -21,8 +21,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import org.aspectj.weaver.tools.cache.AsynchronousFileCacheBacking.ClearCommand;
-
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.controller.tabbed_controllers.WaveController;
