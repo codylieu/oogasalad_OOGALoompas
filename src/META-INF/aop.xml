@@ -1,6 +1,0 @@
-<!-- aop.xml -->
-<aspectj>
-    <aspects>
-        <aspect name="main.java.engine.util.StatsLogAspect"/>
-    </aspects>
-</aspectj>
