@@ -20,9 +20,12 @@ import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.EnemyController;
@@ -33,6 +36,7 @@ import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.author.view.tabs.terrain.TerrainAttribute;
+import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -71,6 +75,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	private List<MonsterSchema> monsterSchemas;
 
 	private JComboBox<String> resDropDown;
+	private JSpinner resNumSpinner;
 
 	@Override
 	public void saveTabData() {
@@ -161,9 +166,9 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		// res dropdown
 		resDropDown.removeAllItems();
-		for (String tower : objectMap.keySet()) {
-			if (!tower.equals(getSelectedObjectName()))
-				resDropDown.addItem(tower);
+		for (String monster : objectMap.keySet()) {
+			if (!monster.equals(getSelectedObjectName()))
+				resDropDown.addItem(monster);
 		}
 		if (ComboBoxUtil.containsValue(resDropDown,
 				(String) map.get(resDropDown.getName()))) {
@@ -172,6 +177,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			resDropDown.addItem(NO_RES_PATH);
 			resDropDown.setSelectedItem(NO_RES_PATH);
 		}
+		// res spinner
+
 	}
 
 	@Override
@@ -247,11 +254,12 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
 					TDObjectSchema.IMAGE_NAME);
-			
-			resDropDown = makeResDropdown();
+
+			resDropDown = new JComboBox<String>();
+			resNumSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 20, 1));
 
 			JSpinner[] spinners = { healthSpinner, speedSpinner, damageSpinner,
-					rewardSpinner };
+					rewardSpinner, resNumSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 
 			ImageCanvas[] canvases = { monsterImageCanvas };
@@ -263,20 +271,26 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		protected JComponent makeFieldPane() {
 			JPanel result = new JPanel(new GridLayout(0, 2));
 			for (JSpinner spinner : spinnerFields) {
-				result.add(makeFieldTile(spinner));
+				if (spinner.getName() != null && !spinner.getName().equals(MonsterSchema.RESURRECT_QUANTITY))
+					result.add(makeFieldTile(spinner));
 			}
 			result.add(makeFieldTile(makeButtonGroupPanel(tileSizeGroup,
 					"Tile Size")));
 			result.add(makeFieldTile(makeButtonGroupPanel(flyingOrGroundGroup,
 					"Flying Or Ground Type")));
-			result.add(makeFieldTile(resDropDown));
+			result.add(makeFieldTile(makeResPane()));
 			return result;
 		}
-		
-		private JComboBox<String> makeResDropdown() {
 
-			JComboBox<String> result = new JComboBox<String>();
-			result.setName(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
+		private JPanel makeResPane() {
+			JPanel result = new JPanel(new GridLayout(0, 1));
+			result.add(new JLabel("Monster To Spawn"));
+			result.add(resDropDown);
+			resDropDown.setName(MonsterSchema.RESURRECT_MONSTER_NAME);
+			result.add(new JLabel("How many"));
+			result.add(resNumSpinner);
+			resNumSpinner.setName(MonsterSchema.RESURRECT_QUANTITY);
+			result.setName("Monsters to Spawn Upon Death");
 			return result;
 		}
 
