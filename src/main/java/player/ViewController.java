@@ -13,8 +13,6 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
@@ -33,6 +31,7 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -46,10 +45,10 @@ import main.java.player.panels.ObservingPanel;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.MultipleMethodAction;
-import main.java.player.util.Observing;
 import main.java.player.util.Sound;
 import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
+import net.lingala.zip4j.exception.ZipException;
 
 /**
  * The Swing wrapper that contains all the buttons,
@@ -316,7 +315,12 @@ public class ViewController implements Serializable {
 	}
 
 	private ITDPlayerEngine initializeEngine(String pathToBlueprint) {
-		engine = new TDPlayerEngine(pathToBlueprint);
+		try {
+			engine = new TDPlayerEngine(pathToBlueprint);
+		} catch (ClassNotFoundException | IOException | ZipException e) {
+			JOptionPane.showMessageDialog(frame, "Invalid file. Closing program.");
+			System.exit(1);
+		}
 		engine.initModel();
 		engine.stop();
 		engine.toggleRunning();

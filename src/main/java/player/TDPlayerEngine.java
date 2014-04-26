@@ -63,7 +63,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private JGPoint lastClickedObject;
 
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
-	public TDPlayerEngine(String pathToBlueprintInit) {
+	public TDPlayerEngine(String pathToBlueprintInit) throws ClassNotFoundException, IOException, ZipException {
 		// super();
 		loadCanvasSize(pathToBlueprintInit);
 		pathToBlueprint = pathToBlueprintInit;
@@ -78,14 +78,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		stop();
 	}
 
-	private void loadCanvasSize(String pathToBlueprint) {
+	private void loadCanvasSize(String pathToBlueprint) throws ClassNotFoundException, IOException, ZipException {
 		DataHandler dataHandler = new DataHandler();
-		GameBlueprint blueprint = null;
-		try {
-			blueprint = dataHandler.loadBlueprint(pathToBlueprint, true);
-		} catch (ClassNotFoundException | IOException | ZipException e) {
-			e.printStackTrace();
-		}
+		GameBlueprint blueprint = dataHandler.loadBlueprint(pathToBlueprint, true);
 		CanvasSchema canvasSchema = (CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap().
 				get(GameMapSchema.MY_CANVAS_ATTRIBUTES);
 		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
@@ -163,7 +158,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 					color = JGColor.orange;
 				}
 			}
-
 		}
 
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
@@ -182,13 +176,12 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		super.doFrame();
 		if (cursorState == CursorState.AddTower) {
 			if (getMouseButton(LEFT_CLICK)) {
-
 				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(LEFT_CLICK);
 			}
-			else{
+			else {
 				drawTowerGhost(towerName);
 			}
 		}
