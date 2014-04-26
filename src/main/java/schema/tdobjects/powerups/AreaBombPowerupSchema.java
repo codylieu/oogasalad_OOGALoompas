@@ -1,8 +1,8 @@
-package main.java.schema.tdobjects.items;
+package main.java.schema.tdobjects.powerups;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
-import main.java.engine.objects.item.AreaBomb;
+import main.java.engine.objects.powerup.Annihilator;
+import main.java.engine.objects.powerup.AreaBomb;
 import main.java.schema.tdobjects.ItemSchema;
 
 import java.util.Set;
@@ -11,18 +11,18 @@ import java.util.Set;
  * 
  * This is a settings object for a specific type of AreaBomb.
  */
-public class AreaBombItemSchema extends ItemSchema {
+public class AreaBombPowerupSchema extends ItemSchema {
 	public static final Class<AreaBomb> MY_CONCRETE_TYPE = AreaBomb.class;
 	public static final String RANGE = "Range";
 
-	public AreaBombItemSchema() {
+	public AreaBombPowerupSchema() {
 		super(MY_CONCRETE_TYPE);
 	}
 
 	/**
 	 * @param name name of monster
 	 */
-	public AreaBombItemSchema(String name) {
+	public AreaBombPowerupSchema(String name) {
 		this();
 		populateDefaultAttributes(name);
 	}
@@ -34,12 +34,12 @@ public class AreaBombItemSchema extends ItemSchema {
 		addAttribute(ItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT);
 		addAttribute(ItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT);
 		addAttribute(ItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT);
-		addAttribute(AreaBombItemSchema.RANGE, ItemViewConstants.RANGE_DEFAULT);
+		addAttribute(AreaBombPowerupSchema.RANGE, ItemViewConstants.RANGE_DEFAULT);
 	}
 
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		myAttributeSet.add(AreaBombItemSchema.RANGE);
+		myAttributeSet.add(AreaBombPowerupSchema.RANGE);
 		return myAttributeSet;
 	}
 }

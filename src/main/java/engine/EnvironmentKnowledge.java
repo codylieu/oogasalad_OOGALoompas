@@ -83,10 +83,10 @@ public class EnvironmentKnowledge {
     }
     
     /**
-     * Add a life to the current player
+     * Add lives to the current player
      */
-    public void grantPlayerLife() {
-    	currentPlayer.incrementLives();
+    public void grantPlayerLife(double livesToGrant) {
+    	currentPlayer.increaseLives(livesToGrant);
     }
 
 }

@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -8,8 +8,8 @@ import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.objects.monster.Monster;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
-import main.java.schema.tdobjects.items.AreaBombItemSchema;
+import main.java.schema.tdobjects.powerups.AnnihilatorPowerupSchema;
+import main.java.schema.tdobjects.powerups.AreaBombPowerupSchema;
 
 /**
  * 
@@ -30,12 +30,12 @@ public class AreaBomb extends RowBomb{
 	public AreaBomb (Map<String, Serializable> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
-				(Double) getValueOrDefault(attributes, AreaBombItemSchema.RANGE, ItemViewConstants.RANGE_DEFAULT),
-				(String) getValueOrDefault(attributes, AreaBombItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombItemSchema.COST, ItemViewConstants.COST_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombItemSchema.BUILDUP_TIME, ItemViewConstants.BUILDUP_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
-				(Integer) getValueOrDefault(attributes, AreaBombItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
+				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.RANGE, ItemViewConstants.RANGE_DEFAULT),
+				(String) getValueOrDefault(attributes, AreaBombPowerupSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
+				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.COST, ItemViewConstants.COST_DEFAULT),
+				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.BUILDUP_TIME, ItemViewConstants.BUILDUP_DEFAULT),
+				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
+				(Integer) getValueOrDefault(attributes, AreaBombPowerupSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
 				);
 	}
 

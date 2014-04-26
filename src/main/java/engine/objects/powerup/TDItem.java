@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
@@ -33,14 +33,6 @@ public abstract class TDItem extends TDObject {
 		this.damage = damage;
 		this.flash_interval = flash_interval;
 	}
-	
-	/**
-	 * This method defines what the object should do 
-	 * and will be called upon creation of the object. 
-	 * 
-	 * @param environmentKnowledge
-	 */
-	public abstract void doAction(EnvironmentKnowledge environmentKnowledge);
 	
 	protected void terminateItem() {
 		isDead = true;

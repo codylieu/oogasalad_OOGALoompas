@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -8,8 +8,8 @@ import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.monster.Monster;
 import main.java.schema.tdobjects.ItemSchema;
-import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
-import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
+import main.java.schema.tdobjects.powerups.AnnihilatorPowerupSchema;
+import main.java.schema.tdobjects.powerups.InstantFreezerPowerupSchema;
 
 /**
  * 
@@ -29,11 +29,11 @@ public class InstantFreeze extends TDItem {
 	public InstantFreeze(Map<String, Serializable> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
-				(String) getValueOrDefault(attributes, InstantFreezeItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
-				(Double) getValueOrDefault(attributes, InstantFreezeItemSchema.COST, ItemViewConstants.COST_DEFAULT),
-				(Double) getValueOrDefault(attributes, InstantFreezeItemSchema.FREEZE_DURATION, ItemViewConstants.FREEZE_DURATION_DEFAULT),
-				(Double) getValueOrDefault(attributes, InstantFreezeItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
-				(Integer) getValueOrDefault(attributes, InstantFreezeItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
+				(String) getValueOrDefault(attributes, InstantFreezerPowerupSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
+				(Double) getValueOrDefault(attributes, InstantFreezerPowerupSchema.COST, ItemViewConstants.COST_DEFAULT),
+				(Double) getValueOrDefault(attributes, InstantFreezerPowerupSchema.FREEZE_DURATION, ItemViewConstants.FREEZE_DURATION_DEFAULT),
+				(Double) getValueOrDefault(attributes, InstantFreezerPowerupSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
+				(Integer) getValueOrDefault(attributes, InstantFreezerPowerupSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
 				);
 	}
 	

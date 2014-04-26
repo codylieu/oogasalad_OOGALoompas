@@ -73,6 +73,10 @@ public class Player {
 	public void incrementLives() {
 		lives++;
 	}
+	
+	public void increaseLives(double changeAmount) {
+		lives+=changeAmount;
+	}
 
 	public double getScore() {
 		return this.score;

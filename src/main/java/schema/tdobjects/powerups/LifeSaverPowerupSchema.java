@@ -1,9 +1,10 @@
-package main.java.schema.tdobjects.items;
+package main.java.schema.tdobjects.powerups;
 
 import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
 import main.java.engine.objects.monster.SimpleMonster;
+import main.java.engine.objects.powerup.Annihilator;
+import main.java.engine.objects.powerup.LifeSaver;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 
@@ -12,19 +13,19 @@ import java.util.Set;
 
 /**
  * 
- * This is a settings object for a specific type of Annihilator.
+ * This is a settings object for a specific type of LifeSaver.
  */
-public class AnnihilatorItemSchema extends ItemSchema {
-	public static final Class<Annihilator> MY_CONCRETE_TYPE = Annihilator.class;
+public class LifeSaverPowerupSchema extends ItemSchema {
+	public static final Class<LifeSaver> MY_CONCRETE_TYPE = LifeSaver.class;
 
-	public AnnihilatorItemSchema() {
+	public LifeSaverPowerupSchema() {
 		super(MY_CONCRETE_TYPE);
 	}
 
 	/**
 	 * @param name name of monster
 	 */
-	public AnnihilatorItemSchema(String name) {
+	public LifeSaverPowerupSchema(String name) {
 		this();
 		populateDefaultAttributes(name);
 	}
@@ -33,10 +34,8 @@ public class AnnihilatorItemSchema extends ItemSchema {
 		addAttribute(ItemSchema.NAME, name);
 		addAttribute(ItemSchema.BUILDUP_TIME, ItemViewConstants.BUILDUP_DEFAULT);
 		addAttribute(ItemSchema.COST, ItemViewConstants.COST_DEFAULT);
-		addAttribute(ItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT);
 		addAttribute(ItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT);
 		addAttribute(ItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT);
-		addAttribute(AreaBombItemSchema.RANGE, ItemViewConstants.RANGE_DEFAULT);
 	}
 
 	@Override

@@ -1,7 +1,7 @@
 package main.java.engine.objects.tower;
 
+import java.awt.geom.Point2D;
 import java.util.List;
-
 import main.java.engine.EnvironmentKnowledge;
 
 public interface ITower {
@@ -53,6 +53,12 @@ public interface ITower {
      */
     public String getUpgradeTowerName();
     
+    /**
+     * Get the tower's center coordinate.
+     * @return
+     */
+    public Point2D centerCoordinate ();
+
     /**
      * Get the information about the tower.
      * 

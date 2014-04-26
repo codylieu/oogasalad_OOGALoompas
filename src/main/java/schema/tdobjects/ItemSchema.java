@@ -2,14 +2,15 @@ package main.java.schema.tdobjects;
 
 import java.awt.geom.Point2D;
 
-import main.java.engine.objects.item.TDItem;
+import main.java.engine.objects.powerup.TDItem;
 
 public abstract class ItemSchema extends TDObjectSchema{
 	public static final String COST = "Cost";
 	public static final String BUILDUP_TIME = "Build Up Time (sec)";
 	public static final String DAMAGE = "Damage";
-	public static final String FLASH_INTERVAL = "Flash interval";
+	public static final String FLASH_INTERVAL = "Flash Interval";
 	public static final String LOCATION = "Location";
+	public static final String LIVES_TO_GRANT = "Lives to Grant";
 
 	public ItemSchema(Class<? extends TDItem> myConcreteType) {
 		super(myConcreteType);
@@ -20,6 +21,7 @@ public abstract class ItemSchema extends TDObjectSchema{
 		myAttributeSet.add(ItemSchema.IMAGE_NAME);
 		myAttributeSet.add(ItemSchema.NAME);
 		myAttributeSet.add(ItemSchema.LOCATION);
+		myAttributeSet.add(ItemSchema.LIVES_TO_GRANT);
 	}
 
 }
