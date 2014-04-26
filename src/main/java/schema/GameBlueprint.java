@@ -24,15 +24,6 @@ public class GameBlueprint implements Serializable {
 	private List<WaveSpawnSchema> myLevelSchemas;
 	private List<GameMapSchema> myGameMapSchemas;
 	private List<ItemSchema> myItemSchema;
-	private CanvasSchema myCanvasSchema;
-	
-	public CanvasSchema getMyCanvasSchema() {
-		return myCanvasSchema;
-	}
-	
-	public void setMyCanvasSchema(CanvasSchema canvasSchema) {
-		this.myCanvasSchema = canvasSchema;
-	}
 
 	public GameSchema getMyGameScenario() {
 		return myGameScenario;

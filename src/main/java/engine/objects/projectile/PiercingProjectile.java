@@ -8,7 +8,7 @@ import jgame.JGObject;
 
 /**
  * 
- * Projectiles that pierce through a certain number of enemies
+ * Projectiles that pierce through a certain number of enemies and deal damage
  * before being removed. 
  *
  */
@@ -19,7 +19,6 @@ public class PiercingProjectile extends DamageProjectile {
     private static final int DEFAULT_MONSTER_TO_PIERCE = 2;
 
     private double myDamage;
-    private int monstersPierced;
     private Set<String> hitList;
     
 
@@ -60,7 +59,6 @@ public class PiercingProjectile extends DamageProjectile {
     }
     
     private void initialize() {
-    	 monstersPierced = 0;
          hitList = new HashSet<String>();
     }
     

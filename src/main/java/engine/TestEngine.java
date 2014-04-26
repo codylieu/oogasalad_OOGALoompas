@@ -26,18 +26,17 @@ public class TestEngine extends JGEngine {
 
 	public TestEngine() {
 		initEngineApplet();
+		//cursorState = CursorState.None;
+		cursorState = CursorState.AddTower;
 	}
 
-	public TestEngine(JGPoint size, Model model) {
-		this.model = model;
-		cursorState = CursorState.AddTower;
+	public TestEngine(JGPoint size) {
 		initEngine(800, 600);
 	}
 
 
 	public static void main(String[] args) {
-		Model model = new Model();
-		engine = new TestEngine(StdGame.parseSizeArgs(args,0), model);
+		engine = new TestEngine(StdGame.parseSizeArgs(args,0));
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class TestEngine extends JGEngine {
 	@Override
 	public void initGame() {
 		setFrameRate(45, 1);
-		model.initializeModel(this);
+		this.model = new Model(this, null);
 		towers = model.getPossibleTowers();
 		items = model.getPossibleItems();
 	}
@@ -130,7 +129,6 @@ public class TestEngine extends JGEngine {
 				File file = fileChooser.getSelectedFile();
 				try {
 					model.loadGameBlueprint(file.getAbsolutePath());
-					model.loadGameSchemas();
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

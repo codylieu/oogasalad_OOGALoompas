@@ -5,17 +5,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.exceptions.engine.MonsterCreationFailureException;
-import main.java.schema.GameBlueprint;
 import main.java.schema.MonsterSpawnSchema;
-import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.WaveSpawnSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 
+/**
+ * Manages the state of the game for each level.
+ * 
+ */
 public class LevelManager {
 
     private int myCurrentWave;
@@ -53,63 +55,69 @@ public class LevelManager {
      */
     public Collection<Monster> spawnNextWave () throws MonsterCreationFailureException {
         Collection<Monster> spawnedMonsters = new ArrayList<Monster>();
-        for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave)
-                .getMonsterSpawnSchemas()) {
-            spawnedMonsters.addAll(spawnMonsterSpawnSchema(spawnSchema));
-            if (++myCurrentWave >= myAllWaves.size()) {
-            	if(survivalMode) {
-            		//reset current wave back to beginning
-            		myCurrentWave = 0;
-            	}
+
+        if (myCurrentWave >= myAllWaves.size()) {
+            if (survivalMode) {
+                // reset current wave back to beginning
+                myCurrentWave = 0;
+            }
+            else {
+                // empty list, avoid running out of spawns.
+                return spawnedMonsters;
             }
         }
+
+        for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave++)
+                .getMonsterSpawnSchemas()) {
+            spawnedMonsters.addAll(spawnMonsterSpawnSchema(spawnSchema));
+        }
+
         return spawnedMonsters;
     }
-    
+
     /**
      * Spawn a particular monster spawn schema with the level manager's set entrance.
+     * 
      * @param spawnSchema
      * @return
      * @throws MonsterCreationFailureException
      */
-    public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema)
-			throws MonsterCreationFailureException {
-		return spawnMonsterSpawnSchema(spawnSchema, entrance);
-	}
-    
-    
-	/**
-	 * Spawn a particular spawn schema. This can be called to spawn a monsters
-	 * schema out of sync with wave spawns.
-	 *
-	 * Return list of newly spawned monsters.
-	 * 
-	 * @param spawnSchema
-	 * @return
-	 * @throws MonsterCreationFailureException
-	 */
-	public List<Monster> spawnMonsterSpawnSchema(MonsterSpawnSchema spawnSchema, Point2D newEntrance)
-			throws MonsterCreationFailureException {
-		List<Monster> spawnedMonsters = new ArrayList<Monster>();
-		for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
-
-		    Monster newlyAdded =
-		            myFactory.placeMonster(newEntrance, exit,
-		                                   (String) spawnSchema.getMonsterSchema()
-		                                           .getAttributesMap().get(TDObjectSchema.NAME));
-		    spawnedMonsters.add(newlyAdded);
-		}
-		return spawnedMonsters;
-	}
-
+    public List<Monster> spawnMonsterSpawnSchema (MonsterSpawnSchema spawnSchema)
+                                                                                 throws MonsterCreationFailureException {
+        return spawnMonsterSpawnSchema(spawnSchema, entrance);
+    }
 
     /**
-     * Returns whether or not the game is won,
-     * i.e. all waves are completed
-     * This will always return false on survival mode.
-     * @return whether or not game is over 
+     * Spawn a particular spawn schema. This can be called to spawn a monsters
+     * schema out of sync with wave spawns.
+     * 
+     * Return list of newly spawned monsters.
+     * 
+     * @param spawnSchema
+     * @return
+     * @throws MonsterCreationFailureException
      */
-    public boolean isGameWon () {
+    public List<Monster> spawnMonsterSpawnSchema (MonsterSpawnSchema spawnSchema,
+                                                  Point2D newEntrance)
+                                                                      throws MonsterCreationFailureException {
+        List<Monster> spawnedMonsters = new ArrayList<Monster>();
+        for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
+
+            Monster newlyAdded =
+                    myFactory.placeMonster(newEntrance, exit,
+                                           (String) spawnSchema.getMonsterSchema()
+                                                   .getAttributesMap().get(TDObjectSchema.NAME));
+            spawnedMonsters.add(newlyAdded);
+        }
+        return spawnedMonsters;
+    }
+
+    /**
+     * Returns if there are no more waves left to spawn.
+     * 
+     * @return whether or not there are no more waves to spawn
+     */
+    public boolean zeroWavesRemaining () {
         return myCurrentWave >= myAllWaves.size();
     }
 
@@ -130,8 +138,8 @@ public class LevelManager {
      * @param y
      */
     public void setExit (double x, double y) {
-//        this.exit = new Point2D.Double(x, y);
-    	this.exit = new Exit(x, y, this);
+        // this.exit = new Point2D.Double(x, y);
+        this.exit = new Exit(x, y, this);
     }
 
     /**
@@ -164,20 +172,21 @@ public class LevelManager {
 
     /**
      * Register a player to be accounted for when monster reaches exit
+     * 
      * @param player
      */
     public void registerPlayer (Player player) {
         myPlayer = player;
 
     }
-    
+
     /**
      * Get the exit for the current level
      * 
      * @return exit object of the current level
      */
-    public Exit getExit() {
-    	return exit;
+    public Exit getExit () {
+        return exit;
     }
 
     /**
@@ -196,13 +205,23 @@ public class LevelManager {
         }
         myCurrentWave = initialWave;
     }
-    
-	/**
-	 * Set the survival mode.
-	 * @param survivalMode
-	 */
-	public void setSurvivalMode(boolean survivalMode){
-		this.survivalMode = survivalMode;
-	}
+
+    /**
+     * Set the survival mode.
+     * 
+     * @param survivalMode
+     */
+    public void setSurvivalMode (boolean survivalMode) {
+        this.survivalMode = survivalMode;
+    }
+
+    /**
+     * Whether or not current game is in survival mode.
+     * 
+     * @param survivalMode
+     */
+    public boolean isSurvivalMode () {
+        return survivalMode;
+    }
 
 }

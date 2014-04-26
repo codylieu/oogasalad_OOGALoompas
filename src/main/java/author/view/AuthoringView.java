@@ -1,6 +1,7 @@
 package main.java.author.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,10 +18,10 @@ import main.java.author.controller.tabbed_controllers.ItemController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.controller.tabbed_controllers.TowerController;
 import main.java.author.controller.tabbed_controllers.WaveController;
-import main.java.author.view.menubar.BasicMenuBar;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
+import main.java.author.view.tabs.item.ItemEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
 import main.java.author.view.tabs.wave_editor.WaveEditorTab;
@@ -47,30 +48,32 @@ public class AuthoringView extends JFrame {
 	private static final String ITEM_EDITOR_STRING = "Item Editor";
 	private static final String TERRAIN_EDITOR_STRING = "Terrain Editor";
 	private static final String WAVE_EDITOR_STRING = "Wave Editor";
+	private static final String TITLE_STRING = "OOGASalad Authoring Environment";
+	public static final String DEFAULT_RESOURCES_DIR = "src/main/resources";
 
 	public AuthoringView(MainController mainController) {
-
-		super("OOGASalad Authoring Environment");
+		super(TITLE_STRING);
 
 		myController = mainController;
 		myController.setView(this);
-
 	}
 
 	/**
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs() {
-		final EnemyController enemyController = new EnemyController(
-				myController);
-		final TowerController towerController = new TowerController(
-				myController);
-		final WaveController waveController = new WaveController(myController);
-		final GameSettingsController gameSettingsController = new GameSettingsController(
-				myController);
-		final TerrainController terrainController = new TerrainController(
-				myController);
-		final ItemController itemController = new ItemController(myController);
+		final EnemyController enemyController =
+				new EnemyController(myController);
+		final TowerController towerController = 
+				new TowerController(myController);
+		final WaveController waveController = 
+				new WaveController(myController);
+		final GameSettingsController gameSettingsController = 
+				new GameSettingsController(myController);
+		final TerrainController terrainController = 
+				new TerrainController(myController);
+		final ItemController itemController = 
+				new ItemController(myController);
 
 		myController.addTabController(enemyController);
 		myController.addTabController(towerController);
@@ -84,26 +87,26 @@ public class AuthoringView extends JFrame {
 		tabbedPane.add(TOWER_EDITOR_STRING, new TowerEditorTab(towerController,
 				"Tower"));
 
-		enemyEditorTab = new EnemyEditorTab(enemyController, "Monster");
+		tabbedPane
+				.add(ENEMY_EDITOR_STRING,
+						new EnemyEditorTab(enemyController, "Monster"));
+		tabbedPane
+				.add(ITEM_EDITOR_STRING,
+						new ItemEditorTab(itemController));
+		tabbedPane
+				.add(TERRAIN_EDITOR_STRING,
+						new TerrainEditorTab(terrainController));
+		tabbedPane
+				.add(WAVE_EDITOR_STRING,
+						new WaveEditorTab(waveController));
 
-		tabbedPane.add(ENEMY_EDITOR_STRING, enemyEditorTab);
-		// tabbedPane
-		// .add(ITEM_EDITOR_STRING, new ItemEditorTab(itemController, "Item")
-		// );
-		tabbedPane.add(TERRAIN_EDITOR_STRING, new TerrainEditorTab(
-				terrainController));
-		tabbedPane.add(WAVE_EDITOR_STRING, new WaveEditorTab(waveController));
-
-		tabbedPane.addChangeListener(new ChangeListener() {
-
+		tabbedPane.addChangeListener(new ChangeListener(){
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				// TODO Auto-generated method stub
 				if (tabbedPane.getSelectedComponent() instanceof WaveEditorTab) {
 					waveController.updateEnemyList();
 				}
 			}
-
 		});
 	}
 
@@ -114,7 +117,6 @@ public class AuthoringView extends JFrame {
 		createEditorTabs();
 		add(tabbedPane, BorderLayout.CENTER);
 		add(createFinalizeGameButton(), BorderLayout.SOUTH);
-		setJMenuBar(new BasicMenuBar());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		pack();
@@ -143,7 +145,6 @@ public class AuthoringView extends JFrame {
 					try {
 						myController.saveBlueprint();
 					} catch (InvalidGameBlueprintException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -164,7 +165,11 @@ public class AuthoringView extends JFrame {
 	 * Shifts to the Enemy Tab
 	 */
 	public void shiftToEnemyTab() {
-		tabbedPane.setSelectedComponent(enemyEditorTab);
+		for(Component tab : tabbedPane.getComponents()) {
+			if (tab instanceof EnemyEditorTab) {
+				tabbedPane.setSelectedComponent(enemyEditorTab);
+			}
+		}	
 	}
 
 }

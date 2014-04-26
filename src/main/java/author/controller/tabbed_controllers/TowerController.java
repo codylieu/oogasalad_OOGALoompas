@@ -4,6 +4,7 @@ import java.util.List;
 
 import main.java.author.controller.MainController;
 import main.java.author.controller.TabController;
+import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TowerSchema;
 
 /**
@@ -22,7 +23,6 @@ public class TowerController extends TabController {
 	 */
 	public void addTowers(List<TowerSchema> towerSchemas) {
 		mySuperController.addTowersToModel(towerSchemas);
-
 	}
 
 }

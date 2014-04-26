@@ -9,7 +9,6 @@ import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.WaveSpawnSchema;
 
 /**
@@ -46,7 +45,7 @@ public class AuthorModel {
 	public void addEnemies(List<MonsterSchema> enemySchema) {
 		myGameBlueprint.setMyMonsterSchemas(enemySchema);
 	}
-
+	
 	/**
 	 * Adds gameschemas to the game blueprint
 	 * 
@@ -100,5 +99,4 @@ public class AuthorModel {
 		myGameBlueprint.setMyItemSchemas(itemSchemas);
 
 	}
-
 }

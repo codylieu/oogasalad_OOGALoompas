@@ -13,6 +13,7 @@ import java.util.Map;
 
 import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
+import main.java.engine.map.TDMap;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.powerup.IPowerup;
@@ -36,6 +37,11 @@ import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 
 
+/**
+ * A factory in charge of creating objects based on schemas
+ * Objects created include towers, monsters, and items
+ *
+ */
 public class TDObjectFactory {
     private static final String ITEM_PATH = "main.java.engine.objects.item.";
 	private JGEngineInterface engine;
@@ -50,6 +56,11 @@ public class TDObjectFactory {
         possibleItemNames = new ArrayList<String>();
     }
 
+    /**
+     * Load tower defense object schemas into schema map
+     * 
+     * @param schemas
+     */
     public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
         // TODO: Get rid of repetition in loading schemas
         for (TDObjectSchema s : schemas) {
@@ -61,25 +72,49 @@ public class TDObjectFactory {
         }
     }
     
+    /**
+     * Load tower schemas
+     * 
+     * @param schemas
+     */
     @SuppressWarnings("unchecked")
 	public void loadTowerSchemas (List<TowerSchema> schemas) {
-    	for (TowerSchema s: schemas) {
-    		possibleTowersNames.add((String) s.getAttributesMap().get(TDObjectSchema.NAME));
-                String bulletImageName = (String) s.getAttributesMap().get(TowerSchema.BULLET_IMAGE_NAME);
-                String bulletImagePath =
-                        Model.RESOURCE_PATH + s.getAttributesMap().get(TowerSchema.BULLET_IMAGE_NAME);
-                engine.defineImage(bulletImageName, "-", 1, bulletImagePath, "-");
+    	for (TowerSchema towerschema: schemas) {
+    		possibleTowersNames.add((String) towerschema.getAttributesMap().get(TDObjectSchema.NAME));
+                defineBulletImage(towerschema, TowerSchema.BULLET_IMAGE_NAME);
+                defineBulletImage(towerschema, TowerSchema.SHRAPNEL_IMAGE_NAME);
     	}
     	// Perhaps a better method of casting than using an intermediate wildcard type?
     	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
     }
     
+    /**
+     * Define the image of a bullet/shrapnel attribute in jgame engine.
+     * @param towerschema the tower schema
+     * @param imageNameConstant a constant of TowerSchema that is an image name attribute
+     */
+    private void defineBulletImage (TowerSchema towerschema, String imageNameConstant) {
+        String bulletImageName = (String) towerschema.getAttributesMap().get(imageNameConstant);
+        String bulletImagePath = Model.RESOURCE_PATH + towerschema.getAttributesMap().get(imageNameConstant);
+        engine.defineImage(bulletImageName, "-", 1, bulletImagePath, "-");
+    }
+    
+    /**
+     * Load monster schemas
+     * 
+     * @param schemas
+     */
     @SuppressWarnings("unchecked")
 	public void loadMonsterSchemas (List<MonsterSchema> schemas) {
     	loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
     }
     
     // TODO: Refactor and get rid of repetition with loadMonsterSchemas method
+	/**
+	 * Load item schemas
+	 * 
+	 * @param schemas
+	 */
 	@SuppressWarnings("unchecked")
 	public void loadItemSchemas(List<ItemSchema> schemas) {
     	for (ItemSchema i: schemas) {
@@ -102,7 +137,7 @@ public class TDObjectFactory {
      */
     public IPowerup placeItem (Point2D location, String itemName) throws ItemCreationFailureException {
     	
-    	Point2D tileOrigin = findTileOrigin(location);
+    	Point2D tileOrigin = TDMap.findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(itemName);
             schema.addAttribute(ItemSchema.LOCATION, (Serializable) tileOrigin);
@@ -141,7 +176,7 @@ schema);
      */
     public ITower placeTower (Point2D location, String towerName)
                                                                  throws TowerCreationFailureException {
-        Point2D tileOrigin = findTileOrigin(location);
+        Point2D tileOrigin = TDMap.findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(towerName);
             schema.addAttribute(TowerSchema.LOCATION, (Serializable) tileOrigin);
@@ -189,9 +224,6 @@ schema);
             schema.addAttribute(MonsterSchema.ENTRANCE_LOCATION, (Serializable) entrance);
             schema.addAttribute(MonsterSchema.EXIT_LOCATION, exit);
 
-            List<Integer> blocked = new ArrayList<Integer>();
-            blocked.add(2); // TODO, change -- provided by factory
-            schema.addAttribute(MonsterSchema.BLOCKED_TILES, (Serializable) blocked);
             Object[] monsterParameters = { schema.getAttributesMap() };
 
             return (Monster) placeObject(schema.getMyConcreteType(), monsterParameters);
@@ -211,19 +243,14 @@ schema);
     private Object placeObject (Class<?> objectType, Object[] parameters) {
         return Reflection.createInstance(objectType.getName(), parameters);
     }
-
+    
     /**
-     * Find the top-left corner associated with the tile associated with the given location. Used to
-     * place
-     * new objects and images.
-     * 
-     * @param location Coordinate of the map used to find the associated file
-     * @return The top left corner of the tile at the given coordinate
+     * Returns the attributes of a TDobject from its schema, if schema doesn't exist, returns null
+     * @param objName
+     * @return unmodifiable map of attributes
      */
-    private Point2D findTileOrigin (Point2D location) {
-        int curXTilePos = (int) location.getX() / engine.tileWidth() * engine.tileWidth();
-        int curYTilePos = (int) location.getY() / engine.tileHeight() * engine.tileHeight();
-        return new Point2D.Double(curXTilePos, curYTilePos);
+    public Map<String, Serializable> getTDObjectAttributes(String objName) {
+    	return tdObjectSchemaMap.containsKey(objName) ? Collections.unmodifiableMap(tdObjectSchemaMap.get(objName).getAttributesMap()) : null;
     }
     
     /**

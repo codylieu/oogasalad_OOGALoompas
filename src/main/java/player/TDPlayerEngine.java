@@ -1,25 +1,33 @@
 package main.java.player;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
+import main.java.data.DataHandler;
+import main.java.engine.IModel;
 import main.java.engine.Model;
+import main.java.engine.util.leapmotion.gamecontroller.LeapGameController;
+import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.player.panels.ItemChooser;
 import main.java.player.panels.ObjectChooser;
-import main.java.player.panels.TowerChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 import main.java.player.util.TowerGhost;
+import main.java.schema.CanvasSchema;
+import main.java.schema.GameBlueprint;
+import main.java.schema.map.GameMapSchema;
 import net.lingala.zip4j.exception.ZipException;
 
 /**
@@ -28,7 +36,7 @@ import net.lingala.zip4j.exception.ZipException;
  *
  */
 
-public class TDPlayerEngine extends JGEngine implements Subject, Observing{
+public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine{
 
 	public static final String LIFE_SAVER = "LifeSaver";
 	public static final String INSTANT_FREEZE = "InstantFreeze";
@@ -39,43 +47,65 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	public static int DEFAULT_FRAME_RATE = 45;
 	public static int LEFT_CLICK = 1;
 	public static int RIGHT_CLICK = 3;
+	public static int TILE_WIDTH = 32;
+	public static int TILE_HEIGHT = 32;
 
-	private ObjectChooser towerChooser;
-	@SuppressWarnings("unused")
-	private ObjectChooser itemChooser;
-	private Model model;
-	private List<Observing> observers;
+	private int xtiles, ytiles;
+	private IModel model;
+	private List<Observing> observerList;
 	private CursorState cursorState;
-	private boolean hasChanged;
 	private boolean isFullScreen;
+	private String pathToBlueprint;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
+	private JGPoint lastClickedObject;
+	private LeapGameController leapController;
+
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
-	public TDPlayerEngine() {
-//		super();
-		model = new Model();
-		initEngineComponent(960, 640);
-		observers = new ArrayList<Observing>();
-		hasChanged = true;
+
+
+	public TDPlayerEngine(String pathToBlueprintInit) throws ClassNotFoundException, IOException, ZipException {
+		// super();
+		loadCanvasSize(pathToBlueprintInit);
+		pathToBlueprint = pathToBlueprintInit;
+		initEngineComponent(xtiles * TILE_WIDTH, ytiles * TILE_HEIGHT);
+		observerList = new ArrayList<Observing>();
 		isFullScreen = false;
 		cursorState = CursorState.None;
+		leapController = new LeapGameController();
+		lastClickedObject = new JGPoint();
+		stop();
+	}
+
+	private void loadCanvasSize(String pathToBlueprint) throws ClassNotFoundException, IOException, ZipException {
+		DataHandler dataHandler = new DataHandler();
+		GameBlueprint blueprint = dataHandler.loadBlueprint(pathToBlueprint, true);
+		CanvasSchema canvasSchema = (CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap().
+				get(GameMapSchema.MY_CANVAS_ATTRIBUTES);
+		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
+		xtiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
+		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
 	}
 
 	@Override
 	public void initCanvas() {
-//		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
-		setCanvasSettings(model.getCanvasSize()[0], model.getCanvasSize()[1], 32, 32, null, JGColor.black, null);
+		setCanvasSettings(xtiles, ytiles, TILE_WIDTH, TILE_HEIGHT, null, JGColor.black, null);
 	}
 
 	@Override
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
-		model.initializeModel(this);
+
+	}
+
+	public void initModel(){
+		model = new Model(this, pathToBlueprint);
+		towerName = model.getPossibleTowers().get(0);
 	}
 
 	public void speedUp() {
 		setFrameRate(getFrameRate() + FRAME_RATE_DELTA, 1);
-		System.out.println(getFrameRate());
+
 	}
 
 	/**
@@ -93,7 +123,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	@Override
 	public void paintFrame() {
 		highlightMouseoverTile();
-		//displayGameStats();
 	}
 
 	public void setCursorState(CursorState newCursorState) {
@@ -105,8 +134,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 	}
 
 	/**
-	 * Draws a rectangle around the tile
-	 * below the current mouse position
+	 * Draws a rectangle around the tile at the current mouse position
 	 * according to certain rules
 	 */
 	private void highlightMouseoverTile() {
@@ -129,87 +157,36 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 					color = JGColor.orange;
 				}
 			}
-
 		}
 
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
-	/*private void displayGameStats() {
-		this.drawString("Score: "+model.getScore(), 50, 25, -1);
-		this.drawString("Lives left: "+model.getPlayerLives(), 50, 50, -1);
-		this.drawString("Money: "+model.getMoney(), 50, 75, -1);
-		this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
-	}*/
-
-	/*public TDObject getSelectedObject() {
+	public List<String> getCurrentDescription() {
 		JGPoint mousePos = getMousePos();
-		int curXTilePos = mousePos.x/tileWidth() * tileWidth();
-		int curYTilePos = mousePos.y/tileHeight() * tileHeight();
-		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0)
-			if (model.isTowerPresent(mousePos.x, mousePos.y))
-				return ;
-	}*/
-
-	public String getCurrentDescription() {
-		/*JGPoint mousePos = getMousePos();
 		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0) {
-			if (model.isTowerPresent(mousePos.x, mousePos.y)){
-				System.out.println(getObjects("tower", 0, true, null).size());
-				return getObjects("tower", 0, true, null).get(1).toString();//remove null to bounding box
-			}
-			else
-				return "";
+			return model.getUnitInfo(lastClickedObject.x, lastClickedObject.y);
 		}
-		else*/
-		return "";
-
+		return new ArrayList<String>();
 	}
-
 
 	@Override
 	public void doFrame() {
 		super.doFrame();
-		if (cursorState == CursorState.AddTower) {
-			if (getMouseButton(LEFT_CLICK)) {
-				model.placeTower(getMouseX(), getMouseY(), towerName);
-				setCursorState(CursorState.None);
-				removeObjects("TowerGhost", 0);
-				clearMouseButton(LEFT_CLICK);
-			}
-			else{
-				drawTowerGhost(towerName);
-			}
+		
+		if (leapController != null) {
+			leapController.doFrame();
 		}
-		else if (cursorState == CursorState.None) {
-			if (getMouseButton(LEFT_CLICK) && getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))) {
-				try {
-					model.upgradeTower(getMouseX(), getMouseY());
-				} catch (TowerCreationFailureException e) {
-					e.printStackTrace();
-				}
-
-				clearMouseButton(LEFT_CLICK);
-				clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
-			}
-			//setAllItems();
+		
+		if (model != null) {
+			checkGameEnd();
+			checkMouse();
+			checkKeys();
+			notifyObservers();
+			updateModel();
+			moveObjects();
+			model.checkCollisions();
 		}
-
-		notifyObservers();
-
-		checkKeys();
-
-		if (getMouseButton(RIGHT_CLICK)) {
-			model.checkAndRemoveTower(getMouseX(), getMouseY());
-			clearMouseButton(3);
-		}
-		try {
-			model.updateGame();
-		} catch (MonsterCreationFailureException e) {
-			e.printStackTrace();
-		}
-		moveObjects();
-		model.checkCollisions();
 	}
 
 	/*private void setAllItems(){
@@ -217,8 +194,65 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			setItem(LEFT_CLICK, items.getString(s));
 		}	
 	}*/
-	
-	private void setItem(int clickName ,String itemName){
+
+	private void checkGameEnd() {
+		if (model.isGameLost()) {
+			JOptionPane.showMessageDialog(null, "Game lost. :(");
+			stop();
+		}
+
+		if (model.isGameWon()) {
+			JOptionPane.showMessageDialog(null, "Game won!");
+			stop();
+		}
+	}
+
+	private void updateModel() {
+		try {
+			model.updateGame();
+		} catch (MonsterCreationFailureException e) {
+			JOptionPane.showMessageDialog(null, "Critical Monster creation exception. See stack trace. Exiting program");
+			e.printStackTrace();
+		}
+	}
+
+	private void checkMouse() {
+		if (cursorState == CursorState.AddTower) {
+			if (getMouseButton(LEFT_CLICK)) {
+				model.placeTower(getMouseX(), getMouseY(), towerName);
+				setCursorState(CursorState.None);
+				removeObjects("TowerGhost", 0);
+				clearMouseButton(LEFT_CLICK);
+			}
+			else {
+				drawTowerGhost(towerName);
+			}
+		}
+		else if (cursorState == CursorState.None) {
+			if (getMouseButton(LEFT_CLICK)) {
+				lastClickedObject.x = getMousePos().x;
+				lastClickedObject.y = getMousePos().y;
+				if(getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))){
+					try {
+						model.upgradeTower(getMouseX(), getMouseY());
+					} catch (TowerCreationFailureException e) {
+						e.printStackTrace();
+					}
+
+
+					clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
+				}
+				clearMouseButton(LEFT_CLICK);
+			}
+			//setAllItems();
+		}
+		if (getMouseButton(RIGHT_CLICK)) {
+			model.checkAndRemoveTower(getMouseX(), getMouseY());
+			clearMouseButton(3);
+		}
+	}
+
+	/*private void setItem(int clickName, String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
 				model.placeItem(itemName, getMouseX(), getMouseY());
@@ -227,13 +261,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			}
 			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
 		}
-	}
+	}*/
 
-	@Override
-	public void update(){
-		System.out.println(towerChooser);
-		System.out.println(towerChooser.getObjectName());
-		towerName = towerChooser.getObjectName();
+	public void setCurrentTowerType(String currentTowerName){
+		towerName = currentTowerName;
 	}
 
 	/**
@@ -245,8 +276,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			setCursorState(CursorState.None);
 			removeObjects("TowerGhost", 0);
 		}
-		else
+		else {
 			setCursorState(CursorState.AddTower);
+		}
 	}
 
 	private void checkKeys() {
@@ -255,7 +287,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 			clearKey(Integer.parseInt(hotkeys.getString("AddTower")));
 		}
 
-		//THIS ONLY PAUSES FOR NOW
 		if (getKey(Integer.parseInt(hotkeys.getString("ToggleRunning")))){
 			toggleRunning();
 			clearKey(Integer.parseInt(hotkeys.getString("ToggleRunning")));
@@ -293,21 +324,17 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 
 	@Override
 	public void register(Observing o) {
-		if(!observers.contains(o)) observers.add(o);
+		if(!observerList.contains(o)) observerList.add(o);
 	}
 
 	@Override
 	public void unregister(Observing o) {
-		if(observers.contains(o)) observers.remove(o);
+		if(observerList.contains(o)) observerList.remove(o);
 	}
 
 	@Override
 	public void notifyObservers() {
-		List<Observing> localObservers = null;
-		if(!hasChanged) return;
-		localObservers = new ArrayList<Observing>(observers);
-		hasChanged = false;
-		for(Observing o: localObservers){
+		for(Observing o: observerList){
 			o.update();
 		}
 	}
@@ -316,30 +343,37 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing{
 		return model.getPossibleTowers();
 	}
 
+	public List<String> getPossibleItems(){
+		return model.getPossibleItems();
+	}
+
 	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {
 		model.loadGameBlueprint(fileName);
 	}
 
+	public void saveGameState(String gameName){
+		try {
+			model.saveGame(gameName);
+		} catch (InvalidSavedGameException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void loadGameState(String gameName){
+		try {
+			model.loadSavedGame(gameName);
+		} catch (InvalidSavedGameException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public Map<String, String> getGameAttributes() {
-		hasChanged = true;
 		Map<String, String> gameStats = new HashMap<String, String>();
 		gameStats.put("Score", "Score: " + model.getScore());
 		gameStats.put("Lives", "Lives left: " + model.getPlayerLives());
 		gameStats.put("Money", "Money: " + model.getMoney());
 		gameStats.put("Time", "Game clock: " + model.getGameClock());
 		return gameStats;
-	}
-
-	@Override
-	public void setSubject(List<Subject> s) {
-		towerChooser = (TowerChooser) s.get(0);
-		itemChooser = (ItemChooser) s.get(1);
-	}
-
-	@Override
-	public void setSubject(Subject s) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -27,11 +26,9 @@ import main.java.author.view.components.TowerBehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
-import main.java.engine.objects.TDObject;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 
 /**
  * @author garysheng The tab that corresponds to the creation of towers. Talks
@@ -39,6 +36,8 @@ import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
  * 
  */
 public class TowerEditorTab extends ObjectEditorTab {
+
+	private static final String NO_UPGRADE_PATH = "No Upgrade Path";
 
 	private JSpinner healthSpinner, costSpinner, damageSpinner, rangeSpinner,
 			buildUpSpinner, firingSpeedSpinner, shrapnelDamageSpinner,
@@ -129,10 +128,14 @@ public class TowerEditorTab extends ObjectEditorTab {
 		}
 		myCurrentObject.addAttribute(TowerSchema.TOWER_BEHAVIORS,
 				(Serializable) behaviorsToggled);
-
-		myCurrentObject.addAttribute(upgradeDropDown.getName(),
-				(String) upgradeDropDown.getSelectedItem());
-
+		//upgrade dropdown
+		
+		if (upgradeDropDown.getSelectedItem() != null && upgradeDropDown.getSelectedItem().equals(NO_UPGRADE_PATH)) {
+			myCurrentObject.addAttribute(upgradeDropDown.getName(), "");
+		} else {
+			myCurrentObject.addAttribute(upgradeDropDown.getName(),
+					(String) upgradeDropDown.getSelectedItem());
+		}
 	}
 
 	/**
@@ -146,19 +149,18 @@ public class TowerEditorTab extends ObjectEditorTab {
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
-
+		//upgrade dropdown
 		upgradeDropDown.removeAllItems();
 		for (String tower : objectMap.keySet()) {
 			if (!tower.equals(getSelectedObjectName()))
 				upgradeDropDown.addItem(tower);
 		}
-
 		if (ComboBoxUtil.containsValue(upgradeDropDown,
 				(String) map.get(upgradeDropDown.getName()))) {
 			upgradeDropDown.setSelectedItem(map.get(upgradeDropDown.getName()));
 		} else {
-			upgradeDropDown.addItem(TowerSchema.UPGRADE_PATH_NONE);
-			upgradeDropDown.setSelectedItem(TowerSchema.UPGRADE_PATH_NONE);
+			upgradeDropDown.addItem(NO_UPGRADE_PATH);
+			upgradeDropDown.setSelectedItem(NO_UPGRADE_PATH);
 		}
 
 		List<TowerBehaviors> behaviorsToToggle = (List<TowerBehaviors>) map

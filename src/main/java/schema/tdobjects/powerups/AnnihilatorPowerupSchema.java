@@ -19,6 +19,7 @@ public class AnnihilatorPowerupSchema extends ItemSchema {
 
 	public AnnihilatorPowerupSchema() {
 		super(MY_CONCRETE_TYPE);
+		myAttributeSet.add(AreaBombItemSchema.RANGE);
 	}
 
 	/**

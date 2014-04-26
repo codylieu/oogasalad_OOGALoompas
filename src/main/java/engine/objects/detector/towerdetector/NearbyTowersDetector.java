@@ -19,16 +19,17 @@ import main.java.engine.objects.tower.ITower;
 public class NearbyTowersDetector extends TDDetector {
 
 	@Override
-	public List<Object> findTarget(double x, double y, double range,
+	public List<Point2D> findTarget(double x, double y, double range,
 			EnvironmentKnowledge environmentKnowledge) {
-        Point2D towerCoordinate = new Point2D.Double(x, y);
-        List<Object> nearbyTowersList = new ArrayList<Object>();
+        Point2D currentTowerCoordinate = new Point2D.Double(x, y);
+        List<Point2D> nearbyTowersList = new ArrayList<Point2D>();
         for (ITower[] tArray : environmentKnowledge.getAllTowers()) {
             for (ITower t : tArray) {
+            	Point2D targetTowerCoor = new Point2D.Double(t.getXCoordinate(), t.getYCoordinate());
                 if (t != null &&
-                		isWithinDistance(new Point2D.Double(t.getXCoordinate(), t.getYCoordinate()), 
-                				towerCoordinate, range)) {
-                    nearbyTowersList.add(t);
+                		isWithinDistance(targetTowerCoor, 
+                				currentTowerCoordinate, range)) {
+                    nearbyTowersList.add(targetTowerCoor);
                 }
             }
         }

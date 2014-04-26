@@ -6,31 +6,37 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.DefaultButtonModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.EnemyController;
+import main.java.author.util.ComboBoxUtil;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
+import main.java.author.view.tabs.terrain.TerrainAttribute;
+import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
@@ -42,21 +48,38 @@ import main.java.schema.tdobjects.TDObjectSchema;
  */
 public class EnemyEditorTab extends ObjectEditorTab {
 
+	private static final String NO_RES_PATH = "No Resurrection Path";
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public EnemyEditorTab(TabController towerController, String objectName) {
 		super(towerController, objectName);
 	}
 
+	public static final Set<Integer> flyingSet = new HashSet<Integer>(
+			Arrays.asList(TerrainAttribute.Untraversable.getIndex()));
+	public static final Set<Integer> groundSet = new HashSet<Integer>(
+			Arrays.asList(TerrainAttribute.Untraversable.getIndex(),
+					TerrainAttribute.Flyable.getIndex()));
+
 	private JSpinner healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
-	private ImageCanvas monsterImageCanvas, collisionImageCanvas;
-	private JButton monsterImageButton, collisionImageButton;
+	private ImageCanvas monsterImageCanvas;
+	private JButton monsterImageButton;
 	private JRadioButton smallTileButton, mediumTileButton, largeTileButton,
 			flyingButton, groundButton;
 	private List<JRadioButton> allButtons;
 	private ButtonGroup tileSizeGroup, flyingOrGroundGroup;
 	private List<MonsterSchema> monsterSchemas;
 
+	private JComboBox<String> resDropDown;
+	private JSpinner resNumSpinner;
+
 	@Override
 	public void saveTabData() {
+
 		EnemyController controller = (EnemyController) myController;
 
 		monsterSchemas = new ArrayList<MonsterSchema>();
@@ -86,7 +109,6 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	 * @return the list of
 	 */
 	public String[] getEnemyNamesArray() {
-
 		int size = objectMap.keySet().size();
 		return objectMap.keySet().toArray(new String[size]);
 	}
@@ -95,10 +117,30 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	protected void updateSchemaDataFromView() {
 		super.updateSchemaDataFromView();
 		TDObjectSchema myCurrentObject = getSelectedObject();
-		myCurrentObject.addAttribute(MonsterSchema.FLYING_OR_GROUND,
-				GroupButtonUtil.getSelectedButtonText(flyingOrGroundGroup));
+		Set blockedTilesSet;
+		// flying or ground
+		if (GroupButtonUtil.getSelectedButtonText(flyingOrGroundGroup) == null) {
+			blockedTilesSet = new HashSet<Integer>();
+		} else if (GroupButtonUtil.getSelectedButtonText(flyingOrGroundGroup)
+				.equals(MonsterSchema.FLYING)) {
+			blockedTilesSet = flyingSet;
+		} else {
+			blockedTilesSet = groundSet;
+		}
+		myCurrentObject.addAttribute(MonsterSchema.BLOCKED_TILES,
+				(Serializable) blockedTilesSet);
+		// tile size
 		myCurrentObject.addAttribute(MonsterSchema.TILE_SIZE,
 				GroupButtonUtil.getSelectedButtonText(tileSizeGroup));
+
+		// dropdown
+		if (resDropDown.getSelectedItem() != null
+				&& resDropDown.getSelectedItem().equals(NO_RES_PATH)) {
+			myCurrentObject.addAttribute(resDropDown.getName(), "");
+		} else {
+			myCurrentObject.addAttribute(resDropDown.getName(),
+					(String) resDropDown.getSelectedItem());
+		}
 
 	}
 
@@ -106,15 +148,37 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
 		for (JRadioButton button : allButtons) {
-			if (button.getText()
-					.equals(map.get(MonsterSchema.FLYING_OR_GROUND))
-					|| button.getText()
-							.equals(map.get(MonsterSchema.TILE_SIZE))) {
-				;
+			Set blockedTilesSet = (Set) map.get(MonsterSchema.BLOCKED_TILES);
+			if (button.getText().equals(MonsterSchema.FLYING)
+					&& blockedTilesSet.equals(flyingSet)) {
+				button.setSelected(true);
+			}
+			if (button.getText().equals(MonsterSchema.GROUND)
+					&& blockedTilesSet.equals(groundSet)) {
+				button.setSelected(true);
+			}
+			if (button.getText().equals(map.get(MonsterSchema.TILE_SIZE))) {
+
 				button.setSelected(true);
 			}
 		}
 		tileSizeGroup.getSelection();
+
+		// res dropdown
+		resDropDown.removeAllItems();
+		for (String monster : objectMap.keySet()) {
+			if (!monster.equals(getSelectedObjectName()))
+				resDropDown.addItem(monster);
+		}
+		if (ComboBoxUtil.containsValue(resDropDown,
+				(String) map.get(resDropDown.getName()))) {
+			resDropDown.setSelectedItem(map.get(resDropDown.getName()));
+		} else {
+			resDropDown.addItem(NO_RES_PATH);
+			resDropDown.setSelectedItem(NO_RES_PATH);
+		}
+		// res spinner
+
 	}
 
 	@Override
@@ -122,8 +186,10 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		super.addListeners();
 		monsterImageButton.addActionListener(new FileChooserListener(
 				monsterImageCanvas));
-		collisionImageButton.addActionListener(new FileChooserListener(
-				collisionImageCanvas));
+		/*
+		 * collisionImageButton.addActionListener(new FileChooserListener(
+		 * collisionImageCanvas));
+		 */
 		for (JRadioButton button : allButtons) {
 			button.addActionListener(new ActionListener() {
 
@@ -133,6 +199,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 				}
 			});
 		}
+
+		resDropDown.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateSchemaDataFromView();
+			}
+		});
 	}
 
 	@Override
@@ -155,7 +229,6 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			super(editorTab);
 		}
 
-		@Override
 		protected void instantiateAndClumpFields() {
 			healthSpinner = makeAttributeSpinner(MonsterSchema.HEALTH);
 			speedSpinner = makeAttributeSpinner(MonsterSchema.SPEED);
@@ -181,14 +254,15 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
 					TDObjectSchema.IMAGE_NAME);
-			collisionImageCanvas = new ImageCanvas(true,
-					MonsterSchema.COLLISION_IMAGE_NAME);
+
+			resDropDown = new JComboBox<String>();
+			resNumSpinner = new JSpinner(new SpinnerNumberModel(0, 0, 20, 1));
 
 			JSpinner[] spinners = { healthSpinner, speedSpinner, damageSpinner,
-					rewardSpinner };
+					rewardSpinner, resNumSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 
-			ImageCanvas[] canvases = { monsterImageCanvas, collisionImageCanvas };
+			ImageCanvas[] canvases = { monsterImageCanvas };
 			imageCanvases = new ArrayList<ImageCanvas>(Arrays.asList(canvases));
 
 		}
@@ -197,13 +271,26 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		protected JComponent makeFieldPane() {
 			JPanel result = new JPanel(new GridLayout(0, 2));
 			for (JSpinner spinner : spinnerFields) {
-				result.add(makeFieldTile(spinner));
+				if (spinner.getName() != null && !spinner.getName().equals(MonsterSchema.RESURRECT_QUANTITY))
+					result.add(makeFieldTile(spinner));
 			}
 			result.add(makeFieldTile(makeButtonGroupPanel(tileSizeGroup,
 					"Tile Size")));
 			result.add(makeFieldTile(makeButtonGroupPanel(flyingOrGroundGroup,
 					"Flying Or Ground Type")));
+			result.add(makeFieldTile(makeResPane()));
+			return result;
+		}
 
+		private JPanel makeResPane() {
+			JPanel result = new JPanel(new GridLayout(0, 1));
+			result.add(new JLabel("Monster To Spawn"));
+			result.add(resDropDown);
+			resDropDown.setName(MonsterSchema.RESURRECT_MONSTER_NAME);
+			result.add(new JLabel("How many"));
+			result.add(resNumSpinner);
+			resNumSpinner.setName(MonsterSchema.RESURRECT_QUANTITY);
+			result.setName("Monsters to Spawn Upon Death");
 			return result;
 		}
 
@@ -225,21 +312,22 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		@Override
 		protected JComponent makeSecondaryImagesGraphicPane() {
-			JPanel result = new JPanel();
-			result.setLayout(new BorderLayout());
-
-			collisionImageCanvas.setSize(new Dimension(
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE,
-					ObjectEditorConstants.IMAGE_CANVAS_SIZE));
-			collisionImageCanvas.setBackground(Color.BLACK);
-			result.add(collisionImageCanvas, BorderLayout.CENTER);
-			collisionImageButton = makeChooseGraphicsButton("Set " + objectName
-					+ " Collision Image");
-			result.add(collisionImageButton, BorderLayout.SOUTH);
-			return result;
+			/*
+			 * JPanel result = new JPanel(); result.setLayout(new
+			 * BorderLayout());
+			 * 
+			 * collisionImageCanvas.setSize(new Dimension(
+			 * ObjectEditorConstants.IMAGE_CANVAS_SIZE,
+			 * ObjectEditorConstants.IMAGE_CANVAS_SIZE));
+			 * collisionImageCanvas.setBackground(Color.BLACK);
+			 * result.add(collisionImageCanvas, BorderLayout.CENTER);
+			 * collisionImageButton = makeChooseGraphicsButton("Set " +
+			 * objectName + " Collision Image");
+			 * result.add(collisionImageButton, BorderLayout.SOUTH); //return
+			 * result;
+			 */return null;
 		}
 
-		@Override
 		protected JComponent makePrimaryObjectGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());

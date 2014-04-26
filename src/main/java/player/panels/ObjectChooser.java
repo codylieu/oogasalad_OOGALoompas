@@ -2,38 +2,46 @@ package main.java.player.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JPanel;
 
-import main.java.player.TDPlayerEngine;
-import main.java.player.util.Observing;
+import main.java.player.ITDPlayerEngine;
+import main.java.reflection.Reflection;
 /**
- * An abstract class that acts as a JComboBox that is also a Subject(observable).
- * Can easily be altered to be a different type(button, textfield, etc) that notifies other Observing objects.
+ * A JComboBox that is also a Subject(observable).
+ * Notifies observers if user clicks on a different item in drop down box
  *  
  * @author Michael Han
  */
 @SuppressWarnings("serial")
-public abstract class ObjectChooser extends SubjectPanel implements ActionListener{
+public class ObjectChooser extends JPanel implements ActionListener{
 	protected JComboBox<String> objectComboBox;
-	protected TDPlayerEngine engine;
+	private List<String> objectNames;
 	protected String currentObjectName;
 	protected Vector<String> comboBoxItems;
 	protected DefaultComboBoxModel<String> comboBoxModel;
+	protected Object engine;
+	private String methodName;
+	private String getListMethodName;
 	
-	public ObjectChooser(TDPlayerEngine myEngine){
-		super();
-		observers = new ArrayList<Observing>();
-		hasChanged = false;
-		engine = myEngine;
-		register(engine);
+	public ObjectChooser(Object myEngine, String myGetListMethodName, String myMethodName){
+		//super();
+		//observers = new ArrayList<Observing>();
+		//hasChanged = false;
+		engine = (ITDPlayerEngine) myEngine;
 		currentObjectName = "";
+		//objectNames = objectNamesList;
+		getListMethodName = myGetListMethodName;
+		methodName = myMethodName;
 		initComboBox();
 	}
-	
+
 	/**
 	 * initializes components relevant to JComboBox
 	 */
@@ -42,41 +50,54 @@ public abstract class ObjectChooser extends SubjectPanel implements ActionListen
 		comboBoxModel = new DefaultComboBoxModel<String>(comboBoxItems);		
 		objectComboBox = new JComboBox<String>(comboBoxModel);
 		objectComboBox.addActionListener(this);
+		populateComboBox();
 		add(objectComboBox);
 	}
-	
+
 	/**
-	 * Left abstract because implementation will differ based on where you are getting the names from.
-	 * Main purpose is to populate the JComboBox
+	 * Populate the JComboBox using list from parameter
 	 */
-	public abstract void getObjectNames();
+	@SuppressWarnings("unchecked")
+	public void populateComboBox(){
+		try {
+			Method m = engine.getClass().getDeclaredMethod(getListMethodName);
+			try {
+				objectNames = (List<String>) m.invoke(engine);
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e1) {
+				e1.printStackTrace();
+			}
+		} catch (NoSuchMethodException | SecurityException e1) {
+			e1.printStackTrace();
+		}
+		comboBoxModel.removeAllElements();
+		for (String s: objectNames) {
+			comboBoxModel.addElement(s);
+		}		
+		objectComboBox.setSelectedIndex(0);
+	}
 
 	/**
 	 * pulls the String that was clicked on in the combo box
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		@SuppressWarnings("unchecked")
 		JComboBox<String> myBox = (JComboBox<String>) e.getSource();
-		String objectName = (String) myBox.getSelectedItem();
-		update(objectName);
-	}
-
-	/**
-	 * Changes currentObjectName to new name that user has just clicked on.
-	 * Notifies observers
-	 */
-	@Override
-	protected void update(String objectName){
-		currentObjectName = objectName;
-		hasChanged = true;
-		notifyObservers();
+		Object objectName = (String) myBox.getSelectedItem();
+		Object[] args = new Object[1];
+		args[0] = objectName;	
+		try {
+			Method m = engine.getClass().getDeclaredMethod(methodName, Reflection.toClasses(args));
+			try {
+				m.invoke(engine, args);
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e1) {
+				e1.printStackTrace();
+			}
+		} catch (NoSuchMethodException | SecurityException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
-	/**
-	 * @return currentObjectName
-	 */
-	public String getObjectName(){
-		return currentObjectName;
-	}
 }

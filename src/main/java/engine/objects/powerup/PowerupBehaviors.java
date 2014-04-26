@@ -7,8 +7,8 @@ import java.io.Serializable;
 public enum PowerupBehaviors implements Serializable {
 	AREA_BOMBING(AreaBomb.class),
 	INSTANT_FREEZE(InstantFreeze.class),
-	LIFE_SAVER(LifeSaver.class),
-	ROW_BOMB(RowBomb.class);
+	LIFE_SAVER(LifeSaver.class);
+//	ROW_BOMB(RowBomb.class);
 
 	private Class<? extends IPowerup> concreteClass;
 

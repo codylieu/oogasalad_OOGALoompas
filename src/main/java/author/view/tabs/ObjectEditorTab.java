@@ -5,7 +5,9 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -55,12 +57,16 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.plaf.SpinnerUI;
 import javax.swing.table.DefaultTableModel;
 
+import com.sun.xml.internal.ws.util.StringUtils;
+
 import main.java.author.controller.TabController;
 import main.java.author.util.ObjectUtilFunctions;
+import main.java.author.view.AuthoringView;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.components.TowerBehaviorTogglingRadioButton;
 import main.java.author.view.global_constants.FontConstants;
 import main.java.author.view.global_constants.ObjectEditorConstants;
+import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.tower.TowerBehaviors;
 import main.java.schema.tdobjects.TDObjectSchema;
 
@@ -89,8 +95,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 	protected HashMap<String, TDObjectSchema> objectMap;
 	protected String objectName = "Default Object Name";
 
-	public ObjectEditorTab(TabController towerController, String objectName) {
-		super(towerController);
+	public ObjectEditorTab(TabController controller, String objectName) {
+		super(controller);
 		this.objectName = objectName;
 		init();
 	}
@@ -278,6 +284,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	 */
 	protected void init() {
 		setLayout(new BorderLayout());
+		imageCanvases = new ArrayList<ImageCanvas>();
 		objectMap = new HashMap<String, TDObjectSchema>();
 		myBuilder = createSpecificTabViewBuilder();
 		myBuilder.instantiateAndClumpFields();
@@ -326,14 +333,17 @@ public abstract class ObjectEditorTab extends EditorTab {
 		for (JSpinner spinner : spinnerFields) {
 
 			myCurrentObject.addAttribute(spinner.getName(),
-					(Integer) spinner.getValue());
+					(Serializable) spinner.getValue());
 		}
 
 		for (ImageCanvas canvas : imageCanvases) {
 
 			String relativePath = new File((String) canvas.getImagePath())
 					.getName();
-			myCurrentObject.addAttribute(canvas.getName(), relativePath);
+
+			if (relativePath != null && !relativePath.isEmpty()) {
+				myCurrentObject.addAttribute(canvas.getName(), relativePath);
+			}
 
 		}
 
@@ -350,7 +360,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 		// fields (spinners)
 
 		for (JSpinner spinner : spinnerFields) {
-			spinner.setValue(map.get(spinner.getName()));
+			if (map.get(spinner.getName()) != null) {
+				spinner.setValue((Integer) map.get(spinner.getName()));
+			}
 		}
 
 		for (ImageCanvas canvas : imageCanvases) {
@@ -382,7 +394,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser();
+			JFileChooser fileChooser = new JFileChooser(new File(
+					AuthoringView.DEFAULT_RESOURCES_DIR));
 			int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -460,8 +473,12 @@ public abstract class ObjectEditorTab extends EditorTab {
 			result.setLayout(new BorderLayout());
 			result.add(myBuilder.makePrimaryObjectGraphicPane(),
 					BorderLayout.CENTER);
-			result.add(myBuilder.makeSecondaryImagesGraphicPane(),
-					BorderLayout.SOUTH);
+			JComponent secondaryImagesGraphicsPane = myBuilder
+					.makeSecondaryImagesGraphicPane();
+			if (secondaryImagesGraphicsPane != null) {
+				result.add(myBuilder.makeSecondaryImagesGraphicPane(),
+						BorderLayout.SOUTH);
+			}
 			return result;
 		}
 
@@ -540,6 +557,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 					SwingConstants.CENTER);
 			result.add(label, BorderLayout.NORTH);
 			result.add(component, BorderLayout.CENTER);
+			result.setBorder(BorderFactory.createEtchedBorder());
 			return result;
 
 		}
