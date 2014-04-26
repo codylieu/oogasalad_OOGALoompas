@@ -168,22 +168,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
-	/*private void displayGameStats() {
-		this.drawString("Score: "+model.getScore(), 50, 25, -1);
-		this.drawString("Lives left: "+model.getPlayerLives(), 50, 50, -1);
-		this.drawString("Money: "+model.getMoney(), 50, 75, -1);
-		this.drawString("Game clock: "+model.getGameClock(), 50, 100, -1);
-	}*/
-
-	/*public TDObject getSelectedObject() {
-		JGPoint mousePos = getMousePos();
-		int curXTilePos = mousePos.x/tileWidth() * tileWidth();
-		int curYTilePos = mousePos.y/tileHeight() * tileHeight();
-		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0)
-			if (model.isTowerPresent(mousePos.x, mousePos.y))
-				return ;
-	}*/
-
 	public List<String> getCurrentDescription() {
 		JGPoint mousePos = getMousePos();
 		if (mousePos.x < pfWidth() && mousePos.x > 0 && mousePos.y < pfHeight() && mousePos.y > 0) {
@@ -378,7 +362,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 		try {
 			model.loadSavedGame(gameName);
 		} catch (InvalidSavedGameException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
