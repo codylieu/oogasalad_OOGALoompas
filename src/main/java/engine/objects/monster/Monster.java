@@ -1,8 +1,6 @@
 package main.java.engine.objects.monster;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import jgame.JGColor;
 import jgame.JGPoint;
@@ -28,7 +26,8 @@ public abstract class Monster extends TDObject {
 
     public static final int MONSTER_CID = 1;
 
-    protected double myHealth;
+	protected double myBaseHealth;
+    protected double myCurrentHealth;
     protected double myMoveSpeed;
     protected double myMoneyValue;
     protected JGPathfinderInterface myPathFinder;
@@ -55,7 +54,8 @@ public abstract class Monster extends TDObject {
         // from initial x,y
         super("monster", entrance.getX() + Math.random() * 100, entrance.getY() + Math.random() *
                                                                 100, MONSTER_CID, graphic);
-        myHealth = health;
+        myCurrentHealth = health;
+		myBaseHealth = health;
         myMoveSpeed = moveSpeed;
         myMoneyValue = rewardAmount;
         myEntrance = entrance;
@@ -103,7 +103,7 @@ public abstract class Monster extends TDObject {
      * Check if this object has died and should be removed
      */
     public boolean isDead () {
-        return myHealth <= 0;
+        return myCurrentHealth <= 0;
     }
 
     /**
@@ -112,7 +112,7 @@ public abstract class Monster extends TDObject {
      * @param damage afflicting object's damage
      */
     public void takeDamage (double damage) {
-        myHealth -= damage;
+        myCurrentHealth -= damage;
     }
 
     public double getOriginalSpeed () {
@@ -128,7 +128,7 @@ public abstract class Monster extends TDObject {
      * effectively removing it from the game
      */
     public void setDead () {
-        myHealth = 0;
+        myCurrentHealth = 0;
         myMoneyValue = 0;
     }
 
@@ -152,14 +152,44 @@ public abstract class Monster extends TDObject {
 
     @Override
     public void paint () {
-        if (myPath != null) {
-            for (JGPoint p : myPath) {
-                JGPoint coord = eng.getTileCoord(p);
-                eng.drawOval(coord.x + eng.tileWidth() / 2, coord.y + eng.tileHeight() / 2,
-                             10, 10, true, true, 10, JGColor.yellow);
-            }
-        }
-    }
+		paintPredictedPath();
+		paintHealthBar();
+	}
+
+	protected void paintPredictedPath() {
+		if (myPath != null) {
+			for (JGPoint p : myPath) {
+				JGPoint coord = eng.getTileCoord(p);
+				eng.drawOval(coord.x + eng.tileWidth() / 2, coord.y + eng.tileHeight() / 2,
+							 10, 10, true, true, 10, JGColor.yellow);
+			}
+		}
+	}
+
+	protected void paintHealthBar() {
+		final double offset = 3;
+		final double healthBarThickness = 2;
+		final JGColor depletedHealthColor = JGColor.red;
+		final JGColor healthColor = JGColor.green;
+
+		// draw red background
+		double xStart = x;
+		double xEnd = x + getTileBBox().width;
+		double yOffset = y - offset;
+
+		eng.drawLine(
+				xStart, yOffset, xEnd, yOffset,
+				healthBarThickness, depletedHealthColor);
+
+		// draw health bar if no cheats used
+		if (myCurrentHealth <= myBaseHealth) {
+			double xHealthEnd = x + (myCurrentHealth / myBaseHealth * getTileBBox().width);
+
+			eng.drawLine(
+					xStart, yOffset,
+					xHealthEnd, yOffset, healthBarThickness, healthColor);
+		}
+	}
 
     /**
      * Get the schema that should be spawned upon the death of this monster.
@@ -181,7 +211,7 @@ public abstract class Monster extends TDObject {
 				"\nX-coor: " + x + 
 				"\nY-coor: " + y + 
 				"\nMoney Value: " + myMoneyValue + 
-				"\nHealth: " + myHealth + 
+				"\nHealth: " + myCurrentHealth +
 				"\nMove Speed: " + myMoveSpeed;
 		return info;
 	}
