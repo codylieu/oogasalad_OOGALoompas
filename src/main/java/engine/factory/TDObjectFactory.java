@@ -125,8 +125,8 @@ schema);
                 (Collection<PowerupBehaviors>) attributes.get(ItemSchema.ITEM_BEHAVIORS);
         for (PowerupBehaviors powerupBehavior : powerupBehaviors) {
             Class<? extends IPowerup> concreteType = powerupBehavior.getConcreteClass();
-            Object[] towerParameters = { finalItem, attributes };
-            finalItem = (IPowerup) placeObject(concreteType, towerParameters);
+            Object[] itemParameters = { finalItem, attributes };
+            finalItem = (IPowerup) placeObject(concreteType, itemParameters);
         }
         return finalItem;
 	}
