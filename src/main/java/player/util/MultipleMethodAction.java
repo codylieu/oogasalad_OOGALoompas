@@ -16,42 +16,15 @@ import main.java.reflection.ReflectionException;
  */
 public class MultipleMethodAction implements ActionListener{
 	private MethodAction[] myMethodActions;
-	private List<Method> myMethods;
-	private List<Object[]> myArgsList;
-	private List<Object> myTargetsList;
 
 	public MultipleMethodAction(MethodAction ... methods){
 		myMethodActions = methods;
-		for(MethodAction m: myMethodActions){
-			try
-			{
-				Method temp = m.getTarget().getClass().getDeclaredMethod(m.getMethodName(),
-						Reflection.toClasses(m.getArguments()));
-				myMethods.add(temp);
-				myArgsList.add(m.getArguments());
-				myTargetsList.add(m.getTarget());
-			}
-			catch (Exception e)
-			{
-				throw new ReflectionException(e.getMessage());
-			}
-		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		int count = 0;
-		try
-		{
-			for(Method m: myMethods){
-				m.invoke(myTargetsList.get(count), myArgsList.get(count));
-				count ++;
-			}
-		}
-		catch (Exception e1)
-		{
-			e1.printStackTrace();
-			throw new ReflectionException(e1.getMessage());
+		for(MethodAction m: myMethodActions){
+			m.actionPerformed(e);
 		}
 	}
 }

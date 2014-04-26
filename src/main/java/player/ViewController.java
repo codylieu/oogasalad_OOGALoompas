@@ -44,6 +44,7 @@ import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.ObservingPanel;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
+import main.java.player.util.MultipleMethodAction;
 import main.java.player.util.Observing;
 import main.java.player.util.Sound;
 import main.java.player.util.Subject;
@@ -471,8 +472,9 @@ public class ViewController implements Serializable {
 
 	private JButton makeMainMenuButton() {
 		JButton mainMenuButton = new JButton(myLanguageResources.getString(MAIN_MENU_TEXT));
-		mainMenuButton.addActionListener(new MethodAction(engine, TOGGLE_RUNNING_METHOD_NAME));
-		mainMenuButton.addActionListener(new MethodAction(this, SHOW_CARD_VARIABLE, WELCOME_CARD));
+		mainMenuButton.addActionListener(new MultipleMethodAction(new MethodAction(engine, TOGGLE_RUNNING_METHOD_NAME),new MethodAction(this, SHOW_CARD_VARIABLE, WELCOME_CARD)));
+		//mainMenuButton.addActionListener(new MethodAction(engine, TOGGLE_RUNNING_METHOD_NAME));
+		//mainMenuButton.addActionListener(new MethodAction(this, SHOW_CARD_VARIABLE, WELCOME_CARD));
 		return mainMenuButton;
 	}
 
