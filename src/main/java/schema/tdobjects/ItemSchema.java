@@ -14,6 +14,7 @@ public abstract class ItemSchema extends TDObjectSchema{
 	public static final String RANGE = "Damage range";
 	public static final String FREEZE_DURATION = "Freeze Slowdown duration";
 	public static final String FREEZE_SLOWDOWN_PROPORTION = "Freeze Slowdown (%)";
+	public static final String ITEM_BEHAVIORS = "Item Behaviors";
 
 	public ItemSchema(Class<? extends TDItem> myConcreteType) {
 		super(myConcreteType);

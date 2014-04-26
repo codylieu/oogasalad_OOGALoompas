@@ -15,6 +15,9 @@ import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.powerup.IPowerup;
+import main.java.engine.objects.powerup.PowerupBehaviors;
+import main.java.engine.objects.powerup.SimplePowerup;
 import main.java.engine.objects.powerup.TDItem;
 import main.java.engine.objects.tower.BombTower;
 import main.java.engine.objects.tower.FreezeTower;
@@ -97,21 +100,38 @@ public class TDObjectFactory {
      * @throws IllegalArgumentException
      * @throws InvocationTargetException
      */
-    public TDItem placeItem (Point2D location, String itemName) throws ItemCreationFailureException {
+    public IPowerup placeItem (Point2D location, String itemName) throws ItemCreationFailureException {
     	
     	Point2D tileOrigin = findTileOrigin(location);
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(itemName);
             schema.addAttribute(ItemSchema.LOCATION, (Serializable) tileOrigin);
             Object[] itemParameters = { schema.getAttributesMap() };
-            return (TDItem) placeObject(schema.getMyConcreteType(), itemParameters);
+//            return (TDItem) placeObject(schema.getMyConcreteType(), itemParameters);
+            return addItemBehaviors((SimplePowerup) placeObject(schema.getMyConcreteType(),
+            		itemParameters),
+schema);
         }
         catch (Exception e) {
             throw new ItemCreationFailureException(e);
         }
     }
 
-    /**
+    private IPowerup addItemBehaviors(SimplePowerup baseItem,
+			TDObjectSchema schema) {
+    	IPowerup finalItem = baseItem;
+        Map<String, Serializable> attributes = schema.getAttributesMap();
+		Collection<PowerupBehaviors> powerupBehaviors =
+                (Collection<PowerupBehaviors>) attributes.get(ItemSchema.ITEM_BEHAVIORS);
+        for (PowerupBehaviors powerupBehavior : powerupBehaviors) {
+            Class<? extends IPowerup> concreteType = powerupBehavior.getConcreteClass();
+            Object[] towerParameters = { finalItem, attributes };
+            finalItem = (IPowerup) placeObject(concreteType, towerParameters);
+        }
+        return finalItem;
+	}
+
+	/**
      * Place tower at a given location's tile.
      * 
      * @param location The coordinates to place the tower at

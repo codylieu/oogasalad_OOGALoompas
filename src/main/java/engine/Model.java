@@ -23,6 +23,7 @@ import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.powerup.IPowerup;
 import main.java.engine.objects.powerup.RowBomb;
 import main.java.engine.objects.powerup.TDItem;
 import main.java.engine.objects.tower.ITower;
@@ -64,7 +65,7 @@ public class Model {
 	private DataHandler dataHandler;
 	private LevelManager levelManager;
 	private EnvironmentKnowledge environ;
-	private List<TDItem> items;
+	private List<IPowerup> items;
 	private int[] canvasSize;
 	private GameBlueprint blueprint;
 
@@ -98,7 +99,7 @@ public class Model {
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
 		towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
-		items = new ArrayList<TDItem>();
+		items = new ArrayList<IPowerup>();
 
 		dataHandler = new DataHandler();
 		levelManager = new LevelManager(factory);
@@ -458,15 +459,15 @@ public class Model {
     }
 
     private void doItemActions () {
-        Iterator<TDItem> itemIter = items.iterator();
+        Iterator<IPowerup> itemIter = items.iterator();
         while (itemIter.hasNext()) {
-            TDItem currentItem = itemIter.next();
-            if (currentItem.isDead()) {
-                itemIter.remove();
-                currentItem.remove();
-                return;
-            }
-            currentItem.doAction(environ);
+        	IPowerup currentItem = itemIter.next();
+//            if (currentItem.isDead()) {
+//                itemIter.remove();
+//                currentItem.remove();
+//                return;
+//            }
+            currentItem.callItemActions(environ);
         }
     }
 
@@ -480,14 +481,13 @@ public class Model {
      */
     public boolean placeItem (String name, double x, double y) {
         try {
-            TDItem newItem = factory.placeItem(new Point2D.Double(x, y), name);
+            IPowerup newItem = factory.placeItem(new Point2D.Double(x, y), name);
             if (newItem.getCost() <= player.getMoney()) {
                 items.add(newItem);
                 player.changeMoney(-newItem.getCost());
                 return true;
             }
             else {
-                newItem.setImage(null);
                 newItem.remove();
                 return false;
             }
