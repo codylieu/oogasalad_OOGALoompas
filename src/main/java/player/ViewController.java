@@ -15,16 +15,13 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -114,7 +111,6 @@ public class ViewController implements Serializable {
 	private Sound song;
 	private boolean soundOn;
 	private ObjectChooser towerChooser;
-	private JFrame languageFrame;
 	private String chosenLanguage;
 	//private ObjectChooser powerUpChooser;
 

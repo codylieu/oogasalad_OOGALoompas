@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
@@ -174,6 +176,30 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	@Override
 	public void doFrame() {
 		super.doFrame();
+		checkMouse();
+		checkKeys();
+		notifyObservers();
+		updateModel();
+		moveObjects();
+		model.checkCollisions();
+	}
+
+	/*private void setAllItems(){
+		for(String s: items.keySet()){
+			setItem(LEFT_CLICK, items.getString(s));
+		}	
+	}*/
+	
+	private void updateModel() {
+		try {
+			model.updateGame();
+		} catch (MonsterCreationFailureException e) {
+			JOptionPane.showMessageDialog(null, "Critical Monster creation exception. See stack trace. Exiting program");
+			e.printStackTrace();
+		}
+	}
+	
+	private void checkMouse() {
 		if (cursorState == CursorState.AddTower) {
 			if (getMouseButton(LEFT_CLICK)) {
 				model.placeTower(getMouseX(), getMouseY(), towerName);
@@ -206,30 +232,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			}
 			//setAllItems();
 		}
-
-		notifyObservers();
-
-		checkKeys();
-
 		if (getMouseButton(RIGHT_CLICK)) {
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
 		}
-		try {
-
-			model.updateGame();
-		} catch (MonsterCreationFailureException e) {
-			e.printStackTrace();
-		}
-		moveObjects();
-		model.checkCollisions();
 	}
-
-	/*private void setAllItems(){
-		for(String s: items.keySet()){
-			setItem(LEFT_CLICK, items.getString(s));
-		}	
-	}*/
 
 	private void setItem(int clickName, String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
