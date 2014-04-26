@@ -76,7 +76,7 @@ public class AuthoringView extends JFrame {
 				new TerrainController(myController);
 		final ItemController itemController = 
 				new ItemController(myController);
-		
+
 		myController.addTabController(enemyController);
 		myController.addTabController(towerController);
 		myController.addTabController(waveController);
@@ -102,7 +102,7 @@ public class AuthoringView extends JFrame {
 		tabbedPane
 				.add(WAVE_EDITOR_STRING,
 						new WaveEditorTab(waveController));
-		
+
 		tabbedPane.addChangeListener(new ChangeListener(){
 			@Override
 			public void stateChanged(ChangeEvent e) {
