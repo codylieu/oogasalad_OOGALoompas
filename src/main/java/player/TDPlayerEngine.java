@@ -51,23 +51,18 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	public static int TILE_HEIGHT = 32;
 
 	private int xtiles, ytiles;
-	private ObjectChooser towerChooser;
-	private ObjectChooser powerUpChooser;
 	private IModel model;
 	private List<Observing> observerList;
-	private List<Subject> subjectList;
 	private CursorState cursorState;
-	private boolean hasGameInfoChanged;
-	private boolean hasUnitInfoChanged;
 	private boolean isFullScreen;
 	private String pathToBlueprint;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private JGPoint lastClickedObject;
 	private LeapGameController leapController;
-	
+
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
-	
+
 
 	public TDPlayerEngine(String pathToBlueprintInit) throws ClassNotFoundException, IOException, ZipException {
 		// super();
@@ -75,9 +70,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		pathToBlueprint = pathToBlueprintInit;
 		initEngineComponent(xtiles * TILE_WIDTH, ytiles * TILE_HEIGHT);
 		observerList = new ArrayList<Observing>();
-		subjectList = new ArrayList<Subject>();
-		hasGameInfoChanged = true;
-		hasUnitInfoChanged = false;
 		isFullScreen = false;
 		cursorState = CursorState.None;
 		leapController = new LeapGameController();
@@ -181,17 +173,19 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	@Override
 	public void doFrame() {
 		super.doFrame();
-		if(leapController != null){
-		    leapController.doFrame();
+		
+		if (leapController != null) {
+			leapController.doFrame();
 		}
-		if(model != null){
-		    checkGameEnd();
-                    checkMouse();
-                    checkKeys();
-                    notifyObservers();
-                    updateModel();
-                    moveObjects();
-                    model.checkCollisions();
+		
+		if (model != null) {
+			checkGameEnd();
+			checkMouse();
+			checkKeys();
+			notifyObservers();
+			updateModel();
+			moveObjects();
+			model.checkCollisions();
 		}
 	}
 
@@ -200,17 +194,19 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			setItem(LEFT_CLICK, items.getString(s));
 		}	
 	}*/
-	
+
 	private void checkGameEnd() {
 		if (model.isGameLost()) {
 			JOptionPane.showMessageDialog(null, "Game lost. :(");
+			stop();
 		}
-		
+
 		if (model.isGameWon()) {
 			JOptionPane.showMessageDialog(null, "Game won!");
+			stop();
 		}
 	}
-	
+
 	private void updateModel() {
 		try {
 			model.updateGame();
@@ -219,7 +215,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void checkMouse() {
 		if (cursorState == CursorState.AddTower) {
 			if (getMouseButton(LEFT_CLICK)) {
@@ -236,9 +232,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			if (getMouseButton(LEFT_CLICK)) {
 				lastClickedObject.x = getMousePos().x;
 				lastClickedObject.y = getMousePos().y;
-				if(!model.getUnitInfo(lastClickedObject.x, lastClickedObject.y).isEmpty()){
-					hasUnitInfoChanged = true;
-				}
 				if(getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))){
 					try {
 						model.upgradeTower(getMouseX(), getMouseY());
@@ -259,7 +252,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		}
 	}
 
-	private void setItem(int clickName, String itemName){
+	/*private void setItem(int clickName, String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
 				model.placeItem(itemName, getMouseX(), getMouseY());
@@ -268,8 +261,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			}
 			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
 		}
-	}
-	
+	}*/
+
 	public void setCurrentTowerType(String currentTowerName){
 		towerName = currentTowerName;
 	}
@@ -341,9 +334,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	@Override
 	public void notifyObservers() {
-		if(!hasGameInfoChanged && !hasUnitInfoChanged) return;
-		hasGameInfoChanged = false;
-		hasUnitInfoChanged = false;
 		for(Observing o: observerList){
 			o.update();
 		}
@@ -378,7 +368,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	}
 
 	public Map<String, String> getGameAttributes() {
-		hasGameInfoChanged = true;
 		Map<String, String> gameStats = new HashMap<String, String>();
 		gameStats.put("Score", "Score: " + model.getScore());
 		gameStats.put("Lives", "Lives left: " + model.getPlayerLives());

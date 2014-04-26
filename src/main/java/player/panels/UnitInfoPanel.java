@@ -6,10 +6,10 @@ import javax.swing.JTextArea;
 
 @SuppressWarnings("serial")
 public class UnitInfoPanel extends ObservingPanel{
-	
+
 	public static final String TIME = "Time";
 	private JTextArea unitInfoArea;
-	
+
 	public UnitInfoPanel() {
 
 		unitInfoArea = new JTextArea(5, 5);
@@ -21,11 +21,13 @@ public class UnitInfoPanel extends ObservingPanel{
 
 	@Override
 	public void update() {		
-	List<String> unitInfoList = engine.getCurrentDescription();
-		String unitInfo = "";
-		for(String s: unitInfoList){
-			unitInfo += s + "\n";
+		List<String> unitInfoList = engine.getCurrentDescription();
+		if (!unitInfoList.isEmpty()) {
+			String unitInfo = "";
+			for(String s: unitInfoList){
+				unitInfo += s + "\n";
+			}
+			unitInfoArea.setText(unitInfo);
 		}
-		unitInfoArea.setText(unitInfo);
 	}
 }
