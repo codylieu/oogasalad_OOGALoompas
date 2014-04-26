@@ -8,12 +8,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 
 /**
- * @author garysheng
- * A concerete subclass of the DefaultTableModel which allows someone to easily remove a column from a table
+ * @author garysheng A concerete subclass of the DefaultTableModel which allows
+ *         someone to easily remove a column from a table, and only accepts ints
+ *         for the values that arent in column 0
  */
-public class ColumnRemovableTableModel extends DefaultTableModel {
+public class ColumnRemovableIntOnlyTableModel extends DefaultTableModel {
 
-	public ColumnRemovableTableModel(Object[][] data, String[] columnNames) {
+	public ColumnRemovableIntOnlyTableModel(Object[][] data,
+			String[] columnNames) {
 		super(data, columnNames);
 	}
 
@@ -22,13 +24,30 @@ public class ColumnRemovableTableModel extends DefaultTableModel {
 
 	}
 
+	public boolean isCellEditable(int row, int col) {
+
+		if (col == 0) {
+			return false;
+		}
+		return true;
+
+	}
+	@Override
+	public java.lang.Class<?> getColumnClass(int columnIndex) {
+		if (columnIndex != 0) // second column accepts only Integer values
+			return Integer.class;
+		else
+			return String.class; // other columns accept String values
+	};
+
 	/**
 	 * removes a column and the corresponding data
+	 * 
 	 * @param table
 	 * @param vColIndex
 	 */
 	public void removeColumnAndData(JTable table, int vColIndex) {
-		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+		ColumnRemovableIntOnlyTableModel model = (ColumnRemovableIntOnlyTableModel) table
 				.getModel();
 		TableColumn col = table.getColumnModel().getColumn(vColIndex);
 		int columnModelIndex = col.getModelIndex();
@@ -59,4 +78,6 @@ public class ColumnRemovableTableModel extends DefaultTableModel {
 		}
 		model.fireTableStructureChanged();
 	}
+	
+	
 }

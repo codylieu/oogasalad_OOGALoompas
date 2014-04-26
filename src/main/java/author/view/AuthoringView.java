@@ -40,7 +40,6 @@ public class AuthoringView extends JFrame {
 	private JButton finalizeGameButton;
 
 	private EnemyEditorTab enemyEditorTab;
-	private TowerEditorTab towerEditorTab;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -148,7 +147,6 @@ public class AuthoringView extends JFrame {
 					try {
 						myController.saveBlueprint();
 					} catch (InvalidGameBlueprintException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
