@@ -17,7 +17,6 @@ import main.java.author.controller.tabbed_controllers.ItemController;
 import main.java.author.controller.tabbed_controllers.TerrainController;
 import main.java.author.controller.tabbed_controllers.TowerController;
 import main.java.author.controller.tabbed_controllers.WaveController;
-import main.java.author.view.menubar.BasicMenuBar;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
@@ -124,7 +123,6 @@ public class AuthoringView extends JFrame {
 		createEditorTabs();
 		add(tabbedPane, BorderLayout.CENTER);
 		add(createFinalizeGameButton(), BorderLayout.SOUTH);
-		setJMenuBar(new BasicMenuBar());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);
 		pack();
