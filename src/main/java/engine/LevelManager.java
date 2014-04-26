@@ -67,7 +67,7 @@ public class LevelManager {
             }
         }
         
-        for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave)
+        for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave++)
                 .getMonsterSpawnSchemas()) {
             spawnedMonsters.addAll(spawnMonsterSpawnSchema(spawnSchema));
         }
