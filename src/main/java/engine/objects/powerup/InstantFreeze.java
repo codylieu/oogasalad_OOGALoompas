@@ -6,6 +6,7 @@ import java.util.Map;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.EnvironmentKnowledge;
+import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.powerups.AnnihilatorPowerupSchema;
@@ -18,52 +19,52 @@ import main.java.schema.tdobjects.powerups.InstantFreezerPowerupSchema;
  * @author Lawrence
  *
  */
-public class InstantFreeze extends TDItem {
-	private double freeze_duration;
-	
-	public InstantFreeze(Point2D location, String image, double cost, double freeze_duration, double damage, int flash_interval) {
-		super("instance_freeze", location.getX(), location.getY(), null, cost, 0, damage, flash_interval);
-		this.freeze_duration = freeze_duration;
-	}
-	
-	public InstantFreeze(Map<String, Serializable> attributes) {
-		this(
-				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
-				(String) getValueOrDefault(attributes, InstantFreezerPowerupSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
-				(Double) getValueOrDefault(attributes, InstantFreezerPowerupSchema.COST, ItemViewConstants.COST_DEFAULT),
-				(Double) getValueOrDefault(attributes, InstantFreezerPowerupSchema.FREEZE_DURATION, ItemViewConstants.FREEZE_DURATION_DEFAULT),
-				(Double) getValueOrDefault(attributes, InstantFreezerPowerupSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
-				(Integer) getValueOrDefault(attributes, InstantFreezerPowerupSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
-				);
-	}
-	
-	@Override
-	public void move() {
-		timeCounter++;
+public class InstantFreeze extends AreaBomb {
+	private static final String FROZEN_IMAGE_DEFAULT = "ice";
+	private static final int FREEZE_SLOWDOWN_PROPORTION_DEFAULT = 0;
+	private static final double FREEZE_DURATION_DEFAULT = 50;
+	private double myFreezeDuration;
+	private double myFreezeSlowDownProportion;
+	private double myFreezeDurationCounter;
+
+	public InstantFreeze(IPowerup baseItem, Map<String, Serializable> attributes) {
+		super(baseItem, attributes);
+		myFreezeDuration = 
+				Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, 
+						ItemSchema.FREEZE_DURATION, 
+						FREEZE_DURATION_DEFAULT)));
+		myFreezeSlowDownProportion = 
+				Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, 
+
+						ItemSchema.FREEZE_SLOWDOWN_PROPORTION, 
+						FREEZE_SLOWDOWN_PROPORTION_DEFAULT)));
+		myFreezeDurationCounter = 0;
 	}
 
-	@Override
-	public void doAction(EnvironmentKnowledge environmentKnowledge) {
-		if (timeCounter < freeze_duration) {
-			freezeMonsters(environmentKnowledge);
-		} else {
-			recoverMonsterSpeed(environmentKnowledge);
-			terminateItem();
-		}
-
-	}
-	
 	private void freezeMonsters(EnvironmentKnowledge environmentKnowledge) {
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
-			m.setSpeed(0, 0);
-			m.setImage("ice");
+			if (isInRange(m)) {
+				m.setSpeed(m.getOriginalSpeed() * myFreezeSlowDownProportion);
+				m.setImage(FROZEN_IMAGE_DEFAULT);
+			}
 		}
 	}
-	
+
 	private void recoverMonsterSpeed(EnvironmentKnowledge environmentKnowledge) {
 		for (Monster m : environmentKnowledge.getAllMonsters()) {
 			m.setSpeed(m.getOriginalSpeed());
 			m.setImage(m.getOriginalImage());
+		}
+	}
+
+	@Override
+	void doDecoratedBehavior(EnvironmentKnowledge environ) {
+		if (myFreezeDurationCounter < myFreezeDuration) {
+			freezeMonsters(environ);
+			myFreezeDurationCounter++;
+		} else {
+			recoverMonsterSpeed(environ);
+			remove();
 		}
 	}
 

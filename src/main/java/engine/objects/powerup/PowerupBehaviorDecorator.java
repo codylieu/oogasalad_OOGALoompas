@@ -26,6 +26,21 @@ abstract class PowerupBehaviorDecorator implements IPowerup {
         return false;
     }
     
+    @Override
+    public double getXCoordinate () {
+        return baseItem.getXCoordinate();
+    }
+
+    @Override
+    public double getYCoordinate () {
+        return baseItem.getYCoordinate();
+    }
+    
+    @Override
+    public double getTimeCounter() {
+    	return baseItem.getTimeCounter();
+    }
+    
     /**
      * Do the additional behavior granted by this behavior decoration.
      * @param environ

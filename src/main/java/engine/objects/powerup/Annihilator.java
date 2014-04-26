@@ -15,8 +15,8 @@ import main.java.schema.tdobjects.powerups.AnnihilatorPowerupSchema;
  */
 public class Annihilator extends TDItem {
 
-	public Annihilator(String image, double cost, double buildup_time, double damage, int flash_interval) {
-		super("annihilator", 0, 0, image, cost, buildup_time, damage, flash_interval);
+	public Annihilator(IPowerup baseItem) {
+		super(baseItem);
 	}
 
 	public Annihilator(Map<String, Serializable> attributes) {

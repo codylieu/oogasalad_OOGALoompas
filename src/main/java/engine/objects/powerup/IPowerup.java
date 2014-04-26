@@ -8,5 +8,11 @@ public interface IPowerup {
     public void remove();
 
     public double getCost();
+    
+    public double getXCoordinate();
+    
+    public double getYCoordinate();
+    
+    public double getTimeCounter();
 
 }

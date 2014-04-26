@@ -7,6 +7,7 @@ import java.util.Map;
 import jgame.JGObject;
 import main.java.author.view.tabs.item.ItemViewConstants;
 import main.java.engine.EnvironmentKnowledge;
+import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.powerup.decorations.Fire;
 import main.java.schema.tdobjects.ItemSchema;
@@ -19,7 +20,7 @@ import main.java.schema.tdobjects.powerups.AreaBombPowerupSchema;
  * @author Lawrence
  *
  */
-public class RowBomb extends TDItem{
+public class RowBomb extends PowerupBehaviorDecorator{
 
 	public RowBomb(Point2D location, String image, double cost, double buildup_time, double damage, int flash_interval) {
 		super("row_bomb", location.getX(), location.getY(), image, cost, buildup_time, damage, flash_interval);
@@ -27,12 +28,8 @@ public class RowBomb extends TDItem{
 	
 	public RowBomb(Map<String, Serializable> attributes) {
 		this(
-				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
-				(String) getValueOrDefault(attributes, AreaBombPowerupSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.COST, ItemViewConstants.COST_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.BUILDUP_TIME, ItemViewConstants.BUILDUP_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
-				(Integer) getValueOrDefault(attributes, AreaBombPowerupSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
+				baseItem,
+				Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, ItemSchema.LIVES_TO_GRANT, LIVES_DEFAULT))));
 				);
 	}
 
@@ -58,6 +55,12 @@ public class RowBomb extends TDItem{
 		double lower = y - m.getImageBBoxConst().height/2;
 		double upper = y + m.getImageBBoxConst().height/2;
 		return ((m.y > lower) && (m.y < upper));
+	}
+
+	@Override
+	void doDecoratedBehavior(EnvironmentKnowledge environ) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

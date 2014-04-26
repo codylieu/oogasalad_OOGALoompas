@@ -5,7 +5,10 @@ import java.io.Serializable;
 import java.util.Map;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
+import main.java.engine.EnvironmentKnowledge;
+import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.powerup.decorations.Fire;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.powerups.AnnihilatorPowerupSchema;
@@ -18,32 +21,47 @@ import main.java.schema.tdobjects.powerups.AreaBombPowerupSchema;
  * @author Lawrence
  *
  */
-public class AreaBomb extends RowBomb{
+public class AreaBomb extends PowerupBehaviorDecorator{
 
-	private double range;
+	private static final double RANGE_DEFAULT = 100;
+	private static final double DAMAGE_DEFAULT = 50;
+	private double myRange;
+	private double myDamage;
 
-	public AreaBomb (Point2D location, double range, String image, double cost, double buildup_time, double damage, int flash_interval) {
-		super(location, image, cost, buildup_time, damage, flash_interval);
-		this.range = range;
+	public AreaBomb (IPowerup baseItem, double range, double damage) {
+		super(baseItem);
+		myRange = range;
+		myDamage = damage;
 	}
 
-	public AreaBomb (Map<String, Serializable> attributes) {
+	public AreaBomb (IPowerup baseItem, Map<String, Serializable> attributes) {
 		this(
-				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
-				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.RANGE, ItemViewConstants.RANGE_DEFAULT),
-				(String) getValueOrDefault(attributes, AreaBombPowerupSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.COST, ItemViewConstants.COST_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.BUILDUP_TIME, ItemViewConstants.BUILDUP_DEFAULT),
-				(Double) getValueOrDefault(attributes, AreaBombPowerupSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT),
-				(Integer) getValueOrDefault(attributes, AreaBombPowerupSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT)
+				baseItem,
+				Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, ItemSchema.RANGE, RANGE_DEFAULT))),
+				Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, ItemSchema.DAMAGE, DAMAGE_DEFAULT)))
 				);
 	}
 
-	@Override
 	protected boolean isInRange(Monster m) {
 		Point2D monster = m.centerCoordinate();
-		Point2D bomb = new Point2D.Double(x, y);
-		return (monster.distance(bomb) <= range);
+		Point2D bomb = new Point2D.Double(getXCoordinate(), getYCoordinate());
+		return (monster.distance(bomb) <= myRange);
+	}
+	
+	private void setFire(Monster m) {
+		new Fire(m.x, m.y);
+	}
+
+	@Override
+	void doDecoratedBehavior(EnvironmentKnowledge environ) {
+		for (Monster m : environ.getAllMonsters()) {
+			if (isInRange(m)) {
+				setFire(m);
+				m.takeDamage(myDamage);
+			}
+		}
+		remove();
+
 	}
 
 }

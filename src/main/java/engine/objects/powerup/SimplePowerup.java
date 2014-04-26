@@ -5,11 +5,13 @@ import java.io.Serializable;
 import java.util.Map;
 
 import main.java.engine.EnvironmentKnowledge;
+import main.java.engine.objects.TDObject;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TowerSchema;
 
-public class SimplePowerup extends TDItem implements IPowerup{
+public class SimplePowerup extends TDObject implements IPowerup{
 	
+	private static final int POWERUP_CID = 5;
 	public static final int FLASH_INTERVAL_DEFAULT = 5;
 	public static final double COST_DEFAULT = 20;
 	public static final double BUILDUP_DEFAULT = 0;
@@ -23,10 +25,13 @@ public class SimplePowerup extends TDItem implements IPowerup{
 	protected double myCost;
 	protected int myFlashInterval;
 	protected String myImage;
+	protected Point2D myLocation;
 	
-	public SimplePowerup(String name, Point2D location, String gfxname,
-			double cost, double buildupTime, double damage, int flash_interval) {
-		super(name, location.getX(), location.getY(), gfxname, cost, buildupTime, damage, flash_interval);
+	
+	public SimplePowerup(Point2D location, double cost, 
+			double buildupTime, int flash_interval, String gfxname) {
+		super("item", location.getX(), location.getY(), POWERUP_CID, gfxname);
+		myLocation = location;
 		myBuildUpTime = buildupTime;
 		myCost = cost;
 		myFlashInterval = flash_interval;
@@ -34,13 +39,11 @@ public class SimplePowerup extends TDItem implements IPowerup{
 	}	
 	public SimplePowerup(Map<String, Serializable> attributes) {
 		this(
-				"item",
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
-				(String) attributes.get(ItemSchema.NAME),
 				(double) getValueOrDefault(attributes, ItemSchema.COST, COST_DEFAULT),
 				(double) getValueOrDefault(attributes, ItemSchema.BUILDUP_TIME, BUILDUP_DEFAULT),
-				(double) getValueOrDefault(attributes, ItemSchema.DAMAGE, DAMAGE_DEFAULT),
-				(int) getValueOrDefault(attributes, ItemSchema.FLASH_INTERVAL, FLASH_INTERVAL_DEFAULT)
+				(int) getValueOrDefault(attributes, ItemSchema.FLASH_INTERVAL, FLASH_INTERVAL_DEFAULT),
+				(String) attributes.get(ItemSchema.NAME)
 				);
 	}
 
@@ -68,5 +71,20 @@ public class SimplePowerup extends TDItem implements IPowerup{
 		super.remove();
 	}
 	// TODO: we may need another way to remove the item. e.g. setDead().
+
+	@Override
+	public double getXCoordinate() {
+		return myLocation.getY();
+	}
+
+	@Override
+	public double getYCoordinate() {
+		return myLocation.getX();
+	}
+
+	@Override
+	public double getTimeCounter() {
+		return myTimingCounter;
+	}
 
 }

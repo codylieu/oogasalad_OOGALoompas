@@ -11,6 +11,9 @@ public abstract class ItemSchema extends TDObjectSchema{
 	public static final String FLASH_INTERVAL = "Flash Interval";
 	public static final String LOCATION = "Location";
 	public static final String LIVES_TO_GRANT = "Lives to Grant";
+	public static final String RANGE = "Damage range";
+	public static final String FREEZE_DURATION = "Freeze Slowdown duration";
+	public static final String FREEZE_SLOWDOWN_PROPORTION = "Freeze Slowdown (%)";
 
 	public ItemSchema(Class<? extends TDItem> myConcreteType) {
 		super(myConcreteType);
@@ -22,6 +25,9 @@ public abstract class ItemSchema extends TDObjectSchema{
 		myAttributeSet.add(ItemSchema.NAME);
 		myAttributeSet.add(ItemSchema.LOCATION);
 		myAttributeSet.add(ItemSchema.LIVES_TO_GRANT);
+		myAttributeSet.add(ItemSchema.RANGE);
+		myAttributeSet.add(ItemSchema.FREEZE_DURATION);
+		myAttributeSet.add(ItemSchema.FREEZE_SLOWDOWN_PROPORTION);
 	}
 
 }

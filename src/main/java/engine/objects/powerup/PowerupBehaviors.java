@@ -5,7 +5,6 @@ import java.io.Serializable;
 
 
 public enum PowerupBehaviors implements Serializable {
-	ANNIHILATION(Annihilator.class),
 	AREA_BOMBING(AreaBomb.class),
 	INSTANT_FREEZE(InstantFreeze.class),
 	LIFE_SAVER(LifeSaver.class),

@@ -20,23 +20,24 @@ import main.java.schema.tdobjects.powerups.AreaBombPowerupSchema;
 public class LifeSaver extends PowerupBehaviorDecorator{
 	private static final int LIVES_DEFAULT = 1;
 	private double livesToGrant;
-	
+
 	public LifeSaver(IPowerup baseItem, double livesToGrant) {
 		super(baseItem);
 		this.livesToGrant = livesToGrant;
 	}
-	
-    /**
-     * Constructor used by the factory in decorating a final tower.
-     * 
-     * @param baseItem
-     * @param attributes
-     */
-    public LifeSaver (IPowerup baseItem, Map<String, Serializable> attributes) {
-        this(
-        	baseItem,
-             Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, ItemSchema.LIVES_TO_GRANT, LIVES_DEFAULT))));
-    }
+
+	/**
+	 * Constructor used by the factory in decorating a final item.
+	 * 
+	 * @param baseItem
+	 * @param attributes
+	 */
+	public LifeSaver (IPowerup baseItem, Map<String, Serializable> attributes) {
+		this(
+				baseItem,
+				Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, ItemSchema.LIVES_TO_GRANT, LIVES_DEFAULT)))
+				);
+	}
 
 	@Override
 	void doDecoratedBehavior(EnvironmentKnowledge environ) {
