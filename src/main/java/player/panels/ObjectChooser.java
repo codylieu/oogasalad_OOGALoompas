@@ -28,14 +28,16 @@ public class ObjectChooser extends JPanel implements ActionListener{
 	protected DefaultComboBoxModel<String> comboBoxModel;
 	protected Object engine;
 	private String methodName;
+	private String getListMethodName;
 	
-	public ObjectChooser(List<String> objectNamesList, Object myEngine, String myMethodName){
+	public ObjectChooser(Object myEngine, String myGetListMethodName, String myMethodName){
 		//super();
 		//observers = new ArrayList<Observing>();
 		//hasChanged = false;
 		engine = (ITDPlayerEngine) myEngine;
 		currentObjectName = "";
-		objectNames = objectNamesList;
+		//objectNames = objectNamesList;
+		getListMethodName = myGetListMethodName;
 		methodName = myMethodName;
 		initComboBox();
 	}
@@ -55,7 +57,19 @@ public class ObjectChooser extends JPanel implements ActionListener{
 	/**
 	 * Populate the JComboBox using list from parameter
 	 */
+	@SuppressWarnings("unchecked")
 	public void populateComboBox(){
+		try {
+			Method m = engine.getClass().getDeclaredMethod(getListMethodName);
+			try {
+				objectNames = (List<String>) m.invoke(engine);
+			} catch (IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException e1) {
+				e1.printStackTrace();
+			}
+		} catch (NoSuchMethodException | SecurityException e1) {
+			e1.printStackTrace();
+		}
 		comboBoxModel.removeAllElements();
 		for (String s: objectNames) {
 			comboBoxModel.addElement(s);
@@ -72,7 +86,7 @@ public class ObjectChooser extends JPanel implements ActionListener{
 		JComboBox<String> myBox = (JComboBox<String>) e.getSource();
 		Object objectName = (String) myBox.getSelectedItem();
 		Object[] args = new Object[1];
-		args[0] = objectName;
+		args[0] = objectName;	
 		try {
 			Method m = engine.getClass().getDeclaredMethod(methodName, Reflection.toClasses(args));
 			try {
@@ -85,4 +99,5 @@ public class ObjectChooser extends JPanel implements ActionListener{
 			e1.printStackTrace();
 		}
 	}
+	
 }

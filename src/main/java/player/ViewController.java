@@ -351,7 +351,8 @@ public class ViewController implements Serializable {
 		JButton soundButton = new JButton(myLanguageResources.getString(SOUND_ONOFF_TEXT));
 		soundButton.addActionListener(new MethodAction (this, TOGGLE_SOUND_METHOD_NAME));
 
-		towerChooser = new ObjectChooser(engine.getPossibleTowers(), engine, SET_CURRENT_TOWER_TYPE_METHID_NAME);
+		//TODO: is it better to just pass in engine, and also call get possible towers using reflection in object hcooser? or is this way simpler even though im already passing in engine
+		towerChooser = new ObjectChooser(engine, "getPossibleTowers", SET_CURRENT_TOWER_TYPE_METHID_NAME);
 		//towerChooser.register((Observing) engine);
 		// should leave as observing engine? or pass into contstructor?
 		//powerUpChooser = new ObjectChooser(engine.getPossibleItems());
