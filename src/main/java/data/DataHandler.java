@@ -99,7 +99,7 @@ public class DataHandler {
 
 		if (tempDirCreated){
 			//Set up container zip file
-			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+//			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
 
 			// Zip resources
 			String zipResourcesLocation = tempDirLocation + "ZippedResources.zip";
@@ -115,7 +115,7 @@ public class DataHandler {
 			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser"));
 
 			// Compress container file
-			if (compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation)){
+			if (compressAuthoringEnvironment(myFilesToZip,filePath)){
 				deleteDirectory(new File(tempDirLocation)); 
 			}
 		} else {
