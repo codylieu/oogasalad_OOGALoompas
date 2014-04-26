@@ -163,32 +163,6 @@ public class ViewController implements Serializable {
 			System.exit(0);
 			return "";
 		}
-	}	
-
-	private void showLanguagePrompt(){
-		languageFrame = new JFrame();
-		languageFrame.setLocationRelativeTo(null);
-		DefaultComboBoxModel<String> listOfLanguages = new DefaultComboBoxModel<String>(new Vector<String>());
-		final JComboBox<String> languageComboBox = new JComboBox<String>(listOfLanguages);
-		for(String s: myLanguagesList.keySet()){
-			listOfLanguages.addElement(s);
-		}
-		languageComboBox.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + (String)languageComboBox.getSelectedItem());
-				makeFrame();
-				makeAndAddCards();
-				show();
-				languageFrame.dispose();
-
-			}			
-		});
-		languageFrame.add(languageComboBox);
-		languageFrame.pack();
-		languageFrame.setLocationRelativeTo(null);
-		languageFrame.setVisible(true);
-
 	}
 
 	private void initSong(){
@@ -196,7 +170,7 @@ public class ViewController implements Serializable {
 			song = new Sound(DEFAULT_MUSIC_PATH);
 		} catch (LineUnavailableException | IOException
 				| UnsupportedAudioFileException e) {
-			//tell user song not found
+			JOptionPane.showMessageDialog(null, "Music file not found.");
 		}
 		soundOn = false;
 	}
