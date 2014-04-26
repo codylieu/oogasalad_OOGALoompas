@@ -56,8 +56,16 @@ public class ItemEditorTab extends EditorTab {
 		tabbedPane.addTab(ItemViewConstants.LIFE_SAVER, lifesaverTab);
 		tabbedPane.addTab(ItemViewConstants.ROW_BOMB, rowbombTab);
 		
-		annihilatorTab.setPreferredSize(new Dimension(1000,500));
+		//annihilatorTab.setLayout(new BorderLayout());
+		//areabombTab.setLayout(new BorderLayout());
+		//instantTab.setLayout(new BorderLayout());
+		//lifesaverTab.setLayout(new BorderLayout());
+		//rowbombTab.setLayout(new BorderLayout());
+		
+		annihilatorTab.setPreferredSize(new Dimension(1200,500));
+		
 		System.out.println(this.getSize() + "\t" + super.getSize());
+		
 		add(tabbedPane, BorderLayout.CENTER);
 		setVisible(true);
 	}
@@ -74,3 +82,4 @@ public class ItemEditorTab extends EditorTab {
 	}
 
 }
+
