@@ -176,6 +176,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	@Override
 	public void doFrame() {
 		super.doFrame();
+		checkGameEnd();
 		checkMouse();
 		checkKeys();
 		notifyObservers();
@@ -189,6 +190,16 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			setItem(LEFT_CLICK, items.getString(s));
 		}	
 	}*/
+	
+	private void checkGameEnd() {
+		if (model.isGameLost()) {
+			JOptionPane.showMessageDialog(null, "Game lost. :(");
+		}
+		
+		if (model.isGameWon()) {
+			JOptionPane.showMessageDialog(null, "Game won!");
+		}
+	}
 	
 	private void updateModel() {
 		try {
