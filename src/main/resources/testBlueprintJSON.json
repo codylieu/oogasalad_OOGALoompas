@@ -5,7 +5,7 @@
       "lives": 3
     },
     "myAttributeSet": [
-      "survivalmodeenabled"
+      "survivalModeEnabled"
     ]
   },
   "myMonsterSchemas": [
@@ -50,6 +50,7 @@
         "Bullet Image Name",
         "Tower Behaviors",
         "imageName",
+        "Build Up Time",
         "Bomb\u0027s Shrapnel Image Name",
         "Bomb Shrapnel Damage",
         "Location",
@@ -61,8 +62,7 @@
         "Firing Speed (per sec)",
         "Money Grant Interval",
         "Upgrade Tower",
-        "Size",
-        "Build Up Time (sec)"
+        "Size"
       ]
     },
     {
@@ -82,6 +82,7 @@
         "Bullet Image Name",
         "Tower Behaviors",
         "imageName",
+        "Build Up Time",
         "Bomb\u0027s Shrapnel Image Name",
         "Bomb Shrapnel Damage",
         "Location",
@@ -93,8 +94,7 @@
         "Firing Speed (per sec)",
         "Money Grant Interval",
         "Upgrade Tower",
-        "Size",
-        "Build Up Time (sec)"
+        "Size"
       ]
     },
     {
@@ -115,6 +115,7 @@
         "Bullet Image Name",
         "Tower Behaviors",
         "imageName",
+        "Build Up Time",
         "Bomb\u0027s Shrapnel Image Name",
         "Bomb Shrapnel Damage",
         "Location",
@@ -126,8 +127,7 @@
         "Firing Speed (per sec)",
         "Money Grant Interval",
         "Upgrade Tower",
-        "Size",
-        "Build Up Time (sec)"
+        "Size"
       ]
     },
     {
@@ -148,6 +148,7 @@
         "Bullet Image Name",
         "Tower Behaviors",
         "imageName",
+        "Build Up Time",
         "Bomb\u0027s Shrapnel Image Name",
         "Bomb Shrapnel Damage",
         "Location",
@@ -159,8 +160,7 @@
         "Firing Speed (per sec)",
         "Money Grant Interval",
         "Upgrade Tower",
-        "Size",
-        "Build Up Time (sec)"
+        "Size"
       ]
     }
   ],
