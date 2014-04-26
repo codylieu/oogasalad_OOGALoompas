@@ -41,6 +41,11 @@ import main.java.schema.tdobjects.TDObjectSchema;
  */
 public class EnemyEditorTab extends ObjectEditorTab {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public EnemyEditorTab(TabController towerController, String objectName) {
 		super(towerController, objectName);
 	}
@@ -52,8 +57,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					TerrainAttribute.Flyable.getIndex()));
 
 	private JSpinner healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
-	private ImageCanvas monsterImageCanvas, collisionImageCanvas;
-	private JButton monsterImageButton, collisionImageButton;
+	private ImageCanvas monsterImageCanvas;
+	private JButton monsterImageButton;
 	private JRadioButton smallTileButton, mediumTileButton, largeTileButton,
 			flyingButton, groundButton;
 	private List<JRadioButton> allButtons;

@@ -1,6 +1,7 @@
 package main.java.author.view.tabs.wave_editor;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,11 +15,15 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
 import org.aspectj.weaver.tools.cache.AsynchronousFileCacheBacking.ClearCommand;
@@ -28,7 +33,8 @@ import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.controller.tabbed_controllers.WaveController;
 import main.java.author.util.ArrayUtil;
 import main.java.author.util.JTableUtil;
-import main.java.author.view.components.ColumnRemovableTableModel;
+import main.java.author.util.ObjectUtilFunctions;
+import main.java.author.view.components.ColumnRemovableIntOnlyTableModel;
 import main.java.author.view.tabs.EditorTab;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.WaveSpawnSchema;
@@ -47,7 +53,7 @@ public class WaveEditorTab extends EditorTab {
 	private static final String REMOVE_WAVE_STRING = "Remove Wave";
 	private static final String CLEAR_ALL_WAVES_STRING = "Clear All Waves";
 	private static final String ADD_ENEMY_STRING = "Add Enemy";
-	
+
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
 	private JButton clearAllWavesButton;
@@ -58,7 +64,7 @@ public class WaveEditorTab extends EditorTab {
 	private Object[][] data = {};
 
 	private JTable table;
-	private ColumnRemovableTableModel tableModel;
+	private ColumnRemovableIntOnlyTableModel tableModel;
 
 	private WaveTabContentCreator tabCreator = new WaveTabContentCreator();
 
@@ -73,7 +79,7 @@ public class WaveEditorTab extends EditorTab {
 
 	/**
 	 * @param columnName
-	 * Called when the enemy list is added to in the Enemy Editor Tab
+	 *            Called when the enemy list is added to in the Enemy Editor Tab
 	 */
 	private void addNewEnemyColumn(String columnName) {
 		List<String> zeroesColumnList = new ArrayList<String>();
@@ -114,19 +120,20 @@ public class WaveEditorTab extends EditorTab {
 					.getColumnIndexFromName(tableModel, columnToRemove));
 		}
 	}
-	
+
 	/**
 	 * @param enemyName
-	 * @return
-	 * Gets the column index of the enemy represented by the input string
+	 * @return Gets the column index of the enemy represented by the input
+	 *         string
 	 */
 	private int getColumnOfEnemy(String enemyName) {
 		WaveController waveController = (WaveController) myController;
 		String[] currentColumnNames = waveController.getEnemyNames();
 
 		for (int index = 0; index < currentColumnNames.length; index++) {
-			if(currentColumnNames[index].equals(enemyName)) {
-				return index + 1; // because Wave # is not included in currentColumnNames
+			if (currentColumnNames[index].equals(enemyName)) {
+				return index + 1; // because Wave # is not included in
+									// currentColumnNames
 			}
 		}
 		return -1;
@@ -134,10 +141,11 @@ public class WaveEditorTab extends EditorTab {
 
 	/**
 	 * @param fieldValue
-	 * Adds a new wave and populates the row based off of the input fieldValue String
+	 *            Adds a new wave and populates the row based off of the input
+	 *            fieldValue String
 	 */
-	private void addNewWaveRow(String fieldValue){
-		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+	private void addNewWaveRow(String fieldValue) {
+		ColumnRemovableIntOnlyTableModel model = (ColumnRemovableIntOnlyTableModel) table
 				.getModel();
 		int newWaveNum = tableModel.getRowCount() + 1;
 		List<String> zeroesRowList = new ArrayList<String>();
@@ -160,11 +168,16 @@ public class WaveEditorTab extends EditorTab {
 		for (int waveRow = 0; waveRow < numWaves; waveRow++) {
 
 			WaveSpawnSchema waveSpawnSchema = new WaveSpawnSchema();
-			for (MonsterSchema monsterSchema : waveController.getMonsterSchemas()) {
-				String monsterName = (String) monsterSchema.getAttributesMap().get(MonsterSchema.NAME);
+			for (MonsterSchema monsterSchema : waveController
+					.getMonsterSchemas()) {
+				String monsterName = (String) monsterSchema.getAttributesMap()
+						.get(MonsterSchema.NAME);
 				int columnOfEnemy = getColumnOfEnemy(monsterName);
-				int numEnemies = Integer.parseInt((String) table.getModel().getValueAt(waveRow, columnOfEnemy));
-				waveSpawnSchema.addMonsterSchema(new MonsterSpawnSchema(monsterSchema, numEnemies));
+				int numEnemies = Integer.parseInt((String.valueOf(Math
+						.abs((int) table.getModel().getValueAt(waveRow,
+								columnOfEnemy)))));
+				waveSpawnSchema.addMonsterSchema(new MonsterSpawnSchema(
+						monsterSchema, numEnemies));
 			}
 			allWaveSpawnSchemas.add(waveSpawnSchema);
 		}
@@ -187,7 +200,7 @@ public class WaveEditorTab extends EditorTab {
 
 			JPanel content = new JPanel(new BorderLayout());
 
-			content.add(createTable(), BorderLayout.WEST);
+			content.add(makeTable(), BorderLayout.WEST);
 			content.add(buttonMaker.makeButtons(), BorderLayout.EAST);
 
 			addNewWaveRow(ONE_STRING); // Setting default value
@@ -198,7 +211,7 @@ public class WaveEditorTab extends EditorTab {
 		/**
 		 * @return Creates a table used to specify the attributes of each wave
 		 */
-		public JComponent createTable() {
+		public JComponent makeTable() {
 			WaveController waveController = (WaveController) myController;
 
 			columnNames = waveController.getEnemyNames();
@@ -207,20 +220,9 @@ public class WaveEditorTab extends EditorTab {
 			for (int i = 0; i < columnNames.length; i++) {
 				columnNamesAndWave[i + 1] = columnNames[i];
 			}
-			tableModel = new ColumnRemovableTableModel(data, columnNamesAndWave) {
-
-				public boolean isCellEditable(int row, int col){
-
-					if(col == 0){
-						return false;
-					}
-					return true;
-
-				}
-
-			};
+			tableModel = new ColumnRemovableIntOnlyTableModel(data,
+					columnNamesAndWave);
 			table = new JTable(tableModel);
-
 			table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 			table.addFocusListener(new FocusListener() {
 
@@ -339,10 +341,10 @@ public class WaveEditorTab extends EditorTab {
 
 				return clearAllWavesButton;
 			}
-			
+
 			/**
-			 * @return
-			 * Changes tab to the Enemy Tab so the user can add new enemy information
+			 * @return Changes tab to the Enemy Tab so the user can add new
+			 *         enemy information
 			 */
 			private Component makeAddEnemyButton() {
 				addEnemyButton = new JButton(ADD_ENEMY_STRING);
@@ -359,7 +361,7 @@ public class WaveEditorTab extends EditorTab {
 
 				return addEnemyButton;
 			}
-			
+
 		}
 
 	}
