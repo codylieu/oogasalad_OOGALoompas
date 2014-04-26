@@ -38,8 +38,14 @@ import net.lingala.zip4j.exception.ZipException;
  */
 
 public class RepositoryViewer extends AbstractAction {
-
+	
 	private static final long serialVersionUID = 1L;
+	public static final String COMPLETED_INSTRUCTIONS = "Game loaded. Go play it now!";
+	public static final String INITIAL_INSTRUCTIONS = "Click OK to start download (may take a while).";
+	public static final String DOWNLOAD = "Download";
+	public static final String PLAY_BUTTON_LABEL = "Play";
+	public static final String MAIN_PANEL_INFO = "Please pick a game to download and play";
+	public static final String REPOSITORY_VIEWER_TITLE = "Repository Viewer";
 	public final static String BASE_URL = "http://people.duke.edu/~kkd10/td/";
 	public final static String LIST_URL = BASE_URL + "list.txt";
 	public final static String DOWNLOADS_PATH = "downloads/";
@@ -64,7 +70,7 @@ public class RepositoryViewer extends AbstractAction {
 	
 	private void makeFrame() {
 		JFrame frame = new JFrame();
-		frame.setTitle("Repository Viewer");
+		frame.setTitle(REPOSITORY_VIEWER_TITLE);
 		frame.setLocationRelativeTo(null);
 		//frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().add(makeMainPanel());
@@ -74,7 +80,7 @@ public class RepositoryViewer extends AbstractAction {
 	
 	private JPanel makeMainPanel() {
 		mainPanel = new JPanel();
-		mainPanel.add(new JLabel("Please pick a game to download and play"));
+		mainPanel.add(new JLabel(MAIN_PANEL_INFO));
 		mainPanel.add(makeList());
 		mainPanel.add(makeSubmitButton());
 		mainPanel.add(makeDescriptionArea());
@@ -88,15 +94,15 @@ public class RepositoryViewer extends AbstractAction {
 	}
 
 	private JButton makeSubmitButton() {
-		JButton submit = new JButton("Play");
+		JButton submit = new JButton(PLAY_BUTTON_LABEL);
 		submit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String fileName = dlc.get(list.getSelectedValue()).getFileName();
 				try {
-					if (JOptionPane.showConfirmDialog(null, "Click OK to start download (may take a while).", "Download", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+					if (JOptionPane.showConfirmDialog(null, INITIAL_INSTRUCTIONS, DOWNLOAD, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 						downloadFromUrl(new URL(BASE_URL + fileName), DOWNLOADS_PATH + fileName);
 						engine.loadBlueprintFile(DOWNLOADS_PATH + fileName);
-						JOptionPane.showMessageDialog(null, "Game loaded. Go play it now!");
+						JOptionPane.showMessageDialog(null, COMPLETED_INSTRUCTIONS);
 						mainPanel.setVisible(false);
 					}					
 				} catch (IOException e1) {

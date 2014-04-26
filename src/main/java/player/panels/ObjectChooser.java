@@ -14,29 +14,22 @@ import javax.swing.JPanel;
 import main.java.player.ITDPlayerEngine;
 import main.java.reflection.Reflection;
 /**
- * A JComboBox that is also a Subject(observable).
- * Notifies observers if user clicks on a different item in drop down box
+ * A JComboBox that tells engine of chosen object change 
  *  
  * @author Michael Han
  */
 @SuppressWarnings("serial")
 public class ObjectChooser extends JPanel implements ActionListener{
-	protected JComboBox<String> objectComboBox;
+	private JComboBox<String> objectComboBox;
 	private List<String> objectNames;
-	protected String currentObjectName;
-	protected Vector<String> comboBoxItems;
-	protected DefaultComboBoxModel<String> comboBoxModel;
-	protected Object engine;
+	private Vector<String> comboBoxItems;
+	private DefaultComboBoxModel<String> comboBoxModel;
+	private Object engine;
 	private String methodName;
 	private String getListMethodName;
-	
+
 	public ObjectChooser(Object myEngine, String myGetListMethodName, String myMethodName){
-		//super();
-		//observers = new ArrayList<Observing>();
-		//hasChanged = false;
 		engine = (ITDPlayerEngine) myEngine;
-		currentObjectName = "";
-		//objectNames = objectNamesList;
 		getListMethodName = myGetListMethodName;
 		methodName = myMethodName;
 		initComboBox();
@@ -99,5 +92,5 @@ public class ObjectChooser extends JPanel implements ActionListener{
 			e1.printStackTrace();
 		}
 	}
-	
+
 }
