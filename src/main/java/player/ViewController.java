@@ -13,26 +13,22 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.Vector;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -46,10 +42,10 @@ import main.java.player.panels.ObservingPanel;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.MultipleMethodAction;
-import main.java.player.util.Observing;
 import main.java.player.util.Sound;
 import main.java.player.util.Subject;
 import main.java.reflection.MethodAction;
+import net.lingala.zip4j.exception.ZipException;
 
 /**
  * The Swing wrapper that contains all the buttons,
@@ -115,7 +111,6 @@ public class ViewController implements Serializable {
 	private Sound song;
 	private boolean soundOn;
 	private ObjectChooser towerChooser;
-	private JFrame languageFrame;
 	private String chosenLanguage;
 	//private ObjectChooser powerUpChooser;
 
@@ -164,32 +159,6 @@ public class ViewController implements Serializable {
 			System.exit(0);
 			return "";
 		}
-	}	
-
-	private void showLanguagePrompt(){
-		languageFrame = new JFrame();
-		languageFrame.setLocationRelativeTo(null);
-		DefaultComboBoxModel<String> listOfLanguages = new DefaultComboBoxModel<String>(new Vector<String>());
-		final JComboBox<String> languageComboBox = new JComboBox<String>(listOfLanguages);
-		for(String s: myLanguagesList.keySet()){
-			listOfLanguages.addElement(s);
-		}
-		languageComboBox.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + (String)languageComboBox.getSelectedItem());
-				makeFrame();
-				makeAndAddCards();
-				show();
-				languageFrame.dispose();
-
-			}			
-		});
-		languageFrame.add(languageComboBox);
-		languageFrame.pack();
-		languageFrame.setLocationRelativeTo(null);
-		languageFrame.setVisible(true);
-
 	}
 
 	private void initSong(){
@@ -197,7 +166,7 @@ public class ViewController implements Serializable {
 			song = new Sound(DEFAULT_MUSIC_PATH);
 		} catch (LineUnavailableException | IOException
 				| UnsupportedAudioFileException e) {
-			//tell user song not found
+			JOptionPane.showMessageDialog(null, "Music file not found.");
 		}
 		soundOn = false;
 	}
@@ -316,7 +285,12 @@ public class ViewController implements Serializable {
 	}
 
 	private ITDPlayerEngine initializeEngine(String pathToBlueprint) {
-		engine = new TDPlayerEngine(pathToBlueprint);
+		try {
+			engine = new TDPlayerEngine(pathToBlueprint);
+		} catch (ClassNotFoundException | IOException | ZipException e) {
+			JOptionPane.showMessageDialog(frame, "Invalid file. Closing program.");
+			System.exit(1);
+		}
 		engine.initModel();
 		engine.stop();
 		engine.toggleRunning();

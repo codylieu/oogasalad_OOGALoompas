@@ -127,7 +127,8 @@ public class TabManager extends JFrame{
 		FileOutputStream outstream;
 		try {
 			outstream = new FileOutputStream(LeapGameController.DEFAULT_ACTIONMAP_FILEPATH
-			                                 + LeapGameController.DEFAULT_ACTIONMAP_FILENAME);
+			                                 + LeapGameController.DEFAULT_ACTIONMAP_FILENAME
+			                                 + LeapGameController.DEFAULT_ACTIONMAP_FILETYPE);
 			                                 
 			for (Map.Entry<String, Integer> entry : keyBindings.entrySet()) {
 				properties.put(entry.getKey(), entry.getValue().toString());

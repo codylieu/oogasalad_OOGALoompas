@@ -8,12 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javax.swing.JOptionPane;
+
 import jgame.JGColor;
 import jgame.JGPoint;
 import jgame.platform.JGEngine;
 import main.java.data.DataHandler;
 import main.java.engine.IModel;
 import main.java.engine.Model;
+import main.java.engine.util.leapmotion.gamecontroller.LeapGameController;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
@@ -48,44 +51,35 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	public static int TILE_HEIGHT = 32;
 
 	private int xtiles, ytiles;
-	private ObjectChooser towerChooser;
-	private ObjectChooser powerUpChooser;
 	private IModel model;
 	private List<Observing> observerList;
-	private List<Subject> subjectList;
 	private CursorState cursorState;
-	private boolean hasGameInfoChanged;
-	private boolean hasUnitInfoChanged;
 	private boolean isFullScreen;
 	private String pathToBlueprint;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private JGPoint lastClickedObject;
+	private LeapGameController leapController;
 
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
-	public TDPlayerEngine(String pathToBlueprintInit) {
+
+
+	public TDPlayerEngine(String pathToBlueprintInit) throws ClassNotFoundException, IOException, ZipException {
 		// super();
 		loadCanvasSize(pathToBlueprintInit);
 		pathToBlueprint = pathToBlueprintInit;
 		initEngineComponent(xtiles * TILE_WIDTH, ytiles * TILE_HEIGHT);
 		observerList = new ArrayList<Observing>();
-		subjectList = new ArrayList<Subject>();
-		hasGameInfoChanged = true;
-		hasUnitInfoChanged = false;
 		isFullScreen = false;
 		cursorState = CursorState.None;
+		leapController = new LeapGameController();
 		lastClickedObject = new JGPoint();
 		stop();
 	}
 
-	private void loadCanvasSize(String pathToBlueprint) {
+	private void loadCanvasSize(String pathToBlueprint) throws ClassNotFoundException, IOException, ZipException {
 		DataHandler dataHandler = new DataHandler();
-		GameBlueprint blueprint = null;
-		try {
-			blueprint = dataHandler.loadBlueprint(pathToBlueprint, true);
-		} catch (ClassNotFoundException | IOException | ZipException e) {
-			e.printStackTrace();
-		}
+		GameBlueprint blueprint = dataHandler.loadBlueprint(pathToBlueprint, true);
 		CanvasSchema canvasSchema = (CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap().
 				get(GameMapSchema.MY_CANVAS_ATTRIBUTES);
 		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
@@ -163,7 +157,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 					color = JGColor.orange;
 				}
 			}
-
 		}
 
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
@@ -180,15 +173,58 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	@Override
 	public void doFrame() {
 		super.doFrame();
+		
+		if (leapController != null) {
+			leapController.doFrame();
+		}
+		
+		if (model != null) {
+			checkGameEnd();
+			checkMouse();
+			checkKeys();
+			notifyObservers();
+			updateModel();
+			moveObjects();
+			model.checkCollisions();
+		}
+	}
+
+	/*private void setAllItems(){
+		for(String s: items.keySet()){
+			setItem(LEFT_CLICK, items.getString(s));
+		}	
+	}*/
+
+	private void checkGameEnd() {
+		if (model.isGameLost()) {
+			JOptionPane.showMessageDialog(null, "Game lost. :(");
+			stop();
+		}
+
+		if (model.isGameWon()) {
+			JOptionPane.showMessageDialog(null, "Game won!");
+			stop();
+		}
+	}
+
+	private void updateModel() {
+		try {
+			model.updateGame();
+		} catch (MonsterCreationFailureException e) {
+			JOptionPane.showMessageDialog(null, "Critical Monster creation exception. See stack trace. Exiting program");
+			e.printStackTrace();
+		}
+	}
+
+	private void checkMouse() {
 		if (cursorState == CursorState.AddTower) {
 			if (getMouseButton(LEFT_CLICK)) {
-
 				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
 				removeObjects("TowerGhost", 0);
 				clearMouseButton(LEFT_CLICK);
 			}
-			else{
+			else {
 				drawTowerGhost(towerName);
 			}
 		}
@@ -196,9 +232,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			if (getMouseButton(LEFT_CLICK)) {
 				lastClickedObject.x = getMousePos().x;
 				lastClickedObject.y = getMousePos().y;
-				if(!model.getUnitInfo(lastClickedObject.x, lastClickedObject.y).isEmpty()){
-					hasUnitInfoChanged = true;
-				}
 				if(getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))){
 					try {
 						model.upgradeTower(getMouseX(), getMouseY());
@@ -213,32 +246,13 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			}
 			//setAllItems();
 		}
-
-		notifyObservers();
-
-		checkKeys();
-
 		if (getMouseButton(RIGHT_CLICK)) {
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
 		}
-		try {
-
-			model.updateGame();
-		} catch (MonsterCreationFailureException e) {
-			e.printStackTrace();
-		}
-		moveObjects();
-		model.checkCollisions();
 	}
 
-	/*private void setAllItems(){
-		for(String s: items.keySet()){
-			setItem(LEFT_CLICK, items.getString(s));
-		}	
-	}*/
-
-	private void setItem(int clickName, String itemName){
+	/*private void setItem(int clickName, String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
 				model.placeItem(itemName, getMouseX(), getMouseY());
@@ -247,8 +261,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			}
 			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
 		}
-	}
-	
+	}*/
+
 	public void setCurrentTowerType(String currentTowerName){
 		towerName = currentTowerName;
 	}
@@ -320,9 +334,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	@Override
 	public void notifyObservers() {
-		if(!hasGameInfoChanged && !hasUnitInfoChanged) return;
-		hasGameInfoChanged = false;
-		hasUnitInfoChanged = false;
 		for(Observing o: observerList){
 			o.update();
 		}
@@ -357,7 +368,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	}
 
 	public Map<String, String> getGameAttributes() {
-		hasGameInfoChanged = true;
 		Map<String, String> gameStats = new HashMap<String, String>();
 		gameStats.put("Score", "Score: " + model.getScore());
 		gameStats.put("Lives", "Lives left: " + model.getPlayerLives());
