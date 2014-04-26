@@ -225,12 +225,12 @@ public class TDObjectFactory {
     }
     
     /**
-     * Returns the attributes of a TDobject from its schema
+     * Returns the attributes of a TDobject from its schema, if schema doesn't exist, returns null
      * @param objName
      * @return unmodifiable map of attributes
      */
     public Map<String, Serializable> getTDObjectAttributes(String objName) {
-    	return Collections.unmodifiableMap(tdObjectSchemaMap.get(objName).getAttributesMap());
+    	return tdObjectSchemaMap.containsKey(objName) ? Collections.unmodifiableMap(tdObjectSchemaMap.get(objName).getAttributesMap()) : null;
     }
     
     /**
