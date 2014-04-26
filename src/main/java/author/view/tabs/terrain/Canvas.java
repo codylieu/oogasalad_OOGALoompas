@@ -34,6 +34,7 @@ public class Canvas extends JPanel {
 	public Canvas(int rows, int cols, TerrainEditorTab terrainTab){
 		numRows = rows;
 		numCols = cols;
+		initEntryAndExitDefaults();
 		myTerrainTab = terrainTab;
 		myTiles = new Tile[numRows][numCols];
 		for (int row = 0; row < numRows; row++) {
@@ -43,6 +44,13 @@ public class Canvas extends JPanel {
 		}
 		setPreferredSize(new Dimension(numCols*TILE_SIZE, numRows*TILE_SIZE)); // important for maintaining size of JPanel
 		initCanvasListeners();
+	}
+	
+	private void initEntryAndExitDefaults() {
+		entryRow = numRows/2;
+		entryCol = 0;
+		exitRow = entryRow;
+		exitCol = numCols - 1;
 	}
 
 	/**
@@ -183,8 +191,11 @@ public class Canvas extends JPanel {
 	 */
 	protected void clearTiles() {
 		for (Tile tile : getTiles()) {
+			initEntryAndExitDefaults();
 			tile.setImage(null);
 			tile.setPassIndex(TerrainEditorTab.DEFAULT_PASSABILITY_INDEX);
+			tile.setEntryStatus(false);
+			tile.setExitStatus(false);
 			tile.setBorderColor(Canvas.DEFAULT_BORDER_COLOR);
 			repaint();
 		}

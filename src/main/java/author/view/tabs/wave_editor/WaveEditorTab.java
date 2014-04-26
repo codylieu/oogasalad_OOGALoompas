@@ -1,6 +1,7 @@
 package main.java.author.view.tabs.wave_editor;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -40,10 +41,17 @@ public class WaveEditorTab extends EditorTab {
 
 	private static final String WAVE_COLUMN_STRING = "Waves";
 	private static final String WAVE_STRING = "Wave";
-
+	private static final String ZERO_STRING = "0";
+	private static final String ONE_STRING = "1";
+	private static final String ADD_WAVE_STRING = "Add Wave";
+	private static final String REMOVE_WAVE_STRING = "Remove Wave";
+	private static final String CLEAR_ALL_WAVES_STRING = "Clear All Waves";
+	private static final String ADD_ENEMY_STRING = "Add Enemy";
+	
 	private JButton addNewWaveButton;
 	private JButton removeWaveButton;
 	private JButton clearAllWavesButton;
+	private JButton addEnemyButton;
 
 	private String[] columnNames = {};
 	private String[] columnNamesAndWave;
@@ -70,7 +78,7 @@ public class WaveEditorTab extends EditorTab {
 	private void addNewEnemyColumn(String columnName) {
 		List<String> zeroesColumnList = new ArrayList<String>();
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			zeroesColumnList.add("0");
+			zeroesColumnList.add(ZERO_STRING);
 		}
 		tableModel.addColumn(columnName, zeroesColumnList.toArray());
 	}
@@ -106,6 +114,42 @@ public class WaveEditorTab extends EditorTab {
 					.getColumnIndexFromName(tableModel, columnToRemove));
 		}
 	}
+	
+	/**
+	 * @param enemyName
+	 * @return
+	 * Gets the column index of the enemy represented by the input string
+	 */
+	private int getColumnOfEnemy(String enemyName) {
+		WaveController waveController = (WaveController) myController;
+		String[] currentColumnNames = waveController.getEnemyNames();
+
+		for (int index = 0; index < currentColumnNames.length; index++) {
+			if(currentColumnNames[index].equals(enemyName)) {
+				return index + 1; // because Wave # is not included in currentColumnNames
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * @param fieldValue
+	 * Adds a new wave and populates the row based off of the input fieldValue String
+	 */
+	private void addNewWaveRow(String fieldValue){
+		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
+				.getModel();
+		int newWaveNum = tableModel.getRowCount() + 1;
+		List<String> zeroesRowList = new ArrayList<String>();
+		zeroesRowList.add(WAVE_STRING + " " + newWaveNum);
+		for (int i = 1; i < tableModel.getColumnCount(); i++) {
+			zeroesRowList.add(fieldValue);
+
+		}
+		model.addRow(zeroesRowList.toArray());
+
+		clearAllWavesButton.setEnabled(true);
+	}
 
 	@Override
 	public void saveTabData() {
@@ -128,42 +172,6 @@ public class WaveEditorTab extends EditorTab {
 	}
 
 	/**
-	 * @param enemyName
-	 * @return
-	 * Gets the column index of the enemy represented by the input string
-	 */
-	private int getColumnOfEnemy(String enemyName) {
-		WaveController waveController = (WaveController) myController;
-		String[] currentColumnNames = waveController.getEnemyNames();
-
-		for (int index = 0; index < currentColumnNames.length; index++) {
-			if(currentColumnNames[index].equals(enemyName)) {
-				return index + 1; // because Wave # is not included in currentColumnNames
-			}
-		}
-		return -1;
-	}
-	
-	/**
-	 * @param fieldValue
-	 * Adds a new wave and populates the row based off of the input fieldValue String
-	 */
-	private void addNewWaveRow(String fieldValue){
-		ColumnRemovableTableModel model = (ColumnRemovableTableModel) table
-				.getModel();
-		int newWaveNum = tableModel.getRowCount() + 1;
-		List<String> zeroesRowList = new ArrayList<String>();
-		zeroesRowList.add(WAVE_STRING + " " + newWaveNum);
-		for (int i = 1; i < tableModel.getColumnCount(); i++) {
-			zeroesRowList.add(fieldValue);
-
-		}
-		model.addRow(zeroesRowList.toArray());
-
-		clearAllWavesButton.setEnabled(true);
-	}
-
-	/**
 	 * Creates the content of the Wave Editor Tab
 	 */
 	private class WaveTabContentCreator {
@@ -181,8 +189,8 @@ public class WaveEditorTab extends EditorTab {
 
 			content.add(createTable(), BorderLayout.WEST);
 			content.add(buttonMaker.makeButtons(), BorderLayout.EAST);
-			
-			addNewWaveRow("1"); // Setting default value
+
+			addNewWaveRow(ONE_STRING); // Setting default value
 
 			return content;
 		}
@@ -259,6 +267,7 @@ public class WaveEditorTab extends EditorTab {
 				panel.add(makeAddNewWaveButton(), BorderLayout.CENTER);
 				panel.add(makeRemoveWaveButton(), BorderLayout.CENTER);
 				panel.add(makeClearAllWavesButton(), BorderLayout.CENTER);
+				panel.add(makeAddEnemyButton(), BorderLayout.CENTER);
 
 				return panel;
 
@@ -269,13 +278,13 @@ public class WaveEditorTab extends EditorTab {
 			 */
 			private JComponent makeAddNewWaveButton() {
 
-				addNewWaveButton = new JButton("Add New Wave");
+				addNewWaveButton = new JButton(ADD_WAVE_STRING);
 
 				addNewWaveButton.addActionListener(new ActionListener() {
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						addNewWaveRow("0");
+						addNewWaveRow(ZERO_STRING);
 
 					}
 				});
@@ -288,7 +297,7 @@ public class WaveEditorTab extends EditorTab {
 			 */
 			private JComponent makeRemoveWaveButton() {
 
-				removeWaveButton = new JButton("Remove Wave");
+				removeWaveButton = new JButton(REMOVE_WAVE_STRING);
 
 				removeWaveButton.addActionListener(new ActionListener() {
 
@@ -309,7 +318,7 @@ public class WaveEditorTab extends EditorTab {
 			 */
 			private JComponent makeClearAllWavesButton() {
 
-				clearAllWavesButton = new JButton("Clear All Waves");
+				clearAllWavesButton = new JButton(CLEAR_ALL_WAVES_STRING);
 
 				clearAllWavesButton.addActionListener(new ActionListener() {
 
@@ -330,6 +339,27 @@ public class WaveEditorTab extends EditorTab {
 
 				return clearAllWavesButton;
 			}
+			
+			/**
+			 * @return
+			 * Changes tab to the Enemy Tab so the user can add new enemy information
+			 */
+			private Component makeAddEnemyButton() {
+				addEnemyButton = new JButton(ADD_ENEMY_STRING);
+
+				addEnemyButton.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						WaveController controller = (WaveController) myController;
+						controller.shiftToEnemyTab();
+					}
+
+				});
+
+				return addEnemyButton;
+			}
+			
 		}
 
 	}
