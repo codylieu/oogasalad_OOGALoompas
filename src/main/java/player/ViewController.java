@@ -61,6 +61,7 @@ import main.java.reflection.MethodAction;
 @SuppressWarnings("serial")
 public class ViewController implements Serializable {
 
+	public static final String SET_CURRENT_TOWER_TYPE_METHID_NAME = "setCurrentTowerType";
 	public static final String LOAD_BLUEPRINT_FILE_METHOD_NAME = "loadBlueprintFile";
 	public static final int WELCOME_LABEL_FONT = 32;
 	public static final String SANS_SERIF_FONT = "SansSerif";
@@ -350,7 +351,7 @@ public class ViewController implements Serializable {
 		JButton soundButton = new JButton(myLanguageResources.getString(SOUND_ONOFF_TEXT));
 		soundButton.addActionListener(new MethodAction (this, TOGGLE_SOUND_METHOD_NAME));
 
-		towerChooser = new ObjectChooser(engine.getPossibleTowers(), engine);
+		towerChooser = new ObjectChooser(engine.getPossibleTowers(), engine, SET_CURRENT_TOWER_TYPE_METHID_NAME);
 		//towerChooser.register((Observing) engine);
 		// should leave as observing engine? or pass into contstructor?
 		//powerUpChooser = new ObjectChooser(engine.getPossibleItems());
