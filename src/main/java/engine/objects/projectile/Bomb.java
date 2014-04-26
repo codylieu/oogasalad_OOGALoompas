@@ -4,6 +4,10 @@ import main.java.engine.objects.monster.Monster;
 import jgame.JGObject;
 
 
+/**
+ * A bomb projectile is one that explodes into a shower of shrapnel upon contact
+ *
+ */
 public class Bomb extends DamageProjectile {
 
     public static final double[] BOMB_SPRAY_X = { 0.0, 0.0, -4.0, 4.0, 2.0, -2.0, 2.0, -2.0};

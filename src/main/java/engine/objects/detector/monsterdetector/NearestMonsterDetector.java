@@ -19,10 +19,10 @@ import main.java.engine.objects.monster.Monster;
 public class NearestMonsterDetector extends TDDetector{
 
 	@Override
-	public List<Object> findTarget(double x, double y, 
+	public List<Point2D> findTarget(double x, double y, 
 			double range, EnvironmentKnowledge environmentKnowledge) {
 		double minDistance = Double.MAX_VALUE;
-		List<Object> closestMonster = new ArrayList<Object>();
+		List<Point2D> closestMonster = new ArrayList<Point2D>();
 		Point2D towerCoordinate = new Point2D.Double(x, y);
 
 		for (Monster m : environmentKnowledge.getAllMonsters()) {

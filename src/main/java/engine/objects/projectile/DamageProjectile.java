@@ -5,6 +5,11 @@ import main.java.engine.objects.monster.Monster;
 import jgame.JGObject;
 
 
+/**
+ * A normal projectile that deals damage upon contact. 
+ * Disappears after one time of contact.  
+ *
+ */
 public class DamageProjectile extends TDObject {
     public static final int TOWER_PROJECTILE_CID = 10;
     public static final double DEFAULT_SPEED = 20;

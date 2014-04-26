@@ -6,6 +6,10 @@ import main.java.engine.objects.projectile.DamageProjectile;
 import jgame.platform.JGEngine;
 
 
+/**
+ * A class that handles all the collisions in the game. 
+ *
+ */
 public class CollisionManager {
 
     private JGEngine myEngine;

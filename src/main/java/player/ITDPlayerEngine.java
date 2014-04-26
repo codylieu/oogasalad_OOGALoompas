@@ -29,12 +29,10 @@ public interface ITDPlayerEngine {
 
 		public CursorState getCursorState();
 		
-		public String getCurrentDescription();
+		public List<String> getCurrentDescription();
 
 		public void doFrame();
-		
-		public void update();
-
+		public void setCurrentTowerType(String currentTowerName);
 		/**
 		 * Toggle the cursor status from AddTower to None 
 		 * or vice-versa
@@ -64,9 +62,9 @@ public interface ITDPlayerEngine {
 
 		public Map<String, String> getGameAttributes();
 
-		public void setSubject(List<Subject> s);
+		public void initModel();
 
-		public void setSubject(Subject s);
+		public void stop();
 
 	
 

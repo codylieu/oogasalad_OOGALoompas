@@ -13,12 +13,19 @@ import java.util.List;
 
 public class Canvas extends JPanel {
 
-	private static final int TILE_SIZE = 25; // in pixels
+	public static final int TILE_SIZE = 25; // in pixels
 	public static final Color DEFAULT_TILE_COLOR = Color.LIGHT_GRAY;
 	public static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
+	public static final String ENTRY_SPECIFIED = "Entry Already Specified.";
+	public static final String EXIT_SPECIFIED = "Exit Already Specified.";
 
 	private int numRows;
 	private int numCols;
+
+	private int entryRow;
+	private int entryCol;
+	private int exitRow;
+	private int exitCol;
 
 	private Tile[][] myTiles;
 	private TileObject selectedTileObj;
@@ -27,6 +34,7 @@ public class Canvas extends JPanel {
 	public Canvas(int rows, int cols, TerrainEditorTab terrainTab){
 		numRows = rows;
 		numCols = cols;
+		initEntryAndExitDefaults();
 		myTerrainTab = terrainTab;
 		myTiles = new Tile[numRows][numCols];
 		for (int row = 0; row < numRows; row++) {
@@ -36,6 +44,13 @@ public class Canvas extends JPanel {
 		}
 		setPreferredSize(new Dimension(numCols*TILE_SIZE, numRows*TILE_SIZE)); // important for maintaining size of JPanel
 		initCanvasListeners();
+	}
+	
+	private void initEntryAndExitDefaults() {
+		entryRow = numRows/2;
+		entryCol = 0;
+		exitRow = entryRow;
+		exitCol = numCols - 1;
 	}
 
 	/**
@@ -133,11 +148,37 @@ public class Canvas extends JPanel {
 		if (tile == null || selectedTileObj == null) {
 			return;
 		}
-		tile.setImage(selectedTileObj.getImage());
-		
+
 		int passIndex = myTerrainTab.getPassabilityIndex();
+		boolean isEntrySelected = TerrainAttribute.getAttribute(passIndex) == TerrainAttribute.Entry;
+		boolean isExitSelected  = TerrainAttribute.getAttribute(passIndex) == TerrainAttribute.Exit;
+
+		// TODO: Refactor w/ Entry & Exit classes
+		if (isEntrySelected) {
+			if (isEntrySpecified()) {
+				JOptionPane.showMessageDialog(this, ENTRY_SPECIFIED);
+				return;
+			}
+			entryRow = tile.getRow();
+			entryCol = tile.getCol();
+		}
 		
+		if (isExitSelected) {
+			if (isExitSpecified()) {
+				JOptionPane.showMessageDialog(this, EXIT_SPECIFIED);
+				return;
+			}
+			exitRow = tile.getRow();
+			exitCol = tile.getCol();
+		}
+
+		tile.setImage(selectedTileObj.getImage());
+
+
 		tile.setPassIndex(passIndex);
+		tile.setEntryStatus(isEntrySelected);
+		tile.setExitStatus(isExitSelected);
+
 		tile.setBorderColor(TerrainAttribute.getAttribute(passIndex).getColor());
 		tile.setMyMapXIndex(selectedTileObj.getMyXIndex()); // TODO: change?
 		tile.setMyMapYIndex(selectedTileObj.getMyYIndex());
@@ -150,8 +191,11 @@ public class Canvas extends JPanel {
 	 */
 	protected void clearTiles() {
 		for (Tile tile : getTiles()) {
+			initEntryAndExitDefaults();
 			tile.setImage(null);
-			tile.setPassIndex(0);
+			tile.setPassIndex(TerrainEditorTab.DEFAULT_PASSABILITY_INDEX);
+			tile.setEntryStatus(false);
+			tile.setExitStatus(false);
 			tile.setBorderColor(Canvas.DEFAULT_BORDER_COLOR);
 			repaint();
 		}
@@ -164,6 +208,42 @@ public class Canvas extends JPanel {
 	protected int getCols() {
 		return numCols;
 	}
+
+	protected boolean isEntrySpecified() {
+		boolean isEntrySpecified = false;
+		for (Tile t : getTiles()) {
+			if (t.isEntry()) {
+				isEntrySpecified = true;
+			}
+		}
+		return isEntrySpecified;
+	}
+
+	protected boolean isExitSpecified() {
+		boolean isExitSpecified = false;
+		for (Tile t : getTiles()) {
+			if (t.isExit()) {
+				isExitSpecified = true;
+			}
+		}
+		return isExitSpecified;
+	}
+
+	protected int getEntryRow() {
+		return entryRow;
+	}
+
+	protected int getEntryCol() {
+		return entryCol;
+	}	
+
+	protected int getExitRow() {
+		return exitRow;
+	}
+
+	protected int getExitCol() {
+		return exitCol;
+	}	
 
 	/**
 	 * Updates the 'selected' TileObject so that on a mouse press,

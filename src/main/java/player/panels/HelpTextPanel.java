@@ -12,13 +12,13 @@ import javax.swing.JTextArea;
  */
 @SuppressWarnings("serial")
 public class HelpTextPanel extends JPanel {
-	public static final String HELP = "random help instructions";
+	private String HELP;
 	private JTextArea helpText;
 	
-	public HelpTextPanel(){
+	public HelpTextPanel(String help){
 		helpText = new JTextArea(10,40);
+		HELP = help;
 		initHelpInfoPanel();
-		
 	}
 	
 	private void initHelpInfoPanel(){

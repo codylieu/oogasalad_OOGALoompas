@@ -9,9 +9,11 @@ public class Tile implements Serializable {
 	private int myColumn;       // 0 - NUM_COLS
 	private int myMapXIndex;    // image x (column) index in tilemap
 	private int myMapYIndex;    // image y (row) index in tilemap
-	private String myTileMapFileName; // tilemap name
 	private int myPassIndex; // passability index to specify what can traverse the Tile
+	private String myTileMapFileName; // tilemap name
 	private Color myBorderColor;
+	private boolean isEntry;
+	private boolean isExit;
 
 	public static final String DEFAULT_IMAGE_PACKAGE = "src/main/resources/author/images/";
 
@@ -21,6 +23,7 @@ public class Tile implements Serializable {
 		myRow = row;
 		myColumn = column;
 		myBorderColor = Canvas.DEFAULT_BORDER_COLOR;
+		myPassIndex = TerrainEditorTab.DEFAULT_PASSABILITY_INDEX;
 	}
 
 	/**
@@ -68,7 +71,7 @@ public class Tile implements Serializable {
 	 * Sets the passability index of the tile, different options are
 	 * specified in TerrainAttribute.java
 	 */
-	protected  void setPassIndex(int index) {
+	protected void setPassIndex(int index) {
 		myPassIndex = index;
 	}
 	
@@ -126,5 +129,21 @@ public class Tile implements Serializable {
 	 */
 	public void setMyTileMapFileName(String myTileMapFileName) {
 		this.myTileMapFileName = myTileMapFileName;
+	}
+	
+	protected void setEntryStatus(boolean isEntry) {
+		this.isEntry = isEntry;
+	}
+	
+	protected void setExitStatus(boolean isExit) {
+		this.isExit = isExit;
+	}
+	
+	protected boolean isEntry() {
+		return isEntry;
+	}
+	
+	protected boolean isExit() {
+		return isExit;
 	}
 }

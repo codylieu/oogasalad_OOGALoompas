@@ -5,6 +5,15 @@ import java.util.Map;
 
 import jgame.JGObject;
 
+/**
+ * Represents a player in the game. 
+ * Keeps track of the player's stats. 
+ *
+ */
+/**
+ * @author aohuilin
+ *
+ */
 public class Player {
 	private static final int DEFAULT_INITIAL_LIVES_NUM = 3;
 	private int money;
@@ -31,23 +40,27 @@ public class Player {
 		this.skills = new HashMap<String, Integer>();
 	}
 	
-	public void updateMoney(double money) {
-		this.money += money;
-	}
-	
-	public void lostLife() {
-		this.lives -= 1;
-	}
-	
+	/**
+	 * Add score to the player
+	 * @param score
+	 */
 	public void addScore(double score) {
 		this.score += score;
 	}
 	
+	/**
+	 * Update the skills and associated level of the player. 
+	 * @param skill
+	 */
 	public void updateSkills(String skill) {
 		if (this.skills.containsKey(skill)) this.skills.put(skill, this.skills.get(skill)+1);
 		else this.skills.put(skill, 1);
 	}
 	
+	/**
+	 * Get the amount of money left. 
+	 * @return
+	 */
 	public int getMoney() {
 		return this.money;
 	}
@@ -61,19 +74,33 @@ public class Player {
 		this.money+=value;
 	}
 	
+	/**
+	 * Get the number of remaining lives of the player.
+	 * @return
+	 */
 	public int getLivesRemaining() {
 		return this.lives;
 	}
 	
 	
+	/**
+	 * Decrease the player's lives by 1.
+	 */
 	public void decrementLives(){
 	    lives--;
 	}
 	
+	/**
+	 * Increase the player's lives by 1.
+	 */
 	public void incrementLives() {
 		lives++;
 	}
 
+	/**
+	 * Get the score of the player.
+	 * @return
+	 */
 	public double getScore() {
 		return this.score;
 	}

@@ -8,6 +8,10 @@ import main.java.engine.objects.monster.Monster;
 import jgame.JGObject;
 
 
+/**
+ * Exit object designated as the destination of monsters.
+ *
+ */
 public class Exit extends JGObject implements Serializable {
 
     public static final String IMAGE_NAME = "exit.png";
