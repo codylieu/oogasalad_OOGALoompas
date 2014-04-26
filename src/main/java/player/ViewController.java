@@ -353,11 +353,9 @@ public class ViewController implements Serializable {
 		towerChooser = new ObjectChooser(engine.getPossibleTowers());
 		towerChooser.register((Observing) engine);
 		//powerUpChooser = new ObjectChooser(engine.getPossibleItems());
-
-		List<Subject> engineSubjectList = new ArrayList<Subject>();
-		engineSubjectList.add(towerChooser);
-		//engineSubjectList.add(powerUpChooser);
-		engine.setSubject(engineSubjectList);//This probably does not belong here
+	
+		engine.addSubject(towerChooser);//This probably does not belong here
+		//engine.addSubject(powerUpChooser);
 
 
 		gameButtonPanel.add(mainMenuButton);
@@ -370,7 +368,7 @@ public class ViewController implements Serializable {
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
-		//gameButtonPanel.add(itemChooser);
+		//gameButtonPanel.add(powerUpChooser);
 		return gameButtonPanel;
 	}
 
@@ -386,28 +384,22 @@ public class ViewController implements Serializable {
 
 	private JPanel makeGameInfoPanel() {
 		ObservingPanel gameInfoPanel = new GameInfoPanel();
-		gameInfoPanel.setSubject((Subject) engine);
+		gameInfoPanel.addSubject((Subject) engine);
 		engine.register(gameInfoPanel);
 		return gameInfoPanel;
 	}
 
 	private JPanel makeUnitInfoPanel() {
 		ObservingPanel unitInfoPanel = new UnitInfoPanel();
-		unitInfoPanel.setSubject((Subject) engine);
+		unitInfoPanel.addSubject((Subject) engine);
 		engine.register(unitInfoPanel);
 		return unitInfoPanel;
 	}
 
-	/*	private JPanel makeInfoPanel(String className){
-		Object infoPanel = Class.forName(className).newInstance();
-
-		//return infoPanel;
-	}
-	 */
 	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
 		HighScoreCard highScoreCard = new HighScoreCard();
-		highScoreCard.setSubject((Subject) engine);
+		highScoreCard.addSubject((Subject) engine);
 		engine.register(highScoreCard);
 		cards.add(highScoreCard, HIGH_SCORE_CARD);
 	}

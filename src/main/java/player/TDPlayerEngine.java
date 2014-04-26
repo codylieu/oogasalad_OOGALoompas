@@ -49,9 +49,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 
 	private int xtiles, ytiles;
 	private ObjectChooser towerChooser;
-	private ObjectChooser itemChooser;
+	private ObjectChooser powerUpChooser;
 	private IModel model;
-	private List<Observing> observers;
+	private List<Observing> observerList;
+	private List<Subject> subjectList;
 	private CursorState cursorState;
 	private boolean hasGameInfoChanged;
 	private boolean hasUnitInfoChanged;
@@ -60,13 +61,15 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private JGPoint lastClickedObject;
+
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 	public TDPlayerEngine(String pathToBlueprintInit) {
 		//		super();
 		loadCanvasSize(pathToBlueprintInit);
 		pathToBlueprint = pathToBlueprintInit;
 		initEngineComponent(xtiles * TILE_WIDTH, ytiles * TILE_HEIGHT);
-		observers = new ArrayList<Observing>();
+		observerList = new ArrayList<Observing>();
+		subjectList = new ArrayList<Subject>();
 		hasGameInfoChanged = true;
 		hasUnitInfoChanged = false;
 		isFullScreen = false;
@@ -92,7 +95,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 
 	@Override
 	public void initCanvas() {
-
 		setCanvasSettings(xtiles, ytiles, TILE_WIDTH, TILE_HEIGHT, null, JGColor.black, null);
 	}
 
@@ -334,19 +336,19 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 
 	@Override
 	public void register(Observing o) {
-		if(!observers.contains(o)) observers.add(o);
+		if(!observerList.contains(o)) observerList.add(o);
 	}
 
 	@Override
 	public void unregister(Observing o) {
-		if(observers.contains(o)) observers.remove(o);
+		if(observerList.contains(o)) observerList.remove(o);
 	}
 
 	@Override
 	public void notifyObservers() {
 		List<Observing> localObservers = null;
 		if(!hasGameInfoChanged && !hasUnitInfoChanged) return;
-		localObservers = new ArrayList<Observing>(observers);
+		localObservers = new ArrayList<Observing>(observerList);
 		hasGameInfoChanged = false;
 		hasUnitInfoChanged = false;
 		for(Observing o: localObservers){
@@ -394,15 +396,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, Observing, ITDP
 	}
 
 	@Override
-	public void setSubject(List<Subject> s) {
-		towerChooser = (ObjectChooser) s.get(0);
-		//itemChooser = (ObjectChooser) s.get(1);
+	public void addSubject(Subject s) {
+		subjectList.add(s);
 	}
 
-	@Override
-	public void setSubject(Subject s) {
-		// TODO Auto-generated method stub
 
-	}
-
+	
 }

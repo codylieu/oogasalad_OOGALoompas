@@ -16,14 +16,8 @@ public abstract class ObservingPanel extends JPanel implements Observing{
 	public abstract void update();
 	
 	@Override
-	public void setSubject(Subject s) {
+	public void addSubject(Subject s) {
 		engine = (TDPlayerEngine) s;
-	}
-	
-	@Override
-	public void setSubject(List<Subject> s) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 }

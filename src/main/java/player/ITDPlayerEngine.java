@@ -64,9 +64,7 @@ public interface ITDPlayerEngine {
 
 		public Map<String, String> getGameAttributes();
 
-		public void setSubject(List<Subject> s);
-
-		public void setSubject(Subject s);
+		public void addSubject(Subject s);
 
 		public void initModel();
 
