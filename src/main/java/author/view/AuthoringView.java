@@ -50,15 +50,14 @@ public class AuthoringView extends JFrame {
 	private static final String ITEM_EDITOR_STRING = "Item Editor";
 	private static final String TERRAIN_EDITOR_STRING = "Terrain Editor";
 	private static final String WAVE_EDITOR_STRING = "Wave Editor";
+	private static final String TITLE_STRING = "OOGASalad Authoring Environment";
 	public static final String DEFAULT_RESOURCES_DIR = "src/main/resources";
 
 	public AuthoringView(MainController mainController) {
-
-		super("OOGASalad Authoring Environment");
+		super(TITLE_STRING);
 
 		myController = mainController;
 		myController.setView(this);
-
 	}
 
 	/**

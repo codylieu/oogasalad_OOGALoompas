@@ -56,7 +56,6 @@ public class ItemEditorTab extends EditorTab {
 		
 		add(tabbedPane, BorderLayout.CENTER);
 		setVisible(true);
-		
 	}
 
 	@Override
