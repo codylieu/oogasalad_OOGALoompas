@@ -20,7 +20,6 @@ import main.java.engine.util.leapmotion.gamecontroller.LeapGameController;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.player.panels.ObjectChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
@@ -238,7 +237,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 					} catch (TowerCreationFailureException e) {
 						e.printStackTrace();
 					}
-
 
 					clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 				}

@@ -7,7 +7,6 @@ import java.util.zip.ZipException;
 
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
-import main.java.player.util.Subject;
 
 public interface ITDPlayerEngine {
 	
@@ -65,7 +64,4 @@ public interface ITDPlayerEngine {
 		public void initModel();
 
 		public void stop();
-
-	
-
 }
