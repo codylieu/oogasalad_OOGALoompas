@@ -45,8 +45,7 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 	}
 
 	@Override
-	public void saveTabData() {
-	}
+	public void saveTabData() {}
 
 	public List<ItemSchema> getItemSchemas() {
 		itemSchemas = new ArrayList<ItemSchema>();

@@ -39,21 +39,25 @@ import main.java.schema.tdobjects.ItemSchema;
 
 public class ItemEditorTab extends EditorTab {
 	private JTabbedPane tabbedPane = new JTabbedPane();
-
+	private AbstractItemEditorSubTab annihilatorTab, areabombTab, instantTab, lifesaverTab, rowbombTab;
+	
 	public ItemEditorTab(TabController tabController) {
 		super(tabController);
 		
-		tabbedPane.addTab(ItemViewConstants.ANNIHILATOR,
-				new AnnihilatorItemEditorTab(tabController, ItemViewConstants.ANNIHILATOR));
-		tabbedPane.addTab(ItemViewConstants.AREA_BOMB,
-				new AreaBombItemEditorTab(tabController, ItemViewConstants.AREA_BOMB));
-		tabbedPane.addTab(ItemViewConstants.INSTANT_FREEZE,
-				new InstantFreezeItemEditorTab(tabController, ItemViewConstants.INSTANT_FREEZE));
-		tabbedPane.addTab(ItemViewConstants.LIFE_SAVER,
-				new LifeSaverItemEditorTab(tabController, ItemViewConstants.LIFE_SAVER));
-		tabbedPane.addTab(ItemViewConstants.ROW_BOMB,
-				new RowBombItemEditorTab(tabController, ItemViewConstants.ROW_BOMB));
+		annihilatorTab	= new AnnihilatorItemEditorTab(tabController, ItemViewConstants.ANNIHILATOR);
+		areabombTab		= new AreaBombItemEditorTab(tabController, ItemViewConstants.AREA_BOMB);
+		instantTab		= new InstantFreezeItemEditorTab(tabController, ItemViewConstants.INSTANT_FREEZE);
+		lifesaverTab	= new LifeSaverItemEditorTab(tabController, ItemViewConstants.LIFE_SAVER);
+		rowbombTab		= new RowBombItemEditorTab(tabController, ItemViewConstants.ROW_BOMB);
 		
+		tabbedPane.addTab(ItemViewConstants.ANNIHILATOR, annihilatorTab);
+		tabbedPane.addTab(ItemViewConstants.AREA_BOMB, areabombTab);
+		tabbedPane.addTab(ItemViewConstants.INSTANT_FREEZE, instantTab);
+		tabbedPane.addTab(ItemViewConstants.LIFE_SAVER, lifesaverTab);
+		tabbedPane.addTab(ItemViewConstants.ROW_BOMB, rowbombTab);
+		
+		annihilatorTab.setPreferredSize(new Dimension(1000,500));
+		System.out.println(this.getSize() + "\t" + super.getSize());
 		add(tabbedPane, BorderLayout.CENTER);
 		setVisible(true);
 	}
