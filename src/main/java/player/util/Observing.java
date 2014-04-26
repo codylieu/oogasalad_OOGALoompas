@@ -14,13 +14,9 @@ public interface Observing {
 	public void update();
 	
 	/**
-	 * Sets the subject that the class implementing Observing will be observing
+	 * Adds a subject that the class implementing Observing will be observing
 	 * @param s
 	 */
-	public void setSubject(Subject s);
-	/**
-	 * Allows for one Observing to observe multiple subjects
-	 * @param s
-	 */
-	public void setSubject(List<Subject> s);
+	public void addSubject(Subject s);
+	
 }

@@ -23,10 +23,10 @@ import com.leapmotion.leap.Gesture.Type;
  */
 public class LeapGameController implements ILeapController {
 
-    public static final String DEFAULT_ACTIONMAP_PACKAGE = "leapMotion.resources.";
+    public static final String DEFAULT_ACTIONMAP_PACKAGE = "main.java.engine.util.leapmotion.";
     public static final String DEFAULT_ACTIONMAP_FILENAME = "LeapActionMap";
     public static final String DEFAULT_ACTIONMAP_FILETYPE = ".properties";
-    public static final String DEFAULT_ACTIONMAP_FILEPATH = "src/leapMotion/resources/";
+    public static final String DEFAULT_ACTIONMAP_FILEPATH = "src/main/java/engine/util/leapmotion/";
 
     /**
      * Text for gestures tab.

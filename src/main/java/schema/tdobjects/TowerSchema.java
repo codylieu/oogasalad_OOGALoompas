@@ -30,7 +30,11 @@ public class TowerSchema extends TDObjectSchema {
      */
     public static final String FREEZE_SLOWDOWN_PROPORTION = "Freeze Slowdown (%)";
     public static final String TILE_SIZE = "Size";
-    public static final String BUILDUP = "Build Up Time (sec)";
+    
+    /**
+     * BUILDUP is time in frames. 
+     */
+    public static final String BUILDUP = "Build Up Time";
     public static final String BULLET_IMAGE_NAME = "Bullet Image Name";
     public static final String SHRAPNEL_IMAGE_NAME = "Bomb's Shrapnel Image Name";
 

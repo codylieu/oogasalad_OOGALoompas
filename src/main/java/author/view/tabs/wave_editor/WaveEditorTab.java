@@ -26,8 +26,6 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import org.aspectj.weaver.tools.cache.AsynchronousFileCacheBacking.ClearCommand;
-
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.EnemyController;
 import main.java.author.controller.tabbed_controllers.WaveController;
