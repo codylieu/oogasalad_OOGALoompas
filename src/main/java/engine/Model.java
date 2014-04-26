@@ -24,6 +24,7 @@ import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.powerup.IPowerup;
+import main.java.engine.objects.powerup.PowerupBehaviors;
 import main.java.engine.objects.powerup.RowBomb;
 import main.java.engine.objects.powerup.TDItem;
 import main.java.engine.objects.tower.ITower;
@@ -77,7 +78,7 @@ public class Model {
 	public Model() {
 		try {
 			loadGameBlueprint(null);// TODO: REPLACE
-			loadCanvasSchema();
+//			loadCanvasSchema();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -114,6 +115,7 @@ public class Model {
 		// TODO: remove this method, make exit a part of wavespawnschemas
 		//and define its image dynamically
 		engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
+//		engine.defineImage("fire", "-", 1, RESOURCE_PATH + "fire.png", "-");
 	}
 
 	/**
@@ -617,6 +619,7 @@ public class Model {
         List<ItemSchema> testItemSchema = new ArrayList<>();
 
         // Create test items
+        /*
         AnnihilatorPowerupSchema testAnnihilatorItem = new AnnihilatorPowerupSchema();
         testAnnihilatorItem.addAttribute(ItemSchema.NAME, "Annihilator");
         testAnnihilatorItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
@@ -646,6 +649,15 @@ public class Model {
         testLifeSaverItem.addAttribute(ItemSchema.NAME, "LifeSaver");
         testLifeSaverItem.addAttribute(ItemSchema.IMAGE_NAME, "fire.png");
         testItemSchema.add(testLifeSaverItem);
+        */
+        ItemSchema testAreaBomb = new ItemSchema();
+        testAreaBomb.addAttribute(ItemSchema.NAME, "AreaBomb");
+        testAreaBomb.addAttribute(ItemSchema.IMAGE_NAME, "tower.gif");
+        Collection<PowerupBehaviors> powerupBehaviors = new ArrayList<PowerupBehaviors>();
+        powerupBehaviors.add(PowerupBehaviors.AREA_BOMBING);
+        testAreaBomb.addAttribute(ItemSchema.ITEM_BEHAVIORS, (Serializable) powerupBehaviors);
+        testAreaBomb.addAttribute(ItemSchema.COST, (double) 100);
+        testItemSchema.add(testAreaBomb);
 
         // Create test towers
         TowerSchema testTowerOne = new TowerSchema();

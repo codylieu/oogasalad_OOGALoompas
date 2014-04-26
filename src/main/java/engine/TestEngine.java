@@ -21,6 +21,7 @@ public class TestEngine extends JGEngine {
 	private CursorState cursorState;
 	private Model model;
 	private List<String> towers;
+	private List<String> items;
 	private int currTower = 0;
 
 	public TestEngine() {
@@ -41,8 +42,8 @@ public class TestEngine extends JGEngine {
 
 	@Override
 	public void initCanvas() {
-//		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
-		setCanvasSettings(model.getCanvasSize()[0], model.getCanvasSize()[1], 32, 32, null, JGColor.black, null);
+		setCanvasSettings(25, 20, 32, 32, null, JGColor.black, null);
+//		setCanvasSettings(model.getCanvasSize()[0], model.getCanvasSize()[1], 32, 32, null, JGColor.black, null);
 	}
 
 	@Override
@@ -50,6 +51,7 @@ public class TestEngine extends JGEngine {
 		setFrameRate(45, 1);
 		model.initializeModel(this);
 		towers = model.getPossibleTowers();
+		items = model.getPossibleItems();
 	}
 
 	@Override
@@ -90,6 +92,7 @@ public class TestEngine extends JGEngine {
 		}
 		if (getKey(KeyEvent.VK_B)) {
 			try {
+				System.out.println("Bomb");
 				model.placeItem("AreaBomb", getMouseX(), getMouseY());
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -29,12 +29,11 @@ public class SimplePowerup extends TDObject implements IPowerup{
 	
 	
 	public SimplePowerup(Point2D location, double cost, 
-			double buildupTime, int flash_interval, String gfxname) {
+			double buildupTime, String gfxname) {
 		super("item", location.getX(), location.getY(), POWERUP_CID, gfxname);
 		myLocation = location;
 		myBuildUpTime = buildupTime;
 		myCost = cost;
-		myFlashInterval = flash_interval;
 		myImage = gfxname;
 	}	
 	public SimplePowerup(Map<String, Serializable> attributes) {
@@ -42,7 +41,6 @@ public class SimplePowerup extends TDObject implements IPowerup{
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(double) getValueOrDefault(attributes, ItemSchema.COST, COST_DEFAULT),
 				(double) getValueOrDefault(attributes, ItemSchema.BUILDUP_TIME, BUILDUP_DEFAULT),
-				(int) getValueOrDefault(attributes, ItemSchema.FLASH_INTERVAL, FLASH_INTERVAL_DEFAULT),
 				(String) attributes.get(ItemSchema.NAME)
 				);
 	}
@@ -52,7 +50,7 @@ public class SimplePowerup extends TDObject implements IPowerup{
 		myTimingCounter++;
 
 		if (myTimingCounter <= myBuildUpTime) {
-			flash(myTimingCounter, myFlashInterval, myImage);
+			flash(myTimingCounter, FLASH_INTERVAL_DEFAULT, myImage);
 			return false;   
 			// do no further behavior if still building up
 		}
