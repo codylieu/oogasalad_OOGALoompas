@@ -32,6 +32,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -91,7 +92,7 @@ public class ViewController implements Serializable {
 	public static final String LANGUAGES_LIST = "LanguageList";
 	public static final String DEFAULT_RESOURCE_PACKAGE = "main.resources.";
 	public static final String ENGLISH = "English";
-	public static final String LANGUAGES = "Languages";
+	public static final String LANGUAGES = "LANGUAGES";
 	public static final int BUTTON_PADDING = 10;
 	public static final String USER_DIR = "user.dir";
 	public static final String DEFAULT_MUSIC_PATH = "src/main/resources/backgroundmusic.wav";
@@ -114,6 +115,7 @@ public class ViewController implements Serializable {
 	private boolean soundOn;
 	private ObjectChooser towerChooser;
 	private JFrame languageFrame;
+	private String chosenLanguage;
 	//private ObjectChooser powerUpChooser;
 
 	/**
@@ -122,9 +124,10 @@ public class ViewController implements Serializable {
 	 */
 	public ViewController(){
 		initializeEngine(showBlueprintPrompt());
-		showLanguagePrompt();
+		initLanguage();
+		//showLanguagePrompt();
 		initSong();
-		/*makeFrame();
+		makeFrame();
 		makeCards();
 		addWelcomeCard();
 		addGameCard();
@@ -132,7 +135,7 @@ public class ViewController implements Serializable {
 		addOptionsCard();
 		addCreditsCard();
 		addHighScoreCard();
-		show();*/
+		show();
 	}
 
 	private void makeAndAddCards(){
@@ -143,6 +146,11 @@ public class ViewController implements Serializable {
 		addOptionsCard();
 		addCreditsCard();
 		addHighScoreCard();
+	}
+	
+	private void initLanguage(){
+		chosenLanguage = ENGLISH;
+		myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + chosenLanguage);
 	}
 
 	private String showBlueprintPrompt() {
@@ -210,11 +218,32 @@ public class ViewController implements Serializable {
 		files.add(new RepositoryViewer(myLanguageResources.getString("LOAD_LIBRARY_TEXT"), engine));
 		return files;
 	}
-
+	
+	private JMenu makeLanguagesMenu(){
+		JMenu languagesMenu = new JMenu(myLanguageResources.getString(LANGUAGES));
+		for(String s: myLanguagesList.keySet()){
+			JMenuItem temp = new JMenuItem(s);
+			temp.addActionListener(new ActionListener(){
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					chosenLanguage = e.getActionCommand();
+					myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + chosenLanguage);
+					frame.dispose();
+					makeFrame();
+					makeAndAddCards();
+					show();			
+				}
+				
+			});
+			languagesMenu.add(temp);
+		}
+		return languagesMenu;
+	}
+	
 	private JMenuBar makeMenuBar(){
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(makeFileMenu());
-		//menuBar.add(makeLanguagesMenu());
+		menuBar.add(makeLanguagesMenu());
 		return menuBar;
 	}
 
