@@ -99,7 +99,7 @@ public class DataHandler {
 
 		if (tempDirCreated){
 			//Set up container zip file
-			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
+//			String zipAuthoringLocation = filePath;// + "ZippedAuthoringEnvironment.zip"; // take out added string after testing
 
 			// Zip resources
 			String zipResourcesLocation = tempDirLocation + "ZippedResources.zip";
@@ -115,7 +115,7 @@ public class DataHandler {
 			myFilesToZip.add(new File(tempDirLocation + "MyBlueprint.ser"));
 
 			// Compress container file
-			if (compressAuthoringEnvironment(myFilesToZip,zipAuthoringLocation)){
+			if (compressAuthoringEnvironment(myFilesToZip,filePath)){
 				deleteDirectory(new File(tempDirLocation)); 
 			}
 		} else {
@@ -221,10 +221,10 @@ public class DataHandler {
 		GameBlueprint toReturn = ((GameBlueprint) loadObjectFromFile(TEMP_FOLDER_PATH + "MyBlueprint.ser"));
 
 		// Delete resources and reload from container file
-		/*File myDir = new File(FILE_PATH);
+		
+		File myDir = new File(FILE_PATH);
 		deleteDirectory(myDir);
-		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);*/
-
+		decompress(TEMP_FOLDER_PATH + "ZippedResources.zip", FILE_PATH);
 		// Delete temp folder
 		deleteDirectory(new File(TEMP_FOLDER_PATH));
 
@@ -472,14 +472,5 @@ public class DataHandler {
 			}
 		}
 		return count == obj.getClass().getDeclaredFields().length;
-	}
-
-	public static void main(String[] args) throws IllegalArgumentException, IllegalAccessException, InvalidDataException, InvalidGameBlueprintException	{
-		DataHandler d = new DataHandler();
-		TestObject t2 = new TestObject();
-		t2.populateDefaultAttributes("testTestObject");
-		System.out.println(d.checkPublicData(t2));
-		GameBlueprint b = new GameBlueprint();
-		System.out.println(d.checkGameBlueprint(b));
 	}
 }
