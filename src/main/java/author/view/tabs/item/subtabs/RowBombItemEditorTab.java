@@ -1,4 +1,4 @@
-package main.java.author.view.tabs.item;
+package main.java.author.view.tabs.item.subtabs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,12 +8,13 @@ import javax.swing.JSpinner;
 import main.java.author.controller.TabController;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.tabs.EditorTab;
-import main.java.author.view.tabs.item.AbstractItemEditorTab.AbstractItemTabViewBuilder;
+import main.java.author.view.tabs.item.AbstractItemEditorSubTab;
+import main.java.author.view.tabs.item.AbstractItemEditorSubTab.AbstractItemTabViewBuilder;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 
-public class RowBombItemEditorTab extends AbstractItemEditorTab{
+public class RowBombItemEditorTab extends AbstractItemEditorSubTab{
 
 	public RowBombItemEditorTab(TabController itemController, String objectName) {
 		super(itemController, objectName);
@@ -38,12 +39,11 @@ public class RowBombItemEditorTab extends AbstractItemEditorTab{
 		@Override
 		protected void instantiateAndClumpFields() {
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
-			timeSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 			rangeSpinner = makeAttributeSpinner(RowBombItemSchema.RANGE);
 			
-			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner, rangeSpinner};
+			JSpinner[] spinners = {costSpinner, damageSpinner, flashSpinner, rangeSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
 		}

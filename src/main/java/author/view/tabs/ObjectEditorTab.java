@@ -282,6 +282,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	 */
 	protected void init() {
 		setLayout(new BorderLayout());
+		imageCanvases = new ArrayList<ImageCanvas>();
 		objectMap = new HashMap<String, TDObjectSchema>();
 		myBuilder = createSpecificTabViewBuilder();
 		myBuilder.instantiateAndClumpFields();
@@ -330,14 +331,14 @@ public abstract class ObjectEditorTab extends EditorTab {
 		for (JSpinner spinner : spinnerFields) {
 
 			myCurrentObject.addAttribute(spinner.getName(),
-					(Integer) spinner.getValue());
+					(Serializable) spinner.getValue());
 		}
 
 		for (ImageCanvas canvas : imageCanvases) {
 
 			String relativePath = new File((String) canvas.getImagePath())
 					.getName();
-			
+
 			if (relativePath != null && !relativePath.isEmpty()) {
 				myCurrentObject.addAttribute(canvas.getName(), relativePath);
 			}
@@ -357,7 +358,9 @@ public abstract class ObjectEditorTab extends EditorTab {
 		// fields (spinners)
 
 		for (JSpinner spinner : spinnerFields) {
-			spinner.setValue(map.get(spinner.getName()));
+			if (map.get(spinner.getName()) != null) {
+				spinner.setValue((Integer) map.get(spinner.getName()));
+			}
 		}
 
 		for (ImageCanvas canvas : imageCanvases) {
@@ -389,7 +392,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser(new File(AuthoringView.DEFAULT_RESOURCES_DIR));
+			JFileChooser fileChooser = new JFileChooser(new File(
+					AuthoringView.DEFAULT_RESOURCES_DIR));
 			int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -467,7 +471,8 @@ public abstract class ObjectEditorTab extends EditorTab {
 			result.setLayout(new BorderLayout());
 			result.add(myBuilder.makePrimaryObjectGraphicPane(),
 					BorderLayout.CENTER);
-			JComponent secondaryImagesGraphicsPane = myBuilder.makeSecondaryImagesGraphicPane();
+			JComponent secondaryImagesGraphicsPane = myBuilder
+					.makeSecondaryImagesGraphicPane();
 			if (secondaryImagesGraphicsPane != null) {
 				result.add(myBuilder.makeSecondaryImagesGraphicPane(),
 						BorderLayout.SOUTH);

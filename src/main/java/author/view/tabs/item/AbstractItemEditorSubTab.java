@@ -32,84 +32,62 @@ import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 
-public abstract class AbstractItemEditorTab extends ObjectEditorTab {
-	JSpinner timeSpinner, costSpinner, damageSpinner, flashSpinner, rangeSpinner, freezeSpinner;
-	List<ItemSchema> itemSchemas;
-	List<JRadioButton> allButtons;
-	JButton itemImageButton;
-	ImageCanvas itemImageCanvas;
-	
-	public AbstractItemEditorTab(TabController itemController, String objectName) {
+public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
+	protected JSpinner costSpinner, damageSpinner, flashSpinner,
+			rangeSpinner, freezeSpinner;
+	protected List<ItemSchema> itemSchemas;
+	protected List<JRadioButton> allButtons;
+	protected JButton itemImageButton;
+	protected ImageCanvas itemImageCanvas;
+
+	public AbstractItemEditorSubTab(TabController itemController, String objectName) {
 		super(itemController, objectName);
 	}
 
 	@Override
-	public void saveTabData() {
-		ItemController controller = (ItemController) myController;
-		itemSchemas = new ArrayList<ItemSchema>();
-		
-		//implement better reflection here (proper polymorphism)
-		for (TDObjectSchema item : objectMap.values()) {
-			ItemSchema itemSchema = null;
-			if (item instanceof AnnihilatorItemSchema) {
-				itemSchema = new AnnihilatorItemSchema();
-			}
-			if (item instanceof AreaBombItemSchema) {
-				itemSchema = new AreaBombItemSchema();
-			}
-			if (item instanceof InstantFreezeItemSchema) {
-				itemSchema = new InstantFreezeItemSchema();
-			}
-			if (item instanceof LifeSaverItemSchema) {
-				itemSchema = new LifeSaverItemSchema();
-			}
-			if (item instanceof RowBombItemSchema){
-				itemSchema = new RowBombItemSchema();
-			}
+	public void saveTabData() {}
 
-			Map<String, Serializable> itemAttributes = item.getAttributesMap();
-			
-			for (String attribute : itemAttributes.keySet()) {
-				itemSchema.addAttribute(attribute, itemAttributes.get(attribute));	
-			}
-			
-			itemSchema.addAttribute(TDObjectSchema.IMAGE_NAME, "item.gif");
+	public List<ItemSchema> getItemSchemas() {
+		itemSchemas = new ArrayList<ItemSchema>();
+
+		for (TDObjectSchema item : objectMap.values()) {
+			ItemSchema itemSchema = (ItemSchema) item;
 			itemSchemas.add(itemSchema);
 		}
-		controller.addItems(itemSchemas);
-	}
-	
-	public List<ItemSchema> getItemSchemas() {
 		return itemSchemas;
 	}
-	
+
 	@Override
 	protected void updateSchemaDataFromView() {
 		super.updateSchemaDataFromView();
-		//TDObjectSchema myCurrentObject = getSelectedObject();
+		// TDObjectSchema myCurrentObject = getSelectedObject();
 	}
-	
+
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
-		//update upgradeDropDown in TowerEditorTab
+		// update upgradeDropDown in TowerEditorTab
 	}
-	
+
 	@Override
 	protected void addListeners() {
 		super.addListeners();
-		itemImageButton.addActionListener(new FileChooserListener(itemImageCanvas));
-		for (JRadioButton button : allButtons) {
-			button.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					updateSchemaDataFromView();
-				}
-			});
+		itemImageButton.addActionListener(new FileChooserListener(
+				itemImageCanvas));
+		if (allButtons != null) {
+			for (JRadioButton button : allButtons) {
+				button.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						updateSchemaDataFromView();
+					}
+				});
+			}
 		}
 	}
-	
-	public abstract class AbstractItemTabViewBuilder extends ObjectTabViewBuilder {
+
+	public abstract class AbstractItemTabViewBuilder extends
+			ObjectTabViewBuilder {
 
 		public AbstractItemTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
@@ -135,7 +113,7 @@ public abstract class AbstractItemEditorTab extends ObjectEditorTab {
 		protected JComponent makeSecondaryImagesGraphicPane() {
 			return null;
 		}
-	
+
 		@Override
 		protected JComponent makeFieldPane() {
 			JPanel result = new JPanel(new GridLayout(0, 2));

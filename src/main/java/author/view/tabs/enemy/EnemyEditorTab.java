@@ -18,6 +18,7 @@ import java.util.Set;
 import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -25,6 +26,7 @@ import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.EnemyController;
+import main.java.author.util.ComboBoxUtil;
 import main.java.author.util.GroupButtonUtil;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.global_constants.ObjectEditorConstants;
@@ -32,6 +34,7 @@ import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.author.view.tabs.terrain.TerrainAttribute;
 import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
@@ -40,6 +43,13 @@ import main.java.schema.tdobjects.TDObjectSchema;
  *         to a tab controller to pass information to the model
  */
 public class EnemyEditorTab extends ObjectEditorTab {
+
+	private static final String NO_RES_PATH = "No Resurrection Path";
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public EnemyEditorTab(TabController towerController, String objectName) {
 		super(towerController, objectName);
@@ -52,13 +62,15 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					TerrainAttribute.Flyable.getIndex()));
 
 	private JSpinner healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
-	private ImageCanvas monsterImageCanvas, collisionImageCanvas;
-	private JButton monsterImageButton, collisionImageButton;
+	private ImageCanvas monsterImageCanvas;
+	private JButton monsterImageButton;
 	private JRadioButton smallTileButton, mediumTileButton, largeTileButton,
 			flyingButton, groundButton;
 	private List<JRadioButton> allButtons;
 	private ButtonGroup tileSizeGroup, flyingOrGroundGroup;
 	private List<MonsterSchema> monsterSchemas;
+
+	private JComboBox<String> resDropDown;
 
 	@Override
 	public void saveTabData() {
@@ -112,9 +124,18 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		}
 		myCurrentObject.addAttribute(MonsterSchema.BLOCKED_TILES,
 				(Serializable) blockedTilesSet);
-		//tile size
+		// tile size
 		myCurrentObject.addAttribute(MonsterSchema.TILE_SIZE,
 				GroupButtonUtil.getSelectedButtonText(tileSizeGroup));
+
+		// dropdown
+		if (resDropDown.getSelectedItem() != null
+				&& resDropDown.getSelectedItem().equals(NO_RES_PATH)) {
+			myCurrentObject.addAttribute(resDropDown.getName(), "");
+		} else {
+			myCurrentObject.addAttribute(resDropDown.getName(),
+					(String) resDropDown.getSelectedItem());
+		}
 
 	}
 
@@ -137,6 +158,20 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			}
 		}
 		tileSizeGroup.getSelection();
+
+		// res dropdown
+		resDropDown.removeAllItems();
+		for (String tower : objectMap.keySet()) {
+			if (!tower.equals(getSelectedObjectName()))
+				resDropDown.addItem(tower);
+		}
+		if (ComboBoxUtil.containsValue(resDropDown,
+				(String) map.get(resDropDown.getName()))) {
+			resDropDown.setSelectedItem(map.get(resDropDown.getName()));
+		} else {
+			resDropDown.addItem(NO_RES_PATH);
+			resDropDown.setSelectedItem(NO_RES_PATH);
+		}
 	}
 
 	@Override
@@ -157,6 +192,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 				}
 			});
 		}
+
+		resDropDown.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateSchemaDataFromView();
+			}
+		});
 	}
 
 	@Override
@@ -204,10 +247,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			allButtons = new ArrayList<JRadioButton>(Arrays.asList(buttons));
 			monsterImageCanvas = new ImageCanvas(true,
 					TDObjectSchema.IMAGE_NAME);
-			/*
-			 * collisionImageCanvas = new ImageCanvas(true,
-			 * MonsterSchema.COLLISION_IMAGE_NAME);
-			 */
+			
+			resDropDown = makeResDropdown();
 
 			JSpinner[] spinners = { healthSpinner, speedSpinner, damageSpinner,
 					rewardSpinner };
@@ -228,7 +269,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					"Tile Size")));
 			result.add(makeFieldTile(makeButtonGroupPanel(flyingOrGroundGroup,
 					"Flying Or Ground Type")));
+			result.add(makeFieldTile(resDropDown));
+			return result;
+		}
+		
+		private JComboBox<String> makeResDropdown() {
 
+			JComboBox<String> result = new JComboBox<String>();
+			result.setName(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
 			return result;
 		}
 

@@ -1,6 +1,7 @@
 package main.java.author.view;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,7 +21,7 @@ import main.java.author.controller.tabbed_controllers.WaveController;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.GameSettingsEditorTab;
 import main.java.author.view.tabs.enemy.EnemyEditorTab;
-import main.java.author.view.tabs.item.AbstractItemEditorTab;
+import main.java.author.view.tabs.item.ItemEditorTab;
 import main.java.author.view.tabs.terrain.TerrainEditorTab;
 import main.java.author.view.tabs.tower.TowerEditorTab;
 import main.java.author.view.tabs.wave_editor.WaveEditorTab;
@@ -38,7 +39,6 @@ public class AuthoringView extends JFrame {
 	private JButton finalizeGameButton;
 
 	private EnemyEditorTab enemyEditorTab;
-	private TowerEditorTab towerEditorTab;
 
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
@@ -48,15 +48,14 @@ public class AuthoringView extends JFrame {
 	private static final String ITEM_EDITOR_STRING = "Item Editor";
 	private static final String TERRAIN_EDITOR_STRING = "Terrain Editor";
 	private static final String WAVE_EDITOR_STRING = "Wave Editor";
+	private static final String TITLE_STRING = "OOGASalad Authoring Environment";
 	public static final String DEFAULT_RESOURCES_DIR = "src/main/resources";
 
 	public AuthoringView(MainController mainController) {
-
-		super("OOGASalad Authoring Environment");
+		super(TITLE_STRING);
 
 		myController = mainController;
 		myController.setView(this);
-
 	}
 
 	/**
@@ -88,13 +87,12 @@ public class AuthoringView extends JFrame {
 		tabbedPane.add(TOWER_EDITOR_STRING, new TowerEditorTab(towerController,
 				"Tower"));
 
-		enemyEditorTab = new EnemyEditorTab(enemyController, "Monster");
-
 		tabbedPane
-				.add(ENEMY_EDITOR_STRING, enemyEditorTab);
-//		tabbedPane
-//				.add(ITEM_EDITOR_STRING,
-//						new ItemEditorTab(itemController, "Item"));
+				.add(ENEMY_EDITOR_STRING,
+						new EnemyEditorTab(enemyController, "Monster"));
+		tabbedPane
+				.add(ITEM_EDITOR_STRING,
+						new ItemEditorTab(itemController));
 		tabbedPane
 				.add(TERRAIN_EDITOR_STRING,
 						new TerrainEditorTab(terrainController));
@@ -105,12 +103,8 @@ public class AuthoringView extends JFrame {
 		tabbedPane.addChangeListener(new ChangeListener(){
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				// TODO Auto-generated method stub
 				if (tabbedPane.getSelectedComponent() instanceof WaveEditorTab) {
 					waveController.updateEnemyList();
-				}
-				if (tabbedPane.getSelectedComponent() instanceof AbstractItemEditorTab) {
-					//towerController.addItems();
 				}
 			}
 		});
@@ -151,7 +145,6 @@ public class AuthoringView extends JFrame {
 					try {
 						myController.saveBlueprint();
 					} catch (InvalidGameBlueprintException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -172,11 +165,11 @@ public class AuthoringView extends JFrame {
 	 * Shifts to the Enemy Tab
 	 */
 	public void shiftToEnemyTab() {
-		tabbedPane.setSelectedComponent(enemyEditorTab);
-	}
-
-	public void shiftToTowerTab() {
-		tabbedPane.setSelectedComponent(towerEditorTab);
+		for(Component tab : tabbedPane.getComponents()) {
+			if (tab instanceof EnemyEditorTab) {
+				tabbedPane.setSelectedComponent(enemyEditorTab);
+			}
+		}	
 	}
 
 }
