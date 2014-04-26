@@ -39,7 +39,8 @@ public class SimpleMonsterSchema extends MonsterSchema {
 		addAttribute(MonsterSchema.BLOCKED_TILES, (Serializable) EnemyEditorTab.groundSet);    
 		addAttribute(MonsterSchema.TILE_SIZE, MonsterSchema.TILE_SIZE_SMALL);
 		addAttribute(TDObjectSchema.IMAGE_NAME, EnemyViewDefaults.ENEMY_DEFAULT_IMAGE);
-		addAttribute(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, "");
+		addAttribute(MonsterSchema.RESURRECT_QUANTITY, EnemyViewDefaults.RESURRECT_QUANTITY);
+		addAttribute(MonsterSchema.RESURRECT_MONSTER_NAME, "");
 
 	}
 
