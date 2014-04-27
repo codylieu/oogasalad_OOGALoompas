@@ -19,7 +19,7 @@ public enum TerrainAttribute {
 		}
 	},
 
-	Flyable {
+	Unwalkable {
 		@Override
 		Color getColor() {
 			return Color.BLUE;
@@ -28,18 +28,6 @@ public enum TerrainAttribute {
 		@Override
 		public int getIndex() {
 			return 11;
-		}
-	},
-
-	Untraversable {
-		@Override
-		Color getColor() {
-			return Color.RED;
-		}
-
-		@Override
-		public int getIndex() {
-			return 12;
 		}
 	},
 
