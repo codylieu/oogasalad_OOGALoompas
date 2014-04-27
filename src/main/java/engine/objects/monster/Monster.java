@@ -193,8 +193,8 @@ public abstract class Monster extends TDObject {
 				xStart, yOffset, xEnd, yOffset,
 				healthBarThickness, depletedHealthColor);
 
-		// draw health bar if no cheats used
-		if (myCurrentHealth <= myBaseHealth) {
+		// draw health bar if no cheats used and nothing is odd
+		if (myCurrentHealth <= myBaseHealth && myCurrentHealth >= 0) {
 			double xHealthEnd = x + (myCurrentHealth / myBaseHealth * getTileBBox().width);
 
 			eng.drawLine(
