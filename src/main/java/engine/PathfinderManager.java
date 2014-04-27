@@ -27,7 +27,7 @@ public class PathfinderManager implements Serializable {
 		return pathfinder.getPath(source, target);
 	}
 
-	public void updatePaths(List<Monster> monsters) {
+	public void updatePaths(List<Monster> monsters) throws NoPossiblePathException {
 		for (Monster m : monsters) {
 			m.updatePath();
 		}

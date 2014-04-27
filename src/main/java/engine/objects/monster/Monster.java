@@ -67,7 +67,7 @@ public abstract class Monster extends TDObject {
 
         myPathfinderManager = pathfinderManager;
         JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y));
-        JGPoint pathExit = myExit.getCenterTile();
+        JGPoint pathExit = eng.getTileIndex(myExit.x, myExit.y);
 		try {
 			myPath = myPathfinderManager.getPath(pathEntrance, pathExit, blocked);
 		}
@@ -102,15 +102,13 @@ public abstract class Monster extends TDObject {
         }
     }
 
-	public void updatePath() {
-		try {
-			JGPoint currentPos = this.getCenterTile();
-			myPath = myPathfinderManager.getPath(currentPos,
-					myExit.getCenterTile(), myBlockedTiles);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	/**
+	 * Update the path of the monster.
+	 */
+	public void updatePath() throws NoPossiblePathException {
+		JGPoint currentPos = this.getCenterTile();
+		myPath = myPathfinderManager.getPath(currentPos,
+				eng.getTileIndex(myExit.x, myExit.y), myBlockedTiles);
 	}
 
     /**

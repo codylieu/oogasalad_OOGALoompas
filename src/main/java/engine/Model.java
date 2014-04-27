@@ -23,10 +23,7 @@ import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
-import main.java.engine.objects.monster.jgpathfinder.JGPathfinderHeuristic;
-import main.java.engine.objects.monster.jgpathfinder.JGPathfinderHeuristicInterface;
-import main.java.engine.objects.monster.jgpathfinder.JGTileMap;
-import main.java.engine.objects.monster.jgpathfinder.JGTileMapInterface;
+import main.java.engine.objects.monster.jgpathfinder.*;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.objects.tower.TowerBehaviors;
@@ -103,16 +100,19 @@ public class Model implements IModel {
 		addNewPlayer();
 	}
 
-	private void initPathfinderManager() {
-		JGTileMapInterface tileMap = new JGTileMap(engine);
-		JGPathfinderHeuristicInterface heuristic = new JGPathfinderHeuristic();
-		pathfinderManager = new PathfinderManager(tileMap, heuristic);
-	}
-
 	private void defineAllStaticImages () {
 		// TODO: remove this method, make exit a part of wavespawnschemas
 		// and define its image dynamically
 		engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
+	}
+
+	/**
+	 * Create the inital pathfinder with a given tilemap and heuristic.
+	 */
+	private void initPathfinderManager() {
+		JGTileMapInterface tileMap = new JGTileMap(engine);
+		JGPathfinderHeuristicInterface heuristic = new JGPathfinderHeuristic();
+		pathfinderManager = new PathfinderManager(tileMap, heuristic);
 	}
 
 	/**
@@ -138,21 +138,25 @@ public class Model implements IModel {
 			int[] currentTile = getTileCoordinates(location);
 
 			// if tower already exists in the tile clicked, do nothing
-			if (isTowerPresent(currentTile)) { return false; }
+			if (isTowerPresent(currentTile)) {
+				return false;
+			}
+
+			// check if tower will block paths
+			if (willTowerBlockPath(currentTile)) {
+				return false;
+			}
 
 			ITower newTower = factory.placeTower(location, towerName);
-
 			if (player.getMoney() >= newTower.getCost()) {
 				// FIXME: Decrease money?
 				player.changeMoney(-newTower.getCost());
 				towers[currentTile[0]][currentTile[1]] = newTower;
-				currentMap.setTileCID(currentTile[0], currentTile[1],
-						TerrainAttribute.Flyable.getIndex()); // TODO: get from schema
-				pathfinderManager.updatePaths(monsters);
 				return true;
 			}
 			else {
 				newTower.remove();
+				currentMap.revertTileCIDToOriginal(currentTile[0], currentTile[1]);
 				return false;
 			}
 		}
@@ -160,6 +164,20 @@ public class Model implements IModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return false;
+	}
+
+	private boolean willTowerBlockPath(int currentTile[]) {
+		try {
+			currentMap.setTileCID(currentTile[0], currentTile[1],
+					TerrainAttribute.Flyable.getIndex()); // TODO: get from schema
+			pathfinderManager.updatePaths(monsters);
+		} catch (NoPossiblePathException e) {
+			currentMap.revertTileCIDToOriginal(currentTile[0], currentTile[1]);
+			System.out.println("Cannot place tower as it will block path");
+			return true;
+		}
+
 		return false;
 	}
 
@@ -256,7 +274,11 @@ public class Model implements IModel {
 			player.changeMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
 			towers[xtile][ytile].remove();
 			currentMap.revertTileCIDToOriginal(xtile, ytile);
-			pathfinderManager.updatePaths(monsters);
+			try {
+				pathfinderManager.updatePaths(monsters);
+			} catch (Exception e) {
+				e.printStackTrace(); // ignore, removing a tower should never block a path
+			}
 			towers[xtile][ytile] = null;
 		}
 	}
@@ -868,5 +890,4 @@ public class Model implements IModel {
 			Arrays.fill(row, null);
 		}
 	}
-
 }
