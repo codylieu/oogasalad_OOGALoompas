@@ -13,9 +13,9 @@ public class ItemViewConstants {
 	public static final String IMAGE_DEFAULT = "red_bullet.png";
 	public static final int RANGE_DEFAULT = 10;
 	
-	public static final String ANNIHILATOR = "Annihilators";
-	public static final String AREA_BOMB = "Area Bombs";
-	public static final String INSTANT_FREEZE = "Instant Freezes";
-	public static final String LIFE_SAVER = "Life Savers";
-	public static final String ROW_BOMB = "Row Bombs";
+	public static final String ANNIHILATOR = "Annihilator";
+	public static final String AREA_BOMB = "Area Bomb";
+	public static final String INSTANT_FREEZE = "Instant Freeze";
+	public static final String LIFE_SAVER = "Life Saver";
+	public static final String ROW_BOMB = "Row Bomb";
 }
