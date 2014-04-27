@@ -46,6 +46,6 @@ public class SimpleMonsterSchema extends MonsterSchema {
 
 	@Override
 	protected Set<String> populateAdditionalAttributes() {
-		return new HashSet<String>(); // empty set, no new attributes
+		return new HashSet<String>();
 	}
 }

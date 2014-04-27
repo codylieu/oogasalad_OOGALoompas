@@ -55,17 +55,14 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public EnemyEditorTab(TabController towerController, String objectName) {
-		super(towerController, objectName);
-	}
-
 	public static final Set<Integer> flyingSet = new HashSet<Integer>(
 			Arrays.asList(TerrainAttribute.Untraversable.getIndex()));
+
 	public static final Set<Integer> groundSet = new HashSet<Integer>(
 			Arrays.asList(TerrainAttribute.Untraversable.getIndex(),
 					TerrainAttribute.Flyable.getIndex()));
-
 	private JSpinner healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
+
 	private ImageCanvas monsterImageCanvas;
 	private JButton monsterImageButton;
 	private JRadioButton smallTileButton, mediumTileButton, largeTileButton,
@@ -73,9 +70,27 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	private List<JRadioButton> allButtons;
 	private ButtonGroup tileSizeGroup, flyingOrGroundGroup;
 	private List<MonsterSchema> monsterSchemas;
-
 	private JComboBox<String> resDropDown;
+
 	private JSpinner resNumSpinner;
+	public EnemyEditorTab(TabController towerController, String objectName) {
+		super(towerController, objectName);
+	}
+
+	/**
+	 * @return the list of enemy names
+	 */
+	public String[] getEnemyNamesArray() {
+		int size = objectMap.keySet().size();
+		return objectMap.keySet().toArray(new String[size]);
+	}
+
+	/**
+	 * @return the list of monster schemas created so far in this tab
+	 */
+	public List<MonsterSchema> getMonsterSchemas() {
+		return monsterSchemas;
+	}
 
 	@Override
 	public void saveTabData() {
@@ -85,7 +100,8 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
 			SimpleMonsterSchema currentMonsterSchema = (SimpleMonsterSchema) monster;
-			Map<String, Serializable> map = currentMonsterSchema.getAttributesMap();
+			Map<String, Serializable> map = currentMonsterSchema
+					.getAttributesMap();
 			String monsterName = (String) map
 					.get(MonsterSchema.RESURRECT_MONSTER_NAME);
 			int resQuant = (Integer) map.get(MonsterSchema.RESURRECT_QUANTITY);
@@ -101,26 +117,52 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			if (monsterSchemaToRes != null) {
 				MonsterSpawnSchema spawnSchema = new MonsterSpawnSchema(
 						monsterSchemaToRes, resQuant);
-				currentMonsterSchema.addAttribute(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, spawnSchema);
+				currentMonsterSchema
+						.addAttribute(
+								MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA,
+								spawnSchema);
 			}
 			monsterSchemas.add(currentMonsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
 	}
 
-	/**
-	 * @return the list of monster schemas created so far in this tab
-	 */
-	public List<MonsterSchema> getMonsterSchemas() {
-		return monsterSchemas;
+	@Override
+	protected void addListeners() {
+		super.addListeners();
+		monsterImageButton.addActionListener(new FileChooserListener(
+				monsterImageCanvas));
+		/*
+		 * collisionImageButton.addActionListener(new FileChooserListener(
+		 * collisionImageCanvas));
+		 */
+		for (JRadioButton button : allButtons) {
+			button.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					updateSchemaDataFromView();
+				}
+			});
+		}
+
+		resDropDown.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateSchemaDataFromView();
+			}
+		});
 	}
 
-	/**
-	 * @return the list of
-	 */
-	public String[] getEnemyNamesArray() {
-		int size = objectMap.keySet().size();
-		return objectMap.keySet().toArray(new String[size]);
+	@Override
+	protected TDObjectSchema createSpecificNewObject(String name) {
+		return new SimpleMonsterSchema(name);
+	}
+
+	@Override
+	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
+		return new EnemyTabViewBuilder(this);
 	}
 
 	@Override
@@ -187,46 +229,6 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			resDropDown.addItem(NO_RES_PATH);
 			resDropDown.setSelectedItem(NO_RES_PATH);
 		}
-		// res spinner
-
-	}
-
-	@Override
-	protected void addListeners() {
-		super.addListeners();
-		monsterImageButton.addActionListener(new FileChooserListener(
-				monsterImageCanvas));
-		/*
-		 * collisionImageButton.addActionListener(new FileChooserListener(
-		 * collisionImageCanvas));
-		 */
-		for (JRadioButton button : allButtons) {
-			button.addActionListener(new ActionListener() {
-
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					updateSchemaDataFromView();
-				}
-			});
-		}
-
-		resDropDown.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateSchemaDataFromView();
-			}
-		});
-	}
-
-	@Override
-	protected TDObjectSchema createSpecificNewObject(String name) {
-		return new SimpleMonsterSchema(name);
-	}
-
-	@Override
-	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
-		return new EnemyTabViewBuilder(this);
 	}
 
 	/**
@@ -237,6 +239,34 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		public EnemyTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
+		}
+
+		/**
+		 * @param buttonGroup
+		 * @param name
+		 * @return a buttonGroup panel.
+		 */
+		private JComponent makeButtonGroupPanel(ButtonGroup buttonGroup,
+				String name) {
+			JPanel result = new JPanel(new GridLayout(0, 1));
+			result.setName(name);
+			Enumeration<AbstractButton> buttons = buttonGroup.getElements();
+			while (buttons.hasMoreElements()) {
+				result.add(buttons.nextElement());
+			}
+			return result;
+		}
+
+		private JPanel makeResPane() {
+			JPanel result = new JPanel(new GridLayout(0, 1));
+			result.add(new JLabel("Monster To Spawn"));
+			result.add(resDropDown);
+			resDropDown.setName(MonsterSchema.RESURRECT_MONSTER_NAME);
+			result.add(new JLabel("How many"));
+			result.add(resNumSpinner);
+			resNumSpinner.setName(MonsterSchema.RESURRECT_QUANTITY);
+			result.setName("Monsters to Spawn Upon Death");
+			return result;
 		}
 
 		protected void instantiateAndClumpFields() {
@@ -294,40 +324,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
-		private JPanel makeResPane() {
-			JPanel result = new JPanel(new GridLayout(0, 1));
-			result.add(new JLabel("Monster To Spawn"));
-			result.add(resDropDown);
-			resDropDown.setName(MonsterSchema.RESURRECT_MONSTER_NAME);
-			result.add(new JLabel("How many"));
-			result.add(resNumSpinner);
-			resNumSpinner.setName(MonsterSchema.RESURRECT_QUANTITY);
-			result.setName("Monsters to Spawn Upon Death");
-			return result;
-		}
-
-		/**
-		 * @param buttonGroup
-		 * @param name
-		 * @return a buttonGroup panel.
-		 */
-		private JComponent makeButtonGroupPanel(ButtonGroup buttonGroup,
-				String name) {
-			JPanel result = new JPanel(new GridLayout(0, 1));
-			result.setName(name);
-			Enumeration<AbstractButton> buttons = buttonGroup.getElements();
-			while (buttons.hasMoreElements()) {
-				result.add(buttons.nextElement());
-			}
-			return result;
-		}
-
-		
 		@Override
-		protected JComponent makeSecondaryImagesGraphicPane() {
-			return null;
-		}
-
 		protected JComponent makePrimaryObjectGraphicPane() {
 			JPanel result = new JPanel();
 			result.setLayout(new BorderLayout());
@@ -341,6 +338,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					+ " Image");
 			result.add(monsterImageButton, BorderLayout.SOUTH);
 			return result;
+		}
+
+		@Override
+		protected JComponent makeSecondaryImagesGraphicPane() {
+			return null;
 		}
 
 	}

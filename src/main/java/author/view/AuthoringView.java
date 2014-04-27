@@ -159,6 +159,9 @@ public class AuthoringView extends JFrame {
 		return finalizeGameButton;
 	}
 
+	/**
+	 * Used to shift the selected tab to the EnemyEditorTab
+	 */
 	public void shiftToEnemyTab() {
 		for (Component tab : tabbedPane.getComponents()) {
 			if (tab instanceof EnemyEditorTab) {

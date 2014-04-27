@@ -41,10 +41,11 @@ public class RowBombItemEditorTab extends AbstractItemEditorSubTab{
 			super.instantiateAndClumpFields();
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
+			buildUpSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 			rangeSpinner = makeAttributeSpinner(RowBombItemSchema.RANGE);
 			
-			JSpinner[] spinners = {costSpinner, damageSpinner, flashSpinner, rangeSpinner};
+			JSpinner[] spinners = {costSpinner, damageSpinner, buildUpSpinner, flashSpinner, rangeSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
 		}

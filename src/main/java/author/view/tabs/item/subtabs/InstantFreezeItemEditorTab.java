@@ -43,12 +43,12 @@ public class InstantFreezeItemEditorTab extends AbstractItemEditorSubTab{
 			super.instantiateAndClumpFields();
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
+			buildUpSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 			freezeSpinner = makeAttributeSpinner(InstantFreezeItemSchema.FREEZE_DURATION);
 			
-			JSpinner[] spinners = {costSpinner, damageSpinner, flashSpinner, freezeSpinner};
+			JSpinner[] spinners = {costSpinner, damageSpinner, buildUpSpinner, flashSpinner, freezeSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
 		}
 	}
 }

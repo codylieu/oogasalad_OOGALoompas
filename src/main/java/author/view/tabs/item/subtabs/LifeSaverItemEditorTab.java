@@ -42,15 +42,13 @@ public class LifeSaverItemEditorTab extends AbstractItemEditorSubTab {
 		protected void instantiateAndClumpFields() {
 			super.instantiateAndClumpFields();
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
-			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
+			buildUpSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 
-			JSpinner[] spinners = { costSpinner, damageSpinner,
+			JSpinner[] spinners = { costSpinner, buildUpSpinner,
 					flashSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
-
-			imageCanvases.add(itemImageCanvas);
+			
 		}
 	}
 }

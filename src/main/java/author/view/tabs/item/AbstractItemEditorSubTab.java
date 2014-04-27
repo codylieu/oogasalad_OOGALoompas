@@ -38,8 +38,12 @@ import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 
+/**
+ * @author dennis park
+ * allows for easier creation of item editor sub tabs
+ */
 public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
-	protected JSpinner costSpinner, damageSpinner, flashSpinner,
+	protected JSpinner costSpinner, buildUpSpinner, flashSpinner, damageSpinner,
 			rangeSpinner, freezeSpinner;
 	protected List<ItemSchema> itemSchemas;
 	protected List<JRadioButton> allButtons;
@@ -124,6 +128,8 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 		protected void instantiateAndClumpFields() {
 			//description text
 			descriptionTextArea = makeDescriptionArea();
+			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
+			imageCanvases.add(itemImageCanvas);
 		}
 
 		private JTextArea makeDescriptionArea() {

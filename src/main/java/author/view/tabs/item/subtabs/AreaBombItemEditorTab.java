@@ -46,12 +46,12 @@ public class AreaBombItemEditorTab extends AbstractItemEditorSubTab{
 		protected void instantiateAndClumpFields() {
 			super.instantiateAndClumpFields();
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
-			
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
+			buildUpSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 			rangeSpinner = makeAttributeSpinner(AreaBombItemSchema.RANGE);
 			
-			JSpinner[] spinners = {costSpinner, damageSpinner, flashSpinner, rangeSpinner};
+			JSpinner[] spinners = {costSpinner, buildUpSpinner, flashSpinner, rangeSpinner, damageSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
 		}
