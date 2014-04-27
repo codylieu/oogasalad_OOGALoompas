@@ -86,7 +86,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
 		xtiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
 		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
-		pathToMusic = (String) blueprint.getMyGameMapSchemas().get(0).getAttributesMap().get(GameSchema.MUSIC);
+		pathToMusic = (String) blueprint.getMyGameScenario().getAttributesMap().get(GameSchema.MUSIC);
 	}
 	
 	public String getPathToMusic() {
