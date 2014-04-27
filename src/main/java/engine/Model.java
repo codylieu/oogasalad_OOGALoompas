@@ -23,6 +23,10 @@ import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.monster.jgpathfinder.JGPathfinderHeuristic;
+import main.java.engine.objects.monster.jgpathfinder.JGPathfinderHeuristicInterface;
+import main.java.engine.objects.monster.jgpathfinder.JGTileMap;
+import main.java.engine.objects.monster.jgpathfinder.JGTileMapInterface;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.objects.tower.TowerBehaviors;
@@ -72,6 +76,7 @@ public class Model implements IModel {
 	private EnvironmentKnowledge environ;
 	private List<TDItem> items;
 	private TDMap currentMap;
+	private PathfinderManager pathfinderManager;
 
 	public Model (JGEngine engine, String pathToBlueprint) {
 		this.engine = engine;
@@ -80,7 +85,8 @@ public class Model implements IModel {
 		this.factory = new TDObjectFactory(engine);
 		collisionManager = new CollisionManager(engine);
 
-		levelManager = new LevelManager(factory);
+		initPathfinderManager();
+		levelManager = new LevelManager(factory, pathfinderManager);
 
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
@@ -95,7 +101,12 @@ public class Model implements IModel {
 		}
 
 		addNewPlayer();
+	}
 
+	private void initPathfinderManager() {
+		JGTileMapInterface tileMap = new JGTileMap(engine);
+		JGPathfinderHeuristicInterface heuristic = new JGPathfinderHeuristic();
+		pathfinderManager = new PathfinderManager(tileMap, heuristic);
 	}
 
 	private void defineAllStaticImages () {
@@ -137,6 +148,7 @@ public class Model implements IModel {
 				towers[currentTile[0]][currentTile[1]] = newTower;
 				currentMap.setTileCID(currentTile[0], currentTile[1],
 						TerrainAttribute.Untraversable.getIndex()); // TODO: get from schema
+				pathfinderManager.updatePaths(monsters);
 				return true;
 			}
 			else {
@@ -244,6 +256,7 @@ public class Model implements IModel {
 			player.changeMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
 			towers[xtile][ytile].remove();
 			currentMap.revertTileCIDToOriginal(xtile, ytile);
+			pathfinderManager.updatePaths(monsters);
 			towers[xtile][ytile] = null;
 		}
 	}

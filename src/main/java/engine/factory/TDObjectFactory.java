@@ -13,6 +13,7 @@ import java.util.Map;
 
 import jgame.impl.JGEngineInterface;
 import main.java.engine.Model;
+import main.java.engine.PathfinderManager;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.item.TDItem;
@@ -196,13 +197,16 @@ public class TDObjectFactory {
      * @return The new Monster object
      * @throws MonsterCreationFailureException
      */
-    public Monster placeMonster (Point2D entrance, Exit exit, String monsterName)
-                                                                                 throws MonsterCreationFailureException {
+    public Monster placeMonster (Point2D entrance, Exit exit,
+								 PathfinderManager pathfinderManager,
+								 String monsterName)
+			throws MonsterCreationFailureException {
         try {
             TDObjectSchema schema = tdObjectSchemaMap.get(monsterName);
 
             schema.addAttribute(MonsterSchema.ENTRANCE_LOCATION, (Serializable) entrance);
             schema.addAttribute(MonsterSchema.EXIT_LOCATION, exit);
+			schema.addAttribute(MonsterSchema.PATHFINDER_MANAGER, pathfinderManager);
 
             Object[] monsterParameters = { schema.getAttributesMap() };
 
