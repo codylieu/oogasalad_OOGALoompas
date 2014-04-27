@@ -3,6 +3,7 @@ package main.java.engine.objects.monster.jgpathfinder;
 import jgame.JGPoint;
 
 import java.util.List;
+import java.util.Set;
 
 public interface JGTileMapInterface {
 	/**
@@ -16,6 +17,13 @@ public interface JGTileMapInterface {
 	 * @return The number of y tiles in the tilemap
 	 */
 	public int getNumYTiles();
+
+	/**
+	 * Set the CIDs that are blocked from movement.
+	 *
+	 * @param blocked A set of blocked CIDs
+	 */
+	public void setBlockedTiles(Set<Integer> blocked);
 
 	/**
 	 * Get the indexes of the neighbors of the given tile. Neighbors can be defined

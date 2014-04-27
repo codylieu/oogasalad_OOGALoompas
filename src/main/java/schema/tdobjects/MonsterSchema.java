@@ -8,6 +8,7 @@ public abstract class MonsterSchema extends TDObjectSchema {
     public static final String SPEED = "Speed";
     public static final String REWARD = "Bounty Reward";
     public static final String DAMAGE = "Attack Damage";
+	public static final String PATHFINDER_MANAGER = "Pathfinder Manager";
     public static final String ENTRANCE_LOCATION = "Entrance Location";
     public static final String EXIT_LOCATION = "Exit";
     public static final String BLOCKED_TILES = "Blocked Tiles";
@@ -42,6 +43,7 @@ public abstract class MonsterSchema extends TDObjectSchema {
         myAttributeSet.add(MonsterSchema.DAMAGE);
         myAttributeSet.add(MonsterSchema.NAME);
         myAttributeSet.add(MonsterSchema.BLOCKED_TILES);
+		myAttributeSet.add(MonsterSchema.PATHFINDER_MANAGER);
         myAttributeSet.add(MonsterSchema.TILE_SIZE);
         myAttributeSet.add(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
         myAttributeSet.add(MonsterSchema.RESURRECT_QUANTITY);
