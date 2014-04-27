@@ -72,8 +72,6 @@ public interface IModel {
 	 */
 	public void resetGameClock ();
 
-	public void addScore (double score);
-
 	/**
 	 * Get the score of the player
 	 * 
