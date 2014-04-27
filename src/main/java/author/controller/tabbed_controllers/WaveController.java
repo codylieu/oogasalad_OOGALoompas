@@ -58,9 +58,6 @@ public class WaveController extends TabController {
 		waveEditorTab.updateEnemyList();
 	}
 
-	/**
-	 * Causes the Authoring view to shift to the Enemy Editor tab
-	 */
 	public void shiftToEnemyTab() {
 		mySuperController.shiftToEnemyTab();
 	}

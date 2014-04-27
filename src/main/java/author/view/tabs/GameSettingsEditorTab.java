@@ -41,7 +41,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JPanel settingsPanel = new JPanel(new BorderLayout());
 
 	private JComboBox gameModeList;
-	String[] GAME_MODE_STRINGS = {BOSS_STRING, SURVIVAL_STRING};
+	String[] GAME_MODE_STRINGS = {FINITE_STRING, SURVIVAL_STRING};
 
 	private JLabel livesLabel;
 	private JLabel beginningMoneyLabel;
@@ -50,7 +50,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	private JSpinner beginningMoneySpinner;
 
 	private static final String SURVIVAL_STRING = "Survival Mode";
-	private static final String BOSS_STRING = "Boss Mode";
+	private static final String FINITE_STRING = "Finite Mode";
 	private static final String LIVES_STRING = "Lives: ";
 	private static final String MONEY_STRING = "Beginning Money: ";
 	private static final String MUSIC_STRING = "Choose Music";
@@ -59,7 +59,7 @@ public class GameSettingsEditorTab extends EditorTab{
 	private static final int MONEY_DEFAULT = 500;
 
 	private static final Boolean SURVIVAL_MODE_VALUE = true;
-	private static final Boolean BOSS_MODE_VALUE = false;
+	private static final Boolean FINITE_MODE_VALUE = false;
 
 	private Font LABEL_FONT = new Font("Dialog", Font.PLAIN, 36);
 
@@ -94,7 +94,7 @@ public class GameSettingsEditorTab extends EditorTab{
 			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, SURVIVAL_MODE_VALUE);
 		}
 		else{
-			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, BOSS_MODE_VALUE);
+			gameSchema.addAttribute(GameSchema.ISSURVIVALMODE, FINITE_MODE_VALUE);
 		}
 
 		controller.addGameSettings(gameSchema);
@@ -191,9 +191,6 @@ public class GameSettingsEditorTab extends EditorTab{
 
 			gameModeList = new JComboBox(GAME_MODE_STRINGS);
 			gameModeList.setSelectedIndex(1);
-
-			//			gameModeList.setFont(LABEL_FONT);
-			//			gameModeList.setPreferredSize(new Dimension(100, 100));
 
 			return gameModeList;
 		}

@@ -22,7 +22,13 @@ public abstract class MonsterSchema extends TDObjectSchema {
     public static final String TILE_SIZE_LARGE = "Large";
 
     public static final String RESURRECT_MONSTERSPAWNSCHEMA =
-            "Monster schema to spawn upon this monster's death.";
+            "Monster Spawn Schemas to Spawn Upon Death";
+    
+    public static final String RESURRECT_MONSTER_NAME =
+    		"Name of Monster to Spawn";
+    
+    public static final String RESURRECT_QUANTITY =
+    		"Number of Monsters to Spawn";
 
     protected MonsterSchema (Class<? extends Monster> myConcreteType) {
         super(myConcreteType);
@@ -38,5 +44,7 @@ public abstract class MonsterSchema extends TDObjectSchema {
         myAttributeSet.add(MonsterSchema.BLOCKED_TILES);
         myAttributeSet.add(MonsterSchema.TILE_SIZE);
         myAttributeSet.add(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA);
+        myAttributeSet.add(MonsterSchema.RESURRECT_QUANTITY);
+        myAttributeSet.add(MonsterSchema.RESURRECT_MONSTER_NAME);
     }
 }

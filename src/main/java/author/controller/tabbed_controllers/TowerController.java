@@ -24,9 +24,5 @@ public class TowerController extends TabController {
 	public void addTowers(List<TowerSchema> towerSchemas) {
 		mySuperController.addTowersToModel(towerSchemas);
 	}
-	
-	public void addItems(List<ItemSchema> itemSchemas) {
-		mySuperController.addItemsToModel(itemSchemas);
-	}
 
 }

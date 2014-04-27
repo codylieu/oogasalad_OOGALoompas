@@ -9,10 +9,9 @@ import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.monster.Monster;
 import main.java.exceptions.engine.MonsterCreationFailureException;
-import main.java.schema.GameBlueprint;
 import main.java.schema.MonsterSpawnSchema;
-import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.WaveSpawnSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 
 /**
@@ -28,6 +27,11 @@ public class LevelManager {
     private Exit exit;
     private Player myPlayer;
     private boolean survivalMode;
+    /**
+     * This is the player's "score"
+     * It's incremented per new wave no matter survival or finite mode.
+     */
+    private int wavesCompleted;
 
     /**
      * Tasked with managing state for levels/waves/lives and spawning waves of monsters.
@@ -37,6 +41,7 @@ public class LevelManager {
         myCurrentWave = 0;
         myAllWaves = new ArrayList<WaveSpawnSchema>();
         survivalMode = true;
+        wavesCompleted = 0;
     }
 
     /**
@@ -56,22 +61,24 @@ public class LevelManager {
      */
     public Collection<Monster> spawnNextWave () throws MonsterCreationFailureException {
         Collection<Monster> spawnedMonsters = new ArrayList<Monster>();
-        
+
         if (myCurrentWave >= myAllWaves.size()) {
             if (survivalMode) {
                 // reset current wave back to beginning
                 myCurrentWave = 0;
-            } else {
+            }
+            else {
                 // empty list, avoid running out of spawns.
                 return spawnedMonsters;
             }
         }
-        
+
         for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave++)
                 .getMonsterSpawnSchemas()) {
+            wavesCompleted++;
             spawnedMonsters.addAll(spawnMonsterSpawnSchema(spawnSchema));
         }
-        
+
         return spawnedMonsters;
     }
 
@@ -113,13 +120,11 @@ public class LevelManager {
     }
 
     /**
-     * Returns whether or not the game is won,
-     * i.e. all waves are completed
-     * This will always return false on survival mode.
+     * Returns if there are no more waves left to spawn.
      * 
-     * @return whether or not game is over
+     * @return whether or not there are no more waves to spawn
      */
-    public boolean isGameWon () {
+    public boolean zeroWavesRemaining () {
         return myCurrentWave >= myAllWaves.size();
     }
 
@@ -215,6 +220,24 @@ public class LevelManager {
      */
     public void setSurvivalMode (boolean survivalMode) {
         this.survivalMode = survivalMode;
+    }
+
+    /**
+     * Whether or not current game is in survival mode.
+     * 
+     * @param survivalMode
+     */
+    public boolean isSurvivalMode () {
+        return survivalMode;
+    }
+    
+    /**
+     * Get the total number of waves completed, 
+     * no matter if survival mode or not.
+     * @return int number of waves completed.
+     */
+    public int getWavesCompleted() {
+        return wavesCompleted;
     }
 
 }
