@@ -22,6 +22,7 @@ import main.java.schema.tdobjects.TowerSchema;
  */
 public class ShootingTower extends TowerBehaviorDecorator {
 
+	private static final int PIERCING_DEFAULT = 0;
 	public static final double DEFAULT_DAMAGE = 10;
 	public static final double DEFAULT_RANGE = 200;
 	public static final double DEFAULT_FIRING_SPEED = 5;
@@ -34,6 +35,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
 	protected double myRange;
 	protected String myBulletImage;
 	protected String myType;
+	protected double myPiercingCount;
 
 	private TargetDetectorInterface myDetector = new MonsterClosestToExitDetector();
 
@@ -49,13 +51,14 @@ public class ShootingTower extends TowerBehaviorDecorator {
 			double damage,
 			double firingSpeed,
 			double range,
-			String bulletImage) {
+			String bulletImage,
+			double monstersToPierce) {
 		super(baseTower);
 		myDamage = damage;
 		myFiringSpeed = firingSpeed;
 		myRange = range;
 		myBulletImage = bulletImage;
-		myType = TOWER_TYPE;
+		myPiercingCount = monstersToPierce;
 	}
 
 	/**
@@ -76,7 +79,8 @@ public class ShootingTower extends TowerBehaviorDecorator {
 								Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes,
 										TowerSchema.RANGE,
 										DEFAULT_RANGE))),
-										(String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""));
+										(String) TDObject.getValueOrDefault(attributes, TowerSchema.BULLET_IMAGE_NAME, ""),
+										Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.PIERCING_COUNT, PIERCING_DEFAULT))));
 	}
 
 	@Override
@@ -123,8 +127,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
 		new PiercingProjectile(
 				baseTower.centerCoordinate().getX(),
 				baseTower.centerCoordinate().getY(),
-				angle, myDamage, myBulletImage);
-
+				angle, myDamage, myBulletImage, myPiercingCount);
 	}
 
 	/**
@@ -134,7 +137,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
 		new PiercingProjectile(
 				baseTower.centerCoordinate().getX(),
 				baseTower.centerCoordinate().getY(),
-				xspeed, yspeed, myDamage, myBulletImage);
+				xspeed, yspeed, myDamage, myBulletImage, myPiercingCount);
 	}
 
 	@Override
