@@ -12,12 +12,10 @@ public class WelcomeButtonPanelListener implements ActionListener{
 
 	private ResourceBundle resources;
 	private ViewController player;
-	private ResourceBundle languageResources;
 	private Map<String,String> translations;
 	public WelcomeButtonPanelListener(ResourceBundle myResources, ViewController myPlayer, ResourceBundle myLanguageResources){
 		resources = myResources;
 		player = myPlayer;
-		languageResources = myLanguageResources;
 		translations = new HashMap<String, String>();
 		for(String s: resources.keySet()){
 			translations.put(myLanguageResources.getString(s), s);

@@ -12,6 +12,7 @@ import main.java.reflection.Reflection;
 
 public class FileChooserActionListener extends AbstractAction implements ActionListener{
 
+	private static final long serialVersionUID = 1L;
 	private String methodName;
 	private JFileChooser fileChooser;
 	private Object target;

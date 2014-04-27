@@ -27,7 +27,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import main.java.player.ITDPlayerEngine;
-import main.java.player.TDPlayerEngine;
 import net.lingala.zip4j.exception.ZipException;
 
 /**
@@ -39,7 +38,8 @@ import net.lingala.zip4j.exception.ZipException;
  */
 
 public class RepositoryViewer extends AbstractAction {
-
+	
+	private static final long serialVersionUID = 1L;
 	public static final String COMPLETED_INSTRUCTIONS = "Game loaded. Go play it now!";
 	public static final String INITIAL_INSTRUCTIONS = "Click OK to start download (may take a while).";
 	public static final String DOWNLOAD = "Download";
@@ -55,11 +55,11 @@ public class RepositoryViewer extends AbstractAction {
 	private JList<String> list;
 	private Map<String, DLCData> dlc;
 	private JTextArea descriptionArea;
-	private TDPlayerEngine engine;
+	private ITDPlayerEngine engine;
 	
-	public RepositoryViewer(String s, ITDPlayerEngine engine) {
+	public RepositoryViewer(String s, ITDPlayerEngine engineInit) {
 		super(s);
-		engine = engine;
+		engine = engineInit;
 		dlc = new HashMap<String, DLCData>();
 	}
 

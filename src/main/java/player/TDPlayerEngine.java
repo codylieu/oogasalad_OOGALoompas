@@ -234,7 +234,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 						e.printStackTrace();
 					}
 
-
 					clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 				}
 				clearMouseButton(LEFT_CLICK);

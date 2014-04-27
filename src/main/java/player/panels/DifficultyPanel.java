@@ -25,8 +25,8 @@ public class DifficultyPanel extends JPanel{
 	private ITDPlayerEngine engine;
 	private ButtonGroup difficultyRadioButtonGroup;
 	
-	public DifficultyPanel(ITDPlayerEngine engine){
-		engine = engine;
+	public DifficultyPanel(ITDPlayerEngine engineInit){
+		engine = engineInit;
 		difficultyRadioButtonGroup = new ButtonGroup();
 		addRadioButtons();
 	}
