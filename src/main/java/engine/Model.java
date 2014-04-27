@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import jgame.platform.JGEngine;
+import main.java.author.view.tabs.terrain.TerrainAttribute;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
@@ -134,6 +135,8 @@ public class Model implements IModel {
 				// FIXME: Decrease money?
 				player.changeMoney(-newTower.getCost());
 				towers[currentTile[0]][currentTile[1]] = newTower;
+				currentMap.setTileCID(currentTile[0], currentTile[1],
+						TerrainAttribute.Untraversable.getIndex()); // TODO: get from schema
 				return true;
 			}
 			else {
@@ -240,6 +243,7 @@ public class Model implements IModel {
 			int ytile = coordinates[1];
 			player.changeMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
 			towers[xtile][ytile].remove();
+			currentMap.revertTileCIDToOriginal(xtile, ytile);
 			towers[xtile][ytile] = null;
 		}
 	}
