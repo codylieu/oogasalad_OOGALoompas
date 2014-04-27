@@ -104,7 +104,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					.getAttributesMap();
 			String monsterName = (String) map
 					.get(MonsterSchema.RESURRECT_MONSTER_NAME);
-			int resQuant = Integer.valueOf(map.get(MonsterSchema.RESURRECT_QUANTITY).toString());
+			int resQuant = Double.valueOf(map.get(MonsterSchema.RESURRECT_QUANTITY).toString()).intValue();
 			SimpleMonsterSchema monsterSchemaToRes = null;
 			for (TDObjectSchema possibleMonsterToRes : objectMap.values()) {
 				SimpleMonsterSchema possibleMonsterSchemaToRes = (SimpleMonsterSchema) possibleMonsterToRes;
