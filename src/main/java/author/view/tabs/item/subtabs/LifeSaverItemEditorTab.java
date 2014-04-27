@@ -6,10 +6,8 @@ import java.util.Arrays;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
-import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.item.AbstractItemEditorSubTab;
-import main.java.author.view.tabs.item.AbstractItemEditorSubTab.AbstractItemTabViewBuilder;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;

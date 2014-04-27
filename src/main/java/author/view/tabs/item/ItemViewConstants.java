@@ -1,8 +1,6 @@
 package main.java.author.view.tabs.item;
 
-import java.awt.Dimension;
-import java.awt.geom.Point2D;
-import java.io.Serializable;
+import java.awt.Dimension;	
 
 public class ItemViewConstants {
 

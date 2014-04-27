@@ -3,7 +3,6 @@ package main.java.author.view.tabs.item;
 import java.awt.BorderLayout;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 

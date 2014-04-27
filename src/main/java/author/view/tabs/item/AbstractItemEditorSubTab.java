@@ -6,11 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +21,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import main.java.author.controller.TabController;
-import main.java.author.controller.tabbed_controllers.ItemController;
 import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
@@ -32,11 +28,6 @@ import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
-import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
-import main.java.schema.tdobjects.items.AreaBombItemSchema;
-import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
-import main.java.schema.tdobjects.items.LifeSaverItemSchema;
-import main.java.schema.tdobjects.items.RowBombItemSchema;
 
 /**
  * @author dennis park
