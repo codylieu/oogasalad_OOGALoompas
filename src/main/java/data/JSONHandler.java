@@ -13,7 +13,6 @@ import java.util.List;
 import main.java.data.adapters.InterfaceAdapter;
 import main.java.data.adapters.MonsterSchemaAdapter;
 import main.java.data.adapters.RuntimeTypeAdapterFactory;
-import main.java.data.adapters.SerializbleInstanceCreator;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import main.java.schema.tdobjects.MonsterSchema;
