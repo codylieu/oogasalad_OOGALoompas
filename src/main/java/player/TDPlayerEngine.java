@@ -38,6 +38,7 @@ import net.lingala.zip4j.exception.ZipException;
 
 public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine{
 
+	public static final String ADD_ITEM = "AddItem";
 	public static final String CRITICAL_MONSTER_CREATION_EXCEPTION = "Critical Monster creation exception. See stack trace. Exiting program";
 	public static final String GAME_CLOCK_HEADER = "GAME_CLOCK_HEADER";
 	public static final String MONEY_HEADER = "MONEY_HEADER";
@@ -109,7 +110,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
 		pathToMusic = (String) blueprint.getMyGameScenario().getAttributesMap().get(GameSchema.MUSIC);
 	}
-	
+
 	public String getPathToMusic() {
 		return pathToMusic;
 	}
@@ -218,7 +219,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			setItem(LEFT_CLICK, s);
 		}	
 	}
-	
+
 	public String getCurrentTowerDescription() {
 		return model.getTowerDescription(towerName);
 	}
@@ -304,7 +305,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	public void setCurrentTowerType(String currentTowerName){
 		towerName = currentTowerName;
 	}
-	
+
 	public void setCurrentPowerUpType(String currentPowerUp){		
 		powerUpName = currentPowerUp;
 	}
@@ -325,7 +326,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			setCursorState(CursorState.AddTower);
 		}
 	}
-	
+
 	public void toggleAddItem() {
 		if (getCursorState() == CursorState.AddItem) {
 			setCursorState(CursorState.AddItem);
@@ -351,11 +352,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString(FULL_SCREEN)));
 		}
-		if (getKey(Integer.parseInt(hotkeys.getString("AddItem")))){
+		if (getKey(Integer.parseInt(hotkeys.getString(ADD_ITEM)))){
 			toggleAddItem();
-			clearKey(Integer.parseInt(hotkeys.getString("AddItem")));
+			clearKey(Integer.parseInt(hotkeys.getString(ADD_ITEM)));
 		}
-
 	}
 
 	public void toggleFullScreen(){
@@ -429,7 +429,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	public void updateLanguage(ResourceBundle myLanguages){
 		languages = myLanguages;
 	}
-	
+
 	public Map<String, String> getGameAttributes() {
 		Map<String, String> gameStats = new HashMap<String, String>();
 		gameStats.put(SCORE, languages.getString(SCORE_HEADER) + model.getScore());
