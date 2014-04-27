@@ -71,4 +71,6 @@ public interface ITDPlayerEngine {
 		public void stop();
 		
 		public void updateLanguage(ResourceBundle myLanguage);
+		
+		public void setCurrentPowerUpType(String currentPowerUp);
 }

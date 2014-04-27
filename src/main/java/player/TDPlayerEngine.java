@@ -76,13 +76,12 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private String pathToBlueprint;
 	private String pathToMusic;
 	private String towerName;
+	private String powerUpName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle(MAIN_RESOURCES_HOTKEYS_DATAPATH);
 	private ResourceBundle languages;
 	private JGPoint lastClickedObject;
 	private LeapGameController leapController;
 	private ViewController viewController;
-	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
-
 
 	public TDPlayerEngine(String pathToBlueprintInit, ViewController myView, ResourceBundle myLanguages) throws ClassNotFoundException, IOException, ZipException {
 		// super();
@@ -127,6 +126,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	public void initModel(){
 		model = new Model(this, pathToBlueprint);
 		towerName = model.getPossibleTowers().get(0);
+		powerUpName = model.getPossibleItems().get(0);
 	}
 
 	public void speedUp() {
@@ -212,11 +212,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		}
 	}
 
-	/*private void setAllItems(){
-		for(String s: items.keySet()){
-			setItem(LEFT_CLICK, items.getString(s));
+	private void setAllItems(){
+		for(String s: model.getPossibleItems()){
+			setItem(LEFT_CLICK, s);
 		}	
-	}*/
+	}
 
 	private void checkGameEnd() {
 		if (model.isGameLost()) {
@@ -272,7 +272,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 				}
 				clearMouseButton(LEFT_CLICK);
 			}
-			//setAllItems();
+			setAllItems();
 		}
 		if (getMouseButton(RIGHT_CLICK)) {
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
@@ -280,7 +280,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		}
 	}
 
-	/*private void setItem(int clickName, String itemName){
+	private void setItem(int clickName, String itemName){
 		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
 			try {
 				model.placeItem(itemName, getMouseX(), getMouseY());
@@ -289,10 +289,15 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			}
 			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
 		}
-	}*/
+	}
 
 	public void setCurrentTowerType(String currentTowerName){
 		towerName = currentTowerName;
+	}
+	
+	public void setCurrentPowerUpType(String currentPowerUp){		
+		powerUpName = currentPowerUp;
+		System.out.println(powerUpName);
 	}
 
 	public double getHighScore(){
