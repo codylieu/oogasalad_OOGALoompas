@@ -80,9 +80,9 @@ public class WaveEditorTab extends EditorTab {
 	 *            Called when the enemy list is added to in the Enemy Editor Tab
 	 */
 	private void addNewEnemyColumn(String columnName) {
-		List<String> zeroesColumnList = new ArrayList<String>();
+		List<Integer> zeroesColumnList = new ArrayList<Integer>();
 		for (int i = 0; i < tableModel.getRowCount(); i++) {
-			zeroesColumnList.add(ZERO_STRING);
+			zeroesColumnList.add(0);
 		}
 		tableModel.addColumn(columnName, zeroesColumnList.toArray());
 	}
@@ -146,10 +146,10 @@ public class WaveEditorTab extends EditorTab {
 		ColumnRemovableIntOnlyTableModel model = (ColumnRemovableIntOnlyTableModel) table
 				.getModel();
 		int newWaveNum = tableModel.getRowCount() + 1;
-		List<String> zeroesRowList = new ArrayList<String>();
+		List<Object> zeroesRowList = new ArrayList<Object>();
 		zeroesRowList.add(WAVE_STRING + " " + newWaveNum);
 		for (int i = 1; i < tableModel.getColumnCount(); i++) {
-			zeroesRowList.add(fieldValue);
+			zeroesRowList.add(Integer.parseInt(fieldValue));
 
 		}
 		model.addRow(zeroesRowList.toArray());
@@ -171,6 +171,11 @@ public class WaveEditorTab extends EditorTab {
 				String monsterName = (String) monsterSchema.getAttributesMap()
 						.get(MonsterSchema.NAME);
 				int columnOfEnemy = getColumnOfEnemy(monsterName);
+				
+				
+				
+				
+				
 				int numEnemies = Integer.parseInt((String.valueOf(Math
 						.abs((int) table.getModel().getValueAt(waveRow,
 								columnOfEnemy)))));
