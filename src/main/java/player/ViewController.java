@@ -32,7 +32,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import main.java.engine.Model;
 import main.java.player.dlc.RepositoryViewer;
 import main.java.player.panels.FileChooserActionListener;
 import main.java.player.panels.GameInfoPanel;
@@ -40,6 +39,7 @@ import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.ObservingPanel;
+import main.java.player.panels.TowerDescriptionArea;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.MultipleMethodAction;
@@ -63,6 +63,7 @@ public class ViewController implements Serializable {
 	public static final String GET_POSSIBLE_TOWERS_METHOD_NAME = "getPossibleTowers";
 	public static final String GUI_PROPERTY_FILEPATH = "GUI";
 	public static final String SET_CURRENT_TOWER_TYPE_METHOD_NAME = "setCurrentTowerType";
+	public static final String SET_CURRENT_ITEM_TYPE_METHOD_NAME = "setCurrentItemType";
 	public static final String LOAD_BLUEPRINT_FILE_METHOD_NAME = "loadBlueprintFile";
 	public static final int WELCOME_LABEL_FONT = 32;
 	public static final String SANS_SERIF_FONT = "SansSerif";
@@ -71,6 +72,7 @@ public class ViewController implements Serializable {
 	public static final String SPEED_UP_METHOD_NAME = "speedUp";
 	public static final String SLOW_DOWN_METHOD_NAME = "slowDown";
 	public static final String TOGGLE_ADD_TOWER_METHOD_NAME = "toggleAddTower";
+	public static final String TOGGLE_ADD_ITEM_METHOD_NAME = "toggleAddItem";
 	public static final String TOGGLE_SOUND_METHOD_NAME = "toggleSound";
 	public static final String TOGGLE_RUNNING_METHOD_NAME = "toggleRunning";
 	public static final String SHOW_CARD_VARIABLE = "showCard";
@@ -84,6 +86,7 @@ public class ViewController implements Serializable {
 	public static final String SOUND_ONOFF_TEXT = "SOUND_ONOFF_TEXT";
 	public static final String ADD_TOWER_TEXT = "ADD_TOWER_TEXT";
 	public static final String SLOW_DOWN_TEXT = "SLOW_DOWN_TEXT";
+	public static final String ADD_ITEM_TEXT = "ADD_ITEM_TEXT";
 	public static final String SPEED_UP_TEXT = "SPEED_UP_TEXT";
 	public static final String LOAD_TEXT = "LOAD_TEXT";
 	public static final String SAVE_TEXT = "SAVE_TEXT";
@@ -103,8 +106,7 @@ public class ViewController implements Serializable {
 	public static final String OPTION_CARD = "optionCard";
 	public static final String HELP_CARD = "helpCard";	
 	public static final String CREDITS_CARD = "creditsCard";
-	public static final String HIGH_SCORE_CARD = "highScoreCard";
-	
+	public static final String HIGH_SCORE_CARD = "highScoreCard";	
 	public static final String RESOURCE_PATH = "src/main/resources/";
 
 	private JFrame frame;
@@ -121,6 +123,7 @@ public class ViewController implements Serializable {
 	private HighScoreCard highScoreCard;
 	private String chosenLanguage;
 	private ObjectChooser powerUpChooser;
+	private ObservingPanel towerDescriptionArea;
 
 	/**
 	 * initializeEngine() must be called first
@@ -328,6 +331,9 @@ public class ViewController implements Serializable {
 
 		JButton addTowerButton = new JButton(myLanguageResources.getString(ADD_TOWER_TEXT));
 		addTowerButton.addActionListener(new MethodAction (engine, TOGGLE_ADD_TOWER_METHOD_NAME));
+		
+		JButton addItemButton = new JButton(myLanguageResources.getString(ADD_ITEM_TEXT));
+		addItemButton.addActionListener(new MethodAction (engine, TOGGLE_ADD_ITEM_METHOD_NAME));
 
 		JButton soundButton = new JButton(myLanguageResources.getString(SOUND_ONOFF_TEXT));
 		soundButton.addActionListener(new MethodAction (this, TOGGLE_SOUND_METHOD_NAME));
@@ -335,6 +341,10 @@ public class ViewController implements Serializable {
 	
 		towerChooser = new ObjectChooser(engine, GET_POSSIBLE_TOWERS_METHOD_NAME, SET_CURRENT_TOWER_TYPE_METHOD_NAME);
 		powerUpChooser = new ObjectChooser(engine, GET_POSSIBLE_ITEMS_METHOD_NAMES, SET_CURRENT_POWER_UP_TYPE_METHOD_NAME );
+		
+		towerDescriptionArea = new TowerDescriptionArea(3, 20);
+		towerDescriptionArea.addSubject((Subject) engine);
+		engine.register(towerDescriptionArea);
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
@@ -347,6 +357,7 @@ public class ViewController implements Serializable {
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
 		gameButtonPanel.add(powerUpChooser);
+		gameButtonPanel.add(towerDescriptionArea);
 		return gameButtonPanel;
 	}
 

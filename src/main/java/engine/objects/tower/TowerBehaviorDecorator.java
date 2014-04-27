@@ -1,6 +1,7 @@
 package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.List;
 import main.java.engine.EnvironmentKnowledge;
 
@@ -11,7 +12,7 @@ import main.java.engine.EnvironmentKnowledge;
  * @author Austin
  *
  */
-abstract class TowerBehaviorDecorator implements ITower {
+abstract class TowerBehaviorDecorator implements ITower, Serializable {
     /**
      * The base tower that will have behaviors added to it ("decorations")
      * This is not necessarily a SimpleTower/TDObject, but could be another TowerBehaviorDecorator!

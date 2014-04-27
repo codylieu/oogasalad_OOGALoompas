@@ -79,6 +79,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private String powerUpName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle(MAIN_RESOURCES_HOTKEYS_DATAPATH);
 	private ResourceBundle languages;
+	private String itemName;
 	private JGPoint lastClickedObject;
 	private LeapGameController leapController;
 	private ViewController viewController;
@@ -217,6 +218,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			setItem(LEFT_CLICK, s);
 		}	
 	}
+	
+	public String getCurrentTowerDescription() {
+		return model.getTowerDescription(towerName);
+	}
 
 	private void checkGameEnd() {
 		if (model.isGameLost()) {
@@ -274,6 +279,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			}
 			setAllItems();
 		}
+		else if (cursorState == CursorState.AddItem) {
+			if (getMouseButton(LEFT_CLICK)) {
+				model.placeItem(itemName, getMouseX(), getMouseY());
+			}
+		}
 		if (getMouseButton(RIGHT_CLICK)) {
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
@@ -297,7 +307,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	
 	public void setCurrentPowerUpType(String currentPowerUp){		
 		powerUpName = currentPowerUp;
-		System.out.println(powerUpName);
 	}
 
 	public double getHighScore(){
@@ -316,6 +325,16 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			setCursorState(CursorState.AddTower);
 		}
 	}
+	
+	public void toggleAddItem() {
+		if (getCursorState() == CursorState.AddItem) {
+			setCursorState(CursorState.AddItem);
+			removeObjects("TowerGhost", 0);
+		}
+		else {
+			setCursorState(CursorState.AddItem);
+		}
+	}
 
 	private void checkKeys() {
 		if (getKey(Integer.parseInt(hotkeys.getString(ADD_TOWER)))){
@@ -331,6 +350,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		if (getKey(Integer.parseInt(hotkeys.getString(FULL_SCREEN)))){
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString(FULL_SCREEN)));
+		}
+		if (getKey(Integer.parseInt(hotkeys.getString("AddItem")))){
+			toggleAddItem();
+			clearKey(Integer.parseInt(hotkeys.getString("AddItem")));
 		}
 
 	}

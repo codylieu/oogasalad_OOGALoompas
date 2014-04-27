@@ -193,5 +193,21 @@ public interface IModel {
 	 *         (please pause and notify the player, then continue the present game).
 	 */
 	public void loadSavedGame (String filename) throws InvalidSavedGameException;
+	
+	/**
+	 * Description of a tower.
+	 * 
+	 * @param towerName
+	 * @return
+	 */
+	public String getTowerDescription(String towerName);
+	
+	/**
+	 * Description of an item/power-up
+	 * 
+	 * @param itemName
+	 * @return
+	 */
+	public String getItemDescription(String itemName);
 
 }
