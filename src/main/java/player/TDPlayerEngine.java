@@ -26,6 +26,7 @@ import main.java.player.util.Subject;
 import main.java.player.util.TowerGhost;
 import main.java.schema.CanvasSchema;
 import main.java.schema.GameBlueprint;
+import main.java.schema.GameSchema;
 import main.java.schema.map.GameMapSchema;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -55,6 +56,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private CursorState cursorState;
 	private boolean isFullScreen;
 	private String pathToBlueprint;
+	private String pathToMusic;
 	private String towerName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private JGPoint lastClickedObject;
@@ -85,6 +87,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
 		xtiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
 		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
+		pathToMusic = (String) blueprint.getMyGameScenario().getAttributesMap().get(GameSchema.MUSIC);
+	}
+	
+	public String getPathToMusic() {
+		return pathToMusic;
 	}
 
 	@Override
@@ -214,6 +221,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		} catch (MonsterCreationFailureException e) {
 			JOptionPane.showMessageDialog(null, "Critical Monster creation exception. See stack trace. Exiting program");
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 

@@ -41,11 +41,10 @@ public class Player {
 	}
 	
 	/**
-	 * Add score to the player
-	 * @param score
+	 * Increase score by one.
 	 */
-	public void addScore(double score) {
-		this.score += score;
+	public void incrementScore() {
+		this.score ++;
 	}
 	
 	/**

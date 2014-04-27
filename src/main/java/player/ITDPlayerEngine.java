@@ -29,6 +29,8 @@ public interface ITDPlayerEngine {
 		public CursorState getCursorState();
 		
 		public List<String> getCurrentDescription();
+		
+		public String getPathToMusic();
 
 		public void doFrame();
 		public void setCurrentTowerType(String currentTowerName);

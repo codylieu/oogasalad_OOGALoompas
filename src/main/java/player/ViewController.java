@@ -32,6 +32,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import main.java.engine.Model;
 import main.java.player.dlc.RepositoryViewer;
 import main.java.player.panels.FileChooserActionListener;
 import main.java.player.panels.GameInfoPanel;
@@ -100,6 +101,8 @@ public class ViewController implements Serializable {
 	public static final String HELP_CARD = "helpCard";	
 	public static final String CREDITS_CARD = "creditsCard";
 	public static final String HIGH_SCORE_CARD = "highScoreCard";
+	
+	public static final String RESOURCE_PATH = "src/main/resources/";
 
 	private JFrame frame;
 	private JPanel cards;
@@ -167,7 +170,9 @@ public class ViewController implements Serializable {
 
 	private void initSong(){
 		try {
-			song = new Sound(DEFAULT_MUSIC_PATH);
+			if (engine.getPathToMusic() != null) {
+				song = new Sound(RESOURCE_PATH + engine.getPathToMusic());
+			}
 		} catch (LineUnavailableException | IOException
 				| UnsupportedAudioFileException e) {
 			JOptionPane.showMessageDialog(null, "Music file not found.");
