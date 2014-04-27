@@ -99,14 +99,31 @@ public class TDMap {
 		}
 	}
 
+	/**
+	 * Set the given tile for the map to a given CID.
+	 *
+	 * @param xind X index of tile
+	 * @param yind X index of tile
+	 * @param cid CID the tile is to be set to
+	 */
 	public void setTileCID(int xind, int yind, int cid) {
 		engine.setTileCid(xind, yind, cid);
 	}
 
+	/**
+	 * Set the tile at the given index to the original CID when the map was
+	 * created.
+	 *
+	 * @param xind X index of tile
+	 * @param yind Y index of tile
+	 */
 	public void revertTileCIDToOriginal(int xind, int yind) {
 		engine.setTileCid(xind, yind, originalTileCIDs[xind][yind]);
 	}
 
+	/**
+	 * Private inner class, container for easy access of tilemaps.
+	 */
 	private class TileMap {
         private String name;
         private int pixelSize;
