@@ -347,6 +347,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	public void saveGameState(String gameName){
 		try {
+			System.out.println("saveing");
 			model.saveGame(gameName);
 		} catch (InvalidSavedGameException e) {
 			e.printStackTrace();
