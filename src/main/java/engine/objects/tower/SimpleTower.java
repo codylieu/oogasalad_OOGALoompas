@@ -18,7 +18,7 @@ import main.java.schema.tdobjects.TowerSchema;
  * The TDObject factory will use this tower as the base tower to decorate.
  * 
  */
-public class SimpleTower extends TDObject implements ITower {
+public class SimpleTower extends TDObject implements ITower, Serializable {
 
     public static final double DEFAULT_HEALTH = 100;
     public static final double DEFAULT_COST = 100;
