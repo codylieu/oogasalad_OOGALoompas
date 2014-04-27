@@ -10,7 +10,7 @@ public class ItemViewConstants {
 	public static final int BUILDUP_DEFAULT = 1;
 	public static final int DAMAGE_DEFAULT = 5;
 	public static final int FREEZE_DURATION_DEFAULT = 5;
-	public static final String IMAGE_DEFAULT = "row_bomb";
+	public static final String IMAGE_DEFAULT = "red_bullet.png";
 	public static final int RANGE_DEFAULT = 10;
 	
 	public static final String ANNIHILATOR = "Annihilator";

@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.management.timer.Timer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -38,8 +39,6 @@ public class AuthoringView extends JFrame {
 
 	private JButton finalizeGameButton;
 
-	private EnemyEditorTab enemyEditorTab;
-
 	private JTabbedPane tabbedPane = new JTabbedPane();
 
 	private static final String GAME_SETTINGS_EDITOR_STRING = "Game Settings Editor";
@@ -62,18 +61,16 @@ public class AuthoringView extends JFrame {
 	 * Creates the Editor Tabs for the tower, enemy, wave, terrain, etc.
 	 */
 	public void createEditorTabs() {
-		final EnemyController enemyController =
-				new EnemyController(myController);
-		final TowerController towerController = 
-				new TowerController(myController);
-		final WaveController waveController = 
-				new WaveController(myController);
-		final GameSettingsController gameSettingsController = 
-				new GameSettingsController(myController);
-		final TerrainController terrainController = 
-				new TerrainController(myController);
-		final ItemController itemController = 
-				new ItemController(myController);
+		final EnemyController enemyController = new EnemyController(
+				myController);
+		final TowerController towerController = new TowerController(
+				myController);
+		final WaveController waveController = new WaveController(myController);
+		final GameSettingsController gameSettingsController = new GameSettingsController(
+				myController);
+		final TerrainController terrainController = new TerrainController(
+				myController);
+		final ItemController itemController = new ItemController(myController);
 
 		myController.addTabController(enemyController);
 		myController.addTabController(towerController);
@@ -87,20 +84,14 @@ public class AuthoringView extends JFrame {
 		tabbedPane.add(TOWER_EDITOR_STRING, new TowerEditorTab(towerController,
 				"Tower"));
 
-		tabbedPane
-				.add(ENEMY_EDITOR_STRING,
-						new EnemyEditorTab(enemyController, "Monster"));
-		tabbedPane
-				.add(ITEM_EDITOR_STRING,
-						new ItemEditorTab(itemController));
-		tabbedPane
-				.add(TERRAIN_EDITOR_STRING,
-						new TerrainEditorTab(terrainController));
-		tabbedPane
-				.add(WAVE_EDITOR_STRING,
-						new WaveEditorTab(waveController));
+		tabbedPane.add(ENEMY_EDITOR_STRING, new EnemyEditorTab(enemyController,
+				"Monster"));
+		tabbedPane.add(ITEM_EDITOR_STRING, new ItemEditorTab(itemController));
+		tabbedPane.add(TERRAIN_EDITOR_STRING, new TerrainEditorTab(
+				terrainController));
+		tabbedPane.add(WAVE_EDITOR_STRING, new WaveEditorTab(waveController));
 
-		tabbedPane.addChangeListener(new ChangeListener(){
+		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				if (tabbedPane.getSelectedComponent() instanceof WaveEditorTab) {
@@ -130,6 +121,12 @@ public class AuthoringView extends JFrame {
 	 * information
 	 */
 	private void addActionListeners() {
+		tabbedPane.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent changeEvent) {
+				System.out.println(tabbedPane.getSelectedIndex());
+				
+			}
+		});
 		finalizeGameButton.addActionListener(new ActionListener() {
 
 			@Override
@@ -165,11 +162,22 @@ public class AuthoringView extends JFrame {
 	 * Shifts to the Enemy Tab
 	 */
 	public void shiftToEnemyTab() {
-		for(Component tab : tabbedPane.getComponents()) {
+		for (Component tab : tabbedPane.getComponents()) {
 			if (tab instanceof EnemyEditorTab) {
-				tabbedPane.setSelectedComponent(enemyEditorTab);
+				tabbedPane.setSelectedComponent(tab);
 			}
-		}	
+		}
+	}
+
+	/**
+	 * Shifts to the Wave Tab
+	 */
+	public void shiftToWaveTab() {
+		for (Component tab : tabbedPane.getComponents()) {
+			if (tab instanceof WaveEditorTab) {
+				tabbedPane.setSelectedComponent(tab);
+			}
+		}
 	}
 
 }
