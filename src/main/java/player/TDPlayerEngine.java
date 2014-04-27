@@ -198,6 +198,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			setItem(LEFT_CLICK, items.getString(s));
 		}	
 	}*/
+	
+	public String getCurrentTowerDescription() {
+		return model.getTowerDescription(towerName);
+	}
 
 	private void checkGameEnd() {
 		if (model.isGameLost()) {

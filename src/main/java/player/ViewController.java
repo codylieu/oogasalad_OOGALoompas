@@ -32,7 +32,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-import main.java.engine.Model;
 import main.java.player.dlc.RepositoryViewer;
 import main.java.player.panels.FileChooserActionListener;
 import main.java.player.panels.GameInfoPanel;
@@ -40,6 +39,7 @@ import main.java.player.panels.HelpTextPanel;
 import main.java.player.panels.HighScoreCard;
 import main.java.player.panels.ObjectChooser;
 import main.java.player.panels.ObservingPanel;
+import main.java.player.panels.TowerDescriptionArea;
 import main.java.player.panels.UnitInfoPanel;
 import main.java.player.panels.WelcomeButtonPanelListener;
 import main.java.player.util.MultipleMethodAction;
@@ -119,6 +119,7 @@ public class ViewController implements Serializable {
 	private HighScoreCard highScoreCard;
 	private String chosenLanguage;
 	private ObjectChooser powerUpChooser;
+	private ObservingPanel towerDescriptionArea;
 
 	/**
 	 * initializeEngine() must be called first
@@ -336,6 +337,10 @@ public class ViewController implements Serializable {
 		//towerChooser.register((Observing) engine);
 		// should leave as observing engine? or pass into contstructor?
 		powerUpChooser = new ObjectChooser(engine, "getPossibleItems", SET_CURRENT_ITEM_TYPE_METHOD_NAME);
+		
+		towerDescriptionArea = new TowerDescriptionArea(3, 20);
+		towerDescriptionArea.addSubject((Subject) engine);
+		engine.register(towerDescriptionArea);
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
@@ -348,6 +353,7 @@ public class ViewController implements Serializable {
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
 		gameButtonPanel.add(powerUpChooser);
+		gameButtonPanel.add(towerDescriptionArea);
 		return gameButtonPanel;
 	}
 
