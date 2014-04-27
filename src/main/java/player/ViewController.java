@@ -99,6 +99,8 @@ public class ViewController implements Serializable {
 	public static final String HELP_CARD = "helpCard";	
 	public static final String CREDITS_CARD = "creditsCard";
 	public static final String HIGH_SCORE_CARD = "highScoreCard";
+	
+	public static final String RESOURCES_PATH = "main/resources/";
 
 	private JFrame frame;
 	private JPanel cards;
@@ -163,7 +165,10 @@ public class ViewController implements Serializable {
 
 	private void initSong(){
 		try {
-			song = new Sound(DEFAULT_MUSIC_PATH);
+			System.out.println(engine.getPathToMusic());
+			if (engine.getPathToMusic() != null) {
+				song = new Sound(RESOURCES_PATH + engine.getPathToMusic());
+			}
 		} catch (LineUnavailableException | IOException
 				| UnsupportedAudioFileException e) {
 			JOptionPane.showMessageDialog(null, "Music file not found.");
