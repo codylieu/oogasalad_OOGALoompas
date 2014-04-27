@@ -56,23 +56,11 @@ public interface IModel {
 	 */
 	public void checkAndRemoveTower (double x, double y);
 
-	// TODO: use this instead of other one, will change -jordan
-	public void loadMapTest (String fileName);
-	/**
-	 * Deserialize and load into the engine the GameBlueprint obtained from the file path
-	 * 
-	 * @param filePath File path of the blueprint to be loaded
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-
 	public void loadGameBlueprint (String filePath) throws ClassNotFoundException, IOException;
 	/**
 	 * Reset the game clock
 	 */
 	public void resetGameClock ();
-
-	public void addScore (double score);
 
 	/**
 	 * Get the score of the player

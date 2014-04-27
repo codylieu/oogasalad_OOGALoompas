@@ -19,6 +19,7 @@ public class RowBombItemSchema extends ItemSchema {
 
 	public RowBombItemSchema() {
 		super(MY_CONCRETE_TYPE);
+		myAttributeSet.add(RANGE);
 	}
 
 	/**
@@ -36,6 +37,7 @@ public class RowBombItemSchema extends ItemSchema {
 		addAttribute(ItemSchema.DAMAGE, ItemViewConstants.DAMAGE_DEFAULT);
 		addAttribute(ItemSchema.FLASH_INTERVAL, ItemViewConstants.FLASH_INTERVAL_DEFAULT);
 		addAttribute(ItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT);
+		addAttribute(RANGE, ItemViewConstants.RANGE_DEFAULT);
 	}
 
 	@Override

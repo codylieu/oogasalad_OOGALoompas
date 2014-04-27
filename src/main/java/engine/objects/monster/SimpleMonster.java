@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
 
+import main.java.engine.PathfinderManager;
 import main.java.engine.objects.Exit;
 import main.java.schema.MonsterSpawnSchema;
 import main.java.schema.tdobjects.MonsterSchema;
@@ -32,6 +33,7 @@ public class SimpleMonster extends Monster {
 				(double) getValueOrDefault(attributes, MonsterSchema.SPEED, DEFAULT_MOVE_SPEED),
 				(double) getValueOrDefault(attributes, MonsterSchema.REWARD, DEFAULT_REWARD_AMOUNT),
 				(String) attributes.get(MonsterSchema.NAME),
+				(PathfinderManager) getValueOrDefault(attributes, MonsterSchema.PATHFINDER_MANAGER, null),
 				(MonsterSpawnSchema) getValueOrDefault(attributes, MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, null));
 	}
 
@@ -42,10 +44,11 @@ public class SimpleMonster extends Monster {
                           double speed,
                           double moneyValue,
                           String imageName,
+						  PathfinderManager pathfinderManager,
                           MonsterSpawnSchema resurrectionSpawnSchema) {
 
-        super(entrance, exit, blocked,
-              health, speed, moneyValue, imageName, resurrectionSpawnSchema);
+        super(entrance, exit, blocked, health, speed, moneyValue, imageName,
+				pathfinderManager, resurrectionSpawnSchema);
 
     }
 }
