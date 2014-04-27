@@ -239,6 +239,16 @@ public class Model implements IModel {
 		}
 		return info;
 	}
+	
+	/**
+	 * Returns the description associated with a particular tower. 
+	 * 
+	 * @param towerName
+	 * @return
+	 */
+	public String getTowerDescription(String towerName) {
+		return factory.getTowerDescription(towerName);
+	}
 
 	/**
 	 * Return the monster at the specified coordinates.
@@ -722,7 +732,7 @@ public class Model implements IModel {
 		 */
 
 		//
-
+		/*
 		// Create test monsters
 		SimpleMonsterSchema testMonsterOne = new SimpleMonsterSchema();
 		testMonsterOne.addAttribute(MonsterSchema.NAME, "test-monster-1");
@@ -771,6 +781,7 @@ public class Model implements IModel {
 		testWaves.add(testWaveSpawnSchemaThree);
 
 		testBlueprint.setMyWaveSchemas(testWaves);
+		*/
 
 		return testBlueprint;
 	}
