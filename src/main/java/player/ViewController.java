@@ -58,6 +58,9 @@ import net.lingala.zip4j.exception.ZipException;
 @SuppressWarnings("serial")
 public class ViewController implements Serializable {
 
+	public static final String MUSIC_FILE_NOT_FOUND_EXCEPTION = "Music file not found.";
+	public static final String LOAD_LIBRARY_TEXT = "LOAD_LIBRARY_TEXT";
+	public static final String INVALID_FILE_CLOSING_PROGRAM_EXCEPTION = "Invalid file. Closing program.";
 	public static final String SET_CURRENT_POWER_UP_TYPE_METHOD_NAME = "setCurrentPowerUpType";
 	public static final String GET_POSSIBLE_ITEMS_METHOD_NAMES = "getPossibleItems";
 	public static final String GET_POSSIBLE_TOWERS_METHOD_NAME = "getPossibleTowers";
@@ -180,7 +183,7 @@ public class ViewController implements Serializable {
 			}
 		} catch (LineUnavailableException | IOException
 				| UnsupportedAudioFileException e) {
-			JOptionPane.showMessageDialog(null, "Music file not found.");
+			JOptionPane.showMessageDialog(null, MUSIC_FILE_NOT_FOUND_EXCEPTION);
 		}
 		soundOn = false;
 	}
@@ -199,7 +202,7 @@ public class ViewController implements Serializable {
 	private JMenu makeFileMenu(){
 		JMenu files = new JMenu(myLanguageResources.getString(FILE_LABEL));
 		files.add(new FileChooserActionListener(engine, LOAD_BLUEPRINT_FILE_METHOD_NAME, fileChooser, myLanguageResources.getString(LOAD_GAME_TEXT)));
-		files.add(new RepositoryViewer(myLanguageResources.getString("LOAD_LIBRARY_TEXT"), engine));
+		files.add(new RepositoryViewer(myLanguageResources.getString(LOAD_LIBRARY_TEXT), engine));
 		return files;
 	}
 
@@ -298,7 +301,7 @@ public class ViewController implements Serializable {
 		try {
 			engine = new TDPlayerEngine(pathToBlueprint, this, myLanguageResources);
 		} catch (ClassNotFoundException | IOException | ZipException e) {
-			JOptionPane.showMessageDialog(frame, "Invalid file. Closing program.");
+			JOptionPane.showMessageDialog(frame, INVALID_FILE_CLOSING_PROGRAM_EXCEPTION);
 			System.exit(1);
 		}
 		engine.initModel();
