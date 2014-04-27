@@ -171,11 +171,6 @@ public class WaveEditorTab extends EditorTab {
 				String monsterName = (String) monsterSchema.getAttributesMap()
 						.get(MonsterSchema.NAME);
 				int columnOfEnemy = getColumnOfEnemy(monsterName);
-				
-				
-				
-				
-				
 				int numEnemies = Integer.parseInt((String.valueOf(Math
 						.abs((int) table.getModel().getValueAt(waveRow,
 								columnOfEnemy)))));
