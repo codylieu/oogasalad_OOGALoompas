@@ -38,6 +38,24 @@ import net.lingala.zip4j.exception.ZipException;
 
 public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine{
 
+	public static final String CRITICAL_MONSTER_CREATION_EXCEPTION = "Critical Monster creation exception. See stack trace. Exiting program";
+	public static final String GAME_CLOCK_HEADER = "GAME_CLOCK_HEADER";
+	public static final String MONEY_HEADER = "MONEY_HEADER";
+	public static final String LIVES_LEFT_HEADER = "LIVES_LEFT_HEADER";
+	public static final String SCORE_HEADER = "SCORE_HEADER";
+	public static final String TIME = "Time";
+	public static final String MONEY = "Money";
+	public static final String LIVES = "Lives";
+	public static final String SCORE = "Score";
+	public static final String FULL_SCREEN = "FullScreen";
+	public static final String TOGGLE_RUNNING = "ToggleRunning";
+	public static final String ADD_TOWER = "AddTower";
+	public static final String UPGRADE_TOWER = "UpgradeTower";
+	public static final String TOWER_GHOST = "TowerGhost";
+	public static final String MAIN_RESOURCES_HOTKEYS_DATAPATH = "main.resources.hotkeys";
+	public static final String GAME_END_MESSAGE = "GAME_END_MESSAGE";
+	public static final String GAME_WON_MESSAGE = "GAME_WON_MESSAGE";
+	public static final String GAME_LOST_MESSAGE = "GAME_LOST_MESSAGE";
 	public static final String LIFE_SAVER = "LifeSaver";
 	public static final String INSTANT_FREEZE = "InstantFreeze";
 	public static final String ANNIHILATOR = "Annihilator";
@@ -58,14 +76,15 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private String pathToBlueprint;
 	private String pathToMusic;
 	private String towerName;
-	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
+	private ResourceBundle hotkeys = ResourceBundle.getBundle(MAIN_RESOURCES_HOTKEYS_DATAPATH);
+	private ResourceBundle languages;
 	private JGPoint lastClickedObject;
 	private LeapGameController leapController;
 	private ViewController viewController;
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 
 
-	public TDPlayerEngine(String pathToBlueprintInit, ViewController myView) throws ClassNotFoundException, IOException, ZipException {
+	public TDPlayerEngine(String pathToBlueprintInit, ViewController myView, ResourceBundle myLanguages) throws ClassNotFoundException, IOException, ZipException {
 		// super();
 		loadCanvasSize(pathToBlueprintInit);
 		pathToBlueprint = pathToBlueprintInit;
@@ -76,6 +95,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		leapController = new LeapGameController();
 		lastClickedObject = new JGPoint();
 		viewController = myView;
+		languages = myLanguages;
 		stop();
 	}
 
@@ -200,16 +220,16 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	private void checkGameEnd() {
 		if (model.isGameLost()) {
-			endGameDialog("Game lost :(");
+			endGameDialog(languages.getString(GAME_LOST_MESSAGE));
 		}
 
 		if (model.isGameWon()) {
-			endGameDialog("Game won!");
+			endGameDialog(languages.getString(GAME_WON_MESSAGE));
 		}
 	}
 
 	private void endGameDialog(String ending){
-		int selected = JOptionPane.showConfirmDialog(null, ending, "Game End", JOptionPane.DEFAULT_OPTION);
+		int selected = JOptionPane.showConfirmDialog(null, ending, languages.getString(GAME_END_MESSAGE), JOptionPane.DEFAULT_OPTION);
 		if(selected == 0){
 			viewController.handleEndGame();
 		}
@@ -219,7 +239,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		try {
 			model.updateGame();
 		} catch (MonsterCreationFailureException e) {
-			JOptionPane.showMessageDialog(null, "Critical Monster creation exception. See stack trace. Exiting program");
+			JOptionPane.showMessageDialog(null, CRITICAL_MONSTER_CREATION_EXCEPTION);
 			e.printStackTrace();
 			System.exit(1);
 		}
@@ -230,7 +250,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			if (getMouseButton(LEFT_CLICK)) {
 				model.placeTower(getMouseX(), getMouseY(), towerName);
 				setCursorState(CursorState.None);
-				removeObjects("TowerGhost", 0);
+				removeObjects(TOWER_GHOST, 0);
 				clearMouseButton(LEFT_CLICK);
 			}
 			else {
@@ -241,14 +261,14 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			if (getMouseButton(LEFT_CLICK)) {
 				lastClickedObject.x = getMousePos().x;
 				lastClickedObject.y = getMousePos().y;
-				if(getKey(Integer.parseInt(hotkeys.getString("UpgradeTower")))){
+				if(getKey(Integer.parseInt(hotkeys.getString(UPGRADE_TOWER)))){
 					try {
 						model.upgradeTower(getMouseX(), getMouseY());
 					} catch (TowerCreationFailureException e) {
 						e.printStackTrace();
 					}
 
-					clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
+					clearKey(Integer.parseInt(hotkeys.getString(UPGRADE_TOWER)));
 				}
 				clearMouseButton(LEFT_CLICK);
 			}
@@ -285,7 +305,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	public void toggleAddTower() {
 		if (getCursorState() == CursorState.AddTower) {
 			setCursorState(CursorState.None);
-			removeObjects("TowerGhost", 0);
+			removeObjects(TOWER_GHOST, 0);
 		}
 		else {
 			setCursorState(CursorState.AddTower);
@@ -293,19 +313,19 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	}
 
 	private void checkKeys() {
-		if (getKey(Integer.parseInt(hotkeys.getString("AddTower")))){
+		if (getKey(Integer.parseInt(hotkeys.getString(ADD_TOWER)))){
 			toggleAddTower();
-			clearKey(Integer.parseInt(hotkeys.getString("AddTower")));
+			clearKey(Integer.parseInt(hotkeys.getString(ADD_TOWER)));
 		}
 
-		if (getKey(Integer.parseInt(hotkeys.getString("ToggleRunning")))){
+		if (getKey(Integer.parseInt(hotkeys.getString(TOGGLE_RUNNING)))){
 			toggleRunning();
-			clearKey(Integer.parseInt(hotkeys.getString("ToggleRunning")));
+			clearKey(Integer.parseInt(hotkeys.getString(TOGGLE_RUNNING)));
 		}
 
-		if (getKey(Integer.parseInt(hotkeys.getString("FullScreen")))){
+		if (getKey(Integer.parseInt(hotkeys.getString(FULL_SCREEN)))){
 			toggleFullScreen();
-			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
+			clearKey(Integer.parseInt(hotkeys.getString(FULL_SCREEN)));
 		}
 
 	}
@@ -378,12 +398,16 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		}
 	}
 
+	public void updateLanguage(ResourceBundle myLanguages){
+		languages = myLanguages;
+	}
+	
 	public Map<String, String> getGameAttributes() {
 		Map<String, String> gameStats = new HashMap<String, String>();
-		gameStats.put("Score", "Score: " + model.getScore());
-		gameStats.put("Lives", "Lives left: " + model.getPlayerLives());
-		gameStats.put("Money", "Money: " + model.getMoney());
-		gameStats.put("Time", "Game clock: " + model.getGameClock());
+		gameStats.put(SCORE, languages.getString(SCORE_HEADER) + model.getScore());
+		gameStats.put(LIVES, languages.getString(LIVES_LEFT_HEADER) + model.getPlayerLives());
+		gameStats.put(MONEY, languages.getString(MONEY_HEADER) + model.getMoney());
+		gameStats.put(TIME, languages.getString(GAME_CLOCK_HEADER) + model.getGameClock());
 		return gameStats;
 	}
 

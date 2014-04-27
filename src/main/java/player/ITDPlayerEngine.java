@@ -3,6 +3,7 @@ package main.java.player;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.zip.ZipException;
 
 import main.java.player.util.CursorState;
@@ -68,4 +69,6 @@ public interface ITDPlayerEngine {
 		public double getHighScore();
 		
 		public void stop();
+		
+		public void updateLanguage(ResourceBundle myLanguage);
 }

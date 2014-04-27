@@ -140,6 +140,7 @@ public class ViewController implements Serializable {
 	}
 
 	private void makeAndAddCards(){
+		engine.updateLanguage(myLanguageResources);
 		makeCards();
 		addWelcomeCard();
 		addGameCard();
@@ -291,7 +292,7 @@ public class ViewController implements Serializable {
 
 	private ITDPlayerEngine initializeEngine(String pathToBlueprint) {
 		try {
-			engine = new TDPlayerEngine(pathToBlueprint, this);
+			engine = new TDPlayerEngine(pathToBlueprint, this, myLanguageResources);
 		} catch (ClassNotFoundException | IOException | ZipException e) {
 			JOptionPane.showMessageDialog(frame, "Invalid file. Closing program.");
 			System.exit(1);
