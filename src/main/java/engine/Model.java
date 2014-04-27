@@ -147,7 +147,7 @@ public class Model implements IModel {
 				player.changeMoney(-newTower.getCost());
 				towers[currentTile[0]][currentTile[1]] = newTower;
 				currentMap.setTileCID(currentTile[0], currentTile[1],
-						TerrainAttribute.Untraversable.getIndex()); // TODO: get from schema
+						TerrainAttribute.Flyable.getIndex()); // TODO: get from schema
 				pathfinderManager.updatePaths(monsters);
 				return true;
 			}
