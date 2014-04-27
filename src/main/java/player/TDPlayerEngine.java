@@ -57,6 +57,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private boolean isFullScreen;
 	private String pathToBlueprint;
 	private String towerName;
+	private String itemName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private JGPoint lastClickedObject;
 	private LeapGameController leapController;
@@ -246,6 +247,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			}
 			//setAllItems();
 		}
+		else if (cursorState == CursorState.AddItem) {
+			if (getMouseButton(LEFT_CLICK)) {
+				model.placeItem(itemName, getMouseX(), getMouseY());
+			}
+		}
 		if (getMouseButton(RIGHT_CLICK)) {
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
 			clearMouseButton(3);
@@ -266,6 +272,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	public void setCurrentTowerType(String currentTowerName){
 		towerName = currentTowerName;
 	}
+	
+	public void setCurrentItemType(String currentItemName) {
+		itemName = currentItemName;
+	}
 
 	/**
 	 * Toggle the cursor status from AddTower to None 
@@ -278,6 +288,16 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		}
 		else {
 			setCursorState(CursorState.AddTower);
+		}
+	}
+	
+	public void toggleAddItem() {
+		if (getCursorState() == CursorState.AddItem) {
+			setCursorState(CursorState.AddItem);
+			removeObjects("TowerGhost", 0);
+		}
+		else {
+			setCursorState(CursorState.AddItem);
 		}
 	}
 
@@ -295,6 +315,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		if (getKey(Integer.parseInt(hotkeys.getString("FullScreen")))){
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
+		}
+		if (getKey(Integer.parseInt(hotkeys.getString("AddItem")))){
+			toggleAddItem();
+			clearKey(Integer.parseInt(hotkeys.getString("AddItem")));
 		}
 
 	}
