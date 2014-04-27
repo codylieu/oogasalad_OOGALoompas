@@ -163,9 +163,10 @@ public class TestDataHandler {
 	public void testJsonSerializationAndDeserialization() throws IOException{
 		JSONHandler testDataHandler = new JSONHandler();
 		GameBlueprint testBlueprint = this.createTestBlueprint();
+		
 		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
 		String original = testDataHandler.serializeObjectToJSON(testBlueprint,"testBlueprintJSON");
-//		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint,"testBlueprintJSON"));
+		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint,"testBlueprintJSON"));
 //		String loaded = testDataHandler.serializeObjectToJSON(loadedBlueprint,"testBlueprintAfterJSONSerialized");
 //		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"),
 //				loadedBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"));
@@ -229,15 +230,12 @@ public class TestDataHandler {
 	public void loadDifferentResourcesFiles() throws ClassNotFoundException, IOException, ZipException{
 		DataHandler testDataHandler = new DataHandler();
 		GameBlueprint testBlueprint = this.createTestBlueprint();
-//		testDataHandler.saveBlueprint(testBlueprint,"src/test/newFolder/myResources.zip");
 		String testPath = "src/main/resources/";
-//		String resourcePath = "src/main/resources/";
 
 		// save this with current resources folder
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesOne.zip");
 
 		// add stuff to resources
-
 		new File(testPath).mkdir();
 		boolean savedObject = testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
@@ -251,29 +249,15 @@ public class TestDataHandler {
 
 		// loading them should cause the first to be bigger than the second,
 		// and cause the second is the original, won't interfere with code
-
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
 		File myResourcesTwo = new File(testPath);
 		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
-//		System.out.println(myResourcesTwoSize);
-
 		// should contain testBlueprint.ser
 
-//		File dir = new File(testPath);
-//		File[] filesList = dir.listFiles();
-//		for (File file : filesList) {
-//			if (file.isFile()) {
-//				System.out.println(file.getName());
-//			}
-//		}
-
 		// loads back the original, should have 1 less file
-
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
 		File myResourcesOne = new File(testPath);
 		long myResourcesOneSize = myResourcesOne.listFiles().length;
-//		System.out.println(myResourcesOneSize);
-		//		System.out.println(myResourcesTwoSize + "   " + myResourcesOneSize);
 		assertTrue("The second resources folder should be greater than the first", myResourcesTwoSize > myResourcesOneSize);
 
 	}
