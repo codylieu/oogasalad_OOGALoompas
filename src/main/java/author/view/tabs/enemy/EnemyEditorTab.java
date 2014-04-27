@@ -55,12 +55,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final Set<Integer> flyingSet = new HashSet<Integer>(
-			Arrays.asList(TerrainAttribute.Untraversable.getIndex()));
+	public static final Set<Integer> flyingSet = new HashSet<Integer>();
+			
 
 	public static final Set<Integer> groundSet = new HashSet<Integer>(
-			Arrays.asList(TerrainAttribute.Untraversable.getIndex(),
-					TerrainAttribute.Flyable.getIndex()));
+					TerrainAttribute.Unwalkable.getIndex());
 	private JSpinner healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
 
 	private ImageCanvas monsterImageCanvas;
