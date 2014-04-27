@@ -17,14 +17,17 @@ public class TDMap {
     private static final int Y_SKIP = 0;
     private static final String IMG_OP = "-";
 
+	private JGEngineInterface engine;
     private List<TileSchema> tileSchemas;
     private List<TileMapSchema> tileMapSchemas;
     private Map<String, TileMap> tileMaps;
     private Set<String> definedTiles;
+	private int[][] originalTileCIDs;
     private static int tileHeight;
     private static int tileWidth;
 
     public TDMap(JGEngineInterface engine, GameMapSchema gameMapSchema) {
+		this.engine = engine;
         tileHeight = engine.tileHeight();
         tileWidth = engine.tileWidth();
         Map<String, Serializable> gameMapAttributes = gameMapSchema.getAttributesMap();
@@ -33,45 +36,78 @@ public class TDMap {
         tileMaps = new HashMap<>();
         definedTiles = new HashSet<>();
 
-        // Load tilemaps used for this map
-        for (TileMapSchema tms : tileMapSchemas) {
-            TileMap tileMap = new TileMap(tms);
-            tileMaps.put(tileMap.name, tileMap);
+		initOriginalTileCIDs();
+		loadTilemaps();
+		loadTiles();
+	}
 
-            engine.defineImageMap(tileMap.name, Model.RESOURCE_PATH + tileMap.name,
+	/**
+	 * Initialize original CID map to all zeros.
+	 */
+	private void initOriginalTileCIDs() {
+		originalTileCIDs = new int[engine.pfTilesX()][engine.pfTilesY()];
+		for (int i = 0; i < originalTileCIDs.length; i++) {
+			for (int j = 0; j < originalTileCIDs[i].length; j++) {
+				originalTileCIDs[i][j] = 0; // TODO: make walkable constant
+			}
+		}
+	}
+
+	/**
+	 * Load in tilemaps.
+	 */
+	private void loadTilemaps() {
+		for (TileMapSchema tms : tileMapSchemas) {
+			TileMap tileMap = new TileMap(tms);
+			tileMaps.put(tileMap.name, tileMap);
+
+			engine.defineImageMap(tileMap.name, Model.RESOURCE_PATH + tileMap.name,
 					X_OFFSET, Y_OFFSET, tileMap.pixelSize, tileMap.pixelSize,
 					X_SKIP, Y_SKIP);
-        }
+		}
+	}
 
-        // Load in tiles to engine
-        for (TileSchema ts : tileSchemas) {
-            Map<String, Serializable> tsAttributeMap = ts.getAttributesMap();
-            String tileMapFileName = (String) tsAttributeMap.get(TileSchema.TILEMAP_FILE_NAME);
+	/**
+	 * Load in tiles.
+	 */
+	private void loadTiles() {
+		for (TileSchema ts : tileSchemas) {
+			Map<String, Serializable> tsAttributeMap = ts.getAttributesMap();
+			String tileMapFileName = (String) tsAttributeMap.get(TileSchema.TILEMAP_FILE_NAME);
 
-            if (tileMaps.get(tileMapFileName) == null) {
-                continue; // TODO: fix
-            }
+			if (tileMaps.get(tileMapFileName) == null) {
+				continue; // TODO: fix
+			}
 
-            int tileRow = (Integer) tsAttributeMap.get(TileSchema.CANVAS_ROW);
-            int tileCol = (Integer) tsAttributeMap.get(TileSchema.CANVAS_COL);
-            int tileMapRow = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_ROW);
-            int tileMapCol = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_COL);
-            int tileCID = (Integer) tsAttributeMap.get(TileSchema.TILE_CID);
-            int tileIndex = tileMapRow * tileMaps.get(tileMapFileName).numCols + tileMapCol;
+			int tileRow = (Integer) tsAttributeMap.get(TileSchema.CANVAS_ROW);
+			int tileCol = (Integer) tsAttributeMap.get(TileSchema.CANVAS_COL);
+			int tileMapRow = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_ROW);
+			int tileMapCol = (Integer) tsAttributeMap.get(TileSchema.TILEMAP_COL);
+			int tileCID = (Integer) tsAttributeMap.get(TileSchema.TILE_CID);
+			int tileIndex = tileMapRow * tileMaps.get(tileMapFileName).numCols + tileMapCol;
 
-            String tileName = tileMapFileName + tileMapCol + tileMapRow;
+			String tileName = tileMapFileName + tileMapCol + tileMapRow;
 
-            if (!definedTiles.contains(tileName)) {
-                engine.defineImage(tileName, tileMapRow + tileMapCol + "", tileCID,
+			if (!definedTiles.contains(tileName)) {
+				engine.defineImage(tileName, tileMapRow + tileMapCol + "", tileCID,
 						tileMapFileName, tileIndex, IMG_OP);
-                definedTiles.add(tileName);
-            }
+				definedTiles.add(tileName);
+			}
 
-            engine.setTile(tileCol, tileRow, tileMapRow + tileMapCol + "");
-        }
-    }
+			engine.setTile(tileCol, tileRow, tileMapRow + tileMapCol + "");
+			originalTileCIDs[tileCol][tileRow] = tileCID;
+		}
+	}
 
-    private class TileMap {
+	public void setTileCID(int xind, int yind, int cid) {
+		engine.setTileCid(xind, yind, cid);
+	}
+
+	public void revertTileCIDToOriginal(int xind, int yind) {
+		engine.setTileCid(xind, yind, originalTileCIDs[xind][yind]);
+	}
+
+	private class TileMap {
         private String name;
         private int pixelSize;
         private int numRows;
