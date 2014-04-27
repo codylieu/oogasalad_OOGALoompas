@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.management.timer.Timer;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -122,15 +121,17 @@ public class AuthoringView extends JFrame {
 	 */
 	private void addActionListeners() {
 		tabbedPane.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent changeEvent) {
 				System.out.println(tabbedPane.getSelectedIndex());
-				
+
 			}
 		});
 		finalizeGameButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				myController.updateWaveTab();
 				int editorTabCount = tabbedPane.getTabCount();
 				for (int count = 0; count < editorTabCount; count++) {
 					EditorTab tab = (EditorTab) tabbedPane
@@ -158,26 +159,13 @@ public class AuthoringView extends JFrame {
 		return finalizeGameButton;
 	}
 
-	/**
-	 * Shifts to the Enemy Tab
-	 */
 	public void shiftToEnemyTab() {
 		for (Component tab : tabbedPane.getComponents()) {
 			if (tab instanceof EnemyEditorTab) {
 				tabbedPane.setSelectedComponent(tab);
 			}
 		}
-	}
 
-	/**
-	 * Shifts to the Wave Tab
-	 */
-	public void shiftToWaveTab() {
-		for (Component tab : tabbedPane.getComponents()) {
-			if (tab instanceof WaveEditorTab) {
-				tabbedPane.setSelectedComponent(tab);
-			}
-		}
 	}
 
 }
