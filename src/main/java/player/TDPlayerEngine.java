@@ -215,6 +215,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		} catch (MonsterCreationFailureException e) {
 			JOptionPane.showMessageDialog(null, "Critical Monster creation exception. See stack trace. Exiting program");
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
