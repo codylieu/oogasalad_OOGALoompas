@@ -139,7 +139,7 @@ public class ShootingTower extends TowerBehaviorDecorator {
 
 	@Override
 	public String getInfo() {
-		String info = this.getClass().getSimpleName() + "\n" +
+		String info = 
 				baseTower.getInfo() + 
 				"\nDamage: " + myDamage +
 				"\nRange: " + myRange;
