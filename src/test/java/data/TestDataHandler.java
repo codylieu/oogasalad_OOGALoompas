@@ -164,7 +164,7 @@ public class TestDataHandler {
 		
 		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
 		String original = testDataHandler.serializeObjectToJSON(testBlueprint,"testBlueprintJSON");
-//		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint,"testBlueprintJSON"));
+		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint,"testBlueprintJSON"));
 //		String loaded = testDataHandler.serializeObjectToJSON(loadedBlueprint,"testBlueprintAfterJSONSerialized");
 //		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"),
 //				loadedBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"));
@@ -238,7 +238,6 @@ public class TestDataHandler {
 		new File(testPath).mkdir();
 		boolean savedObject = testDataHandler.saveObjectToFile(testBlueprint, testPath + "testBlueprint.ser");
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + "testResourcesTwo.zip");
-		System.out.println(savedObject);
 
 		if (savedObject){
 			File myFileToTakeSpace = new File(testPath + "testBlueprint.ser");

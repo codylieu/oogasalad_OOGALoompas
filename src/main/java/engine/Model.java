@@ -318,7 +318,7 @@ public class Model implements IModel {
 
 		// Initialize from game settings from game schema
 		GameSchema gameSchema = blueprint.getMyGameScenario();
-		Map<String, Serializable> gameSchemaAttributeMap = gameSchema.getAttributesMap();
+		Map<String, Object> gameSchemaAttributeMap = gameSchema.getAttributesMap();
 		this.player = new Player((Integer) gameSchemaAttributeMap.get(GameSchema.MONEY),
 				(Integer) gameSchemaAttributeMap.get(GameSchema.LIVES));
 		Boolean survivalModeAttribute =
@@ -812,7 +812,7 @@ public class Model implements IModel {
 	 * @throws ObjectInfoException 
 	 */
 	public double getRange(String towerSchemaName) throws ObjectInfoException {
-		Map<String, Serializable> attributes = factory.getTDObjectAttributes(towerSchemaName);
+		Map<String, Object> attributes = factory.getTDObjectAttributes(towerSchemaName);
 		try {
 			if(!attributes.containsKey(TowerSchema.TOWER_BEHAVIORS)) {//Checks that the schema exists and is a tower schema
 				throw new ObjectInfoException("This is not a tower schema");

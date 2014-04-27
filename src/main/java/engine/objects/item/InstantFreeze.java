@@ -26,7 +26,7 @@ public class InstantFreeze extends TDItem {
 		this.freeze_duration = freeze_duration;
 	}
 
-	public InstantFreeze(Map<String, Serializable> attributes) {
+	public InstantFreeze(Map<String, Object> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(String) getValueOrDefault(attributes, InstantFreezeItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),

@@ -24,8 +24,8 @@ public class GameSchema extends AbstractSchema {
 	}
 	
 	@Override
-	public void addAttribute(String attributeName, Serializable attributeValue) {
-		myAttributesMap.put(attributeName, attributeValue);
+	public void addAttribute(String attributeName, Object attributeValue) {
+		myAttributesMap.put(attributeName, (Serializable) attributeValue);
 		myAttributeSet.add(ISSURVIVALMODE);
 	}
 	

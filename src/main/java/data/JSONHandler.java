@@ -6,14 +6,22 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import main.java.data.adapters.InterfaceAdapter;
+import main.java.data.adapters.MonsterSchemaAdapter;
+import main.java.data.adapters.RuntimeTypeAdapterFactory;
+import main.java.data.adapters.SerializbleInstanceCreator;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
+import main.java.schema.tdobjects.MonsterSchema;
+import main.java.schema.tdobjects.TDObjectSchema;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sun.xml.internal.ws.model.RuntimeModeler;
 
 public class JSONHandler {
 
@@ -22,6 +30,14 @@ public class JSONHandler {
 	
 	public JSONHandler(){
 		GsonBuilder gsonBuilder = new GsonBuilder();
+//		RuntimeTypeAdapterFactory<TDObjectSchema> SchemaAdapter 
+//			= RuntimeTypeAdapterFactory.of(TDObjectSchema.class);
+//		SchemaAdapter.registerSubtype(MonsterSchema.class,"monsterschema");
+//		gsonBuilder.registerTypeAdapter(TDObjectSchema.class, SchemaAdapter);
+		
+		gsonBuilder.registerTypeAdapter(MonsterSchema.class, new MonsterSchemaAdapter());
+		
+//		gsonBuilder.registerTypeAdapter(MonsterSchema.class, new InterfaceAdapter<MonsterSchema>());
 	    gsonBuilder.setPrettyPrinting();
 	    myGson = gsonBuilder.create();
   		

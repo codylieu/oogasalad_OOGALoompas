@@ -101,7 +101,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
 			SimpleMonsterSchema currentMonsterSchema = (SimpleMonsterSchema) monster;
-			Map<String, Serializable> map = currentMonsterSchema
+			Map<String, Object> map = currentMonsterSchema
 					.getAttributesMap();
 			String monsterName = (String) map
 					.get(MonsterSchema.RESURRECT_MONSTER_NAME);
@@ -125,7 +125,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			}
 
 
-			Map<String, Serializable> monsterAttributeMap = currentMonsterSchema.getAttributesMap();
+			Map<String, Object> monsterAttributeMap = currentMonsterSchema.getAttributesMap();
 			for (String attribute : monsterAttributeMap.keySet()) {
 				Serializable attValue = addCastToAttribute(monsterAttributeMap.get(attribute));
 				currentMonsterSchema.addAttribute(attribute, attValue);
@@ -207,7 +207,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	}
 
 	@Override
-	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+	protected void updateViewWithSchemaData(Map<String, Object> map) {
 		super.updateViewWithSchemaData(map);
 		for (JRadioButton button : allButtons) {
 			Set blockedTilesSet = (Set) map.get(MonsterSchema.BLOCKED_TILES);

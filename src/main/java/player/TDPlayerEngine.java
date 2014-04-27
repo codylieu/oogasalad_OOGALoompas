@@ -83,7 +83,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		GameBlueprint blueprint = dataHandler.loadBlueprint(pathToBlueprint, true);
 		CanvasSchema canvasSchema = (CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap().
 				get(GameMapSchema.MY_CANVAS_ATTRIBUTES);
-		Map<String, Serializable> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
+		Map<String, Object> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
 		xtiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
 		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
 	}

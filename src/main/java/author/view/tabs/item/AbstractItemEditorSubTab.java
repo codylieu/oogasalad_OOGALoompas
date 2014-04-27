@@ -55,7 +55,7 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 		for (TDObjectSchema item : objectMap.values()) {
 			ItemSchema itemSchema = (ItemSchema) item;
 			
-			Map<String, Serializable> itemAttributesMap = itemSchema.getAttributesMap();
+			Map<String, Object> itemAttributesMap = itemSchema.getAttributesMap();
 			
 			for (String attribute : itemAttributesMap.keySet()) {
 				Serializable attValue = addCastToAttribute(itemAttributesMap.get(attribute));
@@ -76,7 +76,7 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 	}
 
 	@Override
-	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+	protected void updateViewWithSchemaData(Map<String, Object> map) {
 		super.updateViewWithSchemaData(map);
 		descriptionTextArea.setText((String) map.get(TowerSchema.DESCRIPTION));
 		

@@ -9,7 +9,7 @@ import java.util.Set;
 import main.java.exceptions.engine.InvalidParameterForConcreteTypeException;
 
 public abstract class AbstractSchema implements Serializable {
-	protected Map<String, Serializable> myAttributesMap;
+	protected Map<String, Object> myAttributesMap;
 	protected Set<String> myAttributeSet;
 	// TODO: Ensure that types of values of myAttributesMap match.
 	// Perhaps make myAttributesSet into a map that maps name of attribute with type?
@@ -31,12 +31,12 @@ public abstract class AbstractSchema implements Serializable {
 	 * attribute has toString method.
 	 * 
 	 * @param attributeName
-	 * @param attributeValue
+	 * @param object
 	 * @throws InvalidParameterForConcreteTypeException 
 	 */
-	public void addAttribute(String attributeName, Serializable attributeValue) {
+	public void addAttribute(String attributeName, Object object) {
         if (myAttributeSet.contains(attributeName)) {
-            myAttributesMap.put(attributeName, attributeValue);
+            myAttributesMap.put(attributeName, object);
         } else {
             try {
                 throw new InvalidParameterForConcreteTypeException(); // TODO: actually throw instead of catching
@@ -51,7 +51,7 @@ public abstract class AbstractSchema implements Serializable {
 	 * 
 	 * @return copy of the attributes map
 	 */
-	public Map<String, Serializable> getAttributesMap() {
+	public Map<String, Object> getAttributesMap() {
         return new HashMap<>(myAttributesMap);
 	}
 }

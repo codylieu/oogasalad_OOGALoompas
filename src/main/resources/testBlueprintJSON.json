@@ -10,29 +10,32 @@
   },
   "myMonsterSchemas": [
     {
-      "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
-      "myAttributesMap": {
-        "Speed": 1.0,
-        "imageName": "monster.png",
-        "name": "test-monster-1",
-        "Bounty Reward": 200.0
-      },
-      "myAttributeSet": [
-        "Exit",
-        "imageName",
-        "Health",
-        "Attack Damage",
-        "Tile Size",
-        "Speed",
-        "Pathfinder Manager",
-        "name",
-        "Blocked Tiles",
-        "Bounty Reward",
-        "Monster Spawn Schemas to Spawn Upon Death",
-        "Number of Monsters to Spawn",
-        "Name of Monster to Spawn",
-        "Entrance Location"
-      ]
+      "CLASSNAME": "main.java.schema.tdobjects.monsters.SimpleMonsterSchema",
+      "INSTANCE": {
+        "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+        "myAttributesMap": {
+          "Speed": 1.0,
+          "imageName": "monster.png",
+          "name": "test-monster-1",
+          "Bounty Reward": 200.0
+        },
+        "myAttributeSet": [
+          "Exit",
+          "imageName",
+          "Health",
+          "Attack Damage",
+          "Tile Size",
+          "Speed",
+          "Pathfinder Manager",
+          "name",
+          "Blocked Tiles",
+          "Bounty Reward",
+          "Monster Spawn Schemas to Spawn Upon Death",
+          "Number of Monsters to Spawn",
+          "Name of Monster to Spawn",
+          "Entrance Location"
+        ]
+      }
     }
   ],
   "myTowerSchemas": [
@@ -180,29 +183,32 @@
       "myMonsterSchemas": [
         {
           "myMonsterSchema": {
-            "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
-            "myAttributesMap": {
-              "Speed": 1.0,
-              "imageName": "monster.png",
-              "name": "test-monster-1",
-              "Bounty Reward": 200.0
-            },
-            "myAttributeSet": [
-              "Exit",
-              "imageName",
-              "Health",
-              "Attack Damage",
-              "Tile Size",
-              "Speed",
-              "Pathfinder Manager",
-              "name",
-              "Blocked Tiles",
-              "Bounty Reward",
-              "Monster Spawn Schemas to Spawn Upon Death",
-              "Number of Monsters to Spawn",
-              "Name of Monster to Spawn",
-              "Entrance Location"
-            ]
+            "CLASSNAME": "main.java.schema.tdobjects.monsters.SimpleMonsterSchema",
+            "INSTANCE": {
+              "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+              "myAttributesMap": {
+                "Speed": 1.0,
+                "imageName": "monster.png",
+                "name": "test-monster-1",
+                "Bounty Reward": 200.0
+              },
+              "myAttributeSet": [
+                "Exit",
+                "imageName",
+                "Health",
+                "Attack Damage",
+                "Tile Size",
+                "Speed",
+                "Pathfinder Manager",
+                "name",
+                "Blocked Tiles",
+                "Bounty Reward",
+                "Monster Spawn Schemas to Spawn Upon Death",
+                "Number of Monsters to Spawn",
+                "Name of Monster to Spawn",
+                "Entrance Location"
+              ]
+            }
           },
           "mySwarmSize": 1
         }
@@ -212,29 +218,32 @@
       "myMonsterSchemas": [
         {
           "myMonsterSchema": {
-            "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
-            "myAttributesMap": {
-              "Speed": 1.0,
-              "imageName": "monster.png",
-              "name": "test-monster-1",
-              "Bounty Reward": 200.0
-            },
-            "myAttributeSet": [
-              "Exit",
-              "imageName",
-              "Health",
-              "Attack Damage",
-              "Tile Size",
-              "Speed",
-              "Pathfinder Manager",
-              "name",
-              "Blocked Tiles",
-              "Bounty Reward",
-              "Monster Spawn Schemas to Spawn Upon Death",
-              "Number of Monsters to Spawn",
-              "Name of Monster to Spawn",
-              "Entrance Location"
-            ]
+            "CLASSNAME": "main.java.schema.tdobjects.monsters.SimpleMonsterSchema",
+            "INSTANCE": {
+              "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+              "myAttributesMap": {
+                "Speed": 1.0,
+                "imageName": "monster.png",
+                "name": "test-monster-1",
+                "Bounty Reward": 200.0
+              },
+              "myAttributeSet": [
+                "Exit",
+                "imageName",
+                "Health",
+                "Attack Damage",
+                "Tile Size",
+                "Speed",
+                "Pathfinder Manager",
+                "name",
+                "Blocked Tiles",
+                "Bounty Reward",
+                "Monster Spawn Schemas to Spawn Upon Death",
+                "Number of Monsters to Spawn",
+                "Name of Monster to Spawn",
+                "Entrance Location"
+              ]
+            }
           },
           "mySwarmSize": 2
         }
@@ -244,29 +253,32 @@
       "myMonsterSchemas": [
         {
           "myMonsterSchema": {
-            "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
-            "myAttributesMap": {
-              "Speed": 1.0,
-              "imageName": "monster.png",
-              "name": "test-monster-1",
-              "Bounty Reward": 200.0
-            },
-            "myAttributeSet": [
-              "Exit",
-              "imageName",
-              "Health",
-              "Attack Damage",
-              "Tile Size",
-              "Speed",
-              "Pathfinder Manager",
-              "name",
-              "Blocked Tiles",
-              "Bounty Reward",
-              "Monster Spawn Schemas to Spawn Upon Death",
-              "Number of Monsters to Spawn",
-              "Name of Monster to Spawn",
-              "Entrance Location"
-            ]
+            "CLASSNAME": "main.java.schema.tdobjects.monsters.SimpleMonsterSchema",
+            "INSTANCE": {
+              "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+              "myAttributesMap": {
+                "Speed": 1.0,
+                "imageName": "monster.png",
+                "name": "test-monster-1",
+                "Bounty Reward": 200.0
+              },
+              "myAttributeSet": [
+                "Exit",
+                "imageName",
+                "Health",
+                "Attack Damage",
+                "Tile Size",
+                "Speed",
+                "Pathfinder Manager",
+                "name",
+                "Blocked Tiles",
+                "Bounty Reward",
+                "Monster Spawn Schemas to Spawn Upon Death",
+                "Number of Monsters to Spawn",
+                "Name of Monster to Spawn",
+                "Entrance Location"
+              ]
+            }
           },
           "mySwarmSize": 10
         }

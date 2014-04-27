@@ -37,15 +37,15 @@ public abstract class TDObject extends JGObject{
      * Within an attribute map, returns the value of the attributeName or returns the defaultValue
      * otherwise
      * 
-     * @param attributes map of attributes from a schema
+     * @param gameSchemaAttributeMap map of attributes from a schema
      * @param attributeName desired attribute
      * @param defaultValue default value of attribute if not in attributes map
      * @return
      */
-    public static Object getValueOrDefault (Map<String, Serializable> attributes,
+    public static Object getValueOrDefault (Map<String, Object> gameSchemaAttributeMap,
                                             String attributeName,
                                             Object defaultValue) {
-        return attributes.containsKey(attributeName) ? attributes.get(attributeName) : defaultValue;
+        return gameSchemaAttributeMap.containsKey(attributeName) ? gameSchemaAttributeMap.get(attributeName) : defaultValue;
     }
 
     /**

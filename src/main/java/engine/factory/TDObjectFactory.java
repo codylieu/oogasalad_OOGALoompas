@@ -187,7 +187,7 @@ public class TDObjectFactory {
 
 	private ITower addTowerBehaviors (SimpleTower baseTower, TDObjectSchema schema) {
 		ITower finalTower = baseTower;
-		Map<String, Serializable> attributes = schema.getAttributesMap();
+		Map<String, Object> attributes = schema.getAttributesMap();
 		Collection<TowerBehaviors> towerBehaviors =
 				(Collection<TowerBehaviors>) attributes.get(TowerSchema.TOWER_BEHAVIORS);
 		for (TowerBehaviors towerBehavior : towerBehaviors) {
@@ -244,7 +244,7 @@ public class TDObjectFactory {
 	 * @param objName
 	 * @return unmodifiable map of attributes
 	 */
-	public Map<String, Serializable> getTDObjectAttributes(String objName) {
+	public Map<String, Object> getTDObjectAttributes(String objName) {
 		return tdObjectSchemaMap.containsKey(objName) ? Collections.unmodifiableMap(tdObjectSchemaMap.get(objName).getAttributesMap()) : null;
 	}
 

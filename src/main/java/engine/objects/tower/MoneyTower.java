@@ -58,7 +58,7 @@ public class MoneyTower extends TowerBehaviorDecorator {
      * @param baseTower
      * @param attributes
      */
-    public MoneyTower (ITower baseTower, Map<String, Serializable> attributes) {
+    public MoneyTower (ITower baseTower, Map<String, Object> attributes) {
         this(
              baseTower,
              Double.parseDouble(String.valueOf(TDObject.getValueOrDefault(attributes, TowerSchema.MONEY_GRANTED, DEFAULT_MONEY_GRANTED))),

@@ -138,20 +138,20 @@ public abstract class ObjectEditorTab extends EditorTab {
 	/**
 	 * Casts a serializable attribute into a Serializable object
 	 * 
-	 * @param attribute
+	 * @param object
 	 * @return Serializable version of the attributes
 	 */
-	protected Serializable addCastToAttribute(Serializable attribute) {
+	protected Serializable addCastToAttribute(Object object) {
 		boolean shouldCast = false;
-		if (attribute instanceof Integer) {
+		if (object instanceof Integer) {
 			shouldCast = true;
 		}
 
 		Double doubleAttr = null;
 		if (shouldCast) {
-			doubleAttr = Double.valueOf(((Integer) attribute).intValue());
+			doubleAttr = Double.valueOf(((Integer) object).intValue());
 		}
-		return shouldCast ? doubleAttr : attribute;
+		return (Serializable) (shouldCast ? doubleAttr : object);
 	}
 
 	/**
@@ -356,7 +356,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 	 * @param map
 	 *            of attributes to populate the view with
 	 */
-	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
+	protected void updateViewWithSchemaData(Map<String, Object> map) {
 		// fields (spinners)
 
 		for (JSpinner spinner : spinnerFields) {

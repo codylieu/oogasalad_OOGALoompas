@@ -24,7 +24,7 @@ public class SimpleMonster extends Monster {
 	 * 
 	 * @param attributes key value map of attributes as defined by MonsterSchema
 	 */
-	public SimpleMonster (Map<String, Serializable> attributes) {
+	public SimpleMonster (Map<String, Object> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, MonsterSchema.ENTRANCE_LOCATION, new Point2D.Double(0,0)),
 				(Exit) getValueOrDefault(attributes, MonsterSchema.EXIT_LOCATION, null),
