@@ -17,6 +17,10 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.TowerController;
@@ -27,6 +31,7 @@ import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.engine.objects.tower.TowerBehaviors;
+import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 
@@ -42,16 +47,18 @@ public class TowerEditorTab extends ObjectEditorTab {
 	private JSpinner healthSpinner, costSpinner, damageSpinner, rangeSpinner,
 			buildUpSpinner, firingSpeedSpinner, shrapnelDamageSpinner,
 			moneyFarmAmountSpinner, moneyFarmIntervalSpinner,
-			freezeRatioSpinner;
+			freezeRatioSpinner, bulletPiercingSpinner;
 
 	private TowerBehaviorTogglingRadioButton freezeToggleButton,
 			shootsToggleButton, moneyFarmingToggleButton, bombingToggleButton;
 
 	private JComboBox<String> upgradeDropDown;
 
-	protected ImageCanvas bulletImageCanvas, towerImageCanvas,
+	private ImageCanvas bulletImageCanvas, towerImageCanvas,
 			shrapnelImageCanvas;
-	protected JButton collisionImageButton, shrapnelImageButton;
+	private JButton collisionImageButton, shrapnelImageButton;
+
+	private JTextArea descriptionTextArea;
 
 	public TowerEditorTab(TabController towerController, String objectName) {
 		super(towerController, objectName);
@@ -85,7 +92,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 		super.addListeners();
 		shootsToggleButton.setFieldsToToggle(damageSpinner, firingSpeedSpinner,
 				shrapnelDamageSpinner, rangeSpinner, freezeToggleButton,
-				bombingToggleButton);
+				bombingToggleButton, bulletPiercingSpinner);
 		bombingToggleButton.setFieldsToToggle(shrapnelDamageSpinner);
 		moneyFarmingToggleButton.setFieldsToToggle(moneyFarmAmountSpinner,
 				moneyFarmIntervalSpinner);
@@ -97,6 +104,25 @@ public class TowerEditorTab extends ObjectEditorTab {
 				updateSchemaDataFromView();
 			}
 		});
+
+		descriptionTextArea.getDocument().addDocumentListener(
+				new DocumentListener() {
+
+					@Override
+					public void removeUpdate(DocumentEvent e) {
+						updateSchemaDataFromView();
+					}
+
+					@Override
+					public void insertUpdate(DocumentEvent e) {
+						updateSchemaDataFromView();
+					}
+
+					@Override
+					public void changedUpdate(DocumentEvent e) {
+						updateSchemaDataFromView();
+					}
+				});
 
 		shrapnelImageButton.addActionListener(new FileChooserListener(
 				shrapnelImageCanvas));
@@ -131,14 +157,18 @@ public class TowerEditorTab extends ObjectEditorTab {
 		}
 		myCurrentObject.addAttribute(TowerSchema.TOWER_BEHAVIORS,
 				(Serializable) behaviorsToggled);
-		//upgrade dropdown
-		
-		if (upgradeDropDown.getSelectedItem() != null && upgradeDropDown.getSelectedItem().equals(NO_UPGRADE_PATH)) {
+		// upgrade dropdown
+
+		if (upgradeDropDown.getSelectedItem() != null
+				&& upgradeDropDown.getSelectedItem().equals(NO_UPGRADE_PATH)) {
 			myCurrentObject.addAttribute(upgradeDropDown.getName(), "");
 		} else {
 			myCurrentObject.addAttribute(upgradeDropDown.getName(),
 					(String) upgradeDropDown.getSelectedItem());
 		}
+		// description
+		myCurrentObject.addAttribute(ItemSchema.DESCRIPTION,
+				descriptionTextArea.getText());
 	}
 
 	/**
@@ -152,7 +182,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
-		//upgrade dropdown
+		// upgrade dropdown
 		upgradeDropDown.removeAllItems();
 		for (String tower : objectMap.keySet()) {
 			if (!tower.equals(getSelectedObjectName()))
@@ -175,6 +205,8 @@ public class TowerEditorTab extends ObjectEditorTab {
 				radioButton.setSelected(false);
 			}
 		}
+		// description
+		descriptionTextArea.setText((String) map.get(TowerSchema.DESCRIPTION));
 
 	}
 
@@ -231,6 +263,13 @@ public class TowerEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
+		private JTextArea makeDescriptionArea() {
+			JTextArea result = new JTextArea();
+			result.setLineWrap(true);
+			result.setName(TowerSchema.DESCRIPTION);
+			return result;
+		}
+
 		@Override
 		protected void instantiateAndClumpFields() {
 			// spinners
@@ -241,10 +280,11 @@ public class TowerEditorTab extends ObjectEditorTab {
 			buildUpSpinner = makeAttributeSpinner(TowerSchema.BUILDUP);
 			firingSpeedSpinner = makeAttributeSpinner(TowerSchema.FIRING_SPEED);
 			shrapnelDamageSpinner = makeAttributeSpinner(TowerSchema.SHRAPNEL_DAMAGE);
-			moneyFarmAmountSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANTED);
-			moneyFarmIntervalSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANT_INTERVAL);
+			bulletPiercingSpinner = makeAttributeSpinner(TowerSchema.PIERCING_COUNT);
 			freezeRatioSpinner = makeAttributeSpinner(
 					TowerSchema.FREEZE_SLOWDOWN_PROPORTION, true);
+			moneyFarmAmountSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANTED);
+			moneyFarmIntervalSpinner = makeAttributeSpinner(TowerSchema.MONEY_GRANT_INTERVAL);
 			// radio buttons
 			shootsToggleButton = new TowerBehaviorTogglingRadioButton(
 					TowerViewConstants.TOWER_BEHAVIOR_SHOOTS,
@@ -260,6 +300,8 @@ public class TowerEditorTab extends ObjectEditorTab {
 					TowerBehaviors.MONEY_FARMING, true);
 			// other
 			upgradeDropDown = makeUpgradeDropdown();
+			// description text
+			descriptionTextArea = makeDescriptionArea();
 			// canvases
 			bulletImageCanvas = new ImageCanvas(true,
 					TowerSchema.BULLET_IMAGE_NAME);
@@ -277,12 +319,13 @@ public class TowerEditorTab extends ObjectEditorTab {
 		private void clumpFieldsIntoGroups() {
 			JSpinner[] spinners = { healthSpinner, costSpinner, buildUpSpinner,
 					damageSpinner, rangeSpinner, firingSpeedSpinner,
-					shrapnelDamageSpinner, moneyFarmAmountSpinner,
-					moneyFarmIntervalSpinner, freezeRatioSpinner };
+					shrapnelDamageSpinner, freezeRatioSpinner,
+					bulletPiercingSpinner, moneyFarmAmountSpinner,
+					moneyFarmIntervalSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			TowerBehaviorTogglingRadioButton[] buttons = { shootsToggleButton,
-					freezeToggleButton, moneyFarmingToggleButton,
-					bombingToggleButton };
+					freezeToggleButton, bombingToggleButton,
+					moneyFarmingToggleButton };
 			behaviorTogglingButtons = new ArrayList<TowerBehaviorTogglingRadioButton>(
 					Arrays.asList(buttons));
 			ImageCanvas[] canvases = { bulletImageCanvas, shrapnelImageCanvas,
@@ -297,6 +340,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 				result.add(makeFieldTile(spinner));
 			}
 			result.add(makeFieldTile(upgradeDropDown));
+			result.add(makeFieldTile(descriptionTextArea));
 			return result;
 		}
 

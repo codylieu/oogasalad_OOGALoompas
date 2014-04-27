@@ -20,6 +20,7 @@ public class PiercingProjectile extends DamageProjectile {
 
     private double myDamage;
     private Set<String> hitList;
+    private double myPiercingCount;
     
 
     /**
@@ -34,9 +35,11 @@ public class PiercingProjectile extends DamageProjectile {
     		double y, 
     		double angle, 
     		double damage, 
-    		String img) {
+    		String img,
+    		double piercingCount) {
     	super(x, y, angle, damage, img);
         myDamage = damage;
+        myPiercingCount = piercingCount;
         initialize();
     }
     
@@ -53,8 +56,10 @@ public class PiercingProjectile extends DamageProjectile {
     		double xspeed, 
     		double yspeed, 
     		double damage, 
-    		String img) {
+    		String img, 
+    		double piercingCount) {
     	super(x, y, xspeed, yspeed, damage, img);
+    	myPiercingCount = piercingCount;
     	initialize();
     }
     
@@ -68,7 +73,7 @@ public class PiercingProjectile extends DamageProjectile {
         		(!hitList.contains(obj.getName()))) {
             ((Monster) obj).takeDamage(myDamage);
             hitList.add(obj.getName());
-            if (hitList.size() >= DEFAULT_MONSTER_TO_PIERCE) this.remove();
+            if (hitList.size() >= myPiercingCount) this.remove();
         }
     }
 }

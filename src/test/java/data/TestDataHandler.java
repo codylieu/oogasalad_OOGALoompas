@@ -132,8 +132,6 @@ public class TestDataHandler {
 
 	private GameState createTestState()	{
 		GameState testState = new GameState();
-
-
 		return testState;
 	}
 
@@ -166,12 +164,12 @@ public class TestDataHandler {
 		
 		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
 		String original = testDataHandler.serializeObjectToJSON(testBlueprint,"testBlueprintJSON");
-		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint,"testBlueprintJSON"));
+//		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint,"testBlueprintJSON"));
 //		String loaded = testDataHandler.serializeObjectToJSON(loadedBlueprint,"testBlueprintAfterJSONSerialized");
 //		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"),
 //				loadedBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"));
 	}
-	
+
 	@Test
 	public void testBlueprintSavingAndLoading() throws ZipException, InvalidGameBlueprintException {
 		//Set up blueprint
@@ -220,7 +218,8 @@ public class TestDataHandler {
 
 	/**
 	 * Tests loading of resources from two different
-	 * saved blueprints
+	 * saved blueprints. myResourcesTwo
+	 * should have one more file than myResourcesOne
 	 * @throws ZipException 
 	 * @throws IOException 
 	 * @throws ClassNotFoundException 
@@ -252,12 +251,12 @@ public class TestDataHandler {
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesTwo.zip", false);
 		File myResourcesTwo = new File(testPath);
 		long myResourcesTwoSize = myResourcesTwo.listFiles().length;
-		// should contain testBlueprint.ser
 
 		// loads back the original, should have 1 less file
 		testDataHandler.loadBlueprint(FILE_PATH + "testResourcesOne.zip", false);
 		File myResourcesOne = new File(testPath);
 		long myResourcesOneSize = myResourcesOne.listFiles().length;
+
 		assertTrue("The second resources folder should be greater than the first", myResourcesTwoSize > myResourcesOneSize);
 
 	}
@@ -277,23 +276,36 @@ public class TestDataHandler {
 	@Test
 	public void testCompressionAndDecompression() throws ClassNotFoundException, IOException, ZipException {
 		DataHandler testDataHandler = new DataHandler();
+		
 		//set up gameblueprint, testing by just adding a gameschema
+		
 		GameSchema testSchema = new GameSchema();
 		testSchema.addAttribute("Lives",10);
 		GameBlueprint testBlueprint = new GameBlueprint();
 		testBlueprint.setMyGameScenario(testSchema);
+		
+		// save original blueprint to file
+		
 		testDataHandler.saveObjectToFile(testBlueprint, FILE_PATH + BLUEPRINT_PATH); // 555 bytes
 		testDataHandler.saveBlueprint(testBlueprint, FILE_PATH + SAVEBLUEPRINT_PATH);
+		
 		GameBlueprint loadedBlueprint = testDataHandler.loadBlueprint(FILE_PATH + "SavedBlueprint.zip",false);
 		String savedBlueprintLocation =  FILE_PATH + "testSerializedBlueprint.ser";
+		
+		// save the loaded blueprint to file
+		
 		testDataHandler.saveObjectToFile(loadedBlueprint, savedBlueprintLocation);
 		File serializedTestBlueprint = new File(savedBlueprintLocation);
 		File testBlueprintFile = new File(FILE_PATH + BLUEPRINT_PATH);
+		
+		// Check to see the sizes of the files are the same
+		// meaning that compression/decompression returned the same
+		// file. Also check to see if returns the same "lives"
+		
 		assertEquals(testBlueprintFile.length(),serializedTestBlueprint.length());
 		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("Lives"),
 				((GameBlueprint) testDataHandler.loadObjectFromFile(savedBlueprintLocation)).getMyGameScenario().getAttributesMap().get("Lives"));
 	}
-
-
+	
 }
 

@@ -1,5 +1,6 @@
 package main.java.engine;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,11 +11,7 @@ import jgame.JGObject;
  * Keeps track of the player's stats. 
  *
  */
-/**
- * @author aohuilin
- *
- */
-public class Player {
+public class Player implements Serializable {
 	private static final int DEFAULT_INITIAL_LIVES_NUM = 3;
 	private int money;
 	private int lives;
@@ -41,11 +38,10 @@ public class Player {
 	}
 	
 	/**
-	 * Add score to the player
-	 * @param score
+	 * Increase score by one.
 	 */
-	public void addScore(double score) {
-		this.score += score;
+	public void incrementScore() {
+		this.score ++;
 	}
 	
 	/**

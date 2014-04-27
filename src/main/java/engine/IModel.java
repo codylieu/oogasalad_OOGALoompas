@@ -56,23 +56,11 @@ public interface IModel {
 	 */
 	public void checkAndRemoveTower (double x, double y);
 
-	// TODO: use this instead of other one, will change -jordan
-	public void loadMapTest (String fileName);
-	/**
-	 * Deserialize and load into the engine the GameBlueprint obtained from the file path
-	 * 
-	 * @param filePath File path of the blueprint to be loaded
-	 * @throws IOException
-	 * @throws ClassNotFoundException
-	 */
-
 	public void loadGameBlueprint (String filePath) throws ClassNotFoundException, IOException;
 	/**
 	 * Reset the game clock
 	 */
 	public void resetGameClock ();
-
-	public void addScore (double score);
 
 	/**
 	 * Get the score of the player
@@ -205,5 +193,21 @@ public interface IModel {
 	 *         (please pause and notify the player, then continue the present game).
 	 */
 	public void loadSavedGame (String filename) throws InvalidSavedGameException;
+	
+	/**
+	 * Description of a tower.
+	 * 
+	 * @param towerName
+	 * @return
+	 */
+	public String getTowerDescription(String towerName);
+	
+	/**
+	 * Description of an item/power-up
+	 * 
+	 * @param itemName
+	 * @return
+	 */
+	public String getItemDescription(String itemName);
 
 }

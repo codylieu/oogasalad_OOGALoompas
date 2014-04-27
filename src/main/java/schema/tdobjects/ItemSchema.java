@@ -10,6 +10,7 @@ public abstract class ItemSchema extends TDObjectSchema{
 	public static final String DAMAGE = "Damage";
 	public static final String FLASH_INTERVAL = "Flash interval";
 	public static final String LOCATION = "Location";
+	public static final String DESCRIPTION = "Description Displayed";
 
 	public ItemSchema(Class<? extends TDItem> myConcreteType) {
 		super(myConcreteType);
@@ -20,6 +21,7 @@ public abstract class ItemSchema extends TDObjectSchema{
 		myAttributeSet.add(ItemSchema.IMAGE_NAME);
 		myAttributeSet.add(ItemSchema.NAME);
 		myAttributeSet.add(ItemSchema.LOCATION);
+		myAttributeSet.add(ItemSchema.DESCRIPTION);
 	}
 
 }

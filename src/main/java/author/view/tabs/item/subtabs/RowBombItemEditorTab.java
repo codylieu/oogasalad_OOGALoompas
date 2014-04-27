@@ -1,56 +1,53 @@
-package main.java.author.view.tabs.item;
+package main.java.author.view.tabs.item.subtabs;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import javax.swing.JComponent;
-import javax.swing.JPanel;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
 import main.java.author.view.components.ImageCanvas;
-import main.java.author.view.global_constants.ObjectEditorConstants;
 import main.java.author.view.tabs.EditorTab;
+import main.java.author.view.tabs.item.AbstractItemEditorSubTab;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
-import main.java.schema.tdobjects.items.AreaBombItemSchema;
+import main.java.schema.tdobjects.items.RowBombItemSchema;
 
-public class AreaBombItemEditorTab extends AbstractItemEditorTab{
+public class RowBombItemEditorTab extends AbstractItemEditorSubTab{
 
-	public AreaBombItemEditorTab(TabController itemController, String objectName) {
+	public RowBombItemEditorTab(TabController itemController, String objectName) {
 		super(itemController, objectName);
 	}
 
 	@Override
 	protected TDObjectSchema createSpecificNewObject(String name) {
-		return new AreaBombItemSchema(name);
+		return new RowBombItemSchema(name);
 	}
 
 	@Override
 	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
-		return new AreaBombItemTabViewBuilder(this);
+		return new RowBombItemTabViewBuilder(this);
 	}
+	
+	private class RowBombItemTabViewBuilder extends AbstractItemTabViewBuilder {
 
-	private class AreaBombItemTabViewBuilder extends AbstractItemTabViewBuilder {
-
-		public AreaBombItemTabViewBuilder(EditorTab editorTab) {
+		public RowBombItemTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
 		}
 
 		@Override
 		protected void instantiateAndClumpFields() {
+			super.instantiateAndClumpFields();
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
-			timeSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
+			buildUpSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
-			rangeSpinner = makeAttributeSpinner(AreaBombItemSchema.RANGE);
+			rangeSpinner = makeAttributeSpinner(RowBombItemSchema.RANGE);
 			
-			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner, rangeSpinner};
+			JSpinner[] spinners = {costSpinner, damageSpinner, buildUpSpinner, flashSpinner, rangeSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
 		}
 	}
+
 }
