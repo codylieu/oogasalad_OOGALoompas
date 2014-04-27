@@ -43,7 +43,7 @@ public class ItemEditorTab extends EditorTab {
 		tabbedPane.addTab(ItemViewConstants.LIFE_SAVER, lifesaverTab);
 		tabbedPane.addTab(ItemViewConstants.ROW_BOMB, rowbombTab);
 
-		annihilatorTab.setPreferredSize(new Dimension(1200, 500));
+		annihilatorTab.setPreferredSize(ItemViewConstants.DIM);
 
 		add(tabbedPane, BorderLayout.CENTER);
 		setVisible(true);
