@@ -86,7 +86,7 @@ public class ViewController implements Serializable {
 	public static final String SOUND_ONOFF_TEXT = "SOUND_ONOFF_TEXT";
 	public static final String ADD_TOWER_TEXT = "ADD_TOWER_TEXT";
 	public static final String SLOW_DOWN_TEXT = "SLOW_DOWN_TEXT";
-	public static final String ADD_ITEM_TEXT = "ADD_ITEM_TEXT";
+	public static final String ADD_POWER_UP_TEXT = "ADD_POWER_UP_TEXT";
 	public static final String SPEED_UP_TEXT = "SPEED_UP_TEXT";
 	public static final String LOAD_TEXT = "LOAD_TEXT";
 	public static final String SAVE_TEXT = "SAVE_TEXT";
@@ -321,6 +321,7 @@ public class ViewController implements Serializable {
 
 		JButton loadButton = new JButton(myLanguageResources.getString(LOAD_TEXT));
 		loadButton.addActionListener(new FileChooserActionListener(engine, LOAD_GAME_STATE_METHOD_NAME, fileChooser, null));
+		
 		JButton speedUpButton = new JButton(myLanguageResources.getString(SPEED_UP_TEXT));
 		speedUpButton.addActionListener(new MethodAction (engine, SPEED_UP_METHOD_NAME));
 
@@ -332,8 +333,8 @@ public class ViewController implements Serializable {
 		JButton addTowerButton = new JButton(myLanguageResources.getString(ADD_TOWER_TEXT));
 		addTowerButton.addActionListener(new MethodAction (engine, TOGGLE_ADD_TOWER_METHOD_NAME));
 		
-		JButton addItemButton = new JButton(myLanguageResources.getString(ADD_ITEM_TEXT));
-		addItemButton.addActionListener(new MethodAction (engine, TOGGLE_ADD_ITEM_METHOD_NAME));
+		JButton addPowerUpButton = new JButton(myLanguageResources.getString(ADD_POWER_UP_TEXT));
+		addPowerUpButton.addActionListener(new MethodAction (engine, TOGGLE_ADD_ITEM_METHOD_NAME));
 
 		JButton soundButton = new JButton(myLanguageResources.getString(SOUND_ONOFF_TEXT));
 		soundButton.addActionListener(new MethodAction (this, TOGGLE_SOUND_METHOD_NAME));
@@ -355,6 +356,7 @@ public class ViewController implements Serializable {
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
+		gameButtonPanel.add(addPowerUpButton);
 		gameButtonPanel.add(towerChooser);
 		gameButtonPanel.add(powerUpChooser);
 		gameButtonPanel.add(towerDescriptionArea);
