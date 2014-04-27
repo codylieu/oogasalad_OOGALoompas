@@ -239,7 +239,7 @@ public class Model implements IModel {
 		}
 		return info;
 	}
-	
+
 	/**
 	 * Returns the description associated with a particular tower. 
 	 * 
