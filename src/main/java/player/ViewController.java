@@ -57,6 +57,7 @@ import net.lingala.zip4j.exception.ZipException;
 @SuppressWarnings("serial")
 public class ViewController implements Serializable {
 
+	public static final String GUI_PROPERTY_FILEPATH = "GUI";
 	public static final String SET_CURRENT_TOWER_TYPE_METHID_NAME = "setCurrentTowerType";
 	public static final String LOAD_BLUEPRINT_FILE_METHOD_NAME = "loadBlueprintFile";
 	public static final int WELCOME_LABEL_FONT = 32;
@@ -104,13 +105,14 @@ public class ViewController implements Serializable {
 	private JPanel cards;
 	private CardLayout cardLayout;
 	private static final JFileChooser fileChooser = new JFileChooser(System.getProperties().getProperty(USER_DIR));
-	private ResourceBundle myResources = ResourceBundle.getBundle("main.resources.GUI");
+	private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + GUI_PROPERTY_FILEPATH);
 	private ResourceBundle myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + ENGLISH);
 	private ResourceBundle myLanguagesList = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + LANGUAGES_LIST);
 	private ITDPlayerEngine engine;
 	private Sound song;
 	private boolean soundOn;
 	private ObjectChooser towerChooser;
+	private HighScoreCard highScoreCard;
 	private String chosenLanguage;
 	//private ObjectChooser powerUpChooser;
 
@@ -141,9 +143,11 @@ public class ViewController implements Serializable {
 		addHelpCard();
 		addOptionsCard();
 		addCreditsCard();
-		addHighScoreCard();
+		updateHighScore();
+		//addHighScoreCard();
+		//want to maintain highscore card but adding new one will change it, also need to fix with language
 	}
-	
+
 	private void initLanguage(){
 		chosenLanguage = ENGLISH;
 		myLanguageResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + chosenLanguage);
@@ -188,7 +192,7 @@ public class ViewController implements Serializable {
 		files.add(new RepositoryViewer(myLanguageResources.getString("LOAD_LIBRARY_TEXT"), engine));
 		return files;
 	}
-	
+
 	private JMenu makeLanguagesMenu(){
 		JMenu languagesMenu = new JMenu(myLanguageResources.getString(LANGUAGES));
 		for(String s: myLanguagesList.keySet()){
@@ -208,7 +212,7 @@ public class ViewController implements Serializable {
 		}
 		return languagesMenu;
 	}
-	
+
 	private JMenuBar makeMenuBar(){
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.add(makeFileMenu());
@@ -265,16 +269,14 @@ public class ViewController implements Serializable {
 		constraints.gridy = 0;
 		gameCard.add((Component) engine, constraints);
 
-		//constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 0;
 		gameCard.add(makeGameActionPanel(), constraints);
-		//constraints.fill = GridBagConstraints.HORIZONTAL;
+		
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		gameCard.add(makeGameInfoPanel(), constraints);
 
-		//constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		gameCard.add(makeUnitInfoPanel(), constraints);
@@ -284,7 +286,7 @@ public class ViewController implements Serializable {
 
 	private ITDPlayerEngine initializeEngine(String pathToBlueprint) {
 		try {
-			engine = new TDPlayerEngine(pathToBlueprint);
+			engine = new TDPlayerEngine(pathToBlueprint, this);
 		} catch (ClassNotFoundException | IOException | ZipException e) {
 			JOptionPane.showMessageDialog(frame, "Invalid file. Closing program.");
 			System.exit(1);
@@ -329,7 +331,6 @@ public class ViewController implements Serializable {
 		// should leave as observing engine? or pass into contstructor?
 		//powerUpChooser = new ObjectChooser(engine.getPossibleItems());
 
-
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
 		gameButtonPanel.add(saveButton);
@@ -370,12 +371,25 @@ public class ViewController implements Serializable {
 
 	//TODO: need to add when game ends to route to here, also need to work on saving the scores 
 	private void addHighScoreCard(){
-		HighScoreCard highScoreCard = new HighScoreCard();
-		highScoreCard.addSubject((Subject) engine);
-		engine.register(highScoreCard);
+		highScoreCard = new HighScoreCard(engine, makeMainMenuButton(), myLanguageResources);
 		cards.add(highScoreCard, HIGH_SCORE_CARD);
 	}
+	
+	//call this method when route to high score card ==> so when thing pops up saying game won or lost 
+	//when they click ok it should go to high score card and also reset engine
+	private void updateHighScore(){
+		cards.add(highScoreCard, HIGH_SCORE_CARD);
+		highScoreCard.updateLabels(myLanguageResources);
+		//engine.reset? or soemthing equivalent
+	}
 
+	public void handleEndGame(){
+		highScoreCard.setHighScore();		
+		engine.initModel();
+		engine.stop();
+		showCard(HIGH_SCORE_CARD);		
+	}
+	
 	private void addOptionsCard() {
 		JPanel optionCard = new JPanel();
 		optionCard.setLayout(new GridBagLayout());
@@ -396,7 +410,7 @@ public class ViewController implements Serializable {
 		constraints.gridy = 2;
 		optionCard.add(new DifficultyPanel(engine), constraints);
 		 */
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+	//	constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 1;
 		// need to make sound label be centered

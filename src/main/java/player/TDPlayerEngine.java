@@ -59,11 +59,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private JGPoint lastClickedObject;
 	private LeapGameController leapController;
-
+	private ViewController viewController;
 	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 
 
-	public TDPlayerEngine(String pathToBlueprintInit) throws ClassNotFoundException, IOException, ZipException {
+	public TDPlayerEngine(String pathToBlueprintInit, ViewController myView) throws ClassNotFoundException, IOException, ZipException {
 		// super();
 		loadCanvasSize(pathToBlueprintInit);
 		pathToBlueprint = pathToBlueprintInit;
@@ -73,6 +73,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		cursorState = CursorState.None;
 		leapController = new LeapGameController();
 		lastClickedObject = new JGPoint();
+		viewController = myView;
 		stop();
 	}
 
@@ -168,11 +169,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	@Override
 	public void doFrame() {
 		super.doFrame();
-		
+
 		if (leapController != null) {
 			leapController.doFrame();
 		}
-		
+
 		if (model != null) {
 			checkGameEnd();
 			checkMouse();
@@ -192,16 +193,21 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	private void checkGameEnd() {
 		if (model.isGameLost()) {
-			JOptionPane.showMessageDialog(null, "Game lost. :(");
-			stop();
+			endGameDialog("Game lost :(");
 		}
 
 		if (model.isGameWon()) {
-			JOptionPane.showMessageDialog(null, "Game won!");
-			stop();
+			endGameDialog("Game won!");
 		}
 	}
 
+	private void endGameDialog(String ending){
+		int selected = JOptionPane.showConfirmDialog(null, ending, "Game End", JOptionPane.DEFAULT_OPTION);
+		if(selected == 0){
+			viewController.handleEndGame();
+		}
+		stop();
+	}
 	private void updateModel() {
 		try {
 			model.updateGame();
@@ -261,6 +267,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		towerName = currentTowerName;
 	}
 
+	public double getHighScore(){
+		return model.getScore();
+	}
 	/**
 	 * Toggle the cursor status from AddTower to None 
 	 * or vice-versa
@@ -347,7 +356,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	public void saveGameState(String gameName){
 		try {
-			System.out.println("saveing");
 			model.saveGame(gameName);
 		} catch (InvalidSavedGameException e) {
 			e.printStackTrace();

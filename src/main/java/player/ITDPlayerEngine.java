@@ -63,5 +63,7 @@ public interface ITDPlayerEngine {
 
 		public void initModel();
 
+		public double getHighScore();
+		
 		public void stop();
 }

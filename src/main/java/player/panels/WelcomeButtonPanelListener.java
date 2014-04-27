@@ -24,6 +24,7 @@ public class WelcomeButtonPanelListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		//System.out.println(e.getActionCommand());
+		//System.out.println(resources.getString(translations.get(e.getActionCommand())));
 		//System.out.println((String)languageResources.getObject(e.getActionCommand()));
 		player.showCard(resources.getString(translations.get(e.getActionCommand())));
 		
