@@ -1,9 +1,9 @@
 package main.java.schema.tdobjects.items;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
-import main.java.engine.objects.item.AreaBomb;
-import main.java.engine.objects.item.RowBomb;
+import main.java.engine.objects.powerup.AnnihilatorPowerup;
+import main.java.engine.objects.powerup.AreaBombPowerup;
+import main.java.engine.objects.powerup.RowBombPowerup;
 import main.java.schema.tdobjects.ItemSchema;
 
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import java.util.Set;
  * This is a settings object for a specific type of RowBomb.
  */
 public class RowBombItemSchema extends ItemSchema {
-	public static final Class<RowBomb> MY_CONCRETE_TYPE = RowBomb.class;
+	public static final Class<RowBombPowerup> MY_CONCRETE_TYPE = RowBombPowerup.class;
 	public static final String RANGE = "Range";
 
 	public RowBombItemSchema() {

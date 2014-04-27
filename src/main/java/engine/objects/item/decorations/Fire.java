@@ -2,7 +2,7 @@ package main.java.engine.objects.item.decorations;
 
 import jgame.JGObject;
 import main.java.engine.EnvironmentKnowledge;
-import main.java.engine.objects.item.TDItem;
+import main.java.engine.objects.powerup.TDPowerupPowerup;
 
 /**
  * A fire object that shows up when a monster dies.
