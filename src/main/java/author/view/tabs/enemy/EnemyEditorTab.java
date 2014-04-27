@@ -92,6 +92,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return monsterSchemas;
 	}
 
+
 	@Override
 	public void saveTabData() {
 
@@ -120,8 +121,17 @@ public class EnemyEditorTab extends ObjectEditorTab {
 				currentMonsterSchema
 						.addAttribute(
 								MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA,
-								spawnSchema);
+								(Serializable) spawnSchema);
 			}
+			
+			
+			Map<String, Serializable> monsterAttributeMap = currentMonsterSchema.getAttributesMap();
+			for (String attribute : monsterAttributeMap.keySet()) {
+				Serializable attValue = addCastToAttribute(monsterAttributeMap.get(attribute));
+				currentMonsterSchema.addAttribute(attribute, attValue);
+
+			}
+
 			monsterSchemas.add(currentMonsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);

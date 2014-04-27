@@ -23,6 +23,7 @@ public class LevelManager {
     private int myCurrentWave;
     private List<WaveSpawnSchema> myAllWaves;
     private TDObjectFactory myFactory;
+	private PathfinderManager myPathfinderManager;
     private Point2D entrance;
     private Exit exit;
     private Player myPlayer;
@@ -31,7 +32,8 @@ public class LevelManager {
     /**
      * Tasked with managing state for levels/waves/lives and spawning waves of monsters.
      */
-    public LevelManager (TDObjectFactory factory) {
+    public LevelManager (TDObjectFactory factory, PathfinderManager pathfinderManager) {
+		myPathfinderManager = pathfinderManager;
         myFactory = factory;
         myCurrentWave = 0;
         myAllWaves = new ArrayList<WaveSpawnSchema>();
@@ -105,9 +107,9 @@ public class LevelManager {
         for (int i = 0; i < spawnSchema.getSwarmSize(); i++) {
 
             Monster newlyAdded =
-                    myFactory.placeMonster(newEntrance, exit,
-                                           (String) spawnSchema.getMonsterSchema()
-                                                   .getAttributesMap().get(TDObjectSchema.NAME));
+                    myFactory.placeMonster(newEntrance, exit, myPathfinderManager,
+							(String) spawnSchema.getMonsterSchema().
+									getAttributesMap().get(TDObjectSchema.NAME));
             spawnedMonsters.add(newlyAdded);
         }
         return spawnedMonsters;
