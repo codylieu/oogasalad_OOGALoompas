@@ -367,6 +367,18 @@ public class Model implements IModel {
 	public double getGameClock () {
 		return this.gameClock;
 	}
+	
+	
+	/**
+	 * Get the number of total waves completed.
+	 * This is incremented per new wave, no matter if survival or finite mode,
+	 * and is displayed as the player's "score".
+	 * @return int number of waves completed.
+	 */
+	public int getWavesCompleted() {
+	    return levelManager.getWavesCompleted();
+	}
+	
 
 	/**
 	 * Get the number of remaining lives of the player

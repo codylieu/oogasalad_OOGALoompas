@@ -27,6 +27,11 @@ public class LevelManager {
     private Exit exit;
     private Player myPlayer;
     private boolean survivalMode;
+    /**
+     * This is the player's "score"
+     * It's incremented per new wave no matter survival or finite mode.
+     */
+    private int wavesCompleted;
 
     /**
      * Tasked with managing state for levels/waves/lives and spawning waves of monsters.
@@ -36,6 +41,7 @@ public class LevelManager {
         myCurrentWave = 0;
         myAllWaves = new ArrayList<WaveSpawnSchema>();
         survivalMode = true;
+        wavesCompleted = 0;
     }
 
     /**
@@ -69,6 +75,7 @@ public class LevelManager {
 
         for (MonsterSpawnSchema spawnSchema : myAllWaves.get(myCurrentWave++)
                 .getMonsterSpawnSchemas()) {
+            wavesCompleted++;
             spawnedMonsters.addAll(spawnMonsterSpawnSchema(spawnSchema));
         }
 
@@ -222,6 +229,15 @@ public class LevelManager {
      */
     public boolean isSurvivalMode () {
         return survivalMode;
+    }
+    
+    /**
+     * Get the total number of waves completed, 
+     * no matter if survival mode or not.
+     * @return int number of waves completed.
+     */
+    public int getWavesCompleted() {
+        return wavesCompleted;
     }
 
 }
