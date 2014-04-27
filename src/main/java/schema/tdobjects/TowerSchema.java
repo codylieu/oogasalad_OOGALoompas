@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+
 import main.java.author.view.tabs.tower.TowerViewConstants;
 import main.java.engine.objects.tower.SimpleTower;
 import main.java.engine.objects.tower.TowerBehaviors;
@@ -44,6 +45,8 @@ public class TowerSchema extends TDObjectSchema {
      * This is the name of a tower to be upgraded into.
      */
     public static final String UPGRADE_PATH = "Upgrade Tower";
+	public static final String DESCRIPTION = "Description Displayed";
+	public static final String PIERCING_COUNT = "# of Enemies Bullet Pierces";
 
     /**
      * Do not use this, UPGRADE_PATH is enough. Model will know there is no
@@ -71,6 +74,8 @@ public class TowerSchema extends TDObjectSchema {
         myAttributeSet.add(SHRAPNEL_IMAGE_NAME);
         myAttributeSet.add(FREEZE_SLOWDOWN_PROPORTION);
         myAttributeSet.add(UPGRADE_PATH);
+        myAttributeSet.add(DESCRIPTION);
+        myAttributeSet.add(PIERCING_COUNT);
     }
 
     public TowerSchema (String name) {

@@ -40,6 +40,7 @@ public class AnnihilatorItemEditorTab extends AbstractItemEditorSubTab{
 
 		@Override
 		protected void instantiateAndClumpFields() {
+			super.instantiateAndClumpFields();
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
 			
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);

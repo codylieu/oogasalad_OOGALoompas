@@ -290,7 +290,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 		myBuilder.instantiateAndClumpFields();
 		this.add(myBuilder.makeDesignObjectPane(), BorderLayout.NORTH);
 		this.add(myBuilder.makeOverallContent(), BorderLayout.SOUTH);
-		addObjectNameToList(objectName);
+		addObjectNameToList(objectName + " One");
 		addListeners();
 		updateFieldDataUponNewSelection();
 

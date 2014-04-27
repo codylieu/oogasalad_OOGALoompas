@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,6 +19,9 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import main.java.author.controller.TabController;
 import main.java.author.controller.tabbed_controllers.ItemController;
@@ -26,6 +31,7 @@ import main.java.author.view.tabs.EditorTab;
 import main.java.author.view.tabs.ObjectEditorTab;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
+import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
@@ -39,6 +45,7 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 	protected List<JRadioButton> allButtons;
 	protected JButton itemImageButton;
 	protected ImageCanvas itemImageCanvas;
+	protected JTextArea descriptionTextArea; 
 
 	public AbstractItemEditorSubTab(TabController itemController, String objectName) {
 		super(itemController, objectName);
@@ -60,13 +67,16 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 	@Override
 	protected void updateSchemaDataFromView() {
 		super.updateSchemaDataFromView();
-		// TDObjectSchema myCurrentObject = getSelectedObject();
+		TDObjectSchema myCurrentObject = getSelectedObject();
+		myCurrentObject.addAttribute(ItemSchema.DESCRIPTION, descriptionTextArea.getText());
+
 	}
 
 	@Override
 	protected void updateViewWithSchemaData(Map<String, Serializable> map) {
 		super.updateViewWithSchemaData(map);
-		// update upgradeDropDown in TowerEditorTab
+		descriptionTextArea.setText((String) map.get(TowerSchema.DESCRIPTION));
+		
 	}
 
 	@Override
@@ -84,6 +94,23 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 				});
 			}
 		}
+		descriptionTextArea.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				updateSchemaDataFromView();
+			}
+			
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				updateSchemaDataFromView();
+			}
+			
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				updateSchemaDataFromView();
+			}
+		});
 	}
 
 	public abstract class AbstractItemTabViewBuilder extends
@@ -91,6 +118,19 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 
 		public AbstractItemTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
+		}
+		
+		@Override
+		protected void instantiateAndClumpFields() {
+			//description text
+			descriptionTextArea = makeDescriptionArea();
+		}
+
+		private JTextArea makeDescriptionArea() {
+			JTextArea result = new JTextArea();
+			result.setLineWrap(true);
+			result.setName(ItemSchema.DESCRIPTION);
+			return result;
 		}
 
 		@Override
@@ -120,6 +160,7 @@ public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {
 			for (JSpinner spinner : spinnerFields) {
 				result.add(makeFieldTile(spinner));
 			}
+			result.add(makeFieldTile(descriptionTextArea));
 			return result;
 		}
 	}

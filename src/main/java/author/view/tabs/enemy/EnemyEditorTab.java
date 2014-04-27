@@ -322,22 +322,10 @@ public class EnemyEditorTab extends ObjectEditorTab {
 			return result;
 		}
 
+		
 		@Override
 		protected JComponent makeSecondaryImagesGraphicPane() {
-			/*
-			 * JPanel result = new JPanel(); result.setLayout(new
-			 * BorderLayout());
-			 * 
-			 * collisionImageCanvas.setSize(new Dimension(
-			 * ObjectEditorConstants.IMAGE_CANVAS_SIZE,
-			 * ObjectEditorConstants.IMAGE_CANVAS_SIZE));
-			 * collisionImageCanvas.setBackground(Color.BLACK);
-			 * result.add(collisionImageCanvas, BorderLayout.CENTER);
-			 * collisionImageButton = makeChooseGraphicsButton("Set " +
-			 * objectName + " Collision Image");
-			 * result.add(collisionImageButton, BorderLayout.SOUTH); //return
-			 * result;
-			 */return null;
+			return null;
 		}
 
 		protected JComponent makePrimaryObjectGraphicPane() {

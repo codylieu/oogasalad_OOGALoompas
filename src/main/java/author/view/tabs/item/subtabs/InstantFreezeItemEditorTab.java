@@ -40,6 +40,7 @@ public class InstantFreezeItemEditorTab extends AbstractItemEditorSubTab{
 
 		@Override
 		protected void instantiateAndClumpFields() {
+			super.instantiateAndClumpFields();
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
 			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
