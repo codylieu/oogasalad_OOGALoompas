@@ -84,16 +84,26 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
-			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
-			Map<String, Serializable> monsterAttributes = monster
-					.getAttributesMap();
+			SimpleMonsterSchema currentMonsterSchema = (SimpleMonsterSchema) monster;
+			Map<String, Serializable> map = currentMonsterSchema.getAttributesMap();
+			String monsterName = (String) map
+					.get(MonsterSchema.RESURRECT_MONSTER_NAME);
+			int resQuant = (Integer) map.get(MonsterSchema.RESURRECT_QUANTITY);
+			SimpleMonsterSchema monsterSchemaToRes = null;
+			for (TDObjectSchema possibleMonsterToRes : objectMap.values()) {
+				SimpleMonsterSchema possibleMonsterSchemaToRes = (SimpleMonsterSchema) possibleMonsterToRes;
+				if (possibleMonsterSchemaToRes.getAttributesMap()
+						.get(TDObjectSchema.NAME).equals(monsterName)) {
+					monsterSchemaToRes = possibleMonsterSchemaToRes;
 
-			for (String attribute : monsterAttributes.keySet()) {
-				Serializable castedAttribute = addCastToAttribute(monsterAttributes
-						.get(attribute));
-				monsterSchema.addAttribute(attribute, castedAttribute);
+				}
 			}
-			monsterSchemas.add(monsterSchema);
+			if (monsterSchemaToRes != null) {
+				MonsterSpawnSchema spawnSchema = new MonsterSpawnSchema(
+						monsterSchemaToRes, resQuant);
+				currentMonsterSchema.addAttribute(MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA, spawnSchema);
+			}
+			monsterSchemas.add(currentMonsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
 	}
@@ -271,7 +281,9 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		protected JComponent makeFieldPane() {
 			JPanel result = new JPanel(new GridLayout(0, 2));
 			for (JSpinner spinner : spinnerFields) {
-				if (spinner.getName() != null && !spinner.getName().equals(MonsterSchema.RESURRECT_QUANTITY))
+				if (spinner.getName() != null
+						&& !spinner.getName().equals(
+								MonsterSchema.RESURRECT_QUANTITY))
 					result.add(makeFieldTile(spinner));
 			}
 			result.add(makeFieldTile(makeButtonGroupPanel(tileSizeGroup,
