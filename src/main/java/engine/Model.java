@@ -70,6 +70,7 @@ public class Model implements IModel {
 	private LevelManager levelManager;
 	private EnvironmentKnowledge environ;
 	private List<TDItem> items;
+	private TDMap currentMap;
 
 	public Model (JGEngine engine, String pathToBlueprint) {
 		this.engine = engine;
@@ -243,21 +244,6 @@ public class Model implements IModel {
 		}
 	}
 
-	// TODO: use this instead of other one, will change -jordan
-	public void loadMapTest (String fileName) {
-		try {
-			FileInputStream fis = new FileInputStream(fileName);
-			ObjectInputStream is = new ObjectInputStream(fis);
-			GameMapSchema mapToLoad = (GameMapSchema) is.readObject();
-			is.close();
-
-			new TDMap(engine, mapToLoad);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Deserialize and load into the engine the GameBlueprint obtained from the file path
 	 * 
@@ -309,7 +295,7 @@ public class Model implements IModel {
 
 		// Initialize map settings
 		if (blueprint.getMyGameMapSchemas() != null) {
-			new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
+			currentMap = new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
 			// each map
 			CanvasSchema myCanvasSchema =
 					(CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap()
