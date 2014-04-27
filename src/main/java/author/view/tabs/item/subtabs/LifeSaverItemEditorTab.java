@@ -1,4 +1,4 @@
-package main.java.author.view.tabs.item;
+package main.java.author.view.tabs.item.subtabs;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,13 +6,13 @@ import java.util.Arrays;
 import javax.swing.JSpinner;
 
 import main.java.author.controller.TabController;
-import main.java.author.view.components.ImageCanvas;
 import main.java.author.view.tabs.EditorTab;
+import main.java.author.view.tabs.item.AbstractItemEditorSubTab;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 
-public class LifeSaverItemEditorTab extends AbstractItemEditorTab{
+public class LifeSaverItemEditorTab extends AbstractItemEditorSubTab {
 
 	public LifeSaverItemEditorTab(TabController itemController,
 			String objectName) {
@@ -29,7 +29,8 @@ public class LifeSaverItemEditorTab extends AbstractItemEditorTab{
 		return new LifeSaverItemTabViewBuilder(this);
 	}
 
-	private class LifeSaverItemTabViewBuilder extends AbstractItemTabViewBuilder {
+	private class LifeSaverItemTabViewBuilder extends
+			AbstractItemTabViewBuilder {
 
 		public LifeSaverItemTabViewBuilder(EditorTab editorTab) {
 			super(editorTab);
@@ -37,14 +38,15 @@ public class LifeSaverItemEditorTab extends AbstractItemEditorTab{
 
 		@Override
 		protected void instantiateAndClumpFields() {
+			super.instantiateAndClumpFields();
 			costSpinner = makeAttributeSpinner(ItemSchema.COST);
-			timeSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
-			damageSpinner = makeAttributeSpinner(ItemSchema.DAMAGE);
+			buildUpSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
-			
-			JSpinner[] spinners = {costSpinner, timeSpinner, damageSpinner, flashSpinner};
+
+			JSpinner[] spinners = { costSpinner, buildUpSpinner,
+					flashSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
-			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
+			
 		}
 	}
 }

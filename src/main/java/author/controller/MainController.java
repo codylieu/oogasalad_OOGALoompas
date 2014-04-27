@@ -8,6 +8,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.author.controller.tabbed_controllers.EnemyController;
+import main.java.author.controller.tabbed_controllers.WaveController;
 import main.java.author.model.AuthorModel;
 import main.java.author.view.AuthoringView;
 import main.java.schema.map.GameMapSchema;
@@ -202,6 +203,15 @@ public class MainController {
 	 */
 	public void shiftToEnemyTab() {
 		myAuthoringView.shiftToEnemyTab();
+	}
+
+	public void updateWaveTab() {
+		for (TabController controller : myTabControllers) {
+			if (controller instanceof WaveController) {
+				WaveController waveController = (WaveController) controller;
+				waveController.updateEnemyList();
+			}
+		}
 	}
 	
 }
