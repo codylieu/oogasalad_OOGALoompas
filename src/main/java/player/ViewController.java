@@ -60,6 +60,7 @@ public class ViewController implements Serializable {
 
 	public static final String GUI_PROPERTY_FILEPATH = "GUI";
 	public static final String SET_CURRENT_TOWER_TYPE_METHID_NAME = "setCurrentTowerType";
+	public static final String SET_CURRENT_ITEM_TYPE_METHOD_NAME = "setCurrentItemType";
 	public static final String LOAD_BLUEPRINT_FILE_METHOD_NAME = "loadBlueprintFile";
 	public static final int WELCOME_LABEL_FONT = 32;
 	public static final String SANS_SERIF_FONT = "SansSerif";
@@ -117,7 +118,7 @@ public class ViewController implements Serializable {
 	private ObjectChooser towerChooser;
 	private HighScoreCard highScoreCard;
 	private String chosenLanguage;
-	//private ObjectChooser powerUpChooser;
+	private ObjectChooser powerUpChooser;
 
 	/**
 	 * initializeEngine() must be called first
@@ -334,7 +335,7 @@ public class ViewController implements Serializable {
 		towerChooser = new ObjectChooser(engine, "getPossibleTowers", SET_CURRENT_TOWER_TYPE_METHID_NAME);
 		//towerChooser.register((Observing) engine);
 		// should leave as observing engine? or pass into contstructor?
-		//powerUpChooser = new ObjectChooser(engine.getPossibleItems());
+		powerUpChooser = new ObjectChooser(engine, "getPossibleItems", SET_CURRENT_ITEM_TYPE_METHOD_NAME);
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
@@ -346,7 +347,7 @@ public class ViewController implements Serializable {
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
-		//gameButtonPanel.add(powerUpChooser);
+		gameButtonPanel.add(powerUpChooser);
 		return gameButtonPanel;
 	}
 

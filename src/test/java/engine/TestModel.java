@@ -13,11 +13,8 @@ public class TestModel {
 		Model model = new Model(new TestJGEngine(), null); // TODO: Replace with actual path
 		
 		final int testx = 200, testy = 200;
-//		System.out.println("ha");
 		System.out.println(model.placeTower(testx, testy,"name"));
-		System.out.println("ha");
 		model.isTowerPresent(testx, testy);
-		System.out.println("ha");
 		
 		assert(model.isTowerPresent(testx, testy));
 	}

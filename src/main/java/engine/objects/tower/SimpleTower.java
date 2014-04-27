@@ -18,7 +18,7 @@ import main.java.schema.tdobjects.TowerSchema;
  * The TDObject factory will use this tower as the base tower to decorate.
  * 
  */
-public class SimpleTower extends TDObject implements ITower {
+public class SimpleTower extends TDObject implements ITower, Serializable {
 
     public static final double DEFAULT_HEALTH = 100;
     public static final double DEFAULT_COST = 100;
@@ -47,6 +47,8 @@ public class SimpleTower extends TDObject implements ITower {
      * Internal timer shooting at intervals and timing build up phase.
      */
     protected double myTimingCounter;
+    
+    protected String myDescription;
 
     /**
      * Create a new tower
@@ -63,13 +65,15 @@ public class SimpleTower extends TDObject implements ITower {
                         double cost,
                         double buildup,
                         String upgradeTower,
-                        String name) {
+                        String name, 
+                        String description) {
         super("tower", location.getX(), location.getY(), TOWER_CID, name);
         myHealth = health;
         myImage = name;
         myCost = cost;
         myBuildUpTime = buildup;
         myUpgradeTower = upgradeTower;
+        myDescription = description;
     }
 
     public SimpleTower (Map<String, Serializable> attributes) {
@@ -79,7 +83,8 @@ public class SimpleTower extends TDObject implements ITower {
              (double) getValueOrDefault(attributes, TowerSchema.COST, DEFAULT_COST),
              (double) getValueOrDefault(attributes, TowerSchema.BUILDUP, DEFAULT_BUILDUPTIME),
              (String) getValueOrDefault(attributes, TowerSchema.UPGRADE_PATH, ""),
-             (String) attributes.get(TowerSchema.NAME));
+             (String) attributes.get(TowerSchema.NAME),
+             (String) getValueOrDefault(attributes, TowerSchema.DESCRIPTION, ""));
     }
 
     @Override

@@ -110,6 +110,7 @@ public class TowerSchema extends TDObjectSchema {
         addAttribute(TowerSchema.UPGRADE_PATH, "");
         addAttribute(TowerSchema.TOWER_BEHAVIORS,
                      (Serializable) Arrays.asList(TowerBehaviors.values()));
+        addAttribute(TowerSchema.DESCRIPTION, "");
     }
 
     @Override
