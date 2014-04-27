@@ -202,8 +202,7 @@ public class ViewController implements Serializable {
 					makeFrame();
 					makeAndAddCards();
 					show();			
-				}
-				
+				}				
 			});
 			languagesMenu.add(temp);
 		}
@@ -279,7 +278,6 @@ public class ViewController implements Serializable {
 		constraints.gridx = 1;
 		constraints.gridy = 1;
 		gameCard.add(makeUnitInfoPanel(), constraints);
-
 
 		cards.add(gameCard, GAME_CARD);
 	}

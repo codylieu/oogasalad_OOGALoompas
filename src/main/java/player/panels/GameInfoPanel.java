@@ -5,8 +5,6 @@ import java.util.Map;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 
-import main.java.player.TDPlayerEngine;
-
 /**
  * Allows User to display Game info as Observing object
  * @author Michael

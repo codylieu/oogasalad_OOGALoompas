@@ -20,7 +20,6 @@ import main.java.engine.util.leapmotion.gamecontroller.LeapGameController;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.player.panels.ObjectChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
@@ -95,7 +94,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	@Override
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
-
 	}
 
 	public void initModel(){
@@ -105,7 +103,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	public void speedUp() {
 		setFrameRate(getFrameRate() + FRAME_RATE_DELTA, 1);
-
 	}
 
 	/**
@@ -150,7 +147,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 				else {
 					color = JGColor.green;
 				}
-
 			}
 			else {
 				if (model.isTowerPresent(mousePos.x, mousePos.y)) {
@@ -158,7 +154,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 				}
 			}
 		}
-
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 

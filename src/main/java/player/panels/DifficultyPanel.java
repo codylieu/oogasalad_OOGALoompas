@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import main.java.player.ITDPlayerEngine;
-import main.java.player.TDPlayerEngine;
 
 /**
  * Panel to allow user to choose difficulty

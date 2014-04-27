@@ -1,8 +1,5 @@
 package main.java.player.panels;
 
-import java.util.List;
-
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import main.java.player.TDPlayerEngine;
