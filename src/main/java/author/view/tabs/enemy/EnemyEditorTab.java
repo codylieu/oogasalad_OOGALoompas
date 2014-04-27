@@ -99,30 +99,16 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
-			SimpleMonsterSchema currentMonsterSchema = (SimpleMonsterSchema) monster;
-			Map<String, Serializable> map = currentMonsterSchema
+			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
+			Map<String, Serializable> monsterAttributes = monster
 					.getAttributesMap();
-			String monsterName = (String) map
-					.get(MonsterSchema.RESURRECT_MONSTER_NAME);
-			int resQuant = (Integer) map.get(MonsterSchema.RESURRECT_QUANTITY);
-			SimpleMonsterSchema monsterSchemaToRes = null;
-			for (TDObjectSchema possibleMonsterToRes : objectMap.values()) {
-				SimpleMonsterSchema possibleMonsterSchemaToRes = (SimpleMonsterSchema) possibleMonsterToRes;
-				if (possibleMonsterSchemaToRes.getAttributesMap()
-						.get(TDObjectSchema.NAME).equals(monsterName)) {
-					monsterSchemaToRes = possibleMonsterSchemaToRes;
 
-				}
+			for (String attribute : monsterAttributes.keySet()) {
+				Serializable castedAttribute = addCastToAttribute(monsterAttributes
+						.get(attribute));
+				monsterSchema.addAttribute(attribute, castedAttribute);
 			}
-			if (monsterSchemaToRes != null) {
-				MonsterSpawnSchema spawnSchema = new MonsterSpawnSchema(
-						monsterSchemaToRes, resQuant);
-				currentMonsterSchema
-						.addAttribute(
-								MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA,
-								spawnSchema);
-			}
-			monsterSchemas.add(currentMonsterSchema);
+			monsterSchemas.add(monsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
 	}
