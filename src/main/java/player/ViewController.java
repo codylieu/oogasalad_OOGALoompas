@@ -69,6 +69,7 @@ public class ViewController implements Serializable {
 	public static final String SPEED_UP_METHOD_NAME = "speedUp";
 	public static final String SLOW_DOWN_METHOD_NAME = "slowDown";
 	public static final String TOGGLE_ADD_TOWER_METHOD_NAME = "toggleAddTower";
+	public static final String TOGGLE_ADD_ITEM_METHOD_NAME = "toggleAddItem";
 	public static final String TOGGLE_SOUND_METHOD_NAME = "toggleSound";
 	public static final String TOGGLE_RUNNING_METHOD_NAME = "toggleRunning";
 	public static final String SHOW_CARD_VARIABLE = "showCard";
@@ -82,6 +83,7 @@ public class ViewController implements Serializable {
 	public static final String SOUND_ONOFF_TEXT = "SOUND_ONOFF_TEXT";
 	public static final String ADD_TOWER_TEXT = "ADD_TOWER_TEXT";
 	public static final String SLOW_DOWN_TEXT = "SLOW_DOWN_TEXT";
+	public static final String ADD_ITEM_TEXT = "ADD_ITEM_TEXT";
 	public static final String SPEED_UP_TEXT = "SPEED_UP_TEXT";
 	public static final String LOAD_TEXT = "LOAD_TEXT";
 	public static final String SAVE_TEXT = "SAVE_TEXT";
@@ -328,6 +330,9 @@ public class ViewController implements Serializable {
 
 		JButton addTowerButton = new JButton(myLanguageResources.getString(ADD_TOWER_TEXT));
 		addTowerButton.addActionListener(new MethodAction (engine, TOGGLE_ADD_TOWER_METHOD_NAME));
+		
+		JButton addItemButton = new JButton(myLanguageResources.getString(ADD_ITEM_TEXT));
+		addItemButton.addActionListener(new MethodAction (engine, TOGGLE_ADD_ITEM_METHOD_NAME));
 
 		JButton soundButton = new JButton(myLanguageResources.getString(SOUND_ONOFF_TEXT));
 		soundButton.addActionListener(new MethodAction (this, TOGGLE_SOUND_METHOD_NAME));
