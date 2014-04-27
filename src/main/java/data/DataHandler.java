@@ -232,7 +232,7 @@ public class DataHandler {
 			// Validate game blueprint for engine, but not author
 			// throw stuff if it isn't complete
 			try {
-				System.out.println(checkGameBlueprint(toReturn));
+				checkGameBlueprint(toReturn);
 			} catch(NullPointerException e) {
 				throw new InvalidGameBlueprintException();
 			}
@@ -457,20 +457,22 @@ public class DataHandler {
 	 * @throws IllegalArgumentException 
 	 * @throws InvalidDataException 
 	 */
-	private boolean checkPublicData(Object obj) throws IllegalArgumentException, IllegalAccessException, InvalidDataException	{
-		int count = 0;
-		System.out.println(Arrays.toString(obj.getClass().getDeclaredFields()));
-		for(Field field : obj.getClass().getDeclaredFields())	{
-			if(!Modifier.isStatic(field.getModifiers()))	{
-				count++;
-				if(field.get(obj) != null)	{
-					count++;
-				}
-				else	{
-					throw new InvalidDataException(field.getName(),obj);
-				}
-			}
-		}
-		return count == obj.getClass().getDeclaredFields().length;
-	}
+//	private boolean checkPublicData(Object obj) throws IllegalArgumentException, IllegalAccessException, InvalidDataException	{
+//		int count = 0;
+//		System.out.println(Arrays.toString(obj.getClass().getDeclaredFields()));
+//		for(Field field : obj.getClass().getDeclaredFields())	{
+//			if(!Modifier.isStatic(field.getModifiers()))	{
+//				count++;
+//				if(field.get(obj) != null)	{
+//					count++;
+//				}
+//				else	{
+//					throw new InvalidDataException(field.getName(),obj);
+//				}
+//			}
+//		}
+//		return count == obj.getClass().getDeclaredFields().length;
+//	}
+
 }
+

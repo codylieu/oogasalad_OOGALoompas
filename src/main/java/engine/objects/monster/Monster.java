@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.util.Set;
 import jgame.JGColor;
 import jgame.JGPoint;
+import main.java.engine.PathfinderManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.monster.jgpathfinder.JGPath;
@@ -30,7 +31,8 @@ public abstract class Monster extends TDObject {
     protected double myCurrentHealth;
     protected double myMoveSpeed;
     protected double myMoneyValue;
-    protected JGPathfinderInterface myPathFinder;
+    protected PathfinderManager myPathfinderManager;
+	protected Set<Integer> myBlockedTiles;
     protected Point2D myEntrance;
     protected Exit myExit;
     protected JGPath myPath;
@@ -49,6 +51,7 @@ public abstract class Monster extends TDObject {
                     double moveSpeed,
                     double rewardAmount,
                     String graphic,
+					PathfinderManager pathfinderManager,
                     MonsterSpawnSchema resurrectSchema) {
         // TODO make factory add the spread between monsters in the same wave, and remove random
         // from initial x,y
@@ -60,21 +63,21 @@ public abstract class Monster extends TDObject {
         myMoneyValue = rewardAmount;
         myEntrance = entrance;
         myExit = exit;
-        myPathFinder =
-                new JGPathfinder(new JGTileMap(eng, null, blocked), new JGPathfinderHeuristic()); // TODO:
-                                                                                                  // clean
-                                                                                                  // up
-        JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y)); // TODO: move into diff method
-        JGPoint pathExit = new JGPoint(myExit.getCenterTile());
+		myBlockedTiles = blocked;
+
+        myPathfinderManager = pathfinderManager;
+        JGPoint pathEntrance = new JGPoint(eng.getTileIndex(x, y));
+        JGPoint pathExit = eng.getTileIndex(myExit.x, myExit.y);
+		try {
+			myPath = myPathfinderManager.getPath(pathEntrance, pathExit, blocked);
+		}
+		catch (NoPossiblePathException e) {
+			e.printStackTrace();
+		}
+
         this.setSpeed(myMoveSpeed);
         originalImage = graphic;
         this.resurrectMonsterSchema = resurrectSchema;
-        try {
-            myPath = myPathFinder.getPath(pathEntrance, pathExit);
-        }
-        catch (NoPossiblePathException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -98,6 +101,15 @@ public abstract class Monster extends TDObject {
             }
         }
     }
+
+	/**
+	 * Update the path of the monster.
+	 */
+	public void updatePath() throws NoPossiblePathException {
+		JGPoint currentPos = this.getCenterTile();
+		myPath = myPathfinderManager.getPath(currentPos,
+				eng.getTileIndex(myExit.x, myExit.y), myBlockedTiles);
+	}
 
     /**
      * Check if this object has died and should be removed

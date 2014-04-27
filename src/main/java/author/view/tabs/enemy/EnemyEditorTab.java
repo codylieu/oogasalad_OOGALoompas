@@ -92,6 +92,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 		return monsterSchemas;
 	}
 
+
 	@Override
 	public void saveTabData() {
 
@@ -99,16 +100,40 @@ public class EnemyEditorTab extends ObjectEditorTab {
 
 		monsterSchemas = new ArrayList<MonsterSchema>();
 		for (TDObjectSchema monster : objectMap.values()) {
-			SimpleMonsterSchema monsterSchema = new SimpleMonsterSchema();
-			Map<String, Serializable> monsterAttributes = monster
+			SimpleMonsterSchema currentMonsterSchema = (SimpleMonsterSchema) monster;
+			Map<String, Serializable> map = currentMonsterSchema
 					.getAttributesMap();
+			String monsterName = (String) map
+					.get(MonsterSchema.RESURRECT_MONSTER_NAME);
+			System.out.println(map.get(MonsterSchema.RESURRECT_QUANTITY));
+			int resQuant = Integer.valueOf(map.get(MonsterSchema.RESURRECT_QUANTITY).toString());
+			SimpleMonsterSchema monsterSchemaToRes = null;
+			for (TDObjectSchema possibleMonsterToRes : objectMap.values()) {
+				SimpleMonsterSchema possibleMonsterSchemaToRes = (SimpleMonsterSchema) possibleMonsterToRes;
+				if (possibleMonsterSchemaToRes.getAttributesMap()
+						.get(TDObjectSchema.NAME).equals(monsterName)) {
+					monsterSchemaToRes = possibleMonsterSchemaToRes;
 
-			for (String attribute : monsterAttributes.keySet()) {
-				Serializable castedAttribute = addCastToAttribute(monsterAttributes
-						.get(attribute));
-				monsterSchema.addAttribute(attribute, castedAttribute);
+				}
 			}
-			monsterSchemas.add(monsterSchema);
+			if (monsterSchemaToRes != null) {
+				MonsterSpawnSchema spawnSchema = new MonsterSpawnSchema(
+						monsterSchemaToRes, resQuant);
+				currentMonsterSchema
+						.addAttribute(
+								MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA,
+								(Serializable) spawnSchema);
+			}
+			
+			
+			Map<String, Serializable> monsterAttributeMap = currentMonsterSchema.getAttributesMap();
+			for (String attribute : monsterAttributeMap.keySet()) {
+				Serializable attValue = addCastToAttribute(monsterAttributeMap.get(attribute));
+				currentMonsterSchema.addAttribute(attribute, attValue);
+
+			}
+
+			monsterSchemas.add(currentMonsterSchema);
 		}
 		controller.addEnemies(monsterSchemas);
 	}
