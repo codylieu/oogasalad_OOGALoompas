@@ -47,6 +47,7 @@ public class TDObjectFactory {
 	private List<String> possibleTowersNames;
 	private List<String> possibleItemNames;
 	private Map<String, String> towerMap;
+	private Map<String, String> itemMap;
 
 	public TDObjectFactory (JGEngineInterface engine) {
 		this.engine = engine;
@@ -54,6 +55,7 @@ public class TDObjectFactory {
 		possibleTowersNames = new ArrayList<String>();
 		possibleItemNames = new ArrayList<String>();
 		towerMap = new HashMap<String, String>();
+		itemMap = new HashMap<String, String>();
 	}
 
 	/**
@@ -122,6 +124,10 @@ public class TDObjectFactory {
 	public void loadItemSchemas(List<ItemSchema> schemas) {
 		for (ItemSchema i: schemas) {
 			possibleItemNames.add((String) i.getAttributesMap().get(TDObjectSchema.NAME));
+			// TODO: make the following code work
+//			String itemName = (String) i.getAttributesMap().get(TDObjectSchema.NAME);
+//			String itemDescription = (String) i.getAttributesMap().get(ItemSchema.DESCRIPTION);
+//			itemMap.put(itemName, itemDescription);
 		}
 		loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);		
 	}
@@ -267,6 +273,16 @@ public class TDObjectFactory {
 	 */
 	public String getTowerDescription(String towerName) {
 		return towerMap.get(towerName);
+	}
+	
+	/**
+	 * Returns the description associated with an item
+	 * 
+	 * @param itemName
+	 * @return
+	 */
+	public String getItemDescription(String itemName) {
+		return itemMap.get(itemName);
 	}
 
 

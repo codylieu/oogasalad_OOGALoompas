@@ -897,4 +897,12 @@ public class Model implements IModel {
 			Arrays.fill(row, null);
 		}
 	}
+
+	/* (non-Javadoc)
+	 * @see main.java.engine.IModel#getItemDescription(java.lang.String)
+	 */
+	@Override
+	public String getItemDescription(String itemName) {
+		return factory.getItemDescription(itemName);
+	}
 }
