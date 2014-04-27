@@ -66,6 +66,11 @@ public class JGTileMap implements JGTileMapInterface {
 		return engine.pfTilesY();
 	}
 
+	@Override
+	public void setBlockedTiles(Set<Integer> blocked) {
+		blockedCIDs = blocked;
+	}
+
 	/**
 	 * Get the indexes of the direct neighbors (no diagonals) of the given tile.
 	 *

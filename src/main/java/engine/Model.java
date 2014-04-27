@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import jgame.platform.JGEngine;
+import main.java.author.view.tabs.terrain.TerrainAttribute;
 import main.java.data.DataHandler;
 import main.java.engine.factory.TDObjectFactory;
 import main.java.engine.map.TDMap;
@@ -22,6 +23,7 @@ import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
 import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.monster.jgpathfinder.*;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.objects.tower.TowerBehaviors;
@@ -70,6 +72,8 @@ public class Model implements IModel {
 	private LevelManager levelManager;
 	private EnvironmentKnowledge environ;
 	private List<TDItem> items;
+	private TDMap currentMap;
+	private PathfinderManager pathfinderManager;
 
 	public Model (JGEngine engine, String pathToBlueprint) {
 		this.engine = engine;
@@ -78,7 +82,8 @@ public class Model implements IModel {
 		this.factory = new TDObjectFactory(engine);
 		collisionManager = new CollisionManager(engine);
 
-		levelManager = new LevelManager(factory);
+		initPathfinderManager();
+		levelManager = new LevelManager(factory, pathfinderManager);
 
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
@@ -93,13 +98,21 @@ public class Model implements IModel {
 		}
 
 		addNewPlayer();
-
 	}
 
 	private void defineAllStaticImages () {
 		// TODO: remove this method, make exit a part of wavespawnschemas
 		// and define its image dynamically
 		engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
+	}
+
+	/**
+	 * Create the inital pathfinder with a given tilemap and heuristic.
+	 */
+	private void initPathfinderManager() {
+		JGTileMapInterface tileMap = new JGTileMap(engine);
+		JGPathfinderHeuristicInterface heuristic = new JGPathfinderHeuristic();
+		pathfinderManager = new PathfinderManager(tileMap, heuristic);
 	}
 
 	/**
@@ -125,10 +138,16 @@ public class Model implements IModel {
 			int[] currentTile = getTileCoordinates(location);
 
 			// if tower already exists in the tile clicked, do nothing
-			if (isTowerPresent(currentTile)) { return false; }
+			if (isTowerPresent(currentTile)) {
+				return false;
+			}
+
+			// check if tower will block paths
+			if (willTowerBlockPath(currentTile)) {
+				return false;
+			}
 
 			ITower newTower = factory.placeTower(location, towerName);
-
 			if (player.getMoney() >= newTower.getCost()) {
 				// FIXME: Decrease money?
 				player.changeMoney(-newTower.getCost());
@@ -137,6 +156,7 @@ public class Model implements IModel {
 			}
 			else {
 				newTower.remove();
+				currentMap.revertTileCIDToOriginal(currentTile[0], currentTile[1]);
 				return false;
 			}
 		}
@@ -144,6 +164,20 @@ public class Model implements IModel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return false;
+	}
+
+	private boolean willTowerBlockPath(int currentTile[]) {
+		try {
+			currentMap.setTileCID(currentTile[0], currentTile[1],
+					TerrainAttribute.Flyable.getIndex()); // TODO: get from schema
+			pathfinderManager.updatePaths(monsters);
+		} catch (NoPossiblePathException e) {
+			currentMap.revertTileCIDToOriginal(currentTile[0], currentTile[1]);
+			System.out.println("Cannot place tower as it will block path");
+			return true;
+		}
+
 		return false;
 	}
 
@@ -239,22 +273,13 @@ public class Model implements IModel {
 			int ytile = coordinates[1];
 			player.changeMoney(DEFAULT_MONEY_MULTIPLIER * towers[xtile][ytile].getCost());
 			towers[xtile][ytile].remove();
+			currentMap.revertTileCIDToOriginal(xtile, ytile);
+			try {
+				pathfinderManager.updatePaths(monsters);
+			} catch (Exception e) {
+				e.printStackTrace(); // ignore, removing a tower should never block a path
+			}
 			towers[xtile][ytile] = null;
-		}
-	}
-
-	// TODO: use this instead of other one, will change -jordan
-	public void loadMapTest (String fileName) {
-		try {
-			FileInputStream fis = new FileInputStream(fileName);
-			ObjectInputStream is = new ObjectInputStream(fis);
-			GameMapSchema mapToLoad = (GameMapSchema) is.readObject();
-			is.close();
-
-			new TDMap(engine, mapToLoad);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -309,7 +334,7 @@ public class Model implements IModel {
 
 		// Initialize map settings
 		if (blueprint.getMyGameMapSchemas() != null) {
-			new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
+			currentMap = new TDMap(engine, blueprint.getMyGameMapSchemas().get(0)); // TODO: load
 			// each map
 			CanvasSchema myCanvasSchema =
 					(CanvasSchema) blueprint.getMyGameMapSchemas().get(0).getAttributesMap()
@@ -877,5 +902,4 @@ public class Model implements IModel {
 			Arrays.fill(row, null);
 		}
 	}
-
 }
