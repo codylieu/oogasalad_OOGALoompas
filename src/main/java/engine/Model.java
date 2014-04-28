@@ -299,7 +299,7 @@ public class Model implements IModel {
 	public void loadGameBlueprint (String filePath) throws ClassNotFoundException, IOException {
 		GameBlueprint blueprint = null;
 		if (filePath == null) {
-			blueprint = createTestBlueprint();
+			//blueprint = createTestBlueprint();
 		}
 		else {
 			try {
@@ -613,7 +613,7 @@ public class Model implements IModel {
 	 * 
 	 * @return test blueprint
 	 */
-	private GameBlueprint createTestBlueprint () {
+	/*private GameBlueprint createTestBlueprint () {
 		GameBlueprint testBlueprint = new GameBlueprint();
 
 		// Populate TDObjects
@@ -776,10 +776,10 @@ public class Model implements IModel {
 		testWaves.add(testWaveSpawnSchemaThree);
 
 		testBlueprint.setMyWaveSchemas(testWaves);
-		*/
+		
 
 		return testBlueprint;
-	}
+	}*/
 
 	/**
 	 * A list of names of possible towers to create
