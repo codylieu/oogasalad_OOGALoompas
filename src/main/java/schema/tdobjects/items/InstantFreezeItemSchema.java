@@ -1,9 +1,9 @@
 package main.java.schema.tdobjects.items;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
-import main.java.engine.objects.item.AreaBomb;
-import main.java.engine.objects.item.InstantFreeze;
+import main.java.engine.objects.powerup.AnnihilatorPowerup;
+import main.java.engine.objects.powerup.AreaBombPowerup;
+import main.java.engine.objects.powerup.InstantFreezePowerup;
 import main.java.schema.tdobjects.ItemSchema;
 
 import java.util.HashSet;
@@ -14,7 +14,7 @@ import java.util.Set;
  * This is a settings object for a specific type of InstantFreeze.
  */
 public class InstantFreezeItemSchema extends ItemSchema {
-	public static final Class<InstantFreeze> MY_CONCRETE_TYPE = InstantFreeze.class;
+	public static final Class<InstantFreezePowerup> MY_CONCRETE_TYPE = InstantFreezePowerup.class;
 	public static final String FREEZE_DURATION = "Range";
 
 	public InstantFreezeItemSchema() {

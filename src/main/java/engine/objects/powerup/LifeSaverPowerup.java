@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -14,13 +14,14 @@ import main.java.schema.tdobjects.items.AreaBombItemSchema;
  * Grants an additional life to player
  *
  */
-public class LifeSaver extends TDItem {
 
-	public LifeSaver(Point2D location, String image, double cost, double buildup_time, int flash_interval) {
+public class LifeSaverPowerup extends TDPowerupPowerup {
+	
+	public LifeSaverPowerup(Point2D location, String image, double cost, double buildup_time, int flash_interval) {
 		super("lifesaver", location.getX(), location.getY(), "row_bomb", cost, buildup_time, 0, flash_interval);
 	}
-
-	public LifeSaver(Map<String, Object> attributes) {
+	
+	public LifeSaverPowerup(Map<String, Object> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(String) getValueOrDefault(attributes, AreaBombItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),

@@ -1,7 +1,5 @@
 package main.java.engine;
 
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.List;
 
 import main.java.engine.objects.Exit;
@@ -21,6 +19,8 @@ import main.java.engine.objects.tower.ITower;
  * Contains helper methods to return info which relies on knowledge unknown to individual objects
  * (typically aggregate info about the entire field of towers and monsters)
  * and methods to change state of environmental objects in a controlled manner.
+ * 
+ * @author Austin
  * 
  */
 public class EnvironmentKnowledge {

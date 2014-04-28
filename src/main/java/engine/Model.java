@@ -1,9 +1,7 @@
 package main.java.engine;
 
 import java.awt.geom.Point2D;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,9 +19,9 @@ import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
-import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.monster.jgpathfinder.*;
+import main.java.engine.objects.powerup.TDPowerupPowerup;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.objects.tower.TowerBehaviors;
@@ -35,18 +33,15 @@ import main.java.schema.CanvasSchema;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import main.java.schema.MonsterSpawnSchema;
-import main.java.schema.WaveSpawnSchema;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
-import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
-import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 
 
 /**
@@ -71,14 +66,14 @@ public class Model implements IModel {
 	private DataHandler dataHandler;
 	private LevelManager levelManager;
 	private EnvironmentKnowledge environ;
-	private List<TDItem> items;
+	private List<TDPowerupPowerup> items;
 	private TDMap currentMap;
 	private PathfinderManager pathfinderManager;
 
 	public Model (JGEngine engine, String pathToBlueprint) {
 		this.engine = engine;
 		dataHandler = new DataHandler();
-		defineAllStaticImages();
+		defineExitImage();
 		this.factory = new TDObjectFactory(engine);
 		collisionManager = new CollisionManager(engine);
 
@@ -88,10 +83,10 @@ public class Model implements IModel {
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
 		towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
-		items = new ArrayList<TDItem>();
+		items = new ArrayList<TDPowerupPowerup>();
 
 		try {
-			loadGameBlueprint(pathToBlueprint);// TODO: REPLACE
+			loadGameBlueprint(pathToBlueprint);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -100,7 +95,7 @@ public class Model implements IModel {
 		addNewPlayer();
 	}
 
-	private void defineAllStaticImages () {
+	private void defineExitImage () {
 		// TODO: remove this method, make exit a part of wavespawnschemas
 		// and define its image dynamically
 		engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
@@ -170,7 +165,7 @@ public class Model implements IModel {
 	private boolean willTowerBlockPath(int currentTile[]) {
 		try {
 			currentMap.setTileCID(currentTile[0], currentTile[1],
-					TerrainAttribute.Flyable.getIndex()); // TODO: get from schema
+					TerrainAttribute.Unwalkable.getIndex()); // TODO: get from schema
 			pathfinderManager.updatePaths(monsters);
 		} catch (NoPossiblePathException e) {
 			currentMap.revertTileCIDToOriginal(currentTile[0], currentTile[1]);
@@ -468,9 +463,9 @@ public class Model implements IModel {
 	}
 
 	private void doItemActions () {
-		Iterator<TDItem> itemIter = items.iterator();
+		Iterator<TDPowerupPowerup> itemIter = items.iterator();
 		while (itemIter.hasNext()) {
-			TDItem currentItem = itemIter.next();
+			TDPowerupPowerup currentItem = itemIter.next();
 			if (currentItem.isDead()) {
 				itemIter.remove();
 				currentItem.remove();
@@ -490,7 +485,7 @@ public class Model implements IModel {
 	 */
 	public boolean placeItem (String name, double x, double y) {
 		try {
-			TDItem newItem = factory.placeItem(new Point2D.Double(x, y), name);
+			TDPowerupPowerup newItem = factory.placeItem(new Point2D.Double(x, y), name);
 			if (newItem.getCost() <= player.getMoney()) {
 				items.add(newItem);
 				player.changeMoney(-newItem.getCost());
@@ -781,7 +776,7 @@ public class Model implements IModel {
 		testWaves.add(testWaveSpawnSchemaThree);
 
 		testBlueprint.setMyWaveSchemas(testWaves);
-		*/
+		 */
 
 		return testBlueprint;
 	}
@@ -904,5 +899,16 @@ public class Model implements IModel {
 	@Override
 	public String getItemDescription(String itemName) {
 		return factory.getItemDescription(itemName);
+	}
+
+	/**
+	 * Call this cheat to annihilate all monsters on field.
+	 */
+	public void annihilateMonsters() {
+		Iterator<Monster> iter = monsters.iterator();
+		while(iter.hasNext()) {
+			Monster m = iter.next();
+			m.takeDamage(Double.MAX_VALUE);
+		}
 	}
 }

@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -13,13 +13,13 @@ import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
  * Removes all current monsters from map
  *
  */
-public class Annihilator extends TDItem {
+public class AnnihilatorPowerup extends TDPowerupPowerup {
 
-	public Annihilator(String image, double cost, double buildup_time, double damage, int flash_interval) {
+	public AnnihilatorPowerup(String image, double cost, double buildup_time, double damage, int flash_interval) {
 		super("annihilator", 0, 0, image, cost, buildup_time, damage, flash_interval);
 	}
 
-	public Annihilator(Map<String, Object> attributes) {
+	public AnnihilatorPowerup(Map<String, Object> attributes) {
 		this(
 				(String) getValueOrDefault(attributes, AnnihilatorItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),
 				(Double) getValueOrDefault(attributes, AnnihilatorItemSchema.COST, ItemViewConstants.COST_DEFAULT),

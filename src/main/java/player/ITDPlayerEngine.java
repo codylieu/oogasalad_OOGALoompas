@@ -7,7 +7,6 @@ import java.util.zip.ZipException;
 
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
-import main.java.player.util.Subject;
 
 public interface ITDPlayerEngine {
 	
@@ -30,6 +29,8 @@ public interface ITDPlayerEngine {
 		public CursorState getCursorState();
 		
 		public List<String> getCurrentDescription();
+		
+		public String getPathToMusic();
 
 		public void doFrame();
 		public void setCurrentTowerType(String currentTowerName);
@@ -52,8 +53,6 @@ public interface ITDPlayerEngine {
 
 		public List<String> getPossibleTowers();
 
-		public List<String> getPossibleItems();
-
 		public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException, net.lingala.zip4j.exception.ZipException;
 
 		public void saveGameState(String gameName);
@@ -64,8 +63,7 @@ public interface ITDPlayerEngine {
 
 		public void initModel();
 
+		public double getHighScore();
+		
 		public void stop();
-
-	
-
 }

@@ -12,7 +12,7 @@ public class UnitInfoPanel extends ObservingPanel{
 
 	public UnitInfoPanel() {
 
-		unitInfoArea = new JTextArea(5, 5);
+		unitInfoArea = new JTextArea(5, 20);
 		unitInfoArea.setEditable(false);
 		unitInfoArea.setLineWrap(true);
 		unitInfoArea.setWrapStyleWord(true);

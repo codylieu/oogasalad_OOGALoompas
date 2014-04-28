@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -18,15 +18,15 @@ import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
  * @author Lawrence
  *
  */
-public class InstantFreeze extends TDItem {
+public class InstantFreezePowerup extends TDPowerupPowerup {
 	private double freeze_duration;
-
-	public InstantFreeze(Point2D location, String image, double cost, double freeze_duration, double damage, int flash_interval) {
+	
+	public InstantFreezePowerup(Point2D location, String image, double cost, double freeze_duration, double damage, int flash_interval) {
 		super("instance_freeze", location.getX(), location.getY(), null, cost, 0, damage, flash_interval);
 		this.freeze_duration = freeze_duration;
 	}
-
-	public InstantFreeze(Map<String, Object> attributes) {
+	
+	public InstantFreezePowerup(Map<String, Object> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(String) getValueOrDefault(attributes, InstantFreezeItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),

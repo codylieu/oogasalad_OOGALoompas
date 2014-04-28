@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
@@ -19,13 +19,13 @@ import main.java.schema.tdobjects.items.AreaBombItemSchema;
  * @author Lawrence
  *
  */
-public class RowBomb extends TDItem{
+public class RowBombPowerup extends TDPowerupPowerup{
 
-	public RowBomb(Point2D location, String image, double cost, double buildup_time, double damage, int flash_interval) {
+	public RowBombPowerup(Point2D location, String image, double cost, double buildup_time, double damage, int flash_interval) {
 		super("row_bomb", location.getX(), location.getY(), image, cost, buildup_time, damage, flash_interval);
 	}
 
-	public RowBomb(Map<String, Object> attributes) {
+	public RowBombPowerup(Map<String, Object> attributes) {
 		this(
 				(Point2D) getValueOrDefault(attributes, ItemSchema.LOCATION, new Point2D.Double(0, 0)),
 				(String) getValueOrDefault(attributes, AreaBombItemSchema.IMAGE_NAME, ItemViewConstants.IMAGE_DEFAULT),

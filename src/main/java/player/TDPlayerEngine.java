@@ -20,13 +20,13 @@ import main.java.engine.util.leapmotion.gamecontroller.LeapGameController;
 import main.java.exceptions.engine.InvalidSavedGameException;
 import main.java.exceptions.engine.MonsterCreationFailureException;
 import main.java.exceptions.engine.TowerCreationFailureException;
-import main.java.player.panels.ObjectChooser;
 import main.java.player.util.CursorState;
 import main.java.player.util.Observing;
 import main.java.player.util.Subject;
 import main.java.player.util.TowerGhost;
 import main.java.schema.CanvasSchema;
 import main.java.schema.GameBlueprint;
+import main.java.schema.GameSchema;
 import main.java.schema.map.GameMapSchema;
 import net.lingala.zip4j.exception.ZipException;
 
@@ -56,16 +56,15 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private CursorState cursorState;
 	private boolean isFullScreen;
 	private String pathToBlueprint;
+	private String pathToMusic;
 	private String towerName;
-	private String itemName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private JGPoint lastClickedObject;
 	private LeapGameController leapController;
+	private ViewController viewController;
 
-	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 
-
-	public TDPlayerEngine(String pathToBlueprintInit) throws ClassNotFoundException, IOException, ZipException {
+	public TDPlayerEngine(String pathToBlueprintInit, ViewController myView) throws ClassNotFoundException, IOException, ZipException {
 		// super();
 		loadCanvasSize(pathToBlueprintInit);
 		pathToBlueprint = pathToBlueprintInit;
@@ -75,6 +74,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		cursorState = CursorState.None;
 		leapController = new LeapGameController();
 		lastClickedObject = new JGPoint();
+		viewController = myView;
 		stop();
 	}
 
@@ -86,6 +86,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		Map<String, Object> canvasSchemaAttributeMap = canvasSchema.getAttributesMap();
 		xtiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.X_TILES);
 		ytiles = (Integer) canvasSchemaAttributeMap.get(CanvasSchema.Y_TILES);
+		pathToMusic = (String) blueprint.getMyGameScenario().getAttributesMap().get(GameSchema.MUSIC);
+	}
+	
+	public String getPathToMusic() {
+		return pathToMusic;
 	}
 
 	@Override
@@ -96,7 +101,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	@Override
 	public void initGame() {
 		setFrameRate(DEFAULT_FRAME_RATE, 1);
-
 	}
 
 	public void initModel(){
@@ -106,7 +110,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	public void speedUp() {
 		setFrameRate(getFrameRate() + FRAME_RATE_DELTA, 1);
-
 	}
 
 	/**
@@ -151,7 +154,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 				else {
 					color = JGColor.green;
 				}
-
 			}
 			else {
 				if (model.isTowerPresent(mousePos.x, mousePos.y)) {
@@ -159,7 +161,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 				}
 			}
 		}
-
 		this.drawRect(curXTilePos, curYTilePos, tileWidth(), tileHeight(), false, false, 1.0, color);
 	}
 
@@ -174,11 +175,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	@Override
 	public void doFrame() {
 		super.doFrame();
-		
+
 		if (leapController != null) {
 			leapController.doFrame();
 		}
-		
+
 		if (model != null) {
 			checkGameEnd();
 			checkMouse();
@@ -189,31 +190,35 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			model.checkCollisions();
 		}
 	}
-
-	/*private void setAllItems(){
-		for(String s: items.keySet()){
-			setItem(LEFT_CLICK, items.getString(s));
-		}	
-	}*/
+	
+	public String getCurrentTowerDescription() {
+		return model.getTowerDescription(towerName);
+	}
 
 	private void checkGameEnd() {
 		if (model.isGameLost()) {
-			JOptionPane.showMessageDialog(null, "Game lost. :(");
-			stop();
+			endGameDialog("Game lost :(");
 		}
 
 		if (model.isGameWon()) {
-			JOptionPane.showMessageDialog(null, "Game won!");
-			stop();
+			endGameDialog("Game won!");
 		}
 	}
 
+	private void endGameDialog(String ending){
+		int selected = JOptionPane.showConfirmDialog(null, ending, "Game End", JOptionPane.DEFAULT_OPTION);
+		if(selected == 0){
+			viewController.handleEndGame();
+		}
+		stop();
+	}
 	private void updateModel() {
 		try {
 			model.updateGame();
 		} catch (MonsterCreationFailureException e) {
 			JOptionPane.showMessageDialog(null, "Critical Monster creation exception. See stack trace. Exiting program");
 			e.printStackTrace();
+			System.exit(1);
 		}
 	}
 
@@ -240,16 +245,9 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 						e.printStackTrace();
 					}
 
-
 					clearKey(Integer.parseInt(hotkeys.getString("UpgradeTower")));
 				}
 				clearMouseButton(LEFT_CLICK);
-			}
-			//setAllItems();
-		}
-		else if (cursorState == CursorState.AddItem) {
-			if (getMouseButton(LEFT_CLICK)) {
-				model.placeItem(itemName, getMouseX(), getMouseY());
 			}
 		}
 		if (getMouseButton(RIGHT_CLICK)) {
@@ -258,25 +256,13 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		}
 	}
 
-	/*private void setItem(int clickName, String itemName){
-		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
-			try {
-				model.placeItem(itemName, getMouseX(), getMouseY());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
-		}
-	}*/
-
 	public void setCurrentTowerType(String currentTowerName){
 		towerName = currentTowerName;
 	}
-	
-	public void setCurrentItemType(String currentItemName) {
-		itemName = currentItemName;
-	}
 
+	public double getHighScore(){
+		return model.getScore();
+	}
 	/**
 	 * Toggle the cursor status from AddTower to None 
 	 * or vice-versa
@@ -288,16 +274,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		}
 		else {
 			setCursorState(CursorState.AddTower);
-		}
-	}
-	
-	public void toggleAddItem() {
-		if (getCursorState() == CursorState.AddItem) {
-			setCursorState(CursorState.AddItem);
-			removeObjects("TowerGhost", 0);
-		}
-		else {
-			setCursorState(CursorState.AddItem);
 		}
 	}
 
@@ -316,11 +292,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
 		}
-		if (getKey(Integer.parseInt(hotkeys.getString("AddItem")))){
-			toggleAddItem();
-			clearKey(Integer.parseInt(hotkeys.getString("AddItem")));
-		}
-
 	}
 
 	public void toggleFullScreen(){
@@ -365,10 +336,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	public List<String> getPossibleTowers(){
 		return model.getPossibleTowers();
-	}
-
-	public List<String> getPossibleItems(){
-		return model.getPossibleItems();
 	}
 
 	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {

@@ -55,11 +55,11 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	public static final Set<Integer> flyingSet = new HashSet<Integer>();
+	public static final Set<Integer> flyingSet = new HashSet<>();
 			
 
-	public static final Set<Integer> groundSet = new HashSet<Integer>(
-					TerrainAttribute.Unwalkable.getIndex());
+	public static final Set<Integer> groundSet = new HashSet<>(Arrays.asList(
+			TerrainAttribute.Unwalkable.getIndex()));
 	private JSpinner healthSpinner, speedSpinner, damageSpinner, rewardSpinner;
 
 	private ImageCanvas monsterImageCanvas;
@@ -104,7 +104,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 					.getAttributesMap();
 			String monsterName = (String) map
 					.get(MonsterSchema.RESURRECT_MONSTER_NAME);
-			int resQuant = Integer.valueOf(map.get(MonsterSchema.RESURRECT_QUANTITY).toString());
+			int resQuant = Double.valueOf(map.get(MonsterSchema.RESURRECT_QUANTITY).toString()).intValue();
 			SimpleMonsterSchema monsterSchemaToRes = null;
 			for (TDObjectSchema possibleMonsterToRes : objectMap.values()) {
 				SimpleMonsterSchema possibleMonsterSchemaToRes = (SimpleMonsterSchema) possibleMonsterToRes;
