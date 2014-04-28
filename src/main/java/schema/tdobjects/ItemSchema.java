@@ -2,7 +2,7 @@ package main.java.schema.tdobjects;
 
 import java.awt.geom.Point2D;
 
-import main.java.engine.objects.item.TDItem;
+import main.java.engine.objects.powerup.TDPowerupPowerup;
 
 public abstract class ItemSchema extends TDObjectSchema{
 	public static final String COST = "Cost";
@@ -12,7 +12,7 @@ public abstract class ItemSchema extends TDObjectSchema{
 	public static final String LOCATION = "Location";
 	public static final String DESCRIPTION = "Description Displayed";
 
-	public ItemSchema(Class<? extends TDItem> myConcreteType) {
+	public ItemSchema(Class<? extends TDPowerupPowerup> myConcreteType) {
 		super(myConcreteType);
 		myAttributeSet.add(ItemSchema.BUILDUP_TIME);
 		myAttributeSet.add(ItemSchema.COST);

@@ -21,9 +21,9 @@ import main.java.engine.map.TDMap;
 import main.java.engine.objects.CollisionManager;
 import main.java.engine.objects.Exit;
 import main.java.engine.objects.TDObject;
-import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
 import main.java.engine.objects.monster.jgpathfinder.*;
+import main.java.engine.objects.powerup.TDPowerupPowerup;
 import main.java.engine.objects.tower.ITower;
 import main.java.engine.objects.tower.ShootingTower;
 import main.java.engine.objects.tower.TowerBehaviors;
@@ -71,7 +71,7 @@ public class Model implements IModel {
 	private DataHandler dataHandler;
 	private LevelManager levelManager;
 	private EnvironmentKnowledge environ;
-	private List<TDItem> items;
+	private List<TDPowerupPowerup> items;
 	private TDMap currentMap;
 	private PathfinderManager pathfinderManager;
 
@@ -88,7 +88,7 @@ public class Model implements IModel {
 		this.gameClock = 0;
 		monsters = new ArrayList<Monster>();
 		towers = new ITower[engine.viewTilesX()][engine.viewTilesY()];
-		items = new ArrayList<TDItem>();
+		items = new ArrayList<TDPowerupPowerup>();
 
 		try {
 			loadGameBlueprint(pathToBlueprint);// TODO: REPLACE
@@ -468,9 +468,9 @@ public class Model implements IModel {
 	}
 
 	private void doItemActions () {
-		Iterator<TDItem> itemIter = items.iterator();
+		Iterator<TDPowerupPowerup> itemIter = items.iterator();
 		while (itemIter.hasNext()) {
-			TDItem currentItem = itemIter.next();
+			TDPowerupPowerup currentItem = itemIter.next();
 			if (currentItem.isDead()) {
 				itemIter.remove();
 				currentItem.remove();
@@ -490,7 +490,7 @@ public class Model implements IModel {
 	 */
 	public boolean placeItem (String name, double x, double y) {
 		try {
-			TDItem newItem = factory.placeItem(new Point2D.Double(x, y), name);
+			TDPowerupPowerup newItem = factory.placeItem(new Point2D.Double(x, y), name);
 			if (newItem.getCost() <= player.getMoney()) {
 				items.add(newItem);
 				player.changeMoney(-newItem.getCost());

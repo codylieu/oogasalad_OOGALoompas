@@ -1,8 +1,8 @@
 package main.java.schema.tdobjects.items;
 
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
-import main.java.engine.objects.item.AreaBomb;
+import main.java.engine.objects.powerup.AnnihilatorPowerup;
+import main.java.engine.objects.powerup.AreaBombPowerup;
 import main.java.schema.tdobjects.ItemSchema;
 
 import java.util.Set;
@@ -12,7 +12,7 @@ import java.util.Set;
  * This is a settings object for a specific type of AreaBomb.
  */
 public class AreaBombItemSchema extends ItemSchema {
-	public static final Class<AreaBomb> MY_CONCRETE_TYPE = AreaBomb.class;
+	public static final Class<AreaBombPowerup> MY_CONCRETE_TYPE = AreaBombPowerup.class;
 	public static final String RANGE = "Range";
 
 	public AreaBombItemSchema() {
