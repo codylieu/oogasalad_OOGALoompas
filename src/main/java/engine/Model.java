@@ -1,9 +1,7 @@
 package main.java.engine;
 
 import java.awt.geom.Point2D;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,18 +33,15 @@ import main.java.schema.CanvasSchema;
 import main.java.schema.GameBlueprint;
 import main.java.schema.GameSchema;
 import main.java.schema.MonsterSpawnSchema;
-import main.java.schema.WaveSpawnSchema;
 import main.java.schema.map.GameMapSchema;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
-import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
-import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 
 
 /**
@@ -78,7 +73,7 @@ public class Model implements IModel {
 	public Model (JGEngine engine, String pathToBlueprint) {
 		this.engine = engine;
 		dataHandler = new DataHandler();
-		defineAllStaticImages();
+		defineExitImage();
 		this.factory = new TDObjectFactory(engine);
 		collisionManager = new CollisionManager(engine);
 
@@ -91,7 +86,7 @@ public class Model implements IModel {
 		items = new ArrayList<TDItem>();
 
 		try {
-			loadGameBlueprint(pathToBlueprint);// TODO: REPLACE
+			loadGameBlueprint(pathToBlueprint);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -100,7 +95,7 @@ public class Model implements IModel {
 		addNewPlayer();
 	}
 
-	private void defineAllStaticImages () {
+	private void defineExitImage () {
 		// TODO: remove this method, make exit a part of wavespawnschemas
 		// and define its image dynamically
 		engine.defineImage(Exit.NAME, "-", 1, RESOURCE_PATH + Exit.IMAGE_NAME, "-");
