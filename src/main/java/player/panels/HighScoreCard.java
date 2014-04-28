@@ -30,6 +30,7 @@ public class HighScoreCard extends JPanel implements ActionListener {
 	private ITDPlayerEngine engine;
 	private JTextArea highScoreDisplay;
 	private JLabel instructions;
+	private JLabel highScoreInstruction;
 	private double highScore;
 	private JButton mainMenuButton;
 	private ResourceBundle languageResources;
@@ -43,36 +44,41 @@ public class HighScoreCard extends JPanel implements ActionListener {
 		highScoreDisplay = new JTextArea(20,50);
 		highScoreDisplay.setEditable(false);
 		instructions = new JLabel();
+		highScoreInstruction = new JLabel();
 		updateLabels(languages);
 		addComponents();
 	}
-	
+
 	//separate method for when languages get changed since dont want to lose this card
 	public void updateLabels(ResourceBundle languages){
 		//playerName.setText(INITIAL_PLAYER_NAME);
-		highScoreDisplay.setText(languages.getString(INITIAL_HIGH_SCORE_BOX));
+		highScoreInstruction.setText(languages.getString(INITIAL_HIGH_SCORE_BOX));
 		instructions.setText(languages.getString(INITIAL_PLAYER_NAME));
 	}
-	
+
 	private void addComponents(){
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		add(instructions, constraints);
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 1;
-		add(playerName, constraints);
+		add(highScoreInstruction, constraints);
 
 		constraints.gridx = 0;
 		constraints.gridy = 2;
-		add(highScoreDisplay, constraints);
-				
+		add(playerName, constraints);
+
 		constraints.gridx = 0;
 		constraints.gridy = 3;
+		add(highScoreDisplay, constraints);
+
+		constraints.gridx = 0;
+		constraints.gridy = 4;
 		add(mainMenuButton, constraints);
-		
+
 	}
 
 	public void setHighScore() {
