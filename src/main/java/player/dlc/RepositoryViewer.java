@@ -13,7 +13,6 @@ import java.nio.channels.ReadableByteChannel;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,7 +26,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import main.java.player.ITDPlayerEngine;
-import net.lingala.zip4j.exception.ZipException;
 
 /**
  * AbstractAction that can create a panel to
@@ -37,7 +35,7 @@ import net.lingala.zip4j.exception.ZipException;
  *
  */
 
-public class RepositoryViewer extends AbstractAction {
+public class RepositoryViewer {
 	
 	private static final long serialVersionUID = 1L;
 	public static final String COMPLETED_INSTRUCTIONS = "Game loaded. Go play it now!";
@@ -56,19 +54,15 @@ public class RepositoryViewer extends AbstractAction {
 	private Map<String, DLCData> dlc;
 	private JTextArea descriptionArea;
 	private ITDPlayerEngine engine;
+	private String fileNameSaved;
 	
 	public RepositoryViewer(String s, ITDPlayerEngine engineInit) {
-		super(s);
 		engine = engineInit;
 		dlc = new HashMap<String, DLCData>();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e){
-		makeFrame();
+		//makeFrame();
 	}
 	
-	private void makeFrame() {
+	public String getLocalURL() {
 		JFrame frame = new JFrame();
 		frame.setTitle(REPOSITORY_VIEWER_TITLE);
 		frame.setLocationRelativeTo(null);
@@ -76,6 +70,12 @@ public class RepositoryViewer extends AbstractAction {
 		frame.getContentPane().add(makeMainPanel());
 		frame.pack();
 		frame.setVisible(true);
+		while (fileNameSaved == null) {
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {}
+		}
+		return DOWNLOADS_PATH + fileNameSaved;
 	}
 	
 	private JPanel makeMainPanel() {
@@ -101,15 +101,12 @@ public class RepositoryViewer extends AbstractAction {
 				try {
 					if (JOptionPane.showConfirmDialog(null, INITIAL_INSTRUCTIONS, DOWNLOAD, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
 						downloadFromUrl(new URL(BASE_URL + fileName), DOWNLOADS_PATH + fileName);
-						engine.loadBlueprintFile(DOWNLOADS_PATH + fileName);
+						fileNameSaved = fileName;
+						//engine.loadBlueprintFile(DOWNLOADS_PATH + fileName);
 						JOptionPane.showMessageDialog(null, COMPLETED_INSTRUCTIONS);
 						mainPanel.setVisible(false);
 					}					
 				} catch (IOException e1) {
-					e1.printStackTrace();
-				} catch (ClassNotFoundException e1) {
-					e1.printStackTrace();
-				} catch (ZipException e1) {
 					e1.printStackTrace();
 				}
 			}

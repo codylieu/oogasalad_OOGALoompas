@@ -153,10 +153,20 @@ public class ViewController implements Serializable {
 	}
 
 	private String showBlueprintPrompt() {
-		int response = fileChooser.showOpenDialog(null);
-		if(response == JFileChooser.APPROVE_OPTION){
-			File file = fileChooser.getSelectedFile();
-			return file.getAbsolutePath();
+		int response0 = JOptionPane.showConfirmDialog(null, "Load local file? (No = Load Internet File, Cancel = Exit)");
+		if (response0 == JOptionPane.YES_OPTION) {
+			int response = fileChooser.showOpenDialog(null);
+			if(response == JFileChooser.APPROVE_OPTION){
+				File file = fileChooser.getSelectedFile();
+				return file.getAbsolutePath();
+			}
+			else {
+				System.exit(0);
+				return "";
+			}
+		}
+		else if (response0 == JOptionPane.NO_OPTION) {
+			return new RepositoryViewer(myLanguageResources.getString("LOAD_LIBRARY_TEXT"), engine).getLocalURL();
 		}
 		else {
 			System.exit(0);
@@ -190,7 +200,7 @@ public class ViewController implements Serializable {
 	private JMenu makeFileMenu(){
 		JMenu files = new JMenu(myLanguageResources.getString(FILE_LABEL));
 		files.add(new FileChooserActionListener(engine, LOAD_BLUEPRINT_FILE_METHOD_NAME, fileChooser, myLanguageResources.getString(LOAD_GAME_TEXT)));
-		files.add(new RepositoryViewer(myLanguageResources.getString("LOAD_LIBRARY_TEXT"), engine));
+		//files.add(new RepositoryViewer(myLanguageResources.getString("LOAD_LIBRARY_TEXT"), engine));
 		return files;
 	}
 
@@ -216,7 +226,7 @@ public class ViewController implements Serializable {
 
 	private JMenuBar makeMenuBar(){
 		JMenuBar menuBar = new JMenuBar();
-		menuBar.add(makeFileMenu());
+		//menuBar.add(makeFileMenu());
 		menuBar.add(makeLanguagesMenu());
 		return menuBar;
 	}
