@@ -905,4 +905,15 @@ public class Model implements IModel {
 	public String getItemDescription(String itemName) {
 		return factory.getItemDescription(itemName);
 	}
+	
+	/**
+         * Call this cheat to annihilate all monsters on field.
+         */
+        public void annihilateMonsters() {
+            Iterator<Monster> iter = monsters.iterator();
+            while(iter.hasNext()) {
+                Monster m = iter.next();
+                m.takeDamage(Double.MAX_VALUE);
+            }
+        }
 }
