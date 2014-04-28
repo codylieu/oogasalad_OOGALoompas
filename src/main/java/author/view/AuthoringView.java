@@ -122,7 +122,7 @@ public class AuthoringView extends JFrame {
 		tabbedPane.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent changeEvent) {
-				System.out.println(tabbedPane.getSelectedIndex());
+				//System.out.println(tabbedPane.getSelectedIndex());
 
 			}
 		});

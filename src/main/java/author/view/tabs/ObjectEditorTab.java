@@ -409,7 +409,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 				}
 
 			} else {
-				System.out.println("Cancelled");
+				//System.out.println("Cancelled");
 			}
 		}
 	}
