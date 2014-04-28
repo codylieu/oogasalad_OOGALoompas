@@ -263,6 +263,7 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	public double getHighScore(){
 		return model.getScore();
 	}
+	
 	/**
 	 * Toggle the cursor status from AddTower to None 
 	 * or vice-versa
