@@ -2,9 +2,9 @@ package main.java.schema.tdobjects.items;
 
 import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
-import main.java.engine.objects.item.LifeSaver;
 import main.java.engine.objects.monster.SimpleMonster;
+import main.java.engine.objects.powerup.AnnihilatorPowerup;
+import main.java.engine.objects.powerup.LifeSaverPowerup;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 
@@ -16,7 +16,7 @@ import java.util.Set;
  * This is a settings object for a specific type of LifeSaver.
  */
 public class LifeSaverItemSchema extends ItemSchema {
-	public static final Class<LifeSaver> MY_CONCRETE_TYPE = LifeSaver.class;
+	public static final Class<LifeSaverPowerup> MY_CONCRETE_TYPE = LifeSaverPowerup.class;
 
 	public LifeSaverItemSchema() {
 		super(MY_CONCRETE_TYPE);

@@ -2,8 +2,8 @@ package main.java.schema.tdobjects.items;
 
 import main.java.author.view.tabs.enemy.EnemyViewDefaults;
 import main.java.author.view.tabs.item.ItemViewConstants;
-import main.java.engine.objects.item.Annihilator;
 import main.java.engine.objects.monster.SimpleMonster;
+import main.java.engine.objects.powerup.AnnihilatorPowerup;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.MonsterSchema;
 
@@ -15,7 +15,7 @@ import java.util.Set;
  * This is a settings object for a specific type of Annihilator.
  */
 public class AnnihilatorItemSchema extends ItemSchema {
-	public static final Class<Annihilator> MY_CONCRETE_TYPE = Annihilator.class;
+	public static final Class<AnnihilatorPowerup> MY_CONCRETE_TYPE = AnnihilatorPowerup.class;
 
 	public AnnihilatorItemSchema() {
 		super(MY_CONCRETE_TYPE);

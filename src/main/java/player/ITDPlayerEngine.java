@@ -53,8 +53,6 @@ public interface ITDPlayerEngine {
 
 		public List<String> getPossibleTowers();
 
-		public List<String> getPossibleItems();
-
 		public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException, net.lingala.zip4j.exception.ZipException;
 
 		public void saveGameState(String gameName);

@@ -58,12 +58,10 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 	private String pathToBlueprint;
 	private String pathToMusic;
 	private String towerName;
-	private String itemName;
 	private ResourceBundle hotkeys = ResourceBundle.getBundle("main.resources.hotkeys");
 	private JGPoint lastClickedObject;
 	private LeapGameController leapController;
 	private ViewController viewController;
-	//private ResourceBundle items = ResourceBundle.getBundle("main.resources.Items");
 
 
 	public TDPlayerEngine(String pathToBlueprintInit, ViewController myView) throws ClassNotFoundException, IOException, ZipException {
@@ -192,12 +190,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			model.checkCollisions();
 		}
 	}
-
-	/*private void setAllItems(){
-		for(String s: items.keySet()){
-			setItem(LEFT_CLICK, items.getString(s));
-		}	
-	}*/
 	
 	public String getCurrentTowerDescription() {
 		return model.getTowerDescription(towerName);
@@ -257,12 +249,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 				}
 				clearMouseButton(LEFT_CLICK);
 			}
-			//setAllItems();
-		}
-		else if (cursorState == CursorState.AddItem) {
-			if (getMouseButton(LEFT_CLICK)) {
-				model.placeItem(itemName, getMouseX(), getMouseY());
-			}
 		}
 		if (getMouseButton(RIGHT_CLICK)) {
 			model.checkAndRemoveTower(getMouseX(), getMouseY());
@@ -270,23 +256,8 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 		}
 	}
 
-	/*private void setItem(int clickName, String itemName){
-		if (getMouseButton(clickName) && getKey(Integer.parseInt(hotkeys.getString(itemName)))) {
-			try {
-				model.placeItem(itemName, getMouseX(), getMouseY());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			clearKey(Integer.parseInt(hotkeys.getString(itemName)));
-		}
-	}*/
-
 	public void setCurrentTowerType(String currentTowerName){
 		towerName = currentTowerName;
-	}
-	
-	public void setCurrentItemType(String currentItemName) {
-		itemName = currentItemName;
 	}
 
 	public double getHighScore(){
@@ -305,16 +276,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			setCursorState(CursorState.AddTower);
 		}
 	}
-	
-	public void toggleAddItem() {
-		if (getCursorState() == CursorState.AddItem) {
-			setCursorState(CursorState.AddItem);
-			removeObjects("TowerGhost", 0);
-		}
-		else {
-			setCursorState(CursorState.AddItem);
-		}
-	}
 
 	private void checkKeys() {
 		if (getKey(Integer.parseInt(hotkeys.getString("AddTower")))){
@@ -331,11 +292,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
 		}
-		if (getKey(Integer.parseInt(hotkeys.getString("AddItem")))){
-			toggleAddItem();
-			clearKey(Integer.parseInt(hotkeys.getString("AddItem")));
-		}
-
 	}
 
 	public void toggleFullScreen(){
@@ -380,10 +336,6 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 
 	public List<String> getPossibleTowers(){
 		return model.getPossibleTowers();
-	}
-
-	public List<String> getPossibleItems(){
-		return model.getPossibleItems();
 	}
 
 	public void loadBlueprintFile(String fileName) throws ClassNotFoundException, IOException, ZipException {

@@ -60,12 +60,9 @@ public class ViewController implements Serializable {
 
 	public static final String GUI_PROPERTY_FILEPATH = "GUI";
 	public static final String SET_CURRENT_TOWER_TYPE_METHID_NAME = "setCurrentTowerType";
-	public static final String SET_CURRENT_ITEM_TYPE_METHOD_NAME = "setCurrentItemType";
 	public static final String LOAD_BLUEPRINT_FILE_METHOD_NAME = "loadBlueprintFile";
 	public static final int WELCOME_LABEL_FONT = 32;
 	public static final String SANS_SERIF_FONT = "SansSerif";
-	public static final String SAVE_GAME_STATE_METHOD_NAME = "saveGameState";
-	public static final String LOAD_GAME_STATE_METHOD_NAME = "loadGameState";
 	public static final String SPEED_UP_METHOD_NAME = "speedUp";
 	public static final String SLOW_DOWN_METHOD_NAME = "slowDown";
 	public static final String TOGGLE_ADD_TOWER_METHOD_NAME = "toggleAddTower";
@@ -83,8 +80,6 @@ public class ViewController implements Serializable {
 	public static final String ADD_TOWER_TEXT = "ADD_TOWER_TEXT";
 	public static final String SLOW_DOWN_TEXT = "SLOW_DOWN_TEXT";
 	public static final String SPEED_UP_TEXT = "SPEED_UP_TEXT";
-	public static final String LOAD_TEXT = "LOAD_TEXT";
-	public static final String SAVE_TEXT = "SAVE_TEXT";
 	public static final String PLAY_PAUSE_TEXT = "PLAY_PAUSE_TEXT";
 	public static final String WELCOME_LABEL_TEXT = "WELCOME_LABEL_TEXT";
 	public static final String LOAD_GAME_TEXT = "LOAD_GAME_TEXT";
@@ -118,7 +113,6 @@ public class ViewController implements Serializable {
 	private ObjectChooser towerChooser;
 	private HighScoreCard highScoreCard;
 	private String chosenLanguage;
-	private ObjectChooser powerUpChooser;
 	private ObservingPanel towerDescriptionArea;
 
 	/**
@@ -313,11 +307,6 @@ public class ViewController implements Serializable {
 		JButton playResumeButton = new JButton(myLanguageResources.getString(PLAY_PAUSE_TEXT));
 		playResumeButton.addActionListener(new MethodAction (engine, TOGGLE_RUNNING_METHOD_NAME));
 
-		JButton saveButton = new JButton(myLanguageResources.getString(SAVE_TEXT));
-		saveButton.addActionListener(new FileChooserActionListener(engine, SAVE_GAME_STATE_METHOD_NAME, fileChooser, null));
-
-		JButton loadButton = new JButton(myLanguageResources.getString(LOAD_TEXT));
-		loadButton.addActionListener(new FileChooserActionListener(engine, LOAD_GAME_STATE_METHOD_NAME, fileChooser, null));
 		JButton speedUpButton = new JButton(myLanguageResources.getString(SPEED_UP_TEXT));
 		speedUpButton.addActionListener(new MethodAction (engine, SPEED_UP_METHOD_NAME));
 
@@ -332,11 +321,7 @@ public class ViewController implements Serializable {
 		JButton soundButton = new JButton(myLanguageResources.getString(SOUND_ONOFF_TEXT));
 		soundButton.addActionListener(new MethodAction (this, TOGGLE_SOUND_METHOD_NAME));
 
-		//TODO: is it better to just pass in engine, and also call get possible towers using reflection in object hcooser? or is this way simpler even though im already passing in engine
 		towerChooser = new ObjectChooser(engine, "getPossibleTowers", SET_CURRENT_TOWER_TYPE_METHID_NAME);
-		//towerChooser.register((Observing) engine);
-		// should leave as observing engine? or pass into contstructor?
-		powerUpChooser = new ObjectChooser(engine, "getPossibleItems", SET_CURRENT_ITEM_TYPE_METHOD_NAME);
 		
 		towerDescriptionArea = new TowerDescriptionArea(3, 20);
 		towerDescriptionArea.addSubject((Subject) engine);
@@ -344,15 +329,12 @@ public class ViewController implements Serializable {
 
 		gameButtonPanel.add(mainMenuButton);
 		gameButtonPanel.add(playResumeButton);
-		gameButtonPanel.add(saveButton);
-		gameButtonPanel.add(loadButton);
 		gameButtonPanel.add(speedUpButton);
 		gameButtonPanel.add(slowDownButton);
 		gameButtonPanel.add(quitButton);
 		gameButtonPanel.add(soundButton);
 		gameButtonPanel.add(addTowerButton);
 		gameButtonPanel.add(towerChooser);
-		gameButtonPanel.add(powerUpChooser);
 		gameButtonPanel.add(towerDescriptionArea);
 		return gameButtonPanel;
 	}

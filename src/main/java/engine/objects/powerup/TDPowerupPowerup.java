@@ -1,4 +1,4 @@
-package main.java.engine.objects.item;
+package main.java.engine.objects.powerup;
 
 import main.java.engine.EnvironmentKnowledge;
 import main.java.engine.objects.TDObject;
@@ -10,7 +10,7 @@ import main.java.engine.objects.TDObject;
  * @author Lawrence
  *
  */
-public abstract class TDItem extends TDObject {
+public abstract class TDPowerupPowerup extends TDObject {
 
 	public static final int ITEM_CID = 3;
 	
@@ -22,7 +22,7 @@ public abstract class TDItem extends TDObject {
 	protected String image;
 	protected int flash_interval;
 
-	public TDItem(String name, double x, double y, 
+	public TDPowerupPowerup(String name, double x, double y, 
 			String gfxname, double cost, double buildupTime,
 			double damage, int flash_interval) {
 		super(name, x, y, ITEM_CID, gfxname);

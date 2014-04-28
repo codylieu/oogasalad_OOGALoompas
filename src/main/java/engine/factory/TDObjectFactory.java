@@ -16,8 +16,8 @@ import main.java.engine.Model;
 import main.java.engine.PathfinderManager;
 import main.java.engine.map.TDMap;
 import main.java.engine.objects.Exit;
-import main.java.engine.objects.item.TDItem;
 import main.java.engine.objects.monster.Monster;
+import main.java.engine.objects.powerup.TDPowerupPowerup;
 import main.java.engine.objects.tower.BombTower;
 import main.java.engine.objects.tower.FreezeTower;
 import main.java.engine.objects.tower.ITower;
@@ -144,14 +144,14 @@ public class TDObjectFactory {
 	 * @throws IllegalArgumentException
 	 * @throws InvocationTargetException
 	 */
-	public TDItem placeItem (Point2D location, String itemName) throws ItemCreationFailureException {
+	public TDPowerupPowerup placeItem (Point2D location, String itemName) throws ItemCreationFailureException {
 
 		Point2D tileOrigin = TDMap.findTileOrigin(location);
 		try {
 			TDObjectSchema schema = tdObjectSchemaMap.get(itemName);
 			schema.addAttribute(ItemSchema.LOCATION, (Serializable) tileOrigin);
 			Object[] itemParameters = { schema.getAttributesMap() };
-			return (TDItem) placeObject(schema.getMyConcreteType(), itemParameters);
+			return (TDPowerupPowerup) placeObject(schema.getMyConcreteType(), itemParameters);
 		}
 		catch (Exception e) {
 			throw new ItemCreationFailureException(e);
