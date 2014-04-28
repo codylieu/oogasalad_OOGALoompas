@@ -2,7 +2,6 @@ package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
 import java.io.Serializable;
-import java.util.List;
 import main.java.engine.EnvironmentKnowledge;
 
 
@@ -67,7 +66,6 @@ abstract class TowerBehaviorDecorator implements ITower, Serializable {
     public Point2D centerCoordinate () {
         return baseTower.centerCoordinate();
     }
-    
     
     
     /**

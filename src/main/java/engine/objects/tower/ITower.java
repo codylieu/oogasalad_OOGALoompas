@@ -1,7 +1,6 @@
 package main.java.engine.objects.tower;
 
 import java.awt.geom.Point2D;
-import java.util.List;
 import main.java.engine.EnvironmentKnowledge;
 
 /**
