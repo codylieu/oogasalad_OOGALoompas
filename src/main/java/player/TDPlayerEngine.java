@@ -292,6 +292,11 @@ public class TDPlayerEngine extends JGEngine implements Subject, ITDPlayerEngine
 			toggleFullScreen();
 			clearKey(Integer.parseInt(hotkeys.getString("FullScreen")));
 		}
+		
+		if (getKey(Integer.parseInt(hotkeys.getString("Annihilate")))){
+			model.annihilateMonsters();
+			clearKey(Integer.parseInt(hotkeys.getString("Annihilate")));
+		}
 	}
 
 	public void toggleFullScreen(){

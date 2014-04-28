@@ -209,5 +209,10 @@ public interface IModel {
 	 * @return
 	 */
 	public String getItemDescription(String itemName);
+	
+	/**
+	 * Deletes all monsters
+	 */
+	public void annihilateMonsters();
 
 }
