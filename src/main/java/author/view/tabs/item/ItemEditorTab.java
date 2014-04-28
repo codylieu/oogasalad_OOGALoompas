@@ -18,7 +18,7 @@ import main.java.author.view.tabs.item.subtabs.RowBombItemEditorTab;
 import main.java.schema.tdobjects.ItemSchema;
 
 /**
- * @author dennis park, garysheng Overarching item editor for the X different
+ * @author dennispark, garysheng Overarching item editor for the X different
  *         types of items you can build. Must create some sort of
  *         ItemSubTabEditor if you want to add a new type of item
  */

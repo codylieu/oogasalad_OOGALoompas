@@ -2,6 +2,12 @@ package main.java.author.view.tabs.item;
 
 import java.awt.Dimension;	
 
+/**
+ * @author Dennis Park
+ * referenced constants that standardize
+ * default values, strings, and dimensions of item tabs
+ */
+
 public class ItemViewConstants {
 
 	public static final int FLASH_INTERVAL_DEFAULT = 5;

@@ -12,6 +12,10 @@ import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.InstantFreezeItemSchema;
 
+/**
+ * @author Dennis Park
+ * makes instant freeze sub-tab within item editor tab
+ */
 public class InstantFreezeItemEditorTab extends AbstractItemEditorSubTab {
 
 	public InstantFreezeItemEditorTab(TabController itemController,

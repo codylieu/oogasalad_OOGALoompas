@@ -43,16 +43,13 @@ import main.java.schema.tdobjects.monsters.SimpleMonsterSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 
 /**
- * @author garysheng The tab that corresponds to the creation of enemies. Talks
+ * @author garysheng dennispark The tab that corresponds to the creation of enemies. Talks
  *         to a tab controller to pass information to the model
  */
 public class EnemyEditorTab extends ObjectEditorTab {
 
 	private static final String NO_RES_PATH = "No Resurrection Path";
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	public static final Set<Integer> flyingSet = new HashSet<>();

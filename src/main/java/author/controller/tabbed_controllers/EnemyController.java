@@ -44,7 +44,7 @@ public class EnemyController extends TabController {
 	/**
 	 * Called by the EnemyEditorTab to:
 	 * 
-	 * @return the list of 
+	 * @return the list of monster schemas
 	 */
 	public List<MonsterSchema> getMonsterSchemas() {
 		EnemyEditorTab editorTab = (EnemyEditorTab) myEditorTab;
