@@ -13,6 +13,10 @@ import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 
+/**
+ * @author dennispark
+ * makes areabomb sub-tab within item editor tab
+ */
 public class AreaBombItemEditorTab extends AbstractItemEditorSubTab{
 
 	public AreaBombItemEditorTab(TabController itemController, String objectName) {

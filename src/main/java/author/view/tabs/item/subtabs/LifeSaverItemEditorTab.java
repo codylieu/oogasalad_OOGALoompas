@@ -12,6 +12,10 @@ import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.LifeSaverItemSchema;
 
+/**
+ * @author Dennis Park
+ * makes lifesaver sub-tab within item editor tab
+ */
 public class LifeSaverItemEditorTab extends AbstractItemEditorSubTab {
 
 	public LifeSaverItemEditorTab(TabController itemController,
@@ -43,8 +47,9 @@ public class LifeSaverItemEditorTab extends AbstractItemEditorSubTab {
 			buildUpSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 
-			JSpinner[] spinners = { costSpinner, buildUpSpinner,
-					flashSpinner };
+			JSpinner[] spinners = { costSpinner,
+									buildUpSpinner,
+									flashSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			
 		}

@@ -30,7 +30,7 @@ import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.TowerSchema;
 
 /**
- * @author dennis park
+ * @author dennispark
  * allows for easier creation of item editor sub tabs
  */
 public abstract class AbstractItemEditorSubTab extends ObjectEditorTab {

@@ -13,7 +13,11 @@ import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.RowBombItemSchema;
 
-public class RowBombItemEditorTab extends AbstractItemEditorSubTab{
+/**
+ * @author Dennis Park
+ * makes row bomb sub-tab within item editor tab
+ */
+public class RowBombItemEditorTab extends AbstractItemEditorSubTab {
 
 	public RowBombItemEditorTab(TabController itemController, String objectName) {
 		super(itemController, objectName);
@@ -44,7 +48,11 @@ public class RowBombItemEditorTab extends AbstractItemEditorSubTab{
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 			rangeSpinner = makeAttributeSpinner(RowBombItemSchema.RANGE);
 			
-			JSpinner[] spinners = {costSpinner, damageSpinner, buildUpSpinner, flashSpinner, rangeSpinner};
+			JSpinner[] spinners = {	costSpinner,
+									damageSpinner,
+									buildUpSpinner,
+									flashSpinner,
+									rangeSpinner };
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 			itemImageCanvas = new ImageCanvas(true, ItemSchema.IMAGE_NAME);
 		}

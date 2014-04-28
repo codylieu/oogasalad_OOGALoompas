@@ -13,8 +13,12 @@ import main.java.schema.tdobjects.TDObjectSchema;
 import main.java.schema.tdobjects.items.AnnihilatorItemSchema;
 import main.java.schema.tdobjects.items.AreaBombItemSchema;
 
-public class AnnihilatorItemEditorTab extends AbstractItemEditorSubTab{
-	
+/**
+ * @author dennispark
+ * makes annihilator sub-tab within item editor tab
+ */
+public class AnnihilatorItemEditorTab extends AbstractItemEditorSubTab {
+
 	public AnnihilatorItemEditorTab(TabController itemController,
 			String objectName) {
 		super(itemController, objectName);
@@ -24,12 +28,12 @@ public class AnnihilatorItemEditorTab extends AbstractItemEditorSubTab{
 	protected ObjectTabViewBuilder createSpecificTabViewBuilder() {
 		return new AnnihilatorItemTabViewBuilder(this);
 	}
-	
+
 	@Override
 	protected TDObjectSchema createSpecificNewObject(String name) {
 		return new AnnihilatorItemSchema(name);
 	}
-	
+
 	private class AnnihilatorItemTabViewBuilder extends AbstractItemTabViewBuilder {
 
 		public AnnihilatorItemTabViewBuilder(EditorTab editorTab) {
@@ -44,8 +48,13 @@ public class AnnihilatorItemEditorTab extends AbstractItemEditorSubTab{
 			buildUpSpinner = makeAttributeSpinner(ItemSchema.BUILDUP_TIME);
 			flashSpinner = makeAttributeSpinner(ItemSchema.FLASH_INTERVAL);
 			rangeSpinner = makeAttributeSpinner(AreaBombItemSchema.RANGE);
+
+			JSpinner[] spinners = {	costSpinner,
+									buildUpSpinner,
+									flashSpinner,
+									rangeSpinner,
+									damageSpinner };
 			
-			JSpinner[] spinners = {costSpinner, buildUpSpinner, flashSpinner, rangeSpinner, damageSpinner};
 			spinnerFields = new ArrayList<JSpinner>(Arrays.asList(spinners));
 		}
 	}

@@ -7,6 +7,10 @@ import main.java.author.controller.TabController;
 import main.java.schema.tdobjects.ItemSchema;
 import main.java.schema.tdobjects.TowerSchema;
 
+/**
+ * @author codylieu dennispark The sub controller for the Item tab & sub tabs
+ *         that communicates with the Main Controller.
+ */
 public class ItemController extends TabController{
 
 	public ItemController(MainController superController) {
