@@ -89,7 +89,7 @@ public class TowerEditorTab extends ObjectEditorTab {
 		super.addListeners();
 		shootsToggleButton.setFieldsToToggle(damageSpinner, firingSpeedSpinner,
 				shrapnelDamageSpinner, rangeSpinner, freezeToggleButton,
-				bombingToggleButton, bulletPiercingSpinner);
+				bombingToggleButton, bulletPiercingSpinner, freezeRatioSpinner);
 		bombingToggleButton.setFieldsToToggle(shrapnelDamageSpinner);
 		moneyFarmingToggleButton.setFieldsToToggle(moneyFarmAmountSpinner,
 				moneyFarmIntervalSpinner);
