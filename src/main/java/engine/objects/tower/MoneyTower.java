@@ -1,8 +1,6 @@
 package main.java.engine.objects.tower;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import main.java.engine.EnvironmentKnowledge;
@@ -31,8 +29,6 @@ public class MoneyTower extends TowerBehaviorDecorator {
     
     public static final String TOWER_TYPE = "Money Tower";
     
-    private int moneyGranted;
-
     private double myMoneyGranted;
     private double myMoneyGrantInterval;
     
@@ -82,13 +78,10 @@ public class MoneyTower extends TowerBehaviorDecorator {
         }
     }
 
-
-	@Override
-	public String getInfo() {
-		String info = 
-				baseTower.getInfo() + 
-				"\nMoney Granted: " + moneyGranted;
-		return info;
-	}
+    @Override
+    public String getInfo () {
+        return baseTower.getInfo()
+               + "\nMoney Granted: " + myMoneyGranted;
+    }
 
 }
