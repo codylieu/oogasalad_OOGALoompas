@@ -17,6 +17,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Path;
@@ -394,8 +395,26 @@ public abstract class ObjectEditorTab extends EditorTab {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			JFileChooser fileChooser = new JFileChooser(new File(
+			final JFileChooser fileChooser = new JFileChooser(new File(
 					AuthoringView.DEFAULT_RESOURCES_DIR));
+			fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+
+				@Override
+				public String getDescription() {
+					return "*.png,*.jpg,*.gif";
+				}
+
+				@Override
+				public boolean accept(File f) {
+					if (f.isDirectory()) {
+						return true;
+					}
+					final String name = f.getName();
+					return name.endsWith(".png") || name.endsWith(".jpg")
+							|| name.endsWith(".jpeg") || name.endsWith(".gif");
+				}
+			});
+
 			int returnVal = fileChooser.showOpenDialog(ObjectEditorTab.this);
 
 			if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -409,7 +428,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 				}
 
 			} else {
-				//System.out.println("Cancelled");
+				// System.out.println("Cancelled");
 			}
 		}
 	}
