@@ -21,6 +21,8 @@ public class Canvas extends JPanel {
 
 	private int numRows;
 	private int numCols;
+	private boolean entrySpecified;
+	private boolean exitSpecified;
 
 	private int entryRow;
 	private int entryCol;
@@ -155,19 +157,21 @@ public class Canvas extends JPanel {
 
 		// TODO: Refactor w/ Entry & Exit classes
 		if (isEntrySelected) {
-			if (isEntrySpecified()) {
+			if (entrySpecified) {
 				JOptionPane.showMessageDialog(this, ENTRY_SPECIFIED);
 				return;
 			}
+			entrySpecified = true;
 			entryRow = tile.getRow();
 			entryCol = tile.getCol();
 		}
 		
 		if (isExitSelected) {
-			if (isExitSpecified()) {
+			if (exitSpecified) {
 				JOptionPane.showMessageDialog(this, EXIT_SPECIFIED);
 				return;
 			}
+			exitSpecified = true;
 			exitRow = tile.getRow();
 			exitCol = tile.getCol();
 		}
@@ -176,6 +180,15 @@ public class Canvas extends JPanel {
 
 
 		tile.setPassIndex(passIndex);
+		
+		if (tile.isEntry() && isEntrySelected == false) {
+			entrySpecified = false;
+		}
+		
+		if (tile.isExit() && isExitSelected == false) {
+			exitSpecified = true;
+		}
+		
 		tile.setEntryStatus(isEntrySelected);
 		tile.setExitStatus(isExitSelected);
 
@@ -199,6 +212,8 @@ public class Canvas extends JPanel {
 			tile.setBorderColor(Canvas.DEFAULT_BORDER_COLOR);
 			repaint();
 		}
+		entrySpecified = false;
+		exitSpecified = false;
 	}
 
 	protected int getRows() {
@@ -207,26 +222,6 @@ public class Canvas extends JPanel {
 
 	protected int getCols() {
 		return numCols;
-	}
-
-	protected boolean isEntrySpecified() {
-		boolean isEntrySpecified = false;
-		for (Tile t : getTiles()) {
-			if (t.isEntry()) {
-				isEntrySpecified = true;
-			}
-		}
-		return isEntrySpecified;
-	}
-
-	protected boolean isExitSpecified() {
-		boolean isExitSpecified = false;
-		for (Tile t : getTiles()) {
-			if (t.isExit()) {
-				isExitSpecified = true;
-			}
-		}
-		return isExitSpecified;
 	}
 
 	protected int getEntryRow() {
