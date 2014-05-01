@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,17 +46,17 @@ public class TowerEditorTab extends ObjectEditorTab {
 	private static final String NO_UPGRADE_PATH = "No Upgrade Path";
 
 	private JSpinner healthSpinner, costSpinner, damageSpinner, rangeSpinner,
-			buildUpSpinner, firingSpeedSpinner, shrapnelDamageSpinner,
-			moneyFarmAmountSpinner, moneyFarmIntervalSpinner,
-			freezeRatioSpinner, bulletPiercingSpinner;
+	buildUpSpinner, firingSpeedSpinner, shrapnelDamageSpinner,
+	moneyFarmAmountSpinner, moneyFarmIntervalSpinner,
+	freezeRatioSpinner, bulletPiercingSpinner;
 
 	private TowerBehaviorTogglingRadioButton freezeToggleButton,
-			shootsToggleButton, moneyFarmingToggleButton, bombingToggleButton;
+	shootsToggleButton, moneyFarmingToggleButton, bombingToggleButton;
 
 	private JComboBox<String> upgradeDropDown;
 
 	private ImageCanvas bulletImageCanvas, towerImageCanvas,
-			shrapnelImageCanvas;
+	shrapnelImageCanvas;
 	private JButton collisionImageButton, shrapnelImageButton;
 
 	private JTextArea descriptionTextArea;
@@ -74,10 +75,22 @@ public class TowerEditorTab extends ObjectEditorTab {
 			Map<String, Serializable> towerAttributes = tower
 					.getAttributesMap();
 
-			for (String attribute : towerAttributes.keySet()) {
-				Serializable castedAttribute = addCastToAttribute(towerAttributes
-						.get(attribute));
-				towerSchema.addAttribute(attribute, castedAttribute);
+			for (String key : towerAttributes.keySet()) {
+				Serializable castedAttribute = "";
+				if (key.equals(TowerSchema.BULLET_IMAGE_NAME)
+						|| key.equals(TowerSchema.SHRAPNEL_IMAGE_NAME)
+						|| key.equals(TowerSchema.IMAGE_NAME)) {
+					File f = new File((String) towerAttributes.get(key));
+					String attValue = f.getName();
+					System.out.println(attValue);
+
+					castedAttribute = addCastToAttribute(attValue);
+				} else {
+					castedAttribute = addCastToAttribute(towerAttributes
+							.get(key));
+				}
+
+				towerSchema.addAttribute(key, castedAttribute);
 			}
 			towerSchemas.add(towerSchema);
 		}

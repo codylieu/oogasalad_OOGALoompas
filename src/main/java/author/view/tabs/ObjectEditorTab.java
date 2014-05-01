@@ -142,16 +142,16 @@ public abstract class ObjectEditorTab extends EditorTab {
 	 * @return Serializable version of the attributes
 	 */
 	protected Serializable addCastToAttribute(Serializable attribute) {
-		boolean shouldCast = false;
+		boolean shouldCastToDouble = false;
 		if (attribute instanceof Integer) {
-			shouldCast = true;
+			shouldCastToDouble = true;
 		}
 
 		Double doubleAttr = null;
-		if (shouldCast) {
+		if (shouldCastToDouble) {
 			doubleAttr = Double.valueOf(((Integer) attribute).intValue());
 		}
-		return shouldCast ? doubleAttr : attribute;
+		return shouldCastToDouble ? doubleAttr : attribute;
 	}
 
 	/**
@@ -339,7 +339,7 @@ public abstract class ObjectEditorTab extends EditorTab {
 		for (ImageCanvas canvas : imageCanvases) {
 
 			String relativePath = new File((String) canvas.getImagePath())
-					.getName();
+					.getAbsolutePath();
 
 			if (relativePath != null && !relativePath.isEmpty()) {
 				myCurrentObject.addAttribute(canvas.getName(), relativePath);

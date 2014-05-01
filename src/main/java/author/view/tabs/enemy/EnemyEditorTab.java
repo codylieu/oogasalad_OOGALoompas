@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +54,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	private static final long serialVersionUID = 1L;
 
 	public static final Set<Integer> flyingSet = new HashSet<>();
-			
+
 
 	public static final Set<Integer> groundSet = new HashSet<>(Arrays.asList(
 			TerrainAttribute.Unwalkable.getIndex()));
@@ -62,7 +63,7 @@ public class EnemyEditorTab extends ObjectEditorTab {
 	private ImageCanvas monsterImageCanvas;
 	private JButton monsterImageButton;
 	private JRadioButton smallTileButton, mediumTileButton, largeTileButton,
-			flyingButton, groundButton;
+	flyingButton, groundButton;
 	private List<JRadioButton> allButtons;
 	private ButtonGroup tileSizeGroup, flyingOrGroundGroup;
 	private List<MonsterSchema> monsterSchemas;
@@ -115,16 +116,28 @@ public class EnemyEditorTab extends ObjectEditorTab {
 				MonsterSpawnSchema spawnSchema = new MonsterSpawnSchema(
 						monsterSchemaToRes, resQuant);
 				currentMonsterSchema
-						.addAttribute(
-								MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA,
-								(Serializable) spawnSchema);
+				.addAttribute(
+						MonsterSchema.RESURRECT_MONSTERSPAWNSCHEMA,
+						(Serializable) spawnSchema);
 			}
-			
-			
+
+
 			Map<String, Serializable> monsterAttributeMap = currentMonsterSchema.getAttributesMap();
-			for (String attribute : monsterAttributeMap.keySet()) {
-				Serializable attValue = addCastToAttribute(monsterAttributeMap.get(attribute));
-				currentMonsterSchema.addAttribute(attribute, attValue);
+			for (String key : monsterAttributeMap.keySet()) {
+
+
+				Serializable castedAttribute = "";
+				if (key.equals(MonsterSchema.IMAGE_NAME)) {
+					File f = new File((String) monsterAttributeMap.get(key));
+					String attValue = f.getName();
+					System.out.println(attValue);
+
+					castedAttribute = addCastToAttribute(attValue);
+				} else {
+					castedAttribute = addCastToAttribute(monsterAttributeMap
+							.get(key));
+				}
+				currentMonsterSchema.addAttribute(key, castedAttribute);
 
 			}
 
