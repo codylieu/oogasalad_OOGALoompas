@@ -54,7 +54,6 @@ public class JSONHandler {
 		File outputFile = new File(FILE_PATH + filename + ".json");
 		PrintWriter output = new PrintWriter(outputFile);
 		String json = myGson.toJson(obj);
-		System.out.println(json);
 		output.println(json);
 		output.close();
 		return json;

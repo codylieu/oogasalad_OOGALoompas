@@ -1,0 +1,288 @@
+{
+  "myGameScenario": {
+    "myAttributesMap": {
+      "money": 503.0,
+      "lives": 3.0
+    },
+    "myAttributeSet": [
+      "survivalModeEnabled"
+    ]
+  },
+  "myMonsterSchemas": [
+    {
+      "CLASSNAME": "main.java.schema.tdobjects.monsters.SimpleMonsterSchema",
+      "INSTANCE": {
+        "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+        "myAttributesMap": {
+          "Speed": 1.0,
+          "imageName": "monster.png",
+          "name": "test-monster-1",
+          "Bounty Reward": 200.0
+        },
+        "myAttributeSet": [
+          "Exit",
+          "imageName",
+          "Health",
+          "Attack Damage",
+          "Tile Size",
+          "Speed",
+          "Pathfinder Manager",
+          "name",
+          "Blocked Tiles",
+          "Bounty Reward",
+          "Monster Spawn Schemas to Spawn Upon Death",
+          "Number of Monsters to Spawn",
+          "Name of Monster to Spawn",
+          "Entrance Location"
+        ]
+      }
+    }
+  ],
+  "myTowerSchemas": [
+    {
+      "myConcreteType": "main.java.engine.objects.tower.SimpleTower",
+      "myAttributesMap": {
+        "Cost": 10.0,
+        "Bullet Image Name": "red_bullet",
+        "Tower Behaviors": [
+          "MONEY_FARMING"
+        ],
+        "imageName": "tower.gif",
+        "name": "test-tower-1"
+      },
+      "myAttributeSet": [
+        "Damage",
+        "Range",
+        "Bullet Image Name",
+        "Tower Behaviors",
+        "imageName",
+        "Build Up Time",
+        "Bomb\u0027s Shrapnel Image Name",
+        "Bomb Shrapnel Damage",
+        "Location",
+        "# of Enemies Bullet Pierces",
+        "Health",
+        "Freeze Slowdown (%)",
+        "Cost",
+        "Money Granted Per Interval",
+        "name",
+        "Description Displayed",
+        "Firing Speed (per sec)",
+        "Money Grant Interval",
+        "Upgrade Tower",
+        "Size"
+      ]
+    },
+    {
+      "myConcreteType": "main.java.engine.objects.tower.SimpleTower",
+      "myAttributesMap": {
+        "Cost": 10.0,
+        "Bullet Image Name": "red_bullet",
+        "Tower Behaviors": [
+          "SHOOTING"
+        ],
+        "imageName": "tower.gif",
+        "name": "test-tower-2"
+      },
+      "myAttributeSet": [
+        "Damage",
+        "Range",
+        "Bullet Image Name",
+        "Tower Behaviors",
+        "imageName",
+        "Build Up Time",
+        "Bomb\u0027s Shrapnel Image Name",
+        "Bomb Shrapnel Damage",
+        "Location",
+        "# of Enemies Bullet Pierces",
+        "Health",
+        "Freeze Slowdown (%)",
+        "Cost",
+        "Money Granted Per Interval",
+        "name",
+        "Description Displayed",
+        "Firing Speed (per sec)",
+        "Money Grant Interval",
+        "Upgrade Tower",
+        "Size"
+      ]
+    },
+    {
+      "myConcreteType": "main.java.engine.objects.tower.SimpleTower",
+      "myAttributesMap": {
+        "Cost": 10.0,
+        "Bullet Image Name": "blue_bullet",
+        "Tower Behaviors": [
+          "BOMBING"
+        ],
+        "imageName": "tower.gif",
+        "name": "test-tower-3",
+        "Bomb\u0027s Shrapnel Image Name": "red_bullet"
+      },
+      "myAttributeSet": [
+        "Damage",
+        "Range",
+        "Bullet Image Name",
+        "Tower Behaviors",
+        "imageName",
+        "Build Up Time",
+        "Bomb\u0027s Shrapnel Image Name",
+        "Bomb Shrapnel Damage",
+        "Location",
+        "# of Enemies Bullet Pierces",
+        "Health",
+        "Freeze Slowdown (%)",
+        "Cost",
+        "Money Granted Per Interval",
+        "name",
+        "Description Displayed",
+        "Firing Speed (per sec)",
+        "Money Grant Interval",
+        "Upgrade Tower",
+        "Size"
+      ]
+    },
+    {
+      "myConcreteType": "main.java.engine.objects.tower.SimpleTower",
+      "myAttributesMap": {
+        "Cost": 10.0,
+        "Bullet Image Name": "red_bullet",
+        "Tower Behaviors": [
+          "FREEZING"
+        ],
+        "imageName": "tower.gif",
+        "name": "test-tower-4",
+        "Freeze Slowdown (%)": 0.8
+      },
+      "myAttributeSet": [
+        "Damage",
+        "Range",
+        "Bullet Image Name",
+        "Tower Behaviors",
+        "imageName",
+        "Build Up Time",
+        "Bomb\u0027s Shrapnel Image Name",
+        "Bomb Shrapnel Damage",
+        "Location",
+        "# of Enemies Bullet Pierces",
+        "Health",
+        "Freeze Slowdown (%)",
+        "Cost",
+        "Money Granted Per Interval",
+        "name",
+        "Description Displayed",
+        "Firing Speed (per sec)",
+        "Money Grant Interval",
+        "Upgrade Tower",
+        "Size"
+      ]
+    }
+  ],
+  "myLevelSchemas": [
+    {
+      "myMonsterSchemas": [
+        {
+          "myMonsterSchema": {
+            "CLASSNAME": "main.java.schema.tdobjects.monsters.SimpleMonsterSchema",
+            "INSTANCE": {
+              "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+              "myAttributesMap": {
+                "Speed": 1.0,
+                "imageName": "monster.png",
+                "name": "test-monster-1",
+                "Bounty Reward": 200.0
+              },
+              "myAttributeSet": [
+                "Exit",
+                "imageName",
+                "Health",
+                "Attack Damage",
+                "Tile Size",
+                "Speed",
+                "Pathfinder Manager",
+                "name",
+                "Blocked Tiles",
+                "Bounty Reward",
+                "Monster Spawn Schemas to Spawn Upon Death",
+                "Number of Monsters to Spawn",
+                "Name of Monster to Spawn",
+                "Entrance Location"
+              ]
+            }
+          },
+          "mySwarmSize": 1
+        }
+      ]
+    },
+    {
+      "myMonsterSchemas": [
+        {
+          "myMonsterSchema": {
+            "CLASSNAME": "main.java.schema.tdobjects.monsters.SimpleMonsterSchema",
+            "INSTANCE": {
+              "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+              "myAttributesMap": {
+                "Speed": 1.0,
+                "imageName": "monster.png",
+                "name": "test-monster-1",
+                "Bounty Reward": 200.0
+              },
+              "myAttributeSet": [
+                "Exit",
+                "imageName",
+                "Health",
+                "Attack Damage",
+                "Tile Size",
+                "Speed",
+                "Pathfinder Manager",
+                "name",
+                "Blocked Tiles",
+                "Bounty Reward",
+                "Monster Spawn Schemas to Spawn Upon Death",
+                "Number of Monsters to Spawn",
+                "Name of Monster to Spawn",
+                "Entrance Location"
+              ]
+            }
+          },
+          "mySwarmSize": 2
+        }
+      ]
+    },
+    {
+      "myMonsterSchemas": [
+        {
+          "myMonsterSchema": {
+            "CLASSNAME": "main.java.schema.tdobjects.monsters.SimpleMonsterSchema",
+            "INSTANCE": {
+              "myConcreteType": "main.java.engine.objects.monster.SimpleMonster",
+              "myAttributesMap": {
+                "Speed": 1.0,
+                "imageName": "monster.png",
+                "name": "test-monster-1",
+                "Bounty Reward": 200.0
+              },
+              "myAttributeSet": [
+                "Exit",
+                "imageName",
+                "Health",
+                "Attack Damage",
+                "Tile Size",
+                "Speed",
+                "Pathfinder Manager",
+                "name",
+                "Blocked Tiles",
+                "Bounty Reward",
+                "Monster Spawn Schemas to Spawn Upon Death",
+                "Number of Monsters to Spawn",
+                "Name of Monster to Spawn",
+                "Entrance Location"
+              ]
+            }
+          },
+          "mySwarmSize": 10
+        }
+      ]
+    }
+  ]
+}

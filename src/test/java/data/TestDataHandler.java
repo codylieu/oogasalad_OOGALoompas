@@ -165,9 +165,9 @@ public class TestDataHandler {
 		// serializes the testBlueprint to src/main/java/resources/testBlueprintJSON.json
 		String original = testDataHandler.serializeObjectToJSON(testBlueprint,"testBlueprintJSON");
 		GameBlueprint loadedBlueprint = ((GameBlueprint) testDataHandler.deserializeObjectFromJSON(testBlueprint,"testBlueprintJSON"));
-//		String loaded = testDataHandler.serializeObjectToJSON(loadedBlueprint,"testBlueprintAfterJSONSerialized");
-//		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"),
-//				loadedBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"));
+		String loaded = testDataHandler.serializeObjectToJSON(loadedBlueprint,"testBlueprintAfterJSONSerialized");
+		assertEquals(testBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"),
+				loadedBlueprint.getMyGameScenario().getAttributesMap().get("LIVES"));
 	}
 
 	@Test
