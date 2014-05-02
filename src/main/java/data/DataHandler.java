@@ -42,12 +42,6 @@ public class DataHandler {
 	private final static String TEMP_FOLDER_PATH = "src/main/resources.loaded/";
 	private final static int BUFF_SIZE = 4096;
 
-	/*private Gson myGson;
-
-	public DataHandler(){
-		myGson = new Gson();
-	}*/
-
 	/**
 	 * 
 	 * @param currentGameState

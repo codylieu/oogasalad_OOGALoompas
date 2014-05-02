@@ -170,7 +170,7 @@ public class Model implements IModel {
 	private boolean willTowerBlockPath(int currentTile[]) {
 		try {
 			currentMap.setTileCID(currentTile[0], currentTile[1],
-					TerrainAttribute.Flyable.getIndex()); // TODO: get from schema
+					TerrainAttribute.Unwalkable.getIndex()); // TODO: get from schema
 			pathfinderManager.updatePaths(monsters);
 		} catch (NoPossiblePathException e) {
 			currentMap.revertTileCIDToOriginal(currentTile[0], currentTile[1]);
