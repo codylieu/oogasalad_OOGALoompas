@@ -64,7 +64,6 @@ public class TDObjectFactory {
 	 * @param schemas
 	 */
 	public void loadTDObjectSchemas (List<TDObjectSchema> schemas) {
-		// TODO: Get rid of repetition in loading schemas
 		for (TDObjectSchema s : schemas) {
 			String objName = (String) s.getAttributesMap().get(TDObjectSchema.NAME);
 			String objImagePath =
@@ -114,7 +113,6 @@ public class TDObjectFactory {
 		loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);
 	}
 
-	// TODO: Refactor and get rid of repetition with loadMonsterSchemas method
 	/**
 	 * Load item schemas
 	 * 
@@ -124,10 +122,6 @@ public class TDObjectFactory {
 	public void loadItemSchemas(List<ItemSchema> schemas) {
 		for (ItemSchema i: schemas) {
 			possibleItemNames.add((String) i.getAttributesMap().get(TDObjectSchema.NAME));
-			// TODO: make the following code work
-//			String itemName = (String) i.getAttributesMap().get(TDObjectSchema.NAME);
-//			String itemDescription = (String) i.getAttributesMap().get(ItemSchema.DESCRIPTION);
-//			itemMap.put(itemName, itemDescription);
 		}
 		loadTDObjectSchemas((List<TDObjectSchema>)(List<?>) schemas);		
 	}
